@@ -2,6 +2,8 @@ import {Component, inject} from "@angular/core";
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes} from '@angular/router';
 import {LEGACY_BASE_URL} from "./tokens/legacy-base-url.token";
+import {LoginPageComponent} from "./pages/login-page/login-page.component";
+import {authGuard} from "./auth/auth.guard";
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -21,7 +23,11 @@ class LegacyUrlComponent {
 
 export const routes: Routes = [{
   path: '',
-  loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent)
+  loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
+  canActivate: [authGuard]
+}, {
+  path: 'login',
+  loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
 }, {
   path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
   resolve: {

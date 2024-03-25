@@ -3,7 +3,7 @@ import {RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/auth.service";
 
 @Component({
-  selector: 'app-root',
+  selector: 'oitc-root',
   standalone: true,
   imports: [
     RouterOutlet,
@@ -17,13 +17,11 @@ export class AppComponent {
 
   private readonly authService = inject(AuthService);
 
-  public readonly authenticated = this.authService.authenticated;
-
   public login() {
-    this.authService.login();
+    this.authService.goToLogin();
   }
 
   public logout() {
-    this.authService.logout();
+    this.authService.goToLogout();
   }
 }

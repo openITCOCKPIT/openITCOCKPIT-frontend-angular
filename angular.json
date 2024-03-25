@@ -8,7 +8,7 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "oitc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -61,7 +61,8 @@
               "buildTarget": "frontend-angular:build:production"
             },
             "development": {
-              "buildTarget": "frontend-angular:build:development"
+              "buildTarget": "frontend-angular:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

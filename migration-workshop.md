@@ -20,7 +20,6 @@
  
 ## Todos
 - Angular 18 App als Poc
-- CI/CD
 - Skeleton 
   - Header (wie angularJS)
   - Navbar (wie angularJS)
@@ -40,7 +39,7 @@
 - Angular i18n
   - i18n Evalurieren (voraussichtlich i18n extract von Angular)
 
-
+- CI/CD
 - Script Loader für Standards Libs
   - TODO: welche Third Party Libs benötigen wir?
     - Gibt es TypeScript implementierungen / NPM Module?
