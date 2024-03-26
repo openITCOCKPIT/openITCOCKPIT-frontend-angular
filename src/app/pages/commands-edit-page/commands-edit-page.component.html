@@ -5,13 +5,18 @@
     <button (click)="stopClock()">Stop clock</button>
   </div>
 
-  <form>
 
-    <div class="form-group">
+  <div>
+    Command name: {{ form.value.name }}
+  </div>
+
+  <form [formGroup]="form">
+
+  <div class="form-group">
       <label class="control-label">
         Command type
       </label>
-      <select class="form-control">
+      <select class="form-control" formControlName="command_line">
         <option value="1">Service check command</option>
         <option value="2">Host check command</option>
         <option value="3">Notification command</option>
@@ -23,7 +28,7 @@
       <label class="control-label">
         Name
       </label>
-      <input class="form-control" type="text">
+      <input class="form-control" type="text" formControlName="name">
     </div>
 
     <div class="form-group required">
@@ -31,7 +36,7 @@
         Command line
       </label>
       <textarea class="form-control code-font" type="text"
-                cols="30" rows="6" id="commandLineTextArea"></textarea>
+                cols="30" rows="6" id="commandLineTextArea" formControlName="command_line"></textarea>
     </div>
 
 
