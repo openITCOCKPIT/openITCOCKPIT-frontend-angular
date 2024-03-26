@@ -1,30 +1,7 @@
 <oitc-blank>
-  <p>login-page works!</p>
-
-  <button (click)="login()">login</button>
-</oitc-blank>
-
-
-<form [formGroup]="form" (ngSubmit)="login()">
-  <section>
-    <label>E-mail</label>
-    <input type="email" formControlName="email">
-  </section>
-  <section>
-    <label>Password</label>
-    <input type="password" formControlName="password">
-  </section>
-  <section>
-    <label>Remember Me</label>
-    <input type="checkbox" formControlName="remember_me">
-  </section>
-  <button [disabled]="!this.form.valid">auf gehts</button>
-</form>
 
 
 
-
-<body class="app" style="display: none;">
 
 
 <div class="peers ai-s fxw-nw h-100vh">
@@ -54,7 +31,7 @@
 
 
     <!-- Start login form for username and password (Session and LDAP) -->
-    <form>
+    <form [formGroup]="form" (ngSubmit)="login()">
       <div class="form-group">
         <label class="text-normal c-white">Username</label>
         <input
@@ -62,7 +39,7 @@
           class="form-control"
           placeholder="John Doe"
           ng-disabled="disableLogin"
-          ng-model="post.email">
+          formControlName="email">
       </div>
       <div class="form-group">
         <label class="text-normal c-white">Password</label>
@@ -71,7 +48,7 @@
           class="form-control"
           placeholder="Password"
           ng-disabled="disableLogin"
-          ng-model="post.password">
+          formControlName="password">
       </div>
       <div class="form-group">
         <div class="peers ai-c jc-sb fxw-nw">
@@ -81,7 +58,7 @@
                 type="checkbox"
                 ng-true-value="1"
                 ng-false-value="0"
-                ng-model="post.remember_me"
+                formControlName="remember_me"
                 ng-disabled="disableLogin"
                 id="RememberMeCheckbox"
                 class="peer">
@@ -92,6 +69,7 @@
           </div>
           <div class="peer">
             <button
+              [disabled]="!this.form.valid"
               type="submit"
               class="btn btn-primary"
               ng-disabled="disableLogin">
@@ -153,3 +131,4 @@
 
 
 
+</oitc-blank>
