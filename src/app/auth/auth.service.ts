@@ -3,8 +3,8 @@ import {DOCUMENT} from "@angular/common";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Permission} from "../interfaces/permission.interface";
 import {Router} from "@angular/router";
-import {API_URL} from "../tokens/api-url.token";
 import {switchMap, Observable, EMPTY, map, tap, catchError, of} from "rxjs";
+import {PROXY_PATH} from "../tokens/proxy-path.token";
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
-  private readonly apiUrl = inject(API_URL);
+  private readonly proxyPath = inject(PROXY_PATH);
 
   public goToLogin() {
     this.document.location = '/users/login';
@@ -30,7 +30,8 @@ export class AuthService {
   }
 
   public login(email: string, password: string): Observable<boolean> {
-    return this.http.get<Record<string, string>>(`/api/users/login.json`).pipe(
+    const proxyPath = this.proxyPath;
+    return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json`).pipe(
       switchMap(data => {
 
         const csrfToken = data['_csrfToken'];
@@ -40,7 +41,7 @@ export class AuthService {
         searchParams.set('_csrfToken', csrfToken);
         searchParams.set('remember_me', '1');
 
-        return this.http.post(`/api/users/login`, searchParams.toString(), {
+        return this.http.post(`${proxyPath}/users/login`, searchParams.toString(), {
           responseType: 'text',
           withCredentials: true,
           headers: {
@@ -66,8 +67,8 @@ export class AuthService {
   }
 
   public checkAuthentication(): Observable<unknown> {
-    const apiUrl = this.apiUrl;
+    const proxyPath = this.proxyPath;
 
-    return this.http.get<unknown>(`${apiUrl}/api/users/login.json`);
+    return this.http.get<unknown>(`${proxyPath}/users/login.json`);
   }
 }
