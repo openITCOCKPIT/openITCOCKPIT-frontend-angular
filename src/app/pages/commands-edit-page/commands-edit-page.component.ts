@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {SatelliteComponent} from '../../layouts/satellite/satellite.component';
 import {CommandclockService} from './commandclock.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 
 @Component({
@@ -17,18 +17,20 @@ import {AsyncPipe} from '@angular/common';
 export class CommandsEditPageComponent {
 
   private clock = inject(CommandclockService);
-  public now$: Observable<Date> = new Observable<Date>()
+  public now: Date = new Date();
+  public clock$: Observable<Date> = new Observable<Date>();
+  private sub: Subscription = new Subscription();
 
   constructor() {
-    this.now$ = this.clock.startClock();
+    this.clock$ = this.clock.startClock();
 
-    // Unnötig aber just for fun
-    const sub = this.now$.subscribe((date) => {
-     console.log('Hier im commands edit page component', date);
-    })
+    this.sub.add(this.clock$.subscribe((date) => {
+      this.now = date;
+    }))
+
   }
 
   public stopClock() {
-
+    this.sub.unsubscribe();
   }
 }

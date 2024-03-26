@@ -1,7 +1,8 @@
 <oitc-satellite>
 
   <div>
-    Hier ist die Uhr: {{ now$ | async }}
+    Hier ist die Uhr: {{ now }}
+    <button (click)="stopClock()">Stop clock</button>
   </div>
 
   <form>

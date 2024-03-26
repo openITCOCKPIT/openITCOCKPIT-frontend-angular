@@ -13,7 +13,7 @@ export class CommandclockService {
   public startClock() {
     this.interval$ = interval(1000).pipe(
       map(() => new Date()),
-      tap(() => console.log(new Date()))
+      //tap(() => console.log(new Date()))
     )
     return this.interval$;
   }
