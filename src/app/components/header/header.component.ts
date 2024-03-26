@@ -1,5 +1,4 @@
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSignOut, faRetweet} from '@fortawesome/free-solid-svg-icons';
 import {Component, inject} from '@angular/core';
 import {AuthService} from "../../auth/auth.service";
 
@@ -11,8 +10,6 @@ import {AuthService} from "../../auth/auth.service";
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  faSignOut = faSignOut;
-  faRetweet = faRetweet;
   private readonly authService = inject(AuthService);
 
   public logout(): void {
