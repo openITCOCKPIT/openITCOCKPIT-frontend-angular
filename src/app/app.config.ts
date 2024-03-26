@@ -26,8 +26,8 @@ export const appConfig: ApplicationConfig = {
         // authInterceptor,
       ]),
       withXsrfConfiguration({
-        cookieName: 'x-csrf-token',
-        headerName: 'csrfToken',
+        cookieName: 'csrfToken',
+        headerName: 'x-csrf-token',
       })
     ),
 
