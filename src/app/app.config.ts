@@ -11,6 +11,7 @@ import {
 } from "@angular/common/http";
 import {PROXY_PATH} from "./tokens/proxy-path.token";
 import {authInterceptor} from "./auth/auth.interceptor";
+import {csrfInterceptor} from "./auth/csrf.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,11 +19,14 @@ export const appConfig: ApplicationConfig = {
     { provide: PROXY_PATH, useValue: '' },
     { provide: AuthService, useClass: AuthService },
     provideHttpClient(
-      withInterceptors([authInterceptor]),
+      withInterceptors([authInterceptor, csrfInterceptor]),
+      /*
       withXsrfConfiguration({
-        cookieName: 'csrfToken',
+        // cookieName: 'csrfToken',
         headerName: 'x-csrf-token',
       })
+
+       */
     ),
 
     provideRouter(routes)
