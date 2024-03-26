@@ -9,7 +9,7 @@
     <div class="position-relative">
       <input type="text" id="nav_filter_input" placeholder="Type to search" class="form-control" tabindex="0">
       <a class="btn-primary btn-search-close js-waves-off">
-        <i class="fa fa-chevron-up color-white"></i>
+          <fa-icon [icon]="faChevronUp" />
       </a>
     </div>
   </div>
@@ -32,14 +32,14 @@
     </li>
     <li class="ng-scope menufilterSelectable">
       <a class="waves-effect waves-themed ng-scope" title="Dashboards" href="/#!/dashboards/index">
-        <i class="fas fa-tachometer-alt"></i>
+          <fa-icon [icon]="faTachometer" />
         <span class="menu-item-parent nav-link-text ng-binding">
           Dashboards
         </span>
       </a>
 
       <a class="waves-effect waves-themed ng-scope" [routerLink]="'/bullllllshit'">
-        <i class="fas fa-tachometer-alt"></i>
+          <fa-icon [icon]="faTachometer" />
         <span class="menu-item-parent nav-link-text ng-binding">
           gibbet nich
         </span>

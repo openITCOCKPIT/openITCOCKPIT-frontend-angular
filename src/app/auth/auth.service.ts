@@ -64,6 +64,7 @@ export class AuthService {
   }
 
   public logout(): void {
+    console.log('logout');
     this.goToLogout();
   }
 

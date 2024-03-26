@@ -1,1 +1,35 @@
-header
+<header id="header" class="page-header" role="banner">
+    <div class="search hidden-lg-down" top-search=""></div>
+    <div class="ml-auto d-flex">
+        <div class="header-icon">
+            <span>
+              <a class="btn btn-default waves-effect waves-themed"
+                 ui-sref="ExportsIndex"
+                 export-status=""
+                 data-original-title="Refresh monitoring configuration"
+                 data-placement="bottom"
+                 rel="tooltip"
+                 data-container="body">
+
+                    <fa-icon [icon]="faRetweet" />
+                  <!--  ng-show not working!
+                    <fa-icon [icon]="faRetweet"  ng-show="exportRunning"/>
+                    -->
+              </a>
+            </span>
+        </div>
+
+        <div class="header-icon">
+            <div class="btn-group mr-2" role="group" aria-label="">
+                <a (click)="logout()" class="btn btn-default waves-effect waves-themed"
+                   href="/users/logout"
+                   data-original-title="Sign out"
+                   data-placement="bottom"
+                   rel="tooltip"
+                   data-container="body">
+                    <fa-icon [icon]="faSignOut" />
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
