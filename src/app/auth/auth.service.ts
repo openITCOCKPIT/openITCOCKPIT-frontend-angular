@@ -12,8 +12,10 @@ import {PROXY_PATH} from "../tokens/proxy-path.token";
 export class AuthService {
   private readonly csrfToken: WritableSignal<string|null> = signal(null);
   private readonly permissions: WritableSignal<Permission[]|null> = signal([]);
+
+  private readonly _authenticated: WritableSignal<boolean> = signal(false);
   public readonly authenticated: Signal<boolean> = computed(() => {
-    return !!this.permissions();
+    return this._authenticated();
   });
 
   private readonly http = inject(HttpClient);
@@ -54,21 +56,28 @@ export class AuthService {
 
             return of(null);
           }),
-          map(() => 'fake-token'),
+          map((response) => !!response),
         );
       }),
-      tap((token) => this.csrfToken.set(token)),
-      map((token) => !!token),
+      tap((loggedIn) => this._authenticated.set(loggedIn)),
     )
   }
 
   public logout(): void {
-    this.permissions.set(null);
+    this.goToLogout();
   }
 
-  public checkAuthentication(): Observable<unknown> {
+  public checkAuthentication(): Observable<boolean> {
     const proxyPath = this.proxyPath;
 
-    return this.http.get<unknown>(`${proxyPath}/users/login.json`);
+    return this.http.get<Record<string, string|boolean>>(`${proxyPath}/users/login.json`).pipe(
+      map(data => data['isLoggedIn'] as boolean),
+      catchError(error => {
+        console.error(error);
+
+        return of(false);
+      }),
+      tap(loggedIn => this._authenticated.set(loggedIn)),
+    );
   }
 }
