@@ -2,6 +2,18 @@
   <oitc-header oitcHeader>header</oitc-header>
   <oitc-navigation oitcNavigation>nav</oitc-navigation>
 
-  <p>start-page works!</p>
+  <h1>Start Page</h1>
+  <h2>Route Params</h2>
+  <pre *ngIf="routeParams$ | async as routeParams">
+    {{ routeParams | json}}
+    {{ routeParams | json}}
+    {{ routeParams | json}}
+  </pre>
+  <h2>Query Params</h2>
+  <pre>
+    {{ queryParams$ | async | json }}
+  </pre>
+  <hr />
+  <button (click)="addRandomQueryParam()">add random query param</button>
 </oitc-satellite>
 
