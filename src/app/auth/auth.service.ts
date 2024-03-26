@@ -31,7 +31,7 @@ export class AuthService {
     this.document.location = '/users/logout';
   }
 
-  public login(email: string, password: string): Observable<boolean> {
+  public login(email: string, password: string, rememberMe = true): Observable<boolean> {
     const proxyPath = this.proxyPath;
     return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json`).pipe(
       switchMap(data => {
@@ -41,7 +41,7 @@ export class AuthService {
         searchParams.set('email', email);
         searchParams.set('password', password);
         searchParams.set('_csrfToken', csrfToken);
-        searchParams.set('remember_me', '1');
+        searchParams.set('remember_me', rememberMe ? '1' : '0');
 
         return this.http.post(`${proxyPath}/users/login`, searchParams.toString(), {
           responseType: 'text',

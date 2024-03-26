@@ -21,11 +21,11 @@
 ## Todos
 - Angular 18 App als Poc ✅
 - Globale Styles implementieren ✅
-- Skeleton 
+- Skeleton ✅
   - Header (wie angularJS)
   - Navbar (wie angularJS)
 - Navigation Concept
-  - Query Params
+  - Query Params ✅
   - + wir benötigen einen State => nicht ✅
 - Header
   - Websockets oder Polling zwischen den Clients
@@ -42,13 +42,13 @@
 - Angular i18n
   - i18n Evalurieren (voraussichtlich i18n extract von Angular)
 
-- CI/CD
+- CI/CD 
 - Script Loader für Standards Libs
   - TODO: welche Third Party Libs benötigen wir?
     - Gibt es TypeScript implementierungen / NPM Module?
       - https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types
       - TODO: Lizensen prüfen? 
-- Context-Wechsel von AngularJS => Angular
+- Context-Wechsel von AngularJS => Angular ✅
 - 
 
 

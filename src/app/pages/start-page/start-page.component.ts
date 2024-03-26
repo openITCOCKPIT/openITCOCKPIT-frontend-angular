@@ -3,7 +3,7 @@ import {SatelliteComponent} from "../../layouts/satellite/satellite.component";
 import {HeaderComponent} from "../../components/header/header.component";
 import {NavigationComponent} from "../../components/navigation/navigation.component";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -15,7 +15,8 @@ import {Subscription} from "rxjs";
     NavigationComponent,
     RouterModule,
     AsyncPipe,
-    JsonPipe
+    JsonPipe,
+    NgIf,
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
