@@ -1,3 +1,52 @@
-<p>navigation works!</p>
+<div class="page-logo pointer" href="/#!/dashboards/index">
+  <img src="/img/logos/logo_header.png" class="header-logo" alt="logo" aria-roledescription="logo" style="width: 28px;">
+  <span class="page-logo-text mr-1 ng-binding">openITCOCKPIT</span>
+  <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
+</div>
 
-<a [routerLink]="'/bullllllshit'">gibbet nich</a>
+<nav id="js-primary-nav" class="primary-nav js-list-filter" role="navigation">
+  <div class="nav-filter">
+    <div class="position-relative">
+      <input type="text" id="nav_filter_input" placeholder="Type to search" class="form-control" tabindex="0">
+      <a class="btn-primary btn-search-close js-waves-off">
+        <i class="fa fa-chevron-up color-white"></i>
+      </a>
+    </div>
+  </div>
+  <div class="info-card">
+    <img class="profile-image rounded-circle" alt="me"
+         src="/img/userimages/initial_avatar_d78ff0bc69e9a7a5c86ab082d61d9716.png">
+    <div class="info-card-text">
+      <a class="d-flex align-items-center text-white" href="/#!/profile/edit/">
+        <span class="text-truncate text-truncate-sm d-inline-block ng-binding">
+          Root Wheel
+        </span>
+      </a>
+    </div>
+  </div>
+
+
+  <ul id="js-nav-menu" class="nav-menu ng-isolate-scope js-nav-built">
+    <li class="nav-title ng-binding ng-scope">
+      Overview
+    </li>
+    <li class="ng-scope menufilterSelectable">
+      <a class="waves-effect waves-themed ng-scope" title="Dashboards" href="/#!/dashboards/index">
+        <i class="fas fa-tachometer-alt"></i>
+        <span class="menu-item-parent nav-link-text ng-binding">
+          Dashboards
+        </span>
+      </a>
+
+      <a class="waves-effect waves-themed ng-scope" [routerLink]="'/bullllllshit'">
+        <i class="fas fa-tachometer-alt"></i>
+        <span class="menu-item-parent nav-link-text ng-binding">
+          gibbet nich
+        </span>
+      </a>
+
+    </li>
+  </ul>
+
+</nav>
+
