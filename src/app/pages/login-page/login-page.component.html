@@ -5,7 +5,26 @@
 </oitc-blank>
 
 
-<body class="app">
+<form [formGroup]="form" (ngSubmit)="login()">
+  <section>
+    <label>E-mail</label>
+    <input type="email" formControlName="email">
+  </section>
+  <section>
+    <label>Password</label>
+    <input type="password" formControlName="password">
+  </section>
+  <section>
+    <label>Remember Me</label>
+    <input type="checkbox" formControlName="remember_me">
+  </section>
+  <button [disabled]="!this.form.valid">auf gehts</button>
+</form>
+
+
+
+
+<body class="app" style="display: none;">
 
 
 <div class="peers ai-s fxw-nw h-100vh">
