@@ -44,7 +44,7 @@ export class AuthService {
           responseType: 'text',
           withCredentials: true,
           headers: {
-            'x-csrf-token': csrfToken,
+            // 'x-csrf-token': csrfToken,
             'content-type': 'application/x-www-form-urlencoded'
           }
         }).pipe(
@@ -53,7 +53,7 @@ export class AuthService {
 
             return of(null);
           }),
-          map(() => csrfToken),
+          map(() => 'fake-token'),
         );
       }),
       tap((token) => this.csrfToken.set(token)),
@@ -68,11 +68,6 @@ export class AuthService {
   public checkAuthentication(): Observable<unknown> {
     const apiUrl = this.apiUrl;
 
-    return this.http.get<unknown>(`${apiUrl}/api/users/login.json`, {
-      withCredentials: true,
-    });
+    return this.http.get<unknown>(`${apiUrl}/api/users/login.json`);
   }
 }
-
-
-

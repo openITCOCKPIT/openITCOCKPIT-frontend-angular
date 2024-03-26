@@ -8,7 +8,7 @@ export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   return auth.checkAuthentication().pipe(
-    tap(console.info),
+    tap(auth => console.log('auth', auth)),
     map(() => true),
     catchError((err) => {
       console.error('oh snap', err);

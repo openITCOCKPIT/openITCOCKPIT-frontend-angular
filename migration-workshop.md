@@ -20,12 +20,13 @@
  
 ## Todos
 - Angular 18 App als Poc
+- Globale Styles implementieren
 - Skeleton 
   - Header (wie angularJS)
   - Navbar (wie angularJS)
 - Navigation Concept
   - Query Params
-  - + wir benötigen einen State (ggf. Session Storage oder LocalStorage)
+  - + wir benötigen einen State
 - Header
   - Websockets oder Polling zwischen den Clients
   - Uhrzeit - auto updates + Timezones
@@ -46,7 +47,6 @@
       - https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types
       - TODO: Lizensen prüfen? 
 - Context-Wechsel von AngularJS => Angular
-- LocalStorage / UI State Implementierung bei Seitenwechsel prüfen
 - 
 
 
