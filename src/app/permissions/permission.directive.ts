@@ -25,7 +25,6 @@ export class PermissionDirective implements OnInit, OnDestroy {
   public ngOnInit() {
     this.subscription.add(this.oitcPermission$$.pipe(
       combineLatestWith(this.permissionService.permissions$),
-      tap(([a, b]) => console.log('permission directive', a, b)),
       map(([oitcPermission, permissions]) => this.permissionService.checkPermission(oitcPermission, permissions)),
       filter(permit => permit),
     ).subscribe({
