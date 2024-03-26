@@ -14,5 +14,13 @@
   </pre>
   <hr />
   <button (click)="addRandomQueryParam()">add random query param</button>
+  <h1>Permissions</h1>
+  <span *oitcPermission="['foo', 'bar', 'baz']">show</span>
+  <span *oitcPermission="'gibbet.nicht'">hidden</span>
+  <span *oitcPermission="'a.b'">show</span>
+
+  <span *oitcPermission="'hosts.index'">hosts.index</span>
+  <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
 </oitc-satellite>
+
 

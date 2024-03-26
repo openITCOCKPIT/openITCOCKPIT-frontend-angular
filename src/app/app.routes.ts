@@ -7,7 +7,7 @@ import {authGuard} from "./auth/auth.guard";
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
-@Component({standalone: true, template: `If you can read this, something has to be fixed ;)`, imports: [RouterModule]})
+@Component({selector: 'legacy-redirect', standalone: true, template: `If you can read this, something has to be fixed ;)`, imports: [RouterModule]})
 class LegacyUrlComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly document = inject(DOCUMENT);
