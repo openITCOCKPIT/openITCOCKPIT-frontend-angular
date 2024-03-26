@@ -29,7 +29,6 @@ export const routes: Routes = [{
   path: 'login',
   loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
 }, {
-}, {
   path: 'commands/edit',
   loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
 }, {
