@@ -4,7 +4,8 @@ import {HeaderComponent} from "../../components/header/header.component";
 import {NavigationComponent} from "../../components/navigation/navigation.component";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
-import {Subscription} from "rxjs";
+import {interval, Subscription} from "rxjs";
+import {PermissionDirective} from "../../permissions/permission.directive";
 
 @Component({
   selector: 'app-start-page',
@@ -17,6 +18,7 @@ import {Subscription} from "rxjs";
     AsyncPipe,
     JsonPipe,
     NgIf,
+    PermissionDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'

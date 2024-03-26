@@ -41,6 +41,7 @@
 - Features / Module
 - Angular i18n
   - i18n Evalurieren (voraussichtlich i18n extract von Angular)
+- DTOs / Interfaces
 
 - CI/CD 
 - Script Loader für Standards Libs

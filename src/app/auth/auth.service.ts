@@ -1,9 +1,7 @@
-import {computed, inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
+import {inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
 import {DOCUMENT} from "@angular/common";
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Permission} from "../interfaces/permission.interface";
-import {Router} from "@angular/router";
-import {switchMap, Observable, EMPTY, map, tap, catchError, of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {switchMap, Observable, map, tap, catchError, of, BehaviorSubject} from "rxjs";
 import {PROXY_PATH} from "../tokens/proxy-path.token";
 
 @Injectable({
@@ -11,16 +9,12 @@ import {PROXY_PATH} from "../tokens/proxy-path.token";
 })
 export class AuthService {
   private readonly csrfToken: WritableSignal<string|null> = signal(null);
-  private readonly permissions: WritableSignal<Permission[]|null> = signal([]);
 
-  private readonly _authenticated: WritableSignal<boolean> = signal(false);
-  public readonly authenticated: Signal<boolean> = computed(() => {
-    return this._authenticated();
-  });
+  private readonly authenticated$$ = new BehaviorSubject(true);
+  public readonly authenticated$ = this.authenticated$$.asObservable();
 
   private readonly http = inject(HttpClient);
   private readonly document = inject(DOCUMENT);
-  private readonly router = inject(Router);
   private readonly proxyPath = inject(PROXY_PATH);
 
   public goToLogin() {
@@ -59,12 +53,16 @@ export class AuthService {
           map((response) => !!response),
         );
       }),
-      tap((loggedIn) => this._authenticated.set(loggedIn)),
+      tap((loggedIn) => this.authenticated$$.next(loggedIn)),
     )
   }
 
   public logout(): void {
     this.goToLogout();
+  }
+
+  public setUnauthorized(): void {
+    this.authenticated$$.next(false);
   }
 
   public checkAuthentication(): Observable<boolean> {
@@ -77,7 +75,7 @@ export class AuthService {
 
         return of(false);
       }),
-      tap(loggedIn => this._authenticated.set(loggedIn)),
+      tap(loggedIn => this.authenticated$$.next(loggedIn)),
     );
   }
 }
