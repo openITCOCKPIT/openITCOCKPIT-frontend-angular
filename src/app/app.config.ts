@@ -5,21 +5,16 @@ import { routes } from './app.routes';
 import {LEGACY_BASE_URL} from "./tokens/legacy-base-url.token";
 import {AuthService} from "./auth/auth.service";
 import {
-  HTTP_INTERCEPTORS,
-  HttpClientModule,
   provideHttpClient,
-  withFetch,
   withInterceptors,
   withXsrfConfiguration
 } from "@angular/common/http";
-import {authInterceptor} from "./auth/auth.interceptor";
-import {csrfInterceptor} from "./auth/csrf.interceptor";
-import {API_URL} from "./tokens/api-url.token";
+import {PROXY_PATH} from "./tokens/proxy-path.token";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: LEGACY_BASE_URL, useValue: 'https://159.89.106.40' }, // Must be replaced by real staged URL
-    { provide: API_URL, useValue: 'https://159.89.106.40' }, // Must be replaced by real staged URL
+    { provide: LEGACY_BASE_URL, useValue: '' }, // Must be replaced by real staged URL
+    { provide: PROXY_PATH, useValue: '/api' },
     { provide: AuthService, useClass: AuthService },
     provideHttpClient(
       withInterceptors([
