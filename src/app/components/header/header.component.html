@@ -1,6 +1,20 @@
 <header id="header" class="page-header" role="banner">
     <div class="search hidden-lg-down" top-search=""></div>
     <div class="ml-auto d-flex">
+
+        <form [formGroup]="form" (ngSubmit)="submitSearch()">
+          <select formControlName="type">
+            <option [value]="SearchType.Host">{{ SearchType.Host }}</option>
+            <option [value]="SearchType.Address">{{ SearchType.Address }}</option>
+            <option [value]="SearchType.Service">{{ SearchType.Service }}</option>
+            <option [value]="SearchType.UUID">{{ SearchType.UUID }}</option>
+            <option [value]="SearchType.TagsHost">{{ SearchType.TagsHost }}</option>
+            <option [value]="SearchType.TagsService">{{ SearchType.TagsService }}</option>
+          </select>
+          <input type="text" formControlName="query" />
+          <button [disabled]="!form.valid">auf gehts</button>
+        </form>
+
         <div class="header-icon">
             <span>
               <a class="btn btn-default waves-effect waves-themed"
