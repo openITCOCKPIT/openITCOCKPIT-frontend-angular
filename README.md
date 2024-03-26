@@ -26,7 +26,7 @@ Der gesamte Traffik wird über den Nginx Webserver gerouted. Dazu folgendes in d
 ```
 # Proxy for /a/ Angular frontend
 location ^~ /a/ {
-    proxy_pass http://127.0.0.1:4200/a/;
+    proxy_pass http://localhost:4200/a/;
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -100,7 +100,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `ng s --disable-host-check  --public-host --host=0.0.0.0` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
