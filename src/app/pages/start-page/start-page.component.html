@@ -1,20 +1,20 @@
 <oitc-satellite>
   <oitc-navigation oitcNavigation>nav</oitc-navigation>
 
-  <h1>Start Page</h1>
-  <h2>Route Params</h2>
+  <h1 i18n>Start Page</h1>
+  <h2 i18n>Route Params</h2>
   <pre *ngIf="routeParams$ | async as routeParams">
     {{ routeParams | json}}
     {{ routeParams | json}}
     {{ routeParams | json}}
   </pre>
-  <h2>Query Params</h2>
+  <h2 i18n>Query Params</h2>
   <pre>
     {{ queryParams$ | async | json }}
   </pre>
   <hr />
   <button (click)="addRandomQueryParam()">add random query param</button>
-  <h1>Permissions</h1>
+  <h1 i18n>Permissions</h1>
   <span *oitcPermission="['foo', 'bar', 'baz']">show</span>
   <span *oitcPermission="'gibbet.nicht'">hidden</span>
   <span *oitcPermission="'a.b'">show</span>
