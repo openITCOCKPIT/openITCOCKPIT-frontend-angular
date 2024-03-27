@@ -6,6 +6,7 @@ import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
 import {interval, Subscription} from "rxjs";
 import {PermissionDirective} from "../../permissions/permission.directive";
+import {SocketService} from "../../socket/socket.service";
 
 @Component({
   selector: 'app-start-page',
@@ -26,6 +27,7 @@ import {PermissionDirective} from "../../permissions/permission.directive";
 export class StartPageComponent implements OnDestroy{
   public readonly route = inject(ActivatedRoute);
   public readonly router = inject(Router);
+  private readonly socketService = inject(SocketService);
 
   private readonly subscription = new Subscription();
 

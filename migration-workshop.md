@@ -29,7 +29,7 @@
   - + wir benötigen einen State => nicht ✅
 - Header
   - Websockets oder Polling zwischen den Clients
-  - Uhrzeit - auto updates + Timezones
+  - Uhrzeit - auto updates + Timezones 
 - Authentication Authorization ✅
   - Login ✅
   - Logout ✅
