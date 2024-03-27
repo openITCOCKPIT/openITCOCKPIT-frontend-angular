@@ -4,21 +4,23 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {NavigationService} from "./navigation.service";
 import {Link} from "./navigation.interface";
 import {FormsModule} from "@angular/forms";
+import {AsyncPipe, JsonPipe, NgFor, NgIf} from "@angular/common";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: 'oitc-navigation',
     standalone: true,
-    imports: [RouterLink, FontAwesomeModule, FormsModule],
+    imports: [RouterLink, FontAwesomeModule, FormsModule, AsyncPipe, JsonPipe, NgIf, NgFor],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
     private readonly NavigationService: NavigationService = inject(NavigationService);
 
-    public menu: Link[];
+    public MenuSubject: BehaviorSubject<Link[]>;
 
     constructor() {
-        this.menu = this.NavigationService.getMenu();
+        this.MenuSubject = this.NavigationService.getLinkSubject();
     };
 
 }

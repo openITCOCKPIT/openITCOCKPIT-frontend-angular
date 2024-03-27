@@ -1,58 +1,33 @@
-<div class="page-logo pointer" href="/#!/dashboards/index">
-  <img src="/img/logos/logo_header.png" class="header-logo" alt="logo" aria-roledescription="logo" style="width: 28px;">
-  <span class="page-logo-text mr-1 ng-binding">openITCOCKPIT</span>
-  <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
-</div>
+<ul *ngFor="let item of MenuSubject.getValue()" class="nav-menu ng-isolate-scope js-nav-built">
+    <li ng-if="item.items.length > 0" href="javascript:void(0);"
 
-<nav id="js-primary-nav" class="primary-nav js-list-filter" role="navigation">
-  <div class="nav-filter">
-    <div class="position-relative">
-      <input type="text" id="nav_filter_input" placeholder="Type to search" class="form-control" tabindex="0">
-      <a class="btn-primary btn-search-close js-waves-off">
-          <fa-icon icon="chevron-up" />
-      </a>
-    </div>
-  </div>
-  <div class="info-card">
-    <img class="profile-image rounded-circle" alt="me"
-         src="/img/userimages/initial_avatar_d78ff0bc69e9a7a5c86ab082d61d9716.png">
-    <div class="info-card-text">
-      <a class="d-flex align-items-center text-white" href="/#!/profile/edit/">
-        <span class="text-truncate text-truncate-sm d-inline-block ng-binding">
-          Root Wheel
+        class="nav-title ng-binding ng-scope"
+        title="{{item.alias}}">
+        <span class="menu-item-parent nav-link-text">
+            {{ item.alias }}
         </span>
-      </a>
-    </div>
-  </div>
- <ol>
-     <li ng-repeat="menu">AAA</li>
- </ol>
-
-  <ul id="js-nav-menu" class="nav-menu ng-isolate-scope js-nav-built">
-    <li class="nav-title ng-binding ng-scope">
-      Overview
     </li>
-    <li class="ng-scope menufilterSelectable">
-      <a class="waves-effect waves-themed ng-scope" title="Dashboards" href="/#!/dashboards/index">
-          <fa-icon icon="tachometer" />
-        <span class="menu-item-parent nav-link-text ng-binding">
-          Dashboards
-        </span>
-      </a>
 
-      <a class="waves-effect waves-themed ng-scope" [routerLink]="'/bullllllshit'">
-          <fa-icon icon="tachometer" />
-        <span class="menu-item-parent nav-link-text ng-binding">
-          gibbet nich
-        </span>
-      </a>
+    <li ng-if="item.items.length > 0" *ngFor="let subItem of item.items"
+        class="ng-scope menufilterSelectable">
 
-      <a class="waves-effect waves-themed ng-scope" [routerLink]="['commands', 'edit']">
-        <fa-icon icon="tachometer" />
-        <span class="menu-item-parent nav-link-text ng-binding">
-          Comand Edit
-        </span>
-      </a>
+        <a ng-if="!item.items" class="waves-effect waves-themed ng-scope" title="Dashboards">
+            <i class="fa fa-home"></i>
+            <span class="menu-item-parent nav-link-text ng-binding">
+                🟡   {{ subItem.name }}
+
+            </span>
+        </a>
+        <ul ng-if="subItem.items.length > 0">
+            <li *ngFor="let subsubItem of subItem.items" class="menufilterSelectable">
+                <a class="waves-effect waves-themed"
+                   title="{{subsubItem.name}}" ng-click="scrollTop();">
+                    <i class="{{subsubItem.icon}}"></i>
+                    <span class="nav-link-text">
+                        🔴   {{ subsubItem.name }}
+                    </span>
+                </a>
+            </li>
+        </ul>
     </li>
-  </ul>
-</nav>
+</ul>
