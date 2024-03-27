@@ -24,7 +24,7 @@
 - Skeleton ✅
   - Header (wie angularJS) ✅
   - Navbar (wie angularJS) ✅
-- Navigation Concept
+- Navigation Concept ✅
   - Query Params ✅
   - + wir benötigen einen State => nicht ✅
 - Header
