@@ -8,7 +8,7 @@ import {PROXY_PATH} from "../tokens/proxy-path.token";
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly csrfToken: WritableSignal<string|null> = signal(null);
+  public csrfToken: string | null = null;
 
   private readonly authenticated$$ = new BehaviorSubject(true);
   public readonly authenticated$ = this.authenticated$$.asObservable();
