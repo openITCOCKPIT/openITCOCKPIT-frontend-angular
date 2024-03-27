@@ -3,9 +3,9 @@ import {SatelliteComponent} from '../../layouts/satellite/satellite.component';
 import {CommandclockService} from './commandclock.service';
 import {Observable, Subscription} from 'rxjs';
 import {AsyncPipe, JsonPipe, NgFor, NgIf} from '@angular/common';
-import {CommandEditService} from './CommandEditService';
 import {CommandEdit} from './CommandEdit.interface';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommandsService} from './commands.service';
 
 @Component({
   selector: 'oitc-commands-edit-page',
@@ -30,7 +30,7 @@ export class CommandsEditPageComponent implements OnDestroy {
   // end of remove
 
   private subscriptions: Subscription = new Subscription();
-  private CommandEditService = inject(CommandEditService);
+  private CommandsService = inject(CommandsService);
   public command!: CommandEdit;
 
   constructor() {
