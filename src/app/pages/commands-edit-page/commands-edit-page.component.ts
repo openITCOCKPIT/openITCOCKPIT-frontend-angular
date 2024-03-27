@@ -3,7 +3,7 @@ import {SatelliteComponent} from '../../layouts/satellite/satellite.component';
 import {CommandclockService} from './commandclock.service';
 import {Observable, Subscription} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
-import {CommandEditService} from './CommandEditService';
+import {CommandsService} from './commands.service';
 import {CommandEdit} from './CommandEdit.interface';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
@@ -27,7 +27,7 @@ export class CommandsEditPageComponent implements OnDestroy {
   // end of remove
 
   private subscriptions: Subscription = new Subscription();
-  private CommandEditService = inject(CommandEditService);
+  private CommandsService = inject(CommandsService);
   public command: CommandEdit | null = null;
 
   private readonly formBuilder = inject(FormBuilder);
@@ -44,7 +44,7 @@ export class CommandsEditPageComponent implements OnDestroy {
       this.now = date;
     }))
 
-    this.subscriptions.add(this.CommandEditService.load(3)
+    this.subscriptions.add(this.CommandsService.getEdit(3)
       .subscribe((command) => {
         this.form.patchValue(command); // update input fields
         this.command = command; // to display in template

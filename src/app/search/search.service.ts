@@ -38,21 +38,20 @@ export class SearchService {
   }
 
   private searchHost(query: string): void {
-    this.router.navigate(['/hosts/index'], {
-      queryParams: {
-        hostname: query,
-      },
-    });
+    const params = new URLSearchParams();
+    params.set('hostname', query);
+
+    this.router.navigateByUrl('/#!/hosts/index?' + params.toString());
   }
   private searchAddress(query: string): void {
-    this.router.navigate(['/hosts/index'], {
+    this.router.navigate(['/#!/hosts/index'], {
       queryParams: {
         address: query,
       },
     });
   }
   private searchService(query: string): void {
-    this.router.navigate(['/services/index'], {
+    this.router.navigate(['/#!/services/index'], {
       queryParams: {
         servicename: query,
       },
@@ -70,14 +69,14 @@ export class SearchService {
     })
   }
   private searchTagsHost(query: string): void {
-    this.router.navigate(['/hosts/index'], {
+    this.router.navigate(['/#!/hosts/index'], {
       queryParams: {
         keywords: query,
       },
     });
   }
   private searchTagsService(query: string): void {
-    this.router.navigate(['/services/index'], {
+    this.router.navigate(['/#!/services/index'], {
       queryParams: {
         keywords: query,
       },
