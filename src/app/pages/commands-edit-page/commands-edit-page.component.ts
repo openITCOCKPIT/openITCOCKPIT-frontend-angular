@@ -42,7 +42,7 @@ export class CommandsEditPageComponent implements OnDestroy {
       this.now = date;
     }))
 
-    this.subscriptions.add(this.CommandEditService.load(3)
+    this.subscriptions.add(this.CommandsService.getEdit(3)
       .subscribe((command) => {
         this.command = command; // to display in template
 

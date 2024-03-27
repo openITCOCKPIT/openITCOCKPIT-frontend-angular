@@ -44,13 +44,15 @@ export class SearchService {
       },
     });
   }
+
   private searchAddress(query: string): void {
-    this.router.navigate(['/hosts/index'], {
+    this.router.navigate(['/#!/hosts/index'], {
       queryParams: {
         address: query,
       },
     });
   }
+
   private searchService(query: string): void {
     this.router.navigate(['/services/index'], {
       queryParams: {
@@ -58,6 +60,7 @@ export class SearchService {
       },
     });
   }
+
   private searchUUID(type: SearchType, query: string): void {
     const proxyPath = this.proxyPath;
     this.http.post(`${proxyPath}/angular/topSearch.json?angular=true`, {
@@ -69,6 +72,7 @@ export class SearchService {
       next: (data) => console.info('search uuid result', data),
     })
   }
+
   private searchTagsHost(query: string): void {
     this.router.navigate(['/hosts/index'], {
       queryParams: {
@@ -76,6 +80,7 @@ export class SearchService {
       },
     });
   }
+
   private searchTagsService(query: string): void {
     this.router.navigate(['/services/index'], {
       queryParams: {

@@ -8,13 +8,13 @@ import {CommandEdit} from './CommandEdit.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class CommandEditService {
+export class CommandsService {
 
   private readonly http = inject(HttpClient);
   private readonly document = inject(DOCUMENT);
   private readonly proxyPath = inject(PROXY_PATH);
 
-  public load(id: number): Observable<CommandEdit> {
+  public getEdit(id: number): Observable<CommandEdit> {
     const proxyPath = this.proxyPath;
     return this.http.get<{ command: CommandEdit }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
       map(data => {
