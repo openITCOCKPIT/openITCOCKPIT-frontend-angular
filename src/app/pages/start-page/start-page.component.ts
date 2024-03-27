@@ -3,7 +3,7 @@ import {SatelliteComponent} from "../../layouts/satellite/satellite.component";
 import {HeaderComponent} from "../../components/header/header.component";
 import {NavigationComponent} from "../../components/navigation/navigation.component";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
+import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
 import {interval, Subscription} from "rxjs";
 import {PermissionDirective} from "../../permissions/permission.directive";
 
@@ -32,6 +32,8 @@ export class StartPageComponent implements OnDestroy{
   public readonly routeParams$ = this.route.params;
   public readonly queryParams$ = this.route.queryParams;
 
+  private readonly document = inject(DOCUMENT);
+
   public addRandomQueryParam() {
     const key = Math.random();
     const value = Math.random();
@@ -44,10 +46,18 @@ export class StartPageComponent implements OnDestroy{
   public constructor() {
     this.route.queryParams.subscribe({
       next: console.info,
-    })
+    });
   }
 
   public ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  public callPeter() {
+    type WindowWithPeter = {
+      callPeter: () => void
+    } & Window;
+
+    (this.document.defaultView as unknown as WindowWithPeter).callPeter();
   }
 }

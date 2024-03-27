@@ -2,10 +2,10 @@ import {Component, inject, OnDestroy} from '@angular/core';
 import {SatelliteComponent} from '../../layouts/satellite/satellite.component';
 import {CommandclockService} from './commandclock.service';
 import {Observable, Subscription} from 'rxjs';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, JsonPipe, NgFor, NgIf} from '@angular/common';
 import {CommandEditService} from './CommandEditService';
 import {CommandEdit} from './CommandEdit.interface';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
   selector: 'oitc-commands-edit-page',
@@ -13,7 +13,10 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
   imports: [
     SatelliteComponent,
     AsyncPipe,
-    ReactiveFormsModule
+    FormsModule,
+    NgFor,
+    NgIf,
+    JsonPipe
   ],
   templateUrl: './commands-edit-page.component.html',
   styleUrl: './commands-edit-page.component.css'
@@ -28,14 +31,7 @@ export class CommandsEditPageComponent implements OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
   private CommandEditService = inject(CommandEditService);
-  public command: CommandEdit | null = null;
-
-  private readonly formBuilder = inject(FormBuilder);
-  public readonly form: FormGroup = this.formBuilder.group({
-    name: [''],
-    command_line: [''],
-    command_type: [''],
-  });
+  public command!: CommandEdit;
 
   constructor() {
     $localize`Start Page`;
@@ -48,10 +44,32 @@ export class CommandsEditPageComponent implements OnDestroy {
 
     this.subscriptions.add(this.CommandEditService.load(3)
       .subscribe((command) => {
-        this.form.patchValue(command); // update input fields
         this.command = command; // to display in template
+
+        console.log('command', command);
       })
     );
+  }
+
+  public formSubmit(values: any) {
+    console.log('form values', values);
+
+    console.log('command reference', this.command);
+  }
+
+  public addCmdArgFormControl(): void {
+    this.command?.commandarguments.push({
+      id: 0,
+      command_id: 0,
+      name: '',
+      human_name: '',
+      created: 'heute',
+      modified: 'heute',
+    })
+    /*
+    this.cmdArgsForm.push(
+      this.formBuilder.control(Math.random()), { emitEvent: true }
+    );*/
   }
 
   ngOnDestroy() {
@@ -60,5 +78,9 @@ export class CommandsEditPageComponent implements OnDestroy {
 
   public stopClock() {
     this.subscriptions.unsubscribe();
+  }
+
+  public changeName(): void {
+    this.command.name = Math.random()+'';
   }
 }
