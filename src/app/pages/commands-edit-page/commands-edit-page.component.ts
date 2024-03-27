@@ -38,6 +38,8 @@ export class CommandsEditPageComponent implements OnDestroy {
   });
 
   constructor() {
+    $localize`Start Page`;
+
     this.clock$ = this.clock.startClock();
 
     this.subscriptions.add(this.clock$.subscribe((date) => {
