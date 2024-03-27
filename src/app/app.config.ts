@@ -15,7 +15,7 @@ import {csrfInterceptor} from "./auth/csrf.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: LEGACY_BASE_URL, useValue: '' }, // Must be replaced by real staged URL
+    { provide: LEGACY_BASE_URL, useValue: '/#!' }, // Must be replaced by real staged URL
     { provide: PROXY_PATH, useValue: '' },
     { provide: AuthService, useClass: AuthService },
     provideHttpClient(

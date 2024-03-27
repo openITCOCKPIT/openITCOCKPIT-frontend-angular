@@ -22,26 +22,26 @@
 - Angular 18 App als Poc ✅
 - Globale Styles implementieren ✅
 - Skeleton ✅
-  - Header (wie angularJS)
-  - Navbar (wie angularJS)
+  - Header (wie angularJS) ✅
+  - Navbar (wie angularJS) ✅
 - Navigation Concept
   - Query Params ✅
   - + wir benötigen einen State => nicht ✅
 - Header
   - Websockets oder Polling zwischen den Clients
   - Uhrzeit - auto updates + Timezones
-- Authentication Authorization
+- Authentication Authorization ✅
   - Login ✅
   - Logout ✅
-    - csrf Token + Post Header
-    - Permissions
-      - 3-4 Level
-      - permission UI directive
+    - csrf Token + Post Header ✅
+    - Permissions ✅
+      - 3-4 Level ✅
+      - permission UI directive ✅
       - voraussichtlich kein routing check ✅
 - Features / Module
 - Angular i18n
   - i18n Evalurieren (voraussichtlich i18n extract von Angular)
-- DTOs / Interfaces
+- DTOs / Interfaces ✅
 
 - CI/CD 
 - Script Loader für Standards Libs
