@@ -17,8 +17,8 @@ class LegacyUrlComponent {
 
     if (legacyUrl) {
 
-      console.log('destination', this.document.location.host + legacyUrl)
-      this.document.location.href = this.document.location.host + legacyUrl;
+      console.log('destination',  legacyUrl)
+      this.document.location.href = legacyUrl;
     }
   }
 }
