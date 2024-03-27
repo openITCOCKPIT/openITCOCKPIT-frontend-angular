@@ -2,6 +2,8 @@
     <div class="search hidden-lg-down" top-search=""></div>
     <div class="ml-auto d-flex">
 
+
+
         <form [formGroup]="form" (ngSubmit)="submitSearch()">
           <select formControlName="type">
             <option [value]="SearchType.Host">{{ SearchType.Host }}</option>
