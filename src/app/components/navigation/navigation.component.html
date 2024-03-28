@@ -11,14 +11,14 @@
     <li ng-if="item.items.length > 0" *ngFor="let subItem of item.items"
         class="ng-scope menufilterSelectable">
 
-        <a ng-if="!item.items" class="waves-effect waves-themed ng-scope" title="Dashboards">
-            <i class="fa fa-home"></i>
+        <a ng-if="!item.items" (click)="toggleGroup(item)" class="waves-effect waves-themed ng-scope" href="#" title="Dashboards">
+            <fa-icon icon="retweet" />
             <span class="menu-item-parent nav-link-text ng-binding">
-                🟡   {{ subItem.name }}
+                {{ subItem.name }}
 
             </span>
         </a>
-        <ul ng-if="subItem.items.length > 0">
+        <ul ng-if="subItem.items.length > 0" style="display:none;">
             <li *ngFor="let subsubItem of subItem.items" class="menufilterSelectable">
                 <a class="waves-effect waves-themed"
                    title="{{subsubItem.name}}" ng-click="scrollTop();">
