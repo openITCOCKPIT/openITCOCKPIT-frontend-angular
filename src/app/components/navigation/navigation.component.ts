@@ -23,8 +23,8 @@ export class NavigationComponent {
         this.MenuSubject = this.NavigationService.getLinkSubject();
     };
 
-    public toggleGroup(item:object ) : void
-    {
+    public toggleGroup(item: Link): void {
+        item.showSubmenu = !(item.showSubmenu || false);
         console.warn("Congrats, you toggled a group. Dipshit!");
         console.warn(item);
     }
