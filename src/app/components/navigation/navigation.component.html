@@ -11,19 +11,19 @@
     <li ng-if="item.items.length > 0" *ngFor="let subItem of item.items"
         class="ng-scope menufilterSelectable">
 
-        <a ng-if="!item.items" (click)="toggleGroup(item)" class="waves-effect waves-themed ng-scope" href="#" title="Dashboards">
+        <a ng-if="!item.items" (click)="toggleGroup(subItem)" class="waves-effect waves-themed ng-scope" href="#" title="Dashboards">
             <fa-icon icon="retweet" />
             <span class="menu-item-parent nav-link-text ng-binding">
-                {{ subItem.name }}
+                {{ subItem.alias || subItem.name }}
             </span>
         </a>
-        <ul ng-if="subItem.items.length > 0 && item.showSubmenu === true">
+        <ul *ngIf="(subItem.items) && (subItem.showSubmenu === true)">
             <li *ngFor="let subsubItem of subItem.items" class="menufilterSelectable">
                 <a class="waves-effect waves-themed"
                    title="{{subsubItem.name}}" ng-click="scrollTop();" href="#">
                     <i class="{{subsubItem.icon}}"></i>
                     <span class="nav-link-text">
-                        🔴   {{ subsubItem.name }}
+                        {{ subsubItem.name }}
                     </span>
                 </a>
             </li>
