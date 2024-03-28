@@ -16,7 +16,9 @@ class LegacyUrlComponent {
     const { legacyUrl } = this.route.snapshot.data;
 
     if (legacyUrl) {
-      this.document.location = legacyUrl;
+
+      console.log('destination',  legacyUrl)
+      this.document.location.href = legacyUrl;
     }
   }
 }

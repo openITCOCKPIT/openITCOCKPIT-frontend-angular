@@ -38,11 +38,13 @@ export class SearchService {
   }
 
   private searchHost(query: string): void {
-    const params = new URLSearchParams();
-    params.set('hostname', query);
-
-    this.router.navigateByUrl('/#!/hosts/index?' + params.toString());
+    this.router.navigate(['/hosts/index'], {
+      queryParams: {
+        hostname: query,
+      },
+    });
   }
+
   private searchAddress(query: string): void {
     this.router.navigate(['/#!/hosts/index'], {
       queryParams: {
@@ -50,13 +52,15 @@ export class SearchService {
       },
     });
   }
+
   private searchService(query: string): void {
-    this.router.navigate(['/#!/services/index'], {
+    this.router.navigate(['/services/index'], {
       queryParams: {
         servicename: query,
       },
     });
   }
+
   private searchUUID(type: SearchType, query: string): void {
     const proxyPath = this.proxyPath;
     this.http.post(`${proxyPath}/angular/topSearch.json?angular=true`, {
@@ -68,15 +72,17 @@ export class SearchService {
       next: (data) => console.info('search uuid result', data),
     })
   }
+
   private searchTagsHost(query: string): void {
-    this.router.navigate(['/#!/hosts/index'], {
+    this.router.navigate(['/hosts/index'], {
       queryParams: {
         keywords: query,
       },
     });
   }
+
   private searchTagsService(query: string): void {
-    this.router.navigate(['/#!/services/index'], {
+    this.router.navigate(['/services/index'], {
       queryParams: {
         keywords: query,
       },

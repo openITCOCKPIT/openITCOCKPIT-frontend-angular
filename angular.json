@@ -42,7 +42,9 @@
               "src/assets/smartadmin4/dist/css/app.bundle.css",
               "src/assets/smartadmin4/dist/css/themes/cust-theme-10.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/peter.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -76,7 +78,7 @@
             },
             "development": {
               "buildTarget": "frontend-angular:build:development",
-              //"proxyConfig": "src/proxy.conf.json"
+              // "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -102,7 +104,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+
+            ]
           }
         }
       }
