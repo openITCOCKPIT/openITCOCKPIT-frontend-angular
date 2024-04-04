@@ -4,15 +4,15 @@
   <h1 i18n>Start Page</h1>
   <h2 i18n>Route Params</h2>
   <pre *ngIf="routeParams$ | async as routeParams">
-    {{ routeParams | json}}
-    {{ routeParams | json}}
-    {{ routeParams | json}}
+    {{ routeParams | json }}
+    {{ routeParams | json }}
+    {{ routeParams | json }}
   </pre>
   <h2 i18n>Query Params</h2>
   <pre>
     {{ queryParams$ | async | json }}
   </pre>
-  <hr />
+  <hr/>
   <button (click)="addRandomQueryParam()">add random query param</button>
   <h1 i18n>Permissions</h1>
   <span *oitcPermission="['foo', 'bar', 'baz']">show</span>
@@ -21,7 +21,7 @@
 
   <span *oitcPermission="'hosts.index'">hosts.index</span>
   <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
-  <hr />
+  <hr/>
   <button (click)="callPeter()">call peter</button>
 </oitc-satellite>
 

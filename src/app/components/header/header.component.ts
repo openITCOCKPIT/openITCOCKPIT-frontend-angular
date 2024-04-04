@@ -1,10 +1,10 @@
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "../../auth/auth.service";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {SearchService} from "../../search/search.service";
-import {SearchType} from "../../search/search-type.enum";
-import {filter, map, Subscription} from "rxjs";
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from "../../auth/auth.service";
+import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
+import { SearchService } from "../../search/search.service";
+import { SearchType } from "../../search/search-type.enum";
+import { filter, map, Subscription } from "rxjs";
 
 @Component({
   selector: 'oitc-header',
@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public submitSearch() {
-    const { type, query } = this.form.value;
+    const {type, query} = this.form.value;
 
     this.searchService.search(type as SearchType, query as string);
   }

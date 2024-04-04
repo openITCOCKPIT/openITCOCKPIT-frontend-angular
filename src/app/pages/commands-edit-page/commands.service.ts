@@ -1,9 +1,9 @@
-import {inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {switchMap, Observable, map, tap, catchError, of, BehaviorSubject, retry} from "rxjs";
-import {PROXY_PATH} from "../../tokens/proxy-path.token";
-import {CommandEdit} from './CommandEdit.interface';
+import { inject, Injectable } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { map, Observable } from "rxjs";
+import { PROXY_PATH } from "../../tokens/proxy-path.token";
+import { CommandEdit } from './CommandEdit.interface';
 
 @Injectable({
   providedIn: 'root',

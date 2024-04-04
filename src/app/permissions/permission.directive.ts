@@ -1,7 +1,6 @@
-import {Directive, inject, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {PermissionsService} from "./permissions.service";
-import {combineLatestWith, filter, map, ReplaySubject, Subject, Subscription, tap} from "rxjs";
-import {combineLatest} from "rxjs/internal/operators/combineLatest";
+import { Directive, inject, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { PermissionsService } from "./permissions.service";
+import { combineLatestWith, filter, map, ReplaySubject, Subscription } from "rxjs";
 
 @Directive({
   selector: '[oitcPermission]',
@@ -13,14 +12,13 @@ export class PermissionDirective implements OnInit, OnDestroy {
   private readonly viewContainer = inject(ViewContainerRef);
 
   private readonly subscription = new Subscription();
+  private readonly oitcPermission$$ = new ReplaySubject<string | string[]>();
 
-  @Input({ required: true })
+  @Input({required: true})
   public set oitcPermission(value: string | string[]) {
 
     this.oitcPermission$$.next(value);
   };
-
-  private readonly oitcPermission$$ = new ReplaySubject<string | string[]>();
 
   public ngOnInit() {
     this.subscription.add(this.oitcPermission$$.pipe(

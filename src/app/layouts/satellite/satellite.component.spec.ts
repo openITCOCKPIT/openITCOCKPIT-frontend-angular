@@ -10,8 +10,8 @@ describe('SatelliteComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SatelliteComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(SatelliteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

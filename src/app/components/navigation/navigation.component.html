@@ -1,20 +1,20 @@
 <div class="page-logo pointer" href="/#!/dashboards/index">
-  <img src="/img/logos/logo_header.png" class="header-logo" alt="logo" aria-roledescription="logo" style="width: 28px;">
+  <img alt="logo" aria-roledescription="logo" class="header-logo" src="/img/logos/logo_header.png" style="width: 28px;">
   <span class="page-logo-text mr-1 ng-binding">openITCOCKPIT</span>
   <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
 </div>
 
-<nav id="js-primary-nav" class="primary-nav js-list-filter" role="navigation">
+<nav class="primary-nav js-list-filter" id="js-primary-nav" role="navigation">
   <div class="nav-filter">
     <div class="position-relative">
-      <input type="text" id="nav_filter_input" placeholder="Type to search" class="form-control" tabindex="0">
+      <input class="form-control" id="nav_filter_input" placeholder="Type to search" tabindex="0" type="text">
       <a class="btn-primary btn-search-close js-waves-off">
-          <fa-icon icon="chevron-up" />
+        <fa-icon icon="chevron-up"/>
       </a>
     </div>
   </div>
   <div class="info-card">
-    <img class="profile-image rounded-circle" alt="me"
+    <img alt="me" class="profile-image rounded-circle"
          src="/img/userimages/initial_avatar_d78ff0bc69e9a7a5c86ab082d61d9716.png">
     <div class="info-card-text">
       <a class="d-flex align-items-center text-white" href="/#!/profile/edit/">
@@ -26,27 +26,27 @@
   </div>
 
 
-  <ul id="js-nav-menu" class="nav-menu ng-isolate-scope js-nav-built">
+  <ul class="nav-menu ng-isolate-scope js-nav-built" id="js-nav-menu">
     <li class="nav-title ng-binding ng-scope">
       Overview
     </li>
     <li class="ng-scope menufilterSelectable">
-      <a class="waves-effect waves-themed ng-scope" title="Dashboards" href="/#!/dashboards/index">
-          <fa-icon icon="tachometer" />
+      <a class="waves-effect waves-themed ng-scope" href="/#!/dashboards/index" title="Dashboards">
+        <fa-icon icon="tachometer"/>
         <span class="menu-item-parent nav-link-text ng-binding">
           Dashboards
         </span>
       </a>
 
-      <a class="waves-effect waves-themed ng-scope" [routerLink]="'/bullllllshit'">
-          <fa-icon icon="tachometer" />
+      <a [routerLink]="'/bullllllshit'" class="waves-effect waves-themed ng-scope">
+        <fa-icon icon="tachometer"/>
         <span class="menu-item-parent nav-link-text ng-binding">
           gibbet nich
         </span>
       </a>
 
-      <a class="waves-effect waves-themed ng-scope" [routerLink]="['commands', 'edit']">
-        <fa-icon icon="tachometer" />
+      <a [routerLink]="['commands', 'edit']" class="waves-effect waves-themed ng-scope">
+        <fa-icon icon="tachometer"/>
         <span class="menu-item-parent nav-link-text ng-binding">
           Comand Edit
         </span>

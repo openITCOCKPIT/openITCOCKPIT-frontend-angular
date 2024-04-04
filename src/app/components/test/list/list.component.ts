@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {NgFor} from "@angular/common";
-import {ListItemComponent} from "../list-item/list-item.component";
+import { Component } from '@angular/core';
+import { NgFor } from "@angular/common";
+import { ListItemComponent } from "../list-item/list-item.component";
 
 @Component({
   selector: 'oitc-list',

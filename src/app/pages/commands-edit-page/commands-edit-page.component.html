@@ -14,7 +14,7 @@
         <label class="control-label">
           Command type
         </label>
-        <select class="form-control" name="command_type" [(ngModel)]="command.command_type">
+        <select [(ngModel)]="command.command_type" class="form-control" name="command_type">
           <option value="1">Service check command</option>
           <option value="2">Host check command</option>
           <option value="3">Notification command</option>
@@ -26,15 +26,15 @@
         <label class="control-label">
           Name
         </label>
-        <input class="form-control" name="name" type="text" [(ngModel)]="command.name">
+        <input [(ngModel)]="command.name" class="form-control" name="name" type="text">
       </div>
 
       <div class="form-group required">
         <label class="control-label" for="commandLineTextArea">
           Command line
         </label>
-        <textarea name="command_line" class="form-control code-font" type="text"
-                  cols="30" rows="6" id="commandLineTextArea" [(ngModel)]="command.command_line"></textarea>
+        <textarea [(ngModel)]="command.command_line" class="form-control code-font" cols="30"
+                  id="commandLineTextArea" name="command_line" rows="6" type="text"></textarea>
       </div>
 
 
@@ -49,9 +49,10 @@
         -->
 
 
-        <input type="text" name="{{i}}" *ngFor="let arg of command.commandarguments;index as i" [(ngModel)]="arg.human_name" />
+        <input *ngFor="let arg of command.commandarguments;index as i" [(ngModel)]="arg.human_name" name="{{i}}"
+               type="text"/>
 
-        <hr />
+        <hr/>
 
         <pre>
           {{ form.value | json }}
@@ -62,10 +63,10 @@
         <button (click)="changeName()">change name</button>
       </div>
 
-      <div ng-repeat="arg in args" class="col-lg-12">
+      <div class="col-lg-12" ng-repeat="arg in args">
         <div class="row">
           <div class="col-lg-1">
-            <div style="margin-top: 24px;" class="text-purple">
+            <div class="text-purple" style="margin-top: 24px;">
               arg.name
             </div>
           </div>
@@ -73,12 +74,12 @@
             <label class="control-label" for="newArg">
               Name
             </label>
-            <input class="form-control input-sm" type="text"
-                   placeholder="<?php echo __('Please enter a name'); ?>"
+            <input class="form-control input-sm" id="newArg"
                    name="human_name"
                    ng-model="arg.human_name"
-                   id="newArg"
-                   style="width:100%;">
+                   placeholder="<?php echo __('Please enter a name'); ?>"
+                   style="width:100%;"
+                   type="text">
           </div>
           <div class="col-md-1 col-lg-1">
             <a class="btn btn-danger btn-sm waves-effect waves-themed deleteCommandArg margin-top-25"
@@ -91,13 +92,13 @@
       </div>
       <div class="row ml-1">
         <div ng-show="args.length > 0">
-        <span class="col col-lg-3 col-xs-12 text-danger">
-          <i class="fa fa-exclamation-circle"></i>
-          <?php echo __('empty arguments will be removed automatically'); ?>
-        </span>
+          <span class="col col-lg-3 col-xs-12 text-danger">
+            <i class="fa fa-exclamation-circle"></i>
+            <?php echo __('empty arguments will be removed automatically'); ?>
+          </span>
         </div>
         <div class="ml-auto mr-3">
-          <a class="btn btn-success btn-xs " id="add_new_arg" href="javascript:void(0);"
+          <a class="btn btn-success btn-xs " href="javascript:void(0);" id="add_new_arg"
              ng-click="addArg()">
             <i class="fa fa-plus"></i>
             <?php echo __('Add argument'); ?>
