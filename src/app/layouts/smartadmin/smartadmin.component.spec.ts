@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SatelliteComponent } from './satellite.component';
+import { SmartadminComponent } from './smartadmin.component';
 
-describe('SatelliteComponent', () => {
-  let component: SatelliteComponent;
-  let fixture: ComponentFixture<SatelliteComponent>;
+describe('SmartadminComponent', () => {
+  let component: SmartadminComponent;
+  let fixture: ComponentFixture<SmartadminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SatelliteComponent]
+      imports: [SmartadminComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(SatelliteComponent);
+    fixture = TestBed.createComponent(SmartadminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

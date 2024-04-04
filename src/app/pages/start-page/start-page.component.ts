@@ -1,17 +1,17 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { SatelliteComponent } from "../../layouts/satellite/satellite.component";
 import { HeaderComponent } from "../../components/header/header.component";
 import { NavigationComponent } from "../../components/navigation/navigation.component";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
+import { SmartadminComponent } from '../../layouts/smartadmin/smartadmin.component';
 
 @Component({
   selector: 'app-start-page',
   standalone: true,
   imports: [
-    SatelliteComponent,
+    SmartadminComponent,
     HeaderComponent,
     NavigationComponent,
     RouterModule,

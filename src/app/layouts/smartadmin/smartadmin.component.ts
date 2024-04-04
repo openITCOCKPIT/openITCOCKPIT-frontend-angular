@@ -3,15 +3,15 @@ import { RouterOutlet } from "@angular/router";
 import { HeaderComponent } from "../../components/header/header.component";
 
 @Component({
-  selector: 'oitc-satellite',
+  selector: 'oitc-smartadmin',
   standalone: true,
   imports: [
     RouterOutlet,
     HeaderComponent
   ],
-  templateUrl: './satellite.component.html',
-  styleUrl: './satellite.component.css'
+  templateUrl: './smartadmin.component.html',
+  styleUrl: './smartadmin.component.css'
 })
-export class SatelliteComponent {
+export class SmartadminComponent {
 
 }
