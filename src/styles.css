@@ -1,3 +1,17 @@
+
+/*
+ * Importing SmartAdmin globally.
+ * This is required for the SmartAdmin Layout but for now this is disabled due to CoreUI
+ */
+/*
+@import "./assets/smartadmin4/dist/css/vendors.bundle.css";
+@import "./assets/smartadmin4/dist/css/app.bundle.css";
+@import "./assets/smartadmin4/dist/css/themes/cust-theme-10.css";
+*/
+
+@import "assets/coreui/style.scss";
+
+/*
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -10,3 +24,6 @@ body {
   min-height: 100%;
   margin: 0;
 }
+*/
+
+

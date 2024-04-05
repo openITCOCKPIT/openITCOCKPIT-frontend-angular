@@ -10,8 +10,8 @@ describe('CommandsEditPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CommandsEditPageComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CommandsEditPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

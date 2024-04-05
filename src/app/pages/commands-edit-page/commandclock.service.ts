@@ -1,6 +1,5 @@
-import {Injectable} from "@angular/core";
-import {interval, map, Observable, tap} from 'rxjs';
-import {popNumber} from 'rxjs/internal/util/args';
+import { Injectable } from "@angular/core";
+import { interval, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

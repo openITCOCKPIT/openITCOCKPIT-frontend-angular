@@ -1,10 +1,10 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {PROXY_PATH} from "../tokens/proxy-path.token";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { PROXY_PATH } from "../tokens/proxy-path.token";
 import { Permission } from './permission.type';
 
-import {BehaviorSubject, filter, map, Observable, of, shareReplay, startWith, switchMap, take, tap} from "rxjs";
-import {AuthService} from "../auth/auth.service";
+import { BehaviorSubject, filter, map, switchMap, take } from "rxjs";
+import { AuthService } from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +21,6 @@ export class PermissionsService {
     this.loadPermissions();
   }
 
-  private loadPermissions(): void {
-    const proxyPath = this.proxyPath;
-
-    this.authService.authenticated$.pipe(
-      filter(authenticated => authenticated),
-      take(1),
-      switchMap(() => this.http.get<{permissions: Permission}>(`${proxyPath}/users/getUserPermissions.json`)),
-      map(({permissions}) => permissions)
-    ).subscribe({
-      next: permissions => this.permissions$$.next(permissions),
-    });
-  }
-
   public checkPermission(checkChunks: string | string[], againstPermissions: Permission): boolean {
     let _chunks: string[] = [];
 
@@ -48,5 +35,18 @@ export class PermissionsService {
     }, againstPermissions);
 
     return result === _chunks[_chunks.length - 1];
+  }
+
+  private loadPermissions(): void {
+    const proxyPath = this.proxyPath;
+
+    this.authService.authenticated$.pipe(
+      filter(authenticated => authenticated),
+      take(1),
+      switchMap(() => this.http.get<{ permissions: Permission }>(`${proxyPath}/users/getUserPermissions.json`)),
+      map(({permissions}) => permissions)
+    ).subscribe({
+      next: permissions => this.permissions$$.next(permissions),
+    });
   }
 }

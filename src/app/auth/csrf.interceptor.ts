@@ -1,7 +1,7 @@
-import {HttpEvent, HttpInterceptorFn, HttpResponse, HttpStatusCode} from '@angular/common/http';
-import {inject} from "@angular/core";
-import {AuthService} from "./auth.service";
-import {catchError, EMPTY, tap} from "rxjs";
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from "@angular/core";
+import { AuthService } from "./auth.service";
+import { tap } from "rxjs";
 
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

@@ -1,9 +1,9 @@
-import {inject, Injectable} from '@angular/core';
-import {SearchType} from "./search-type.enum";
-import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {take} from "rxjs";
-import {PROXY_PATH} from "../tokens/proxy-path.token";
+import { inject, Injectable } from '@angular/core';
+import { SearchType } from "./search-type.enum";
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { take } from "rxjs";
+import { PROXY_PATH } from "../tokens/proxy-path.token";
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,11 @@ export class SearchService {
         this.searchTagsService(query);
         break;
     }
+  }
+
+  public isUUID(value: string): boolean {
+    const RegExObject = new RegExp('([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', 'i');
+    return value.match(RegExObject) !== null;
   }
 
   private searchHost(query: string): void {
@@ -87,10 +92,5 @@ export class SearchService {
         keywords: query,
       },
     });
-  }
-
-  public isUUID(value: string): boolean {
-    const RegExObject = new RegExp('([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', 'i');
-    return value.match(RegExObject) !== null;
   }
 }

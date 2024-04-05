@@ -1,23 +1,28 @@
-import {Component, inject} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
-import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes} from '@angular/router';
-import {LEGACY_BASE_URL} from "./tokens/legacy-base-url.token";
-import {LoginPageComponent} from "./pages/login-page/login-page.component";
-import {authGuard} from "./auth/auth.guard";
+import { Component, inject } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
+import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
+import { authGuard } from "./auth/auth.guard";
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
-@Component({selector: 'legacy-redirect', standalone: true, template: `If you can read this, something has to be fixed ;)`, imports: [RouterModule]})
+@Component({
+  selector: 'legacy-redirect',
+  standalone: true,
+  template: `If you can read this, something has to be fixed ;)`,
+  imports: [RouterModule]
+})
 class LegacyUrlComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly document = inject(DOCUMENT);
+
   public constructor() {
 
-    const { legacyUrl } = this.route.snapshot.data;
+    const {legacyUrl} = this.route.snapshot.data;
 
     if (legacyUrl) {
 
-      console.log('destination',  legacyUrl)
+      console.log('destination', legacyUrl)
       this.document.location.href = legacyUrl;
     }
   }

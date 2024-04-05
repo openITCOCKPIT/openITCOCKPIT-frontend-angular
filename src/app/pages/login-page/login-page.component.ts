@@ -1,9 +1,9 @@
-import {Component, inject, OnDestroy} from '@angular/core';
-import {BlankComponent} from "../../layouts/blank/blank.component";
-import {AuthService} from "../../auth/auth.service";
-import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
-import {EmailValidator, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { Component, inject, OnDestroy } from '@angular/core';
+import { BlankComponent } from "../../layouts/blank/blank.component";
+import { AuthService } from "../../auth/auth.service";
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 
 @Component({
   selector: 'oitc-login-page',

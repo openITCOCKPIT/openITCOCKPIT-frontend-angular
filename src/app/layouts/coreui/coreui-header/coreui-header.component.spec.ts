@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SatelliteComponent } from './satellite.component';
+import { CoreuiHeaderComponent } from './coreui-header.component';
 
-describe('SatelliteComponent', () => {
-  let component: SatelliteComponent;
-  let fixture: ComponentFixture<SatelliteComponent>;
+describe('CoreuiHeaderComponent', () => {
+  let component: CoreuiHeaderComponent;
+  let fixture: ComponentFixture<CoreuiHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SatelliteComponent]
+      imports: [CoreuiHeaderComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SatelliteComponent);
+    fixture = TestBed.createComponent(CoreuiHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

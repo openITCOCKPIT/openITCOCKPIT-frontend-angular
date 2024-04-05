@@ -10,8 +10,8 @@ describe('BlankComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BlankComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(BlankComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

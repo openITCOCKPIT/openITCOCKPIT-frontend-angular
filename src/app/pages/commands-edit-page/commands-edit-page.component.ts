@@ -1,17 +1,17 @@
-import {Component, inject, OnDestroy} from '@angular/core';
-import {SatelliteComponent} from '../../layouts/satellite/satellite.component';
-import {CommandclockService} from './commandclock.service';
-import {Observable, Subscription} from 'rxjs';
-import {AsyncPipe, JsonPipe, NgFor, NgIf} from '@angular/common';
-import {CommandEdit} from './CommandEdit.interface';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CommandsService} from './commands.service';
+import { Component, inject, OnDestroy } from '@angular/core';
+import { CommandclockService } from './commandclock.service';
+import { Observable, Subscription } from 'rxjs';
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { CommandEdit } from './CommandEdit.interface';
+import { FormsModule } from '@angular/forms';
+import { CommandsService } from './commands.service';
+import { SmartadminComponent } from '../../layouts/smartadmin/smartadmin.component';
 
 @Component({
   selector: 'oitc-commands-edit-page',
   standalone: true,
   imports: [
-    SatelliteComponent,
+    SmartadminComponent,
     AsyncPipe,
     FormsModule,
     NgFor,
@@ -23,15 +23,14 @@ import {CommandsService} from './commands.service';
 })
 export class CommandsEditPageComponent implements OnDestroy {
 
-  // Remove this 💩
-  private clock = inject(CommandclockService);
   public now: Date = new Date();
   public clock$: Observable<Date> = new Observable<Date>();
+  public command!: CommandEdit;
   // end of remove
-
+  // Remove this 💩
+  private clock = inject(CommandclockService);
   private subscriptions: Subscription = new Subscription();
   private CommandsService = inject(CommandsService);
-  public command!: CommandEdit;
 
   constructor() {
     $localize`Start Page`;
@@ -81,6 +80,6 @@ export class CommandsEditPageComponent implements OnDestroy {
   }
 
   public changeName(): void {
-    this.command.name = Math.random()+'';
+    this.command.name = Math.random() + '';
   }
 }

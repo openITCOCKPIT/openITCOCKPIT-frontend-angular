@@ -10,8 +10,8 @@ describe('ListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ListComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(ListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

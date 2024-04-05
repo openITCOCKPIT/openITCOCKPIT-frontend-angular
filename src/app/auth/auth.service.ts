@@ -1,8 +1,8 @@
-import {inject, Injectable, Signal, signal, WritableSignal} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {switchMap, Observable, map, tap, catchError, of, BehaviorSubject} from "rxjs";
-import {PROXY_PATH} from "../tokens/proxy-path.token";
+import { inject, Injectable } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from "rxjs";
+import { PROXY_PATH } from "../tokens/proxy-path.token";
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +69,7 @@ export class AuthService {
   public checkAuthentication(): Observable<boolean> {
     const proxyPath = this.proxyPath;
 
-    return this.http.get<Record<string, string|boolean>>(`${proxyPath}/users/login.json`).pipe(
+    return this.http.get<Record<string, string | boolean>>(`${proxyPath}/users/login.json`).pipe(
       map(data => data['isLoggedIn'] as boolean),
       catchError(error => {
         console.error(error);

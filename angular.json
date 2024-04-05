@@ -37,10 +37,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/smartadmin4/dist/css/vendors.bundle.css",
-              "src/assets/smartadmin4/dist/css/app.bundle.css",
-              "src/assets/smartadmin4/dist/css/themes/cust-theme-10.css"
+              "src/styles.css"
             ],
             "scripts": [
               "src/peter.js"
