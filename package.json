@@ -19,9 +19,12 @@
     "@angular/platform-browser-dynamic": "^17.3.3",
     "@angular/router": "^17.3.3",
     "@coreui/angular": "^5.0.1",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-angular": "^5.0.1",
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "ngx-scrollbar": "^14.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"

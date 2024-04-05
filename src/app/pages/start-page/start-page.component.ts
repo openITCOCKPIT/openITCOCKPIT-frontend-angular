@@ -5,20 +5,22 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
-import { SmartadminComponent } from '../../layouts/smartadmin/smartadmin.component';
+import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { ButtonDirective } from '@coreui/angular';
 
 @Component({
   selector: 'app-start-page',
   standalone: true,
   imports: [
-    SmartadminComponent,
+    CoreuiComponent,
     HeaderComponent,
     NavigationComponent,
     RouterModule,
     AsyncPipe,
     JsonPipe,
     NgIf,
-    PermissionDirective
+    PermissionDirective,
+    ButtonDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
