@@ -13,13 +13,11 @@
     </c-sidebar-brand>
   </c-sidebar-header>
 
-  <!--
-  <ng-scrollbar #scrollbar="ngScrollbar" (updated)="onScrollbarUpdate(scrollbar.state)" class="overflow" pointerEventsMethod="scrollbar" visibility="hover">
-    <c-sidebar-nav #overflow [navItems]="navItems" dropdownMode="close" compact />
-  </ng-scrollbar>
-  -->
+  <c-sidebar-nav #overflow [navItems]="navItems" dropdownMode="close" compact/>
+
   @if (!sidebar1.narrow) {
-    <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable" style="cursor: pointer;">
+    <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable"
+                      style="cursor: pointer;">
       <button cSidebarToggler></button>
     </c-sidebar-footer>
   }
@@ -31,7 +29,7 @@
   <oitc-coreui-header [cShadowOnScroll]="'sm'"
                       class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
                       position="sticky"
-                      sidebarId="sidebar1" />
+                      sidebarId="sidebar1"/>
   <!--app-body-->
   <div class="body flex-grow-1">
     <c-container [fluid]="true" class="h-auto px-4">

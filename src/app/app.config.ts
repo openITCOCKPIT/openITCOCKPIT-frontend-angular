@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,6 +8,9 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { PROXY_PATH } from "./tokens/proxy-path.token";
 import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,7 +27,9 @@ export const appConfig: ApplicationConfig = {
 
        */
     ),
+    //importProvidersFrom(BrowserAnimationsModule),
 
-    provideRouter(routes)
+    provideRouter(routes),
+    provideAnimations(),
   ]
 };
