@@ -8,8 +8,44 @@
     </ol>
   </nav>
 
-
   <h1 i18n>Start Page</h1>
+
+  <c-card>
+    <c-card-header>
+      <c-nav class="card-header-pills float-end">
+        <c-nav-item class="px-1">
+          <button cButton color="secondary" class="ripple" size="sm">
+            Button 1
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button cButton color="secondary" class="ripple" size="sm">
+            Button 2
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button cButton color="secondary" class="ripple" size="sm">
+            Button 3
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
+    <c-card-body>This is some text within a card body.
+      <h5 cCardTitle>Card title</h5>
+      <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
+        Card subtitle
+      </h6>
+      <ul cListGroup [flush]="true">
+        <li cListGroupItem>Cras justo odio</li>
+        <li cListGroupItem>Dapibus ac facilisis in</li>
+        <li cListGroupItem>Vestibulum at eros</li>
+      </ul>
+    </c-card-body>
+    <c-card-footer class="text-end">
+      <button cButton color="primary" class="ripple">Save me</button>
+    </c-card-footer>
+  </c-card>
+
 
   <div>
     <h2>Button test</h2>
@@ -52,5 +88,3 @@
   <hr/>
   <button (click)="callPeter()">call peter</button>
 </oitc-coreui>
-
-
