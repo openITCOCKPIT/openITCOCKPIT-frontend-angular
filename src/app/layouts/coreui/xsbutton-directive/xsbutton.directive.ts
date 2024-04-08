@@ -9,6 +9,7 @@ import { ButtonDirective } from '@coreui/angular';
   standalone: true
 })
 export class XsButtonDirective extends ButtonDirective {
+
   // Override the size property defined in the original ButtonDirective
   // @ts-ignore
   @Input() override size?: 'xs' | 'sm' | 'lg' | '';
