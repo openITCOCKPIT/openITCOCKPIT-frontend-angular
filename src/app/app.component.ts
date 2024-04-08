@@ -5,7 +5,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
-
+import 'flag-icons';
 
 
 @Component({

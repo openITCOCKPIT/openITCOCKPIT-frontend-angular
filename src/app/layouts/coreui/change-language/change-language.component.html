@@ -1,0 +1,36 @@
+<c-dropdown variant="nav-item" *transloco="let t">
+  <button [caret]="false" cDropdownToggle>
+    @switch (currentLanguage) {
+      @case ("en") {
+        <span class="fi fi-us"></span>
+      }
+      @case ("de") {
+        <span class="fi fi-de"></span>
+      }
+      @default {
+        <span class="fi fi-xx"></span>
+      }
+    }
+  </button>
+  <div cDropdownMenu>
+    <button
+      (click)="onChangedLanguage('de')"
+      [active]="currentLanguage === 'de'"
+      cDropdownItem
+      class="d-flex align-items-center"
+    >
+      <span class="fi fi-de"></span>
+      {{ t('Deutsch / German') }}
+    </button>
+
+    <button
+      (click)="onChangedLanguage('en')"
+      [active]="currentLanguage === 'en'"
+      cDropdownItem
+      class="d-flex align-items-center"
+    >
+      <span class="fi fi-us"></span>
+      {{ t('English / English') }}
+    </button>
+  </div>
+</c-dropdown>
