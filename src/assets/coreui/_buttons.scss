@@ -1,0 +1,8 @@
+
+/* bring back good old .btn-xs */
+.btn-group-xs > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .875rem;
+  line-height: .7;
+  border-radius: .2rem;
+}
