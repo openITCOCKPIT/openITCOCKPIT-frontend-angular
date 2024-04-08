@@ -6,13 +6,27 @@ import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
 import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
-import { ButtonToolbarComponent, CardBodyComponent,
-  CardComponent, CardFooterComponent,
-  CardHeaderComponent, CardSubtitleDirective, CardTitleDirective,
+import {
+  ButtonToolbarComponent,
+  CardBodyComponent,
+  CardComponent,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardSubtitleDirective,
+  CardTitleDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective, FormSelectDirective, FormTextDirective, InputGroupTextDirective,
   ListGroupDirective,
-  ListGroupItemDirective, NavComponent, NavItemComponent, NavLinkDirective
+  ListGroupItemDirective,
+  NavComponent,
+  NavItemComponent,
+  NavLinkDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faAsterisk, faCircleInfo, faCoffee} from "@fortawesome/free-solid-svg-icons";
+import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
 
 @Component({
   selector: 'app-start-page',
@@ -38,7 +52,18 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
     NavItemComponent,
     NavLinkDirective,
     ButtonToolbarComponent,
-    XsButtonDirective
+    XsButtonDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormControlDirective,
+    FormTextDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormCheckComponent,
+    InputGroupTextDirective,
+    FormSelectDirective,
+    FaIconComponent,
+    RequiredIconComponent
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
@@ -77,4 +102,8 @@ export class StartPageComponent implements OnDestroy {
 
     (this.document.defaultView as unknown as WindowWithPeter).callPeter();
   }
+
+  protected readonly faCoffee = faCoffee;
+  protected readonly faCircleInfo = faCircleInfo;
+  protected readonly faAsterisk = faAsterisk;
 }
