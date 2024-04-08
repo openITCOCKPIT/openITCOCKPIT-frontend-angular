@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject} from '@angular/core';
 import {
   ContainerComponent,
   INavData,
@@ -18,6 +18,7 @@ import { CoreuiFooterComponent } from './coreui-footer/coreui-footer.component';
 import { CoreuiMenuComponent } from './coreui-menu/coreui-menu.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RouterLink } from '@angular/router';
+import {NavigationService} from "../../components/navigation/navigation.service";
 
 @Component({
   selector: 'oitc-coreui',
@@ -43,6 +44,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './coreui.component.css'
 })
 export class CoreuiComponent {
+  public navigationService: NavigationService = inject(NavigationService);
 
   public navItems: INavData[] = [
     {
