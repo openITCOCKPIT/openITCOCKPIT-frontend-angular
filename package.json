@@ -24,6 +24,7 @@
     "@coreui/angular": "^5.0.1",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-angular": "^5.0.1",
+    "@fontsource/roboto": "^5.0.12",
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
