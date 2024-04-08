@@ -19,6 +19,7 @@ import { delay, filter, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
+import { ChangeLanguageComponent } from '../change-language/change-language.component';
 @Component({
   selector: 'oitc-coreui-header',
   standalone: true,
@@ -39,7 +40,8 @@ import { IconDirective } from '@coreui/icons-angular';
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
-    IconDirective
+    IconDirective,
+    ChangeLanguageComponent
   ],
   templateUrl: './coreui-header.component.html',
   styleUrl: './coreui-header.component.css'

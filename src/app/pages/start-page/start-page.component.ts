@@ -24,9 +24,12 @@ import {
   NavLinkDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faAsterisk, faCircleInfo, faCoffee} from "@fortawesome/free-solid-svg-icons";
 import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
+import { TranslocoDirective } from "@jsverse/transloco";
+
 
 @Component({
   selector: 'app-start-page',
@@ -63,7 +66,8 @@ import {RequiredIconComponent} from "../../components/required-icon/required-ico
     InputGroupTextDirective,
     FormSelectDirective,
     FaIconComponent,
-    RequiredIconComponent
+    RequiredIconComponent,
+    TranslocoDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
