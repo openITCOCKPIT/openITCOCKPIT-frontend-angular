@@ -6,13 +6,13 @@ import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
 import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
-import {
-  ButtonDirective, ButtonToolbarComponent, CardBodyComponent,
+import { ButtonToolbarComponent, CardBodyComponent,
   CardComponent, CardFooterComponent,
   CardHeaderComponent, CardSubtitleDirective, CardTitleDirective,
   ListGroupDirective,
   ListGroupItemDirective, NavComponent, NavItemComponent, NavLinkDirective
 } from '@coreui/angular';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
   selector: 'app-start-page',
@@ -26,7 +26,6 @@ import {
     JsonPipe,
     NgIf,
     PermissionDirective,
-    ButtonDirective,
     CardComponent,
     CardHeaderComponent,
     ListGroupDirective,
@@ -38,7 +37,8 @@ import {
     NavComponent,
     NavItemComponent,
     NavLinkDirective,
-    ButtonToolbarComponent
+    ButtonToolbarComponent,
+    XsButtonDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
