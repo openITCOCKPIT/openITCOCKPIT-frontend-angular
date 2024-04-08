@@ -1,11 +1,11 @@
-import { Component, inject, OnDestroy } from '@angular/core';
-import { HeaderComponent } from "../../components/header/header.component";
-import { NavigationComponent } from "../../components/navigation/navigation.component";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
-import { Subscription } from "rxjs";
-import { PermissionDirective } from "../../permissions/permission.directive";
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import {Component, inject, OnDestroy} from '@angular/core';
+import {HeaderComponent} from "../../components/header/header.component";
+import {NavigationComponent} from "../../components/navigation/navigation.component";
+import {ActivatedRoute, Router, RouterModule} from "@angular/router";
+import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
+import {Subscription} from "rxjs";
+import {PermissionDirective} from "../../permissions/permission.directive";
+import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
 import {
   ButtonToolbarComponent,
   CardBodyComponent,
@@ -13,22 +13,28 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   CardSubtitleDirective,
-  CardTitleDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  CardTitleDirective,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
   FormControlDirective,
   FormDirective,
-  FormLabelDirective, FormSelectDirective, FormTextDirective, InputGroupTextDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  FormTextDirective,
+  InputGroupTextDirective,
   ListGroupDirective,
   ListGroupItemDirective,
   NavComponent,
   NavItemComponent,
   NavLinkDirective
 } from '@coreui/angular';
-import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faAsterisk, faCircleInfo, faCoffee} from "@fortawesome/free-solid-svg-icons";
 import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
-import { TranslocoDirective } from "@jsverse/transloco";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 
 @Component({

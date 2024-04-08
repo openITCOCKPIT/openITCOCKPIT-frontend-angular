@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@jsverse/transloco": "^7.1.0",
+    "flag-icon-css": "^4.1.7",
     "flag-icons": "^7.2.1",
     "ngx-scrollbar": "^14.0.0",
     "prettier": "^3.2.5",
