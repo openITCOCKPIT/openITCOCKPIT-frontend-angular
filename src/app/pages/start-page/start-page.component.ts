@@ -13,6 +13,7 @@ import { ButtonToolbarComponent, CardBodyComponent,
   ListGroupItemDirective, NavComponent, NavItemComponent, NavLinkDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { TranslocoDirective } from "@jsverse/transloco";
 
 @Component({
   selector: 'app-start-page',
@@ -38,7 +39,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
     NavItemComponent,
     NavLinkDirective,
     ButtonToolbarComponent,
-    XsButtonDirective
+    XsButtonDirective,
+    TranslocoDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'

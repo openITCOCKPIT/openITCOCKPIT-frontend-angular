@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +10,8 @@ import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@jsverse/transloco';
 
 
 export const appConfig: ApplicationConfig = {
@@ -30,6 +32,17 @@ export const appConfig: ApplicationConfig = {
     //importProvidersFrom(BrowserAnimationsModule),
 
     provideRouter(routes),
-    provideAnimations(),
+    provideAnimations(), provideHttpClient(), provideTransloco({
+      // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
+        config: {
+          availableLangs: ['en', 'de'],
+          defaultLang: 'en',
+          failedRetries: 1,
+          // Remove this option if your application doesn't support changing language in runtime.
+          reRenderOnLangChange: true,
+          prodMode: !isDevMode(),
+        },
+        loader: TranslocoHttpLoader
+      }),
   ]
 };
