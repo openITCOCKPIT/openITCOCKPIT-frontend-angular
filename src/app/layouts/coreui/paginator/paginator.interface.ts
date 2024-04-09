@@ -27,3 +27,10 @@ export interface Paging {
   queryScope: any
 }
 
+// This event will be thrown when the paginator or scroll index component changes the page
+// Or when the mode will be changed from scroll to page or vice versa
+export interface PaginatorChangeEvent {
+  page: number, // the new page to load
+  scroll: boolean // true = scroll mode, false = page mode
+}
+
