@@ -14,6 +14,47 @@
       </ol>
     </nav>
 
-    <h1>{{ t('Commands overview') }}</h1>
+
+    <c-card>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Commands overview') }}
+          <c-nav class="card-header-pills float-end">
+            <c-nav-item class="px-1">
+              <button cButton color="secondary" class="ripple" size="xs">
+                <fa-icon [icon]="faArrowsRotate"></fa-icon>
+                {{ t('Refresh') }}
+              </button>
+            </c-nav-item>
+            <c-nav-item class="px-1">
+              <button cButton color="success" class="ripple" size="xs">
+                <fa-icon [icon]="faPlus"></fa-icon>
+                {{ t('New') }}
+              </button>
+            </c-nav-item>
+            <c-nav-item class="px-1">
+              <button cButton color="primary" class="ripple" size="xs">
+                <fa-icon [icon]="faFilter"></fa-icon>
+                {{ t('Filter') }}
+              </button>
+            </c-nav-item>
+          </c-nav>
+        </h5>
+      </c-card-header>
+      <c-card-body>This is some text within a card body.
+        <h5 cCardTitle>Card title</h5>
+        <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
+          Card subtitle
+        </h6>
+        <ul cListGroup [flush]="true">
+          <li cListGroupItem>Cras justo odio</li>
+          <li cListGroupItem>Dapibus ac facilisis in</li>
+          <li cListGroupItem>Vestibulum at eros</li>
+        </ul>
+      </c-card-body>
+      <c-card-footer class="text-end">
+        <button cButton color="primary" class="ripple">Save me</button>
+      </c-card-footer>
+    </c-card>
+
   </ng-container>
 </oitc-coreui>
