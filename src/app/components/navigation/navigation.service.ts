@@ -68,6 +68,8 @@ export class NavigationService {
     let myMenu: INavData = {};
     myMenu.name = link.alias || link.name;
     myMenu.children = [];
+    myMenu.url = [link.controller, link.action];
+    myMenu.iconComponent= { name: 'cil-puzzle' };
     for (let itemKey in link.items) {
       let myLink = link.items?.at(parseInt(itemKey)) as Link;
       myMenu.children.push(this.oitcToC2(myLink))
