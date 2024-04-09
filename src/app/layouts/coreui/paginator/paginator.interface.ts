@@ -4,27 +4,27 @@ export interface PaginateOrScroll {
 }
 
 export interface Scroll {
-  page: number
-  limit: number
-  offset: number
-  hasPrevPage: boolean
-  prevPage: number
-  nextPage: number
-  current: number
-  hasNextPage: boolean
+  page: number          // Current page
+  limit: number         // Amount of items per page
+  offset: number        // Offset of database records to skip
+  hasPrevPage: boolean  // Is there a previous page
+  prevPage: number      // Previous page number
+  nextPage: number      // Next page number
+  current: number       // Current page
+  hasNextPage: boolean  // Is there a next page
 }
 
 export interface Paging {
-  page: number
-  current: number
-  count: number
-  prevPage: boolean
-  nextPage: boolean
-  pageCount: number
-  limit: number
-  options: any[]
-  paramType: string
-  queryScope: any
+  page: number        // Current page
+  current: number     // Current amount of items
+  count: number       // Total amount of items
+  prevPage: boolean   // Is there a previous page
+  nextPage: boolean   // Is there a next page
+  pageCount: number   // Total amount of pages
+  limit: number       // Amount of items per page
+  options: any[]      // Unknown
+  paramType: string   // Unknown
+  queryScope: any     // Unknown
 }
 
 // This event will be thrown when the paginator or scroll index component changes the page

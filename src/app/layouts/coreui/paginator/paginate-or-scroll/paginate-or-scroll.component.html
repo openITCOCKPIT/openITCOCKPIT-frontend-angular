@@ -3,6 +3,8 @@
     <c-col>
       <oitc-paginator
         *ngIf="paginateOrScroll?.paging"
+        [paging]="paginateOrScroll?.paging"
+        (pageChange)="onPageChange($event)"
       ></oitc-paginator>
 
       <oitc-scroll-index
