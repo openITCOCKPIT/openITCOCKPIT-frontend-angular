@@ -13,7 +13,7 @@
         </li>
       </ol>
     </nav>
-    <c-card>
+    <c-card class="mb-3">
       <c-card-header>
         <h5 cCardTitle>{{ t('Commands overview') }}
           <c-nav class="card-header-pills float-end">
@@ -124,26 +124,20 @@
           </tr>
           </tbody>
         </table>
-
-
+        <c-container fluid>
+          <c-row>
+            <c-col>
+              <oitc-paginate-or-scroll
+                *ngIf="commands"
+                [paginateOrScroll]="commands"
+                (pageChange)="onPageChange($event)"></oitc-paginate-or-scroll>
+            </c-col>
+          </c-row>
+        </c-container>
       </c-card-body>
-      <c-card-footer class="text-end">
-        <button cButton color="primary" class="ripple">Save me</button>
+      <c-card-footer>
+        &nbsp;
       </c-card-footer>
     </c-card>
-
   </ng-container>
-
-  <div class="container">
-    <div class="row">
-
-      <oitc-paginate-or-scroll
-        *ngIf="commands"
-        [paginateOrScroll]="commands"
-        (pageChange)="onPageChange($event)"></oitc-paginate-or-scroll>
-
-    </div>
-
-  </div>
-
 </oitc-coreui>
