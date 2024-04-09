@@ -8,10 +8,23 @@ import {
   CardHeaderComponent,
   CardSubtitleDirective,
   CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckComponent,
+  FormCheckInputDirective,
+  FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
   ListGroupDirective,
   ListGroupItemDirective,
   NavComponent,
-  NavItemComponent
+  NavItemComponent,
+  RowComponent,
+  TableColorDirective,
+  TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { faArrowsRotate, faCircleInfo, faFilter, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -25,6 +38,7 @@ import { JsonPipe, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 
 @Component({
   selector: 'oitc-commands-index',
@@ -47,6 +61,20 @@ import {
     JsonPipe,
     PaginateOrScrollComponent,
     NgIf,
+    TableDirective,
+    TableColorDirective,
+    ContainerComponent,
+    RowComponent,
+    ColComponent,
+    FormDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'

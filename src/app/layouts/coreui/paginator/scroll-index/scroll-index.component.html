@@ -1,9 +1,9 @@
 <ng-container *transloco="let t">
   <c-row>
-    <c-col sm="6">
+    <c-col md="6">
       {{ t('Paginator disabled for better performance. Running in scroll mode.') }}
     </c-col>
-    <c-col sm="6">
+    <c-col md="6">
       <c-pagination *ngIf="scroll">
         <li cPageItem
             *ngIf="scroll.current > 1"> <!-- ngIf in this case so that the CSS makes round borders -->
