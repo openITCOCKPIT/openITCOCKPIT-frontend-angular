@@ -8,6 +8,7 @@
         <li cPageItem
             *ngIf="scroll.current > 1"> <!-- ngIf in this case so that the CSS makes round borders -->
           <button cPageLink
+                  class="ripple"
                   [title]="'First page' | transloco"
                   (click)="firstPage()">
             <fa-icon [icon]="faAnglesLeft"></fa-icon>
@@ -15,6 +16,7 @@
         </li>
         <li cPageItem [disabled]="!scroll.hasPrevPage">
           <button cPageLink
+                  class="ripple"
                   [title]="'Previous page' | transloco"
                   (click)="prevPage()"
           >
@@ -29,6 +31,7 @@
         </li>
         <li cPageItem [disabled]="!scroll.hasNextPage">
           <button cPageLink
+                  class="ripple"
                   [title]="'Next page' | transloco"
                   (click)="nextPage()"
           >
