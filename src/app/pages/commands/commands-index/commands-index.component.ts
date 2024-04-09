@@ -6,7 +6,21 @@ import {
   CardComponent,
   CardFooterComponent,
   CardHeaderComponent,
-  CardSubtitleDirective, CardTitleDirective, ListGroupDirective, ListGroupItemDirective, NavComponent, NavItemComponent
+  CardSubtitleDirective,
+  CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
+  ListGroupDirective,
+  ListGroupItemDirective,
+  NavComponent,
+  NavItemComponent,
+  RowComponent,
+  TableColorDirective,
+  TableDirective
 } from "@coreui/angular";
 import {XsButtonDirective} from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import {faArrowsRotate, faCircleInfo, faFilter, faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +31,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommandIndexRoot, CommandsIndexParams } from '../commands.interface';
 import { CommandTypesEnum } from '../command-types.enum';
 import { JsonPipe } from '@angular/common';
+import {RequiredIconComponent} from "../../../components/required-icon/required-icon.component";
 
 @Component({
   selector: 'oitc-commands-index',
@@ -36,7 +51,21 @@ import { JsonPipe } from '@angular/common';
     NavItemComponent,
     XsButtonDirective,
     FaIconComponent,
-    JsonPipe
+    JsonPipe,
+    TableDirective,
+    TableColorDirective,
+    ContainerComponent,
+    RowComponent,
+    ColComponent,
+    FormDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'

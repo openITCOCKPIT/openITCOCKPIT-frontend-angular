@@ -13,8 +13,6 @@
         </li>
       </ol>
     </nav>
-
-
     <c-card>
       <c-card-header>
         <h5 cCardTitle>{{ t('Commands overview') }}
@@ -40,16 +38,94 @@
           </c-nav>
         </h5>
       </c-card-header>
-      <c-card-body>This is some text within a card body.
-        <h5 cCardTitle>Card title</h5>
-        <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
-          Card subtitle
-        </h6>
-        <ul cListGroup [flush]="true">
-          <li cListGroupItem>Cras justo odio</li>
-          <li cListGroupItem>Dapibus ac facilisis in</li>
-          <li cListGroupItem>Vestibulum at eros</li>
-        </ul>
+      <c-card-body>
+        <c-container fluid class="shadow-sm p-2 mb-4 bg-body rounded">
+          <c-row>
+            <c-col>
+              <h6 class="pb-2 mb-3 border-bottom">
+                <fa-icon [icon]="faFilter"></fa-icon>
+                {{ t('Filter') }}
+              </h6>
+            </c-col>
+          </c-row>
+          <form cForm>
+            <c-row>
+              <c-col>
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="faFilter"></fa-icon>
+                  </span>
+                  <input aria-label="Username"
+                         cFormControl
+                         type="text"
+                         placeholder="{{ t('Filter by command name') }}"
+                  />
+                </c-input-group>
+              </c-col>
+              <c-col>
+                <fieldset>
+                  <h5>
+                    {{ t('Command types') }}
+                  </h5>
+                  <c-form-check>
+                    <input [checked]="true" cFormCheckInput id="ServiceCheckCommand" type="checkbox"/>
+                    <label cFormCheckLabel for="ServiceCheckCommand">{{ t('Service check command') }}</label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input [checked]="true" cFormCheckInput id="HostCheckCommand" type="checkbox"/>
+                    <label cFormCheckLabel for="HostCheckCommand">{{ t('Host check command') }}</label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input [checked]="true" cFormCheckInput id="NotificationCommand" type="checkbox"/>
+                    <label cFormCheckLabel for="NotificationCommand">{{ t('Notification command') }}</label>
+                  </c-form-check>
+                  <c-form-check>
+                    <input [checked]="true" cFormCheckInput id="EventhandlerCommand" type="checkbox"/>
+                    <label cFormCheckLabel for="EventhandlerCommand">{{ t('Eventhandler command') }}</label>
+                  </c-form-check>
+                </fieldset>
+              </c-col>
+            </c-row>
+            <c-row>
+              <c-col class="text-end">
+                <button cButton color="danger" class="ripple" size="xs">
+                  {{ t('Reset filter') }}
+                </button>
+              </c-col>
+            </c-row>
+          </form>
+        </c-container>
+        <table cTable hover striped bordered class="mt-2">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Class</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Heading</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>&#64;mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>&#64;fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colSpan="2">Larry the Bird</td>
+            <td>&#64;twitter</td>
+          </tr>
+          </tbody>
+        </table>
+
+
       </c-card-body>
       <c-card-footer class="text-end">
         <button cButton color="primary" class="ripple">Save me</button>
