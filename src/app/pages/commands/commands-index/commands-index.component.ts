@@ -39,6 +39,7 @@ import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -127,8 +128,9 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   // Callback for Paginator or Scroll Index Component
-  public onPageChange(newPage: number): void {
-    this.params.page = newPage;
+  public onPaginatorChange(change: PaginatorChangeEvent): void {
+    this.params.page = change.page;
+    this.params.scroll = change.scroll;
     this.loadCommands();
   }
 }
