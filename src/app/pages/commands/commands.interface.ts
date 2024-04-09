@@ -2,6 +2,7 @@
  *    Index action    *
  **********************/
 import { CommandTypesEnum } from './command-types.enum';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
 export interface CommandsIndexParams {
   angular: true,
@@ -14,11 +15,9 @@ export interface CommandsIndexParams {
   'filter[Commands.command_type][]': CommandTypesEnum[]
 }
 
-export interface CommandIndexRoot {
+export interface CommandIndexRoot extends PaginateOrScroll {
   all_commands: CommandIndex[]
   _csrfToken: string
-  //scroll?: Scroll
-  //paging?: Paging
 }
 
 export interface CommandIndex {

@@ -57,4 +57,17 @@
     </c-card>
 
   </ng-container>
+
+  <div class="container">
+    <div class="row">
+
+      <oitc-paginate-or-scroll
+        *ngIf="commands"
+        [paginateOrScroll]="commands"
+        (pageChange)="onPageChange($event)"></oitc-paginate-or-scroll>
+
+    </div>
+
+  </div>
+
 </oitc-coreui>

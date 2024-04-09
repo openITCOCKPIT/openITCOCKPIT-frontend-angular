@@ -1,1 +1,41 @@
-<p>scroll-index works!</p>
+<ng-container *transloco="let t">
+  <c-row>
+    <c-col sm="6">
+      {{ t('Paginator disabled for better performance. Running in scroll mode.') }}
+    </c-col>
+    <c-col sm="6">
+      <c-pagination *ngIf="scroll">
+        <li cPageItem
+            *ngIf="scroll.current > 1"> <!-- ngIf in this case so that the CSS makes round borders -->
+          <button cPageLink
+                  [title]="'First page' | transloco"
+                  (click)="firstPage()">
+            <fa-icon [icon]="faAnglesLeft"></fa-icon>
+          </button>
+        </li>
+        <li cPageItem [disabled]="!scroll.hasPrevPage">
+          <button cPageLink
+                  [title]="'Previous page' | transloco"
+                  (click)="prevPage()"
+          >
+            <fa-icon [icon]="faAngleLeft"></fa-icon>
+          </button>
+        </li>
+        <li cPageItem [active]="true">
+          <button cPageLink
+                  [title]="'Current page' | transloco">
+            {{ scroll.current }}
+          </button>
+        </li>
+        <li cPageItem [disabled]="!scroll.hasNextPage">
+          <button cPageLink
+                  [title]="'Next page' | transloco"
+                  (click)="nextPage()"
+          >
+            <fa-icon [icon]="faAnglesRight"></fa-icon>
+          </button>
+        </li>
+      </c-pagination>
+    </c-col>
+  </c-row>
+</ng-container>

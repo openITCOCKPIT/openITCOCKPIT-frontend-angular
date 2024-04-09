@@ -1,3 +1,8 @@
+export interface PaginateOrScroll {
+  scroll?: Scroll,
+  paging?: Paging
+}
+
 export interface Scroll {
   page: number
   limit: number

@@ -1,0 +1,11 @@
+<c-row>
+  <oitc-paginator
+    *ngIf="paginateOrScroll?.paging"
+  ></oitc-paginator>
+
+  <oitc-scroll-index
+    *ngIf="paginateOrScroll?.scroll"
+    [scroll]="paginateOrScroll?.scroll"
+    (pageChange)="onPageChange($event)">
+  </oitc-scroll-index>
+</c-row>
