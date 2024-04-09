@@ -5,13 +5,8 @@ import {Link, NavigationInterface} from "./navigation.interface";
 import {AuthService} from "../../auth/auth.service";
 import {PROXY_PATH} from "../../tokens/proxy-path.token";
 import {INavData} from "@coreui/angular";
-import {
-  INavAttributes,
-  INavBadge,
-  INavLabel,
-  INavLinkProps,
-  INavWrapper
-} from "@coreui/angular/lib/sidebar/sidebar-nav/sidebar-nav";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Injectable({
   providedIn: 'root',
@@ -47,11 +42,11 @@ export class NavigationService {
     let ret: INavData[] = [];
     for (let a in navigation.menu) {
       let link: Link = navigation.menu[a] as Link;
-      let inavdata: INavData = this.oitcToC2(link);
-      inavdata.children = [];
-      inavdata.title = true;
+      let iNavData: INavData = this.oitcToC2(link);
+      iNavData.children = [];
+      iNavData.title = true;
 
-      ret.push(inavdata);
+      ret.push(iNavData);
 
 
       for (let itemKey in link.items) {
@@ -65,16 +60,20 @@ export class NavigationService {
   }
 
   private oitcToC2(link: Link): INavData {
-    let myMenu: INavData = {};
-    myMenu.name = link.alias || link.name;
-    myMenu.children = [];
-    myMenu.url = [link.controller, link.action];
-    myMenu.iconComponent= { name: 'cil-puzzle' };
+    let iNavData: INavData = {};
+    iNavData.name     = link.alias || link.name;
+    iNavData.children = [];
+    iNavData.url      = ['/', link.controller, link.action];
+
+    iNavData.iconComponent= { name: 'cil-puzzle' };
+    iNavData.icon = 'fa fa-address-book';
+    // iNavData.iconComponent = FaIconComponent;
+
     for (let itemKey in link.items) {
       let myLink = link.items?.at(parseInt(itemKey)) as Link;
-      myMenu.children.push(this.oitcToC2(myLink))
+      iNavData.children.push(this.oitcToC2(myLink))
     }
-    return myMenu;
+    return iNavData;
   }
 
 }
