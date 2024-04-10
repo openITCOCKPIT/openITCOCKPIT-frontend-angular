@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
+import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,10 +8,10 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { PROXY_PATH } from "./tokens/proxy-path.token";
 import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
+import { loaderInterceptor } from './interceptors/loader.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     {provide: PROXY_PATH, useValue: ''},
     {provide: AuthService, useClass: AuthService},
     provideHttpClient(
-      withInterceptors([authInterceptor, csrfInterceptor]),
+      withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),
       /*
       withXsrfConfiguration({
         // cookieName: 'csrfToken',
@@ -34,15 +34,15 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(), provideHttpClient(), provideTransloco({
       // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
-        config: {
-          availableLangs: ['en', 'de'],
-          defaultLang: 'en',
-          failedRetries: 1,
-          // Remove this option if your application doesn't support changing language in runtime.
-          reRenderOnLangChange: true,
-          prodMode: !isDevMode(),
-        },
-        loader: TranslocoHttpLoader
-      }),
+      config: {
+        availableLangs: ['en', 'de'],
+        defaultLang: 'en',
+        failedRetries: 1,
+        // Remove this option if your application doesn't support changing language in runtime.
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader
+    }),
   ]
 };
