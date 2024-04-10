@@ -40,6 +40,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import {PermissionDirective} from "../../../permissions/permission.directive";
 
 @Component({
   selector: 'oitc-commands-index',
@@ -76,7 +77,8 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
     FormCheckLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    NgForOf
+    NgForOf,
+    PermissionDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
