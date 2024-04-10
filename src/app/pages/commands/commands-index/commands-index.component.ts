@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {Component, inject, NgIterable, OnDestroy, OnInit} from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
@@ -27,14 +27,14 @@ import {
   TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
-import { faArrowsRotate, faCircleInfo, faFilter, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {faArrowsRotate, faCircleInfo, faFilter, faGear, faPlus, faSquareCheck} from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommandIndexRoot, CommandsIndexParams } from '../commands.interface';
 import { CommandTypesEnum } from '../command-types.enum';
-import { JsonPipe, NgIf } from '@angular/common';
+import {JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -75,7 +75,8 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
     FormCheckInputDirective,
     FormCheckLabelDirective,
     InputGroupComponent,
-    InputGroupTextDirective
+    InputGroupTextDirective,
+    NgForOf
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
@@ -142,4 +143,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
       this.loadCommands();
     }
   }
+
+  protected readonly faSquareCheck = faSquareCheck;
+  protected readonly faGear = faGear;
 }

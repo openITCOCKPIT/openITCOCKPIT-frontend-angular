@@ -98,29 +98,26 @@
         <table cTable hover striped bordered class="mt-2">
           <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Class</th>
-            <th scope="col">Heading</th>
-            <th scope="col">Heading</th>
+            <th scope="col" class="text-center col-1">
+              <fa-icon [icon]="faSquareCheck"></fa-icon>
+            </th>
+            <th scope="col">
+              {{ t('Command name') }}
+            </th>
+            <th scope="col">
+              {{ t('Command type') }}
+            </th>
+            <th scope="col" class="text-center col-1">
+              <fa-icon [icon]="faGear"></fa-icon>
+            </th>
           </tr>
           </thead>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>&#64;mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>&#64;fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colSpan="2">Larry the Bird</td>
-            <td>&#64;twitter</td>
+          <tbody *ngIf="commands">
+          <tr *ngFor="let command of commands.all_commands">
+            <td></td>
+            <td>{{ command.Command.name }}</td>
+            <td>{{ command.Command.type }}</td>
+            <td></td>
           </tr>
           </tbody>
         </table>
