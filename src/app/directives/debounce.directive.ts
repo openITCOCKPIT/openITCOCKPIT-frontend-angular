@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 
 @Directive({
@@ -11,7 +11,7 @@ export class DebounceDirective {
   @Output() debouncedValue = new EventEmitter<any>();
   private subject = new Subject<any>();
 
-  constructor() {
+  constructor(private elementRef: ElementRef) {
     this.subject.pipe(
       debounceTime(this.debounceTime),
       distinctUntilChanged()
@@ -21,11 +21,21 @@ export class DebounceDirective {
   }
 
   // Input type=text uses the input event
-  // A checkbox uses the change event
   @HostListener('input', ['$event.target.value'])
-  @HostListener('change', ['$event.target.checked'])
   onInputChange(value: any): void {
-    this.subject.next(value);
+    // Ignore checkboxes
+    if (this.elementRef.nativeElement.type !== 'checkbox') {
+      this.subject.next(value);
+    }
   }
 
+  // A checkbox uses the change event
+  // BUT! An input type=text fires also a change event on focus left, so we have to filter this
+  @HostListener('change', ['$event.target.checked'])
+  onInputChangeCeckbox(value: any): void {
+    // For now, only listen to checkboxes
+    if (this.elementRef.nativeElement.type === 'checkbox') {
+      this.subject.next(value);
+    }
+  }
 }
