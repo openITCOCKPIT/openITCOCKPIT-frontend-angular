@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
+import {Component} from '@angular/core';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Component({
@@ -12,6 +11,4 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
   styleUrl: './required-icon.component.css'
 })
 export class RequiredIconComponent {
-
-  protected readonly faAsterisk = faAsterisk;
 }

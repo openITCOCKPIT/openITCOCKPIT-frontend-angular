@@ -157,11 +157,4 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   public onSearchTermChange(event: Event) {
     this.loadCommands();
   }
-
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faArrowsRotate = faArrowsRotate;
-  protected readonly faPlus = faPlus;
-  protected readonly faFilter = faFilter;
-  protected readonly faSquareCheck = faSquareCheck;
-  protected readonly faGear = faGear;
 }
