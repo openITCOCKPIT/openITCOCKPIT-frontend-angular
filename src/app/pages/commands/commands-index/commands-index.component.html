@@ -149,6 +149,9 @@
           </tr>
           </tbody>
         </table>
+
+        <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
+
         <c-container fluid>
           <c-row>
             <c-col>

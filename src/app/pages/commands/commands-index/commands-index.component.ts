@@ -28,20 +28,12 @@ import {
   TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
-import {
-  faArrowsRotate,
-  faCircleInfo,
-  faFilter,
-  faGear,
-  faPlus,
-  faSquareCheck
-} from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -53,6 +45,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { CommandTypesEnum } from '../command-types.enum';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -72,7 +65,6 @@ import { CommandTypesEnum } from '../command-types.enum';
     NavItemComponent,
     XsButtonDirective,
     FaIconComponent,
-    JsonPipe,
     PaginateOrScrollComponent,
     NgIf,
     TableDirective,
@@ -96,7 +88,8 @@ import { CommandTypesEnum } from '../command-types.enum';
     DebounceDirective,
     NgForOf,
     PermissionDirective,
-    TrueFalseDirective
+    TrueFalseDirective,
+    NoRecordsComponent
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
