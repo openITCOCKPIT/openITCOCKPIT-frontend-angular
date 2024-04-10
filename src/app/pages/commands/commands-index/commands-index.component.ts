@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
   CardBodyComponent,
   CardComponent,
@@ -22,6 +22,7 @@ import {
   ListGroupItemDirective,
   NavComponent,
   NavItemComponent,
+  PlaceholderDirective,
   RowComponent,
   TableColorDirective,
   TableDirective
@@ -32,14 +33,16 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommandIndexRoot, CommandsIndexParams } from '../commands.interface';
-import { CommandTypesEnum } from '../command-types.enum';
+import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
 import { JsonPipe, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -75,7 +78,12 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
     FormCheckInputDirective,
     FormCheckLabelDirective,
     InputGroupComponent,
-    InputGroupTextDirective
+    InputGroupTextDirective,
+    PlaceholderDirective,
+    TranslocoPipe,
+    RouterLink,
+    FormsModule,
+    DebounceDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
@@ -87,19 +95,27 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   protected readonly faPlus = faPlus;
   protected readonly faFilter = faFilter;
 
-  public params?: CommandsIndexParams;
-  public commands?: CommandIndexRoot;
+  public readonly route = inject(ActivatedRoute);
+  public readonly router = inject(Router);
 
+  public params: CommandsIndexParams = getDefaultCommandsIndexParams()
+  public commands?: CommandIndexRoot;
+  public hideFilter: boolean = false;
 
   private subscriptions: Subscription = new Subscription();
   private CommandsService = inject(CommandsService)
 
   constructor(private _liveAnnouncer: LiveAnnouncer) {
+
   }
 
   public ngOnInit() {
-    this.resetFilter();
-    this.loadCommands();
+    this.subscriptions.add(this.route.queryParams.subscribe(params => {
+      // Here, params is an object containing the current query parameters.
+      // You can do something with these parameters here.
+      console.log(params);
+      this.loadCommands();
+    }));
   }
 
   public ngOnDestroy() {
@@ -107,39 +123,32 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
-    if (this.params) {
-      this.subscriptions.add(this.CommandsService.getIndex(this.params)
-        .subscribe((result) => {
-          this.commands = result;
-        })
-      );
-    }
+    this.subscriptions.add(this.CommandsService.getIndex(this.params)
+      .subscribe((result) => {
+        this.commands = result;
+      })
+    );
+  }
+
+  // Show or hide the filter
+  public toggleFilter() {
+    this.hideFilter = !this.hideFilter;
   }
 
   public resetFilter() {
-    this.params = {
-      angular: true,
-      scroll: true,
-      page: 1,
-      direction: 'asc',
-      sort: 'Commands.name',
-      'filter[Commands.id][]': [],
-      'filter[Commands.name]': "",
-      'filter[Commands.command_type][]': [
-        CommandTypesEnum.CHECK_COMMAND,
-        CommandTypesEnum.HOSTCHECK_COMMAND,
-        CommandTypesEnum.NOTIFICATION_COMMAND,
-        CommandTypesEnum.EVENTHANDLER_COMMAND
-      ]
-    }
+    this.params = getDefaultCommandsIndexParams();
   }
 
   // Callback for Paginator or Scroll Index Component
   public onPaginatorChange(change: PaginatorChangeEvent): void {
-    if (this.params) {
-      this.params.page = change.page;
-      this.params.scroll = change.scroll;
-      this.loadCommands();
-    }
+    this.params.page = change.page;
+    this.params.scroll = change.scroll;
+    this.loadCommands();
   }
+
+  // Callback when a filter has changed
+  public onSearchTermChange(event: Event) {
+    this.loadCommands();
+  }
+
 }

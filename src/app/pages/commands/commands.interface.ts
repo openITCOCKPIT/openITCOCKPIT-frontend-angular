@@ -15,6 +15,24 @@ export interface CommandsIndexParams {
   'filter[Commands.command_type][]': CommandTypesEnum[]
 }
 
+export function getDefaultCommandsIndexParams(): CommandsIndexParams {
+  return {
+    angular: true,
+    scroll: true,
+    sort: 'Commands.name',
+    page: 1,
+    direction: 'asc',
+    'filter[Commands.id][]': [],
+    'filter[Commands.name]': "",
+    'filter[Commands.command_type][]': [
+      CommandTypesEnum.CHECK_COMMAND,
+      CommandTypesEnum.HOSTCHECK_COMMAND,
+      CommandTypesEnum.NOTIFICATION_COMMAND,
+      CommandTypesEnum.EVENTHANDLER_COMMAND
+    ]
+  }
+}
+
 export interface CommandIndexRoot extends PaginateOrScroll {
   all_commands: CommandIndex[]
   _csrfToken: string

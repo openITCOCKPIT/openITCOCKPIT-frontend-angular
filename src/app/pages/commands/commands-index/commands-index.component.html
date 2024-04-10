@@ -2,10 +2,10 @@
   <ng-container *transloco="let t">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">
           {{ t('Home') }}
         </a></li>
-        <li class="breadcrumb-item"><a href="#">
+        <li class="breadcrumb-item"><a [routerLink]="['/', 'commands', 'index']">
           {{ t('Commands') }}
         </a></li>
         <li class="breadcrumb-item active" aria-current="page">
@@ -30,7 +30,7 @@
               </button>
             </c-nav-item>
             <c-nav-item class="px-1">
-              <button cButton color="primary" class="ripple" size="xs">
+              <button cButton color="primary" class="ripple" size="xs" (click)="toggleFilter()">
                 <fa-icon [icon]="faFilter"></fa-icon>
                 {{ t('Filter') }}
               </button>
@@ -39,6 +39,8 @@
         </h5>
       </c-card-header>
       <c-card-body>
+
+        <!-- Filter -->
         <c-container fluid class="shadow-sm p-2 mb-4 bg-body rounded">
           <c-row>
             <c-col>
@@ -58,7 +60,11 @@
                   <input aria-label="Username"
                          cFormControl
                          type="text"
-                         placeholder="{{ t('Filter by command name') }}"
+                         oitcDebounce
+                         name="commands.name"
+                         [(ngModel)]="params['filter[Commands.name]']"
+                         (debouncedValue)="onSearchTermChange($event)"
+                         [placeholder]="'Filter by command name' | transloco"
                   />
                 </c-input-group>
               </c-col>
@@ -95,6 +101,8 @@
             </c-row>
           </form>
         </c-container>
+        <!-- End Filter -->
+
         <table cTable hover striped bordered class="mt-2">
           <thead>
           <tr>
