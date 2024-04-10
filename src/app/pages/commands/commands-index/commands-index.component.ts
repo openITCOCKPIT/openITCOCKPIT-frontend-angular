@@ -187,12 +187,4 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.params.page = 1;
     this.loadCommands();
   }
-
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faArrowsRotate = faArrowsRotate;
-  protected readonly faPlus = faPlus;
-  protected readonly faFilter = faFilter;
-  protected readonly faSquareCheck = faSquareCheck;
-  protected readonly faGear = faGear;
-  protected readonly CommandTypesEnum = CommandTypesEnum;
 }
