@@ -1,4 +1,5 @@
-import { AfterViewChecked, AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -28,21 +29,29 @@ import {
   TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
-import { faArrowsRotate, faCircleInfo, faFilter, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowsRotate,
+  faCircleInfo,
+  faFilter,
+  faGear,
+  faPlus,
+  faSquareCheck
+} from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
-import { JsonPipe, NgIf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
 @Component({
   selector: 'oitc-commands-index',
@@ -83,17 +92,14 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
     TranslocoPipe,
     RouterLink,
     FormsModule,
-    DebounceDirective
+    DebounceDirective,
+    NgForOf,
+    PermissionDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
 })
 export class CommandsIndexComponent implements OnInit, OnDestroy {
-
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faArrowsRotate = faArrowsRotate;
-  protected readonly faPlus = faPlus;
-  protected readonly faFilter = faFilter;
 
   public readonly route = inject(ActivatedRoute);
   public readonly router = inject(Router);
@@ -146,9 +152,16 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.loadCommands();
   }
 
+
   // Callback when a filter has changed
   public onSearchTermChange(event: Event) {
     this.loadCommands();
   }
 
+  protected readonly faCircleInfo = faCircleInfo;
+  protected readonly faArrowsRotate = faArrowsRotate;
+  protected readonly faPlus = faPlus;
+  protected readonly faFilter = faFilter;
+  protected readonly faSquareCheck = faSquareCheck;
+  protected readonly faGear = faGear;
 }
