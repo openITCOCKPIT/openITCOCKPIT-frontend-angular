@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 })
 export class DebounceDirective {
 
-  @Input() debounceTime = 300;
+  @Input() debounceTime = 500;
   @Output() debouncedValue = new EventEmitter<any>();
   private subject = new Subject<any>();
 

@@ -1,8 +1,8 @@
 /**********************
  *    Index action    *
  **********************/
-import {CommandTypesEnum} from './command-types.enum';
-import {PaginateOrScroll} from '../../layouts/coreui/paginator/paginator.interface';
+import { CommandTypesEnum } from './command-types.enum';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
 export interface CommandsIndexParams {
   angular: true,
@@ -25,10 +25,10 @@ export function getDefaultCommandsIndexParams(): CommandsIndexParams {
     'filter[Commands.id][]': [],
     'filter[Commands.name]': "",
     'filter[Commands.command_type][]': [
-      CommandTypesEnum.CHECK_COMMAND,
-      CommandTypesEnum.HOSTCHECK_COMMAND,
-      CommandTypesEnum.NOTIFICATION_COMMAND,
-      CommandTypesEnum.EVENTHANDLER_COMMAND
+      //CommandTypesEnum.CHECK_COMMAND,
+      //CommandTypesEnum.HOSTCHECK_COMMAND,
+      //CommandTypesEnum.NOTIFICATION_COMMAND,
+      //CommandTypesEnum.EVENTHANDLER_COMMAND
     ]
   }
 }

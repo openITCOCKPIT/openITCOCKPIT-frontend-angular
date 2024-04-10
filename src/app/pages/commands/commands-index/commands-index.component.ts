@@ -1,4 +1,3 @@
-
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -52,6 +51,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { CommandTypesEnum } from '../command-types.enum';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -94,7 +95,8 @@ import { PermissionDirective } from "../../../permissions/permission.directive";
     FormsModule,
     DebounceDirective,
     NgForOf,
-    PermissionDirective
+    PermissionDirective,
+    TrueFalseDirective
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
@@ -107,6 +109,13 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   public params: CommandsIndexParams = getDefaultCommandsIndexParams()
   public commands?: CommandIndexRoot;
   public hideFilter: boolean = false;
+
+  public tmpFilter = {
+    service_commands: true,
+    hostcheck_commands: true,
+    notification_commands: true,
+    eventhandler_commands: true
+  }
 
   private subscriptions: Subscription = new Subscription();
   private CommandsService = inject(CommandsService)
@@ -129,6 +138,20 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
+    this.params['filter[Commands.command_type][]'] = [];
+    if (this.tmpFilter.service_commands) {
+      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.CHECK_COMMAND);
+    }
+    if (this.tmpFilter.hostcheck_commands) {
+      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.HOSTCHECK_COMMAND);
+    }
+    if (this.tmpFilter.notification_commands) {
+      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.NOTIFICATION_COMMAND);
+    }
+    if (this.tmpFilter.eventhandler_commands) {
+      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.EVENTHANDLER_COMMAND);
+    }
+
     this.subscriptions.add(this.CommandsService.getIndex(this.params)
       .subscribe((result) => {
         this.commands = result;
@@ -143,6 +166,12 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
   public resetFilter() {
     this.params = getDefaultCommandsIndexParams();
+    this.tmpFilter = {
+      service_commands: true,
+      hostcheck_commands: true,
+      notification_commands: true,
+      eventhandler_commands: true
+    }
   }
 
   // Callback for Paginator or Scroll Index Component
@@ -154,7 +183,8 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
 
   // Callback when a filter has changed
-  public onSearchTermChange(event: Event) {
+  public onFilterChange(event: Event) {
+    this.params.page = 1;
     this.loadCommands();
   }
 
@@ -164,4 +194,5 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   protected readonly faFilter = faFilter;
   protected readonly faSquareCheck = faSquareCheck;
   protected readonly faGear = faGear;
+  protected readonly CommandTypesEnum = CommandTypesEnum;
 }

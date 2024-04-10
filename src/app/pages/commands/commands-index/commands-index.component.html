@@ -18,7 +18,7 @@
         <h5 cCardTitle>{{ t('Commands overview') }}
           <c-nav class="card-header-pills float-end">
             <c-nav-item class="px-1">
-              <button cButton color="secondary" class="ripple" size="xs">
+              <button cButton color="secondary" class="ripple" size="xs" (click)="loadCommands()">
                 <fa-icon [icon]="faArrowsRotate"></fa-icon>
                 {{ t('Refresh') }}
               </button>
@@ -63,7 +63,7 @@
                          oitcDebounce
                          name="commands.name"
                          [(ngModel)]="params['filter[Commands.name]']"
-                         (debouncedValue)="onSearchTermChange($event)"
+                         (debouncedValue)="onFilterChange($event)"
                          [placeholder]="'Filter by command name' | transloco"
                   />
                 </c-input-group>
@@ -74,19 +74,35 @@
                     {{ t('Command types') }}
                   </h5>
                   <c-form-check>
-                    <input [checked]="true" cFormCheckInput id="ServiceCheckCommand" type="checkbox"/>
+                    <input cFormCheckInput id="ServiceCheckCommand" type="checkbox"
+                           name="ServiceCheckCommand"
+                           oitcDebounce
+                           [(ngModel)]="tmpFilter.service_commands"
+                           (debouncedValue)="onFilterChange($event)"/>
                     <label cFormCheckLabel for="ServiceCheckCommand">{{ t('Service check command') }}</label>
                   </c-form-check>
                   <c-form-check>
-                    <input [checked]="true" cFormCheckInput id="HostCheckCommand" type="checkbox"/>
+                    <input cFormCheckInput id="HostCheckCommand" type="checkbox"
+                           name="HostCheckCommand"
+                           oitcDebounce
+                           [(ngModel)]="tmpFilter.hostcheck_commands"
+                           (debouncedValue)="onFilterChange($event)"/>
                     <label cFormCheckLabel for="HostCheckCommand">{{ t('Host check command') }}</label>
                   </c-form-check>
                   <c-form-check>
-                    <input [checked]="true" cFormCheckInput id="NotificationCommand" type="checkbox"/>
+                    <input cFormCheckInput id="NotificationCommand" type="checkbox"
+                           name="NotificationCommand"
+                           oitcDebounce
+                           [(ngModel)]="tmpFilter.notification_commands"
+                           (debouncedValue)="onFilterChange($event)"/>
                     <label cFormCheckLabel for="NotificationCommand">{{ t('Notification command') }}</label>
                   </c-form-check>
                   <c-form-check>
-                    <input [checked]="true" cFormCheckInput id="EventhandlerCommand" type="checkbox"/>
+                    <input cFormCheckInput id="EventhandlerCommand" type="checkbox"
+                           name="EventhandlerCommand"
+                           oitcDebounce
+                           [(ngModel)]="tmpFilter.eventhandler_commands"
+                           (debouncedValue)="onFilterChange($event)"/>
                     <label cFormCheckLabel for="EventhandlerCommand">{{ t('Eventhandler command') }}</label>
                   </c-form-check>
                 </fieldset>
