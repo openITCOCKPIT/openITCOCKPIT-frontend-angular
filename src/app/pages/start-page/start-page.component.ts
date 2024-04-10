@@ -32,7 +32,6 @@ import {
 import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faAsterisk, faCircleInfo, faCoffee} from "@fortawesome/free-solid-svg-icons";
 import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
 import {TranslocoDirective} from "@jsverse/transloco";
 
@@ -112,8 +111,4 @@ export class StartPageComponent implements OnDestroy {
 
     (this.document.defaultView as unknown as WindowWithPeter).callPeter();
   }
-
-  protected readonly faCoffee = faCoffee;
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faAsterisk = faAsterisk;
 }

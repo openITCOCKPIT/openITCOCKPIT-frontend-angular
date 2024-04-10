@@ -19,19 +19,19 @@
           <c-nav class="card-header-pills float-end">
             <c-nav-item class="px-1">
               <button cButton color="secondary" class="ripple" size="xs" (click)="loadCommands()">
-                <fa-icon [icon]="faArrowsRotate"></fa-icon>
+                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                 {{ t('Refresh') }}
               </button>
             </c-nav-item>
             <c-nav-item class="px-1">
               <button cButton color="success" class="ripple" size="xs">
-                <fa-icon [icon]="faPlus"></fa-icon>
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                 {{ t('New') }}
               </button>
             </c-nav-item>
             <c-nav-item class="px-1">
               <button cButton color="primary" class="ripple" size="xs" (click)="toggleFilter()">
-                <fa-icon [icon]="faFilter"></fa-icon>
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                 {{ t('Filter') }}
               </button>
             </c-nav-item>
@@ -45,7 +45,7 @@
           <c-row>
             <c-col>
               <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="faFilter"></fa-icon>
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                 {{ t('Filter') }}
               </h6>
             </c-col>
@@ -55,7 +55,7 @@
               <c-col md="6">
                 <c-input-group>
                   <span cInputGroupText>
-                    <fa-icon [icon]="faFilter"></fa-icon>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                   </span>
                   <input aria-label="Username"
                          cFormControl
@@ -123,7 +123,7 @@
           <thead>
           <tr>
             <th scope="col" class="text-center col-1">
-              <fa-icon [icon]="faSquareCheck"></fa-icon>
+              <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
             </th>
             <th scope="col">
               {{ t('Command name') }}
@@ -132,7 +132,7 @@
               {{ t('Command type') }}
             </th>
             <th scope="col" class="text-center col-1">
-              <fa-icon [icon]="faGear"></fa-icon>
+              <fa-icon [icon]="['fas', 'gear']"></fa-icon>
             </th>
           </tr>
           </thead>
