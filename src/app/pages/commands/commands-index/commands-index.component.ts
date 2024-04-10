@@ -86,22 +86,8 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   protected readonly faArrowsRotate = faArrowsRotate;
   protected readonly faPlus = faPlus;
   protected readonly faFilter = faFilter;
-  public params: CommandsIndexParams = {
-    angular: true,
-    scroll: true,
-    page: 1,
-    direction: 'asc',
-    sort: 'Commands.name',
-    'filter[Commands.id][]': [],
-    'filter[Commands.name]': "",
-    'filter[Commands.command_type][]': [
-      CommandTypesEnum.CHECK_COMMAND,
-      CommandTypesEnum.HOSTCHECK_COMMAND,
-      CommandTypesEnum.NOTIFICATION_COMMAND,
-      CommandTypesEnum.EVENTHANDLER_COMMAND
-    ]
-  }
 
+  public params?: CommandsIndexParams;
   public commands?: CommandIndexRoot;
 
 
@@ -112,6 +98,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.resetFilter();
     this.loadCommands();
   }
 
@@ -120,17 +107,39 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
-    this.subscriptions.add(this.CommandsService.getIndex(this.params)
-      .subscribe((result) => {
-        this.commands = result;
-      })
-    );
+    if (this.params) {
+      this.subscriptions.add(this.CommandsService.getIndex(this.params)
+        .subscribe((result) => {
+          this.commands = result;
+        })
+      );
+    }
+  }
+
+  public resetFilter() {
+    this.params = {
+      angular: true,
+      scroll: true,
+      page: 1,
+      direction: 'asc',
+      sort: 'Commands.name',
+      'filter[Commands.id][]': [],
+      'filter[Commands.name]': "",
+      'filter[Commands.command_type][]': [
+        CommandTypesEnum.CHECK_COMMAND,
+        CommandTypesEnum.HOSTCHECK_COMMAND,
+        CommandTypesEnum.NOTIFICATION_COMMAND,
+        CommandTypesEnum.EVENTHANDLER_COMMAND
+      ]
+    }
   }
 
   // Callback for Paginator or Scroll Index Component
   public onPaginatorChange(change: PaginatorChangeEvent): void {
-    this.params.page = change.page;
-    this.params.scroll = change.scroll;
-    this.loadCommands();
+    if (this.params) {
+      this.params.page = change.page;
+      this.params.scroll = change.scroll;
+      this.loadCommands();
+    }
   }
 }
