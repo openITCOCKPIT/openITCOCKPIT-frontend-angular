@@ -1,16 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalLoadingService } from '../../../global-loading.service';
-import { AsyncPipe, NgIf } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'oitc-global-loader',
   standalone: true,
-  imports: [
-    NgIf,
-    AsyncPipe
-  ],
+  imports: [],
   templateUrl: './global-loader.component.html',
   styleUrl: './global-loader.component.css',
   animations: [
@@ -23,7 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class GlobalLoaderComponent implements OnInit, OnDestroy {
 
-  public isTextVisible: boolean = true;
+  public isLoaderVisible: boolean = true;
   private subscriptions: Subscription = new Subscription();
 
   constructor(public loader: GlobalLoadingService) {
@@ -31,7 +27,7 @@ export class GlobalLoaderComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.add(this.loader.isLoading$.subscribe(loading => {
-      this.isTextVisible = loading;
+      this.isLoaderVisible = loading;
     }));
   }
 
