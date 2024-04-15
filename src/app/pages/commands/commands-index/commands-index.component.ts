@@ -46,6 +46,7 @@ import { PermissionDirective } from "../../../permissions/permission.directive";
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { CommandTypesEnum } from '../command-types.enum';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -89,7 +90,8 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
     NgForOf,
     PermissionDirective,
     TrueFalseDirective,
-    NoRecordsComponent
+    NoRecordsComponent,
+    MatCheckboxModule
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'

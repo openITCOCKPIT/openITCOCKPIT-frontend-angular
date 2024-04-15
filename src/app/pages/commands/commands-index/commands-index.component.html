@@ -139,9 +139,7 @@
           <tbody *ngIf="commands">
           <tr *ngFor="let command of commands.all_commands">
             <td class="text-center">
-              <c-form-check sizing="lg" *oitcPermission="'commands.delete'">
-                <input cFormCheckInput type="checkbox" id="{{command.Command.id}}"/>
-              </c-form-check>
+              <mat-checkbox class="custom-theme example-margin"></mat-checkbox>
             </td>
             <td>{{ command.Command.name }}</td>
             <td>{{ command.Command.type }}</td>

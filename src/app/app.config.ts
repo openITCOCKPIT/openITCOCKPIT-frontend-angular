@@ -12,6 +12,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { loaderInterceptor } from './interceptors/loader.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 export const appConfig: ApplicationConfig = {
@@ -43,6 +44,6 @@ export const appConfig: ApplicationConfig = {
         prodMode: !isDevMode(),
       },
       loader: TranslocoHttpLoader
-    }),
+    }), provideAnimationsAsync(),
   ]
 };
