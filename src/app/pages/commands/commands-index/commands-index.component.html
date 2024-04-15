@@ -140,6 +140,10 @@
           <tr *ngFor="let command of commands.all_commands">
             <td class="text-center">
 
+              <mat-checkbox color="danger">
+                Bitch please
+              </mat-checkbox>
+
               <oitc-item-select
                 *oitcPermission="['commands', 'delete']"
                 [item]="command"

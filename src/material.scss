@@ -116,6 +116,7 @@ $warn-palette: (
 
 $dark-theme: mat.define-dark-theme((
   color: (
+    theme-type: dark,
     primary: mat.define-palette($primary-palette, 500),
     accent: mat.define-palette($secondary-palette, 500),
     warn: mat.define-palette($warn-palette),
@@ -126,6 +127,7 @@ $dark-theme: mat.define-dark-theme((
 
 $light-theme: mat.define-light-theme((
   color: (
+    theme-type: light,
     primary: mat.define-palette($primary-palette, 500),
     accent: mat.define-palette($secondary-palette, 500),
     warn: mat.define-palette($warn-palette),
@@ -136,14 +138,18 @@ $light-theme: mat.define-light-theme((
 
 //$dark-theme: map.merge($dark-theme, (background: $custom-background));
 
-// Apply the dark theme by default
-@include mat.all-component-themes($dark-theme);
 
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
+// Apply the light theme by default
+@include mat.all-component-themes($light-theme);
+
+
+// Apply the dark theme only when the user prefers dark themes.
+@media (prefers-color-scheme: dark) {
   // Use the `-color` mixins to only apply color styles without reapplying the same
   // typography and density styles.
-  @include mat.all-component-themes($light-theme);
+
+  // Irgendwie funktioniert das nicht sondern es wird einfach IMMER der dark modus genutzt
+  //@include mat.all-component-themes($dark-theme);
 }
 
 
@@ -162,3 +168,13 @@ $light-theme: mat.define-light-theme((
 //$color-map: map.get($dark-theme, 'color');
 //$modified-color-map: map.merge($color-map, ('background': $custom-background));
 //$dark-theme: map.merge($dark-theme, ('color': $modified-color-map));
+
+// Add .dark-theme to <body> to apply the dark theme.
+.dark-theme {
+  @include mat.all-component-themes($dark-theme);
+}
+
+// Add .light-theme to <body> to apply the dark theme.
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+}
