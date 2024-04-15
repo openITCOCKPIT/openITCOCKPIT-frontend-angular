@@ -47,6 +47,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { CommandTypesEnum } from '../command-types.enum';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -91,7 +93,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     PermissionDirective,
     TrueFalseDirective,
     NoRecordsComponent,
-    MatCheckboxModule
+    MatCheckboxModule,
+    SelectAllComponent,
+    ItemSelectComponent,
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
@@ -167,6 +171,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
       notification_commands: true,
       eventhandler_commands: true
     }
+    this.loadCommands();
   }
 
   // Callback for Paginator or Scroll Index Component
@@ -182,4 +187,5 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.params.page = 1;
     this.loadCommands();
   }
+  
 }

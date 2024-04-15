@@ -139,7 +139,12 @@
           <tbody *ngIf="commands">
           <tr *ngFor="let command of commands.all_commands">
             <td class="text-center">
-              <mat-checkbox class="custom-theme example-margin"></mat-checkbox>
+
+              <oitc-item-select
+                *oitcPermission="['commands', 'delete']"
+                [item]="command"
+                [disabled]="false"></oitc-item-select>
+
             </td>
             <td>{{ command.Command.name }}</td>
             <td>{{ command.Command.type }}</td>
@@ -149,6 +154,12 @@
         </table>
 
         <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
+
+        <ng-container *ngIf="commands && commands.all_commands">
+          <oitc-select-all
+            [itemsCount]="commands.all_commands.length"></oitc-select-all>
+        </ng-container>
+
 
         <c-container fluid>
           <c-row>
