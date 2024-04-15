@@ -99,8 +99,7 @@
             ],
             "styles": [
               "src/styles.css",
-              "@angular/material/prebuilt-themes/indigo-pink.css"
-              //"src/material.scss"
+              "src/material.scss"
             ],
             "scripts": [
             ]
