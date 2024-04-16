@@ -42,20 +42,30 @@ export class SelectAllComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.subscriptions.add(this.selection.selection$.subscribe(selection => {
-      this.currentSelection = selection;
 
-      if (this.currentSelection.length === this.itemsCount) {
+    // Subscribe to selection changes
+    this.subscriptions.add(this.selection.selection$.subscribe(selection => {
+      this.currentSelection = selection; // Used to show the length of the selection in the template
+
+      if (selection.length === 0) {
+        // 0 items are selected
+        // Reset the checked and intermediate state
+        this.checked = false;
+        this.intermediate = false;
+        return;
+      }
+
+
+      if (selection.length === this.itemsCount) {
         // All items are selected
         this.checked = true;
       }
 
       this.intermediate = false;
-      if (this.currentSelection.length > 0 && this.currentSelection.length < this.itemsCount) {
+      if (selection.length > 0 && selection.length < this.itemsCount) {
         this.intermediate = true;
         this.checked = false;
       }
-
     }));
   }
 
