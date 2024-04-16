@@ -20,6 +20,7 @@ import {
   InputGroupTextDirective,
   ListGroupDirective,
   ListGroupItemDirective,
+  ModalService,
   NavComponent,
   NavItemComponent,
   PlaceholderDirective,
@@ -50,6 +51,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -97,6 +99,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
     MatCheckboxModule,
     SelectAllComponent,
     ItemSelectComponent,
+    DeleteAllModalComponent,
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'
@@ -105,6 +108,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
   public readonly route = inject(ActivatedRoute);
   public readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
 
   public params: CommandsIndexParams = getDefaultCommandsIndexParams()
   public commands?: CommandIndexRoot;
@@ -190,6 +194,13 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   public onFilterChange(event: Event) {
     this.params.page = 1;
     this.loadCommands();
+  }
+
+  public toggleDeleteAllModal() {
+    this.modalService.toggle({
+      show: true,
+      id: 'deleteAllModal',
+    });
   }
 
 }

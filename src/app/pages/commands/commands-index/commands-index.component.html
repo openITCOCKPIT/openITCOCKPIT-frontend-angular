@@ -167,7 +167,7 @@
                   [itemsCount]="commands.all_commands.length"></oitc-select-all>
               </c-col>
               <c-col class="text-center">
-                <span class="text-danger select-label">
+                <span class="text-danger select-label" (click)="toggleDeleteAllModal()">
                   <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                   {{ t('Delete selected') }}
                 </span>
@@ -194,3 +194,6 @@
     </c-card>
   </ng-container>
 </oitc-coreui>
+
+
+<oitc-delete-all-modal></oitc-delete-all-modal>
