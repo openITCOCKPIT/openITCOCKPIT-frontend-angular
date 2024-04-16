@@ -1,10 +1,17 @@
 <ng-container *transloco="let t">
-  {{ currentSelection.length }}
-  <c-form-check>
-    <input cFormCheckInput id="selectAll" type="checkbox" [(ngModel)]="checked" [indeterminate]="intermediate"
-           (change)="toggleSelectAll()">
-    <label cFormCheckLabel for="selectAll" class="select-label">
-      {{ t('Select all') }}
-    </label>
-  </c-form-check>
+    <div class="row">
+        <div class="col-1 text-center">
+            ({{ currentSelection.length }})
+        </div>
+        <div class="col">
+            <c-form-check>
+                <input cFormCheckInput id="selectAll" type="checkbox" [(ngModel)]="checked"
+                       [indeterminate]="intermediate"
+                       (change)="toggleSelectAll()">
+                <label cFormCheckLabel for="selectAll" class="select-label float-start">
+                    {{ t('Select all') }}
+                </label>
+            </c-form-check>
+        </div>
+    </div>
 </ng-container>
