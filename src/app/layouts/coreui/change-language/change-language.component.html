@@ -3,14 +3,12 @@
     @switch (currentLanguage) {
       @case ("en") {
         <span class="fi fi-us"></span>
-        🇺🇸
       }
       @case ("de") {
-        <span class="fi fi-us"></span>
-        🇩🇪
+        <span class="fi fi-de"></span>
       }
       @default {
-        🏳️
+        <span class="fi fi-xx"></span>
       }
     }
   </button>
@@ -21,8 +19,10 @@
       cDropdownItem
       class="d-flex align-items-center"
     >
-      <span class="fi fi-us"></span>
-      {{ t('Deutsch / German') }}
+      <span class="fi fi-de"></span>
+      &nbsp;
+      <!-- Nativ language / Name of language in current selected language -->
+      Deutsch / {{ t('German') }}
     </button>
 
     <button
@@ -32,8 +32,8 @@
       class="d-flex align-items-center"
     >
       <span class="fi fi-us"></span>
-      {{ t('English / English') }}
+      &nbsp;
+      English / {{ t('English') }}
     </button>
   </div>
 </c-dropdown>
-

@@ -1,4 +1,3 @@
-
 /*
  * Importing SmartAdmin globally.
  * This is required for the SmartAdmin Layout but for now this is disabled due to CoreUI
@@ -10,6 +9,9 @@
 */
 
 @import "assets/coreui/style.scss";
+@import "@fontsource/roboto/index.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/400-italic.css";
 
 
 /*
@@ -27,4 +29,11 @@ body {
 }
 */
 
+html, body {
+  height: 100%;
+}
 
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

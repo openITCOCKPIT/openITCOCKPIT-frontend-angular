@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+  ColorModeService,
   ContainerComponent,
   INavData,
   ShadowOnScrollDirective,
@@ -12,12 +13,16 @@ import {
   SidebarToggleDirective,
   SidebarTogglerDirective
 } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
 import { CoreuiHeaderComponent } from './coreui-header/coreui-header.component';
 import { CoreuiFooterComponent } from './coreui-footer/coreui-footer.component';
 import { CoreuiMenuComponent } from './coreui-menu/coreui-menu.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RouterLink } from '@angular/router';
+import { GlobalLoaderComponent } from './global-loader/global-loader.component';
+import { Subscription } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { DOCUMENT } from '@angular/common';
+
 
 @Component({
   selector: 'oitc-coreui',
@@ -38,17 +43,67 @@ import { RouterLink } from '@angular/router';
     NgScrollbarModule,
     RouterLink,
     SidebarModule,
+    GlobalLoaderComponent,
   ],
   templateUrl: './coreui.component.html',
   styleUrl: './coreui.component.css'
 })
-export class CoreuiComponent {
+export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  readonly #colorModeService = inject(ColorModeService);
+  private readonly document = inject(DOCUMENT);
+
+  private subscription: Subscription = new Subscription();
+
+  constructor(colorService: ColorModeService) {
+    // This is to sync the selected theme color from CoreUI with Angular Material
+    // --force --brechstange
+
+    const colorMode$ = toObservable(colorService.colorMode);
+
+
+    // Subscribe to the color mode changes (drop down menu in header)
+    this.subscription.add(colorMode$.subscribe((theme) => {
+
+      // theme can be one of 'light', 'dark', 'auto'
+      if (theme === 'dark') {
+        this.document.body.classList.add('dark-theme');
+      } else {
+        this.document.body.classList.remove('dark-theme');
+      }
+
+    }));
+  }
+
+  public ngOnInit(): void {
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  public ngAfterViewInit(): void {
+    const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.#colorModeService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
+    if (osSystemDarkMode) {
+      // Enable dark mode for Angular Material because the OS wants dark mode
+      // quick and dirty hack
+      setTimeout(() => this.document.body.classList.add('dark-theme'), 100);
+    }
+
+    if (coreUiTheme === 'auto' || coreUiTheme === null) {
+      setTimeout(() => {
+        // Force CoreUI to use the OS theme
+        this.#colorModeService.colorMode.set('auto');
+      }, 100);
+    }
+  }
 
   public navItems: INavData[] = [
     {
       name: 'Dashboard',
       url: '/dashboard',
-      iconComponent: { name: 'cil-speedometer' },
+      iconComponent: {name: 'cil-speedometer'},
       badge: {
         color: 'info',
         text: 'NEW'
@@ -61,13 +116,13 @@ export class CoreuiComponent {
     {
       name: 'Colors',
       url: '/theme/colors',
-      iconComponent: { name: 'cil-drop' }
+      iconComponent: {name: 'cil-drop'}
     },
     {
       name: 'Typography',
       url: '/theme/typography',
-      linkProps: { fragment: 'headings' },
-      iconComponent: { name: 'cil-pencil' }
+      linkProps: {fragment: 'headings'},
+      iconComponent: {name: 'cil-pencil'}
     },
     {
       name: 'Components',
@@ -76,7 +131,7 @@ export class CoreuiComponent {
     {
       name: 'Base',
       url: '/base',
-      iconComponent: { name: 'cil-puzzle' },
+      iconComponent: {name: 'cil-puzzle'},
       children: [
         {
           name: 'Accordion',
@@ -158,7 +213,7 @@ export class CoreuiComponent {
     {
       name: 'Buttons',
       url: '/buttons',
-      iconComponent: { name: 'cil-cursor' },
+      iconComponent: {name: 'cil-cursor'},
       children: [
         {
           name: 'Buttons',
@@ -180,7 +235,7 @@ export class CoreuiComponent {
     {
       name: 'Forms',
       url: '/forms',
-      iconComponent: { name: 'cil-notes' },
+      iconComponent: {name: 'cil-notes'},
       children: [
         {
           name: 'Form Control',
@@ -226,12 +281,12 @@ export class CoreuiComponent {
     },
     {
       name: 'Charts',
-      iconComponent: { name: 'cil-chart-pie' },
+      iconComponent: {name: 'cil-chart-pie'},
       url: '/charts'
     },
     {
       name: 'Icons',
-      iconComponent: { name: 'cil-star' },
+      iconComponent: {name: 'cil-star'},
       url: '/icons',
       children: [
         {
@@ -258,7 +313,7 @@ export class CoreuiComponent {
     {
       name: 'Notifications',
       url: '/notifications',
-      iconComponent: { name: 'cil-bell' },
+      iconComponent: {name: 'cil-bell'},
       children: [
         {
           name: 'Alerts',
@@ -285,7 +340,7 @@ export class CoreuiComponent {
     {
       name: 'Widgets',
       url: '/widgets',
-      iconComponent: { name: 'cil-calculator' },
+      iconComponent: {name: 'cil-calculator'},
       badge: {
         color: 'info',
         text: 'NEW'
@@ -298,7 +353,7 @@ export class CoreuiComponent {
     {
       name: 'Pages',
       url: '/login',
-      iconComponent: { name: 'cil-star' },
+      iconComponent: {name: 'cil-star'},
       children: [
         {
           name: 'Login',
@@ -330,8 +385,8 @@ export class CoreuiComponent {
     {
       name: 'Docs',
       url: 'https://coreui.io/angular/docs/5.x/',
-      iconComponent: { name: 'cil-description' },
-      attributes: { target: '_blank' }
+      iconComponent: {name: 'cil-description'},
+      attributes: {target: '_blank'}
     }
   ];
 

@@ -1,0 +1,30 @@
+<ng-container *transloco="let t">
+  <c-modal
+    [keyboard]="true"
+    size="lg"
+    id="deleteAllModal"
+    #modal='cModal'
+  >
+    <c-modal-header class="bg-danger">
+      <h5 cModalTitle>
+        {{ t('Attention!') }}
+      </h5>
+      <button cButtonClose (click)="hideModal();"></button>
+    </c-modal-header>
+    <c-modal-body>
+      <c-row>
+        <c-col>
+          <p>{{ t('Do you really want delete the selected object?') }}</p>
+        </c-col>
+      </c-row>
+    </c-modal-body>
+    <c-modal-footer>
+      <button cButton color="danger" class="ripple">
+        {{ t('Delete') }}
+      </button>
+      <button cButton color="secondary" (click)="hideModal();" class="ripple">
+        {{ t('Cancel') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
+</ng-container>

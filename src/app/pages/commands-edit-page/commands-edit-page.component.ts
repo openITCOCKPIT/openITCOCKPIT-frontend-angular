@@ -2,10 +2,10 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { CommandclockService } from './commandclock.service';
 import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
-import { CommandEdit } from './CommandEdit.interface';
 import { FormsModule } from '@angular/forms';
-import { CommandsService } from './commands.service';
 import { SmartadminComponent } from '../../layouts/smartadmin/smartadmin.component';
+import { CommandsService } from '../commands/commands.service';
+import { CommandEdit } from '../commands/commands.interface';
 
 @Component({
   selector: 'oitc-commands-edit-page',

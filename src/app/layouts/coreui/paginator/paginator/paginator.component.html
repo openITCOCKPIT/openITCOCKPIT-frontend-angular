@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+  <c-row>
+    <c-col md="6" *ngIf="paging">
+      {{ t('Page') }}
+      {{ paging.page | number }}
+      {{ t('of') }}
+      {{ paging.pageCount | number }},
+      {{ t('Total') }}
+      {{ paging.count | number }}
+      {{ t('entries') }}
+
+    </c-col>
+    <c-col md="6">
+      <c-pagination *ngIf="paging" class="float-end">
+        <li cPageItem [disabled]="!paging.prevPage">
+          <button cPageLink
+                  class="ripple"
+                  [title]="'First page' | transloco"
+                  (click)="firstPage()">
+            <fa-icon [icon]="faAnglesLeft"></fa-icon>
+          </button>
+        </li>
+        <li cPageItem [disabled]="!paging.prevPage">
+          <button cPageLink
+                  class="ripple"
+                  [title]="'Previous page' | transloco"
+                  (click)="prevPage()"
+          >
+            <fa-icon [icon]="faAngleLeft"></fa-icon>
+          </button>
+        </li>
+
+
+        <li cPageItem *ngFor="let page of pages" [active]="page === paging.page">
+          <button cPageLink
+                  class="ripple"
+                  (click)="changePage(page)">
+            {{ page }}
+          </button>
+        </li>
+
+
+        <li cPageItem [disabled]="!paging.nextPage">
+          <button cPageLink
+                  class="ripple"
+                  [title]="'Next page' | transloco"
+                  (click)="nextPage()"
+          >
+            <fa-icon [icon]="faAngleRight"></fa-icon>
+          </button>
+        </li>
+        <li cPageItem [disabled]="!paging.nextPage">
+          <button cPageLink
+                  class="ripple"
+                  [title]="'Last page' | transloco"
+                  (click)="lastPage()"
+          >
+            <fa-icon [icon]="faAnglesRight"></fa-icon>
+          </button>
+        </li>
+      </c-pagination>
+    </c-col>
+  </c-row>
+</ng-container>
