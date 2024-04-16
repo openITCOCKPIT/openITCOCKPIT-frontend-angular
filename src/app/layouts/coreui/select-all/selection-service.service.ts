@@ -28,13 +28,13 @@ export class SelectionServiceService {
   }
 
   public delelectAll(): void {
-    this.selectAllSubject.next(false);
-
     // Clear current selection
     this.currentSelection = [];
 
     // Update all subscribers
     this.selectionSubject.next(this.currentSelection);
+
+    this.selectAllSubject.next(false);
   }
 
   public selectItem(item: any): void {

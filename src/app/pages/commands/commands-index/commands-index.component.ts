@@ -49,6 +49,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -118,6 +119,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
   private CommandsService = inject(CommandsService)
+  private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
   constructor(private _liveAnnouncer: LiveAnnouncer) {
 
@@ -137,6 +139,8 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
+    this.SelectionServiceService.delelectAll();
+
     this.params['filter[Commands.command_type][]'] = [];
     if (this.tmpFilter.service_commands) {
       this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.CHECK_COMMAND);
@@ -187,5 +191,5 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.params.page = 1;
     this.loadCommands();
   }
-  
+
 }
