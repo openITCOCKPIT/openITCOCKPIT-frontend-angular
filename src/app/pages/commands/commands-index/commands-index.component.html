@@ -119,7 +119,7 @@
         </c-container>
         <!-- End Filter -->
 
-        <table cTable hover striped bordered class="mt-2">
+        <table cTable hover striped bordered class="mt-2 mb-0">
           <thead>
           <tr>
             <th scope="col" class="text-center col-1">
@@ -160,9 +160,9 @@
         <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
 
         <ng-container *ngIf="commands && commands.all_commands">
-          <c-container fluid>
+          <c-container fluid class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0">
             <c-row>
-              <c-col class="text-center">
+              <c-col>
                 <oitc-select-all
                   [itemsCount]="commands.all_commands.length"></oitc-select-all>
               </c-col>
