@@ -109,7 +109,7 @@
         </c-card-footer>
       </c-card>
     </form>
-    
+
     <div>
       <h2>Button test</h2>
 
@@ -125,6 +125,15 @@
       <button cButton color="dark" class="ripple">Dark</button>
 
       <button cButton color="link">Link</button>
+
+      <br>
+      <button class="ripple" (click)="switchAllowEdit()">Switch Allow Edit</button>
+
+      <oitc-actions-button [allow_edit]="allowEdit" [permission]="'hosts.edit'" [url]="'/hosts/edit/1'">
+        <oitc-actions-button-element [allow]="allowEdit" [icon]="faCog" [permission]="'hosts.edit'" [url]="'/hosts/edit/1'">Edit</oitc-actions-button-element>
+        <li cDropdownDivider></li>
+        <oitc-actions-button-element [allow]="true" [icon]="faMouse" [permission]="'hosts.index'" (click)="clickTest()">Click Test</oitc-actions-button-element>
+      </oitc-actions-button>
 
     </div>
 

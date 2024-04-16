@@ -6,6 +6,7 @@ import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
 import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import {faCog, faMouse} from "@fortawesome/free-solid-svg-icons";
 import {
   ButtonToolbarComponent,
   CardBodyComponent,
@@ -13,7 +14,7 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   CardSubtitleDirective,
-  CardTitleDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  CardTitleDirective, DropdownDividerDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
   FormControlDirective,
   FormDirective,
   FormLabelDirective, FormSelectDirective, FormTextDirective, InputGroupTextDirective,
@@ -29,6 +30,8 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faAsterisk, faCircleInfo, faCoffee} from "@fortawesome/free-solid-svg-icons";
 import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
 import { TranslocoDirective } from "@jsverse/transloco";
+import {ActionsButtonComponent} from '../../components/actions-button/actions-button.component';
+import {ActionsButtonElementComponent} from '../../components/actions-button-element/actions-button-element.component';
 
 
 @Component({
@@ -67,7 +70,10 @@ import { TranslocoDirective } from "@jsverse/transloco";
     FormSelectDirective,
     FaIconComponent,
     RequiredIconComponent,
-    TranslocoDirective
+    TranslocoDirective,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
@@ -79,6 +85,7 @@ export class StartPageComponent implements OnDestroy {
   public readonly queryParams$ = this.route.queryParams;
   private readonly subscription = new Subscription();
   private readonly document = inject(DOCUMENT);
+  public allowEdit = true;
 
   public constructor() {
     this.route.queryParams.subscribe({
@@ -107,7 +114,17 @@ export class StartPageComponent implements OnDestroy {
     (this.document.defaultView as unknown as WindowWithPeter).callPeter();
   }
 
+  public clickTest() {
+    alert("Clicked!!!");
+  }
+
+  public switchAllowEdit() {
+    this.allowEdit = !this.allowEdit;
+  }
+
   protected readonly faCoffee = faCoffee;
   protected readonly faCircleInfo = faCircleInfo;
   protected readonly faAsterisk = faAsterisk;
+  protected readonly faCog = faCog;
+  protected readonly faMouse = faMouse;
 }

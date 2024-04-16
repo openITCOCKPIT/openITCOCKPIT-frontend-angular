@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
+import {DropdownService} from '@coreui/angular';
 
 
 export const appConfig: ApplicationConfig = {
@@ -44,5 +45,6 @@ export const appConfig: ApplicationConfig = {
         },
         loader: TranslocoHttpLoader
       }),
+    DropdownService
   ]
 };
