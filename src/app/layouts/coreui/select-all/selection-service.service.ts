@@ -18,6 +18,7 @@ export class SelectionServiceService {
   constructor() {
   }
 
+
   public selectAll(): void {
     // Clear current selection
     this.currentSelection = [];
@@ -49,6 +50,10 @@ export class SelectionServiceService {
 
     // Tell all subscribers about the new selection
     this.selectionSubject.next(this.currentSelection);
+  }
+
+  public getSelectedItems(): any[] {
+    return this.currentSelection;
   }
 
 }

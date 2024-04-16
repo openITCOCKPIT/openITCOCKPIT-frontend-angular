@@ -160,8 +160,20 @@
         <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
 
         <ng-container *ngIf="commands && commands.all_commands">
-          <oitc-select-all
-            [itemsCount]="commands.all_commands.length"></oitc-select-all>
+          <c-container fluid>
+            <c-row>
+              <c-col class="text-center">
+                <oitc-select-all
+                  [itemsCount]="commands.all_commands.length"></oitc-select-all>
+              </c-col>
+              <c-col class="text-center">
+                <span class="text-danger select-label">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                  {{ t('Delete selected') }}
+                </span>
+              </c-col>
+            </c-row>
+          </c-container>
         </ng-container>
 
 
