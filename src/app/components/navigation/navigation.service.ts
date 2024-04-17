@@ -7,6 +7,7 @@ import {PROXY_PATH} from "../../tokens/proxy-path.token";
 import {INavData} from "@coreui/angular";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
 
 @Injectable({
   providedIn: 'root',
@@ -65,8 +66,15 @@ export class NavigationService {
     iNavData.children = [];
     iNavData.url      = ['/', link.controller, link.action];
 
-    iNavData.iconComponent= { name: 'cil-puzzle' };
-    iNavData.icon = 'fa fa-address-book';
+    // iNavData.iconComponent  = {name: link.icon};
+
+    // Codiumate:
+    iNavData.iconComponent = {name: faCircleQuestion.iconName}
+
+
+    // iNavData.iconComponent= { name: link.icon };
+    // iNavData.iconComponent= { name: 'cil-puzzle' };
+    // iNavData.icon = 'cil-puzzle';
     // iNavData.iconComponent = FaIconComponent;
 
     for (let itemKey in link.items) {

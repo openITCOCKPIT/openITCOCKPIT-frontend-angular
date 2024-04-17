@@ -8,8 +8,44 @@
 >
   <c-sidebar-header class="border-bottom">
     <c-sidebar-brand [routerLink]="[]">
-      <svg [class]="{icon: false}" cIcon class="sidebar-brand-full" height="32" name="logo" title="CoreUI Logo"></svg>
-      <svg cIcon class="sidebar-brand-narrow" height="32" name="signet" title="CoreUI Logo"></svg>
+      <div *ngIf="showSearch" class="nav-filter  m-0 p-0">
+
+        <form [formGroup]="navSearch" (ngSubmit)="runSearch()">
+          <c-input-group class="mb-3">
+            <input aria-describedby="basic-addon2"
+                   cFormControl="searchTerm"
+                   placeholder="Search"
+                   formControlName="searchTerm"
+            />
+            <span cInputGroupText id="basic-addon2">
+              <fa-icon [icon]="faSearch" *ngIf="searchTerm !== ''" />
+              <fa-icon [icon]="faClose" *ngIf="searchTerm === ''" (click)="clearSearch()" />
+            </span>
+          </c-input-group>
+        </form>
+        <ul class="list-group m-0 p-0"  *ngIf="searchTerm !== ''" >
+          <li class="list-group-item">
+            <strong>An item</strong>
+            <br />Asnaeb
+          </li>
+          <li class="list-group-item">
+            <strong>A second item</strong>
+            <br />Asnaeb
+          </li>
+          <li class="list-group-item">
+            <strong>A third item</strong>
+            <br />Asnaeb
+          </li>
+          <li class="list-group-item">
+            <strong>A fourth item</strong>
+            <br />Asnaeb
+          </li>
+          <li class="list-group-item">
+            <strong>And a fifth one</strong>
+            <br />Asnaeb
+          </li>
+        </ul>
+      </div>
     </c-sidebar-brand>
   </c-sidebar-header>
 

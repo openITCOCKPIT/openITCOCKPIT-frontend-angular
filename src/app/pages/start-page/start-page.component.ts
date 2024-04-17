@@ -1,6 +1,5 @@
 import {Component, inject, OnDestroy} from '@angular/core';
 import {HeaderComponent} from "../../components/header/header.component";
-import {NavigationComponent} from "../../components/navigation/navigation.component";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
@@ -43,7 +42,6 @@ import {TranslocoDirective} from "@jsverse/transloco";
   imports: [
     CoreuiComponent,
     HeaderComponent,
-    NavigationComponent,
     RouterModule,
     AsyncPipe,
     JsonPipe,
