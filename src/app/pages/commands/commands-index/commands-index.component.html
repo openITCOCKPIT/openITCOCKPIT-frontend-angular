@@ -139,11 +139,6 @@
           <tbody *ngIf="commands">
           <tr *ngFor="let command of commands.all_commands">
             <td class="text-center">
-
-              <mat-checkbox color="danger">
-                Bitch please
-              </mat-checkbox>
-
               <oitc-item-select
                 *oitcPermission="['commands', 'delete']"
                 [item]="command"
@@ -166,7 +161,13 @@
                 <oitc-select-all
                   [itemsCount]="commands.all_commands.length"></oitc-select-all>
               </c-col>
-              <c-col class="text-center">
+              <c-col class="text-end" md="2">
+                  <span class="select-label" (click)="toggleDeleteAllModal()">
+                      <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                      {{ t('Copy') }}
+                  </span>
+              </c-col>
+              <c-col class="text-end" md="2">
                 <span class="text-danger select-label" (click)="toggleDeleteAllModal()">
                   <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                   {{ t('Delete selected') }}
