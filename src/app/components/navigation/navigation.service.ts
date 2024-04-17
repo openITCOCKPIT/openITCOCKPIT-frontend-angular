@@ -1,13 +1,12 @@
 import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, filter, take, switchMap} from "rxjs";
+import {BehaviorSubject, filter, take, switchMap, map, Observable, Subscription} from "rxjs";
 import {Link, NavigationInterface} from "./navigation.interface";
 import {AuthService} from "../../auth/auth.service";
 import {PROXY_PATH} from "../../tokens/proxy-path.token";
 import {INavData} from "@coreui/angular";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
+import {CommandIndexRoot} from "../../pages/commands/commands.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -19,30 +18,71 @@ export class NavigationService {
 
   private readonly links$$ = new BehaviorSubject<Link[]>([]);
   public readonly links$ = this.links$$.asObservable();
+  private subscriptions: Subscription = new Subscription();
 
   public constructor() {
-    this.loadMenu();
+    ;
+
+    this.subscriptions.add(this.loadMenu()
+      .subscribe((result) => {
+        this.navigation = this.oitcToCoreUi(result);
+      })
+    );
   }
 
   public navigation: INavData[] = []
+  public searchResults: INavData[] = []
 
-  private loadMenu(): void {
+  private loadMenu(): Observable<NavigationInterface> {
     const proxyPath = this.proxyPath;
-    this.authService.authenticated$.pipe(
-      filter(authenticated => authenticated),
-      take(1),
-      switchMap(() => this.http.get<NavigationInterface>(`${proxyPath}/angular/menu.json`)),
-    ).subscribe({
-      next: navigation => {
-        this.navigation = this.oitcToCoreUi(navigation);
-      },
-    });
+    return this.http.get<NavigationInterface>(`${proxyPath}/angular/menu.json`, {
+      params: {}
+    }).pipe(
+      map(data => {
+        return data;
+      })
+    )
+  }
+
+  public navEntryMatchesSearch(navigationElement: INavData, search: string): boolean {
+    let name: string = navigationElement.name as string;
+    name = name.toLowerCase();
+    search = search.toLowerCase();
+    return !(name.indexOf(search) === -1);
+  }
+
+  public search(searchTerm: string): void {
+    this.searchResults = this._search(this.navigation, searchTerm);
+  }
+
+  private _search(items: INavData[], searchTerm: string): INavData[] {
+    let result: INavData[] = [];
+
+    for (let key in items) {
+      let item = items[key];
+      item.children = item.children as INavData[];
+      // First level?
+      if (this.navEntryMatchesSearch(item, searchTerm)) {
+        result.push(item);
+      }
+
+      if (item.children.length === 0) {
+        continue;
+      }
+      let foundChildren: INavData[] = this._search(item.children as INavData[], searchTerm);
+      for (let foundChildrenIndex in foundChildren) {
+        let foundChild = foundChildren[foundChildrenIndex];
+        result.push(foundChild);
+
+      }
+    }
+    return result;
   }
 
   private oitcToCoreUi(navigation: NavigationInterface): INavData[] {
     let ret: INavData[] = [];
     for (let a in navigation.menu) {
-      let link: Link = navigation.menu[a] as Link;
+      let link: Link = navigation.menu[a];
       let iNavData: INavData = this.oitcToC2(link);
       iNavData.children = [];
       iNavData.title = true;
@@ -62,20 +102,11 @@ export class NavigationService {
 
   private oitcToC2(link: Link): INavData {
     let iNavData: INavData = {};
-    iNavData.name     = link.alias || link.name;
+    iNavData.name = link.alias || link.name;
     iNavData.children = [];
-    iNavData.url      = ['/', link.controller, link.action];
+    iNavData.url = '/' + link.controller + '/' + link.action;
 
-    // iNavData.iconComponent  = {name: link.icon};
-
-    // Codiumate:
-    iNavData.iconComponent = {name: faCircleQuestion.iconName}
-
-
-    // iNavData.iconComponent= { name: link.icon };
-    // iNavData.iconComponent= { name: 'cil-puzzle' };
-    // iNavData.icon = 'cil-puzzle';
-    // iNavData.iconComponent = FaIconComponent;
+    iNavData.iconComponent = {name: 'cil-puzzle'};
 
     for (let itemKey in link.items) {
       let myLink = link.items?.at(parseInt(itemKey)) as Link;
