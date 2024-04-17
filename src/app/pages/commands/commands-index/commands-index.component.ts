@@ -202,6 +202,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.loadCommands();
   }
 
+  // Open the Delete All Modal
   public toggleDeleteAllModal() {
     const items: DeleteAllItem[] = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
       return {
@@ -216,6 +217,13 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
       show: true,
       id: 'deleteAllModal',
     });
+  }
+
+  // Generic callback whenever a mass action (like delete all) has been finished
+  public onMassActionComplete(success: boolean) {
+    if (success) {
+      this.loadCommands();
+    }
   }
 
 }

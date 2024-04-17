@@ -8,3 +8,18 @@ export interface DeleteAllItem {
 export interface DeleteAllModalService {
   delete(item: DeleteAllItem): Observable<any>;
 }
+
+export interface DeleteAllResponse {
+  success: boolean
+  id?: string | number        // Only on error
+  message?: string            // Only on error
+  usedBy?: DeleteAllUsedBy[]  // Only on error
+  _csrfToken: string
+}
+
+export interface DeleteAllUsedBy {
+  baseUrl: string
+  state: string
+  message: string
+  module: string
+}
