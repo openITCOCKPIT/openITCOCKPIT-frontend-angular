@@ -104,7 +104,8 @@
                            oitcDebounce
                            [(ngModel)]="tmpFilter.service_commands"
                            (debouncedValue)="onFilterChange($event)"/>
-                    <label cFormCheckLabel for="ServiceCheckCommand">{{ t('Service check command') }}</label>
+                    <label cFormCheckLabel
+                           for="ServiceCheckCommand">{{ t('Service check command') }}</label>
                   </c-form-check>
                   <c-form-check>
                     <input cFormCheckInput id="HostCheckCommand" type="checkbox"
@@ -112,7 +113,8 @@
                            oitcDebounce
                            [(ngModel)]="tmpFilter.hostcheck_commands"
                            (debouncedValue)="onFilterChange($event)"/>
-                    <label cFormCheckLabel for="HostCheckCommand">{{ t('Host check command') }}</label>
+                    <label cFormCheckLabel
+                           for="HostCheckCommand">{{ t('Host check command') }}</label>
                   </c-form-check>
                   <c-form-check>
                     <input cFormCheckInput id="NotificationCommand" type="checkbox"
@@ -120,7 +122,8 @@
                            oitcDebounce
                            [(ngModel)]="tmpFilter.notification_commands"
                            (debouncedValue)="onFilterChange($event)"/>
-                    <label cFormCheckLabel for="NotificationCommand">{{ t('Notification command') }}</label>
+                    <label cFormCheckLabel
+                           for="NotificationCommand">{{ t('Notification command') }}</label>
                   </c-form-check>
                   <c-form-check>
                     <input cFormCheckInput id="EventhandlerCommand" type="checkbox"
@@ -128,7 +131,8 @@
                            oitcDebounce
                            [(ngModel)]="tmpFilter.eventhandler_commands"
                            (debouncedValue)="onFilterChange($event)"/>
-                    <label cFormCheckLabel for="EventhandlerCommand">{{ t('Eventhandler command') }}</label>
+                    <label cFormCheckLabel
+                           for="EventhandlerCommand">{{ t('Eventhandler command') }}</label>
                   </c-form-check>
                 </fieldset>
               </c-col>
@@ -144,6 +148,7 @@
         </c-container>
         <!-- End Filter -->
 
+        <<<<<<< HEAD
         <table cTable hover striped bordered class="mt-2 mb-0">
           <thead>
           <tr>
@@ -209,7 +214,6 @@
         </table>
 
         <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
-
         <ng-container *ngIf="commands && commands.all_commands">
           <c-container fluid class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0">
             <c-row>
@@ -217,22 +221,23 @@
                 <oitc-select-all
                   [itemsCount]="commands.all_commands.length"></oitc-select-all>
               </c-col>
-              <c-col class="text-end" md="2">
-                <span class="select-label" (click)="toggleDeleteAllModal()">
-                  <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                  {{ t('Copy') }}
-                </span>
-              </c-col>
-              <c-col class="text-end" md="2">
-                <span class="text-danger select-label" (click)="toggleDeleteAllModal()">
-                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                  {{ t('Delete selected') }}
-                </span>
+              <c-col md="3">
+                <div class="btn-group btn-group-xs d-flex flex-row" role="group"
+                     aria-label="Basic outlined example">
+                  <button type="button" class="btn btn-outline-primary col-3">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                  </button>
+                  <button type="button" class="btn btn-outline-danger col-3"
+                          (click)="toggleDeleteAllModal()">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                </div>
               </c-col>
             </c-row>
           </c-container>
         </ng-container>
-
 
         <c-container fluid>
           <c-row>
@@ -253,4 +258,4 @@
 </oitc-coreui>
 
 
-<oitc-delete-all-modal></oitc-delete-all-modal>
+<oitc-delete-all-modal deleteUrl="/commands/delete" [items]="selectedItems"></oitc-delete-all-modal>

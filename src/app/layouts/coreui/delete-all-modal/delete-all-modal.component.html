@@ -9,20 +9,42 @@
       <h5 cModalTitle>
         {{ t('Attention!') }}
       </h5>
-      <button cButtonClose (click)="hideModal();"></button>
+      <button cButtonClose (click)="hideModal()"></button>
     </c-modal-header>
     <c-modal-body>
       <c-row>
         <c-col>
-          <p>{{ t('Do you really want delete the selected object?') }}</p>
+          <strong>{{ t('Do you really want delete the selected object?') }}</strong>
         </c-col>
       </c-row>
+
+      <c-row class="pt-2">
+        <c-col sm="12" *ngFor="let item of items">
+          <ul class="mb-0">
+            <li>
+              {{ item.displayName }}
+            </li>
+          </ul>
+        </c-col>
+      </c-row>
+
+      <c-row class="pt-4 pb-2" [hidden]="!isDeleting">
+        <c-col sm="12">
+          <h4>{{ t('Deleting...') }}</h4>
+        </c-col>
+        <c-col sm="12">
+          <c-progress [animated]="true" [value]="progress" color="danger" variant="striped"/>
+        </c-col>
+      </c-row>
+
+
     </c-modal-body>
     <c-modal-footer>
-      <button cButton color="danger" class="ripple">
+      <button cButton color="danger" class="ripple" (click)="delete()" [disabled]="isDeleting">
+        <fa-icon [icon]="['fas', 'spinner']" animation="spin" [hidden]="!isDeleting"></fa-icon>
         {{ t('Delete') }}
       </button>
-      <button cButton color="secondary" (click)="hideModal();" class="ripple">
+      <button cButton color="secondary" (click)="hideModal()" class="ripple">
         {{ t('Cancel') }}
       </button>
     </c-modal-footer>

@@ -78,6 +78,8 @@ import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.
 import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
 import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
 import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
 import {
   ActionsButtonElementComponent
@@ -135,7 +137,10 @@ import {
     DropdownDividerDirective,
   ],
   templateUrl: './commands-index.component.html',
-  styleUrl: './commands-index.component.css'
+  styleUrl: './commands-index.component.css',
+  providers: [
+    {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
+  ]
 })
 export class CommandsIndexComponent implements OnInit, OnDestroy {
 
@@ -146,6 +151,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   public params: CommandsIndexParams = getDefaultCommandsIndexParams()
   public commands?: CommandIndexRoot;
   public hideFilter: boolean = false;
+  public selectedItems: DeleteAllItem[] = [];
 
   public tmpFilter = {
     service_commands: true,
@@ -230,6 +236,15 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public toggleDeleteAllModal() {
+    const items: DeleteAllItem[] = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+      return {
+        id: item.Command.id,
+        displayName: item.Command.name
+      };
+    });
+
+    this.selectedItems = items;
+
     this.modalService.toggle({
       show: true,
       id: 'deleteAllModal',
