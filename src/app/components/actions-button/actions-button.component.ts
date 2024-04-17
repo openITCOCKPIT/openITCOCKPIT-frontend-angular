@@ -29,7 +29,6 @@ import {PermissionDirective} from '../../permissions/permission.directive';
 import {Router} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faCog} from "@fortawesome/free-solid-svg-icons";
 import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -50,8 +49,7 @@ import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutto
 })
 export class ActionsButtonComponent {
 
-  protected readonly faCog = faCog;
-  @Input({transform: booleanAttribute, required: true}) allow_edit: boolean = true;
+  @Input({transform: booleanAttribute}) allowEdit: boolean = true;
   @Input({required: true}) url: string = '';
   @Input({required: true}) permission: string = '';
 

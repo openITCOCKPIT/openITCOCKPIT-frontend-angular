@@ -1,6 +1,31 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+/*
+ * Copyright (C) <2015-present>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
+import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
 import {
   CardBodyComponent,
   CardComponent,
@@ -10,6 +35,7 @@ import {
   CardTitleDirective,
   ColComponent,
   ContainerComponent,
+  DropdownDividerDirective,
   FormCheckComponent,
   FormCheckInputDirective,
   FormCheckLabelDirective,
@@ -28,30 +54,34 @@ import {
   TableColorDirective,
   TableDirective
 } from "@coreui/angular";
-import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { Subscription } from 'rxjs';
-import { CommandsService } from '../commands.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import {XsButtonDirective} from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {Subscription} from 'rxjs';
+import {CommandsService} from '../commands.service';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams} from '../commands.interface';
+import {NgForOf, NgIf} from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { PermissionDirective } from "../../../permissions/permission.directive";
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { CommandTypesEnum } from '../command-types.enum';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {RequiredIconComponent} from "../../../components/required-icon/required-icon.component";
+import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {DebounceDirective} from '../../../directives/debounce.directive';
+import {PermissionDirective} from "../../../permissions/permission.directive";
+import {TrueFalseDirective} from '../../../directives/true-false.directive';
+import {CommandTypesEnum} from '../command-types.enum';
+import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
+import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
+import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import {
+  ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -100,6 +130,9 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     SelectAllComponent,
     ItemSelectComponent,
     DeleteAllModalComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css'

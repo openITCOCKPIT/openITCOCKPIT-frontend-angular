@@ -24,7 +24,6 @@
  */
 
 import {booleanAttribute, Component, Input} from '@angular/core';
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import {RouterLink} from '@angular/router';
 import {PermissionDirective} from '../../permissions/permission.directive';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
@@ -46,8 +45,7 @@ import {NgTemplateOutlet} from '@angular/common';
 })
 export class ActionsButtonElementComponent {
 
-  @Input({required: true}) icon: IconDefinition | undefined;
-  @Input({transform: booleanAttribute, required: true}) allow: boolean = true;
+  @Input({transform: booleanAttribute}) allow: boolean = true;
   @Input() url: string = '';
   @Input({required: true}) permission: string = '';
 

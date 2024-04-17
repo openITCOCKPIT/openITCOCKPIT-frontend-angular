@@ -1,3 +1,28 @@
+<!--
+  ~ Copyright (C) <2015-present>  <it-novum GmbH>
+  ~
+  ~ This file is dual licensed
+  ~
+  ~ 1.
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, version 3 of the License.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ 2.
+  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+  ~     License agreement and license key will be shipped with the order
+  ~     confirmation.
+  -->
+
 <oitc-coreui>
   <ng-container *transloco="let t">
     <nav aria-label="breadcrumb">
@@ -131,7 +156,7 @@
             <th scope="col">
               {{ t('Command type') }}
             </th>
-            <th scope="col" class="text-center col-1">
+            <th scope="col" class="text-center col-1 width-50">
               <fa-icon [icon]="['fas', 'gear']"></fa-icon>
             </th>
           </tr>
@@ -147,7 +172,38 @@
             </td>
             <td>{{ command.Command.name }}</td>
             <td>{{ command.Command.type }}</td>
-            <td></td>
+            <td class="width-50">
+              <oitc-actions-button [permission]="'commands.edit'" [url]="'/commands/edit/' + command.Command.id">
+                <oitc-actions-button-element [permission]="'commands.edit'"
+                                             [url]="'/commands/edit/' + command.Command.id">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                  {{ t('Edit') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                             [url]="'/changelogs/entity/command/' + command.Command.id">
+                  <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                  {{ t('Changelog') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'commands.usedBy'"
+                                             [url]="'/commands/usedBy/' + command.Command.id">
+                  <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                  {{ t('Used By') }}
+                </oitc-actions-button-element>
+                <li cDropdownDivider></li>
+                <oitc-actions-button-element [permission]="'commands.copy'"
+                                             [url]="'/commands/copy/' + command.Command.id">
+                  <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                  {{ t('Copy') }}
+                </oitc-actions-button-element>
+                <li cDropdownDivider></li>
+                <oitc-actions-button-element [permission]="'commands.delete'">
+                  <span class="txt-color-red">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete') }}
+                  </span>
+                </oitc-actions-button-element>
+              </oitc-actions-button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -162,10 +218,10 @@
                   [itemsCount]="commands.all_commands.length"></oitc-select-all>
               </c-col>
               <c-col class="text-end" md="2">
-                  <span class="select-label" (click)="toggleDeleteAllModal()">
-                      <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                      {{ t('Copy') }}
-                  </span>
+                <span class="select-label" (click)="toggleDeleteAllModal()">
+                  <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                  {{ t('Copy') }}
+                </span>
               </c-col>
               <c-col class="text-end" md="2">
                 <span class="text-danger select-label" (click)="toggleDeleteAllModal()">

@@ -24,18 +24,14 @@
   -->
 
 <span *oitcPermission="permission">
-  @if (allow && icon) {
+  @if (allow) {
     @if (url.length !== 0) {
       <li><a cDropdownItem [routerLink]="[url]">
-        <fa-icon [icon]="icon" size="xs" class="dropdown-item-icon"></fa-icon>
         <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
-        <ng-content></ng-content>
       </a></li>
     } @else {
       <li><a cDropdownItem href="javascript:void(0);">
-        <fa-icon [icon]="icon" size="xs" class="dropdown-item-icon"></fa-icon>
         <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
-        <ng-content></ng-content>
       </a></li>
     }
   }

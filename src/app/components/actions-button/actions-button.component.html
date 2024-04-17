@@ -25,16 +25,16 @@
 
 <c-dropdown placement="bottom-start"
             variant="btn-group">
-  @if (allow_edit) {
+  @if (allowEdit) {
     <button cButton class="ripple" color="secondary" variant="outline" *oitcPermission="permission" (click)="onClick()">
-      <fa-icon [icon]="faCog" size="xs"></fa-icon>
+      <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
     </button>
     <!--<button cButton class="ripple" color="secondary" variant="outline" *oitcPermission="permission; showOnNoPermission: true" disabled>
       <fa-icon [icon]="faCog" size="xs"></fa-icon>
     </button>-->
   } @else {
     <button cButton class="ripple" color="secondary" variant="outline" disabled>
-      <fa-icon [icon]="faCog" size="xs"></fa-icon>
+      <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
     </button>
   }
   <button cButton color="secondary" variant="outline" cDropdownToggle split>
