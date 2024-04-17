@@ -21,8 +21,6 @@ export class NavigationService {
   private subscriptions: Subscription = new Subscription();
 
   public constructor() {
-    ;
-
     this.subscriptions.add(this.loadMenu()
       .subscribe((result) => {
         this.navigation = this.oitcToCoreUi(result);
