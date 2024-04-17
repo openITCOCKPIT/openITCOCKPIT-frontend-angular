@@ -148,7 +148,6 @@
         </c-container>
         <!-- End Filter -->
 
-        <<<<<<< HEAD
         <table cTable hover striped bordered class="mt-2 mb-0">
           <thead>
           <tr>
@@ -201,7 +200,8 @@
                   {{ t('Copy') }}
                 </oitc-actions-button-element>
                 <li cDropdownDivider></li>
-                <oitc-actions-button-element [permission]="'commands.delete'">
+                <oitc-actions-button-element [permission]="'commands.delete'"
+                                             (click)="toggleDeleteAllModal(command)">
                   <span class="txt-color-red">
                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                     {{ t('Delete') }}

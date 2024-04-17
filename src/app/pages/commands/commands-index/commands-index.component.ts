@@ -182,7 +182,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
-    this.SelectionServiceService.delelectAll();
+    this.SelectionServiceService.deselectAll();
 
     this.params['filter[Commands.command_type][]'] = [];
     if (this.tmpFilter.service_commands) {
@@ -235,13 +235,27 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.loadCommands();
   }
 
-  public toggleDeleteAllModal() {
-    const items: DeleteAllItem[] = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-      return {
+  public toggleDeleteAllModal(item?: any) {
+
+    let items: DeleteAllItem[] = [];
+
+    if (item !== undefined) {
+
+      items.push({
         id: item.Command.id,
         displayName: item.Command.name
-      };
-    });
+      });
+
+    } else {
+
+      items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+        return {
+          id: item.Command.id,
+          displayName: item.Command.name
+        };
+      });
+
+    }
 
     this.selectedItems = items;
 
