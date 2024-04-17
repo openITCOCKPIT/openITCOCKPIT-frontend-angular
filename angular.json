@@ -36,7 +36,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/material.scss"
             ],
             "scripts": [
               "src/peter.js"
@@ -97,7 +98,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/material.scss"
             ],
             "scripts": [
             ]

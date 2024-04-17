@@ -19,10 +19,11 @@ import 'flag-icons';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
   constructor(library: FaIconLibrary, private IconSetService: IconSetService) {
     // Add an icon to the library for convenient access in other components
     library.addIconPacks(fas);
 
-    this.IconSetService.icons = { ...iconSubset };
+    this.IconSetService.icons = {...iconSubset};
   }
 }
