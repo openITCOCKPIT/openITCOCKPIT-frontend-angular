@@ -4,11 +4,12 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { CommandEdit, CommandIndexRoot, CommandsIndexParams } from './commands.interface';
+import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommandsService {
+export class CommandsService implements DeleteAllModalService {
 
   private readonly http = inject(HttpClient);
   private readonly document = inject(DOCUMENT);
@@ -32,6 +33,12 @@ export class CommandsService {
         return data['command'];
       })
     )
+  }
+
+  // Generic function for the Delete All Modal
+  public delete(item: DeleteAllItem): Observable<any> {
+    const proxyPath = this.proxyPath;
+    return this.http.post(`${proxyPath}/commands/delete/${item.id}.json?angular=true`, {});
   }
 
 }
