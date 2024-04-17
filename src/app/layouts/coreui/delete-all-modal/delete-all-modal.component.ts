@@ -13,7 +13,7 @@ import {
   RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DeleteAllItem } from './delete-all.interface';
 import { NgForOf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -80,17 +80,17 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     for (let i in this.items) {
       const item = this.items[i];
 
-      this.deleteService.delete(item).pipe(tap({
-        error: e => console.log(e)
-      }))
-        .subscribe((result: any) => { // Successz
-          console.log(result);
-          this.progress = (parseInt(i) + 1) / this.items.length * 100;
-          if (this.progress === 100) {
-            this.isDeleting = false;
-            this.hideModal();
-          }
-        });
+      this.deleteService.delete(item).subscribe({
+        next(value: any) {
+          console.log('Observable emitted the next value: ' + value);
+        },
+        error(err: any) {
+          console.error('Observable emitted an error: ' + err);
+        },
+        complete() {
+          console.log('Observable emitted the complete notification');
+        }
+      });
 
     }
 

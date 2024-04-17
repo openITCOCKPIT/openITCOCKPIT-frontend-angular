@@ -36,7 +36,7 @@ export class CommandsService implements DeleteAllModalService {
   }
 
   // Generic function for the Delete All Modal
-  public delete(item: DeleteAllItem): Observable<any> {
+  public delete(item: DeleteAllItem): Observable<Object> {
     const proxyPath = this.proxyPath;
     return this.http.post(`${proxyPath}/commands/delete/${item.id}.json?angular=true`, {});
   }
