@@ -39,6 +39,9 @@ export const routes: Routes = [{
   path: 'commands/index',
   loadComponent: () => import('./pages/commands/commands-index/commands-index.component').then(m => m.CommandsIndexComponent)
 }, {
+  path: 'commands/add',
+  loadComponent: () => import('./pages/commands/commands-add/commands-add.component').then(m => m.CommandsAddComponent)
+}, {
   path: 'commands/edit',
   loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
 }, {
