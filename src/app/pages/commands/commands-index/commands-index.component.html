@@ -178,7 +178,7 @@
                 </oitc-actions-button-element>
                 <li cDropdownDivider></li>
                 <oitc-actions-button-element [permission]="'commands.delete'"
-                                             (click)="toggleDeleteAllModal()">
+                                             (click)="toggleDeleteAllModal(command)">
                   <span class="txt-color-red">
                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                     {{ t('Delete') }}

@@ -59,7 +59,12 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
+import {
+  CommandIndex,
+  CommandIndexRoot,
+  CommandsIndexParams,
+  getDefaultCommandsIndexParams
+} from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
@@ -236,16 +241,29 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   // Open the Delete All Modal
-  public toggleDeleteAllModal() {
-    const items: DeleteAllItem[] = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-      return {
-        id: item.Command.id,
-        displayName: item.Command.name
-      };
-    });
+  public toggleDeleteAllModal(command?: CommandIndex) {
+    let items: DeleteAllItem[] = [];
 
+    if (command) {
+      // User just want to delete a single command
+      items = [{
+        id: command.Command.id,
+        displayName: command.Command.name
+      }];
+    } else {
+      // User clicked on delete selected button
+      items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+        return {
+          id: item.Command.id,
+          displayName: item.Command.name
+        };
+      });
+    }
+
+    // Pass selection to the modal
     this.selectedItems = items;
 
+    // open modal
     this.modalService.toggle({
       show: true,
       id: 'deleteAllModal',

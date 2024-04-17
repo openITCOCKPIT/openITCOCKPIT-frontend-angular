@@ -116,7 +116,6 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
           issueCount++
           this.hasErrors = true;
           this.errors.push(responseError);
-          console.log(this.errors);
 
           responseCount++;
           this.percentage = Math.round((responseCount / count) * 100);
