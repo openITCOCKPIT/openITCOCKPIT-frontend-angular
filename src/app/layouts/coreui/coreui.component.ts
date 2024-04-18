@@ -138,8 +138,6 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchTerm = searchTerm.toLowerCase();
 
     this.navigationService.search(this.searchTerm);
-
-    console.error(this.navigationService.searchResults);
   }
 
   public clearSearch(): void {
