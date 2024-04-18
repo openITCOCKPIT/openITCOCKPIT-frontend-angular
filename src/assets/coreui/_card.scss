@@ -1,5 +1,9 @@
 /* Add support for card-toolbar */
 
+.card {
+  box-shadow: 0 0 13px 0 rgba(9, 61, 148, 0.08);
+}
+
 .card-header {
   display: flex;
 }

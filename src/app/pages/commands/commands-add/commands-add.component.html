@@ -26,7 +26,7 @@
 
           <c-nav class="card-toolbar card-header-pills">
             <c-nav-item class="px-1">
-              <button cButton color="secondary" class="ripple" size="xs" oitcBackButton
+              <button cButton color="default" class="ripple" size="xs" oitcBackButton
                       [fallbackUrl]="['commands', 'index']">
                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
                 {{ t('Back') }}
@@ -120,7 +120,7 @@
           <button cButton color="primary" type="submit" class="ripple">
             {{ t('Create command') }}
           </button>
-          <button cButton oitcBackButton [fallbackUrl]="['commands', 'index']" color="secondary" type="submit"
+          <button cButton oitcBackButton [fallbackUrl]="['commands', 'index']" color="default" type="submit"
                   class="ms-1 ripple">
             {{ t('Cancel') }}
           </button>

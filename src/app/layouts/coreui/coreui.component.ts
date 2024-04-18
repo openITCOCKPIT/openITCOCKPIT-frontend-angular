@@ -1,8 +1,11 @@
-import {AfterViewInit, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DebounceDirective } from '../../directives/debounce.directive';
 import {
   ColorModeService,
   ContainerComponent,
+  FormControlDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
   ShadowOnScrollDirective,
   SidebarBrandComponent,
   SidebarComponent,
@@ -12,28 +15,23 @@ import {
   SidebarNavComponent,
   SidebarToggleDirective,
   SidebarTogglerDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  FormControlDirective,
 } from '@coreui/angular';
-import {CoreuiHeaderComponent} from './coreui-header/coreui-header.component';
-import {CoreuiFooterComponent} from './coreui-footer/coreui-footer.component';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CoreuiMenuComponent} from './coreui-menu/coreui-menu.component';
-import {NgScrollbarModule} from 'ngx-scrollbar';
-import {RouterLink} from '@angular/router';
-import {GlobalLoaderComponent} from './global-loader/global-loader.component';
-import {Subscription} from 'rxjs';
-import {toObservable} from '@angular/core/rxjs-interop';
-import {DOCUMENT, NgFor} from '@angular/common';
+import { CoreuiHeaderComponent } from './coreui-header/coreui-header.component';
+import { CoreuiFooterComponent } from './coreui-footer/coreui-footer.component';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CoreuiMenuComponent } from './coreui-menu/coreui-menu.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { RouterLink } from '@angular/router';
+import { GlobalLoaderComponent } from './global-loader/global-loader.component';
+import { Subscription } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { DOCUMENT, NgFor, NgIf } from '@angular/common';
 
 
-import {NavigationService} from "../../components/navigation/navigation.service";
-import {NgIf} from "@angular/common";
-import {IconComponent} from "@coreui/icons-angular";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {faClose, faQuestion, faSearch} from "@fortawesome/free-solid-svg-icons";
+import { NavigationService } from "../../components/navigation/navigation.service";
+import { IconComponent } from "@coreui/icons-angular";
+import { FaIconComponent, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'oitc-coreui',
@@ -118,7 +116,7 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngAfterViewInit(): void {
     const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.#colorModeService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
-    if (osSystemDarkMode) {
+    if (osSystemDarkMode && coreUiTheme !== 'light') {
       // Enable dark mode for Angular Material because the OS wants dark mode
       // quick and dirty hack
       setTimeout(() => this.document.body.classList.add('dark-theme'), 100);

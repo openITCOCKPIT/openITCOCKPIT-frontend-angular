@@ -6,3 +6,62 @@
   line-height: 1.5;
   border-radius: .25rem;
 }
+
+/* add shadows for all button types (btn-primary, btn-secondary etc) */
+/* prefix is "cui" */
+@each $color-name, $color-value in $theme-colors {
+  .btn-#{$color-name} {
+    //box-shadow: 0 2px 6px 0 rgba(var(--#{$prefix}#{$state}), 0.5);
+    box-shadow: 0 2px 6px 0 transparentize($color-value, 0.5);
+  }
+}
+
+/* bring back the bootstrap 3 default button for light and dark theme */
+.btn-default {
+  background-color: #f5f5f5;
+  color: #444;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px 0 rgba(245, 245, 245, 0.5);
+}
+
+.btn-default:hover, .btn-default:active {
+  border-color: #c6c6c6 !important;
+  color: #333;
+}
+
+.btn-outline-default {
+  background-color: transparent;
+  border-color: #c6c6c6;
+  border-width: var(--cui-btn-border-width);
+}
+
+.btn-outline-default:hover, .btn-outline-default:active {
+  background-color: #f5f5f5 !important;
+  border-color: #c6c6c6 !important;
+  color: #333;
+  border-width: var(--cui-btn-border-width);
+}
+
+body.dark-theme .btn-default {
+  background-color: #1d222b;
+  color: #eeecec;
+  border: 1px solid rgba(var(--cui-border-color), 0.1);
+  box-shadow: 0 2px 6px 0 rgba(29, 34, 43, 0.5);
+}
+
+body.dark-theme .btn-default:hover, body.dark-theme .btn-default:active {
+  border: 1px solid rgba(var(--cui-border-color), 1);
+  color: #fff;
+}
+
+body.dark-theme .btn-outline-default {
+  background-color: transparent;
+  border-color: #828282;
+  border-width: var(--cui-btn-border-width);
+}
+
+body.dark-theme .btn-outline-default:hover, body.dark-theme .btn-outline-default:active {
+  background-color: #828282;
+  border: var(--cui-btn-border-width) solid rgba(var(--cui-border-color), 1);
+  color: #333;
+}

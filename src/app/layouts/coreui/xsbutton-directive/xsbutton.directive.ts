@@ -14,6 +14,9 @@ export class XsButtonDirective extends ButtonDirective {
   // @ts-ignore
   @Input() override size?: 'xs' | 'sm' | 'lg' | '';
 
+  // Add default as color option for buttions
+  @Input() override color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light' | 'default' | 'primary-gradient' | 'secondary-gradient' | 'success-gradient' | 'danger-gradient' | 'warning-gradient' | 'info-gradient' | 'dark-gradient' | 'light-gradient' | string;
+
   constructor() {
     super(); // Call the constructor of the base class
   }
