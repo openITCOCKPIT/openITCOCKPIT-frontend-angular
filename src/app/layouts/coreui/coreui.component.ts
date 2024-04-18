@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { DebounceDirective } from '../../directives/debounce.directive';
 import {
   ColorModeService,
   ContainerComponent,
-  INavData,
   ShadowOnScrollDirective,
   SidebarBrandComponent,
   SidebarComponent,
@@ -47,6 +47,7 @@ import {faClose, faQuestion, faSearch} from "@fortawesome/free-solid-svg-icons";
     CoreuiHeaderComponent,
     CoreuiFooterComponent,
     ShadowOnScrollDirective,
+    DebounceDirective,
     CoreuiMenuComponent,
     FormsModule,
     FontAwesomeModule,

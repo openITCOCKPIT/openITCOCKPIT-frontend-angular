@@ -18,6 +18,8 @@
                    cFormControl="searchTerm"
                    placeholder="Search"
                    formControlName="searchTerm"
+                   oitcDebounce
+                   (debouncedValue)="runSearch()"
             />
             <span cInputGroupText id="basic-addon2">
               <fa-icon [icon]="faSearch" *ngIf="searchTerm !== ''"/>
