@@ -155,7 +155,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
   public params: CommandsIndexParams = getDefaultCommandsIndexParams()
   public commands?: CommandIndexRoot;
-  public hideFilter: boolean = false;
+  public hideFilter: boolean = true;
   public selectedItems: DeleteAllItem[] = [];
 
   public tmpFilter = {
