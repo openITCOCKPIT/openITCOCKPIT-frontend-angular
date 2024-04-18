@@ -89,13 +89,14 @@
             <td>
               <div class="btn-group btn-group-xs" role="group"
                    aria-label="Basic outlined">
-                <button type="button" class="btn btn-outline-primary">
+                <button type="button" class="btn btn-outline-primary"
+                        [ngClass]="{'btn-outline-danger': macro.password == 0}">
 
                   <fa-icon [icon]="['fas', 'eye']" *ngIf="macro.password == 1"
                            [title]="'Show value' | transloco"
                            (click)="macro.password = 0"></fa-icon>
                   <fa-icon [icon]="['fas', 'eye-slash']" *ngIf="macro.password == 0"
-                           [title]="'Hide value' | transloco" class="text-danger"
+                           [title]="'Hide value' | transloco"
                            (click)="macro.password = 1"></fa-icon>
 
                 </button>
