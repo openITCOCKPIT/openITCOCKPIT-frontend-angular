@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { DebounceDirective } from '../../directives/debounce.directive';
 import {
   ColorModeService,
   ContainerComponent,
-  INavData,
   ShadowOnScrollDirective,
   SidebarBrandComponent,
   SidebarComponent,
@@ -25,7 +25,7 @@ import {RouterLink} from '@angular/router';
 import {GlobalLoaderComponent} from './global-loader/global-loader.component';
 import {Subscription} from 'rxjs';
 import {toObservable} from '@angular/core/rxjs-interop';
-import {DOCUMENT} from '@angular/common';
+import {DOCUMENT, NgFor} from '@angular/common';
 
 
 import {NavigationService} from "../../components/navigation/navigation.service";
@@ -33,7 +33,7 @@ import {NgIf} from "@angular/common";
 import {IconComponent} from "@coreui/icons-angular";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {faClose, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faClose, faQuestion, faSearch} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'oitc-coreui',
@@ -47,6 +47,7 @@ import {faClose, faSearch} from "@fortawesome/free-solid-svg-icons";
     CoreuiHeaderComponent,
     CoreuiFooterComponent,
     ShadowOnScrollDirective,
+    DebounceDirective,
     CoreuiMenuComponent,
     FormsModule,
     FontAwesomeModule,
@@ -59,6 +60,7 @@ import {faClose, faSearch} from "@fortawesome/free-solid-svg-icons";
     SidebarToggleDirective,
     SidebarTogglerDirective,
     NgIf,
+    NgFor,
     NgScrollbarModule,
     RouterLink,
     SidebarModule,
@@ -136,11 +138,7 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchTerm = searchTerm.toLowerCase();
 
     this.navigationService.search(this.searchTerm);
-
-    console.error(this.navigationService.searchResults);
   }
-
-  public filteredNavigation: INavData[] = []
 
   public clearSearch(): void {
     this.searchTerm = '';
@@ -153,4 +151,5 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
     // }
   }
 
+  protected readonly faQuestion = faQuestion;
 }

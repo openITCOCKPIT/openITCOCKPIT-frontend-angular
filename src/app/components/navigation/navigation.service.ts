@@ -1,12 +1,10 @@
 import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, filter, take, switchMap, map, Observable, Subscription} from "rxjs";
+import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
 import {Link, NavigationInterface} from "./navigation.interface";
 import {AuthService} from "../../auth/auth.service";
 import {PROXY_PATH} from "../../tokens/proxy-path.token";
 import {INavData} from "@coreui/angular";
-import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
-import {CommandIndexRoot} from "../../pages/commands/commands.interface";
 
 @Injectable({
   providedIn: 'root',
