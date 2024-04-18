@@ -6,15 +6,21 @@
     #modal='cModal'
   >
     <c-modal-header class="bg-danger">
-      <h5 cModalTitle>
+      <h5 cModalTitle class="text-white">
         {{ t('Attention!') }}
       </h5>
       <button cButtonClose (click)="hideModal()"></button>
     </c-modal-header>
     <c-modal-body>
       <c-row>
-        <c-col>
+        <c-col xs="12" *ngIf="!deleteMessage">
           <strong>{{ t('Do you really want delete the selected object?') }}</strong>
+        </c-col>
+        <c-col xs="12" *ngIf="deleteMessage">
+          <strong>{{ deleteMessage }}</strong>
+        </c-col>
+        <c-col xs="12" *ngIf="helpMessage" class="help-block">
+          {{ helpMessage }}
         </c-col>
       </c-row>
 
@@ -23,6 +29,13 @@
           <ul class="mb-0">
             <li>
               {{ item.displayName }}
+              <div *ngIf="hasErrors && currentItemHasErrors(item)">
+                <div class="text-danger" *ngFor="let error of getErrorsForItem(item)">
+                  <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                  {{ error.message }}
+                  <!-- todo implement usedby link -->
+                </div>
+              </div>
             </li>
           </ul>
         </c-col>
@@ -33,7 +46,7 @@
           <h4>{{ t('Deleting...') }}</h4>
         </c-col>
         <c-col sm="12">
-          <c-progress [animated]="true" [value]="progress" color="danger" variant="striped"/>
+          <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
         </c-col>
       </c-row>
 

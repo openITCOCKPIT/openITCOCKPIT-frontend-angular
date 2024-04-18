@@ -1,4 +1,4 @@
-import { Component, Inject, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
   ButtonCloseDirective,
   ButtonDirective,
@@ -13,11 +13,12 @@ import {
   RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { Subscription, tap } from 'rxjs';
-import { DeleteAllItem } from './delete-all.interface';
-import { NgForOf } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { DeleteAllItem, DeleteAllResponse } from './delete-all.interface';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'oitc-delete-all-modal',
@@ -35,18 +36,25 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     ColComponent,
     NgForOf,
     FaIconComponent,
-    ProgressComponent
+    ProgressComponent,
+    NgIf,
+    JsonPipe
   ],
   templateUrl: './delete-all-modal.component.html',
   styleUrl: './delete-all-modal.component.css'
 })
 export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
-  @Input() public deleteUrl: string = '';
-  @Input() public items: DeleteAllItem[] = [];
+  @Input({required: true}) public items: DeleteAllItem[] = [];
+  @Input({required: false}) public deleteMessage: string = '';
+  @Input({required: false}) public helpMessage: string = '';
+  @Output() completed = new EventEmitter<boolean>();
+
 
   public isDeleting: boolean = false;
-  public progress: number = 0;
+  public percentage: number = 0;
+  public hasErrors: boolean = false;
+  public errors: DeleteAllResponse[] = [];
 
   private readonly modalService = inject(ModalService);
   private subscriptions: Subscription = new Subscription();
@@ -75,24 +83,61 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
   public delete() {
     this.isDeleting = true;
-    this.progress = 0;
+    this.percentage = 0;
+    let count = this.items.length;
+    let responseCount: number = 0
+    let issueCount: number = 0;
 
     for (let i in this.items) {
       const item = this.items[i];
 
-      this.deleteService.delete(item).pipe(tap({
-        error: e => console.log(e)
-      }))
-        .subscribe((result: any) => { // Successz
-          console.log(result);
-          this.progress = (parseInt(i) + 1) / this.items.length * 100;
-          if (this.progress === 100) {
-            this.isDeleting = false;
-            this.hideModal();
+      this.deleteService.delete(item).subscribe({
+        next: (value: any) => {
+          responseCount++
+          this.percentage = Math.round((responseCount / count) * 100);
+
+          if (responseCount === count && issueCount === 0) {
+            // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
+            setTimeout(() => {
+              // All records have been deleted successfully. Reset the modal
+              this.isDeleting = false;
+              this.percentage = 0;
+              this.hasErrors = false;
+              this.errors = [];
+
+              this.hideModal();
+            }, 250);
+            this.completed.emit(true);
           }
-        });
 
+        },
+        error: (error: HttpErrorResponse) => {
+          const responseError = error.error as DeleteAllResponse;
+          issueCount++
+          this.hasErrors = true;
+          this.errors.push(responseError);
+
+          responseCount++;
+          this.percentage = Math.round((responseCount / count) * 100);
+
+          if (responseCount === count && issueCount > 0) {
+            // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
+            setTimeout(() => {
+              this.isDeleting = false;
+              this.percentage = 0;
+            }, 250);
+            this.completed.emit(false);
+          }
+        }
+      });
     }
+  }
 
+  public currentItemHasErrors(item: DeleteAllItem): boolean {
+    return this.errors.some((error) => error.id == item.id);
+  }
+
+  public getErrorsForItem(item: DeleteAllItem): DeleteAllResponse[] {
+    return this.errors.filter((error) => error.id == item.id);
   }
 }

@@ -1,10 +1,35 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { PROXY_PATH } from "../tokens/proxy-path.token";
-import { Permission } from './permission.type';
+/*
+ * Copyright (C) <2015-present>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
 
-import { BehaviorSubject, filter, map, switchMap, take } from "rxjs";
-import { AuthService } from "../auth/auth.service";
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {PROXY_PATH} from "../tokens/proxy-path.token";
+import {Permission} from './permission.type';
+
+import {BehaviorSubject, filter, map, switchMap, take} from "rxjs";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +46,7 @@ export class PermissionsService {
     this.loadPermissions();
   }
 
-  public checkPermission(checkChunks: string | string[], againstPermissions: Permission): boolean {
+  public checkPermission(checkChunks: string | string[], againstPermissions: Permission, showOnNoPermission: boolean = false): boolean {
     let _chunks: string[] = [];
 
     if (!Array.isArray(checkChunks)) {
@@ -33,6 +58,7 @@ export class PermissionsService {
     const result = _chunks.reduce<any>((acc, chunk) => {
       return acc[chunk] || {};
     }, againstPermissions);
+
 
     return result === _chunks[_chunks.length - 1];
   }

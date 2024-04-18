@@ -1,3 +1,28 @@
+/*
+ * Copyright (C) <2015-present>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
 import {Component, inject, OnDestroy} from '@angular/core';
 import {HeaderComponent} from "../../components/header/header.component";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
@@ -5,6 +30,7 @@ import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 import {PermissionDirective} from "../../permissions/permission.directive";
 import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
+import {faAsterisk, faCircleInfo, faCoffee, faCog, faMouse} from "@fortawesome/free-solid-svg-icons";
 import {
   ButtonToolbarComponent,
   CardBodyComponent,
@@ -13,6 +39,7 @@ import {
   CardHeaderComponent,
   CardSubtitleDirective,
   CardTitleDirective,
+  DropdownDividerDirective,
   FormCheckComponent,
   FormCheckInputDirective,
   FormCheckLabelDirective,
@@ -33,6 +60,8 @@ import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutto
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {ActionsButtonComponent} from '../../components/actions-button/actions-button.component';
+import {ActionsButtonElementComponent} from '../../components/actions-button-element/actions-button-element.component';
 
 
 @Component({
@@ -70,7 +99,10 @@ import {TranslocoDirective} from "@jsverse/transloco";
     FormSelectDirective,
     FaIconComponent,
     RequiredIconComponent,
-    TranslocoDirective
+    TranslocoDirective,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective
   ],
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.css'
@@ -82,6 +114,7 @@ export class StartPageComponent implements OnDestroy {
   public readonly queryParams$ = this.route.queryParams;
   private readonly subscription = new Subscription();
   private readonly document = inject(DOCUMENT);
+  public allowEdit = true;
 
   public constructor() {
     this.route.queryParams.subscribe({
@@ -109,4 +142,19 @@ export class StartPageComponent implements OnDestroy {
 
     (this.document.defaultView as unknown as WindowWithPeter).callPeter();
   }
+
+  public clickTest() {
+    alert("Clicked!!!");
+  }
+
+  public switchAllowEdit() {
+    this.allowEdit = !this.allowEdit;
+  }
+
+  protected readonly faCoffee = faCoffee;
+  protected readonly faCircleInfo = faCircleInfo;
+  protected readonly faAsterisk = faAsterisk;
+  protected readonly faCog = faCog;
+  protected readonly faMouse = faMouse;
+
 }

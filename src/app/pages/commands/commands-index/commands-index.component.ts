@@ -1,3 +1,28 @@
+/*
+ * Copyright (C) <2015-present>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -10,6 +35,7 @@ import {
   CardTitleDirective,
   ColComponent,
   ContainerComponent,
+  DropdownDividerDirective,
   FormCheckComponent,
   FormCheckInputDirective,
   FormCheckLabelDirective,
@@ -33,7 +59,12 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
+import {
+  CommandIndex,
+  CommandIndexRoot,
+  CommandsIndexParams,
+  getDefaultCommandsIndexParams
+} from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
@@ -54,6 +85,10 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import {
+  ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 
 @Component({
   selector: 'oitc-commands-index',
@@ -102,6 +137,9 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     SelectAllComponent,
     ItemSelectComponent,
     DeleteAllModalComponent,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
   ],
   templateUrl: './commands-index.component.html',
   styleUrl: './commands-index.component.css',
@@ -149,7 +187,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
   }
 
   public loadCommands() {
-    this.SelectionServiceService.delelectAll();
+    this.SelectionServiceService.deselectAll();
 
     this.params['filter[Commands.command_type][]'] = [];
     if (this.tmpFilter.service_commands) {
@@ -202,20 +240,41 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     this.loadCommands();
   }
 
-  public toggleDeleteAllModal() {
-    const items: DeleteAllItem[] = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-      return {
-        id: item.Command.id,
-        displayName: item.Command.name
-      };
-    });
+  // Open the Delete All Modal
+  public toggleDeleteAllModal(command?: CommandIndex) {
+    let items: DeleteAllItem[] = [];
 
+    if (command) {
+      // User just want to delete a single command
+      items = [{
+        id: command.Command.id,
+        displayName: command.Command.name
+      }];
+    } else {
+      // User clicked on delete selected button
+      items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+        return {
+          id: item.Command.id,
+          displayName: item.Command.name
+        };
+      });
+    }
+
+    // Pass selection to the modal
     this.selectedItems = items;
 
+    // open modal
     this.modalService.toggle({
       show: true,
       id: 'deleteAllModal',
     });
+  }
+
+  // Generic callback whenever a mass action (like delete all) has been finished
+  public onMassActionComplete(success: boolean) {
+    if (success) {
+      this.loadCommands();
+    }
   }
 
 }
