@@ -62,12 +62,28 @@
             <td class="text-primary code-font">
               {{ macro.name }}
             </td>
-            <td>{{ macro.value }}</td>
-            <td>{{ macro.description }}</td>
-            
-            <td class="width-50">
-
+            <td>
+              <code [ngClass]="{'text-blur': macro.password > 0}">
+                {{ macro.value }}
+              </code>
             </td>
+            <td>{{ macro.description }}</td>
+
+            <td>
+              <div class="btn-group btn-group-xs" role="group"
+                   aria-label="Basic outlined">
+                <button type="button" class="btn btn-outline-primary">
+
+                  <fa-icon [icon]="['fas', 'eye']" *ng-if="macro.password == 1"></fa-icon>
+                  <fa-icon [icon]="['fas', 'eye-slash']" *ng-if="macro.password == 0"></fa-icon>
+
+                </button>
+                <button type="button" class="btn btn-outline-secondary">
+                  <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                </button>
+              </div>
+            </td>
+
           </tr>
           </tbody>
         </table>
@@ -76,7 +92,7 @@
 
         <c-container fluid>
           <c-row>
-            <c-col class="text-info">
+            <c-col class="text-info pt-3 pb-2">
               <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
               {{ t('Nagios supports up to 256 $USERx$ macros ($USER1$ through $USER256$)') }}
             </c-col>

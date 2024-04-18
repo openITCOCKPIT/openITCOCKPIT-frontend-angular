@@ -30,7 +30,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
   PaginateOrScrollComponent
@@ -85,7 +85,8 @@ import { MacrosService } from '../macros.service';
     TranslocoDirective,
     TranslocoPipe,
     XsButtonDirective,
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   templateUrl: './macro-index.component.html',
   styleUrl: './macro-index.component.css'
