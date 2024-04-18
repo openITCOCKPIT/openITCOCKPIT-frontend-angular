@@ -20,32 +20,18 @@
                    formControlName="searchTerm"
             />
             <span cInputGroupText id="basic-addon2">
-              <fa-icon [icon]="faSearch" *ngIf="searchTerm !== ''" />
-              <fa-icon [icon]="faClose" *ngIf="searchTerm === ''" (click)="clearSearch()" />
+              <fa-icon [icon]="faSearch" *ngIf="searchTerm !== ''"/>
+              <fa-icon [icon]="faClose" *ngIf="searchTerm === ''" (click)="clearSearch()"/>
             </span>
           </c-input-group>
         </form>
-        <ul class="list-group m-0 p-0"  *ngIf="searchTerm !== ''" >
-          <li class="list-group-item">
-            <strong>An item</strong>
-            <br />Asnaeb
-          </li>
-          <li class="list-group-item">
-            <strong>A second item</strong>
-            <br />Asnaeb
-          </li>
-          <li class="list-group-item">
-            <strong>A third item</strong>
-            <br />Asnaeb
-          </li>
-          <li class="list-group-item">
-            <strong>A fourth item</strong>
-            <br />Asnaeb
-          </li>
-          <li class="list-group-item">
-            <strong>And a fifth one</strong>
-            <br />Asnaeb
-          </li>
+        <ul class="list-group m-0 p-0" *ngIf="navigationService.searchResults as searchResults">
+          <ng-container *ngFor="let item of searchResults">
+            <li class="pointer list-group-item" [routerLink]="item.url">
+              <fa-icon [icon]="faQuestion"></fa-icon>
+              <strong>{{ item.name }}</strong>
+            </li>
+          </ng-container>
         </ul>
       </div>
     </c-sidebar-brand>

@@ -5,8 +5,6 @@ import {Link, NavigationInterface} from "./navigation.interface";
 import {AuthService} from "../../auth/auth.service";
 import {PROXY_PATH} from "../../tokens/proxy-path.token";
 import {INavData} from "@coreui/angular";
-import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
-import {CommandIndexRoot} from "../../pages/commands/commands.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +19,6 @@ export class NavigationService {
   private subscriptions: Subscription = new Subscription();
 
   public constructor() {
-    ;
 
     this.subscriptions.add(this.loadMenu()
       .subscribe((result) => {
