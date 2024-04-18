@@ -42,6 +42,9 @@ export class NavigationService {
 
   public navEntryMatchesSearch(navigationElement: INavData, search: string): boolean {
     let name: string = navigationElement.name as string;
+    if (typeof(navigationElement.url) !== "string") {
+      return false;
+    }
     name = name.toLowerCase();
     search = search.toLowerCase();
     return !(name.indexOf(search) === -1);
@@ -100,7 +103,9 @@ export class NavigationService {
     let iNavData: INavData = {};
     iNavData.name = link.alias || link.name;
     iNavData.children = [];
-    iNavData.url = '/' + link.controller + '/' + link.action;
+    if (link.controller && link.action) {
+      iNavData.url = '/' + link.controller + '/' + link.action;
+    }
 
     iNavData.iconComponent = {name: 'cil-puzzle'};
 
