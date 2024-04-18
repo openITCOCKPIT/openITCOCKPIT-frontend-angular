@@ -19,6 +19,23 @@
         </li>
       </ol>
     </nav>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="alert alert-warning">
+          <h4 cAlertHeading>
+            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="fa-lg"></fa-icon>
+            {{ t('Security notice ') }}
+          </h4>
+          <p>
+            {{ t('User defined macros can also be used inside of check commands. This could lead to unwanted code execution.') }}
+            <br>
+            {{ t('It is recommended to only provide access for a certain group of users to edit commands and user defined macros.') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <c-card class="mb-3">
       <c-card-header>
         <h5 cCardTitle>{{ t('Commands overview') }}</h5>
@@ -74,8 +91,12 @@
                    aria-label="Basic outlined">
                 <button type="button" class="btn btn-outline-primary">
 
-                  <fa-icon [icon]="['fas', 'eye']" *ng-if="macro.password == 1"></fa-icon>
-                  <fa-icon [icon]="['fas', 'eye-slash']" *ng-if="macro.password == 0"></fa-icon>
+                  <fa-icon [icon]="['fas', 'eye']" *ngIf="macro.password == 1"
+                           [title]="'Show value' | transloco"
+                           (click)="macro.password = 0"></fa-icon>
+                  <fa-icon [icon]="['fas', 'eye-slash']" *ngIf="macro.password == 0"
+                           [title]="'Hide value' | transloco" class="text-danger"
+                           (click)="macro.password = 1"></fa-icon>
 
                 </button>
                 <button type="button" class="btn btn-outline-secondary">

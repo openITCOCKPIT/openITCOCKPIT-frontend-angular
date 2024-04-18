@@ -4,6 +4,8 @@ import {
   ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
+  AlertComponent,
+  AlertHeadingDirective,
   CardBodyComponent,
   CardComponent,
   CardFooterComponent,
@@ -86,7 +88,9 @@ import { MacrosService } from '../macros.service';
     TranslocoPipe,
     XsButtonDirective,
     RouterLink,
-    NgClass
+    NgClass,
+    AlertComponent,
+    AlertHeadingDirective,
   ],
   templateUrl: './macro-index.component.html',
   styleUrl: './macro-index.component.css'

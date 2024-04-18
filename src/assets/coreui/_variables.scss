@@ -1,9 +1,111 @@
 // If you want to override variables do it here
 
+// scss-docs-start gray-color-variables
+$white: #fff !default;
+$gray-base: #323a49 !default;
+$gray-100: #f3f4f7 !default;
+$gray-200: #e7eaee !default;
+$gray-300: #dbdfe6 !default;
+$gray-400: #cfd4de !default;
+$gray-500: #aab3c5 !default;
+$gray-600: #6d7d9c !default;
+$gray-700: #4a566d !default;
+$gray-800: #323a49 !default;
+$gray-900: #212631 !default;
+$black: #080a0c !default;
+// scss-docs-end gray-color-variables
+
+$gray-100-dark: $gray-100 !default;
+$gray-200-dark: $gray-200 !default;
+$gray-300-dark: $gray-300 !default;
+$gray-400-dark: $gray-400 !default;
+$gray-500-dark: $gray-500 !default;
+$gray-600-dark: $gray-600 !default;
+$gray-700-dark: $gray-700 !default;
+$gray-800-dark: $gray-800 !default;
+$gray-900-dark: $gray-900 !default;
+
+$primary: #5856d6 !default;
+$secondary: #6b7785 !default;
 $success: #00C851;
 $warning: #ffbb33;
 $danger: #CC0000;
 $info: #33b5e5;
+$light: $gray-100 !default;
+$dark: $gray-900 !default;
+
+// scss-docs-start theme-text-variables
+/*
+$primary-text-emphasis: rgb(216, 124, 249) !default;
+$secondary-text-emphasis: rgb (165, 171, 177) !default;
+$success-text-emphasis: rgb(134, 239, 71) !default;
+$info-text-emphasis: rgb(130, 197, 248) !default;
+$warning-text-emphasis: rgb(255, 198, 121) !default;
+$danger-text-emphasis: rgb(253, 120, 151) !default;
+*/
+
+$primary-text-emphasis: #8b09ba !default;
+$secondary-text-emphasis: #434a51 !default;
+$success-text-emphasis: #5b9b35 !default;
+$info-text-emphasis: #376a90 !default;
+$warning-text-emphasis: #935400 !default;
+$danger-text-emphasis: #c0022e !default;
+
+
+// scss-docs-start theme-text-dark-variables
+$primary-text-emphasis-dark: rgb(216, 124, 249) !default;
+$secondary-text-emphasis-dark: rgb(165, 171, 177) !default;
+$success-text-emphasis-dark: rgb(134, 239, 71) !default;
+$info-text-emphasis-dark: rgb(130, 197, 248) !default;
+$warning-text-emphasis-dark: rgb(255, 198, 121) !default;
+$danger-text-emphasis-dark: rgb(253, 120, 151) !default;
+$light-text-emphasis-dark: $gray-100-dark !default;
+$dark-text-emphasis-dark: $gray-300-dark !default;
+// scss-docs-end theme-text-dark-variables
+
+
+// scss-docs-start theme-bg-subtle-variables
+$primary-bg-subtle: rgb(245, 222, 253) !default;
+$secondary-bg-subtle: rgb(244, 245, 246) !default;
+$success-bg-subtle: rgb(236, 250, 228) !default;
+$info-bg-subtle: rgb(225, 239, 250) !default;
+$warning-bg-subtle: rgb(255, 226, 187) !default;
+$danger-bg-subtle: rgb(254, 190, 205) !default;
+$light-bg-subtle: mix($gray-100, $white) !default;
+$dark-bg-subtle: $gray-400 !default;
+// scss-docs-end theme-bg-subtle-variables
+
+// scss-docs-start theme-bg-subtle-dark-variables
+$primary-bg-subtle-dark: rgba(187, 27, 244, 0.2) !default;
+$secondary-bg-subtle-dark: rgba(67, 74, 81, 0.2) !default;
+$success-bg-subtle-dark: rgba(82, 191, 17, 0.2) !default;
+$info-bg-subtle-dark: rgba(33, 152, 243, 0.2) !default;
+$warning-bg-subtle-dark: rgba(255, 154, 19, 0.2) !default;
+$danger-bg-subtle-dark: rgba(252, 19, 73, 0.2) !default;
+$light-bg-subtle-dark: $gray-800-dark !default;
+$dark-bg-subtle-dark: mix($gray-800-dark, $black) !default;
+// scss-docs-end theme-bg-subtle-dark-variables
+
+// scss-docs-start theme-border-subtle-variables
+$primary-border-subtle: rgb(216, 124, 249) !default;
+$secondary-border-subtle: rgb(211, 214, 218) !default;
+$success-border-subtle: rgb(176, 237, 139) !default;
+$info-border-subtle: rgb(180, 213, 239) !default;
+$warning-border-subtle: rgb(255, 169, 55) !default;
+$danger-border-subtle: rgb(253, 120, 151) !default;
+$light-border-subtle: $gray-200 !default;
+$dark-border-subtle: $gray-500 !default;
+
+// scss-docs-start theme-border-subtle-dark-variables
+$primary-border-subtle-dark: rgba(187, 27, 244, 0.6) !default;
+$secondary-border-subtle-dark: rgba(67, 74, 81, 0.6) !default;
+$success-border-subtle-dark: rgba(82, 191, 17, 0.6) !default;
+$info-border-subtle-dark: rgba(33, 152, 243, 0.6) !default;
+$warning-border-subtle-dark: rgba(255, 154, 19, 0.6) !default;
+$danger-border-subtle-dark: rgba(252, 19, 73, 0.6) !default;
+$light-border-subtle-dark: $gray-700-dark !default;
+$dark-border-subtle-dark: $gray-800-dark !default;
+// scss-docs-end theme-border-subtle-dark-variables
 
 $table-striped-bg-factor: .015;
 
