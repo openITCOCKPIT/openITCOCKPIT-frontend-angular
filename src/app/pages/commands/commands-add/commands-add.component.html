@@ -1,0 +1,71 @@
+<oitc-coreui>
+  <ng-container *transloco="let t">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/', 'commands', 'index']">
+          {{ t('Commands') }}
+        </a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ t('Add') }}
+        </li>
+      </ol>
+    </nav>
+    <form cForm>
+      <c-card class="mb-3">
+        <c-card-header>
+          <h5 cCardTitle>{{ t('Create new command') }}</h5>
+        </c-card-header>
+        <c-card-body>
+
+          <div class="mb-3">
+            <label cLabel for="CommandType">Command type</label>
+            <select cSelect aria-label="Default select example" cSelect id="CommandType">
+              <option value="1">Service check command</option>
+              <option value="2">Host check command</option>
+              <option value="3">Notification command</option>
+              <option value="4">Eventhandler command</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="commandName">Name
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="commandName" required type="text">
+          </div>
+          <div class="mb-3">
+            <label cLabel for="commandLine">
+              Command line
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="commandLine" type="text">
+            <div cFormText class="text-primary">
+              <i class="fa-solid fa-circle-info"></i>
+              <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as user defined macro.
+              Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$)
+            </div>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="commandDescription">{{ t('Description')}}</label>
+            <textarea cFormControl id="commandDescription" rows="6"></textarea>
+          </div>
+          <c-form-check class="mb-3">
+            <label cLabel>{{ t('Arguments')}}:</label>
+          </c-form-check>
+
+
+        </c-card-body>
+        <c-card-footer>
+          &nbsp;
+          <input cButton color="primary" type="submit">
+        </c-card-footer>
+      </c-card>
+    </form>
+  </ng-container>
+</oitc-coreui>
+
+
+<oitc-delete-all-modal></oitc-delete-all-modal>
