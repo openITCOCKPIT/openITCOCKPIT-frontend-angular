@@ -36,6 +36,9 @@ export const routes: Routes = [{
   path: 'login',
   loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
 }, {
+  path: 'macros/index',
+  loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
+}, {
   path: 'commands/index',
   loadComponent: () => import('./pages/commands/commands-index/commands-index.component').then(m => m.CommandsIndexComponent)
 }, {

@@ -1,0 +1,93 @@
+<oitc-coreui>
+  <ng-container *transloco="let t">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/']">
+            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+            {{ t('Home') }}
+          </a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/', 'macros', 'index']" *oitcPermission="['macros', 'index']">
+            <fa-icon [icon]="['fas', 'dollar']"></fa-icon>
+            {{ t('User defined macros') }}
+          </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
+    </nav>
+    <c-card class="mb-3">
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button cButton color="secondary" class="ripple" size="xs" (click)="loadMacros()">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button cButton color="success" class="ripple" size="xs"
+                    *oitcPermission="['macros', 'add']">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('New') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
+
+        <table cTable hover striped bordered class="mt-2 mb-0">
+          <thead>
+          <tr>
+            <th scope="col">
+              {{ t('Name') }}
+            </th>
+            <th scope="col">
+              {{ t('Value') }}
+            </th>
+            <th scope="col">
+              {{ t('Description') }}
+            </th>
+            <th scope="col">
+              {{ t('Actions') }}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf="macros">
+          <tr *ngFor="let macro of macros">
+            <td class="text-primary code-font">
+              {{ macro.name }}
+            </td>
+            <td>{{ macro.value }}</td>
+            <td>{{ macro.description }}</td>
+            
+            <td class="width-50">
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <oitc-no-records *ngIf="macros && macros.length === 0"></oitc-no-records>
+
+        <c-container fluid>
+          <c-row>
+            <c-col class="text-info">
+              <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              {{ t('Nagios supports up to 256 $USERx$ macros ($USER1$ through $USER256$)') }}
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-card-body>
+      <c-card-footer>
+        &nbsp;
+      </c-card-footer>
+    </c-card>
+  </ng-container>
+</oitc-coreui>
+
+
