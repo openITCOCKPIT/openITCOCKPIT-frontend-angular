@@ -24,7 +24,9 @@
               </button>
             </c-nav-item>
             <c-nav-item class="px-1">
-              <button cButton color="success" class="ripple" size="xs" [routerLink]="['/', 'commands', 'add']">
+              <button cButton color="success" class="ripple" size="xs"
+                      *oitcPermission="['commands', 'add']"
+                      [routerLink]="['/', 'commands', 'add']">
                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                 {{ t('New') }}
               </button>

@@ -1,7 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
+  AlertComponent,
+  AlertHeadingDirective,
   CardBodyComponent,
   CardComponent,
   CardFooterComponent,
@@ -15,12 +17,13 @@ import {
   FormCheckLabelDirective,
   FormControlDirective,
   FormDirective,
-  FormLabelDirective, FormSelectDirective, FormTextDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  FormTextDirective,
   InputGroupComponent,
   InputGroupTextDirective,
   ListGroupDirective,
   ListGroupItemDirective,
-  ModalService,
   NavComponent,
   NavItemComponent,
   PlaceholderDirective,
@@ -30,28 +33,22 @@ import {
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { Subscription } from 'rxjs';
-import { CommandsService } from '../commands.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommandIndexRoot, CommandsIndexParams, getDefaultCommandsIndexParams } from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { CommandTypesEnum } from '../command-types.enum';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { CommandTypesEnum } from '../command-types.enum';
 
 @Component({
   selector: 'oitc-commands-add',
@@ -102,10 +99,13 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     DeleteAllModalComponent,
     FormSelectDirective,
     FormTextDirective,
+    AlertComponent,
+    AlertHeadingDirective,
   ],
   templateUrl: './commands-add.component.html',
   styleUrl: './commands-add.component.css'
 })
 export class CommandsAddComponent {
 
+  protected readonly CommandTypesEnum = CommandTypesEnum;
 }
