@@ -42,7 +42,7 @@ export class NavigationService {
 
   public navEntryMatchesSearch(navigationElement: INavData, search: string): boolean {
     let name: string = navigationElement.name as string;
-    if (typeof(navigationElement.url) !== "string") {
+    if (typeof (navigationElement.url) !== "string") {
       return false;
     }
     name = name.toLowerCase();
@@ -56,6 +56,10 @@ export class NavigationService {
 
   private _search(items: INavData[], searchTerm: string): INavData[] {
     let result: INavData[] = [];
+
+    if (searchTerm.length === 0) {
+      return result;
+    }
 
     for (let key in items) {
       let item = items[key];
