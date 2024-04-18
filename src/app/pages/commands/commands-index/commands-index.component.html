@@ -2,41 +2,48 @@
   <ng-container *transloco="let t">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a [routerLink]="['/']">
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/', 'commands', 'index']">
-          {{ t('Commands') }}
-        </a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/']">
+            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+            {{ t('Home') }}
+          </a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/', 'commands', 'index']" *oitcPermission="['commands', 'index']">
+            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+            {{ t('Commands') }}
+          </a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
           {{ t('Overview') }}
         </li>
       </ol>
     </nav>
     <c-card class="mb-3">
       <c-card-header>
-        <h5 cCardTitle>{{ t('Commands overview') }}
-          <c-nav class="card-header-pills float-end">
-            <c-nav-item class="px-1">
-              <button cButton color="secondary" class="ripple" size="xs" (click)="loadCommands()">
-                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                {{ t('Refresh') }}
-              </button>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              <button cButton color="success" class="ripple" size="xs">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('New') }}
-              </button>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              <button cButton color="primary" class="ripple" size="xs" (click)="toggleFilter()">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
-        </h5>
+        <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button cButton color="secondary" class="ripple" size="xs" (click)="loadCommands()">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button cButton color="success" class="ripple" size="xs"
+                    *oitcPermission="['commands', 'add']"
+                    [routerLink]="['/', 'commands', 'add']">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('New') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button cButton color="primary" class="ripple" size="xs" (click)="toggleFilter()">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
       </c-card-header>
       <c-card-body>
 

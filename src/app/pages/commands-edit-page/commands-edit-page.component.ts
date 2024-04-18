@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { SmartadminComponent } from '../../layouts/smartadmin/smartadmin.component';
 import { CommandsService } from '../commands/commands.service';
 import { CommandEdit } from '../commands/commands.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'oitc-commands-edit-page',
@@ -16,7 +17,8 @@ import { CommandEdit } from '../commands/commands.interface';
     FormsModule,
     NgFor,
     NgIf,
-    JsonPipe
+    JsonPipe,
+    RouterLink
   ],
   templateUrl: './commands-edit-page.component.html',
   styleUrl: './commands-edit-page.component.css'

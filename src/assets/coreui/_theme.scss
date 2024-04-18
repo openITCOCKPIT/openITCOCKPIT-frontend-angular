@@ -51,6 +51,11 @@ body {
   min-height: calc(3rem + 1px); /* stylelint-disable-line function-disallowed-list */
 }
 
+/* do not underline breadcrumb links */
+nav ol.breadcrumb li.breadcrumb-item a {
+  text-decoration: none;
+}
+
 @if $enable-dark-mode {
   @include color-mode(dark) {
     body {
