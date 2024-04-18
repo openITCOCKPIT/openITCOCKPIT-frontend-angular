@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import 'flag-icons';
+import { HistoryService } from './history.service';
 
 
 @Component({
@@ -19,6 +20,9 @@ import 'flag-icons';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
+  // Inject HistoryService to keep track of the previous URLs
+  private historyService: HistoryService = inject(HistoryService);
 
   constructor(library: FaIconLibrary, private IconSetService: IconSetService) {
     // Add an icon to the library for convenient access in other components

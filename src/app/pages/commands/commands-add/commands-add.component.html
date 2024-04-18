@@ -2,15 +2,19 @@
   <ng-container *transloco="let t">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a [routerLink]="['/']">
-          {{ t('Home') }}
-        </a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/']">
+            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+            {{ t('Home') }}
+          </a></li>
         <li class="breadcrumb-item">
           <a [routerLink]="['/', 'commands', 'index']" *oitcPermission="['commands', 'index']">
+            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
             {{ t('Commands') }}
           </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
           {{ t('Add') }}
         </li>
       </ol>
@@ -19,6 +23,17 @@
       <c-card class="mb-3">
         <c-card-header>
           <h5 cCardTitle>{{ t('Create new command') }}</h5>
+
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <button cButton color="secondary" class="ripple" size="xs" oitcBackButton
+                      [fallbackUrl]="['commands', 'index']">
+                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                {{ t('Back') }}
+              </button>
+            </c-nav-item>
+          </c-nav>
+
         </c-card-header>
         <c-card-body>
 
@@ -102,10 +117,11 @@
         </c-card-body>
         <c-card-footer class="text-end">
 
-          <button cButton color="primary" type="submit">
+          <button cButton color="primary" type="submit" class="ripple">
             {{ t('Create command') }}
           </button>
-          <button cButton color="secondary" type="submit" class="ms-1">
+          <button cButton oitcBackButton [fallbackUrl]="['commands', 'index']" color="secondary" type="submit"
+                  class="ms-1 ripple">
             {{ t('Cancel') }}
           </button>
 

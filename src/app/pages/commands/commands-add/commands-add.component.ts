@@ -49,6 +49,7 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { CommandTypesEnum } from '../command-types.enum';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
   selector: 'oitc-commands-add',
@@ -101,6 +102,7 @@ import { CommandTypesEnum } from '../command-types.enum';
     FormTextDirective,
     AlertComponent,
     AlertHeadingDirective,
+    BackButtonDirective,
   ],
   templateUrl: './commands-add.component.html',
   styleUrl: './commands-add.component.css'
