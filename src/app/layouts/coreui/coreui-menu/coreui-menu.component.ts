@@ -4,12 +4,14 @@ import {
     SidebarBrandComponent,
     SidebarComponent,
     SidebarFooterComponent,
-    SidebarHeaderComponent, SidebarToggleDirective, SidebarTogglerDirective
+    SidebarHeaderComponent,
+    SidebarToggleDirective,
+    SidebarTogglerDirective
 } from '@coreui/angular';
 
 @Component({
-  selector: 'oitc-coreui-menu',
-  standalone: true,
+    selector: 'oitc-coreui-menu',
+    standalone: true,
     imports: [
         IconDirective,
         SidebarBrandComponent,
@@ -19,8 +21,8 @@ import {
         SidebarToggleDirective,
         SidebarTogglerDirective
     ],
-  templateUrl: './coreui-menu.component.html',
-  styleUrl: './coreui-menu.component.css'
+    templateUrl: './coreui-menu.component.html',
+    styleUrl: './coreui-menu.component.css'
 })
 export class CoreuiMenuComponent {
 

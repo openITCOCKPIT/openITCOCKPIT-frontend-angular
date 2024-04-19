@@ -1294,7 +1294,7 @@ div.packetmanager-selection > span::selection {
 }
 
 .tab-allocated {
-    color: #00acc1!important;
+    color: #00acc1 !important;
 }
 
 .tab-shared-and-allocated-gradient {
@@ -1304,6 +1304,7 @@ div.packetmanager-selection > span::selection {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 /* Status pages */
 
 .statuspage-bg-primary {

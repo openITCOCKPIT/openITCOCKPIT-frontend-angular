@@ -23,54 +23,54 @@
  *     confirmation.
  */
 
-import {ApplicationConfig, isDevMode} from '@angular/core';
-import {provideRouter} from '@angular/router';
+import { ApplicationConfig, isDevMode } from '@angular/core';
+import { provideRouter } from '@angular/router';
 
-import {routes} from './app.routes';
-import {LEGACY_BASE_URL} from "./tokens/legacy-base-url.token";
-import {AuthService} from "./auth/auth.service";
-import {provideHttpClient, withInterceptors} from "@angular/common/http";
-import {PROXY_PATH} from "./tokens/proxy-path.token";
-import {authInterceptor} from "./auth/auth.interceptor";
-import {csrfInterceptor} from "./auth/csrf.interceptor";
-import {provideAnimations} from '@angular/platform-browser/animations';
-import {TranslocoHttpLoader} from './transloco-loader';
-import {provideTransloco} from '@jsverse/transloco';
-import {DropdownService} from '@coreui/angular';
-import {loaderInterceptor} from './interceptors/loader.interceptor';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+import { routes } from './app.routes';
+import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
+import { AuthService } from "./auth/auth.service";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { PROXY_PATH } from "./tokens/proxy-path.token";
+import { authInterceptor } from "./auth/auth.interceptor";
+import { csrfInterceptor } from "./auth/csrf.interceptor";
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@jsverse/transloco';
+import { DropdownService } from '@coreui/angular';
+import { loaderInterceptor } from './interceptors/loader.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
-    {provide: PROXY_PATH, useValue: ''},
-    {provide: AuthService, useClass: AuthService},
-    provideHttpClient(
-      withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),
-      /*
-      withXsrfConfiguration({
-        // cookieName: 'csrfToken',
-        headerName: 'x-csrf-token',
-      })
+    providers: [
+        {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
+        {provide: PROXY_PATH, useValue: ''},
+        {provide: AuthService, useClass: AuthService},
+        provideHttpClient(
+            withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),
+            /*
+            withXsrfConfiguration({
+              // cookieName: 'csrfToken',
+              headerName: 'x-csrf-token',
+            })
 
-       */
-    ),
-    //importProvidersFrom(BrowserAnimationsModule),
+             */
+        ),
+        //importProvidersFrom(BrowserAnimationsModule),
 
-    provideRouter(routes),
-    provideAnimations(), provideHttpClient(), provideTransloco({
-      // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
-      config: {
-        availableLangs: ['en', 'de'],
-        defaultLang: 'en',
-        failedRetries: 1,
-        // Remove this option if your application doesn't support changing language in runtime.
-        reRenderOnLangChange: true,
-        prodMode: !isDevMode(),
-      },
-      loader: TranslocoHttpLoader
-    }), provideAnimationsAsync(),
-    DropdownService
-  ]
+        provideRouter(routes),
+        provideAnimations(), provideHttpClient(), provideTransloco({
+            // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
+            config: {
+                availableLangs: ['en', 'de'],
+                defaultLang: 'en',
+                failedRetries: 1,
+                // Remove this option if your application doesn't support changing language in runtime.
+                reRenderOnLangChange: true,
+                prodMode: !isDevMode(),
+            },
+            loader: TranslocoHttpLoader
+        }), provideAnimationsAsync(),
+        DropdownService
+    ]
 };

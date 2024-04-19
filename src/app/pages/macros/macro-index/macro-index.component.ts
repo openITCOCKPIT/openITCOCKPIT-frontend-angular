@@ -1,30 +1,30 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
-  ActionsButtonElementComponent
+    ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -35,7 +35,7 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
-  PaginateOrScrollComponent
+    PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -47,77 +47,77 @@ import { Subscription } from 'rxjs';
 import { MacrosService } from '../macros.service';
 
 @Component({
-  selector: 'oitc-macro-index',
-  standalone: true,
-  imports: [
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    CoreuiComponent,
-    DebounceDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    NgClass,
-    AlertComponent,
-    AlertHeadingDirective,
-  ],
-  templateUrl: './macro-index.component.html',
-  styleUrl: './macro-index.component.css'
+    selector: 'oitc-macro-index',
+    standalone: true,
+    imports: [
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        CoreuiComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        NgClass,
+        AlertComponent,
+        AlertHeadingDirective,
+    ],
+    templateUrl: './macro-index.component.html',
+    styleUrl: './macro-index.component.css'
 })
 export class MacroIndexComponent implements OnInit, OnDestroy {
 
-  public macros: MacroIndex[] = [];
+    public macros: MacroIndex[] = [];
 
-  private subscriptions: Subscription = new Subscription();
-  private MacrosService = inject(MacrosService)
+    private subscriptions: Subscription = new Subscription();
+    private MacrosService = inject(MacrosService)
 
 
-  public ngOnInit() {
-    this.loadMacros();
-  }
+    public ngOnInit() {
+        this.loadMacros();
+    }
 
-  public ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
 
-  public loadMacros() {
-    this.subscriptions.add(this.MacrosService.getIndex()
-      .subscribe((result) => {
-        this.macros = result;
-      })
-    );
-  }
+    public loadMacros() {
+        this.subscriptions.add(this.MacrosService.getIndex()
+            .subscribe((result) => {
+                this.macros = result;
+            })
+        );
+    }
 
 
 }

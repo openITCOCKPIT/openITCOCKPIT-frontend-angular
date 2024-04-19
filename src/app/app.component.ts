@@ -10,24 +10,24 @@ import { HistoryService } from './history.service';
 
 
 @Component({
-  selector: 'oitc-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    FontAwesomeModule
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'oitc-root',
+    standalone: true,
+    imports: [
+        RouterOutlet,
+        FontAwesomeModule
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
 
-  // Inject HistoryService to keep track of the previous URLs
-  private historyService: HistoryService = inject(HistoryService);
+    // Inject HistoryService to keep track of the previous URLs
+    private historyService: HistoryService = inject(HistoryService);
 
-  constructor(library: FaIconLibrary, private IconSetService: IconSetService) {
-    // Add an icon to the library for convenient access in other components
-    library.addIconPacks(fas);
+    constructor(library: FaIconLibrary, private IconSetService: IconSetService) {
+        // Add an icon to the library for convenient access in other components
+        library.addIconPacks(fas);
 
-    this.IconSetService.icons = {...iconSubset};
-  }
+        this.IconSetService.icons = {...iconSubset};
+    }
 }

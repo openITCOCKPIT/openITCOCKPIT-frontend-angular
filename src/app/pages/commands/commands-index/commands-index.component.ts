@@ -27,32 +27,32 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardSubtitleDirective,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ListGroupDirective,
-  ListGroupItemDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  PlaceholderDirective,
-  RowComponent,
-  TableColorDirective,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardSubtitleDirective,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ListGroupDirective,
+    ListGroupItemDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    PlaceholderDirective,
+    RowComponent,
+    TableColorDirective,
+    TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -60,14 +60,14 @@ import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {
-  CommandIndex,
-  CommandIndexRoot,
-  CommandsIndexParams,
-  getDefaultCommandsIndexParams
+    CommandIndex,
+    CommandIndexRoot,
+    CommandsIndexParams,
+    getDefaultCommandsIndexParams
 } from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import {
-  PaginateOrScrollComponent
+    PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
@@ -87,194 +87,191 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
-  ActionsButtonElementComponent
+    ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 
 @Component({
-  selector: 'oitc-commands-index',
-  standalone: true,
-  imports: [
-    CoreuiComponent,
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardSubtitleDirective,
-    CardTitleDirective,
-    ListGroupDirective,
-    ListGroupItemDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FaIconComponent,
-    PaginateOrScrollComponent,
-    NgIf,
-    TableDirective,
-    TableColorDirective,
-    ContainerComponent,
-    RowComponent,
-    ColComponent,
-    FormDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PlaceholderDirective,
-    TranslocoPipe,
-    RouterLink,
-    FormsModule,
-    DebounceDirective,
-    NgForOf,
-    PermissionDirective,
-    TrueFalseDirective,
-    NoRecordsComponent,
-    MatCheckboxModule,
-    SelectAllComponent,
-    ItemSelectComponent,
-    DeleteAllModalComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-  ],
-  templateUrl: './commands-index.component.html',
-  styleUrl: './commands-index.component.css',
-  providers: [
-    {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
-  ]
+    selector: 'oitc-commands-index',
+    standalone: true,
+    imports: [
+        CoreuiComponent,
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardSubtitleDirective,
+        CardTitleDirective,
+        ListGroupDirective,
+        ListGroupItemDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FaIconComponent,
+        PaginateOrScrollComponent,
+        NgIf,
+        TableDirective,
+        TableColorDirective,
+        ContainerComponent,
+        RowComponent,
+        ColComponent,
+        FormDirective,
+        FormControlDirective,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PlaceholderDirective,
+        TranslocoPipe,
+        RouterLink,
+        FormsModule,
+        DebounceDirective,
+        NgForOf,
+        PermissionDirective,
+        TrueFalseDirective,
+        NoRecordsComponent,
+        MatCheckboxModule,
+        SelectAllComponent,
+        ItemSelectComponent,
+        DeleteAllModalComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+    ],
+    templateUrl: './commands-index.component.html',
+    styleUrl: './commands-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
+    ]
 })
 export class CommandsIndexComponent implements OnInit, OnDestroy {
 
-  public readonly route = inject(ActivatedRoute);
-  public readonly router = inject(Router);
-  private readonly modalService = inject(ModalService);
-
-  public params: CommandsIndexParams = getDefaultCommandsIndexParams()
-  public commands?: CommandIndexRoot;
-  public hideFilter: boolean = true;
-  public selectedItems: DeleteAllItem[] = [];
-
-  public tmpFilter = {
-    service_commands: true,
-    hostcheck_commands: true,
-    notification_commands: true,
-    eventhandler_commands: true
-  }
-
-  private subscriptions: Subscription = new Subscription();
-  private CommandsService = inject(CommandsService)
-  private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-
-  constructor(private _liveAnnouncer: LiveAnnouncer) {
-
-  }
-
-  public ngOnInit() {
-    this.subscriptions.add(this.route.queryParams.subscribe(params => {
-      // Here, params is an object containing the current query parameters.
-      // You can do something with these parameters here.
-      //console.log(params);
-      this.loadCommands();
-    }));
-  }
-
-  public ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  public loadCommands() {
-    this.SelectionServiceService.deselectAll();
-
-    this.params['filter[Commands.command_type][]'] = [];
-    if (this.tmpFilter.service_commands) {
-      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.CHECK_COMMAND);
+    public readonly route = inject(ActivatedRoute);
+    public readonly router = inject(Router);
+    public params: CommandsIndexParams = getDefaultCommandsIndexParams()
+    public commands?: CommandIndexRoot;
+    public hideFilter: boolean = true;
+    public selectedItems: DeleteAllItem[] = [];
+    public tmpFilter = {
+        service_commands: true,
+        hostcheck_commands: true,
+        notification_commands: true,
+        eventhandler_commands: true
     }
-    if (this.tmpFilter.hostcheck_commands) {
-      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.HOSTCHECK_COMMAND);
-    }
-    if (this.tmpFilter.notification_commands) {
-      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.NOTIFICATION_COMMAND);
-    }
-    if (this.tmpFilter.eventhandler_commands) {
-      this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.EVENTHANDLER_COMMAND);
+    private readonly modalService = inject(ModalService);
+    private subscriptions: Subscription = new Subscription();
+    private CommandsService = inject(CommandsService)
+    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+
+    constructor(private _liveAnnouncer: LiveAnnouncer) {
+
     }
 
-    this.subscriptions.add(this.CommandsService.getIndex(this.params)
-      .subscribe((result) => {
-        this.commands = result;
-      })
-    );
-  }
-
-  // Show or hide the filter
-  public toggleFilter() {
-    this.hideFilter = !this.hideFilter;
-  }
-
-  public resetFilter() {
-    this.params = getDefaultCommandsIndexParams();
-    this.tmpFilter = {
-      service_commands: true,
-      hostcheck_commands: true,
-      notification_commands: true,
-      eventhandler_commands: true
-    }
-    this.loadCommands();
-  }
-
-  // Callback for Paginator or Scroll Index Component
-  public onPaginatorChange(change: PaginatorChangeEvent): void {
-    this.params.page = change.page;
-    this.params.scroll = change.scroll;
-    this.loadCommands();
-  }
-
-
-  // Callback when a filter has changed
-  public onFilterChange(event: Event) {
-    this.params.page = 1;
-    this.loadCommands();
-  }
-
-  // Open the Delete All Modal
-  public toggleDeleteAllModal(command?: CommandIndex) {
-    let items: DeleteAllItem[] = [];
-
-    if (command) {
-      // User just want to delete a single command
-      items = [{
-        id: command.Command.id,
-        displayName: command.Command.name
-      }];
-    } else {
-      // User clicked on delete selected button
-      items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-        return {
-          id: item.Command.id,
-          displayName: item.Command.name
-        };
-      });
+    public ngOnInit() {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.loadCommands();
+        }));
     }
 
-    // Pass selection to the modal
-    this.selectedItems = items;
-
-    // open modal
-    this.modalService.toggle({
-      show: true,
-      id: 'deleteAllModal',
-    });
-  }
-
-  // Generic callback whenever a mass action (like delete all) has been finished
-  public onMassActionComplete(success: boolean) {
-    if (success) {
-      this.loadCommands();
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
-  }
+
+    public loadCommands() {
+        this.SelectionServiceService.deselectAll();
+
+        this.params['filter[Commands.command_type][]'] = [];
+        if (this.tmpFilter.service_commands) {
+            this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.CHECK_COMMAND);
+        }
+        if (this.tmpFilter.hostcheck_commands) {
+            this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.HOSTCHECK_COMMAND);
+        }
+        if (this.tmpFilter.notification_commands) {
+            this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.NOTIFICATION_COMMAND);
+        }
+        if (this.tmpFilter.eventhandler_commands) {
+            this.params['filter[Commands.command_type][]'].push(CommandTypesEnum.EVENTHANDLER_COMMAND);
+        }
+
+        this.subscriptions.add(this.CommandsService.getIndex(this.params)
+            .subscribe((result) => {
+                this.commands = result;
+            })
+        );
+    }
+
+    // Show or hide the filter
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
+    }
+
+    public resetFilter() {
+        this.params = getDefaultCommandsIndexParams();
+        this.tmpFilter = {
+            service_commands: true,
+            hostcheck_commands: true,
+            notification_commands: true,
+            eventhandler_commands: true
+        }
+        this.loadCommands();
+    }
+
+    // Callback for Paginator or Scroll Index Component
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.loadCommands();
+    }
+
+
+    // Callback when a filter has changed
+    public onFilterChange(event: Event) {
+        this.params.page = 1;
+        this.loadCommands();
+    }
+
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(command?: CommandIndex) {
+        let items: DeleteAllItem[] = [];
+
+        if (command) {
+            // User just want to delete a single command
+            items = [{
+                id: command.Command.id,
+                displayName: command.Command.name
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.Command.id,
+                    displayName: item.Command.name
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+
+    // Generic callback whenever a mass action (like delete all) has been finished
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.loadCommands();
+        }
+    }
 
 }

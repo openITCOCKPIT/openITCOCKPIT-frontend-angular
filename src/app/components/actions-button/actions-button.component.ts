@@ -23,41 +23,46 @@
  *     confirmation.
  */
 
-import {booleanAttribute, Component, Input} from '@angular/core';
-import {ButtonGroupComponent, DropdownComponent, DropdownMenuDirective, DropdownToggleDirective} from '@coreui/angular';
-import {PermissionDirective} from '../../permissions/permission.directive';
-import {Router} from '@angular/router';
-import {NgIf} from '@angular/common';
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-
-@Component({
-  selector: 'oitc-actions-button',
-  standalone: true,
-  imports: [
+import { booleanAttribute, Component, Input } from '@angular/core';
+import {
     ButtonGroupComponent,
     DropdownComponent,
-    PermissionDirective,
-    NgIf,
-    FaIconComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective
-  ],
-  templateUrl: './actions-button.component.html',
-  styleUrl: './actions-button.component.css'
+    DropdownMenuDirective,
+    DropdownToggleDirective
+} from '@coreui/angular';
+import { PermissionDirective } from '../../permissions/permission.directive';
+import { Router } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
+@Component({
+    selector: 'oitc-actions-button',
+    standalone: true,
+    imports: [
+        ButtonGroupComponent,
+        DropdownComponent,
+        PermissionDirective,
+        NgIf,
+        FaIconComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective
+    ],
+    templateUrl: './actions-button.component.html',
+    styleUrl: './actions-button.component.css'
 })
 export class ActionsButtonComponent {
 
-  @Input({transform: booleanAttribute}) allowEdit: boolean = true;
-  @Input({required: true}) url: string = '';
-  @Input({required: true}) permission: string = '';
+    @Input({transform: booleanAttribute}) allowEdit: boolean = true;
+    @Input({required: true}) url: string = '';
+    @Input({required: true}) permission: string = '';
 
-  constructor(private router: Router) {
-  }
+    constructor(private router: Router) {
+    }
 
-  public onClick(): void {
-    this.router.navigateByUrl(this.url);
-  }
+    public onClick(): void {
+        this.router.navigateByUrl(this.url);
+    }
 
 }

@@ -5,10 +5,10 @@
         </div>
         <div class="col">
             <c-form-check>
-                <input cFormCheckInput id="selectAll" type="checkbox" [(ngModel)]="checked"
-                       [indeterminate]="intermediate"
-                       (change)="toggleSelectAll()">
-                <label cFormCheckLabel for="selectAll" class="select-label float-start">
+                <input (change)="toggleSelectAll()" [(ngModel)]="checked" [indeterminate]="intermediate" cFormCheckInput
+                       id="selectAll"
+                       type="checkbox">
+                <label cFormCheckLabel class="select-label float-start" for="selectAll">
                     {{ t('Select all') }}
                 </label>
             </c-form-check>

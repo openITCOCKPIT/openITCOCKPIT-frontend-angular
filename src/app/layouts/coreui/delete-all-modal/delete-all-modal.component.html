@@ -1,65 +1,65 @@
 <ng-container *transloco="let t">
-  <c-modal
-    [keyboard]="true"
-    size="lg"
-    id="deleteAllModal"
-    #modal='cModal'
-  >
-    <c-modal-header class="bg-danger">
-      <h5 cModalTitle class="text-white">
-        {{ t('Attention!') }}
-      </h5>
-      <button cButtonClose (click)="hideModal()"></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        <c-col xs="12" *ngIf="!deleteMessage">
-          <strong>{{ t('Do you really want delete the selected object?') }}</strong>
-        </c-col>
-        <c-col xs="12" *ngIf="deleteMessage">
-          <strong>{{ deleteMessage }}</strong>
-        </c-col>
-        <c-col xs="12" *ngIf="helpMessage" class="help-block">
-          {{ helpMessage }}
-        </c-col>
-      </c-row>
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="deleteAllModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-danger">
+            <h5 cModalTitle class="text-white">
+                {{ t('Attention!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col *ngIf="!deleteMessage" xs="12">
+                    <strong>{{ t('Do you really want delete the selected object?') }}</strong>
+                </c-col>
+                <c-col *ngIf="deleteMessage" xs="12">
+                    <strong>{{ deleteMessage }}</strong>
+                </c-col>
+                <c-col *ngIf="helpMessage" class="help-block" xs="12">
+                    {{ helpMessage }}
+                </c-col>
+            </c-row>
 
-      <c-row class="pt-2">
-        <c-col sm="12" *ngFor="let item of items">
-          <ul class="mb-0">
-            <li>
-              {{ item.displayName }}
-              <div *ngIf="hasErrors && currentItemHasErrors(item)">
-                <div class="text-danger" *ngFor="let error of getErrorsForItem(item)">
-                  <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                  {{ error.message }}
-                  <!-- todo implement usedby link -->
-                </div>
-              </div>
-            </li>
-          </ul>
-        </c-col>
-      </c-row>
+            <c-row class="pt-2">
+                <c-col *ngFor="let item of items" sm="12">
+                    <ul class="mb-0">
+                        <li>
+                            {{ item.displayName }}
+                            <div *ngIf="hasErrors && currentItemHasErrors(item)">
+                                <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                    {{ error.message }}
+                                    <!-- todo implement usedby link -->
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </c-col>
+            </c-row>
 
-      <c-row class="pt-4 pb-2" [hidden]="!isDeleting">
-        <c-col sm="12">
-          <h4>{{ t('Deleting...') }}</h4>
-        </c-col>
-        <c-col sm="12">
-          <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
-        </c-col>
-      </c-row>
+            <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Deleting...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button cButton color="danger" class="ripple" (click)="delete()" [disabled]="isDeleting">
-        <fa-icon [icon]="['fas', 'spinner']" animation="spin" [hidden]="!isDeleting"></fa-icon>
-        {{ t('Delete') }}
-      </button>
-      <button cButton color="default" (click)="hideModal()" class="ripple">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
+                <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Delete') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

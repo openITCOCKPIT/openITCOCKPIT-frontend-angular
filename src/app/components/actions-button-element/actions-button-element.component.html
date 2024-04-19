@@ -24,19 +24,19 @@
   -->
 
 <span *oitcPermission="permission">
-  @if (allow) {
-    @if (url.length !== 0) {
-      <li><a cDropdownItem [routerLink]="[url]">
-        <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
-      </a></li>
-    } @else {
-      <li><a cDropdownItem href="javascript:void(0);">
-        <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
-      </a></li>
+    @if (allow) {
+        @if (url.length !== 0) {
+            <li><a cDropdownItem [routerLink]="[url]">
+                <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
+            </a></li>
+        } @else {
+            <li><a cDropdownItem href="javascript:void(0);">
+                <ng-container *ngTemplateOutlet="tempOutlet"></ng-container>
+            </a></li>
+        }
     }
-  }
 </span>
 
 <ng-template #tempOutlet>
-  <ng-content></ng-content>
+    <ng-content></ng-content>
 </ng-template>

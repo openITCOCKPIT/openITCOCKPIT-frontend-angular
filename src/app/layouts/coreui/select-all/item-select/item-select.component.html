@@ -1,6 +1,6 @@
 <c-form-check>
-  <input cFormCheckInput type="checkbox" class="checkbox-lg"
-         [disabled]="disabled"
-         [(ngModel)]="checked" name="selectAllCheckbox"
-         (change)="notifyItemSelection()">
+    <input (change)="notifyItemSelection()" [(ngModel)]="checked" [disabled]="disabled"
+           cFormCheckInput
+           class="checkbox-lg" name="selectAllCheckbox"
+           type="checkbox">
 </c-form-check>

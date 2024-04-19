@@ -7,54 +7,54 @@ import { authGuard } from "./auth/auth.guard";
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
 @Component({
-  selector: 'legacy-redirect',
-  standalone: true,
-  template: `If you can read this, something has to be fixed ;)`,
-  imports: [RouterModule]
+    selector: 'legacy-redirect',
+    standalone: true,
+    template: `If you can read this, something has to be fixed ;)`,
+    imports: [RouterModule]
 })
 class LegacyUrlComponent {
-  private readonly route = inject(ActivatedRoute);
-  private readonly document = inject(DOCUMENT);
+    private readonly route = inject(ActivatedRoute);
+    private readonly document = inject(DOCUMENT);
 
-  public constructor() {
+    public constructor() {
 
-    const {legacyUrl} = this.route.snapshot.data;
+        const {legacyUrl} = this.route.snapshot.data;
 
-    if (legacyUrl) {
+        if (legacyUrl) {
 
-      console.log('destination', legacyUrl)
-      this.document.location.href = legacyUrl;
+            console.log('destination', legacyUrl)
+            this.document.location.href = legacyUrl;
+        }
     }
-  }
 }
 
 export const routes: Routes = [{
-  path: '',
-  loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
-  canActivate: [authGuard]
+    path: '',
+    loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
+    canActivate: [authGuard]
 }, {
-  path: 'login',
-  loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
+    path: 'login',
+    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
 }, {
-  path: 'macros/index',
-  loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
+    path: 'macros/index',
+    loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {
-  path: 'commands/index',
-  loadComponent: () => import('./pages/commands/commands-index/commands-index.component').then(m => m.CommandsIndexComponent)
+    path: 'commands/index',
+    loadComponent: () => import('./pages/commands/commands-index/commands-index.component').then(m => m.CommandsIndexComponent)
 }, {
-  path: 'commands/add',
-  loadComponent: () => import('./pages/commands/commands-add/commands-add.component').then(m => m.CommandsAddComponent)
+    path: 'commands/add',
+    loadComponent: () => import('./pages/commands/commands-add/commands-add.component').then(m => m.CommandsAddComponent)
 }, {
-  path: 'commands/edit',
-  loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
+    path: 'commands/edit',
+    loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
 }, {
-  path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
-  resolve: {
-    legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-      const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
-      const legacyPath: string = state.url;
-      return `${legacyBaseUrl}${legacyPath}`;
-    }
-  },
-  component: LegacyUrlComponent,
+    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
+    resolve: {
+        legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+            const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
+            const legacyPath: string = state.url;
+            return `${legacyBaseUrl}${legacyPath}`;
+        }
+    },
+    component: LegacyUrlComponent,
 }];

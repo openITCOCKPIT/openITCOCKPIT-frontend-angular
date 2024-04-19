@@ -4,16 +4,16 @@ import { AuthService } from "./auth.service";
 import { tap } from "rxjs";
 
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const csrfRequest = req.clone({
-    headers: req.headers.set('X-CSRF-Token', authService.csrfToken || '')
-  });
+    const authService = inject(AuthService);
+    const csrfRequest = req.clone({
+        headers: req.headers.set('X-CSRF-Token', authService.csrfToken || '')
+    });
 
-  return next(csrfRequest).pipe(
-    tap((event: any) => {
-      if (event?.body?._csrfToken) {
-        authService.csrfToken = event.body._csrfToken;
-      }
-    }),
-  );
+    return next(csrfRequest).pipe(
+        tap((event: any) => {
+            if (event?.body?._csrfToken) {
+                authService.csrfToken = event.body._csrfToken;
+            }
+        }),
+    );
 };

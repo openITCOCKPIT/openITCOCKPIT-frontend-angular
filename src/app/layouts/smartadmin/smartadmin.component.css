@@ -1,4 +1,3 @@
-
 /*
 Loading Smartadmin in here dies not work as expacted
 @import "../../../assets/smartadmin4/dist/css/vendors.bundle.css";
@@ -6,24 +5,24 @@ Loading Smartadmin in here dies not work as expacted
 @import "../../../assets/smartadmin4/dist/css/themes/cust-theme-10.css";*/
 
 :host {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
 }
 
 .navigation {
-  width: 250px;
-  background: green;
+    width: 250px;
+    background: green;
 }
 
 .main {
-  flex: 1;
-  background: red;
+    flex: 1;
+    background: red;
 }
 
 .header {
-  height: 100px;
-  background: blue;
+    height: 100px;
+    background: blue;
 }

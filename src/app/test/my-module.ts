@@ -1,5 +1,5 @@
 export function foo() {
-  baz();
+    baz();
 }
 
 export function bar() {

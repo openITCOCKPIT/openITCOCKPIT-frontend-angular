@@ -1319,5 +1319,5 @@ input[type="radio"]:checked + .custom-control-label, input[type="checkbox"]:chec
 }
 
 label.extended-list::before {
-    border-color: #ffffff!important;
+    border-color: #ffffff !important;
 }

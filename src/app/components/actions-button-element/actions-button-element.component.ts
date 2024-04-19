@@ -23,30 +23,30 @@
  *     confirmation.
  */
 
-import {booleanAttribute, Component, Input} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {PermissionDirective} from '../../permissions/permission.directive';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {DropdownItemDirective} from '@coreui/angular';
-import {NgTemplateOutlet} from '@angular/common';
+import { booleanAttribute, Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { PermissionDirective } from '../../permissions/permission.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { DropdownItemDirective } from '@coreui/angular';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'oitc-actions-button-element',
-  standalone: true,
-  imports: [
-    RouterLink,
-    PermissionDirective,
-    FaIconComponent,
-    DropdownItemDirective,
-    NgTemplateOutlet
-  ],
-  templateUrl: './actions-button-element.component.html',
-  styleUrl: './actions-button-element.component.css'
+    selector: 'oitc-actions-button-element',
+    standalone: true,
+    imports: [
+        RouterLink,
+        PermissionDirective,
+        FaIconComponent,
+        DropdownItemDirective,
+        NgTemplateOutlet
+    ],
+    templateUrl: './actions-button-element.component.html',
+    styleUrl: './actions-button-element.component.css'
 })
 export class ActionsButtonElementComponent {
 
-  @Input({transform: booleanAttribute}) allow: boolean = true;
-  @Input() url: string = '';
-  @Input({required: true}) permission: string = '';
+    @Input({transform: booleanAttribute}) allow: boolean = true;
+    @Input() url: string = '';
+    @Input({required: true}) permission: string = '';
 
 }

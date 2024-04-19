@@ -1,39 +1,39 @@
-<c-dropdown variant="nav-item" *transloco="let t">
-  <button [caret]="false" cDropdownToggle>
-    @switch (currentLanguage) {
-      @case ("en") {
-        <span class="fi fi-us"></span>
-      }
-      @case ("de") {
-        <span class="fi fi-de"></span>
-      }
-      @default {
-        <span class="fi fi-xx"></span>
-      }
-    }
-  </button>
-  <div cDropdownMenu>
-    <button
-      (click)="onChangedLanguage('de')"
-      [active]="currentLanguage === 'de'"
-      cDropdownItem
-      class="d-flex align-items-center"
-    >
-      <span class="fi fi-de"></span>
-      &nbsp;
-      <!-- Nativ language / Name of language in current selected language -->
-      Deutsch / {{ t('German') }}
+<c-dropdown *transloco="let t" variant="nav-item">
+    <button [caret]="false" cDropdownToggle>
+        @switch (currentLanguage) {
+            @case ("en") {
+                <span class="fi fi-us"></span>
+            }
+            @case ("de") {
+                <span class="fi fi-de"></span>
+            }
+            @default {
+                <span class="fi fi-xx"></span>
+            }
+        }
     </button>
+    <div cDropdownMenu>
+        <button
+            (click)="onChangedLanguage('de')"
+            [active]="currentLanguage === 'de'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-de"></span>
+            &nbsp;
+            <!-- Nativ language / Name of language in current selected language -->
+            Deutsch / {{ t('German') }}
+        </button>
 
-    <button
-      (click)="onChangedLanguage('en')"
-      [active]="currentLanguage === 'en'"
-      cDropdownItem
-      class="d-flex align-items-center"
-    >
-      <span class="fi fi-us"></span>
-      &nbsp;
-      English / {{ t('English') }}
-    </button>
-  </div>
+        <button
+            (click)="onChangedLanguage('en')"
+            [active]="currentLanguage === 'en'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-us"></span>
+            &nbsp;
+            English / {{ t('English') }}
+        </button>
+    </div>
 </c-dropdown>

@@ -25,22 +25,22 @@
 
 <c-dropdown placement="bottom-start"
             variant="btn-group">
-  @if (allowEdit) {
-    <button cButton class="ripple" color="default" *oitcPermission="permission" (click)="onClick()">
-      <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
+    @if (allowEdit) {
+        <button cButton class="ripple" color="default" *oitcPermission="permission" (click)="onClick()">
+            <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
+        </button>
+        <!--<button cButton class="ripple" color="default" *oitcPermission="permission; showOnNoPermission: true" disabled>
+          <fa-icon [icon]="faCog" size="xs"></fa-icon>
+        </button>-->
+    } @else {
+        <button cButton class="ripple" color="default" disabled>
+            <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
+        </button>
+    }
+    <button cButton cDropdownToggle color="default" split>
+        <span class="visually-hidden">Toggle Dropdown</span>
     </button>
-    <!--<button cButton class="ripple" color="default" *oitcPermission="permission; showOnNoPermission: true" disabled>
-      <fa-icon [icon]="faCog" size="xs"></fa-icon>
-    </button>-->
-  } @else {
-    <button cButton class="ripple" color="default" disabled>
-      <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
-    </button>
-  }
-  <button cButton color="default" cDropdownToggle split>
-    <span class="visually-hidden">Toggle Dropdown</span>
-  </button>
-  <ul cDropdownMenu>
-    <ng-content></ng-content>
-  </ul>
+    <ul cDropdownMenu>
+        <ng-content></ng-content>
+    </ul>
 </c-dropdown>

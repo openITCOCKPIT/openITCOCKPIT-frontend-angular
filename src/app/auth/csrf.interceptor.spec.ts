@@ -4,14 +4,14 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { csrfInterceptor } from './csrf.interceptor';
 
 describe('csrfInterceptor', () => {
-  const interceptor: HttpInterceptorFn = (req, next) =>
-    TestBed.runInInjectionContext(() => csrfInterceptor(req, next));
+    const interceptor: HttpInterceptorFn = (req, next) =>
+        TestBed.runInInjectionContext(() => csrfInterceptor(req, next));
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+    });
 
-  it('should be created', () => {
-    expect(interceptor).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(interceptor).toBeTruthy();
+    });
 });

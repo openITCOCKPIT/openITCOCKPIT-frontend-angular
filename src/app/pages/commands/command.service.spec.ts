@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { CommandsService } from './commands.service';
 
 describe('CommandService', () => {
-  let service: CommandsService;
+    let service: CommandsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(CommandsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(CommandsService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

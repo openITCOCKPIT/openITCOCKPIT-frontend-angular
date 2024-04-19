@@ -23,138 +23,139 @@
  *     confirmation.
  */
 
-import {Component, inject, OnDestroy} from '@angular/core';
-import {HeaderComponent} from "../../components/header/header.component";
-import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
-import {Subscription} from "rxjs";
-import {PermissionDirective} from "../../permissions/permission.directive";
-import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
-import {faAsterisk, faCircleInfo, faCoffee, faCog, faMouse} from "@fortawesome/free-solid-svg-icons";
+import { Component, inject, OnDestroy } from '@angular/core';
+import { HeaderComponent } from "../../components/header/header.component";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
+import { Subscription } from "rxjs";
+import { PermissionDirective } from "../../permissions/permission.directive";
+import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { faAsterisk, faCircleInfo, faCoffee, faCog, faMouse } from "@fortawesome/free-solid-svg-icons";
 import {
-  ButtonToolbarComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardSubtitleDirective,
-  CardTitleDirective,
-  DropdownDividerDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  FormSelectDirective,
-  FormTextDirective,
-  InputGroupTextDirective,
-  ListGroupDirective,
-  ListGroupItemDirective,
-  NavComponent,
-  NavItemComponent,
-  NavLinkDirective
+    ButtonToolbarComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardSubtitleDirective,
+    CardTitleDirective,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    FormTextDirective,
+    InputGroupTextDirective,
+    ListGroupDirective,
+    ListGroupItemDirective,
+    NavComponent,
+    NavItemComponent,
+    NavLinkDirective
 } from '@coreui/angular';
-import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
-import {TranslocoDirective} from "@jsverse/transloco";
-import {ActionsButtonComponent} from '../../components/actions-button/actions-button.component';
-import {ActionsButtonElementComponent} from '../../components/actions-button-element/actions-button-element.component';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { RequiredIconComponent } from "../../components/required-icon/required-icon.component";
+import { TranslocoDirective } from "@jsverse/transloco";
+import { ActionsButtonComponent } from '../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../components/actions-button-element/actions-button-element.component';
 
 
 @Component({
-  selector: 'app-start-page',
-  standalone: true,
-  imports: [
-    CoreuiComponent,
-    HeaderComponent,
-    RouterModule,
-    AsyncPipe,
-    JsonPipe,
-    NgIf,
-    PermissionDirective,
-    CardComponent,
-    CardHeaderComponent,
-    ListGroupDirective,
-    ListGroupItemDirective,
-    CardBodyComponent,
-    CardTitleDirective,
-    CardSubtitleDirective,
-    CardFooterComponent,
-    NavComponent,
-    NavItemComponent,
-    NavLinkDirective,
-    ButtonToolbarComponent,
-    XsButtonDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormControlDirective,
-    FormTextDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormCheckComponent,
-    InputGroupTextDirective,
-    FormSelectDirective,
-    FaIconComponent,
-    RequiredIconComponent,
-    TranslocoDirective,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective
-  ],
-  templateUrl: './start-page.component.html',
-  styleUrl: './start-page.component.css'
+    selector: 'app-start-page',
+    standalone: true,
+    imports: [
+        CoreuiComponent,
+        HeaderComponent,
+        RouterModule,
+        AsyncPipe,
+        JsonPipe,
+        NgIf,
+        PermissionDirective,
+        CardComponent,
+        CardHeaderComponent,
+        ListGroupDirective,
+        ListGroupItemDirective,
+        CardBodyComponent,
+        CardTitleDirective,
+        CardSubtitleDirective,
+        CardFooterComponent,
+        NavComponent,
+        NavItemComponent,
+        NavLinkDirective,
+        ButtonToolbarComponent,
+        XsButtonDirective,
+        FormDirective,
+        FormLabelDirective,
+        FormControlDirective,
+        FormTextDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormCheckComponent,
+        InputGroupTextDirective,
+        FormSelectDirective,
+        FaIconComponent,
+        RequiredIconComponent,
+        TranslocoDirective,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective
+    ],
+    templateUrl: './start-page.component.html',
+    styleUrl: './start-page.component.css'
 })
 export class StartPageComponent implements OnDestroy {
-  public readonly route = inject(ActivatedRoute);
-  public readonly router = inject(Router);
-  public readonly routeParams$ = this.route.params;
-  public readonly queryParams$ = this.route.queryParams;
-  private readonly subscription = new Subscription();
-  private readonly document = inject(DOCUMENT);
-  public allowEdit = true;
+    public readonly route = inject(ActivatedRoute);
+    public readonly router = inject(Router);
+    public readonly routeParams$ = this.route.params;
+    public readonly queryParams$ = this.route.queryParams;
+    public allowEdit = true;
+    protected readonly faCoffee = faCoffee;
+    protected readonly faCircleInfo = faCircleInfo;
+    protected readonly faAsterisk = faAsterisk;
+    protected readonly faCog = faCog;
+    protected readonly faMouse = faMouse;
+    private readonly subscription = new Subscription();
+    private readonly document = inject(DOCUMENT);
 
-  public constructor() {
-    this.route.queryParams.subscribe({
-      next: console.info,
-    });
-  }
+    public constructor() {
+        this.route.queryParams.subscribe({
+            next: console.info,
+        });
+    }
 
-  public addRandomQueryParam() {
-    const key = Math.random();
-    const value = Math.random();
-    this.router.navigate([], {
-      queryParams: {[key]: value},
-      queryParamsHandling: "merge",
-    })
-  }
+    public addRandomQueryParam() {
+        const key = Math.random();
+        const value = Math.random();
+        this.router.navigate([], {
+            queryParams: {[key]: value},
+            queryParamsHandling: "merge",
+        })
+    }
 
-  public ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+    public ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  public callPeter() {
-    type WindowWithPeter = {
-      callPeter: () => void
-    } & Window;
+    public callPeter() {
+        type WindowWithPeter = {
+            callPeter: () => void
+        } & Window;
 
-    (this.document.defaultView as unknown as WindowWithPeter).callPeter();
-  }
+        (this.document.defaultView as unknown as WindowWithPeter).callPeter();
+    }
 
-  public clickTest() {
-    alert("Clicked!!!");
-  }
+    public clickTest() {
+        alert("Clicked!!!");
+    }
 
-  public switchAllowEdit() {
-    this.allowEdit = !this.allowEdit;
-  }
-
-  protected readonly faCoffee = faCoffee;
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faAsterisk = faAsterisk;
-  protected readonly faCog = faCog;
-  protected readonly faMouse = faMouse;
+    public switchAllowEdit() {
+        this.allowEdit = !this.allowEdit;
+    }
 
 }

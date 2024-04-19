@@ -1,135 +1,135 @@
 <oitc-coreui>
-  <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/']">
-            <fa-icon [icon]="['fas', 'home']"></fa-icon>
-            {{ t('Home') }}
-          </a></li>
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/', 'commands', 'index']" *oitcPermission="['commands', 'index']">
-            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-            {{ t('Commands') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-          {{ t('Add') }}
-        </li>
-      </ol>
-    </nav>
-    <form cForm>
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>{{ t('Create new command') }}</h5>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Commands') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add') }}
+                </li>
+            </ol>
+        </nav>
+        <form cForm>
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Create new command') }}</h5>
 
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button cButton color="default" class="ripple" size="xs" oitcBackButton
-                      [fallbackUrl]="['commands', 'index']">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default" oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+                </c-card-header>
+                <c-card-body>
 
-          <div class="row">
-            <div class="col-12">
-              <c-alert color="warning">
-                <h4 cAlertHeading>
-                  <fa-icon [icon]="['fas', 'exclamation-triangle']" class="fa-lg"></fa-icon>
-                  {{ t('Security notice ') }}
-                </h4>
-                <p>
-                  {{ t('User defined macros inside of command_line could lead to unwanted code execution.') }}
-                  <br>
-                  {{ t('It is recommended to only provide access for a certain group of users to edit commands and user defined macros.') }}
-                </p>
-              </c-alert>
-            </div>
-          </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <c-alert color="warning">
+                                <h4 cAlertHeading>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="fa-lg"></fa-icon>
+                                    {{ t('Security notice ') }}
+                                </h4>
+                                <p>
+                                    {{ t('User defined macros inside of command_line could lead to unwanted code execution.') }}
+                                    <br>
+                                    {{ t('It is recommended to only provide access for a certain group of users to edit commands and user defined macros.') }}
+                                </p>
+                            </c-alert>
+                        </div>
+                    </div>
 
-          <div class="mb-3">
-            <label cLabel for="CommandType">
-              {{ t('Command type') }}
-            </label>
-            <select cSelect aria-label="Default select example" id="CommandType">
-              <option [value]="CommandTypesEnum.CHECK_COMMAND">
-                {{ t('Service check command') }}
-              </option>
-              <option [value]="CommandTypesEnum.HOSTCHECK_COMMAND">
-                {{ t('Host check command') }}
-              </option>
-              <option [value]="CommandTypesEnum.NOTIFICATION_COMMAND">
-                {{ t('Notification command') }}
-              </option>
-              <option [value]="CommandTypesEnum.EVENTHANDLER_COMMAND">
-                {{ t('Eventhandler command') }}
-              </option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label cLabel for="commandName">
-              {{ t('Name') }}
-              <oitc-required-icon></oitc-required-icon>
-            </label>
-            <input cFormControl id="commandName" required type="text">
-          </div>
-          <div class="mb-3">
-            <label cLabel for="commandLine">
-              {{ t('Command line') }}
-              <oitc-required-icon></oitc-required-icon>
-            </label>
-            <input cFormControl id="commandLine" type="text">
-            <div cFormText class="text-info">
-              <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                    <div class="mb-3">
+                        <label cLabel for="CommandType">
+                            {{ t('Command type') }}
+                        </label>
+                        <select aria-label="Default select example" cSelect id="CommandType">
+                            <option [value]="CommandTypesEnum.CHECK_COMMAND">
+                                {{ t('Service check command') }}
+                            </option>
+                            <option [value]="CommandTypesEnum.HOSTCHECK_COMMAND">
+                                {{ t('Host check command') }}
+                            </option>
+                            <option [value]="CommandTypesEnum.NOTIFICATION_COMMAND">
+                                {{ t('Notification command') }}
+                            </option>
+                            <option [value]="CommandTypesEnum.EVENTHANDLER_COMMAND">
+                                {{ t('Eventhandler command') }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="commandName">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="commandName" required type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="commandLine">
+                            {{ t('Command line') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="commandLine" type="text">
+                        <div cFormText class="text-info">
+                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
 
-              {{
-                t('A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as {0}.', {
-                  '0': ''
-                })
-              }}
-              <span *oitcPermission="['macros', 'index']; showOnNoPermission: true">
-                {{ t('user defined macro') }}
-              </span>
-              <span *oitcPermission="['macros', 'index']">
-                oitc-todo link
-                {{ t('user defined macro') }}
-              </span>
-              <br/>
-              {{ t('Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$') }}
+                            {{
+                                t('A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as {0}.', {
+                                    '0': ''
+                                })
+                            }}
+                            <span *oitcPermission="['macros', 'index']; showOnNoPermission: true">
+                                {{ t('user defined macro') }}
+                            </span>
+                            <span *oitcPermission="['macros', 'index']">
+                                oitc-todo link
+                                {{ t('user defined macro') }}
+                            </span>
+                            <br/>
+                            {{ t('Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$') }}
 
-            </div>
-          </div>
-          <div class="mb-3">
-            <label cLabel for="commandDescription">{{ t('Description') }}</label>
-            <textarea cFormControl id="commandDescription" rows="6"></textarea>
-          </div>
-          <c-form-check class="mb-3">
-            <label cLabel>{{ t('Arguments') }}:</label>
-          </c-form-check>
-
-
-        </c-card-body>
-        <c-card-footer class="text-end">
-
-          <button cButton color="primary" type="submit" class="ripple">
-            {{ t('Create command') }}
-          </button>
-          <button cButton oitcBackButton [fallbackUrl]="['commands', 'index']" color="default" type="submit"
-                  class="ms-1 ripple">
-            {{ t('Cancel') }}
-          </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="commandDescription">{{ t('Description') }}</label>
+                        <textarea cFormControl id="commandDescription" rows="6"></textarea>
+                    </div>
+                    <c-form-check class="mb-3">
+                        <label cLabel>{{ t('Arguments') }}:</label>
+                    </c-form-check>
 
 
-        </c-card-footer>
-      </c-card>
-    </form>
-  </ng-container>
+                </c-card-body>
+                <c-card-footer class="text-end">
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Create command') }}
+                    </button>
+                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default" oitcBackButton
+                            type="submit">
+                        {{ t('Cancel') }}
+                    </button>
+
+
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
 </oitc-coreui>
 
 
