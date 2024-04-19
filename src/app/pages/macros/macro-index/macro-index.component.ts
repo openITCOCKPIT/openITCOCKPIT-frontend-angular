@@ -6,6 +6,7 @@ import {
 import {
     AlertComponent,
     AlertHeadingDirective,
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -19,8 +20,16 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
+    FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -42,9 +51,12 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import { MacroIndex } from '../macros.interface';
+import { AvailableMacroNamesParams, MacroIndex, MacroPost } from '../macros.interface';
 import { Subscription } from 'rxjs';
 import { MacrosService } from '../macros.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-macro-index',
@@ -91,6 +103,17 @@ import { MacrosService } from '../macros.service';
         NgClass,
         AlertComponent,
         AlertHeadingDirective,
+        ModalToggleDirective,
+        ModalHeaderComponent,
+        ModalComponent,
+        ModalBodyComponent,
+        ButtonCloseDirective,
+        ModalTitleDirective,
+        ModalFooterComponent,
+        NgSelectModule,
+        FormLabelDirective,
+        RequiredIconComponent,
+        TrueFalseDirective,
     ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css'
@@ -98,9 +121,12 @@ import { MacrosService } from '../macros.service';
 export class MacroIndexComponent implements OnInit, OnDestroy {
 
     public macros: MacroIndex[] = [];
+    public currentMacro: MacroPost | null = null;
+    public availableMacroNames: string[] = [];
 
     private subscriptions: Subscription = new Subscription();
     private MacrosService = inject(MacrosService)
+    private readonly modalService = inject(ModalService);
 
 
     public ngOnInit() {
@@ -119,5 +145,35 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
         );
     }
 
+    public createMacro() {
+        const params: AvailableMacroNamesParams = {
+            include: '', // Return all available macro names
+            angular: true
+        }
+
+        this.currentMacro = {
+            Macro: {
+                name: null,
+                value: '',
+                description: '',
+                password: 0
+            }
+        };
+
+        this.subscriptions.add(this.MacrosService.getAvailableMacroNames(params)
+            .subscribe((result) => {
+                this.availableMacroNames = result;
+
+                this.modalService.toggle({
+                    show: true,
+                    id: 'macroAddEditModal',
+                });
+            })
+        );
+    }
+
+    public saveMacro() {
+        console.log(this.currentMacro);
+    }
 
 }

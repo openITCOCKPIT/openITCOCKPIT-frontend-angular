@@ -38,7 +38,12 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+                <h5 cCardTitle>
+                    {{ t('Macros') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadMacros()" cButton class="ripple" color="default" size="xs">
@@ -48,7 +53,7 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['macros', 'add']" cButton class="ripple" color="success"
-                                size="xs">
+                                size="xs" (click)="createMacro()">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('New') }}
                         </button>
@@ -88,12 +93,14 @@
 
                         <td>
                             <div class="btn-group btn-group-xs" role="group">
-                                <button (click)="macro.password = 0" *ngIf="macro.password == 1" [title]="'Show value' | transloco"
+                                <button (click)="macro.password = 0" *ngIf="macro.password == 1"
+                                        [title]="'Show value' | transloco"
                                         class="btn btn-primary"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 </button>
-                                <button (click)="macro.password = 1" *ngIf="macro.password == 0" [title]="'Hide value' | transloco"
+                                <button (click)="macro.password = 1" *ngIf="macro.password == 0"
+                                        [title]="'Hide value' | transloco"
                                         class="btn btn-danger"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
@@ -123,6 +130,97 @@
                 &nbsp;
             </c-card-footer>
         </c-card>
+
+        <button [cModalToggle]="macroModal.id" cButton>Full screen below md</button>
+
+        <!-- Add / Edit Macro Modal -->
+        <c-modal #macroModal fullscreen="md" size="lg" id="macroAddEditModal">
+            <form cForm (ngSubmit)="saveMacro()">
+                <c-modal-header>
+                    <h5 cModalTitle>
+                        <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                        {{ t('Add user defined macro') }}
+                    </h5>
+                    <button [cModalToggle]="macroModal.id" cButtonClose></button>
+                </c-modal-header>
+                <c-modal-body *ngIf="currentMacro">
+
+                    <div class="mb-3">
+                        <label cLabel for="macroName">
+                            {{ t('Macro name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="macroName"
+                                   name="name"
+                                   [(ngModel)]="currentMacro.Macro.name">
+                            <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
+                                {{ macroName }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="inputValue">
+                            {{ t('Value') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            </span>
+                            <input id="inputValue" cFormControl type="text"
+                                   name="value"
+                                   [(ngModel)]="currentMacro.Macro.value"/>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="inputDescription">
+                            {{ t('Description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+
+                            </span>
+                            <input id="inputDescription" cFormControl type="text"
+                                   name="description"
+                                   [(ngModel)]="currentMacro.Macro.description"/>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput id="inputHideValue" type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1" name="is_password"
+                                   [(ngModel)]="currentMacro.Macro.password"/>
+                            <label cFormCheckLabel for="inputHideValue">
+                                {{ t('Hide value') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+
+                    <div class="mb-3 help-block">
+                        {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
+                        <br>
+                        {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
+                    </div>
+
+                </c-modal-body>
+                <c-modal-footer>
+                    <button cButton color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                    <button [cModalToggle]="macroModal.id" cButton color="default">
+                        {{ t('Close') }}
+                    </button>
+                </c-modal-footer>
+            </form>
+        </c-modal>
+
     </ng-container>
 </oitc-coreui>
 

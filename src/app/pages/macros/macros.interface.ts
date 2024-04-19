@@ -12,3 +12,17 @@ export interface MacroIndex {
     created: string
     modified: string
 }
+
+export interface AvailableMacroNamesParams {
+    include: string,
+    angular: true
+}
+
+export interface MacroPost {
+    Macro: {
+        name: string | null,
+        value: string
+        description: string
+        password: number
+    }
+}

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { MacroIndex, MacroIndexRoot } from './macros.interface';
+import { AvailableMacroNamesParams, MacroIndex, MacroIndexRoot } from './macros.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +23,17 @@ export class MacrosService {
         }).pipe(
             map(data => {
                 return data.all_macros;
+            })
+        )
+    }
+
+    public getAvailableMacroNames(params: AvailableMacroNamesParams): Observable<string[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ availableMacroNames: string[] }>(`${proxyPath}/macros/getAvailableMacroNames.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.availableMacroNames;
             })
         )
     }
