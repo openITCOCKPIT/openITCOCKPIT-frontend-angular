@@ -1,5 +1,11 @@
 /* This file contains styles for fonts and typography */
 
+code {
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: var(--cui-card-cap-bg);
+}
+
 .code-font {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace
 }
