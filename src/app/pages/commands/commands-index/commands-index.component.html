@@ -139,16 +139,16 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped>
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
                     <thead>
                     <tr>
                         <th class="text-center col-1" scope="col">
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
-                        <th scope="col">
+                        <th scope="col" mat-sort-header="Commands.name">
                             {{ t('Command name') }}
                         </th>
-                        <th scope="col">
+                        <th scope="col" mat-sort-header="Commands.command_type">
                             {{ t('Command type') }}
                         </th>
                         <th class="text-center col-1 width-50" scope="col">
