@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -164,7 +164,6 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
         notification_commands: true,
         eventhandler_commands: true
     }
-    @ViewChild(MatSort, {static: false}) sort!: MatSort;
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private CommandsService = inject(CommandsService)
