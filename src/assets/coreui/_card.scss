@@ -17,6 +17,10 @@ h5.card-title {
     margin-bottom: 0.25rem;
 }
 
+h5.card-title > small.fw-300 {
+    font-style: italic;
+}
+
 .card-toolbar {
     display: flex;
     align-items: center;

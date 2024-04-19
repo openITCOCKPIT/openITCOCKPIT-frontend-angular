@@ -21,7 +21,11 @@
         </nav>
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+                <h5 cCardTitle>{{ t('Commands') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadCommands()" cButton class="ripple" color="default" size="xs">
