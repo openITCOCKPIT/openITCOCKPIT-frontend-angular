@@ -88,16 +88,13 @@
 
             <td>
               <div class="btn-group btn-group-xs" role="group">
-                <button type="button" class="btn btn-primary"
-                        [ngClass]="{'btn-danger': macro.password == 0}">
-
-                  <fa-icon [icon]="['fas', 'eye']" *ngIf="macro.password == 1"
-                           [title]="'Show value' | transloco"
-                           (click)="macro.password = 0"></fa-icon>
-                  <fa-icon [icon]="['fas', 'eye-slash']" *ngIf="macro.password == 0"
-                           [title]="'Hide value' | transloco"
-                           (click)="macro.password = 1"></fa-icon>
-
+                <button type="button" class="btn btn-primary" *ngIf="macro.password == 1" (click)="macro.password = 0"
+                        [title]="'Show value' | transloco">
+                  <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                </button>
+                <button type="button" class="btn btn-danger" *ngIf="macro.password == 0" (click)="macro.password = 1"
+                        [title]="'Hide value' | transloco">
+                  <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                 </button>
                 <button type="button" class="btn btn-default">
                   <fa-icon [icon]="['fas', 'cog']"></fa-icon>
