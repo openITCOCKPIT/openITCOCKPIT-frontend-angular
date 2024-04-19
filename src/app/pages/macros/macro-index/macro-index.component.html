@@ -152,11 +152,13 @@
                         </label>
                         <ng-select id="macroName"
                                    name="name"
-                                   [(ngModel)]="currentMacro.Macro.name">
+                                   [(ngModel)]="currentMacro.Macro.name"
+                                   oitcFormError [errors]="errors" errorField="name">
                             <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
                                 {{ macroName }}
                             </ng-option>
                         </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
 
 
@@ -188,8 +190,10 @@
                             </span>
                             <input id="inputDescription" cFormControl type="text"
                                    name="description"
-                                   [(ngModel)]="currentMacro.Macro.description"/>
+                                   [(ngModel)]="currentMacro.Macro.description"
+                                   oitcFormError [errors]="errors" errorField="description"/>
                         </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">

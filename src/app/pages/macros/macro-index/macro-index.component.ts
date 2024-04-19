@@ -191,7 +191,7 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
                             show: false,
                             id: 'macroAddEditModal',
                         });
-
+                        this.loadMacros();
                         return;
                     }
 
