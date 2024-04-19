@@ -26,18 +26,18 @@
 <c-dropdown placement="bottom-start"
             variant="btn-group">
   @if (allowEdit) {
-    <button cButton class="ripple" color="default" variant="outline" *oitcPermission="permission" (click)="onClick()">
+    <button cButton class="ripple" color="default" *oitcPermission="permission" (click)="onClick()">
       <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
     </button>
-    <!--<button cButton class="ripple" color="secondary" variant="outline" *oitcPermission="permission; showOnNoPermission: true" disabled>
+    <!--<button cButton class="ripple" color="default" *oitcPermission="permission; showOnNoPermission: true" disabled>
       <fa-icon [icon]="faCog" size="xs"></fa-icon>
     </button>-->
   } @else {
-    <button cButton class="ripple" color="default" variant="outline" disabled>
+    <button cButton class="ripple" color="default" disabled>
       <fa-icon [icon]="['fas', 'gear']" size="xs"></fa-icon>
     </button>
   }
-  <button cButton color="default" variant="outline" cDropdownToggle split>
+  <button cButton color="default" cDropdownToggle split>
     <span class="visually-hidden">Toggle Dropdown</span>
   </button>
   <ul cDropdownMenu>

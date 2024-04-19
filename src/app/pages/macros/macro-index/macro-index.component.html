@@ -87,10 +87,9 @@
             <td>{{ macro.description }}</td>
 
             <td>
-              <div class="btn-group btn-group-xs" role="group"
-                   aria-label="Basic outlined">
-                <button type="button" class="btn btn-outline-primary"
-                        [ngClass]="{'btn-outline-danger': macro.password == 0}">
+              <div class="btn-group btn-group-xs" role="group">
+                <button type="button" class="btn btn-primary"
+                        [ngClass]="{'btn-danger': macro.password == 0}">
 
                   <fa-icon [icon]="['fas', 'eye']" *ngIf="macro.password == 1"
                            [title]="'Show value' | transloco"
@@ -100,7 +99,7 @@
                            (click)="macro.password = 1"></fa-icon>
 
                 </button>
-                <button type="button" class="btn btn-outline-secondary">
+                <button type="button" class="btn btn-default">
                   <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                 </button>
               </div>
