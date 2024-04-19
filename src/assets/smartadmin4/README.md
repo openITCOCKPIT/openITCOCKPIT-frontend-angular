@@ -1,2 +1,0 @@
-# Anpassungen für Angular
-
