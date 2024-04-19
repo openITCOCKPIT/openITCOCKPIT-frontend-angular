@@ -48,7 +48,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { AvailableMacroNamesParams, MacroIndex, MacroPost } from '../macros.interface';
@@ -61,6 +61,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+
 
 @Component({
     selector: 'oitc-macro-index',
@@ -137,6 +138,7 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
     private MacrosService = inject(MacrosService)
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
 
     public ngOnInit() {
         this.loadMacros();
@@ -175,7 +177,35 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
 
                 this.modalService.toggle({
                     show: true,
-                    id: 'macroAddEditModal',
+                    id: 'macroAddModal',
+                });
+            })
+        );
+    }
+
+    public editMacro(macro: MacroIndex) {
+        const params: AvailableMacroNamesParams = {
+            include: macro.name,
+            angular: true
+        }
+
+        this.currentMacro = {
+            Macro: {
+                id: macro.id,
+                name: macro.name,
+                value: macro.value,
+                description: macro.description,
+                password: macro.password
+            }
+        };
+
+        this.subscriptions.add(this.MacrosService.getAvailableMacroNames(params)
+            .subscribe((result) => {
+                this.availableMacroNames = result;
+
+                this.modalService.toggle({
+                    show: true,
+                    id: 'macroEditModal',
                 });
             })
         );
@@ -183,13 +213,38 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
 
     public saveMacro() {
         if (this.currentMacro) {
+            if (this.currentMacro.Macro.id && this.currentMacro.Macro.id > 0) {
+                // Edit existing macro
+                this.subscriptions.add(this.MacrosService.editMacro(this.currentMacro)
+                    .subscribe((result) => {
+                        if (result === true) {
+                            this.notyService.genericSuccess();
+                            this.modalService.toggle({
+                                show: false,
+                                id: 'macroEditModal',
+                            });
+                            this.loadMacros();
+                            return;
+                        }
+
+                        // Error
+                        this.notyService.genericError();
+                        if (result) {
+                            this.errors = result;
+                        }
+                    })
+                );
+                return;
+            }
+
+            // Create new macro
             this.subscriptions.add(this.MacrosService.addMacro(this.currentMacro)
                 .subscribe((result) => {
                     if (result === true) {
                         this.notyService.genericSuccess();
                         this.modalService.toggle({
                             show: false,
-                            id: 'macroAddEditModal',
+                            id: 'macroAddModal',
                         });
                         this.loadMacros();
                         return;
@@ -202,6 +257,31 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
                     }
                 })
             );
+        }
+    }
+
+    public deleteMacro() {
+        if (this.currentMacro) {
+            if (this.currentMacro.Macro.id && this.currentMacro.Macro.id > 0) {
+                this.subscriptions.add(this.MacrosService.deleteMacro(this.currentMacro.Macro.id)
+                    .subscribe((result) => {
+                        if (result.success) {
+                            this.notyService.genericSuccess(
+                                this.TranslocoService.translate('Record deleted successfully')
+                            );
+                            this.modalService.toggle({
+                                show: false,
+                                id: 'macroEditModal',
+                            });
+                            this.loadMacros();
+                            return;
+                        }
+
+                        // Error
+                        this.notyService.genericError();
+                    })
+                );
+            }
         }
     }
 

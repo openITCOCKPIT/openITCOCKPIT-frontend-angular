@@ -3,3 +3,7 @@ export interface GenericValidationError {
         [key: string]: string
     }
 }
+
+export interface GenericSuccessResponse {
+    success: boolean;
+}

@@ -4,7 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { AvailableMacroNamesParams, MacroIndex, MacroIndexRoot, MacroPost } from './macros.interface';
-import { GenericValidationError } from '../../generic-responses';
+import { GenericSuccessResponse, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -50,6 +50,38 @@ export class MacrosService {
                 }),
                 catchError((error: any) => {
                     const err = error.error.error as GenericValidationError;
+                    return of(err);
+                })
+            );
+    }
+
+    public editMacro(macro: MacroPost): Observable<boolean | GenericValidationError> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/macros/edit/${macro.Macro.id}.json?angular=true`, macro)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return true;
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of(err);
+                })
+            );
+    }
+
+    public deleteMacro(id: number): Observable<GenericSuccessResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<GenericSuccessResponse>(`${proxyPath}/macros/delete/${id}.json?angular=true`, {})
+            .pipe(
+                map(data => {
+                    return data;
+                }),
+                catchError((error: any) => {
+                    console.error(error.error);
+                    const err: GenericSuccessResponse = {
+                        success: false
+                    }
                     return of(err);
                 })
             );
