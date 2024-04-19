@@ -5,6 +5,10 @@
 @import "@ng-select/ng-select/themes/default.theme.css";
 @import "ng-select-dark";
 
+// regular style toast
+@import 'ngx-toastr/toastr';
+@import "toast";
+
 @import "theme";
 @import "card";
 @import "fonts";

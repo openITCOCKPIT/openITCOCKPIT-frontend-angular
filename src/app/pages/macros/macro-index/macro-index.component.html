@@ -171,8 +171,10 @@
                             </span>
                             <input id="inputValue" cFormControl type="text"
                                    name="value"
-                                   [(ngModel)]="currentMacro.Macro.value"/>
+                                   [(ngModel)]="currentMacro.Macro.value"
+                                   oitcFormError [errors]="errors" errorField="value"/>
                         </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">

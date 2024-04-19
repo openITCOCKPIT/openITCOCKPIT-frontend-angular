@@ -39,7 +39,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { DropdownService } from '@coreui/angular';
 import { loaderInterceptor } from './interceptors/loader.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -59,7 +59,10 @@ export const appConfig: ApplicationConfig = {
         //importProvidersFrom(BrowserAnimationsModule),
 
         provideRouter(routes),
-        provideAnimations(), provideHttpClient(), provideTransloco({
+        provideAnimations(),
+        provideHttpClient(),
+        provideToastr(),
+        provideTransloco({
             // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
             config: {
                 availableLangs: ['en', 'de'],

@@ -20,6 +20,7 @@ export interface AvailableMacroNamesParams {
 
 export interface MacroPost {
     Macro: {
+        id?: number,
         name: string | null,
         value: string
         description: string

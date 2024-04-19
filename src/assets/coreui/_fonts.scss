@@ -19,3 +19,7 @@ code {
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
     -ms-filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
 }
+
+.text-invalid {
+    color: var(--cui-form-invalid-color);
+}

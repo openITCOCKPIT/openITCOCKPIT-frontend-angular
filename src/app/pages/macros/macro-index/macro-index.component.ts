@@ -41,7 +41,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -57,6 +57,10 @@ import { MacrosService } from '../macros.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { GenericValidationError } from '../../../generic-responses';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
     selector: 'oitc-macro-index',
@@ -114,6 +118,10 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormLabelDirective,
         RequiredIconComponent,
         TrueFalseDirective,
+        FormFeedbackComponent,
+        KeyValuePipe,
+        FormErrorDirective,
+        FormFeedbackComponent,
     ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css'
@@ -123,11 +131,12 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
     public macros: MacroIndex[] = [];
     public currentMacro: MacroPost | null = null;
     public availableMacroNames: string[] = [];
+    public errors: GenericValidationError | null = null;
 
     private subscriptions: Subscription = new Subscription();
     private MacrosService = inject(MacrosService)
     private readonly modalService = inject(ModalService);
-
+    private readonly notyService = inject(NotyService);
 
     public ngOnInit() {
         this.loadMacros();
@@ -173,7 +182,27 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
     }
 
     public saveMacro() {
-        console.log(this.currentMacro);
+        if (this.currentMacro) {
+            this.subscriptions.add(this.MacrosService.addMacro(this.currentMacro)
+                .subscribe((result) => {
+                    if (result === true) {
+                        this.notyService.genericSuccess();
+                        this.modalService.toggle({
+                            show: false,
+                            id: 'macroAddEditModal',
+                        });
+
+                        return;
+                    }
+
+                    // Error
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = result;
+                    }
+                })
+            );
+        }
     }
 
 }
