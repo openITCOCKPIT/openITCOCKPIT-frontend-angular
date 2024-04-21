@@ -26,7 +26,8 @@
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default" oitcBackButton
+                            <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
                                 {{ t('Back') }}
@@ -89,20 +90,21 @@
                             <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
 
                             {{
-                                t('A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as {0}.', {
-                                    '0': ''
+                                t('A $-sign needs to be escaped manually ($). Semicolons (;) needs to be defined as {0}.', {
+                                    '0': 'Test'
                                 })
                             }}
                             <span *oitcPermission="['macros', 'index']; showOnNoPermission: true">
                                 {{ t('user defined macro') }}
                             </span>
                             <span *oitcPermission="['macros', 'index']">
-                                oitc-todo link
-                                {{ t('user defined macro') }}
+                                <a [routerLink]="['/', 'macros', 'index']">
+                                    {{ t('user defined macro') }}
+                                </a>
                             </span>
+                            .
                             <br/>
-                            {{ t('Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$') }}
-
+                            {{ t('Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$)') }}
                         </div>
                     </div>
                     <div class="mb-3">
@@ -120,7 +122,8 @@
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Create command') }}
                     </button>
-                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default" oitcBackButton
+                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
                             type="submit">
                         {{ t('Cancel') }}
                     </button>
