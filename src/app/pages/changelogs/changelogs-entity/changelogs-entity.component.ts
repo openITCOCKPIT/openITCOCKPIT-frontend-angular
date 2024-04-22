@@ -25,9 +25,11 @@ import {
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
+import { ChangelogsEntityParams, getDefaultChangelogsEntityParams } from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
+import { ObjectTypesEnum } from '../object-types.enum';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-changelogs-entity',
@@ -58,7 +60,8 @@ import { ChangelogsService } from '../changelogs.service';
         TranslocoPipe,
         FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        DatePipe
     ],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
@@ -68,18 +71,25 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly router = inject(Router);
 
     public hideFilter: boolean = false;
-    public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
+    public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
     private changes: any;
 
 
     loadChanges() {
-        this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
-            .subscribe((result: any) => {
-                this.changes = result;
-            })
-        );
+        const idStr = this.route.snapshot.paramMap.get('id');
+        const typeStr:any = this.route.snapshot.paramMap.get('type')?.toUpperCase();
+        if (idStr && typeStr) {
+            this.params['filter[Changelogs.object_id]'] = idStr;
+            // @ts-ignore
+            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr]];
+            this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+                .subscribe((result: any) => {
+                    this.changes = result;
+                })
+            );
+        }
     }
 
     public toggleFilter() {
