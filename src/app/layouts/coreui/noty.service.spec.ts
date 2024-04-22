@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NotyService } from './noty-service.service';
+import { NotyService } from './noty.service';
 
 describe('NotyService', () => {
     let service: NotyService;

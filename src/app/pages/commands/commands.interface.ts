@@ -38,6 +38,10 @@ export interface CommandIndexRoot extends PaginateOrScroll {
     _csrfToken: string
 }
 
+/**********************
+ *    Index action    *
+ **********************/
+
 export interface CommandIndex {
     Command: {
         id: number
@@ -51,9 +55,38 @@ export interface CommandIndex {
     }
 }
 
-/**********************
- *    Index action    *
- **********************/
+/***************************
+ *    Add / Edit action    *
+ ***************************/
+
+export interface CommandPost {
+    Command: {
+        id?: number
+        name: string
+        command_type: number
+        command_line: string
+        description: string
+        commandarguments: Commandargument[]
+    }
+}
+
+export interface Commandargument {
+    id?: number
+    command_id?: number
+    name: string
+    human_name: string
+    created?: string
+    modified?: string
+}
+
+export interface ArgumentsMissmatch {
+    hasMissmatch: boolean
+    usedCommandLineArgs: string[],
+    definedCommandArguments: string[],
+    missingArgumentDefenitions: string[],
+    missingArgumentUsageInCommandLine: string[]
+}
+
 export interface CommandEdit {
     id: number
     name: string

@@ -19,13 +19,15 @@
                 </li>
             </ol>
         </nav>
-        <form cForm>
+        <form cForm (ngSubmit)="checkForMisingArguments()">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new command') }}</h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
+                            <oitc-user-macros-modal *oitcPermission="['macros', 'index']"></oitc-user-macros-modal>
+
                             <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
                                     size="xs">
@@ -58,7 +60,10 @@
                         <label cLabel for="CommandType">
                             {{ t('Command type') }}
                         </label>
-                        <select aria-label="Default select example" cSelect id="CommandType">
+                        <select aria-label="Default select example" cSelect id="CommandType"
+                                name="command_type"
+                                [(ngModel)]="post.Command.command_type"
+                                oitcFormError [errors]="errors" errorField="command_type">
                             <option [value]="CommandTypesEnum.CHECK_COMMAND">
                                 {{ t('Service check command') }}
                             </option>
@@ -72,26 +77,39 @@
                                 {{ t('Eventhandler command') }}
                             </option>
                         </select>
+                        <oitc-form-feedback [errors]="errors" errorField="command_type"></oitc-form-feedback>
                     </div>
+
                     <div class="mb-3">
                         <label cLabel for="commandName">
                             {{ t('Name') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <input cFormControl id="commandName" required type="text">
+                        <input cFormControl id="commandName" required type="text"
+                               name="name"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="post.Command.name">
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
+
+
                     <div class="mb-3">
                         <label cLabel for="commandLine">
                             {{ t('Command line') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <input cFormControl id="commandLine" type="text">
+                        <input cFormControl id="commandLine" type="text"
+                               name="command_line"
+                               oitcFormError [errors]="errors" errorField="command_line"
+                               [(ngModel)]="post.Command.command_line">
+                        <oitc-form-feedback [errors]="errors" errorField="command_line"></oitc-form-feedback>
+
                         <div cFormText class="text-info">
                             <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-
+                            <!-- todo fix link -->
                             {{
                                 t('A $-sign needs to be escaped manually ($). Semicolons (;) needs to be defined as {0}.', {
-                                    '0': 'Test'
+                                    '0': ''
                                 })
                             }}
                             <span *oitcPermission="['macros', 'index']; showOnNoPermission: true">
@@ -109,16 +127,65 @@
                     </div>
                     <div class="mb-3">
                         <label cLabel for="commandDescription">{{ t('Description') }}</label>
-                        <textarea cFormControl id="commandDescription" rows="6"></textarea>
+                        <textarea cFormControl id="commandDescription" rows="6"
+                                  name="description"
+                                  oitcFormError [errors]="errors" errorField="description"
+                                  [(ngModel)]="post.Command.description">></textarea>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                     </div>
+
                     <c-form-check class="mb-3">
-                        <label cLabel>{{ t('Arguments') }}:</label>
+                        <h5>{{ t('Arguments') }}:</h5>
                     </c-form-check>
+
+                    <div class="row"
+                         *ngFor="let argument of post.Command.commandarguments; let i = index; trackBy: trackByIndex">
+                        <div class="col-12">
+                            <div class="row mb-2">
+                                <div class="col-lg-1">
+                                    <div class="text-purple argname-margin-top">
+                                        {{ argument.name }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 form-group">
+                                    <label class="form-label">
+                                        {{ t('Name') }}
+                                    </label>
+                                    <input class="form-control w-100" type="text"
+                                           [placeholder]="'Please enter a name' | transloco"
+                                           name="human_name_{{i}}"
+                                           [(ngModel)]="argument.human_name">
+                                </div>
+                                <div class="col-md-1 col-lg-1">
+                                    <a class="btn btn-danger ripple command-delete-margin-top"
+                                       href="javascript:void(0);"
+                                       (click)="removeArgument(i)">
+                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 col-md-6 text-danger">
+                            <div *ngIf="post.Command.commandarguments.length > 0">
+                                <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                                {{ t('empty arguments will be removed automatically ') }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-end">
+                            <button cButton class="ripple" color="success" size="xs" type="button"
+                                    (click)="addArgument()">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add argument') }}
+                            </button>
+                        </div>
+                    </div>
 
 
                 </c-card-body>
                 <c-card-footer class="text-end">
-
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Create command') }}
                     </button>
@@ -132,6 +199,69 @@
                 </c-card-footer>
             </c-card>
         </form>
+
+        <c-modal #commandArgumentMissmatchModal fullscreen="md" id="commandArgumentMissmatchModal" size="lg">
+            <c-modal-header class="bg-warning">
+                <h5 cModalTitle>
+                    {{ t('Mismatch in number of defined arguments detected') }}
+                </h5>
+                <button [cModalToggle]="commandArgumentMissmatchModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+                <div class="row">
+                    <div class="col-12">
+                        {{
+                            t('Different amount of used {0} variables compared to defined arguments!', {
+                                '0': '$ARGn$'
+                            })
+                        }}
+                    </div>
+
+                    <div class="col-12">
+                        {{
+                            t('Number of used {0} variables:', {
+                                '0': '$ARGn$'
+                            })
+                        }}
+                        <strong>{{ argumentMissmatch.usedCommandLineArgs.length }}</strong>&nbsp;
+                    </div>
+
+
+                    <div class="col-12">
+                        {{
+                            t('Number of defined arguments:')
+                        }}
+                        <strong>{{ argumentMissmatch.definedCommandArguments.length }}</strong>&nbsp;
+                    </div>
+
+                    <div class="col-12 pt-2" *ngIf="argumentMissmatch.missingArgumentDefenitions.length > 0">
+                        {{
+                            t('Used in command line, but missing in arguments definition')
+                        }}
+                        <code>{{ argumentMissmatch.missingArgumentDefenitions.join(', ') }}</code>&nbsp;
+                    </div>
+
+                    <div class="col-12 pt-2" *ngIf="argumentMissmatch.missingArgumentUsageInCommandLine.length > 0">
+                        {{
+                            t('Defined in arguments definition, but not used in command line')
+                        }}
+                        <code>{{ argumentMissmatch.missingArgumentUsageInCommandLine.join(', ') }}</code>&nbsp;
+                    </div>
+
+
+                </div>
+            </c-modal-body>
+            <c-modal-footer>
+                <button [cModalToggle]="commandArgumentMissmatchModal.id" cButton color="warning" class="ripple"
+                        (click)="saveCommand()">
+                    {{ t('Save anyway') }}
+                </button>
+                <button [cModalToggle]="commandArgumentMissmatchModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </c-modal>
+
     </ng-container>
 </oitc-coreui>
 
