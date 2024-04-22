@@ -14,15 +14,24 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add') }}
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Edit') }}
                 </li>
             </ol>
         </nav>
         <form cForm (ngSubmit)="checkForMisingArguments()">
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new command') }}</h5>
+                    <h5 cCardTitle>
+                        {{ t('Edit command:') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">

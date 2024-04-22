@@ -60,14 +60,13 @@ export interface CommandIndex {
  ***************************/
 
 export interface CommandPost {
-    Command: {
-        id?: number
-        name: string
-        command_type: number
-        command_line: string
-        description: string
-        commandarguments: Commandargument[]
-    }
+    id?: number
+    name: string
+    uuid?: string
+    command_type: number
+    command_line: string
+    description: string
+    commandarguments: Commandargument[]
 }
 
 export interface Commandargument {
@@ -87,20 +86,3 @@ export interface ArgumentsMissmatch {
     missingArgumentUsageInCommandLine: string[]
 }
 
-export interface CommandEdit {
-    id: number
-    name: string
-    command_line: string
-    command_type: number
-    human_args: any
-    uuid: string
-    description: string
-    commandarguments: Array<{
-        id: number
-        command_id: number
-        name: string
-        human_name: string
-        created: string
-        modified: string
-    }>
-}

@@ -1,0 +1,10 @@
+<ng-container *transloco="let t">
+    <div class="me-3 text-muted" (click)="copyToClipboard()" [cTooltip]="toolTipContent" cTooltipPlacement="top">
+        {{ t('UUID') }}: {{ uuid }}
+    </div>
+
+    <ng-template #toolTipContent>
+        {{ tooltipText }}
+    </ng-template>
+</ng-container>
+

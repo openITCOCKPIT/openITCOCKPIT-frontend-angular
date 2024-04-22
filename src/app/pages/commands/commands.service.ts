@@ -3,7 +3,7 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { CommandEdit, CommandIndexRoot, CommandPost, CommandsIndexParams } from './commands.interface';
+import { CommandIndexRoot, CommandPost, CommandsIndexParams } from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericValidationError } from '../../generic-responses';
 
@@ -29,7 +29,9 @@ export class CommandsService implements DeleteAllModalService {
 
     public addCommand(command: CommandPost): Observable<boolean | GenericValidationError> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/commands/add.json?angular=true`, command)
+        return this.http.post<any>(`${proxyPath}/commands/add.json?angular=true`, {
+            Command: command
+        })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
@@ -42,9 +44,9 @@ export class CommandsService implements DeleteAllModalService {
             );
     }
 
-    public getEdit(id: number): Observable<CommandEdit> {
+    public getEdit(id: number): Observable<CommandPost> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ command: CommandEdit }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
+        return this.http.get<{ command: CommandPost }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
             map(data => {
                 return data['command'];
             })
