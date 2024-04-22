@@ -1,0 +1,47 @@
+<ng-container *transloco="let t">
+    <ng-container *ngIf="changelogentry">
+        <time class="cbp_tmtime" [dateTime]="changelogentry.time">
+            <span>{{ changelogentry.time }}</span>
+            <span>{{ changelogentry.timeAgoInWords }}</span>
+        </time>
+        <div class="cbp_tmicon txt-color-white {{changelogentry.color}}" title="{{changelogentry.action}}">
+            <i class="{{changelogentry.icon}}"></i> *** {{ changelogentry.icon }} ***
+        </div>
+        <div class="cbp_tmlabel">
+            <h2 class="font-md">
+                {{ changelogentry.model }}:
+                <strong>
+                    <!-- @todo: fix links -->
+                    <a href="{{changelogentry.ngState}}({id: changelogentry.object_id})"
+                       *ngIf="changelogentry.ngState && changelogentry.recordExists">
+                        {{ changelogentry.name }}
+                    </a>
+                    <span *ngIf="!changelogentry.ngState || !changelogentry.recordExists"
+                          [ngClass]="{'changelog_delete': (changelogentry.action ==='delete' ||
+                  (changelogentry.ngState && !changelogentry.recordExists))}">
+                        {{ changelogentry.name }}
+                    </span>
+
+                </strong>
+                <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user">
+                    {{t('by')}}
+
+                    <!-- @todo: fix links -->
+                    <a *oitcPermission="['users', 'edit']" href="UsersEdit({id: changelogentry.user.id})">
+                        {{ changelogentry.user.firstname }}
+                        {{ changelogentry.user.lastname }}
+                    </a>
+                    <!-- @todo: fix permissions user without permissions  -->
+                    <?php else: ?>
+                    {{ changelogentry.user.firstname }}
+                    {{ changelogentry.user.lastname }}
+                    <?php endif; ?>
+                </span>
+                <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user === null">
+                    {{t('by Cronjob')}}
+                </span>
+            </h2>
+
+        </div>
+    </ng-container>
+</ng-container>
