@@ -3,8 +3,8 @@
         <c-col>
             <select [(ngModel)]="currentSelectedTimerange"
                     (change)="onTimerangeChange(currentSelectedTimerange)" aria-label="Default select example" class="w-100" cSelect>
-                <option *ngFor="let item of availableTimeranges; index as i;" [ngValue]="item[0]">
-                    {{ item[1] }}
+                <option *ngFor="let item of availableTimeranges; index as i;" [ngValue]="item.hours">
+                    {{ item.name }}
                 </option>
             </select>
         </c-col>

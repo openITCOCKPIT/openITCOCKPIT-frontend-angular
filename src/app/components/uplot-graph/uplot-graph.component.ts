@@ -20,22 +20,20 @@ import {
 } from '@coreui/angular';
 import {JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf} from '@angular/common';
 import * as _uPlot from 'uplot';
-//import {UPlotConfigBuilder} from './uplot-config-builder'
 import {from,  fromEvent, Observable, Subscription } from 'rxjs';
 import {UplotGraphService} from './uplot-graph.service';
 import {UplotGraphInterface, PerfParams, Gauges, Datasource} from "./uplot-graph.interface";
 import {TimezoneObject} from "../../pages/services-browser-page/timezone.interface";
 import {UPlotConfigBuilder} from './uplot-config-builder';
 import {FormsModule} from '@angular/forms';
-import {DebounceDirective} from "../../directives/debounce.directive";
 
 const uPlot: any = (_uPlot as any)?.default;
 
-type availableAggregations = {
+/*type availableAggregations = [
     avg: string,
     min: string,
     max: string
-};
+]; */
 
 type availableTimeranges = {
     [key: number]: string
@@ -49,12 +47,11 @@ type availableTimeranges = {
         ColComponent,
         ContainerComponent,
         RowComponent,
-        FormsModule,
         JsonPipe,
         KeyValuePipe,
         NgIf,
         NgForOf,
-        DebounceDirective,
+        FormsModule,
     ],
     templateUrl: './uplot-graph.component.html',
     styleUrl: './uplot-graph.component.css',
@@ -92,8 +89,6 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
     @Input() tooltips: boolean = true;
 
-
-    //private can = document.createElement("canvas");
     private ctx = document.createElement("canvas").getContext("2d");
     @ViewChild('chartUPlot', {static: true}) chartUPlot: any | HTMLElement;
 
@@ -110,24 +105,24 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
    currentSelectedTimerange:number = 3;
-   protected availableTimeranges:[number,string][] = [
-       [ 1, '1 hour'],
-       [ 3, '3 hours'],
-       [ 8, '8 hours'],
-       [24, '1 day'],
-       [168, '7 days'],
-       [720, '30 days'],
-       [2160, '90 days'],
-       [4320, '6 month'],
-       [8760, '1 year']
+   protected availableTimeranges:any[] = [
+       { hours: 1, name: '1 hour'},
+       {hours: 3, name: '3 hours'},
+       {hours: 8, name: '8 hours'},
+       {hours: 24, name: '1 day'},
+       {hours: 168, name :'7 days'},
+       {hours: 720, name: '30 days'},
+       {hours: 2160, name: '90 days'},
+       {hours: 4320, name: '6 month'},
+       {hours: 8760, name: '1 year'}
     ];
     private currentAggregation:string = 'avg';
 
-   private availableAggregations: availableAggregations = {
-        avg: 'Average',
-        min: 'Minimum',
-        max: 'Maximum'
-    };
+  /* private availableAggregations: availableAggregations = [
+        ['avg', 'Average'],
+        ['min', 'Minimum'],
+        ['max', 'Maximum']
+    ]; */
 
 
     private UplotGraphService = inject(UplotGraphService);
