@@ -172,7 +172,6 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
             const id = parseInt(idStr, 10);
             this.subscriptions.add(this.CommandsService.getEdit(id)
                 .subscribe((result) => {
-                    console.log(result);
                     this.post = result;
                 }));
         }

@@ -34,6 +34,7 @@ export class CommandsService implements DeleteAllModalService {
         })
             .pipe(
                 map(data => {
+                    // Return true on 200 Ok
                     return {
                         success: true,
                         data: data as GenericIdResponse
