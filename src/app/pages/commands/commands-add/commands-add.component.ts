@@ -65,7 +65,7 @@ import { CommandsService } from '../commands.service';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
@@ -238,10 +238,16 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
     }
 
     public saveCommand() {
-        this.subscriptions.add(this.CommandsService.addCommand(this.post)
+        this.subscriptions.add(this.CommandsService.createCommand(this.post)
             .subscribe((result) => {
-                if (result === true) {
-                    this.notyService.genericSuccess();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Command');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['commands', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
                     this.modalService.toggle({
                         show: false,
                         id: 'macroAddModal',
@@ -252,9 +258,10 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
                 }
 
                 // Error
+                const errorResponse = result.data as GenericValidationError;
                 this.notyService.genericError();
                 if (result) {
-                    this.errors = result;
+                    this.errors = errorResponse;
                 }
             })
         );

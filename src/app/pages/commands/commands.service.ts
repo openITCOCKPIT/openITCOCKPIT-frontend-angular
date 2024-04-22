@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { CommandIndexRoot, CommandPost, CommandsIndexParams } from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericValidationError } from '../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -27,19 +27,24 @@ export class CommandsService implements DeleteAllModalService {
         )
     }
 
-    public addCommand(command: CommandPost): Observable<boolean | GenericValidationError> {
+    public createCommand(command: CommandPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/commands/add.json?angular=true`, {
             Command: command
         })
             .pipe(
                 map(data => {
-                    // Return true on 200 Ok
-                    return true;
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
                 }),
                 catchError((error: any) => {
                     const err = error.error.error as GenericValidationError;
-                    return of(err);
+                    return of({
+                        success: false,
+                        data: err
+                    });
                 })
             );
     }
@@ -51,6 +56,29 @@ export class CommandsService implements DeleteAllModalService {
                 return data['command'];
             })
         )
+    }
+
+    public updateCommand(command: CommandPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/commands/edit/${command.id}.json?angular=true`, {
+            Command: command
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     // Generic function for the Delete All Modal
