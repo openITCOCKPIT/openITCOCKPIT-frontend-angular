@@ -1,62 +1,104 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
+import { LocationStrategy } from '@angular/common';
+import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class NotyService {
+
+    private locationStrategy = inject(LocationStrategy);
+    private router = inject(Router);
 
     constructor(private toastr: ToastrService, private TranslocoService: TranslocoService) {
     }
 
-    genericSuccess(message?: string, title?: string) {
+    genericSuccess(message?: string, title?: string, url?: any[]) {
         if (!message) {
             message = this.TranslocoService.translate('Data saved successfully');
         }
 
-        this.toastr.success(message, title, {
+        const toast = this.toastr.success(message, title, {
             timeOut: 3500,
             progressBar: true,
             enableHtml: true
-        })
+        });
+
+        if (url) {
+            toast
+                .onTap
+                .pipe(take(1)) // auto unsubscribe
+                .subscribe(() => {
+                    this.router.navigate(url);
+                });
+        }
+
     }
 
-    genericError(message?: string, title?: string) {
+    genericError(message?: string, title?: string, url?: any[]) {
         if (!message) {
             message = this.TranslocoService.translate('Error while saving data');
         }
 
-        this.toastr.error(message, title, {
+        const toast = this.toastr.error(message, title, {
             timeOut: 3500,
             progressBar: true,
             enableHtml: true
-        })
+        });
+
+        if (url) {
+            toast
+                .onTap
+                .pipe(take(1)) // auto unsubscribe
+                .subscribe(() => {
+                    this.router.navigate(url);
+                });
+        }
     }
 
-    genericWarning(message?: string, title?: string) {
+    genericWarning(message?: string, title?: string, url?: any[]) {
         if (!message) {
             message = this.TranslocoService.translate('Warning - something unexpected happened');
         }
 
-        this.toastr.warning(message, title, {
+        const toast = this.toastr.warning(message, title, {
             timeOut: 3500,
             progressBar: true,
             enableHtml: true
-        })
+        });
+
+        if (url) {
+            toast
+                .onTap
+                .pipe(take(1)) // auto unsubscribe
+                .subscribe(() => {
+                    this.router.navigate(url);
+                });
+        }
     }
 
-    genericInfo(message?: string, title?: string) {
+    genericInfo(message?: string, title?: string, url?: any[]) {
         if (!message) {
             message = this.TranslocoService.translate('Please wait while processing ...');
         }
 
-        this.toastr.info(message, title, {
+        const toast = this.toastr.info(message, title, {
             timeOut: 3500,
             progressBar: true,
             enableHtml: true
-        })
+        });
+
+        if (url) {
+            toast
+                .onTap
+                .pipe(take(1)) // auto unsubscribe
+                .subscribe(() => {
+                    this.router.navigate(url);
+                });
+        }
     }
 }
-
