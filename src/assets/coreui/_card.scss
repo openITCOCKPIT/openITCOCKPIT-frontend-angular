@@ -1,0 +1,28 @@
+/* Add support for card-toolbar */
+
+.card {
+    box-shadow: 0 0 13px 0 rgba(9, 61, 148, 0.08);
+}
+
+.card-header {
+    display: flex;
+}
+
+.card-title {
+    flex: 1
+}
+
+h5.card-title {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+h5.card-title > small.fw-300 {
+    font-style: italic;
+}
+
+.card-toolbar {
+    display: flex;
+    align-items: center;
+    padding-right: 0.5rem;
+}

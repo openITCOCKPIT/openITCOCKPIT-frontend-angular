@@ -1,0 +1,44 @@
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col md="6">
+            {{ t('Paginator disabled for better performance. Running in scroll mode.') }}
+        </c-col>
+        <c-col md="6">
+            <c-pagination *ngIf="scroll" class="float-end">
+                <li *ngIf="scroll.current > 1"
+                    cPageItem> <!-- ngIf in this case so that the CSS makes round borders -->
+                    <button (click)="firstPage()"
+                            [title]="'First page' | transloco"
+                            cPageLink
+                            class="ripple">
+                        <fa-icon [icon]="faAnglesLeft"></fa-icon>
+                    </button>
+                </li>
+                <li [disabled]="!scroll.hasPrevPage" cPageItem>
+                    <button (click)="prevPage()"
+                            [title]="'Previous page' | transloco"
+                            cPageLink
+                            class="ripple"
+                    >
+                        <fa-icon [icon]="faAngleLeft"></fa-icon>
+                    </button>
+                </li>
+                <li [active]="true" cPageItem>
+                    <button [title]="'Current page' | transloco"
+                            cPageLink>
+                        {{ scroll.current }}
+                    </button>
+                </li>
+                <li [disabled]="!scroll.hasNextPage" cPageItem>
+                    <button (click)="nextPage()"
+                            [title]="'Next page' | transloco"
+                            cPageLink
+                            class="ripple"
+                    >
+                        <fa-icon [icon]="faAnglesRight"></fa-icon>
+                    </button>
+                </li>
+            </c-pagination>
+        </c-col>
+    </c-row>
+</ng-container>

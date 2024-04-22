@@ -1,118 +1,120 @@
 <oitc-smartadmin>
 
-  <div>
-    Hier ist die Uhr: {{ now }}
-    <button (click)="stopClock()">Stop clock</button>
-  </div>
+    <a [routerLink]="['/', 'commands', 'add']">ADD Command</a>
+
+    <div>
+        Hier ist die Uhr: {{ now }}
+        <button (click)="stopClock()">Stop clock</button>
+    </div>
 
 
-  <ng-container *ngIf="command">
+    <ng-container *ngIf="command">
 
-    <form #form=ngForm (ngSubmit)="formSubmit(form.value)">
+        <form #form=ngForm (ngSubmit)="formSubmit(form.value)">
 
-      <div class="form-group">
-        <label class="control-label">
-          Command type
-        </label>
-        <select [(ngModel)]="command.command_type" class="form-control" name="command_type">
-          <option value="1">Service check command</option>
-          <option value="2">Host check command</option>
-          <option value="3">Notification command</option>
-          <option value="4">Eventhandler command</option>
-        </select>
-      </div>
+            <div class="form-group">
+                <label class="control-label">
+                    Command type
+                </label>
+                <select [(ngModel)]="command.command_type" class="form-control" name="command_type">
+                    <option value="1">Service check command</option>
+                    <option value="2">Host check command</option>
+                    <option value="3">Notification command</option>
+                    <option value="4">Eventhandler command</option>
+                </select>
+            </div>
 
-      <div class="form-group required">
-        <label class="control-label">
-          Name
-        </label>
-        <input [(ngModel)]="command.name" class="form-control" name="name" type="text">
-      </div>
+            <div class="form-group required">
+                <label class="control-label">
+                    Name
+                </label>
+                <input [(ngModel)]="command.name" class="form-control" name="name" type="text">
+            </div>
 
-      <div class="form-group required">
-        <label class="control-label" for="commandLineTextArea">
-          Command line
-        </label>
-        <textarea [(ngModel)]="command.command_line" class="form-control code-font" cols="30"
-                  id="commandLineTextArea" name="command_line" rows="6" type="text"></textarea>
-      </div>
-
-
-      <legend class="font-sm">
-        <h5>Arguments:</h5>
-      </legend>
-      <div id="command_args">
-        <!-- empty because we create a new command! -->
-
-        <!--
-        <input type="text" *ngFor="let control of cmdArgsForm.controls" [formControl]="control" />
-        -->
+            <div class="form-group required">
+                <label class="control-label" for="commandLineTextArea">
+                    Command line
+                </label>
+                <textarea [(ngModel)]="command.command_line" class="form-control code-font" cols="30"
+                          id="commandLineTextArea" name="command_line" rows="6" type="text"></textarea>
+            </div>
 
 
-        <input *ngFor="let arg of command.commandarguments;index as i" [(ngModel)]="arg.human_name" name="{{i}}"
-               type="text"/>
+            <legend class="font-sm">
+                <h5>Arguments:</h5>
+            </legend>
+            <div id="command_args">
+                <!-- empty because we create a new command! -->
 
-        <hr/>
+                <!--
+                <input type="text" *ngFor="let control of cmdArgsForm.controls" [formControl]="control" />
+                -->
 
-        <pre>
+
+                <input *ngFor="let arg of command.commandarguments;index as i" [(ngModel)]="arg.human_name" name="{{i}}"
+                       type="text"/>
+
+                <hr/>
+
+                <pre>
           {{ form.value | json }}
         </pre>
 
-        <button (click)="addCmdArgFormControl()">add arg</button>
-        <button>auf gehts</button>
-        <button (click)="changeName()">change name</button>
-      </div>
-
-      <div class="col-lg-12" ng-repeat="arg in args">
-        <div class="row">
-          <div class="col-lg-1">
-            <div class="text-purple" style="margin-top: 24px;">
-              arg.name
+                <button (click)="addCmdArgFormControl()">add arg</button>
+                <button>auf gehts</button>
+                <button (click)="changeName()">change name</button>
             </div>
-          </div>
-          <div class="col-lg-10 form-group">
-            <label class="control-label" for="newArg">
-              Name
-            </label>
-            <input class="form-control input-sm" id="newArg"
-                   name="human_name"
-                   ng-model="arg.human_name"
-                   placeholder="<?php echo __('Please enter a name'); ?>"
-                   style="width:100%;"
-                   type="text">
-          </div>
-          <div class="col-md-1 col-lg-1">
-            <a class="btn btn-danger btn-sm waves-effect waves-themed deleteCommandArg margin-top-25"
-               href="javascript:void(0);"
-               ng-click="removeArg(arg.count)">
-              <i class="fa fa-trash fa-lg"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="row ml-1">
-        <div ng-show="args.length > 0">
-          <span class="col col-lg-3 col-xs-12 text-danger">
-            <i class="fa fa-exclamation-circle"></i>
-            <?php echo __('empty arguments will be removed automatically'); ?>
-          </span>
-        </div>
-        <div class="ml-auto mr-3">
-          <a class="btn btn-success btn-xs " href="javascript:void(0);" id="add_new_arg"
-             ng-click="addArg()">
-            <i class="fa fa-plus"></i>
-            <?php echo __('Add argument'); ?>
-          </a>
-        </div>
-      </div>
 
-    </form>
+            <div class="col-lg-12" ng-repeat="arg in args">
+                <div class="row">
+                    <div class="col-lg-1">
+                        <div class="text-purple" style="margin-top: 24px;">
+                            arg.name
+                        </div>
+                    </div>
+                    <div class="col-lg-10 form-group">
+                        <label class="control-label" for="newArg">
+                            Name
+                        </label>
+                        <input class="form-control input-sm" id="newArg"
+                               name="human_name"
+                               ng-model="arg.human_name"
+                               placeholder="<?php echo __('Please enter a name'); ?>"
+                               style="width:100%;"
+                               type="text">
+                    </div>
+                    <div class="col-md-1 col-lg-1">
+                        <a class="btn btn-danger btn-sm waves-effect waves-themed deleteCommandArg margin-top-25"
+                           href="javascript:void(0);"
+                           ng-click="removeArg(arg.count)">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row ml-1">
+                <div ng-show="args.length > 0">
+                    <span class="col col-lg-3 col-xs-12 text-danger">
+                        <i class="fa fa-exclamation-circle"></i>
+                        <?php echo __('empty arguments will be removed automatically'); ?>
+                    </span>
+                </div>
+                <div class="ml-auto mr-3">
+                    <a class="btn btn-success btn-xs " href="javascript:void(0);" id="add_new_arg"
+                       ng-click="addArg()">
+                        <i class="fa fa-plus"></i>
+                        <?php echo __('Add argument'); ?>
+                    </a>
+                </div>
+            </div>
 
-  </ng-container>
+        </form>
+
+    </ng-container>
 
 
-  <hr/>
-  <img src="assets/soll.jpg"/>
+    <hr/>
+    <img src="assets/soll.jpg"/>
 
 
 </oitc-smartadmin>

@@ -1,44 +1,69 @@
+<oitc-global-loader></oitc-global-loader>
+
 <!--sidebar-->
 <c-sidebar
-  #sidebar1="cSidebar"
-  class="d-print-none sidebar sidebar-fixed border-end"
-  colorScheme="dark"
-  id="sidebar1"
-  visible
+    #sidebar1="cSidebar"
+    class="d-print-none sidebar sidebar-fixed border-end"
+    colorScheme="dark"
+    id="sidebar1"
+    visible
 >
-  <c-sidebar-header class="border-bottom">
-    <c-sidebar-brand [routerLink]="[]">
-      <svg [class]="{icon: false}" cIcon class="sidebar-brand-full" height="32" name="logo" title="CoreUI Logo"></svg>
-      <svg cIcon class="sidebar-brand-narrow" height="32" name="signet" title="CoreUI Logo"></svg>
-    </c-sidebar-brand>
-  </c-sidebar-header>
+    <c-sidebar-header class="border-bottom">
+        <c-sidebar-brand [routerLink]="[]">
+            <div *ngIf="showSearch" class="nav-filter  m-0 p-0">
 
-  <c-sidebar-nav #overflow [navItems]="navItems" dropdownMode="close" compact/>
+                <form (ngSubmit)="runSearch()" [formGroup]="navSearch">
+                    <c-input-group class="mb-3">
+                        <input (debouncedValue)="runSearch()"
+                               aria-describedby="basic-addon2"
+                               cFormControl="searchTerm"
+                               formControlName="searchTerm"
+                               oitcDebounce
+                               placeholder="Search"
+                        />
+                        <span cInputGroupText id="basic-addon2">
+                            <fa-icon *ngIf="searchTerm !== ''" [icon]="faSearch"/>
+                            <fa-icon (click)="clearSearch()" *ngIf="searchTerm === ''" [icon]="faClose"/>
+                        </span>
+                    </c-input-group>
+                </form>
+                <ul *ngIf="navigationService.searchResults as searchResults" class="list-group m-0 p-0">
+                    <ng-container *ngFor="let item of searchResults">
+                        <li [routerLink]="item.url" class="pointer list-group-item">
+                            <fa-icon [icon]="faQuestion"></fa-icon>
+                            <strong>{{ item.name }}</strong>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </c-sidebar-brand>
+    </c-sidebar-header>
+    <c-sidebar-nav [navItems]="navigationService.navigation" compact dropdownMode="close"/>
 
-  @if (!sidebar1.narrow) {
-    <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable"
-                      style="cursor: pointer;">
-      <button cSidebarToggler></button>
-    </c-sidebar-footer>
-  }
+    @if (!sidebar1.narrow) {
+        <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable"
+                          style="cursor: pointer;">
+            <button cSidebarToggler></button>
+        </c-sidebar-footer>
+    }
 </c-sidebar>
 
 <!--main-->
 <div class="wrapper d-flex flex-column min-vh-100">
-  <!--app-header-->
-  <oitc-coreui-header [cShadowOnScroll]="'sm'"
-                      class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
-                      position="sticky"
-                      sidebarId="sidebar1"/>
-  <!--app-body-->
-  <div class="body flex-grow-1">
-    <c-container [fluid]="true" class="h-auto px-4">
+    <!--app-header-->
+    <oitc-coreui-header [cShadowOnScroll]="'sm'"
+                        class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
+                        position="sticky"
+                        sidebarId="sidebar1"/>
+    <!--app-body-->
+    <div class="body flex-grow-1">
+        <c-container [fluid]="true" class="h-auto px-4">
 
-      <!-- Content will be here -->
-      <ng-content/>
+            <!-- Content will be here -->
+            <ng-content/>
 
-    </c-container>
-  </div>
-  <!--app footer-->
-  <oitc-coreui-footer></oitc-coreui-footer>
+        </c-container>
+    </div>
+    <!--app footer-->
+    <oitc-coreui-footer></oitc-coreui-footer>
 </div>

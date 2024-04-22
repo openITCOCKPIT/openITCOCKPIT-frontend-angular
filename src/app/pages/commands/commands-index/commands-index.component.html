@@ -1,0 +1,254 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Commands') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Commands') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadCommands()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['commands', 'add']" [routerLink]="['/', 'commands', 'add']" cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Commands.name]']"
+                                           [placeholder]="'Filter by command name' | transloco"
+                                           aria-label="Username"
+                                           cFormControl
+                                           name="commands.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Command types') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.service_commands" cFormCheckInput
+                                               id="ServiceCheckCommand"
+                                               name="ServiceCheckCommand"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel
+                                               for="ServiceCheckCommand">{{ t('Service check command') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.hostcheck_commands" cFormCheckInput
+                                               id="HostCheckCommand"
+                                               name="HostCheckCommand"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel
+                                               for="HostCheckCommand">{{ t('Host check command') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.notification_commands" cFormCheckInput
+                                               id="NotificationCommand"
+                                               name="NotificationCommand"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel
+                                               for="NotificationCommand">{{ t('Notification command') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.eventhandler_commands" cFormCheckInput
+                                               id="EventhandlerCommand"
+                                               name="EventhandlerCommand"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel
+                                               for="EventhandlerCommand">{{ t('Eventhandler command') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Commands.name">
+                            {{ t('Command name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Commands.command_type">
+                            {{ t('Command type') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="commands">
+                    <tr *ngFor="let command of commands.all_commands">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['commands', 'delete']"
+                                [disabled]="false"
+                                [item]="command"></oitc-item-select>
+
+                        </td>
+                        <td>{{ command.Command.name }}</td>
+                        <td>{{ command.Command.type }}</td>
+
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'commands.edit'"
+                                                 [url]="'/commands/edit/' + command.Command.id">
+                                <oitc-actions-button-element [permission]="'commands.edit'"
+                                                             [url]="'/commands/edit/' + command.Command.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                             [url]="'/changelogs/entity/command/' + command.Command.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'commands.usedBy'"
+                                                             [url]="'/commands/usedBy/' + command.Command.id">
+                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                    {{ t('Used By') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element [permission]="'commands.copy'"
+                                                             [url]="'/commands/copy/' + command.Command.id">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(command)"
+                                                             [permission]="'commands.delete'">
+                                    <span class="txt-color-red">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
+                <ng-container *ngIf="commands && commands.all_commands">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="commands.all_commands.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+                                    <button class="btn btn-outline-primary col-3" type="button">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </button>
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="commands"
+                                [paginateOrScroll]="commands"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

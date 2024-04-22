@@ -1,0 +1,149 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Commands') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Changelog') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Change log') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadChanges()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        {{ t('From') }}
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[from]']"
+                                           [placeholder]="'From date' | transloco"
+                                           aria-label="from"
+                                           name="from"
+                                           cFormControl
+                                           oitcDebounce
+                                           type="datetime-local"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        {{ t('To') }}
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[to]']"
+                                           [placeholder]="'From date' | transloco"
+                                           aria-label="to"
+                                           name="to"
+                                           cFormControl
+                                           oitcDebounce
+                                           type="datetime-local"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Actions') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="add" type="checkbox" />
+                                        <label cFormCheckLabel for="add">
+                                            {{ t('Add') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="edit" type="checkbox"/>
+                                        <label cFormCheckLabel for="edit">
+                                            {{ t('Edit') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="copy" type="checkbox"/>
+                                        <label cFormCheckLabel for="copy">
+                                            {{ t('Copy') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="delete" type="checkbox"/>
+                                        <label cFormCheckLabel for="delete">
+                                            {{ t('Delete') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="activate" type="checkbox"/>
+                                        <label cFormCheckLabel for="activate">
+                                            {{ t('Activate') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput id="deactivate" type="checkbox"/>
+                                        <label cFormCheckLabel for="deactivate">
+                                            {{ t('Deactivate') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Show services') }}
+                                    </h5>
+                                    <c-form-check>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>

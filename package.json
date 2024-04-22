@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "i18n:extract": "transloco-keys-manager extract",
+    "i18n:find": "transloco-keys-manager find"
   },
   "private": true,
   "dependencies": {
@@ -16,16 +18,24 @@
     "@angular/compiler": "^17.3.3",
     "@angular/core": "^17.3.3",
     "@angular/forms": "^17.3.3",
+    "@angular/material": "^17.3.3",
     "@angular/platform-browser": "^17.3.3",
     "@angular/platform-browser-dynamic": "^17.3.3",
     "@angular/router": "^17.3.3",
     "@coreui/angular": "^5.0.1",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-angular": "^5.0.1",
+    "@fontsource/roboto": "^5.0.12",
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@jsverse/transloco": "^7.1.0",
+    "@ng-select/ng-select": "^12.0.7",
+    "flag-icon-css": "^4.1.7",
+    "flag-icons": "^7.2.1",
     "ngx-scrollbar": "^14.0.0",
+    "ngx-toastr": "^18.0.0",
+    "prettier": "^3.2.5",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "uplot": "^1.6.30",
@@ -36,6 +46,7 @@
     "@angular/cli": "^17.3.3",
     "@angular/compiler-cli": "^17.3.3",
     "@angular/localize": "^17.3.3",
+    "@jsverse/transloco-keys-manager": "^4.1.0",
     "@types/jasmine": "~5.1.4",
     "@types/luxon": "^3.4.2",
     "chartjs-plugin-gradient": "^0.6.1",
@@ -45,6 +56,7 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ngx-build-plus": "^17.0.0",
     "typescript": "~5.4.3"
   }
 }

@@ -1,8 +1,8 @@
-import {Component, inject} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
-import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes} from '@angular/router';
-import {LEGACY_BASE_URL} from "./tokens/legacy-base-url.token";
-import {authGuard} from "./auth/auth.guard";
+import { Component, inject } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
+import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
+import { authGuard } from "./auth/auth.guard";
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -32,24 +32,35 @@ export const routes: Routes = [{
     path: '',
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
-    }, {
-        path: 'login',
-        loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
-    }, {
-        path: 'commands/edit',
-        loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
-    }, {
-        path: 'services/browser',
-        loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+}, {
+    path: 'login',
+    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
+}, {
+    path: 'macros/index',
+    loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
+}, {
+    path: 'commands/index',
+    loadComponent: () => import('./pages/commands/commands-index/commands-index.component').then(m => m.CommandsIndexComponent)
+}, {
+    path: 'commands/add',
+    loadComponent: () => import('./pages/commands/commands-add/commands-add.component').then(m => m.CommandsAddComponent)
+}, {
+    path: 'commands/edit',
+    loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
+}, {
+    path: 'changelogs/entity/:type/:id',
+    loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
+}, {
+    path: 'services/browser',
+    loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+}, {
+    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
+    resolve: {
+        legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+            const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
+            const legacyPath: string = state.url;
+            return `${legacyBaseUrl}${legacyPath}`;
+        }
     },
-    {
-        path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
-        resolve: {
-            legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-                const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
-                const legacyPath: string = state.url;
-                return `${legacyBaseUrl}${legacyPath}`;
-            }
-        },
-        component: LegacyUrlComponent,
+    component: LegacyUrlComponent,
 }];

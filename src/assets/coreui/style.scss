@@ -1,8 +1,22 @@
 @import "variables";
+@import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 @import "@coreui/coreui/scss/coreui";
+@import "@ng-select/ng-select/themes/default.theme.css";
+@import "ng-select-dark";
+
+// regular style toast
+@import 'ngx-toastr/toastr';
+@import "toast";
 
 @import "theme";
+@import "card";
+@import "fonts";
+@import "layout";
+
 @import "scrollbar";
 
+@import "buttons";
+@import "checkboxes";
 @import "ripple";
+@import "selectall";
