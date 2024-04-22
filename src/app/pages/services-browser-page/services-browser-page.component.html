@@ -1,0 +1,10 @@
+<c-container fluid>
+<div *ngIf="service">
+    <h4>Service: {{service.mergedService.name}}, ID: {{service.mergedService.id}}, UUID: {{service.mergedService.uuid}}</h4>
+    <h5>Host: {{service.host.Host.hostname}}, : {{service.host.Host.id}}, UUID: {{service.host.Host.uuid}} </h5>
+</div>
+</c-container>
+<c-container *ngIf="service && service.mergedService.has_graph">
+    <oitc-uplot-graph [service]="service.mergedService.uuid" [host]="service.host.Host.uuid" [gauges]="dataSources" [timezone]="timezone"></oitc-uplot-graph>
+</c-container>
+
