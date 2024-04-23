@@ -89,6 +89,7 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-commands-index',
@@ -140,6 +141,8 @@ import {
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,
+        MatSort,
+        MatSortHeader,
     ],
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
@@ -235,6 +238,15 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
     public onFilterChange(event: Event) {
         this.params.page = 1;
         this.loadCommands();
+    }
+
+    // Callback when sort has changed
+    public onSortChange(sort: Sort) {
+        if (sort.direction) {
+            this.params.sort = sort.active;
+            this.params.direction = sort.direction;
+            this.loadCommands();
+        }
     }
 
     // Open the Delete All Modal

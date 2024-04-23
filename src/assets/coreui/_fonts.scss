@@ -1,5 +1,11 @@
 /* This file contains styles for fonts and typography */
 
+code {
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: var(--cui-card-cap-bg);
+}
+
 .code-font {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace
 }
@@ -12,4 +18,12 @@
     -ms-filter: blur(2px);
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
     -ms-filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
+}
+
+.text-invalid {
+    color: var(--cui-form-invalid-color);
+}
+
+.text-purple {
+    color: #bb1bf4 !important;
 }

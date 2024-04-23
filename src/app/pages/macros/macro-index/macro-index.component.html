@@ -38,7 +38,12 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+                <h5 cCardTitle>
+                    {{ t('Macros') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadMacros()" cButton class="ripple" color="default" size="xs">
@@ -48,7 +53,7 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['macros', 'add']" cButton class="ripple" color="success"
-                                size="xs">
+                                size="xs" (click)="createMacro()">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('New') }}
                         </button>
@@ -88,17 +93,20 @@
 
                         <td>
                             <div class="btn-group btn-group-xs" role="group">
-                                <button (click)="macro.password = 0" *ngIf="macro.password == 1" [title]="'Show value' | transloco"
-                                        class="btn btn-primary"
+                                <button (click)="macro.password = 0" *ngIf="macro.password == 1"
+                                        [title]="'Show value' | transloco"
+                                        class="btn btn-primary ripple"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 </button>
-                                <button (click)="macro.password = 1" *ngIf="macro.password == 0" [title]="'Hide value' | transloco"
-                                        class="btn btn-danger"
+                                <button (click)="macro.password = 1" *ngIf="macro.password == 0"
+                                        [title]="'Hide value' | transloco"
+                                        class="btn btn-danger ripple"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
                                 </button>
-                                <button class="btn btn-default" type="button">
+                                <button class="btn btn-default ripple" type="button" [title]="'Edit macro' | transloco"
+                                        (click)="editMacro(macro)">
                                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                 </button>
                             </div>
@@ -123,6 +131,202 @@
                 &nbsp;
             </c-card-footer>
         </c-card>
+
+        <!-- Add Modal -->
+        <c-modal #macroModal fullscreen="md" size="lg" id="macroAddModal">
+            <form cForm (ngSubmit)="saveMacro()">
+                <c-modal-header>
+                    <h5 cModalTitle>
+                        <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                        {{ t('Add user defined macro') }}
+                    </h5>
+                    <button [cModalToggle]="macroModal.id" cButtonClose></button>
+                </c-modal-header>
+                <c-modal-body *ngIf="currentMacro">
+
+                    <div class="mb-3">
+                        <label cLabel for="macroName">
+                            {{ t('Macro name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="macroName"
+                                   name="name"
+                                   [(ngModel)]="currentMacro.Macro.name"
+                                   oitcFormError [errors]="errors" errorField="name">
+                            <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
+                                {{ macroName }}
+                            </ng-option>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="inputValue">
+                            {{ t('Value') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            </span>
+                            <input id="inputValue" cFormControl type="text"
+                                   name="value"
+                                   [(ngModel)]="currentMacro.Macro.value"
+                                   oitcFormError [errors]="errors" errorField="value"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="inputDescription">
+                            {{ t('Description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+
+                            </span>
+                            <input id="inputDescription" cFormControl type="text"
+                                   name="description"
+                                   [(ngModel)]="currentMacro.Macro.description"
+                                   oitcFormError [errors]="errors" errorField="description"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput id="inputHideValue" type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1" name="is_password"
+                                   [(ngModel)]="currentMacro.Macro.password"/>
+                            <label cFormCheckLabel for="inputHideValue">
+                                {{ t('Hide value') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+
+                    <div class="mb-3 help-block">
+                        {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
+                        <br>
+                        {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
+                    </div>
+
+                </c-modal-body>
+                <c-modal-footer>
+                    <button cButton color="primary" type="submit" class="ripple">
+                        {{ t('Save') }}
+                    </button>
+                    <button [cModalToggle]="macroModal.id" cButton color="default" class="ripple">
+                        {{ t('Close') }}
+                    </button>
+                </c-modal-footer>
+            </form>
+        </c-modal>
+
+        <!-- Edit Modal -->
+        <c-modal #macroModalEdit fullscreen="md" size="lg" id="macroEditModal">
+            <form cForm (ngSubmit)="saveMacro()">
+                <c-modal-header>
+                    <h5 cModalTitle>
+                        <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                        {{ t('Edit user defined macro') }}
+                    </h5>
+                    <button [cModalToggle]="macroModalEdit.id" cButtonClose></button>
+                </c-modal-header>
+                <c-modal-body *ngIf="currentMacro">
+
+                    <div class="mb-3">
+                        <label cLabel for="macroNameEdit">
+                            {{ t('Macro name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="macroNameEdit"
+                                   name="name"
+                                   [(ngModel)]="currentMacro.Macro.name"
+                                   oitcFormError [errors]="errors" errorField="name">
+                            <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
+                                {{ macroName }}
+                            </ng-option>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                        <div class="help-block text-warning">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('If you change the macro name, you manually need to edit all occurrences of the macro!') }}
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="inputValueEdit">
+                            {{ t('Value') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            </span>
+                            <input id="inputValueEdit" cFormControl type="text"
+                                   name="value"
+                                   [(ngModel)]="currentMacro.Macro.value"
+                                   oitcFormError [errors]="errors" errorField="value"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="inputDescriptionEdit">
+                            {{ t('Description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+
+                            </span>
+                            <input id="inputDescriptionEdit" cFormControl type="text"
+                                   name="description"
+                                   [(ngModel)]="currentMacro.Macro.description"
+                                   oitcFormError [errors]="errors" errorField="description"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput id="inputHideValueEdit" type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1" name="is_password"
+                                   [(ngModel)]="currentMacro.Macro.password"/>
+                            <label cFormCheckLabel for="inputHideValueEdit">
+                                {{ t('Hide value') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+
+                    <div class="mb-3 help-block">
+                        {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
+                        <br>
+                        {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
+                    </div>
+
+                </c-modal-body>
+                <c-modal-footer>
+                    <button cButton color="danger" type="button" class="ripple me-auto" (click)="deleteMacro()">
+                        {{ t('Delete') }}
+                    </button>
+                    <button cButton color="primary" type="submit" class="ripple">
+                        {{ t('Save') }}
+                    </button>
+                    <button [cModalToggle]="macroModalEdit.id" cButton color="default" class="ripple">
+                        {{ t('Close') }}
+                    </button>
+                </c-modal-footer>
+            </form>
+        </c-modal>
+
     </ng-container>
 </oitc-coreui>
 

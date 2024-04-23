@@ -1,0 +1,24 @@
+/**
+ * Source:  https://www.bootdey.com/snippets/view/bs4-clear-timeline#css
+ * Bootstrap 4.x Snippet by Dey Dey
+ * license: MIT
+ */
+
+
+.cbp_tmtimeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative
+}
+
+.cbp_tmtimeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: rgba(238, 238, 238, 0.5);
+    left: 14%;
+    margin-left: -6px
+}

@@ -21,7 +21,11 @@
         </nav>
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Commands overview') }}</h5>
+                <h5 cCardTitle>{{ t('Commands') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadCommands()" cButton class="ripple" color="default" size="xs">
@@ -30,7 +34,8 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['commands', 'add']" [routerLink]="['/', 'commands', 'add']" cButton class="ripple"
+                        <button *oitcPermission="['commands', 'add']" [routerLink]="['/', 'commands', 'add']" cButton
+                                class="ripple"
                                 color="success"
                                 size="xs">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -81,7 +86,8 @@
                                         {{ t('Command types') }}
                                     </h5>
                                     <c-form-check>
-                                        <input (debouncedValue)="onFilterChange($event)" [(ngModel)]="tmpFilter.service_commands" cFormCheckInput
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.service_commands" cFormCheckInput
                                                id="ServiceCheckCommand"
                                                name="ServiceCheckCommand"
                                                oitcDebounce
@@ -90,7 +96,8 @@
                                                for="ServiceCheckCommand">{{ t('Service check command') }}</label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input (debouncedValue)="onFilterChange($event)" [(ngModel)]="tmpFilter.hostcheck_commands" cFormCheckInput
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.hostcheck_commands" cFormCheckInput
                                                id="HostCheckCommand"
                                                name="HostCheckCommand"
                                                oitcDebounce
@@ -99,7 +106,8 @@
                                                for="HostCheckCommand">{{ t('Host check command') }}</label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input (debouncedValue)="onFilterChange($event)" [(ngModel)]="tmpFilter.notification_commands" cFormCheckInput
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.notification_commands" cFormCheckInput
                                                id="NotificationCommand"
                                                name="NotificationCommand"
                                                oitcDebounce
@@ -108,7 +116,8 @@
                                                for="NotificationCommand">{{ t('Notification command') }}</label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input (debouncedValue)="onFilterChange($event)" [(ngModel)]="tmpFilter.eventhandler_commands" cFormCheckInput
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.eventhandler_commands" cFormCheckInput
                                                id="EventhandlerCommand"
                                                name="EventhandlerCommand"
                                                oitcDebounce
@@ -130,16 +139,16 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped>
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
                     <thead>
                     <tr>
                         <th class="text-center col-1" scope="col">
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
-                        <th scope="col">
+                        <th scope="col" mat-sort-header="Commands.name">
                             {{ t('Command name') }}
                         </th>
-                        <th scope="col">
+                        <th scope="col" mat-sort-header="Commands.command_type">
                             {{ t('Command type') }}
                         </th>
                         <th class="text-center col-1 width-50" scope="col">

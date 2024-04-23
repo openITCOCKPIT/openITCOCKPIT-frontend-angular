@@ -45,8 +45,11 @@ export const routes: Routes = [{
     path: 'commands/add',
     loadComponent: () => import('./pages/commands/commands-add/commands-add.component').then(m => m.CommandsAddComponent)
 }, {
-    path: 'commands/edit',
-    loadComponent: () => import('./pages/commands-edit-page/commands-edit-page.component').then(m => m.CommandsEditPageComponent)
+    path: 'commands/edit/:id',
+    loadComponent: () => import('./pages/commands/commands-edit/commands-edit.component').then(m => m.CommandsEditComponent)
+}, {
+    path: 'changelogs/entity/:type/:id',
+    loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
     path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
     resolve: {

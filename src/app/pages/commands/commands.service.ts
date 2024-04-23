@@ -1,10 +1,11 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { CommandEdit, CommandIndexRoot, CommandsIndexParams } from './commands.interface';
+import { CommandIndexRoot, CommandPost, CommandsIndexParams } from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -26,13 +27,59 @@ export class CommandsService implements DeleteAllModalService {
         )
     }
 
-    public getEdit(id: number): Observable<CommandEdit> {
+    public createCommand(command: CommandPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ command: CommandEdit }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
+        return this.http.post<any>(`${proxyPath}/commands/add.json?angular=true`, {
+            Command: command
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<CommandPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ command: CommandPost }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
             map(data => {
                 return data['command'];
             })
         )
+    }
+
+    public updateCommand(command: CommandPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/commands/edit/${command.id}.json?angular=true`, {
+            Command: command
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     // Generic function for the Delete All Modal

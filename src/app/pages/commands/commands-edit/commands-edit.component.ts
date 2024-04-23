@@ -46,7 +46,7 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
@@ -67,9 +67,10 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
-    selector: 'oitc-commands-add',
+    selector: 'oitc-commands-edit',
     standalone: true,
     imports: [
         CoreuiComponent,
@@ -131,13 +132,14 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         ModalHeaderComponent,
         ModalTitleDirective,
         ModalToggleDirective,
+        ObjectUuidComponent,
     ],
-    templateUrl: './commands-add.component.html',
-    styleUrl: './commands-add.component.css'
+    templateUrl: './commands-edit.component.html',
+    styleUrl: './commands-edit.component.css'
 })
-export class CommandsAddComponent implements OnInit, OnDestroy {
-
+export class CommandsEditComponent implements OnInit, OnDestroy {
     public post: CommandPost = {
+        id: 0,
         name: "",
         command_type: CommandTypesEnum.CHECK_COMMAND,
         command_line: "",
@@ -159,11 +161,20 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private router = inject(Router);
+    private route = inject(ActivatedRoute)
 
     private subscriptions: Subscription = new Subscription();
 
 
     public ngOnInit() {
+        const idStr = this.route.snapshot.paramMap.get('id');
+        if (idStr) {
+            const id = parseInt(idStr, 10);
+            this.subscriptions.add(this.CommandsService.getEdit(id)
+                .subscribe((result) => {
+                    this.post = result;
+                }));
+        }
     }
 
     public ngOnDestroy() {
@@ -195,6 +206,7 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
         });
 
         // Sortcommand arguemnts by name
+        console.log(JSON.stringify(this.post.commandarguments));
         this.post.commandarguments.sort((a, b) => {
             if (a.name < b.name) {
                 return -1;
@@ -238,13 +250,13 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
     }
 
     public saveCommand() {
-        this.subscriptions.add(this.CommandsService.createCommand(this.post)
+        this.subscriptions.add(this.CommandsService.updateCommand(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
                     const title = this.TranslocoService.translate('Command');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const msg = this.TranslocoService.translate('updated successfully');
                     const url = ['commands', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
