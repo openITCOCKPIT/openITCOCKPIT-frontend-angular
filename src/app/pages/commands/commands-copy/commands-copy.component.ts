@@ -101,11 +101,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.subscriptions.unsubscribe()
     }
-
-    public trackByIndex(index: number, item: any): number {
-        return index;
-    }
-
+    
     public copy() {
         const sub = this.CommandsService.saveCommandsCopy(this.commands).subscribe({
             next: (value: any) => {
