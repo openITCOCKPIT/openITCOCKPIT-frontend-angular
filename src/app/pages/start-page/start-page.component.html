@@ -118,7 +118,9 @@
                             Command line
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <input cFormControl id="commandLine" type="text">
+                        <oitc-code-mirror-container>
+                            <textarea cFormControl id="commandLine"></textarea>
+                        </oitc-code-mirror-container>
                         <div cFormText class="text-primary">
                             <i class="fa-solid fa-circle-info"></i>
                             <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
