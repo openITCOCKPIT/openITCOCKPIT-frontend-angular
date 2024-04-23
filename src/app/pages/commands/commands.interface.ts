@@ -3,6 +3,7 @@
  **********************/
 import { CommandTypesEnum } from './command-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface CommandsIndexParams {
     angular: true,
@@ -86,3 +87,33 @@ export interface ArgumentsMissmatch {
     missingArgumentUsageInCommandLine: string[]
 }
 
+/**********************
+ *     Copy action    *
+ **********************/
+
+export interface CommandCopyGet {
+    Command: {
+        id: number
+        name: string,
+        command_line: string,
+        description: string
+    }
+}
+
+export interface CommandCopyPost {
+    Source: SourceCommand
+    Command: CommandCopy
+    Error: GenericValidationError
+}
+
+export interface SourceCommand {
+    id: number
+    name: string
+}
+
+export interface CommandCopy {
+    id?: number,
+    name: string
+    command_line: string
+    description: string
+}

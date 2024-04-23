@@ -112,7 +112,8 @@
                                     '0': ''
                                 })
                             }}
-                            <span *oitcPermission="['macros', 'index']; showOnNoPermission: true">
+
+                            <span *oitcPermission="['macros', 'index']; negate: true">
                                 {{ t('user defined macro') }}
                             </span>
                             <span *oitcPermission="['macros', 'index']">
