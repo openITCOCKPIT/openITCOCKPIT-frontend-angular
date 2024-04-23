@@ -20,7 +20,7 @@ export interface ChangelogsEntityParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string
+    'filter[from]': string|Date
     'filter[to]': string
     'filter[Changelogs.object_id]': any,
     'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
@@ -48,7 +48,8 @@ export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams{
         angular: true,
         scroll: true,
         page: 1,
-        'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 500), 'dd.MM.y HH:mm', 'en-US'),
+        //'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 500), 'dd.MM.y HH:mm', 'en-US'),
+        'filter[from]':now,
         'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
         'filter[Changelogs.object_id]': null,
         'filter[Changelogs.objecttype_id]': [],
@@ -57,10 +58,51 @@ export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams{
     }
 }
 
-class ChangelogIndex {
-}
-
 export interface ChangelogIndexRoot extends PaginateOrScroll {
     all_changes: ChangelogIndex[]
     _csrfToken: string
+}
+
+export interface ChangelogIndex {
+    id: number
+    model: string
+    action: string
+    object_id: number
+    objecttype_id: number
+    data: string
+    name: string
+    created: string
+    user_id: number
+    user?: ChangelogUser
+    containers: ChangelogContainer[]
+    time: string
+    isToday: boolean
+    timeAgoInWords: string
+    recordExists: boolean
+    data_unserialized: any
+    ngState: string
+    color: string
+    icon: string
+    includeUser: boolean
+}
+
+export interface ChangelogUser {
+    id: number
+    firstname: string
+    lastname: string
+    email: string
+}
+
+export interface ChangelogContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        changelog_id: number
+        container_id: number
+    }
 }

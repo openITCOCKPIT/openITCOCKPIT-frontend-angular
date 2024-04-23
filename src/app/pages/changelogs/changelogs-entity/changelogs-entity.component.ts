@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, Scroll } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
@@ -25,11 +25,21 @@ import {
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { ChangelogsEntityParams, getDefaultChangelogsEntityParams } from '../changelogs.interface';
+import {
+    ChangelogIndex,
+    ChangelogIndexRoot,
+    ChangelogsEntityParams,
+    getDefaultChangelogsEntityParams
+} from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { ObjectTypesEnum } from '../object-types.enum';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
 
 @Component({
     selector: 'oitc-changelogs-entity',
@@ -61,7 +71,13 @@ import { DatePipe } from '@angular/common';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        DatePipe
+        DatePipe,
+        NgIf,
+        JsonPipe,
+        DecimalPipe,
+        PaginateOrScrollComponent,
+        ChangelogsEntryComponent,
+        NgForOf
     ],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
@@ -74,18 +90,18 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
-    private changes: any;
+    public changes?: ChangelogIndexRoot;
 
 
     loadChanges() {
         const idStr = this.route.snapshot.paramMap.get('id');
-        const typeStr:any = this.route.snapshot.paramMap.get('type')?.toUpperCase();
+        const typeStr: any = this.route.snapshot.paramMap.get('type')?.toUpperCase();
         if (idStr && typeStr) {
             this.params['filter[Changelogs.object_id]'] = idStr;
             // @ts-ignore
             this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr]];
             this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
-                .subscribe((result: any) => {
+                .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
                 })
             );
@@ -108,7 +124,17 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public onFilterChange($event: any) {
+    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.loadChanges();
+    }
+
+    // Callback when a filter has changed
+    public onFilterChange(event: Event) {
+        this.params.page = 1;
+        this.loadChanges();
     }
 }
