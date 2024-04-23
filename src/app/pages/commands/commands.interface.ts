@@ -103,7 +103,7 @@ export interface CommandCopyGet {
 export interface CommandCopyPost {
     Source: SourceCommand
     Command: CommandCopy
-    Error: GenericValidationError
+    Error: GenericValidationError | null
 }
 
 export interface SourceCommand {

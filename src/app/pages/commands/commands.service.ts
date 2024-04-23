@@ -3,7 +3,13 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { CommandCopyGet, CommandIndexRoot, CommandPost, CommandsIndexParams } from './commands.interface';
+import {
+    CommandCopyGet,
+    CommandCopyPost,
+    CommandIndexRoot,
+    CommandPost,
+    CommandsIndexParams
+} from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -97,6 +103,14 @@ export class CommandsService implements DeleteAllModalService {
                     return data.commands;
                 })
             )
+    }
+
+    
+    public saveCommandsCopy(commands: CommandCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/commands/copy/.json?angular=true`, {
+            data: commands
+        });
     }
 
 }

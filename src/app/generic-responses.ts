@@ -21,3 +21,4 @@ export interface GenericSuccessResponse {
 export interface GenericIdResponse {
     id: number;
 }
+
