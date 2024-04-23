@@ -23,7 +23,7 @@ import { IconDirective } from '@coreui/icons-angular';
     styleUrl: './change-language.component.css'
 })
 export class ChangeLanguageComponent {
-    public currentLanguage = 'en';
+    public currentLanguage = 'en_US';
 
     constructor(private TranslocoService: TranslocoService) {
     }

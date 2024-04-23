@@ -1,11 +1,26 @@
 <c-dropdown *transloco="let t" variant="nav-item">
     <button [caret]="false" cDropdownToggle>
         @switch (currentLanguage) {
-            @case ("en") {
+            @case ("en_US") {
                 <span class="fi fi-us"></span>
             }
-            @case ("de") {
+            @case ("de_DE") {
                 <span class="fi fi-de"></span>
+            }
+            @case ("es_ES") {
+                <span class="fi fi-es"></span>
+            }
+            @case ("fr_FR") {
+                <span class="fi fi-fr"></span>
+            }
+            @case ("pl_PL") {
+                <span class="fi fi-pl"></span>
+            }
+            @case ("ru_RU") {
+                <span class="fi fi-ru"></span>
+            }
+            @case ("uk_UA") {
+                <span class="fi fi-ua"></span>
             }
             @default {
                 <span class="fi fi-xx"></span>
@@ -14,8 +29,8 @@
     </button>
     <div cDropdownMenu>
         <button
-            (click)="onChangedLanguage('de')"
-            [active]="currentLanguage === 'de'"
+            (click)="onChangedLanguage('de_DE')"
+            [active]="currentLanguage === 'de_DE'"
             cDropdownItem
             class="d-flex align-items-center"
         >
@@ -26,14 +41,69 @@
         </button>
 
         <button
-            (click)="onChangedLanguage('en')"
-            [active]="currentLanguage === 'en'"
+            (click)="onChangedLanguage('en_US')"
+            [active]="currentLanguage === 'en_US'"
             cDropdownItem
             class="d-flex align-items-center"
         >
             <span class="fi fi-us"></span>
             &nbsp;
             English / {{ t('English') }}
+        </button>
+
+        <button
+            (click)="onChangedLanguage('es_ES')"
+            [active]="currentLanguage === 'es_ES'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-es"></span>
+            &nbsp;
+            Español / {{ t('Spanish') }}
+        </button>
+
+        <button
+            (click)="onChangedLanguage('fr_FR')"
+            [active]="currentLanguage === 'fr_FR'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-fr"></span>
+            &nbsp;
+            Français / {{ t('French') }}
+        </button>
+
+        <button
+            (click)="onChangedLanguage('pl_PL')"
+            [active]="currentLanguage === 'pl_PL'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-pl"></span>
+            &nbsp;
+            Polski / {{ t('Polish') }}
+        </button>
+
+        <button
+            (click)="onChangedLanguage('ru_RU')"
+            [active]="currentLanguage === 'ru_RU'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-ru"></span>
+            &nbsp;
+            Русский / {{ t('Russian') }}
+        </button>
+
+        <button
+            (click)="onChangedLanguage('uk_UA')"
+            [active]="currentLanguage === 'uk_UA'"
+            cDropdownItem
+            class="d-flex align-items-center"
+        >
+            <span class="fi fi-ua"></span>
+            &nbsp;
+            Українська / {{ t('Ukrainian') }}
         </button>
     </div>
 </c-dropdown>
