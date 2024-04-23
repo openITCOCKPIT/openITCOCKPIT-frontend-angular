@@ -167,14 +167,11 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
 
 
     public ngOnInit() {
-        const idStr = this.route.snapshot.paramMap.get('id');
-        if (idStr) {
-            const id = parseInt(idStr, 10);
-            this.subscriptions.add(this.CommandsService.getEdit(id)
-                .subscribe((result) => {
-                    this.post = result;
-                }));
-        }
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.CommandsService.getEdit(id)
+            .subscribe((result) => {
+                this.post = result;
+            }));
     }
 
     public ngOnDestroy() {

@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink, Scroll } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
@@ -25,12 +25,7 @@ import {
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import {
-    ChangelogIndex,
-    ChangelogIndexRoot,
-    ChangelogsEntityParams,
-    getDefaultChangelogsEntityParams
-} from '../changelogs.interface';
+import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityParams } from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { ObjectTypesEnum } from '../object-types.enum';
@@ -94,12 +89,12 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
 
 
     loadChanges() {
-        const idStr = this.route.snapshot.paramMap.get('id');
-        const typeStr: any = this.route.snapshot.paramMap.get('type')?.toUpperCase();
-        if (idStr && typeStr) {
-            this.params['filter[Changelogs.object_id]'] = idStr;
-            // @ts-ignore
-            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr]];
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        const typeStr = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
+        if (id && typeStr) {
+            this.params['filter[Changelogs.object_id]'] = id;
+
+            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr as keyof typeof ObjectTypesEnum]];
             this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;

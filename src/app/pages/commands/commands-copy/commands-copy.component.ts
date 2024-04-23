@@ -28,7 +28,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute)
 
     public ngOnInit() {
-        const ids = this.route.snapshot.paramMap.get('ids')?.split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
         if (!ids) {
             // No ids given
             this.router.navigate(['/commands/index'])
