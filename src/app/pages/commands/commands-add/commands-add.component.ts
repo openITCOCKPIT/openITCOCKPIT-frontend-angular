@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
     AlertHeadingDirective,
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -24,6 +25,13 @@ import {
     InputGroupTextDirective,
     ListGroupDirective,
     ListGroupItemDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
     NavComponent,
     NavItemComponent,
     PlaceholderDirective,
@@ -38,7 +46,7 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
@@ -50,6 +58,15 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { CommandTypesEnum } from '../command-types.enum';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { UserMacrosModalComponent } from '../user-macros-modal/user-macros-modal.component';
+import { ArgumentsMissmatch, CommandPost } from '../commands.interface';
+import { Subscription } from 'rxjs';
+import { CommandsService } from '../commands.service';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-commands-add',
@@ -103,11 +120,152 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         AlertComponent,
         AlertHeadingDirective,
         BackButtonDirective,
+        UserMacrosModalComponent,
+        FormFeedbackComponent,
+        FormErrorDirective,
+        NgSelectModule,
+        ButtonCloseDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalToggleDirective,
     ],
     templateUrl: './commands-add.component.html',
     styleUrl: './commands-add.component.css'
 })
-export class CommandsAddComponent {
+export class CommandsAddComponent implements OnInit, OnDestroy {
+
+    public post: CommandPost = {
+        name: "",
+        command_type: CommandTypesEnum.CHECK_COMMAND,
+        command_line: "",
+        description: "",
+        commandarguments: []
+    }
+    public errors: GenericValidationError | null = null;
+
+    public argumentMissmatch: ArgumentsMissmatch = {
+        hasMissmatch: false,
+        usedCommandLineArgs: [],
+        definedCommandArguments: [],
+        missingArgumentDefenitions: [],
+        missingArgumentUsageInCommandLine: []
+    }
+
+    private CommandsService = inject(CommandsService);
+    private readonly modalService = inject(ModalService);
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private router = inject(Router);
+
+    private subscriptions: Subscription = new Subscription();
+
+
+    public ngOnInit() {
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    trackByIndex(index: number, item: any): number {
+        return index;
+    }
+
+    public addArgument() {
+        let argsCount = 1;
+        let allArgNumbersInUse: number[] = [];
+        for (let i in this.post.commandarguments) {
+            const arg = this.post.commandarguments[i];
+            const argNumber = arg.name.match(/\d+/g);
+            if (argNumber) {
+                allArgNumbersInUse.push(parseInt(argNumber[0], 10));
+            }
+        }
+
+        while (allArgNumbersInUse.includes(argsCount)) {
+            argsCount++;
+        }
+
+        this.post.commandarguments.push({
+            name: '$ARG' + argsCount + '$',
+            human_name: ''
+        });
+
+        // Sortcommand arguemnts by name
+        this.post.commandarguments.sort((a, b) => {
+            if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    public removeArgument(index: number) {
+        this.post.commandarguments.splice(index, 1);
+    }
+
+    public checkForMisingArguments() {
+        const commandLine = this.post.command_line;
+        const usedCommandLineArgs: string[] = commandLine.match(/(\$ARG\d+\$)/g) ?? [];
+        const definedCommandArguments = this.post.commandarguments.map(arg => arg.name);
+
+        let missingArgumentDefenitions = usedCommandLineArgs.filter(arg => !definedCommandArguments.includes(arg));
+        let missingArgumentUsageInCommandLine = definedCommandArguments.filter(arg => !usedCommandLineArgs.includes(arg));
+
+        if (missingArgumentUsageInCommandLine.length === 0 && missingArgumentDefenitions.length === 0) {
+            this.argumentMissmatch.hasMissmatch = false;
+            this.saveCommand();
+            return;
+        }
+
+        this.argumentMissmatch.hasMissmatch = true;
+        this.argumentMissmatch.usedCommandLineArgs = usedCommandLineArgs;
+        this.argumentMissmatch.definedCommandArguments = definedCommandArguments;
+        this.argumentMissmatch.missingArgumentDefenitions = missingArgumentDefenitions;
+        this.argumentMissmatch.missingArgumentUsageInCommandLine = missingArgumentUsageInCommandLine;
+
+        this.modalService.toggle({
+            show: true,
+            id: 'commandArgumentMissmatchModal',
+        });
+
+    }
+
+    public saveCommand() {
+        this.subscriptions.add(this.CommandsService.createCommand(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Command');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['commands', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    this.modalService.toggle({
+                        show: false,
+                        id: 'macroAddModal',
+                    });
+                    this.router.navigate(['/commands/index']);
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
+    }
 
     protected readonly CommandTypesEnum = CommandTypesEnum;
 }

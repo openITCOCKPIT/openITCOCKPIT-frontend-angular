@@ -94,7 +94,7 @@
                                         {{ t('Actions') }}
                                     </h5>
                                     <c-form-check>
-                                        <input cFormCheckInput id="add" type="checkbox" />
+                                        <input cFormCheckInput id="add" type="checkbox"/>
                                         <label cFormCheckLabel for="add">
                                             {{ t('Add') }}
                                         </label>
@@ -142,6 +142,23 @@
                             </c-col>
                         </c-row>
                     </form>
+                </c-container>
+                <c-container fluid *ngIf="changes && changes.all_changes">
+                    <ul class="cbp_tmtimeline">
+                        <li *ngFor="let changeLogEntry of changes.all_changes">
+                            <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
+                        </li>
+                    </ul>
+                </c-container>
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="changes"
+                                [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
                 </c-container>
             </c-card-body>
         </c-card>

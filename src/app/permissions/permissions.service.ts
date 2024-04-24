@@ -46,7 +46,7 @@ export class PermissionsService {
         this.loadPermissions();
     }
 
-    public checkPermission(checkChunks: string | string[], againstPermissions: Permission, showOnNoPermission: boolean = false): boolean {
+    public checkPermission(checkChunks: string | string[], againstPermissions: Permission): boolean {
         let _chunks: string[] = [];
 
         if (!Array.isArray(checkChunks)) {

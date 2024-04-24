@@ -286,4 +286,11 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public navigateCopy() {
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Command.id).join(',');
+        if (ids) {
+            this.router.navigate(['/', 'commands', 'copy', ids]);
+        }
+    }
+
 }

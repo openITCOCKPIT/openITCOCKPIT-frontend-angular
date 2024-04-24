@@ -217,7 +217,8 @@
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group btn-group-xs d-flex flex-row" role="group">
-                                    <button class="btn btn-outline-primary col-3" type="button">
+                                    <button class="btn btn-outline-primary col-3" type="button"
+                                            (click)="navigateCopy()">
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>

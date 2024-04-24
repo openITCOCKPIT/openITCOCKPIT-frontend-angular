@@ -65,8 +65,8 @@ export const appConfig: ApplicationConfig = {
         provideTransloco({
             // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
             config: {
-                availableLangs: ['en', 'de'],
-                defaultLang: 'en',
+                availableLangs: ['en_US', 'de_DE', 'es_ES', 'fr_FR', 'pl_PL', 'ru_RU', 'uk_UA'],
+                defaultLang: 'en_US',
                 failedRetries: 1,
                 // Remove this option if your application doesn't support changing language in runtime.
                 reRenderOnLangChange: true,

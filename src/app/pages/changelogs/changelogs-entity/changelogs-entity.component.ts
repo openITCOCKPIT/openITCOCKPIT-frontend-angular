@@ -25,9 +25,16 @@ import {
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
+import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityParams } from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
+import { ObjectTypesEnum } from '../object-types.enum';
+import { DatePipe, DecimalPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
 
 @Component({
     selector: 'oitc-changelogs-entity',
@@ -58,7 +65,14 @@ import { ChangelogsService } from '../changelogs.service';
         TranslocoPipe,
         FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        DatePipe,
+        NgIf,
+        JsonPipe,
+        DecimalPipe,
+        PaginateOrScrollComponent,
+        ChangelogsEntryComponent,
+        NgForOf
     ],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
@@ -68,18 +82,25 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly router = inject(Router);
 
     public hideFilter: boolean = false;
-    public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
+    public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
-    private changes: any;
+    public changes?: ChangelogIndexRoot;
 
 
     loadChanges() {
-        this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
-            .subscribe((result: any) => {
-                this.changes = result;
-            })
-        );
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        const typeStr = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
+        if (id && typeStr) {
+            this.params['filter[Changelogs.object_id]'] = id;
+
+            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr as keyof typeof ObjectTypesEnum]];
+            this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+                .subscribe((result: ChangelogIndexRoot) => {
+                    this.changes = result;
+                })
+            );
+        }
     }
 
     public toggleFilter() {
@@ -98,7 +119,17 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public onFilterChange($event: any) {
+    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.loadChanges();
+    }
+
+    // Callback when a filter has changed
+    public onFilterChange(event: Event) {
+        this.params.page = 1;
+        this.loadChanges();
     }
 }
