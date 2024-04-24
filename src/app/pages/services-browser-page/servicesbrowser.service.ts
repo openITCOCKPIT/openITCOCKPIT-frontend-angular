@@ -17,8 +17,8 @@ export class ServicesbrowserService {
 
     public getServicesbrowser(): Observable<ServicesBrowser> {
         const proxyPath = this.proxyPath;
-        //3,12, 20, 103
-        return this.http.get<ServicesBrowser>(`${proxyPath}/services/browser/12.json`, {
+        //3,12, 20, 103, 11
+        return this.http.get<ServicesBrowser>(`${proxyPath}/services/browser/3.json`, {
             params: {angular: true}
         }).pipe(
             map(data => {

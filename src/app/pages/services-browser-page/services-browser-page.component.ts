@@ -16,7 +16,6 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {DatePipe, NgIf, NgForOf, JsonPipe} from '@angular/common';
 import {ContainerComponent} from '@coreui/angular'
 import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.component';
-//import {ChartjsGraphComponent} from '../../components/chartjs-graph/chartjs-graph.component';
 
 @Component({
   selector: 'oitc-services-browser-page',

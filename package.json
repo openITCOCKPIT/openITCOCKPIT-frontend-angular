@@ -48,8 +48,6 @@
     "@angular/localize": "^17.3.3",
     "@jsverse/transloco-keys-manager": "^4.1.0",
     "@types/jasmine": "~5.1.4",
-    "@types/luxon": "^3.4.2",
-    "chartjs-plugin-gradient": "^0.6.1",
     "jasmine-core": "~5.1.2",
     "karma": "~6.4.3",
     "karma-chrome-launcher": "~3.2.0",

@@ -15,10 +15,10 @@ export interface Datasource {
     metric: string
     unit: string
     act: string
-    warn: string
-    crit: string
-    min: any
-    max: any
+    warn: string | null
+    crit: string | null
+    min: number | null,
+    max: number | null;
 }
 
 export interface Data {
