@@ -101,11 +101,11 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.subscriptions.unsubscribe()
     }
-    
+
     public copy() {
         const sub = this.CommandsService.saveCommandsCopy(this.commands).subscribe({
             next: (value: any) => {
-                console.log(value); // Serve result with the new copied commands
+                //console.log(value); // Serve result with the new copied commands
                 // 200 ok
                 this.notyService.genericSuccess();
                 this.router.navigate(['/', 'commands', 'index']);
