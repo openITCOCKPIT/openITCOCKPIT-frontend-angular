@@ -5,11 +5,11 @@
             <span>{{ changelogentry.timeAgoInWords }}</span>
         </time>
         <div class="cbp_tmicon txt-color-white {{changelogentry.color}}" title="{{changelogentry.action}}">
-            <i class="{{changelogentry.icon}}"></i> *** {{ changelogentry.icon }} ***
+            <fa-icon [icon]="changelogentry.faIcon" class="text-light"></fa-icon>
         </div>
         <div class="cbp_tmlabel">
             <h2 class="font-md">
-                {{ changelogentry.model }}:
+                {{ changelogentry.model }}
                 <strong>
                     <!-- @todo: fix links -->
                     <a href="{{changelogentry.ngState}}({id: changelogentry.object_id})"
@@ -24,24 +24,64 @@
 
                 </strong>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user">
-                    {{t('by')}}
+                    {{ t('by') }}
 
                     <!-- @todo: fix links -->
                     <a *oitcPermission="['users', 'edit']" href="UsersEdit({id: changelogentry.user.id})">
                         {{ changelogentry.user.firstname }}
                         {{ changelogentry.user.lastname }}
                     </a>
-                    <!-- @todo: fix permissions user without permissions  -->
-                    <?php else: ?>
-                    {{ changelogentry.user.firstname }}
-                    {{ changelogentry.user.lastname }}
-                    <?php endif; ?>
+                    <span *oitcPermission="['users', 'edit']; negate: true">
+                        {{ changelogentry.user.firstname }}
+                        {{ changelogentry.user.lastname }}
+                    </span>
                 </span>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user === null">
-                    {{t('by Cronjob')}}
+                    {{ t('by Cronjob') }}
                 </span>
             </h2>
 
+            <!-- Add and copy changes -->
+            <blockquote
+                [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy'}"
+                *ngIf="(changelogentry.action === 'add' || changelogentry.action === 'copy')"
+                class="blockquote">
+                ADD !!!
+            </blockquote>
+            <!-- Edit changes -->
+            <blockquote class="changelog-blockquote-warning blockquote" *ngIf="changelogentry.action === 'edit'">
+                EDIT !!!
+                <div class="ms-2" *ngIf="data">
+                    <div *ngFor="let change of data">
+                        <span *ngIf="change[1].isArray">
+                            <span *ngFor="let field of change[1].data">
+                                <footer>
+                                    {{ field[0] }}:
+                                    <span class="down">{{ field[1].old }}</span>
+                                    <i class="fa fa-caret-right"></i>
+                                    <span class="up">{{ field[1].new }}</span>
+                                </footer>
+                            </span>
+                            IS ARRAY
+                        </span>
+                        <span *ngIf="!change[1].isArray">
+                            IS NOT ARRAY
+                        </span>
+
+
+                        {{ change|json }}
+                        <br/>
+                        <br/>
+                        {{ change[0] }}
+
+                        <br/>
+                        <br/>Change 1:
+                        {{ change[1].isArray }}
+
+
+                    </div>
+                </div>
+            </blockquote>
         </div>
     </ng-container>
 </ng-container>
