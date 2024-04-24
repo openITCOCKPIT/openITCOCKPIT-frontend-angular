@@ -48,40 +48,44 @@
                 class="blockquote">
                 ADD !!!
             </blockquote>
-            <!-- Edit changes -->
-            <blockquote class="changelog-blockquote-warning blockquote" *ngIf="changelogentry.action === 'edit'">
-                EDIT !!!
-                <div class="ms-2" *ngIf="data">
-                    <div *ngFor="let change of data">
-                        <span *ngIf="change[1].isArray">
-                            <span *ngFor="let field of change[1].data">
-                                <footer>
-                                    {{ field[0] }}:
-                                    <span class="down">{{ field[1].old }}</span>
-                                    <i class="fa fa-caret-right"></i>
-                                    <span class="up">{{ field[1].new }}</span>
-                                </footer>
-                            </span>
-                            IS ARRAY
-                        </span>
-                        <span *ngIf="!change[1].isArray">
-                            IS NOT ARRAY
-                        </span>
 
+            <!-- All Changes -->
+            <blockquote class="changelog-blockquote-warning blockquote">
+                ALLE !!!
+                <div class="ms-2">
+                    <div *ngFor="let changeEntry of entry">
 
-                        {{ change|json }}
-                        <br/>
-                        <br/>
-                        {{ change[0] }}
+                        <div>
+                            <h1>{{ changeEntry.controllerName }}</h1>
+                        </div>
 
-                        <br/>
-                        <br/>Change 1:
-                        {{ change[1].isArray }}
+                        <div *ngFor="let change of changeEntry.changes">
+                            <div class="row mb-2">
+                                <div *ngIf="change.hasOld" class="col-6">
+                                    <div *ngFor="let old of change.old" class="text-danger">
+                                        {{ old.field }}
+                                        <span class="changelog_delete">
+                                            {{ old.value }}
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div *ngIf="change.hasNew" class="col-6">
+                                    <div *ngFor="let new of change.new" class="text-success">
+                                        {{ new.field }}
+                                        <span class="">
+                                            {{ new['value'] | json }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
                 </div>
             </blockquote>
+
         </div>
     </ng-container>
 </ng-container>

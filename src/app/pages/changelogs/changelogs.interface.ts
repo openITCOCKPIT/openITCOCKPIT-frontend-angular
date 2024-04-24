@@ -109,59 +109,33 @@ export interface ChangelogContainer {
     }
 }
 
-export interface DataUnserialized {
+// Raw API result which has a lot of dynamic keys and is not very Angular friendly
+export interface DataUnserializedRaw {
     [key: string]: {
-        data: {
-            [key: string]: DataIsStrings | DataIsObjectFakeArray
-        }
-        isArray: boolean // If isArray=false
-    } | null
+        data: any,
+        isArray: boolean
+    }
 }
 
-export interface DataIsStrings {
-    old: string | null,
-    new: string | null,
+export interface ChangelogArrayFalseOldNew {
+    old: string,
+    new: string
 }
 
-export interface DataIsObjectFakeArray {
-    old: {
-        [key: string]: string | null
-    } | null,
-    new: {
-        [key: string]: string | null
-    } | null
+export interface ChangelogEntry {
+    controllerName: string,
+    changes: ChangelogEntryChange[]
 }
 
-
-/*
-API response for isArray=true
-"Command": {
-    "data": {
-        "name": {
-            "old": "aaa_echo",
-            "new": "aaa_echo_new_ new ewnewe"
-        },
-        "description": {
-            "old": "test -a",
-            "new": "test -a jede menge text"
-        }
-    },
-    "isArray": false
+export interface ChangelogEntryChange {
+    hasOld: boolean,
+    hasNew: boolean,
+    old: ChangelogFieldValue[],
+    new: ChangelogFieldValue[],
 }
 
-
-API response for isArray=true 🤯
-
-"Command arguments": {
-    "data": {
-        "2": {
-            "old": "",
-            "new": {
-                "name": "$ARG3$",
-                "human_name": "Und arg 3"
-            }
-        }
-    },
-    "isArray": true
+export interface ChangelogFieldValue {
+    field: string,
+    value: string
 }
-*/
+
