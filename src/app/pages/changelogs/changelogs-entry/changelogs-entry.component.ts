@@ -60,7 +60,6 @@ export class ChangelogsEntryComponent implements OnInit {
                         changeForTemplate.changes.push(changelogEntryChange);
                     }
 
-                    console.log(changeForTemplate);
                     this.entry.push(changeForTemplate);
                 }
             }
@@ -76,8 +75,8 @@ export class ChangelogsEntryComponent implements OnInit {
             const cNew = change.new; //cNew = "changeNew" because "new" is registered word in TS
             const cOld = change.old;
 
-            const hasNew = cNew !== null;
-            const hasOld = cOld !== null;
+            const hasNew = cNew !== null && cNew !== "";
+            const hasOld = cOld !== null && cOld !== "";
 
             if (hasOld === false && hasNew === true) {
                 const newFieldValues: ChangelogFieldValue[] = [];
@@ -137,7 +136,8 @@ export class ChangelogsEntryComponent implements OnInit {
             }
         }
 
-        // Every other action than "edit". add or delete for example
+        // Wo do NOT have "old" and "new" as keys
+        // Add action
         const newFieldValues: ChangelogFieldValue[] = [];
         for (const newFieldName in change) {
             const newFieldValue = change[newFieldName];
