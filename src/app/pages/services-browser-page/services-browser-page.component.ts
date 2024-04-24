@@ -1,11 +1,8 @@
 import {
     Component,
-    TemplateRef,
+
     inject,
-    PipeTransform,
-    Pipe,
-    OnChanges,
-    SimpleChanges,
+    OnInit,
     OnDestroy
 } from '@angular/core';
 import {Subscription} from 'rxjs';
@@ -31,7 +28,7 @@ import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.comp
   templateUrl: './services-browser-page.component.html',
   styleUrl: './services-browser-page.component.css'
 })
-export class ServicesBrowserPageComponent implements OnDestroy {
+export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ServicesBrowserService = inject(ServicesbrowserService);
     public service!: ServicesBrowser;
@@ -40,6 +37,9 @@ export class ServicesBrowserPageComponent implements OnDestroy {
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
         this.load();
+    }
+    ngOnInit() {
+
     }
 
     public load() {

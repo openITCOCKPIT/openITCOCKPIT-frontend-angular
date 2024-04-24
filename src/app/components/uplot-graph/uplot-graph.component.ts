@@ -255,7 +255,6 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
                         return v;
                     });
                 }
-
             }
         ],
         legend: {
@@ -293,31 +292,31 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
         if (this.timezone) {
             this.timezoneObject = this.timezone;
-            this.setStartEnd();
+            this.prepare();
         }
     }
 
     protected onTimerangeChange(range: number) {
-        this.setStartEnd();
+        this.prepare();
     }
 
     protected onAgregationChange(val: string) {
-        this.setStartEnd();
+        this.prepare();
     }
 
     protected onGaugeChange(val: string) {
         this.currentGauge = val;
-        this.setStartEnd();
+        this.prepare();
     }
     protected reload() {
-        this.setStartEnd();
+        this.prepare();
     }
 
     protected autoreload() {
         if(this.autoReload){
             timer(0, 3000).pipe(
                 takeUntil(this.stopPlay$,)
-            ).subscribe(t => this.setStartEnd());
+            ).subscribe(t => this.prepare());
         }else {
             this.stopPlay$.next(true);
         }
@@ -336,7 +335,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    private setStartEnd() {
+    private prepare() {
         this.serverTimeDateObject = new Date(this.timezoneObject.server_time_iso);
         this.perfParams.start = this.serverTimeDateObject.getTime() / 1000 - (this.currentSelectedTimerange * 3600);
         this.perfParams.end = this.serverTimeDateObject.getTime() / 1000;
@@ -589,6 +588,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
 
     public ngOnDestroy() {
+        this.stopPlay$.complete();
         this.subscriptions.unsubscribe();
     }
 

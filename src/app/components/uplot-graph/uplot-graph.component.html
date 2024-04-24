@@ -4,7 +4,7 @@
             <select [(ngModel)]="currentSelectedTimerange"
                     (change)="onTimerangeChange(currentSelectedTimerange)" class="w-100" cSelect>
                 <option *ngFor="let item of availableTimeranges; index as i;" [ngValue]="item.hours">
-                    {{ item.name }}
+                 Timespan:   {{ item.name }}
                 </option>
             </select>
         </c-col>
@@ -25,10 +25,10 @@
             </select>
         </c-col>
         <c-col>
-            <button cButton variant="outline" color="dark" clASS="w-100" (click)="reload()">Reload</button>
+            <button cButton variant="outline" color="primary" clASS="w-100" (click)="reload()"><label>Reload</label></button>
         </c-col>
         <c-col>
-            <button variant="outline" color="dark" class="w-100" cButton>
+            <button color="link" class="w-100" cButton>
                 <input cFormCheckInput id="checka" type="checkbox" [(ngModel)]="autoReload" (ngModelChange)="autoreload()"/>
                 <label cFormCheckLabel for="checka" class="ps-1">Automatic reload</label>
             </button>
