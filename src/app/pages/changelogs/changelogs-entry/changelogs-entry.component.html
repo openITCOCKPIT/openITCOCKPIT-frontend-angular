@@ -8,7 +8,7 @@
             <fa-icon [icon]="changelogentry.faIcon" class="text-light"></fa-icon>
         </div>
         <div class="cbp_tmlabel">
-            <h2 class="font-md">
+            <h4 class="font-md">
                 {{ changelogentry.model }}
                 <strong>
                     <!-- @todo: fix links -->
@@ -25,7 +25,6 @@
                 </strong>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user">
                     {{ t('by') }}
-
                     <!-- @todo: fix links -->
                     <a *oitcPermission="['users', 'edit']" href="UsersEdit({id: changelogentry.user.id})">
                         {{ changelogentry.user.firstname }}
@@ -39,53 +38,53 @@
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user === null">
                     {{ t('by Cronjob') }}
                 </span>
-            </h2>
-
-            <!-- Add and copy changes -->
-            <blockquote
-                [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy'}"
-                *ngIf="(changelogentry.action === 'add' || changelogentry.action === 'copy')"
-                class="blockquote">
-                ADD !!!
-            </blockquote>
+            </h4>
 
             <!-- All Changes -->
-            <blockquote class="changelog-blockquote-warning blockquote">
-                ALLE !!!
+            <blockquote class="blockquote"
+                        [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy', 'changelog-changelog-blockquote-warning': changelogentry.action ==='edit'}">
                 <div class="ms-2">
                     <div *ngFor="let changeEntry of entry">
-
-                        <div>
-                            <h1>{{ changeEntry.controllerName }}</h1>
-                        </div>
-
+                        <h5 class="pb-3">{{ changeEntry.controllerName }}</h5>
                         <div *ngFor="let change of changeEntry.changes">
                             <div class="row mb-2">
-                                <div *ngIf="change.hasOld" class="col-6">
-                                    <div *ngFor="let old of change.old" class="text-danger">
-                                        {{ old.field }}
-                                        <span class="changelog_delete">
-                                            {{ old.value }}
-                                        </span>
-                                    </div>
-
+                                <div *ngIf="change.hasNew && !change.hasOld" class="col-6">
+                                    <small *ngFor="let new of change.new" class="text-success">
+                                        <footer class="blockquote-footer">
+                                            {{ new.field.replace('_id', '') }}:
+                                            <span class="text-success">{{ new.value }}</span>
+                                        </footer>
+                                    </small>
                                 </div>
-                                <div *ngIf="change.hasNew" class="col-6">
-                                    <div *ngFor="let new of change.new" class="text-success">
-                                        {{ new.field }}
-                                        <span class="">
-                                            {{ new['value'] | json }}
-                                        </span>
-                                    </div>
+                                <div *ngIf="change.hasOld && !change.hasNew" class="col-6">
+                                    <small *ngFor="let old of change.old" class="text-danger">
+                                        <footer class="blockquote-footer">
+                                            {{ old.field }}:
+                                            <span class="text-danger changelog_delete">{{ old.value }}</span>
+                                        </footer>
+                                    </small>
+                                </div>
+                                <div *ngIf="change.hasOld && change.hasNew" class="col-6">
+                                    <small *ngFor="let new of change.new; let i = index" class="text-danger">
+                                        <footer class="blockquote-footer">
+                                            {{ new.field.replace('_id', '') }}:
+                                            <span
+                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
+                                                {{ change.old[i].value }}
+                                            </span>
+                                            <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
+                                            <span
+                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
+                                                {{ new.value }}
+                                            </span>
+                                        </footer>
+                                    </small>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </blockquote>
-
         </div>
     </ng-container>
 </ng-container>

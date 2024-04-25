@@ -69,7 +69,7 @@
 .cbp_tmtimeline > li .cbp_tmlabel {
     margin: 0 0 15px 18%;
     background: rgba(238, 238, 238, 0.5);
-    padding: 1.2em;
+    padding: 0.5em;
     position: relative;
     border-radius: 5px;
 }
@@ -113,6 +113,7 @@
 
 .changelog_delete {
     text-decoration: line-through;
+    text-decoration-color: #CC0000;
 }
 
 .cbp_tmtimeline > li .cbp_tmlabel blockquote small {
