@@ -17,7 +17,8 @@
     top: 0;
     bottom: 0;
     width: 3px;
-    background: rgba(238, 238, 238, 0.5);
+    background: rgba(238, 238, 238, 0.1);
+    border: 1px solid rgba(238, 238, 238, 0.2);
     left: 14%;
     margin-left: -6px
 }
@@ -36,11 +37,12 @@
 }
 
 .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
-    background: rgba(238, 238, 238, 0.5);
+    background: rgba(238, 238, 238, 0.1);
+    border: 1px solid rgba(238, 238, 238, 0.2);
 }
 
 .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
-    border-right-color: rgba(238, 238, 238, 0.5);
+    border-right-color: rgba(238, 238, 238, 0.1);
 }
 
 .cbp_tmtimeline > li .empty span {
@@ -68,7 +70,8 @@
 
 .cbp_tmtimeline > li .cbp_tmlabel {
     margin: 0 0 15px 18%;
-    background: rgba(238, 238, 238, 0.5);
+    background: rgba(238, 238, 238, 0.1);
+    border: 1px solid rgba(238, 238, 238, 0.2);
     padding: 0.5em;
     position: relative;
     border-radius: 5px;
@@ -82,7 +85,7 @@
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-right-color: rgba(238, 238, 238, 0.5);
+    border-right-color: rgba(238, 238, 238, 0.1);
     border-width: 10px;
     top: 10px;
 }
@@ -184,7 +187,8 @@
     /* move the speech bubble to the left */
     .cbp_tmtimeline > li .cbp_tmlabel {
         margin: 0 0 15px 34%;
-        background: rgba(238, 238, 238, 0.5);
+        background: rgba(238, 238, 238, 0.1);
+        border: 1px solid rgba(238, 238, 238, 0.2);
         padding: 1.2em;
         position: relative;
         border-radius: 5px;
