@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../permissions/permission.directive';
+import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DebounceDirective } from '../../directives/debounce.directive';
-import {CardBodyComponent, CardComponent, CardHeaderComponent, CardTitleDirective} from '@coreui/angular';
+import { CardBodyComponent, CardComponent, CardHeaderComponent, CardTitleDirective } from '@coreui/angular';
 
 
 @Component({

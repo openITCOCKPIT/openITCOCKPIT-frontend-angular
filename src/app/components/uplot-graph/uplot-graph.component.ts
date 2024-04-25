@@ -123,22 +123,22 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     currentSelectedTimerange: number = 3;
     protected availableTimeranges:availableTimeranges = [
-        {hours: 1, name: '1 hour'},
-        {hours: 3, name: '3 hours'},
-        {hours: 8, name: '8 hours'},
-        {hours: 24, name: '1 day'},
-        {hours: 168, name: '7 days'},
-        {hours: 720, name: '30 days'},
-        {hours: 2160, name: '90 days'},
-        {hours: 4320, name: '6 month'},
-        {hours: 8760, name: '1 year'}
+        { hours: 1, name: '1 hour' },
+        { hours: 3, name: '3 hours' },
+        { hours: 8, name: '8 hours' },
+        { hours: 24, name: '1 day' },
+        { hours: 168, name: '7 days' },
+        { hours: 720, name: '30 days' },
+        { hours: 2160, name: '90 days' },
+        { hours: 4320, name: '6 month' },
+        { hours: 8760, name: '1 year' }
     ];
     protected currentAggregation: string = 'avg';
 
     protected availableAggregations: availableAggregations = [
-        {type: 'avg', name: 'Average'},
-        {type: 'min', name: 'Minimum'},
-        {type: 'max', name: 'Maximum'}
+        { type: 'avg', name: 'Average' },
+        { type: 'min', name: 'Minimum' },
+        { type: 'max', name: 'Maximum' }
     ];
 
     private config: UPlotConfigBuilder;

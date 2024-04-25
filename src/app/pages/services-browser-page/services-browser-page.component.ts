@@ -4,12 +4,12 @@ import {
     OnInit,
     OnDestroy
 } from '@angular/core';
-import {Subscription} from 'rxjs';
-import {ServicesbrowserService} from './servicesbrowser.service';
-import {ServicesBrowser} from './services.interface';
-import {TimezoneObject} from "./timezone.interface";
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {NgIf, NgForOf, JsonPipe} from '@angular/common';
+import { Subscription } from 'rxjs';
+import { ServicesbrowserService } from './servicesbrowser.service';
+import { ServicesBrowser } from './services.interface';
+import { TimezoneObject } from "./timezone.interface";
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { NgIf, NgForOf, JsonPipe } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent, CardHeaderComponent, CardTitleDirective,
@@ -17,12 +17,12 @@ import {
     NavComponent,
     NavItemComponent,
 } from '@coreui/angular'
-import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.component';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
-import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../permissions/permission.directive';
+import { UplotGraphComponent } from '../../components/uplot-graph/uplot-graph.component';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-services-browser-page',
