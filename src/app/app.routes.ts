@@ -54,6 +54,9 @@ export const routes: Routes = [{
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
+    path: 'services/index',
+    loadComponent: () => import('./pages/services-index/services-index.component').then(m => m.ServicesIndexComponent)
+}, {
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {

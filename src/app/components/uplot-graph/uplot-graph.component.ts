@@ -18,22 +18,23 @@ import {
     RowComponent,
     ButtonDirective, FormSelectDirective, FormCheckInputDirective, FormCheckLabelDirective
 } from '@coreui/angular';
-import {JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf} from '@angular/common';
+import { JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf } from '@angular/common';
 import * as _uPlot from 'uplot';
-import {from, fromEvent, Observable, Subject, Subscription, takeUntil} from 'rxjs';
-import {UplotGraphService} from './uplot-graph.service';
-import {UplotGraphInterface, PerfParams, Gauges, Datasource} from "./uplot-graph.interface";
-import {TimezoneObject} from "../../pages/services-browser-page/timezone.interface";
-import {UPlotConfigBuilder} from './uplot-config-builder';
-import {FormsModule} from '@angular/forms';
+import { from, fromEvent, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { UplotGraphService } from './uplot-graph.service';
+import { UplotGraphInterface, PerfParams, Gauges, Datasource } from "./uplot-graph.interface";
+import { TimezoneObject } from "../../pages/services-browser-page/timezone.interface";
+import { UPlotConfigBuilder } from './uplot-config-builder';
+import { FormsModule } from '@angular/forms';
 import { timer, interval } from 'rxjs';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const uPlot: any = (_uPlot as any)?.default;
 
 type availableAggregations = [
-    {type: string, name: string},
-    {type: string, name: string},
-    {type: string, name: string}
+    { type: string, name: string },
+    { type: string, name: string },
+    { type: string, name: string }
 ];
 
 type availableTimeranges =  { hours: number, name: string }[];
@@ -57,6 +58,7 @@ type availableTimeranges =  { hours: number, name: string }[];
         FormCheckLabelDirective,
         TranslocoDirective,
         TranslocoPipe,
+        FaIconComponent,
     ],
     templateUrl: './uplot-graph.component.html',
     styleUrl: './uplot-graph.component.css',
