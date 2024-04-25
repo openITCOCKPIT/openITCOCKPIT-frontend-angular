@@ -247,6 +247,14 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
     }
 
     public saveCommand() {
+
+        // Remove empty args
+        for (let i in this.post.commandarguments) {
+            if (!/\S/.test(this.post.commandarguments[i].human_name)) {
+                this.removeArgument(Number(i));
+            }
+        }
+
         this.subscriptions.add(this.CommandsService.updateCommand(this.post)
             .subscribe((result) => {
                 if (result.success) {
