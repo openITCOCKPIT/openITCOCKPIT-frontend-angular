@@ -1,0 +1,36 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Services') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                    {{ t('Monitored') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Services') }}
+                    <small class="fw-300">
+                           {{ t('overview') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+
+            </c-card-body>
+        </c-card>
+    </ng-container>
+
+</oitc-coreui>
