@@ -74,6 +74,11 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     }
 
     public hideModal() {
+        this.isDeleting = false;
+        this.percentage = 0;
+        this.hasErrors = false;
+        this.errors = [];
+
         this.modalService.toggle({
             show: false,
             id: 'deleteAllModal'
@@ -81,11 +86,19 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     }
 
     public delete() {
+        if (this.items.length === 0) {
+            return;
+        }
+
         this.isDeleting = true;
         this.percentage = 0;
         let count = this.items.length;
         let responseCount: number = 0
         let issueCount: number = 0;
+
+        // Delete any old errors
+        this.errors = [];
+
 
         for (let i in this.items) {
             const item = this.items[i];
