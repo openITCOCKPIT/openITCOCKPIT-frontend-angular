@@ -54,6 +54,9 @@ export const routes: Routes = [{
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
+    path: 'services/browser/:id',
+    loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+}, {
     path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
     resolve: {
         legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
