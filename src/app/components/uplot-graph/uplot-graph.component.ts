@@ -11,6 +11,7 @@ import {
     Output,
 
 } from '@angular/core';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     ColComponent,
     ContainerComponent,
@@ -54,6 +55,8 @@ type availableTimeranges =  { hours: number, name: string }[];
         FormSelectDirective,
         FormCheckInputDirective,
         FormCheckLabelDirective,
+        TranslocoDirective,
+        TranslocoPipe,
     ],
     templateUrl: './uplot-graph.component.html',
     styleUrl: './uplot-graph.component.css',
@@ -68,7 +71,6 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     set gauges(gauges: any) {
-        // you can add here some logic to modify the courses input variable, and create a derived value
         this.availableGauges = gauges;
     }
     @Input() timezone: TimezoneObject = {
@@ -108,7 +110,6 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     resizeObservable$: Observable<Event> = fromEvent(window, 'resize');
     stopPlay$: Subject<any> = new Subject();
     ngOnInit() {
-      //  timer(0, 1000).subscribe(n => console.log('timer', n));
         this.resizeObservable$ = fromEvent(window, 'resize');
         this.subscriptions.add(
             this.resizeObservable$.subscribe(e => {
@@ -314,7 +315,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     protected autoreload() {
         if(this.autoReload){
-            timer(0, 3000).pipe(
+            timer(0, 30000).pipe(
                 takeUntil(this.stopPlay$,)
             ).subscribe(t => this.prepare());
         }else {
@@ -322,16 +323,10 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    handleResize(resize: any) {
-        console.log('onResize', resize);
-        //  this.uPlotChart.setSize(this.getSize())
-    }
-
-
     private getSize() {
         return {
             width: window.innerWidth - 500,
-            height: window.innerHeight - 500,
+            height: 300,
         }
     }
 
@@ -367,6 +362,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
                 if (this.datasource.unit == null) {
                     this.datasource.unit = "";
                 }
+
                 this.makeGraph();
             })
         );
@@ -490,7 +486,6 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         // @ts-ignore
         this.options.axes[1].label = this.datasource.unit;
         this.chartUPlot.nativeElement.innerHTML = '';
-
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);
     }
 

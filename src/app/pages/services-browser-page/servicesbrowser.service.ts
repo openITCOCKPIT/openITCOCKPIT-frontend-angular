@@ -15,10 +15,10 @@ export class ServicesbrowserService {
     private readonly proxyPath = inject(PROXY_PATH);
 
 
-    public getServicesbrowser(): Observable<ServicesBrowser> {
+    public getServicesbrowser(id: number): Observable<ServicesBrowser> {
         const proxyPath = this.proxyPath;
         //3,12, 20, 103, 11
-        return this.http.get<ServicesBrowser>(`${proxyPath}/services/browser/3.json`, {
+        return this.http.get<ServicesBrowser>(`${proxyPath}/services/browser/${id}.json`, {
             params: {angular: true}
         }).pipe(
             map(data => {

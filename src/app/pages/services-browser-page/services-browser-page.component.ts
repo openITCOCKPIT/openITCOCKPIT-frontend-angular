@@ -1,6 +1,5 @@
 import {
     Component,
-
     inject,
     OnInit,
     OnDestroy
@@ -10,9 +9,20 @@ import {ServicesbrowserService} from './servicesbrowser.service';
 import {ServicesBrowser} from './services.interface';
 import { TimezoneObject } from "./timezone.interface";
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {DatePipe, NgIf, NgForOf, JsonPipe} from '@angular/common';
-import {ContainerComponent} from '@coreui/angular'
+import {NgIf, NgForOf, JsonPipe} from '@angular/common';
+import {
+    CardBodyComponent,
+    CardComponent, CardHeaderComponent, CardTitleDirective,
+    ContainerComponent,
+    NavComponent,
+    NavItemComponent,
+} from '@coreui/angular'
 import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.component';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {PermissionDirective} from '../../permissions/permission.directive';
 
 @Component({
   selector: 'oitc-services-browser-page',
@@ -23,7 +33,17 @@ import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.comp
         JsonPipe,
         ContainerComponent,
         UplotGraphComponent,
-
+        CoreuiComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        FaIconComponent,
+        PermissionDirective,
+        NavComponent,
+        NavItemComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        CardTitleDirective,
     ],
   templateUrl: './services-browser-page.component.html',
   styleUrl: './services-browser-page.component.css'
@@ -32,20 +52,27 @@ export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ServicesBrowserService = inject(ServicesbrowserService);
     public service!: ServicesBrowser;
+    public serviceName: string = '';
+    public hostName: string = '';
     public timezone!: TimezoneObject;
     public dataSources: { key: string, displayName: string }[] = [];
+    private router = inject(Router);
+    private route = inject(ActivatedRoute)
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
-        this.load();
+
     }
     ngOnInit() {
-
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.load(id);
     }
 
-    public load() {
-        this.subscriptions.add(this.ServicesBrowserService.getServicesbrowser()
+    public load(id: number) {
+        this.subscriptions.add(this.ServicesBrowserService.getServicesbrowser(id)
         .subscribe((service) => {
             this.service = service;
+            this.serviceName = service.mergedService.name;
+            this.hostName = service.host.Host.hostname;
            // console.log(this.service.mergedService.Perfdata)
             this.getDataSources();
             this.getUserTimezone();

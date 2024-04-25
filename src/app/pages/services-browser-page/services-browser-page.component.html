@@ -1,10 +1,21 @@
-<c-container fluid>
-<div *ngIf="service">
-    <h4>Service: {{service.mergedService.name}}, ID: {{service.mergedService.id}}, UUID: {{service.mergedService.uuid}}</h4>
-    <h5>Host: {{service.host.Host.hostname}}, : {{service.host.Host.id}}, UUID: {{service.host.Host.uuid}} </h5>
-</div>
-</c-container>
-<c-container *ngIf="service && service.mergedService.has_graph">
-    <oitc-uplot-graph [service]="service.mergedService.uuid" [host]="service.host.Host.uuid" [gauges]="dataSources" [timezone]="timezone"></oitc-uplot-graph>
-</c-container>
+<oitc-coreui *transloco="let t">
+    <ng-container>
+        <h2 *ngIf="service"><i><fa-icon [icon]="['fas', 'cog']"></fa-icon>{{ hostName }} / {{ serviceName }}</i></h2>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Service:') }}
+                    <small class="fw-300">
+                        {{ serviceName }} / {{ hostName }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
 
+        <c-container *ngIf="service && service.mergedService.has_graph">
+            <oitc-uplot-graph [service]="service.mergedService.uuid" [host]="service.host.Host.uuid"
+                              [gauges]="dataSources" [timezone]="timezone"></oitc-uplot-graph>
+        </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>

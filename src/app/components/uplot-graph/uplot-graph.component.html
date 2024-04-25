@@ -1,41 +1,45 @@
-<c-container fluid>
-    <c-row>
-        <c-col>
-            <select [(ngModel)]="currentSelectedTimerange"
-                    (change)="onTimerangeChange(currentSelectedTimerange)" class="w-100" cSelect>
-                <option *ngFor="let item of availableTimeranges; index as i;" [ngValue]="item.hours">
-                 Timespan:   {{ item.name }}
-                </option>
-            </select>
-        </c-col>
-        <c-col>
-            <select [(ngModel)]="currentAggregation"
-                    (change)="onAgregationChange(currentAggregation)" class="w-100" cSelect>
-                <option *ngFor="let item of availableAggregations; index as i;" [ngValue]="item.type">
-                    {{ item.name }}
-                </option>
-            </select>
-        </c-col>
-        <c-col>
-            <select [(ngModel)]="currentGauge"
-                    (change)="onGaugeChange(currentGauge)" class="w-100"  cSelect>
-                <option *ngFor="let item of availableGauges; index as i;" [ngValue]="item.key">
-                    {{ item.displayName }}
-                </option>
-            </select>
-        </c-col>
-        <c-col>
-            <button cButton variant="outline" color="primary" clASS="w-100" (click)="reload()"><label>Reload</label></button>
-        </c-col>
-        <c-col>
-            <button color="link" class="w-100" cButton>
-                <input cFormCheckInput id="checka" type="checkbox" [(ngModel)]="autoReload" (ngModelChange)="autoreload()"/>
-                <label cFormCheckLabel for="checka" class="ps-1">Automatic reload</label>
-            </button>
-        </c-col>
-    </c-row>
+<ng-container>
+    <c-container fluid>
+        <c-row *transloco="let t">
+            <c-col>
+                <select [(ngModel)]="currentSelectedTimerange"
+                        (change)="onTimerangeChange(currentSelectedTimerange)" class="w-100" cSelect>
+                    <option *ngFor="let item of availableTimeranges; index as i;" [ngValue]="item.hours">
+                        {{ t('Timerange: ') }} {{ item.name }}
+                    </option>
+                </select>
+            </c-col>
+            <c-col>
+                <select [(ngModel)]="currentAggregation"
+                        (change)="onAgregationChange(currentAggregation)" class="w-100" cSelect>
+                    <option *ngFor="let item of availableAggregations; index as i;" [ngValue]="item.type">
+                        {{ t('Aggregation: ') }}  {{ t(item.name) }}
+                    </option>
+                </select>
+            </c-col>
+            <c-col>
+                <select [(ngModel)]="currentGauge"
+                        (change)="onGaugeChange(currentGauge)" class="w-100" cSelect>
+                    <option *ngFor="let item of availableGauges; index as i;" [ngValue]="item.key">
+                        {{ t('Datasource: ') }} {{ item.displayName }}
+                    </option>
+                </select>
+            </c-col>
+            <c-col>
+                <button cButton variant="outline" color="primary" clASS="w-100" (click)="reload()">
+                    <label>{{ t('Refresh') }}</label></button>
+            </c-col>
+            <c-col>
+                <button color="link" class="w-100" cButton>
+                    <input cFormCheckInput id="checka" type="checkbox" [(ngModel)]="autoReload"
+                           (ngModelChange)="autoreload()"/>
+                    <label cFormCheckLabel for="checka" class="ps-1">{{ t('Auto refresh') }}</label>
+                </button>
+            </c-col>
+        </c-row>
 
-    <div
-        #chartUPlot>
-    </div>
-</c-container>
+        <div
+            #chartUPlot>
+        </div>
+    </c-container>
+</ng-container>
