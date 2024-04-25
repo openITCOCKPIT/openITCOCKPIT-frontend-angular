@@ -195,15 +195,7 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
         });
 
         // Sortcommand arguemnts by name
-        this.post.commandarguments.sort((a, b) => {
-            if (a.name < b.name) {
-                return -1;
-            }
-            if (a.name > b.name) {
-                return 1;
-            }
-            return 0;
-        });
+        this.sortArgumentsByName();
     }
 
     public removeArgument(index: number) {
@@ -238,6 +230,13 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
     }
 
     public saveCommand() {
+        // Remove empty args
+        for (let i in this.post.commandarguments) {
+            if (!/\S/.test(this.post.commandarguments[i].human_name)) {
+                this.removeArgument(Number(i));
+            }
+        }
+
         this.subscriptions.add(this.CommandsService.createCommand(this.post)
             .subscribe((result) => {
                 if (result.success) {
@@ -265,6 +264,15 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+    private sortArgumentsByName() {
+        this.post.commandarguments = this.post.commandarguments.sort(function (a, b) {
+            return a.name.localeCompare(b.name, undefined, {
+                numeric: true,
+                sensitivity: 'base'
+            });
+        });
     }
 
     protected readonly CommandTypesEnum = CommandTypesEnum;
