@@ -10,7 +10,7 @@ export interface CommandsIndexParams {
     scroll: boolean,
     sort: string,
     page: number,
-    direction: string, // asc or desc
+    direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Commands.id][]': number[],
     'filter[Commands.name]': string
     'filter[Commands.command_type][]': CommandTypesEnum[]

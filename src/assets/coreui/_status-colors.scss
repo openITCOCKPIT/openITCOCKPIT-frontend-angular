@@ -1,0 +1,54 @@
+.bg-up,
+.bg-ok {
+    background: $success !important;
+}
+
+.bg-warning {
+    background: $warning !important;
+}
+
+.bg-down,
+.bg-critical {
+    background: $danger !important;
+}
+
+.bg-unreachable,
+.bg-unknown {
+    background: $secondary !important;
+}
+
+.not-monitored {
+    color: #4285F4 !important;
+}
+
+.ok, .up {
+    color: $success !important;
+}
+
+.warning {
+    color: $warning !important;
+}
+
+.critical, .down {
+    color: $danger !important;
+}
+
+.unknown, .unreachable {
+    color: $secondary !important;
+}
+
+.ok-soft, .up-soft {
+    color: lighten($success, 40%) !important;
+}
+
+.warning-soft {
+    color: lighten($warning, 20%) !important;;
+}
+
+.critical-soft, .down-soft {
+    color: lighten($danger, 40%) !important;
+}
+
+.unknown-soft, .unreachable-soft {
+    color: lighten($secondary, 40%) !important;
+}

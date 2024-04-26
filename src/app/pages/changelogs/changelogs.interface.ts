@@ -4,6 +4,7 @@
 import { ObjectTypesEnum } from './object-types.enum';
 import { formatDate } from '@angular/common';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface ChangelogsIndexParams {
     angular: true,
@@ -20,7 +21,7 @@ export interface ChangelogsEntityParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string|Date
+    'filter[from]': string | Date
     'filter[to]': string
     'filter[Changelogs.object_id]': any,
     'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
@@ -42,14 +43,14 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
     }
 }
 
-export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams{
+export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams {
     let now = new Date();
     return {
         angular: true,
         scroll: true,
         page: 1,
         //'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 500), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[from]':now,
+        'filter[from]': now,
         'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
         'filter[Changelogs.object_id]': null,
         'filter[Changelogs.objecttype_id]': [],
@@ -82,7 +83,8 @@ export interface ChangelogIndex {
     data_unserialized: any
     ngState: string
     color: string
-    icon: string
+    icon: string,
+    faIcon: IconProp
     includeUser: boolean
 }
 
@@ -106,3 +108,34 @@ export interface ChangelogContainer {
         container_id: number
     }
 }
+
+// Raw API result which has a lot of dynamic keys and is not very Angular friendly
+export interface DataUnserializedRaw {
+    [key: string]: {
+        data: any,
+        isArray: boolean
+    }
+}
+
+export interface ChangelogArrayFalseOldNew {
+    old: string,
+    new: string
+}
+
+export interface ChangelogEntry {
+    controllerName: string,
+    changes: ChangelogEntryChange[]
+}
+
+export interface ChangelogEntryChange {
+    hasOld: boolean,
+    hasNew: boolean,
+    old: ChangelogFieldValue[],
+    new: ChangelogFieldValue[],
+}
+
+export interface ChangelogFieldValue {
+    field: string,
+    value: string
+}
+
