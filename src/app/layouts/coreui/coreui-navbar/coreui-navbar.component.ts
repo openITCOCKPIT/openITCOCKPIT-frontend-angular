@@ -42,6 +42,7 @@ export class CoreuiNavbarComponent implements OnInit {
     @Input({transform: booleanAttribute}) compact?: boolean;
 
     public visible: boolean = true; // show or hide the complete menu
+    public unfoldable: boolean = false; // compact menu
 
 
     private subscriptions: Subscription = new Subscription()
@@ -58,6 +59,10 @@ export class CoreuiNavbarComponent implements OnInit {
         this.subscriptions.add(this.sidebarService.sidebarState$.subscribe((next: SidebarAction) => {
             this.visible = next.visible;
         }));
+    }
+
+    public toggleUnfoldable() {
+        this.unfoldable = !this.unfoldable;
     }
 
     //public ngOnChanges(changes: SimpleChanges): void {
