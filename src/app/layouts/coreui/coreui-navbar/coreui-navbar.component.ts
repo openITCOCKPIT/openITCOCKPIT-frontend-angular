@@ -1,11 +1,14 @@
-import { booleanAttribute, Component, ElementRef, HostBinding, Input, OnInit, Renderer2 } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 import { MenuHeadline, NavigationInterface } from '../../../components/navigation/navigation.interface';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
+import { SidebarAction } from './sidebar.interface';
+import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
     selector: 'oitc-coreui-navbar',
@@ -13,7 +16,10 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
     imports: [
         RouterLink,
         JsonPipe,
-        FaIconComponent
+        FaIconComponent,
+        NavbarGroupComponent,
+        NgClass,
+        NgScrollbar
     ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css'
@@ -35,6 +41,9 @@ export class CoreuiNavbarComponent implements OnInit {
     @Input({transform: booleanAttribute}) groupItems?: boolean;
     @Input({transform: booleanAttribute}) compact?: boolean;
 
+    public visible: boolean = true; // show or hide the complete menu
+
+
     private subscriptions: Subscription = new Subscription()
 
     public menu: MenuHeadline[] = [];
@@ -45,25 +54,11 @@ export class CoreuiNavbarComponent implements OnInit {
                 this.menu = result.menu;
             })
         );
+
+        this.subscriptions.add(this.sidebarService.sidebarState$.subscribe((next: SidebarAction) => {
+            this.visible = next.visible;
+        }));
     }
-
-    @HostBinding('class')
-    get hostClasses(): any {
-        return {
-            'sidebar-nav': !this.groupItems,
-            'nav-group-items': this.groupItems,
-            compact: this.groupItems && this.compact
-        };
-    }
-
-    // @HostBinding('class.nav-group-items')
-    // get sidebarNavGroupItemsClass(): boolean {
-    //   return !!this.groupItems;
-    // }
-
-    @HostBinding('attr.role') role = 'nav';
-
-    //public navItemsArray: INavData[] = [];
 
     //public ngOnChanges(changes: SimpleChanges): void {
     //    this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
@@ -75,4 +70,5 @@ export class CoreuiNavbarComponent implements OnInit {
 //         this.sidebarService.toggle({toggle: 'visible', sidebar: this.sidebar});
 //     }
 // }
+
 }

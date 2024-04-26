@@ -1,18 +1,24 @@
-<div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
+<div
+    class="d-print-none sidebar sidebar-fixed border-end sidebar-dark compact bg-oitc-gradient"
+    id="sidebar1"
+    [ngClass]="{'hide':!visible, 'show':visible}">
     <div class="sidebar-header border-bottom">
         <div class="sidebar-brand">
             <!-- todo fix logo -->
             <img src="/img/logos/logo_header.png"/>
         </div>
     </div>
-    <ul class="sidebar-nav simplebar-scrollable-y" data-coreui="navigation" data-simplebar="init">
+    <ul class="sidebar-nav simplebar-scrollable-y">
+
+
         <div class="simplebar-wrapper" style="margin: -8px;">
             <div class="simplebar-height-auto-observer-wrapper">
                 <div class="simplebar-height-auto-observer"></div>
             </div>
             <div class="simplebar-mask">
                 <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                    <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content"
+                    <div class="simplebar-content-wrapper" tabindex="0" role="region"
+                         aria-label="scrollable content"
                          style="height: 100%; overflow: hidden scroll;">
                         <div class="simplebar-content" style="padding: 8px;">
                             @for (headline of menu; track $index) {
@@ -32,23 +38,7 @@
                                             </li>
                                         } @else {
                                             <!-- this is a category of links -->
-                                            <li class="nav-group">
-                                                <a class="nav-link nav-group-toggle" href="#">
-                                                    <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                                                    {{ item.alias }}
-                                                </a>
-                                                <ul class="nav-group-items compact">
-                                                    @for (groupItem of item.items; track $index) {
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" [routerLink]="groupItem.angularUrl">
-                                                                <fa-icon [icon]="groupItem.icon"
-                                                                         class="nav-icon"></fa-icon>
-                                                                {{ groupItem.name }}
-                                                            </a>
-                                                        </li>
-                                                    }
-                                                </ul>
-                                            </li>
+                                            <oitc-navbar-group [item]="item"></oitc-navbar-group>
                                         }
                                     }
                                 }
@@ -59,6 +49,8 @@
                 </div>
             </div>
         </div>
+
+        <!--
         <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
             <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
         </div>
@@ -66,8 +58,12 @@
             <div class="simplebar-scrollbar"
                  style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
         </div>
+        -->
     </ul>
     <div class="sidebar-footer border-top d-none d-md-flex">
         <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
     </div>
 </div>
+
+<!-- Inert the page content here -->
+<ng-content></ng-content>
