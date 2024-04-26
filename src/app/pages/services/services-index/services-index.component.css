@@ -1,0 +1,15 @@
+.status-circle {
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+}
+
+.red-icon {
+    color: red;
+}
+
+.ok {color: rgb(18, 132, 10, 1);}
+.ok-soft {color: rgb(18, 132, 10, 1);}
+.warn {color: rgb(255, 187, 51, 1);}
+.crit {color: rgb(192, 0, 0, 1);}
+.crit-soft {color: rgb(192, 0, 0, 1);}

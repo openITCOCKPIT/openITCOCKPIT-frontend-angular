@@ -55,11 +55,11 @@ export const routes: Routes = [{
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
     path: 'services/index',
-    loadComponent: () => import('./pages/services-index/services-index.component').then(m => m.ServicesIndexComponent)
+    loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
 }, {
     path: 'services/browser/:id',
-    loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
-}, {
+    loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+}, /*{
     path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
     resolve: {
         legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
@@ -69,4 +69,5 @@ export const routes: Routes = [{
         }
     },
     component: LegacyUrlComponent,
-}];
+}*/
+];

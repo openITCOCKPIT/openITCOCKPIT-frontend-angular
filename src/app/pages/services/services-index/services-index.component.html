@@ -1,0 +1,213 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Services') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                    {{ t('Monitored') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Services') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item>
+                        <a [routerLink]="['/services', 'index']" class="nav-link active">
+                            <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                            {{ t('Monitored') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/services', 'index']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                            {{ t('Unmonitored') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/services', 'index']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                            {{ t('Disabled') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="success" size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="danger" size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Unhandled only') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
+                    <thead>
+                    <tr>
+                        <th>
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th>{{ t('State') }}</th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                        </th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                        </th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                        </th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                        </th>
+                        <th>P</th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                        </th>
+
+                        <th>{{ t('Host/Service') }}</th>
+                        <th>{{ t('Last state change') }}</th>
+                        <th>{{ t('Last check') }}</th>
+                        <th>{{ t('Next check') }}</th>
+                        <th>{{ t('Service output') }}</th>
+                        <th>
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="services">
+                    <ng-container *ngFor="let service of services.all_services;  index as i;">
+                        <tr *ngIf="i === 0 || (i > 0 && services.all_services[i -1].Host.uuid !== service.Host.uuid)">
+                            <td colspan="16">
+                                <span>{{ service.Service.hostname }}({{ service.Host.address }}) </span>
+                                <div class="badge border border-info text-info">
+                                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                                    {{ service.Host.satelliteName }}
+                                </div>
+                                <span class="fa-pull-right">
+                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                    {{ t('State since') }} {{ service.Hoststatus.last_state_change }}
+                                </span>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="width-50">
+                                <oitc-item-select
+                                        *oitcPermission="['services', 'delete']"
+                                        [disabled]="false"
+                                        [item]="service"></oitc-item-select>
+
+                            </td>
+                            <td class="width-50">
+                                <a href="javascript:void(0);" class="btn btn-danger status-circle"></a>
+                            </td>
+                            <td class="width-50">
+                                <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1">
+                                    <fa-icon [icon]="['far', 'user']"></fa-icon>
+                                </div>
+                                <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 2">
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </div>
+                            </td>
+                            <td class="width-50">
+                                <div *ngIf="service.Servicestatus.scheduledDowntimeDepth > 0">
+                                    <fa-icon [icon]="['fas', 'power-off']" size="lg"></fa-icon>
+                                </div>
+                            </td>
+                            <td class="width-50">
+                                <div *ngIf="service.Servicestatus.notifications_enabled"
+                                     cTooltip="{{t('Notifications enabled')}}">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'check']" class="ok" stackItemSize="1x"
+                                                 transform="shrink-8 right-6 down-6"></fa-icon>
+                                    </fa-stack>
+                                </div>
+                                <div *ngIf="!service.Servicestatus.notifications_enabled"
+                                     cTooltip="{{t('Notifications disabled')}}">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'times']" class="crit" stackItemSize="1x"
+                                                 transform="shrink-8 right-6 down-6"></fa-icon>
+                                    </fa-stack>
+                                </div>
+                            </td>
+                            <td class="width-50">
+                                <div *ngIf="service.Service.has_graph">
+                                    <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                                </div>
+                            </td>
+                            <td class="width-50">
+                                <strong cTooltip="{{t('Passively transferred service')}}"
+                                        *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
+                                    P
+                                </strong>
+                            </td>
+                            <td class="width-50">
+                                <fa-icon [icon]="['fas', 'fire']" size="lg" [ngClass]="{'ok-soft' : service.Service.priority==1,
+                                        'ok' : service.Service.priority==2, 'warn' : service.Service.priority==3,
+                                        'crit-soft' : service.Service.priority==4, 'crit' : service.Service.priority==5}"></fa-icon>
+                            </td>
+                            <td>
+                                <span><a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a></span>
+                            </td>
+                            <td>{{ service.Hoststatus.last_state_change }}</td>
+                            <td>{{ service.Servicestatus.lastCheck }}</td>
+                            <td>{{ service.Servicestatus.nextCheck }}</td>
+                            <td>
+                                <div [innerHTML]="service.Servicestatus.outputHtml"></div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                    </tbody>
+                </table>
+                <oitc-no-records *ngIf="services && services.all_services.length === 0"></oitc-no-records>
+
+                <c-row class="pt-2">
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="services"
+                                [paginateOrScroll]="services"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+
+            </c-card-body>
+        </c-card>
+    </ng-container>
+
+</oitc-coreui>

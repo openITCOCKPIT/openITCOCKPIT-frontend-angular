@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
@@ -31,7 +32,8 @@ export class AppComponent {
                 private TranslocoService: TranslocoService
     ) {
         // Add an icon to the library for convenient access in other components
-        library.addIconPacks(fas);
+        library.addIconPacks(fas, far);
+       // library.addIconPacks(far);
 
         this.IconSetService.icons = {...iconSubset};
 

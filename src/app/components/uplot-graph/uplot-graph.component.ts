@@ -23,7 +23,7 @@ import * as _uPlot from 'uplot';
 import { from, fromEvent, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { UplotGraphService } from './uplot-graph.service';
 import { UplotGraphInterface, PerfParams, Gauges, Datasource } from "./uplot-graph.interface";
-import { TimezoneObject } from "../../pages/services-browser-page/timezone.interface";
+import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
 import { UPlotConfigBuilder } from './uplot-config-builder';
 import { FormsModule } from '@angular/forms';
 import { timer, interval } from 'rxjs';

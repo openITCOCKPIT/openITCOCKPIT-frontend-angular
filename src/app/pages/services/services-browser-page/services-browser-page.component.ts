@@ -17,12 +17,15 @@ import {
     NavComponent,
     NavItemComponent,
 } from '@coreui/angular'
-import { UplotGraphComponent } from '../../components/uplot-graph/uplot-graph.component';
+import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../permissions/permission.directive';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import {UserMacrosModalComponent} from '../../commands/user-macros-modal/user-macros-modal.component';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-services-browser-page',
@@ -44,6 +47,9 @@ import { PermissionDirective } from '../../permissions/permission.directive';
         CardHeaderComponent,
         CardBodyComponent,
         CardTitleDirective,
+        BackButtonDirective,
+        UserMacrosModalComponent,
+        XsButtonDirective,
     ],
     templateUrl: './services-browser-page.component.html',
     styleUrl: './services-browser-page.component.css'
@@ -74,7 +80,6 @@ export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
                 this.service = service;
                 this.serviceName = service.mergedService.name;
                 this.hostName = service.host.Host.hostname;
-                // console.log(this.service.mergedService.Perfdata)
                 this.getDataSources();
                 this.getUserTimezone();
             })
