@@ -30,7 +30,7 @@
                 <ul *ngIf="navigationService.searchResults as searchResults" class="list-group m-0 p-0">
                     <ng-container *ngFor="let item of searchResults">
                         <li [routerLink]="item.url" class="pointer list-group-item">
-                            <fa-icon [icon]="faQuestion"></fa-icon>
+                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
                             <strong>{{ item.name }}</strong>
                         </li>
                     </ng-container>

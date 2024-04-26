@@ -7,7 +7,7 @@ export interface Link {
     alias: any,
     tags: string[];
     order: bigint;
-    icon: string;
+    icon: string | string[];
     items: Link[] | null;
     showSubmenu: boolean | undefined;
 }

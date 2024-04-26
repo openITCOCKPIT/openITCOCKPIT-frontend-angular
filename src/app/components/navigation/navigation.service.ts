@@ -51,7 +51,9 @@ export class NavigationService {
     }
 
     public search(searchTerm: string): void {
-        this.searchResults = this._search(this.navigation, searchTerm);
+        const results = this._search(this.navigation, searchTerm);
+        console.log(results);
+        this.searchResults = results;
     }
 
     private _search(items: INavData[], searchTerm: string): INavData[] {
@@ -104,6 +106,8 @@ export class NavigationService {
     }
 
     private oitcToC2(link: Link): INavData {
+        console.log(link);
+
         let iNavData: INavData = {};
         iNavData.name = link.alias || link.name;
         iNavData.children = [];
