@@ -2,7 +2,6 @@
  *    Entity / Index action    *
  **********************/
 import { ObjectTypesEnum } from './object-types.enum';
-import { formatDate } from '@angular/common';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
@@ -10,10 +9,10 @@ export interface ChangelogsIndexParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string
-    'filter[to]': string
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
     'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
-    'filter[Action]': [],
+    'filter[Changelogs.action][]': string[],
     'filter[ShowServices]': number
 }
 
@@ -21,11 +20,11 @@ export interface ChangelogsEntityParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string | Date
-    'filter[to]': string
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
     'filter[Changelogs.object_id]': any,
     'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
-    'filter[Action]': [],
+    'filter[Changelogs.action][]': string[],
     'filter[ShowServices]': number
 }
 
@@ -35,11 +34,11 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
         angular: true,
         scroll: true,
         page: 1,
-        'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 4), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
         'filter[Changelogs.objecttype_id]': [],
         'filter[ShowServices]': 0,
-        'filter[Action]': []
+        'filter[Changelogs.action][]': []
     }
 }
 
@@ -49,13 +48,12 @@ export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams {
         angular: true,
         scroll: true,
         page: 1,
-        //'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 500), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[from]': now,
-        'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
         'filter[Changelogs.object_id]': null,
         'filter[Changelogs.objecttype_id]': [],
         'filter[ShowServices]': 0,
-        'filter[Action]': []
+        'filter[Changelogs.action][]': [],
     }
 }
 
@@ -138,4 +136,3 @@ export interface ChangelogFieldValue {
     field: string,
     value: string
 }
-
