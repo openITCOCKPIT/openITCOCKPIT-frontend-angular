@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -29,7 +29,7 @@ import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityP
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { ObjectTypesEnum } from '../object-types.enum';
-import { DatePipe, DecimalPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, DecimalPipe, formatDate, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -77,7 +77,7 @@ import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.c
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
 })
-export class ChangelogsEntityComponent implements OnInit, OnDestroy {
+export class ChangelogsEntityComponent implements OnInit {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
@@ -86,15 +86,55 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
     public changes?: ChangelogIndexRoot;
+    public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
+
+
+    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+
+
+    public tmpFilter = {
+        Action: {
+            add: true,
+            edit: true,
+            copy: true,
+            delete: true,
+            activate: true,
+            deactivate: true
+        }
+    }
 
 
     loadChanges() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        const typeStr = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
-        if (id && typeStr) {
-            this.params['filter[Changelogs.object_id]'] = id;
 
-            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[typeStr as keyof typeof ObjectTypesEnum]];
+        if (id && this.entityType) {
+            this.params['filter[Changelogs.object_id]'] = id;
+            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[this.entityType as keyof typeof ObjectTypesEnum]];
+
+            this.params['filter[Changelogs.action][]'] = [];
+            if (this.tmpFilter.Action.add) {
+                this.params['filter[Changelogs.action][]'].push('add');
+            }
+            if (this.tmpFilter.Action.edit) {
+                this.params['filter[Changelogs.action][]'].push('edit');
+            }
+            if (this.tmpFilter.Action.copy) {
+                this.params['filter[Changelogs.action][]'].push('copy');
+            }
+            if (this.tmpFilter.Action.delete) {
+                this.params['filter[Changelogs.action][]'].push('delete');
+            }
+            if (this.tmpFilter.Action.activate) {
+                this.params['filter[Changelogs.action][]'].push('activate');
+            }
+            if (this.tmpFilter.Action.deactivate) {
+                this.params['filter[Changelogs.action][]'].push('deactivate');
+            }
+
+            this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+            this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
             this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
@@ -107,7 +147,19 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
         this.hideFilter = !this.hideFilter;
     }
 
-    public ngOnDestroy(): void {
+    public resetFilter() {
+        this.params = getDefaultChangelogsEntityParams();
+        this.tmpFilter = {
+            Action: {
+                add: true,
+                edit: true,
+                copy: true,
+                delete: true,
+                activate: true,
+                deactivate: true
+            }
+        }
+        this.loadChanges();
     }
 
     public ngOnInit() {
