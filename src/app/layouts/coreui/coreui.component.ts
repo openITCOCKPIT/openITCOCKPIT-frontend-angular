@@ -32,6 +32,7 @@ import { NavigationService } from "../../components/navigation/navigation.servic
 import { IconComponent } from "@coreui/icons-angular";
 import { FaIconComponent, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
 
 @Component({
     selector: 'oitc-coreui',
@@ -64,6 +65,7 @@ import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons
         SidebarModule,
         GlobalLoaderComponent,
         FaIconComponent,
+        CoreuiNavbarComponent,
     ],
     templateUrl: './coreui.component.html',
     styleUrl: './coreui.component.css'

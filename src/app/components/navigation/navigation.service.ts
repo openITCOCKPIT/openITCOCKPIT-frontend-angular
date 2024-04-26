@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, map, Observable, Subscription } from "rxjs";
-import { Link, NavigationInterface } from "./navigation.interface";
+import { MenuLink, NavigationInterface } from "./navigation.interface";
 import { AuthService } from "../../auth/auth.service";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { INavData } from "@coreui/angular";
@@ -14,22 +14,23 @@ export class NavigationService {
     private readonly authService = inject(AuthService);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    private readonly links$$ = new BehaviorSubject<Link[]>([]);
+    private readonly links$$ = new BehaviorSubject<MenuLink[]>([]);
     public readonly links$ = this.links$$.asObservable();
     private subscriptions: Subscription = new Subscription();
 
-    public constructor() {
-        this.subscriptions.add(this.loadMenu()
-            .subscribe((result) => {
-                this.navigation = this.oitcToCoreUi(result);
-            })
-        );
-    }
+    //todo remove
+// public constructor() {
+//     this.subscriptions.add(this.loadMenu()
+//         .subscribe((result) => {
+//             this.navigation = this.oitcToCoreUi(result);
+//         })
+//     );
+// }
 
     public navigation: INavData[] = []
     public searchResults: INavData[] = []
 
-    private loadMenu(): Observable<NavigationInterface> {
+    public loadMenu(): Observable<NavigationInterface> {
         const proxyPath = this.proxyPath;
         return this.http.get<NavigationInterface>(`${proxyPath}/angular/menu.json`, {
             params: {}
@@ -84,44 +85,5 @@ export class NavigationService {
         return result;
     }
 
-    private oitcToCoreUi(navigation: NavigationInterface): INavData[] {
-        let ret: INavData[] = [];
-        for (let a in navigation.menu) {
-            let link: Link = navigation.menu[a];
-            let iNavData: INavData = this.oitcToC2(link);
-            iNavData.children = [];
-            iNavData.title = true;
-
-            ret.push(iNavData);
-
-
-            for (let itemKey in link.items) {
-                let myLink = link.items?.at(parseInt(itemKey)) as Link;
-                ret.push(this.oitcToC2(myLink));
-            }
-
-        }
-
-        return ret;
-    }
-
-    private oitcToC2(link: Link): INavData {
-        console.log(link);
-
-        let iNavData: INavData = {};
-        iNavData.name = link.alias || link.name;
-        iNavData.children = [];
-        if (link.controller && link.action) {
-            iNavData.url = '/' + link.controller + '/' + link.action;
-        }
-
-        iNavData.iconComponent = {name: 'cil-puzzle'};
-
-        for (let itemKey in link.items) {
-            let myLink = link.items?.at(parseInt(itemKey)) as Link;
-            iNavData.children.push(this.oitcToC2(myLink))
-        }
-        return iNavData;
-    }
 
 }

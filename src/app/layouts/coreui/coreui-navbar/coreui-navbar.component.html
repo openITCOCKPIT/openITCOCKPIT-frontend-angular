@@ -1,0 +1,73 @@
+<div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
+    <div class="sidebar-header border-bottom">
+        <div class="sidebar-brand">
+            <!-- todo fix logo -->
+            <img src="/img/logos/logo_header.png"/>
+        </div>
+    </div>
+    <ul class="sidebar-nav simplebar-scrollable-y" data-coreui="navigation" data-simplebar="init">
+        <div class="simplebar-wrapper" style="margin: -8px;">
+            <div class="simplebar-height-auto-observer-wrapper">
+                <div class="simplebar-height-auto-observer"></div>
+            </div>
+            <div class="simplebar-mask">
+                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                    <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content"
+                         style="height: 100%; overflow: hidden scroll;">
+                        <div class="simplebar-content" style="padding: 8px;">
+                            @for (headline of menu; track $index) {
+                                <li class="nav-title">
+                                    {{ headline.alias }}
+                                </li>
+                                @if (headline.items.length > 0) {
+                                    @for (item of headline.items; track $index) {
+                                        <!-- Is this a simple link or a category of links -->
+                                        @if (!item.items) {
+                                            <!-- this is a link -->
+                                            <li class="nav-item">
+                                                <a class="nav-link" [routerLink]="item.angularUrl">
+                                                    <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+                                                    {{ item.name }}
+                                                </a>
+                                            </li>
+                                        } @else {
+                                            <!-- this is a category of links -->
+                                            <li class="nav-group">
+                                                <a class="nav-link nav-group-toggle" href="#">
+                                                    <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+                                                    {{ item.alias }}
+                                                </a>
+                                                <ul class="nav-group-items compact">
+                                                    @for (groupItem of item.items; track $index) {
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" [routerLink]="groupItem.angularUrl">
+                                                                <fa-icon [icon]="groupItem.icon"
+                                                                         class="nav-icon"></fa-icon>
+                                                                {{ groupItem.name }}
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+        </div>
+        <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+            <div class="simplebar-scrollbar"
+                 style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+        </div>
+    </ul>
+    <div class="sidebar-footer border-top d-none d-md-flex">
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+    </div>
+</div>
