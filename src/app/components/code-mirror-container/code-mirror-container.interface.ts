@@ -1,3 +1,5 @@
+import { MacroIndex } from "../../pages/macros/macros.interface";
+
 export interface HighlightPattern {
     highlight: RegExp;
     className: string;
@@ -12,6 +14,11 @@ export interface DefaultMacros {
 export interface Macro {
     macro: string;
     description: string;
+}
+
+export interface Macros {
+    defaultMacros: DefaultMacros[];
+    macros: MacroIndex[];
 }
 
 export interface AutocompleteItem {
