@@ -114,23 +114,11 @@ export class ChangelogsEntityComponent implements OnInit {
             this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[this.entityType as keyof typeof ObjectTypesEnum]];
 
             this.params['filter[Changelogs.action][]'] = [];
-            if (this.tmpFilter.Action.add) {
-                this.params['filter[Changelogs.action][]'].push('add');
-            }
-            if (this.tmpFilter.Action.edit) {
-                this.params['filter[Changelogs.action][]'].push('edit');
-            }
-            if (this.tmpFilter.Action.copy) {
-                this.params['filter[Changelogs.action][]'].push('copy');
-            }
-            if (this.tmpFilter.Action.delete) {
-                this.params['filter[Changelogs.action][]'].push('delete');
-            }
-            if (this.tmpFilter.Action.activate) {
-                this.params['filter[Changelogs.action][]'].push('activate');
-            }
-            if (this.tmpFilter.Action.deactivate) {
-                this.params['filter[Changelogs.action][]'].push('deactivate');
+
+            for (let action in this.tmpFilter.Action) {
+                if (this.tmpFilter.Action[action as keyof typeof this.tmpFilter.Action]) {
+                    this.params['filter[Changelogs.action][]'].push(action);
+                }
             }
 
             this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');

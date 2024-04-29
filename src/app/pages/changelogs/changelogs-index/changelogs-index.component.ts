@@ -34,7 +34,6 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
-import { ObjectTypesEnum } from '../object-types.enum';
 
 @Component({
     selector: 'oitc-changelogs-index',
@@ -83,9 +82,6 @@ export class ChangelogsIndexComponent {
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
     public changes?: ChangelogIndexRoot;
-    protected readonly ObjectTypesEnum = ObjectTypesEnum;
-
-
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
@@ -119,23 +115,19 @@ export class ChangelogsIndexComponent {
 
     public loadChanges() {
         this.params['filter[Changelogs.action][]'] = [];
-        if (this.tmpFilter.Action.add) {
-            this.params['filter[Changelogs.action][]'].push('add');
+        for (let action in this.tmpFilter.Action) {
+            if (this.tmpFilter.Action[action as keyof typeof this.tmpFilter.Action]) {
+                this.params['filter[Changelogs.action][]'].push(action);
+            }
         }
-        if (this.tmpFilter.Action.edit) {
-            this.params['filter[Changelogs.action][]'].push('edit');
-        }
-        if (this.tmpFilter.Action.copy) {
-            this.params['filter[Changelogs.action][]'].push('copy');
-        }
-        if (this.tmpFilter.Action.delete) {
-            this.params['filter[Changelogs.action][]'].push('delete');
-        }
-        if (this.tmpFilter.Action.activate) {
-            this.params['filter[Changelogs.action][]'].push('activate');
-        }
-        if (this.tmpFilter.Action.deactivate) {
-            this.params['filter[Changelogs.action][]'].push('deactivate');
+
+        this.params['filter[Changelogs.objecttype_id][]'] = [];
+        for (let model in this.tmpFilter.Models) {
+            if (this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models]) {
+                this.params['filter[Changelogs.objecttype_id][]'].push(
+                    model as keyof typeof this.tmpFilter.Models
+                );
+            }
         }
 
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
@@ -152,8 +144,10 @@ export class ChangelogsIndexComponent {
         this.hideFilter = !this.hideFilter;
     }
 
-    public onFilterChange($event: any) {
-
+    // Callback when a filter has changed
+    public onFilterChange(event: Event) {
+        this.params.page = 1;
+        this.loadChanges();
     }
 
     public resetFilter() {
