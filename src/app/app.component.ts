@@ -11,13 +11,23 @@ import 'flag-icons';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
+import { ContainerComponent } from '@coreui/angular';
+import { CoreuiFooterComponent } from './layouts/coreui/coreui-footer/coreui-footer.component';
+import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
+import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
+import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
 
 @Component({
     selector: 'oitc-root',
     standalone: true,
     imports: [
         RouterOutlet,
-        FontAwesomeModule
+        FontAwesomeModule,
+        ContainerComponent,
+        CoreuiFooterComponent,
+        CoreuiHeaderComponent,
+        CoreuiNavbarComponent,
+        GlobalLoaderComponent
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'

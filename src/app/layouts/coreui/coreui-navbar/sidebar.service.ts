@@ -13,18 +13,14 @@ export class SidebarService {
     public sidebarState = new Subject<SidebarAction>();
     public sidebarState$ = this.sidebarState.asObservable();
 
-    private currentState: SidebarAction = {
-        visible: true,
-        id: 'sidbar1'
-    };
-
     constructor() {
     }
 
     public toggleShowOrHideSidebar(): void {
-        this.currentState.visible = !this.currentState.visible;
-
-        this.sidebarState.next(this.currentState);
+        this.sidebarState.next({
+            visible: 'toggle',
+            id: 'sidbar1'
+        });
     }
 
 }

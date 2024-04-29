@@ -44,6 +44,8 @@ export class CoreuiNavbarComponent implements OnInit {
     @Input({transform: booleanAttribute}) groupItems?: boolean;
     @Input({transform: booleanAttribute}) compact?: boolean;
 
+    private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined
+
     public visible: boolean = true; // show or hide the complete menu
     public unfoldable: boolean = false; // compact menu
     public isUnfoldable: boolean = true; // disabled on mobile devices
@@ -53,7 +55,17 @@ export class CoreuiNavbarComponent implements OnInit {
 
     public menu: MenuHeadline[] = [];
 
+    public isMobile(): boolean {
+        return window.innerWidth < this.mobileBreakpoint;
+    }
+
     public ngOnInit() {
+        if (this.isMobile()) {
+            // Hide menu on mobile devices by default
+            this.visible = false;
+            this.isUnfoldable = false;
+        }
+
         this.subscriptions.add(this.navigationService.loadMenu()
             .subscribe((result: NavigationInterface) => {
                 // Menu records are loaded
@@ -63,12 +75,17 @@ export class CoreuiNavbarComponent implements OnInit {
 
         this.subscriptions.add(this.sidebarService.sidebarState$.subscribe((next: SidebarAction) => {
             // Subscribe which send shor or hide of the complete sidebar navigation
-            this.visible = next.visible;
+            if (next.visible === "toggle") {
+                // next.visible is toggle so we invert the current value for visible
+                this.visible = !this.visible;
+            } else {
+                // next.visible is true or false
+                this.visible = next.visible;
+            }
         }));
 
         // Detect if browser changes to mobile size
-        const mobileBreakpoint = '767.98px';
-        const onMobile = `(max-width: ${mobileBreakpoint})`;
+        const onMobile = `(max-width: ${this.mobileBreakpoint}px)`;
         const layoutChanges = this.breakpointObserver.observe([onMobile]);
         this.subscriptions.add(layoutChanges.subscribe((result: BreakpointState) => {
             const isCurrentlyMobile: boolean = result.breakpoints[onMobile];

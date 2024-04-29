@@ -10,7 +10,7 @@ export interface SidebarActionOrig {
 
 export interface SidebarAction {
     id: string,
-    visible: boolean,
+    visible: true | false | 'toggle',
 }
 
 export interface SidebarGroupAction {
