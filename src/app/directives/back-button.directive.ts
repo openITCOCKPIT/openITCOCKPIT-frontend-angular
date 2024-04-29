@@ -17,7 +17,7 @@ export class BackButtonDirective {
     @HostListener('click')
     onClick(): void {
         const previousUrl = this.historyService.getPreviousUrl();
-        console.log(previousUrl);
+        //console.log(previousUrl);
         if (previousUrl) {
             if (previousUrl != '/') {
                 this.location.back();

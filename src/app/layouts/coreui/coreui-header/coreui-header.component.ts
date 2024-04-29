@@ -53,7 +53,6 @@ import { Subscription } from 'rxjs';
 })
 export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy {
     @Input() sidebarId: string = 'sidebar1';
-    public visible: boolean = true;
 
     readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     readonly #colorModeService = inject(ColorModeService);
@@ -87,12 +86,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
     }
 
     public toggleShowOrHideSidebar() {
-        this.visible = !this.visible;
-
-        this.sidebarService.toggleShowOrHideSidebar({
-            id: this.sidebarId,
-            visible: this.visible
-        });
+        this.sidebarService.toggleShowOrHideSidebar();
     }
 
 }

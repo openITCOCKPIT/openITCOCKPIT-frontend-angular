@@ -60,10 +60,15 @@
         </div>
         -->
     </ul>
-    <div class="sidebar-footer border-top d-none d-md-flex">
+    <div class="sidebar-footer border-top d-none d-md-flex" *ngIf="isUnfoldable">
         <button class="sidebar-toggler" type="button" (click)="toggleUnfoldable()"></button>
     </div>
 </div>
 
 <!-- Inert the page content here -->
 <ng-content></ng-content>
+
+
+<!-- black menu backdrop / close area on mobile devices -->
+<div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
+
