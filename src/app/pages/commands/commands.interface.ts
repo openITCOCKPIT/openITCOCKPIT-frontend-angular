@@ -1,9 +1,9 @@
 /**********************
  *    Index action    *
  **********************/
-import { CommandTypesEnum } from './command-types.enum';
-import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { GenericValidationError } from '../../generic-responses';
+import {CommandTypesEnum} from './command-types.enum';
+import {PaginateOrScroll} from '../../layouts/coreui/paginator/paginator.interface';
+import {GenericValidationError} from '../../generic-responses';
 
 export interface CommandsIndexParams {
     angular: true,

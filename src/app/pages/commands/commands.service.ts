@@ -12,6 +12,7 @@ import {
 } from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DefaultMacros } from "../../components/code-mirror-container/code-mirror-container.interface";
 
 @Injectable({
     providedIn: 'root',
@@ -54,6 +55,15 @@ export class CommandsService implements DeleteAllModalService {
                     });
                 })
             );
+    }
+
+    public getAdd(): Observable<DefaultMacros[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ defaultMacros: DefaultMacros[] }>(`${proxyPath}/commands/add/.json?angular=true`).pipe(
+            map(data => {
+                return data['defaultMacros'];
+            })
+        )
     }
 
     public getEdit(id: number): Observable<CommandPost> {
@@ -105,7 +115,7 @@ export class CommandsService implements DeleteAllModalService {
             )
     }
 
-    
+
     public saveCommandsCopy(commands: CommandCopyPost[]): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/commands/copy/.json?angular=true`, {
