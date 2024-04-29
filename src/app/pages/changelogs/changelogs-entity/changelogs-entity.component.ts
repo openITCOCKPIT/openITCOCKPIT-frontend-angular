@@ -87,6 +87,7 @@ export class ChangelogsEntityComponent implements OnInit {
     private ChangelogsService = inject(ChangelogsService)
     public changes?: ChangelogIndexRoot;
     public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
+    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -135,7 +136,7 @@ export class ChangelogsEntityComponent implements OnInit {
             this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
             this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-            this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+            this.subscriptions.add(this.ChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
                 })
@@ -170,8 +171,6 @@ export class ChangelogsEntityComponent implements OnInit {
             this.loadChanges();
         }));
     }
-
-    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;

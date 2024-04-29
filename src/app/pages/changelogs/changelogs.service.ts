@@ -14,7 +14,18 @@ export class ChangelogsService {
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public getIndex(params: ChangelogsEntityParams): Observable<ChangelogIndexRoot> {
+    public getEntity(params: ChangelogsEntityParams): Observable<ChangelogIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ChangelogIndexRoot>(`${proxyPath}/changelogs/index.json`, {
+            params: params as {} // cast CommandsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getIndex(params: ChangelogsIndexParams): Observable<ChangelogIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<ChangelogIndexRoot>(`${proxyPath}/changelogs/index.json`, {
             params: params as {} // cast CommandsIndexParams into object

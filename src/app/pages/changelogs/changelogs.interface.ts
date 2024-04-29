@@ -38,7 +38,7 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
         'filter[Changelogs.objecttype_id]': [],
         'filter[ShowServices]': 0,
-        'filter[Changelogs.action][]': []
+        'filter[Changelogs.action][]': [],
     }
 }
 

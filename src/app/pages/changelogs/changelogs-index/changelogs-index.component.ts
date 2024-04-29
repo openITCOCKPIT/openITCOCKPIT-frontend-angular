@@ -1,0 +1,205 @@
+import { Component, inject } from '@angular/core';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
+} from '@coreui/angular';
+import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
+import { Subscription } from 'rxjs';
+import { ChangelogsService } from '../changelogs.service';
+import { ObjectTypesEnum } from '../object-types.enum';
+
+@Component({
+    selector: 'oitc-changelogs-index',
+    standalone: true,
+    imports: [
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ChangelogsEntryComponent,
+        ColComponent,
+        ContainerComponent,
+        CoreuiComponent,
+        DebounceDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink
+    ],
+    templateUrl: './changelogs-index.component.html',
+    styleUrl: './changelogs-index.component.css'
+})
+export class ChangelogsIndexComponent {
+    public readonly route = inject(ActivatedRoute);
+    public readonly router = inject(Router);
+
+    public hideFilter: boolean = false;
+    public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
+    private subscriptions: Subscription = new Subscription();
+    private ChangelogsService = inject(ChangelogsService)
+    public changes?: ChangelogIndexRoot;
+    protected readonly ObjectTypesEnum = ObjectTypesEnum;
+
+
+    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+
+    public tmpFilter = {
+        Models: {
+            Command: true,
+            Contact: true,
+            Contactgroup: true,
+            Host: true,
+            Hostgroup: true,
+            Hosttemplate: true,
+            Service: true,
+            Servicegroup: true,
+            Servicetemplate: true,
+            Servicetemplategroup: true,
+            Timeperiod: true,
+            Location: true,
+            Tenant: true,
+            Container: true,
+            Export: true
+        },
+        Action: {
+            add: true,
+            edit: true,
+            copy: true,
+            delete: true,
+            activate: true,
+            deactivate: true
+        }
+    }
+
+    public loadChanges() {
+        this.params['filter[Changelogs.action][]'] = [];
+        if (this.tmpFilter.Action.add) {
+            this.params['filter[Changelogs.action][]'].push('add');
+        }
+        if (this.tmpFilter.Action.edit) {
+            this.params['filter[Changelogs.action][]'].push('edit');
+        }
+        if (this.tmpFilter.Action.copy) {
+            this.params['filter[Changelogs.action][]'].push('copy');
+        }
+        if (this.tmpFilter.Action.delete) {
+            this.params['filter[Changelogs.action][]'].push('delete');
+        }
+        if (this.tmpFilter.Action.activate) {
+            this.params['filter[Changelogs.action][]'].push('activate');
+        }
+        if (this.tmpFilter.Action.deactivate) {
+            this.params['filter[Changelogs.action][]'].push('deactivate');
+        }
+
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
+        this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+            .subscribe((result: ChangelogIndexRoot) => {
+                this.changes = result;
+            })
+        );
+    }
+
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
+    }
+
+    public onFilterChange($event: any) {
+
+    }
+
+    public resetFilter() {
+        this.params = getDefaultChangelogsIndexParams();
+        this.tmpFilter = {
+            Models: {
+                Command: true,
+                Contact: true,
+                Contactgroup: true,
+                Host: true,
+                Hostgroup: true,
+                Hosttemplate: true,
+                Service: true,
+                Servicegroup: true,
+                Servicetemplate: true,
+                Servicetemplategroup: true,
+                Timeperiod: true,
+                Location: true,
+                Tenant: true,
+                Container: true,
+                Export: true
+            },
+            Action: {
+                add: true,
+                edit: true,
+                copy: true,
+                delete: true,
+                activate: true,
+                deactivate: true
+            }
+        }
+        this.loadChanges();
+    }
+
+    public ngOnInit() {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.loadChanges();
+        }));
+    }
+
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.loadChanges();
+    }
+}

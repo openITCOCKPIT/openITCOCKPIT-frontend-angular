@@ -3,9 +3,11 @@
     background: $success !important;
 }
 
+/*  unnecessary because the class already exists in the coreui css
 .bg-warning {
     background: $warning !important;
 }
+*/
 
 .bg-down,
 .bg-critical {
