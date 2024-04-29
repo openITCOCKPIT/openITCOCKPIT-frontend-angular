@@ -1,4 +1,3 @@
-<p>changelogs-index works!</p>
 <oitc-coreui>
     <ng-container *transloco="let t">
         <nav aria-label="breadcrumb">
@@ -55,6 +54,22 @@
                     </c-row>
                     <form cForm>
                         <c-row>
+                            <c-col md="12" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Changelogs.name]']"
+                                           [placeholder]="'Filter by name' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="changelogs.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
                             <c-col md="6">
                                 <c-input-group>
                                     <span cInputGroupText>

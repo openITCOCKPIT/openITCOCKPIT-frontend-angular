@@ -11,6 +11,7 @@ export interface ChangelogsIndexParams {
     page: number,
     'filter[from]': Date | string,
     'filter[to]': Date | string,
+    'filter[Changelogs.name]': string,
     'filter[Changelogs.model][]': string[],
     'filter[Changelogs.action][]': string[],
     'filter[ShowServices]': number
@@ -36,6 +37,7 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
         page: 1,
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
+        'filter[Changelogs.name]': '',
         'filter[Changelogs.model][]': [],
         'filter[ShowServices]': 0,
         'filter[Changelogs.action][]': [],
