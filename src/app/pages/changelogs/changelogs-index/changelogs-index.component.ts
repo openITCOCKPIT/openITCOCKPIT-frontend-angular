@@ -35,6 +35,7 @@ import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexPar
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 
+
 @Component({
     selector: 'oitc-changelogs-index',
     standalone: true,
@@ -82,6 +83,7 @@ export class ChangelogsIndexComponent {
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
     public changes?: ChangelogIndexRoot;
+
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
@@ -121,12 +123,10 @@ export class ChangelogsIndexComponent {
             }
         }
 
-        this.params['filter[Changelogs.objecttype_id][]'] = [];
+        this.params['filter[Changelogs.model][]'] = [];
         for (let model in this.tmpFilter.Models) {
             if (this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models]) {
-                this.params['filter[Changelogs.objecttype_id][]'].push(
-                    model as keyof typeof this.tmpFilter.Models
-                );
+                this.params['filter[Changelogs.model][]'].push(model);
             }
         }
 
