@@ -26,7 +26,7 @@ import { UplotGraphInterface, PerfParams, Gauges, Datasource } from "./uplot-gra
 import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
 import { UPlotConfigBuilder } from './uplot-config-builder';
 import { FormsModule } from '@angular/forms';
-import { timer, interval } from 'rxjs';
+import { timer } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const uPlot: any = (_uPlot as any)?.default;

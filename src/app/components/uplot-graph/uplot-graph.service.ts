@@ -2,7 +2,7 @@
 import { inject, Injectable} from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { switchMap, Observable, map } from "rxjs";
+import { Observable, map } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { UplotGraphInterface, PerfParams } from "./uplot-graph.interface";
 

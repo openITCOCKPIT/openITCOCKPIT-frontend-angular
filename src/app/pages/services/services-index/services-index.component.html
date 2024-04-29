@@ -46,7 +46,7 @@
                         </a>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="default" size="xs">
+                        <button cButton class="ripple" color="default" size="xs" (click)="refresh()">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -78,29 +78,29 @@
                         <th>
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
-                        <th>{{ t('State') }}</th>
-                        <th>
+                        <th mat-sort-header="Servicestatus.current_state">{{ t('State') }} </th>
+                        <th mat-sort-header="Servicestatus.acknowledgement_type">
                             <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                         </th>
-                        <th>
+                        <th mat-sort-header="Servicestatus.scheduled_downtime_depth">
                             <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                         </th>
-                        <th>
+                        <th mat-sort-header="Servicestatus.notifications_enabled">
                             <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                         </th>
                         <th>
                             <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
                         </th>
                         <th>P</th>
-                        <th>
+                        <th mat-sort-header="servicepriority">
                             <fa-icon [icon]="['fas', 'fire']"></fa-icon>
                         </th>
 
-                        <th>{{ t('Host/Service') }}</th>
-                        <th>{{ t('Last state change') }}</th>
-                        <th>{{ t('Last check') }}</th>
-                        <th>{{ t('Next check') }}</th>
-                        <th>{{ t('Service output') }}</th>
+                        <th cass="w-100"><span mat-sort-header="Hosts.name">{{ t('Host') }}</span><span mat-sort-header="servicename">{{ t('Service') }}</span></th>
+                        <th mat-sort-header="Servicestatus.last_state_change">{{ t('Last state change') }}</th>
+                        <th mat-sort-header="Servicestatus.last_check">{{ t('Last check') }}</th>
+                        <th mat-sort-header="Servicestatus.next_check">{{ t('Next check') }}</th>
+                        <th mat-sort-header="Servicestatus.output">{{ t('Service output') }}</th>
                         <th>
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </th>
@@ -110,15 +110,20 @@
                     <ng-container *ngFor="let service of services.all_services;  index as i;">
                         <tr *ngIf="i === 0 || (i > 0 && services.all_services[i -1].Host.uuid !== service.Host.uuid)">
                             <td colspan="16">
-                                <span>{{ service.Service.hostname }}({{ service.Host.address }}) </span>
+                                <oitc-hoststatus-icon [host]="service.Hoststatus"/>
+                                <span class="ms-1">{{ service.Service.hostname }}({{ service.Host.address }}) </span>
                                 <div class="badge border border-info text-info">
                                     <fa-icon [icon]="['fas', 'home']"></fa-icon>
                                     {{ service.Host.satelliteName }}
                                 </div>
                                 <span class="fa-pull-right">
+                                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                                </span>
+                                <span class="fa-pull-right">
                                     <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                     {{ t('State since') }} {{ service.Hoststatus.last_state_change }}
                                 </span>
+
 
                             </td>
                         </tr>
@@ -132,7 +137,7 @@
 
                             </td>
                             <td class="width-50">
-                                <a href="javascript:void(0);" class="btn btn-danger status-circle"></a>
+                                <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                             </td>
                             <td class="width-50">
                                 <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1">
@@ -178,8 +183,8 @@
                             </td>
                             <td class="width-50">
                                 <fa-icon [icon]="['fas', 'fire']" size="lg" [ngClass]="{'ok-soft' : service.Service.priority==1,
-                                        'ok' : service.Service.priority==2, 'warn' : service.Service.priority==3,
-                                        'crit-soft' : service.Service.priority==4, 'crit' : service.Service.priority==5}"></fa-icon>
+                                        'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
+                                        'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                             </td>
                             <td>
                                 <span><a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a></span>
@@ -190,7 +195,15 @@
                             <td>
                                 <div [innerHTML]="service.Servicestatus.outputHtml"></div>
                             </td>
-                            <td></td>
+                            <td>
+                                <oitc-actions-button [permission]="'services.edit'" [url]="'/services/index'">
+                                    <oitc-actions-button-element [permission]="'services.edit'"
+                                                                 [url]="'/services/index'">
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                        {{ t('Edit') }}
+                                    </oitc-actions-button-element>
+                                </oitc-actions-button>
+                            </td>
                         </tr>
                     </ng-container>
                     </tbody>

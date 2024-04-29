@@ -1,13 +1,15 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import {FaIconComponent, FaStackComponent, FaStackItemSizeDirective} from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {ActivatedRoute, Router, RouterLink, RouterModule} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
-import { ServicesIndexRoot, ServiceParams } from   "./services.interface"
+import { ServicesIndexRoot, ServiceParams } from   "./services.interface";
+import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { HoststatusIconComponent} from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -19,20 +21,26 @@ import {
     RoundedDirective,
     RowComponent,
     TabContentComponent,
-    TabContentRefDirective, TableDirective,
+    TabContentRefDirective,
+    TableDirective,
     TabPaneComponent,
-    TextColorDirective, TooltipDirective
+    TextColorDirective,
+    TooltipDirective
 } from '@coreui/angular';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {CommandIndexRoot} from '../../commands/commands.interface';
-import {MatSort, Sort} from '@angular/material/sort';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
+import { XsButtonDirective}  from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 
 
 @Component({
@@ -54,6 +62,7 @@ import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.
         XsButtonDirective,
         CardTitleDirective,
         MatSort,
+        MatSortHeader,
         TableDirective,
         NgIf,
         NgForOf,
@@ -68,6 +77,10 @@ import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.
         TooltipDirective,
         FaStackComponent,
         FaStackItemSizeDirective,
+        ServicestatusIconComponent,
+        HoststatusIconComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css'
@@ -115,6 +128,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     load () {
         this.subscriptions.add(this.ServicesIndexService.getServicesIndex(this.params)
             .subscribe((services) => {
+               /* let random_boolean = Math.random() < 0.5
+                services.all_services[0].Servicestatus.isFlapping = random_boolean;
+                services.all_services[7].Servicestatus.isFlapping = random_boolean;
+                services.all_services[0].Hoststatus.isFlapping = random_boolean; */
                 this.services = services;
             })
         );
@@ -131,6 +148,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
+        this.load();
+    }
+    public refresh() {
         this.load();
     }
 
