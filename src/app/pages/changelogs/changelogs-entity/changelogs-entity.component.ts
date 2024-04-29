@@ -87,6 +87,7 @@ export class ChangelogsEntityComponent implements OnInit {
     private ChangelogsService = inject(ChangelogsService)
     public changes?: ChangelogIndexRoot;
     public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
+    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -113,29 +114,17 @@ export class ChangelogsEntityComponent implements OnInit {
             this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[this.entityType as keyof typeof ObjectTypesEnum]];
 
             this.params['filter[Changelogs.action][]'] = [];
-            if (this.tmpFilter.Action.add) {
-                this.params['filter[Changelogs.action][]'].push('add');
-            }
-            if (this.tmpFilter.Action.edit) {
-                this.params['filter[Changelogs.action][]'].push('edit');
-            }
-            if (this.tmpFilter.Action.copy) {
-                this.params['filter[Changelogs.action][]'].push('copy');
-            }
-            if (this.tmpFilter.Action.delete) {
-                this.params['filter[Changelogs.action][]'].push('delete');
-            }
-            if (this.tmpFilter.Action.activate) {
-                this.params['filter[Changelogs.action][]'].push('activate');
-            }
-            if (this.tmpFilter.Action.deactivate) {
-                this.params['filter[Changelogs.action][]'].push('deactivate');
+
+            for (let action in this.tmpFilter.Action) {
+                if (this.tmpFilter.Action[action as keyof typeof this.tmpFilter.Action]) {
+                    this.params['filter[Changelogs.action][]'].push(action);
+                }
             }
 
             this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
             this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-            this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+            this.subscriptions.add(this.ChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
                 })
@@ -170,8 +159,6 @@ export class ChangelogsEntityComponent implements OnInit {
             this.loadChanges();
         }));
     }
-
-    protected readonly ObjectTypesEnum = ObjectTypesEnum;
 
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;

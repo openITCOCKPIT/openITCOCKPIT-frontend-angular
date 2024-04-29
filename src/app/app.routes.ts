@@ -50,6 +50,9 @@ export const routes: Routes = [{
     path: 'commands/copy/:ids',
     loadComponent: () => import('./pages/commands/commands-copy/commands-copy.component').then(m => m.CommandsCopyComponent)
 }, {
+    path: 'changelogs/index',
+    loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
+}, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
