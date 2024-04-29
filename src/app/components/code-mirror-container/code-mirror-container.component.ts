@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, Input, numberAttribute, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ContentChild,
+    ElementRef,
+    Input,
+    numberAttribute,
+    OnDestroy,
+    ViewChild
+} from '@angular/core';
 import { basicSetup, EditorView } from 'codemirror';
 import { EditorState, Range, RangeSet, StateEffect, StateField } from '@codemirror/state';
 import { Decoration, DecorationSet, keymap } from '@codemirror/view';
@@ -7,6 +16,8 @@ import { autocompletion, completeFromList, Completion, } from '@codemirror/autoc
 import { AutocompleteItem, DefaultMacros, HighlightPattern, Macros } from './code-mirror-container.interface';
 import { CodeMirrorUpdateType } from './code-mirror-update-type';
 import { MacroIndex } from "../../pages/macros/macros.interface";
+import { NgModel } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-code-mirror-container',
@@ -15,11 +26,13 @@ import { MacroIndex } from "../../pages/macros/macros.interface";
     templateUrl: './code-mirror-container.component.html',
     styleUrl: './code-mirror-container.component.css'
 })
-export class CodeMirrorContainerComponent implements AfterViewInit {
+export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
+    @ContentChild(NgModel) textareaModel!: NgModel;
     private editor!: EditorView;
     private customHighlightExtension!: StateField<DecorationSet>[];
     private autocompleteExtension: any;
+    private subscriptions: Subscription = new Subscription();
 
     private defaultHighlightPatterns: HighlightPattern[] = [
         {
@@ -104,6 +117,18 @@ export class CodeMirrorContainerComponent implements AfterViewInit {
         const textarea = this.containerRef.nativeElement.querySelector('textarea');
 
         if (textarea) {
+
+            if (this.textareaModel !== undefined && this.textareaModel !== null && this.textareaModel.valueChanges !== undefined && this.textareaModel.valueChanges !== null) {
+                this.subscriptions.add(
+                    this.textareaModel.valueChanges.subscribe(newValue => {
+                        // update codemirror if the value of the textarea changes
+                        if (newValue !== this.editor.state.doc.toString()) {
+                            this.updateCodemirrorExtension(CodeMirrorUpdateType.MACROS);
+                        }
+                    })
+                );
+            }
+
             let updateValueChangeCodemirrorListener = this.setUpdateValueChangeCodemirrorListener();
 
             this.autocompleteExtension = this.createAutoCompleteExtension(this._autocompleteWords);
@@ -139,6 +164,10 @@ export class CodeMirrorContainerComponent implements AfterViewInit {
         }
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
     // update the codemirror extension based on the given value
     private updateCodemirrorExtension(updateType: string) {
 
@@ -165,6 +194,7 @@ export class CodeMirrorContainerComponent implements AfterViewInit {
 
         if (this.editor !== undefined && this.editor !== null) {
             this.editor.dispatch({
+                changes: {from: 0, to: this.editor.state.doc.length, insert: this.textareaModel.value},
                 effects: StateEffect.reconfigure.of([this.baseExtensions, this.autocompleteExtension, this.customHighlightExtension, updateValueChangeCodemirrorListener]),
             });
         }

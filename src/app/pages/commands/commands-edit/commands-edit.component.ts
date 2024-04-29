@@ -68,6 +68,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import {
+    CodeMirrorContainerComponent
+} from '../../../components/code-mirror-container/code-mirror-container.component';
+import { DefaultMacros } from '../../../components/code-mirror-container/code-mirror-container.interface';
+import { MacroIndex } from '../../macros/macros.interface';
+import { MacrosService } from '../../macros/macros.service';
 
 @Component({
     selector: 'oitc-commands-edit',
@@ -133,6 +139,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ModalTitleDirective,
         ModalToggleDirective,
         ObjectUuidComponent,
+        CodeMirrorContainerComponent,
     ],
     templateUrl: './commands-edit.component.html',
     styleUrl: './commands-edit.component.css'
@@ -146,6 +153,8 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
         description: "",
         commandarguments: []
     }
+    public defaultMacros: DefaultMacros[] = [];
+    public macros: MacroIndex[] = [];
     public errors: GenericValidationError | null = null;
 
     public argumentMissmatch: ArgumentsMissmatch = {
@@ -160,6 +169,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
+    private MacrosService = inject(MacrosService);
     private router = inject(Router);
     private route = inject(ActivatedRoute)
 
@@ -170,9 +180,11 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.CommandsService.getEdit(id)
             .subscribe((result) => {
-                this.post = result;
+                this.post = result.command;
+                this.defaultMacros = result.defaultMacros;
                 this.sortArgumentsByName();
             }));
+        this.loadMacros();
     }
 
     public ngOnDestroy() {
@@ -181,6 +193,14 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
 
     trackByIndex(index: number, item: any): number {
         return index;
+    }
+
+    public loadMacros() {
+        this.subscriptions.add(this.MacrosService.getIndex()
+            .subscribe((result) => {
+                this.macros = result;
+            })
+        );
     }
 
     public addArgument() {
