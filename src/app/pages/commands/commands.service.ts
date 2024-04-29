@@ -6,6 +6,7 @@ import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import {
     CommandCopyGet,
     CommandCopyPost,
+    CommandEditGet,
     CommandIndexRoot,
     CommandPost,
     CommandsIndexParams
@@ -66,11 +67,14 @@ export class CommandsService implements DeleteAllModalService {
         )
     }
 
-    public getEdit(id: number): Observable<CommandPost> {
+    public getEdit(id: number): Observable<CommandEditGet> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ command: CommandPost }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
+        return this.http.get<{
+            command: CommandPost,
+            defaultMacros: DefaultMacros[]
+        }>(`${proxyPath}/commands/edit/${id}.json?angular=true`).pipe(
             map(data => {
-                return data['command'];
+                return data;
             })
         )
     }

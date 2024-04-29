@@ -107,10 +107,12 @@
                             {{ t('Command line') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <input cFormControl id="commandLine" type="text"
-                               name="command_line"
-                               oitcFormError [errors]="errors" errorField="command_line"
-                               [(ngModel)]="post.command_line">
+                        <oitc-code-mirror-container [macros]="{'defaultMacros': defaultMacros, 'macros': macros}">
+                        <textarea cFormControl id="commandLine"
+                                  name="command_line"
+                                  oitcFormError [errors]="errors" errorField="command_line"
+                                  [(ngModel)]="post.command_line"></textarea>
+                        </oitc-code-mirror-container>
                         <oitc-form-feedback [errors]="errors" errorField="command_line"></oitc-form-feedback>
 
                         <div cFormText class="text-info">
