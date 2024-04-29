@@ -19,7 +19,7 @@ export interface MenuLink {
     tags: string[],
     order: number,
     isAngular: boolean,
-    angularUrl: string | string[]
+    angularUrl: string
 }
 
 export interface NavigationInterface {

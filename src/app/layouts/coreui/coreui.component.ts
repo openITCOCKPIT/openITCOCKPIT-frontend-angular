@@ -130,16 +130,6 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public runSearch(): void {
-        let {searchTerm} = this.navSearch.value;
-        this.searchTerm = searchTerm.toLowerCase();
-
-        this.navigationService.search(this.searchTerm);
-    }
-
-    public clearSearch(): void {
-        this.searchTerm = '';
-    }
 
     onScrollbarUpdate($event: any) {
         // if ($event.verticalUsed) {

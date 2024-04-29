@@ -10,6 +10,8 @@ import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 
 @Component({
     selector: 'oitc-coreui-navbar',
@@ -21,7 +23,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
         NavbarGroupComponent,
         NgClass,
         NgScrollbar,
-        NgIf
+        NgIf,
+        TranslocoPipe,
+        NavbarSearchComponent
     ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css'
