@@ -79,7 +79,8 @@ export interface ChangelogIndex {
     timeAgoInWords: string
     recordExists: boolean
     data_unserialized: any
-    ngState: string
+    ngState: string,
+    routerLink: [],
     color: string
     icon: string,
     faIcon: IconProp

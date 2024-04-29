@@ -11,6 +11,7 @@ import { JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common'
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'oitc-changelogs-entry',
@@ -23,7 +24,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         TranslocoDirective,
         JsonPipe,
         FaIconComponent,
-        NgForOf
+        NgForOf,
+        RouterLink
     ],
     templateUrl: './changelogs-entry.component.html',
     styleUrl: './changelogs-entry.component.css',
@@ -196,7 +198,3 @@ export class ChangelogsEntryComponent implements OnInit {
 
 
 }
-
-
-
-
