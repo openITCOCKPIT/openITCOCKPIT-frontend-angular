@@ -11,8 +11,7 @@
             <h4 class="font-md">
                 {{ changelogentry.model }}
                 <strong>
-                    <!-- @todo: fix links -->
-                    <a href="{{changelogentry.ngState}}({id: changelogentry.object_id})"
+                    <a [routerLink]="changelogentry.routerLink"
                        *ngIf="changelogentry.ngState && changelogentry.recordExists">
                         {{ changelogentry.name }}
                     </a>
@@ -25,8 +24,8 @@
                 </strong>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user">
                     {{ t('by') }}
-                    <!-- @todo: fix links -->
-                    <a *oitcPermission="['users', 'edit']" href="UsersEdit({id: changelogentry.user.id})">
+                    <a *oitcPermission="['users', 'edit']"
+                       [routerLink]="['/','users','edit', changelogentry.user.id]">
                         {{ changelogentry.user.firstname }}
                         {{ changelogentry.user.lastname }}
                     </a>

@@ -1,9 +1,10 @@
 /**********************
  *    Index action    *
  **********************/
-import {CommandTypesEnum} from './command-types.enum';
-import {PaginateOrScroll} from '../../layouts/coreui/paginator/paginator.interface';
-import {GenericValidationError} from '../../generic-responses';
+import { CommandTypesEnum } from './command-types.enum';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { GenericValidationError } from '../../generic-responses';
+import { DefaultMacros } from '../../components/code-mirror-container/code-mirror-container.interface';
 
 export interface CommandsIndexParams {
     angular: true,
@@ -68,6 +69,11 @@ export interface CommandPost {
     command_line: string
     description: string
     commandarguments: Commandargument[]
+}
+
+export interface CommandEditGet {
+    command: CommandPost
+    defaultMacros: DefaultMacros[]
 }
 
 export interface Commandargument {
