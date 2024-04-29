@@ -1,0 +1,23 @@
+<div class="sidebar-header border-bottom">
+    <div class="sidebar-brand">
+        <div class="input-group">
+            <input class="form-control" type="text" [placeholder]="'Type to search' | transloco"
+                   [(ngModel)]="searchString" (debouncedValue)="searchMenu($event)" oitcDebounce
+                   (keydown)="onKeydown($event)"/>
+            <span class="input-group-text">
+                <fa-icon [icon]="['fas', 'search']"></fa-icon>
+            </span>
+        </div>
+        <ul class="list-group m-0 p-0" *ngIf="searchResult.length > 0">
+            @for (result of searchResult; track $index) {
+                <li class="list-group-item list-group-item-action"
+                    [ngClass]="{'active': $index === currentSelectedIndex}">
+                    <a [routerLink]="result.angularUrl" class="search-result">
+                        <fa-icon [icon]="result.icon"></fa-icon>
+                        <strong>&nbsp;{{ result.name }}</strong>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
