@@ -1,0 +1,269 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['systemsettings', 'index']" [routerLink]="['/', 'systemsettings', 'index']">
+                        <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                        {{ t('System Settings') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('System Settings') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <c-alert color="danger">
+                                <h4 cAlertHeading>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="fa-lg"></fa-icon>
+                                    {{ t('Attention!') }}
+                                </h4>
+                                <p>
+                                    {{ t('Do not change values, where you don\'t know what you are doing!') }}
+                                </p>
+                            </c-alert>
+                        </div>
+                    </div>
+
+                    <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="SystemsettingsCategories">
+                        <thead>
+                        <tr>
+                            <th scope="col">
+                                {{ t('Key') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Value') }}
+                            </th>
+                            <th scope="col" class="text-center">
+                                {{ t('Info') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- It works fine but PhpStorm is lost -->
+                            @for (category of SystemsettingsCategories | keyvalue; track $index) {
+                                <tr>
+                                    <td colspan="3" class="fw-bold text-primary">
+                                        {{ category.key }}
+                                    </td>
+                                </tr>
+
+                                @for (setting of category.value; track $index) {
+                                    <tr>
+                                        <td> {{ setting.alias }}</td>
+                                        <td>
+                                            <ng-container [ngSwitch]="setting.key">
+                                                <ng-container
+                                                    *ngSwitchCase="'MONITORING.HOST.INITSTATE'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="o">{{ t('Up') }}</option>
+                                                        <option value="d">{{ t('Down') }}</option>
+                                                        <option value="u">{{ t('Unreachable') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'MONITORING.SERVICE.INITSTATE'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="o">{{ t('Ok') }}</option>
+                                                        <option value="w">{{ t('Warning') }}</option>
+                                                        <option value="c">{{ t('Critical') }}</option>
+                                                        <option value="u">{{ t('Unknown') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.SHOW_EXPORT_RUNNING'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="yes">{{ t('True') }}</option>
+                                                        <option value="no">{{ t('False') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.AUTH_METHOD'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option
+                                                            value="session">{{ t('PHP session') }}
+                                                        </option>
+                                                        <option value="ldap">{{ t('PHP LDAP') }}</option>
+                                                        <option value="sso">{{ t('SSO oAuth2') }}</option>
+                                                        <option value="sso_ldap">{{ t('SSO oAuth2 and LDAP') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.LDAP.TYPE'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option
+                                                            value="adldap">{{ t('Active Directory LDAP') }}
+                                                        </option>
+                                                        <option
+                                                            value="openldap">{{ t('OpenLDAP') }}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="setting.key| ngSwitchMultiCase :'MONITORING.SINGLE_INSTANCE_SYNC':'MONITORING.HOST_CHECK_ACTIVE_DEFAULT':'MONITORING.SERVICE_CHECK_ACTIVE_DEFAULT':'FRONTEND.HIDDEN_USER_IN_CHANGELOG':'FRONTEND.DISABLE_LOGIN_ANIMATION':'FRONTEND.REPLACE_USER_MACROS':'FRONTEND.REPLACE_PASSWORD_IN_OBJECT_MACROS':'FRONTEND.ENABLE_IFRAME_IN_DASHBOARDS':'FRONTEND.SSO.FORCE_USER_TO_LOGINPAGE':'FRONTEND.BLUR_COMMAND_LINE_IN_BROWSER'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="0">{{ t('False') }}</option>
+                                                        <option value="1">{{ t('True') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.LDAP.USE_TLS'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="0">{{ t('Plain') }}</option>
+                                                        <option value="1">{{ t('StartTLS') }}</option>
+                                                        <option value="2">{{ t('TLS (ldaps)') }}</option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.PRESELECTED_DOWNTIME_OPTION'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option
+                                                            value="0">{{ t('Individual host') }}
+                                                        </option>
+                                                        <option
+                                                            value="1">{{ t('Host including services') }}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="setting.key| ngSwitchMultiCase :'ARCHIVE.AGE.SERVICECHECKS':'ARCHIVE.AGE.HOSTCHECKS':'ARCHIVE.AGE.STATEHISTORIES':'ARCHIVE.AGE.NOTIFICATIONS':'ARCHIVE.AGE.LOGENTRIES':'ARCHIVE.AGE.CONTACTNOTIFICATIONS':'ARCHIVE.AGE.CONTACTNOTIFICATIONMETHODS'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option *ngFor="let i of archiveAgeOptions" [ngValue]="i">
+                                                            {{ i }}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'SYSTEM.ANONYMOUS_STATISTICS'">
+                                                    <input cFormControl type="text"
+                                                           [disabled]="true"
+                                                           [readOnly]="true"
+                                                           [name]="setting.key"
+                                                           [value]="getAnonymousStatisticsValue(setting.value)">
+                                                    <div>
+                                                        <!-- todo fix link -->
+                                                        <a href="#" *oitcPermission="['statistics', 'index']">
+                                                            {{ t('Click for more information.') }}
+                                                        </a>
+                                                    </div>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.SSO.AUTH_PROVIDER'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="generic">{{ t('Generic') }}</option>
+                                                        <option value="PingIdentity">{{ t('Ping Identity') }}</option>
+                                                        <option
+                                                            value="AzureActiveDirectory">{{ t('Azure Active Directory') }}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="'FRONTEND.LDAP.OPENLDAP_GROUP_SCHEMA'">
+                                                    <select cSelect
+                                                            [name]="setting.key"
+                                                            [(ngModel)]="setting.value">
+                                                        <option value="memberUid">
+                                                            {{ t('memberUid (deprecated)') }}
+                                                        </option>
+                                                        <option
+                                                            value="uniqueMember">
+                                                            {{ t('uniqueMember (RFC 4519 2.40)') }}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchCase="setting.key | ngSwitchMultiCase : 'FRONTEND.LDAP.PASSWORD':'MONITORING.ACK_RECEIVER_PASSWORD':'FRONTEND.SSO.CLIENT_SECRET'">
+                                                    <!-- password input field -->
+                                                    <input cFormControl type="password"
+                                                           [name]="setting.key"
+                                                           [(ngModel)]="setting.value">
+                                                </ng-container>
+
+                                                <ng-container
+                                                    *ngSwitchDefault>
+                                                    <!-- default text input field -->
+                                                    <input cFormControl type="text"
+                                                           [name]="setting.key"
+                                                           [(ngModel)]="setting.value">
+                                                </ng-container>
+
+                                            </ng-container>
+
+                                        </td>
+                                        <td class="text-center text-info">
+                                            <fa-icon [icon]="['fas', 'info-circle']" size="2x"
+                                                     [cTooltip]="setting.info"
+                                                     cTooltipPlacement="left"></fa-icon>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
+
+    <oitc-reload-interface-modal></oitc-reload-interface-modal>
+
+</oitc-coreui>
+
+

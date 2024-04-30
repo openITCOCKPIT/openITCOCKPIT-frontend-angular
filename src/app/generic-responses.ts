@@ -22,3 +22,8 @@ export interface GenericIdResponse {
     id: number;
 }
 
+export interface GenericResponse {
+    success: boolean,
+    data: any
+}
+
