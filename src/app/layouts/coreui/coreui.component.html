@@ -1,26 +1,29 @@
 <oitc-global-loader></oitc-global-loader>
-
-<!--sidebar-->
-<oitc-coreui-navbar>
-
-    <!--main-->
-    <div class="wrapper d-flex flex-column min-vh-100">
-        <!--app-header-->
-        <oitc-coreui-header [cShadowOnScroll]="'sm'"
-                            class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
-                            position="sticky"
-                            sidebarId="sidebar1"/>
-        <!--app-body-->
-        <div class="body flex-grow-1">
-            <c-container [fluid]="true" class="h-auto px-md-4">
-
+<div class="main-container">
+    <div id="left" class="column">
+        <div class="bottom">
+            <!--sidebar-->
+            <oitc-coreui-navbar>
+            </oitc-coreui-navbar>
+        </div>
+    </div>
+    <div id="right" class="column">
+        <div class="top-right">
+            <!--app-header-->
+            <oitc-coreui-header [cShadowOnScroll]="'sm'"
+                                class="shadow-sm w-100 p-0"
+                                position="sticky"
+                                sidebarId="sidebar1"/>
+        </div>
+        <div class="bottom">
+            <!--main-->
+            <!--app-body-->
+            <c-container [fluid]="true" class="">
                 <!-- Content will be here -->
                 <ng-content/>
-
             </c-container>
+            <!--app footer-->
+            <oitc-coreui-footer></oitc-coreui-footer>
         </div>
-        <!--app footer-->
-        <oitc-coreui-footer></oitc-coreui-footer>
     </div>
-
-</oitc-coreui-navbar>
+</div>

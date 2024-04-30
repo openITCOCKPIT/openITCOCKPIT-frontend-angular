@@ -1,27 +1,25 @@
-<div
-    class="d-print-none sidebar sidebar-fixed border-end sidebar-dark compact bg-oitc-gradient"
-    id="sidebar1"
-    [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable': unfoldable}">
+<div class="d-print-none sidebar border-end sidebar-dark compact bg-oitc-gradient"
+     id="sidebar1"
+     [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable sidebar-fixed sidebar-static': unfoldable}">
     <div class="sidebar-header border-bottom">
         <div class="sidebar-brand">
             <!-- todo fix logo -->
             <img src="/img/logos/logo_header.png"/>
         </div>
     </div>
-
-    <oitc-navbar-search [menu]="menu"></oitc-navbar-search>
+    <oitc-navbar-search [menu]="menu" *ngIf="unfoldable==false">
+    </oitc-navbar-search>
 
     <ul class="sidebar-nav simplebar-scrollable-y">
-        <div class="simplebar-wrapper" style="margin: -8px;">
+        <div class="simplebar-wrapper">
             <div class="simplebar-height-auto-observer-wrapper">
                 <div class="simplebar-height-auto-observer"></div>
             </div>
             <div class="simplebar-mask">
-                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                <div class="simplebar-offset">
                     <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                         aria-label="scrollable content"
-                         style="height: 100%; overflow: hidden scroll;">
-                        <div class="simplebar-content" style="padding: 8px;">
+                         aria-label="scrollable content">
+                        <div class="simplebar-content">
                             @for (headline of menu; track $index) {
                                 <li class="nav-title">
                                     {{ headline.alias }}
@@ -61,15 +59,11 @@
         </div>
         -->
     </ul>
-    <div class="sidebar-footer border-top d-none d-md-flex" *ngIf="isUnfoldable">
+    <div class="sidebar-footer border-top">
         <button class="sidebar-toggler" type="button" (click)="toggleUnfoldable()"></button>
     </div>
 </div>
 
-<!-- Inert the page content here -->
-<ng-content></ng-content>
-
 
 <!-- black menu backdrop / close area on mobile devices -->
 <div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
-

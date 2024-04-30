@@ -63,3 +63,45 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.main-container {
+    height: 100%;
+    margin: 0px;
+    display: flex;
+}
+
+.column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#left {
+    flex-shrink: 0;
+    background-color: magenta;
+    overflow-y: scroll;
+}
+
+#right {
+    background-color: cyan;
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.top-left {
+    flex-shrink: 0;
+    background-color: limegreen;
+    color: white;
+    padding: 20px;
+}
+
+.top-right {
+    display: inline-flex;
+    flex-shrink: 0;
+    background-color: #333;
+    background: yellow;
+}
+
+.bottom {
+    flex-grow: 1;
+    overflow-y: visible;
+}

@@ -2,3 +2,6 @@
     background-image: linear-gradient(270deg, transparent, rgba(64, 132, 197, 0.06));
 }
 
+.sidebar-static {
+    position: static;
+}
