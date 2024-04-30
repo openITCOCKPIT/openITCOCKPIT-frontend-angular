@@ -1,4 +1,5 @@
 /* Command line highlight colors */
+/* Legacy background highlight */
 .highlight-blue {
     background-color: rgba(0, 192, 239, 0.2);
 }
@@ -9,4 +10,37 @@
 
 .highlight-purple {
     background-color: rgba(155, 102, 160, 0.2);
+}
+
+/* New text highlight */
+.highlight-user-macro {
+    color: rgb(88, 86, 214);
+}
+
+.highlight-command-argument {
+    color: #bb1bf4;
+}
+
+.highlight-custom-macro {
+    color: #4285F4;
+}
+
+.highlight-default-macro {
+    color: #b88026;
+}
+
+body.dark-theme .highlight-user-macro {
+    color: rgb(125, 123, 214);
+}
+
+body.dark-theme .highlight-command-argument {
+    color: #d061f8;
+}
+
+body.dark-theme .highlight-custom-macro {
+    color: #80affa;
+}
+
+body.dark-theme .highlight-default-macro {
+    color: #cca567;
 }
