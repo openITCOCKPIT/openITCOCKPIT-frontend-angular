@@ -18,7 +18,11 @@
                 </c-col>
 
                 <c-col xs="12" class="text-info">
-                    {{ t('Automatically reload in {0} seconds.') }}
+                    {{
+                        t('Automatically reload in {delay} seconds.', {
+                            'delay': interfaceReloadIn
+                        })
+                    }}
                 </c-col>
             </c-row>
 

@@ -42,6 +42,7 @@ import { Subscription } from 'rxjs';
 export class ReloadInterfaceModalComponent implements OnInit, OnDestroy {
     public percentage = 0;
     public reloadDelay = 3;
+    public interfaceReloadIn = 3;
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
@@ -69,6 +70,7 @@ export class ReloadInterfaceModalComponent implements OnInit, OnDestroy {
 
         let i = 0;
         this.reloadInterval = setInterval(() => {
+            this.interfaceReloadIn--;
             i++;
             this.percentage = Math.round(i / this.reloadDelay * 100);
 
