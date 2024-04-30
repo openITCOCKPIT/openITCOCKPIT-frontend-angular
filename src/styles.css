@@ -62,6 +62,8 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
     height: 100%;
+    overflow: hidden;
+    display: flex;
 }
 
 .main-container {
@@ -74,16 +76,21 @@ body {
 .column {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 #left {
     flex-shrink: 0;
     background-color: magenta;
+    border: 2px solid mediumseagreen;
+    overflow: auto;
+    overscroll-behavior-y: contain;
 }
 
 #right {
     background-color: cyan;
     flex: 1 1 auto;
+    border:2px solid orangered;
 }
 
 .top-left {

@@ -1,70 +1,72 @@
-<div class="d-print-none sidebar border-end sidebar-dark compact bg-oitc-gradient"
-     id="sidebar1"
-     [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable sidebar-fixed sidebar-static': unfoldable}">
-    <div class="top-left">
-        <div class="sidebar-header border-bottom">
-            <div class="sidebar-brand">
-                <!-- todo fix logo -->
-                <img src="/img/logos/logo_header.png"/>
+<div id="left" class="column h-100">
+    <div class="d-print-none sidebar border-end sidebar-dark compact bg-oitc-gradient bottom"
+         id="sidebar1"
+         [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable sidebar-fixed sidebar-static': unfoldable}">
+
+        <div class="top-left">
+            <div class="sidebar-header border-bottom">
+                <div class="sidebar-brand">
+                    <!-- todo fix logo -->
+                    <img src="/img/logos/logo_header.png"/>
+                </div>
             </div>
+            <oitc-navbar-search [menu]="menu" *ngIf="unfoldable==false">
+            </oitc-navbar-search>
         </div>
-        <oitc-navbar-search [menu]="menu" *ngIf="unfoldable==false">
-        </oitc-navbar-search>
-    </div>
-    <ul class="sidebar-nav">
-        <div class="simplebar-wrapper">
-            <div class="simplebar-height-auto-observer-wrapper">
-                <div class="simplebar-height-auto-observer"></div>
-            </div>
-            <div class="simplebar-mask">
-                <div class="simplebar-offset">
-                    <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                         aria-label="scrollable content">
-                        <div class="simplebar-content">
-                            @for (headline of menu; track $index) {
-                                <li class="nav-title">
-                                    {{ headline.alias }}
-                                </li>
-                                @if (headline.items.length > 0) {
-                                    @for (item of headline.items; track $index) {
-                                        <!-- Is this a simple link or a category of links -->
-                                        @if (!item.items) {
-                                            <!-- this is a link -->
-                                            <li class="nav-item">
-                                                <a class="nav-link" [routerLink]="item.angularUrl">
-                                                    <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                                                    {{ item.name }}
-                                                </a>
-                                            </li>
-                                        } @else {
-                                            <!-- this is a category of links -->
-                                            <oitc-navbar-group [item]="item"></oitc-navbar-group>
+        <ul class="sidebar-nav">
+            <div class="simplebar-wrapper">
+                <div class="simplebar-height-auto-observer-wrapper">
+                    <div class="simplebar-height-auto-observer"></div>
+                </div>
+                <div class="simplebar-mask">
+                    <div class="simplebar-offset">
+                        <div class="simplebar-content-wrapper" tabindex="0" role="region"
+                             aria-label="scrollable content">
+                            <div class="simplebar-content">
+                                @for (headline of menu; track $index) {
+                                    <li class="nav-title">
+                                        {{ headline.alias }}
+                                    </li>
+                                    @if (headline.items.length > 0) {
+                                        @for (item of headline.items; track $index) {
+                                            <!-- Is this a simple link or a category of links -->
+                                            @if (!item.items) {
+                                                <!-- this is a link -->
+                                                <li class="nav-item">
+                                                    <a class="nav-link" [routerLink]="item.angularUrl">
+                                                        <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+                                                        {{ item.name }}
+                                                    </a>
+                                                </li>
+                                            } @else {
+                                                <!-- this is a category of links -->
+                                                <oitc-navbar-group [item]="item"></oitc-navbar-group>
+                                            }
                                         }
                                     }
                                 }
-                            }
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--
-        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+            <!--
+            <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+            </div>
+            <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                <div class="simplebar-scrollbar"
+                     style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+            </div>
+            -->
+        </ul>
+        <div class="sidebar-footer border-top">
+            <button class="sidebar-toggler" type="button" (click)="toggleUnfoldable()"></button>
         </div>
-        <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
-            <div class="simplebar-scrollbar"
-                 style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
-        </div>
-        -->
-    </ul>
-    <div class="sidebar-footer border-top">
-        <button class="sidebar-toggler" type="button" (click)="toggleUnfoldable()"></button>
     </div>
 </div>
-
 
 <!-- black menu backdrop / close area on mobile devices -->
 <div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
