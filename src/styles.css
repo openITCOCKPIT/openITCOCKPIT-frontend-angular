@@ -70,7 +70,6 @@ body {
     height: 100%;
     margin: 0;
     display: flex;
-    background: orange;
 }
 
 .column {
@@ -81,28 +80,22 @@ body {
 
 #left {
     flex-shrink: 0;
-    background-color: magenta;
-    border: 2px solid mediumseagreen;
     overflow: auto;
     overscroll-behavior-y: contain;
 }
 
 #right {
-    background-color: cyan;
     flex: 1 1 auto;
-    border:2px solid orangered;
 }
 
 .top-left {
     flex-shrink: 0;
-    background-color: limegreen;
     position: sticky;
 }
 
 .top-right {
     display: inline-flex;
     flex-shrink: 0;
-    background-color: rebeccapurple;
 }
 
 .bottom {
@@ -114,4 +107,8 @@ ul {
     display: inline-flex;
     list-style: none;
     margin: 0;
+}
+
+.scroll-hidden-y{
+    overflow-y: hidden;
 }
