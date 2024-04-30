@@ -54,23 +54,24 @@ body {
 }
 */
 
-html, body {
+html {
     height: 100%;
 }
 
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    height: 100%;
 }
 
 .main-container {
     height: 100%;
-    margin: 0px;
+    margin: 0;
     display: flex;
+    background: orange;
 }
 
 .column {
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -78,30 +79,32 @@ body {
 #left {
     flex-shrink: 0;
     background-color: magenta;
-    overflow-y: scroll;
 }
 
 #right {
     background-color: cyan;
-    flex-grow: 1;
-    overflow-y: scroll;
+    flex: 1 1 auto;
 }
 
 .top-left {
     flex-shrink: 0;
     background-color: limegreen;
-    color: white;
-    padding: 20px;
+    position: sticky;
 }
 
 .top-right {
     display: inline-flex;
     flex-shrink: 0;
-    background-color: #333;
-    background: yellow;
+    background-color: rebeccapurple;
 }
 
 .bottom {
     flex-grow: 1;
-    overflow-y: visible;
+    overflow-y: auto;
+}
+
+ul {
+    display: inline-flex;
+    list-style: none;
+    margin: 0;
 }
