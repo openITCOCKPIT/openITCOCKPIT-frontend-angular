@@ -17,6 +17,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 return EMPTY;
             }
 
+            if (error.status === HttpStatusCode.NotFound) {
+                router.navigate(['/error/404']);
+            }
+
             // re-throw all other errors so components can handle them
             return throwError(() => error);
         })
