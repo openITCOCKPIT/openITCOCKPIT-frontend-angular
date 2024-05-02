@@ -186,8 +186,8 @@
                                                            [name]="setting.key"
                                                            [value]="getAnonymousStatisticsValue(setting.value)">
                                                     <div>
-                                                        <!-- todo fix link -->
-                                                        <a href="#" *oitcPermission="['statistics', 'index']">
+                                                        <a [routerLink]="['/', 'statistics', 'index']"
+                                                           *oitcPermission="['statistics', 'index']">
                                                             {{ t('Click for more information.') }}
                                                         </a>
                                                     </div>

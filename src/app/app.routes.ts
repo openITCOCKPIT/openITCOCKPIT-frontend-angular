@@ -62,6 +62,9 @@ export const routes: Routes = [{
     path: 'systemsettings/index',
     loadComponent: () => import('./pages/systemsettings/systemsettings-index/systemsettings-index.component').then(m => m.SystemsettingsIndexComponent)
 }, {
+    path: 'statistics/index',
+    loadComponent: () => import('./pages/statistics/statistics-index/statistics-index.component').then(m => m.StatisticsIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
