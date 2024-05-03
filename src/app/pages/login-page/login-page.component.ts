@@ -48,7 +48,7 @@ export class LoginPageComponent implements OnDestroy {
             email, password, remember_me
         ).subscribe({
             next: (loggedIn) => {
-                console.log(loggedIn);
+                //console.log(loggedIn);
 
                 this.router.navigate(['/']);
             }

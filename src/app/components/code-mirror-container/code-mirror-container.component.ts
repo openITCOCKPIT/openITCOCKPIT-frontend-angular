@@ -3,6 +3,7 @@ import {
     Component,
     ContentChild,
     ElementRef,
+    inject,
     Input,
     numberAttribute,
     OnDestroy,
@@ -18,6 +19,7 @@ import { CodeMirrorUpdateType } from './code-mirror-update-type';
 import { MacroIndex } from "../../pages/macros/macros.interface";
 import { NgModel } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-code-mirror-container',
@@ -33,27 +35,28 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
     private customHighlightExtension!: StateField<DecorationSet>[];
     private autocompleteExtension: any;
     private subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
 
     private defaultHighlightPatterns: HighlightPattern[] = [
         {
             highlight: /(\$ARG\d+\$)/g,
-            className: 'highlight-blue'
+            className: 'highlight-command-argument'
         },
         {
             highlight: /(\$USER\d+\$)/g,
-            className: 'highlight-green'
+            className: 'highlight-user-macro'
         },
         {
             highlight: /(\$_HOST.*?\$)/g,
-            className: 'highlight-purple'
+            className: 'highlight-custom-macro'
         },
         {
             highlight: /(\$_SERVICE.*?\$)/g,
-            className: 'highlight-purple'
+            className: 'highlight-custom-macro'
         },
         {
             highlight: /(\$_CONTACT.*?\$)/g,
-            className: 'highlight-purple'
+            className: 'highlight-custom-macro'
         }
     ];
 
@@ -160,7 +163,7 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
             // hide textarea
             textarea.style.display = 'none';
         } else {
-            console.warn('Keine Textarea gefunden.');
+            console.warn(this.TranslocoService.translate('Could not find textarea'));
         }
     }
 
@@ -279,7 +282,7 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
         for (let i = 1; i <= 32; i++) {
             let item: AutocompleteItem = {
                 value: '$ARG' + i + '$',
-                description: 'Nagios Macro'
+                description: this.TranslocoService.translate('Command Argument')
             };
             autocompleteItems.push(item);
         }
