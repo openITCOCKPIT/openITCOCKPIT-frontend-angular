@@ -1,0 +1,41 @@
+/** issues page **/
+
+.pm-h4 {
+    padding-top: 5px;
+    margin-bottom: 0;
+}
+
+.supportCard {
+    border-radius: 5px !important;
+}
+
+.supportCard .card-header {
+    height: 74px;
+}
+
+.supportCard .card-body {
+    height: 384px;
+}
+
+.supportCard .card-footer {
+    height: 42px;
+    padding: 6px 6px 6px 20px !important;
+}
+
+.supportCard .card-footer .btn, .supportCard .card-footer a.btn {
+    height: 30px !important;
+}
+
+.supportCardBody {
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    height: 150px;
+    margin: 5px 1% 5px 1%;
+    float: left;
+    position: relative;
+    transition: height 0.5s;
+    -webkit-transition: height 0.5s;
+    overflow: auto;
+}
+
+/** end issues page **/
