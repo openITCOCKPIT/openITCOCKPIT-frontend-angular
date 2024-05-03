@@ -123,3 +123,135 @@ export interface CommandCopy {
     command_line: string
     description: string
 }
+
+
+export interface CommandUsedBy {
+    command: Command
+    objects: Objects
+    total: number
+    _csrfToken: string
+}
+
+export interface Command {
+    id: number
+    name: string
+    command_line: string
+    command_type: number
+    human_args: any
+    uuid: string
+    description: string
+}
+
+
+export interface Objects {
+    Contacts: Contact[]
+    Hosttemplates: Hosttemplate[]
+    Servicetemplates: Servicetemplate[]
+    Hosts: Host[]
+    Services: Service[]
+}
+
+export interface Contact {
+    id: number
+    uuid: string
+    name: string
+    description: string
+    email: string
+    phone: string
+    user_id: number
+    host_timeperiod_id: number
+    service_timeperiod_id: number
+    host_notifications_enabled: number
+    service_notifications_enabled: number
+    notify_service_recovery: number
+    notify_service_warning: number
+    notify_service_unknown: number
+    notify_service_critical: number
+    notify_service_flapping: number
+    notify_service_downtime: number
+    notify_host_recovery: number
+    notify_host_down: number
+    notify_host_unreachable: number
+    notify_host_flapping: number
+    notify_host_downtime: number
+    host_push_notifications_enabled: number
+    service_push_notifications_enabled: number
+    containers: Container[]
+}
+
+export interface Container {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    _joinData: JoinData
+}
+
+export interface JoinData {
+    id: number
+    contact_id: number
+    container_id: number
+}
+
+export interface Hosttemplate {
+    id: number
+    name: string
+    uuid: string
+}
+
+export interface Servicetemplate {
+    id: number
+    name: string
+    template_name: string
+    uuid: string
+}
+
+export interface Host {
+    id: number
+    name: string
+    uuid: string
+    hosts_to_containers_sharing: HostsToContainersSharing[]
+}
+
+export interface HostsToContainersSharing {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id?: number
+    lft: number
+    rght: number
+    _joinData: JoinData2
+}
+
+export interface JoinData2 {
+    id: number
+    host_id: number
+    container_id: number
+}
+
+export interface Service {
+    id: number
+    name: string
+    uuid: string
+    servicename: string
+    _matchingData: MatchingData
+}
+
+export interface MatchingData {
+    Hosts: Hosts
+    Servicetemplates: Servicetemplates
+}
+
+export interface Hosts {
+    id: number
+    name: string
+    uuid: string
+}
+
+export interface Servicetemplates {
+    id: number
+    name: string
+    uuid: string
+}

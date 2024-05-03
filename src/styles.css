@@ -66,6 +66,10 @@ body {
     display: flex;
 }
 
+a {
+    text-decoration: none;
+}
+
 .main-container {
     height: 100%;
     margin: 0;
