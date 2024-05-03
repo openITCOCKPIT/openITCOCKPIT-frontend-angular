@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Library</a></li>
@@ -169,12 +169,13 @@
         <span *oitcPermission="'gibbet.nicht'">hidden</span>
         <span *oitcPermission="'a.b'">show</span>
 
-  <span *oitcPermission="'hosts.index'">hosts.index</span>
-  <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
+        <span *oitcPermission="'hosts.index'">hosts.index</span>
+        <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
 
-  <hr/>
-  <span *oitcPermission="'services.browser'"><a [routerLink]="['services', 'browser', 3]">Servicesbrowser</a></span>
-  <hr/>
+        <hr/>
+        <span *oitcPermission="'services.browser'"><a
+            [routerLink]="['services', 'browser', 3]">Servicesbrowser</a></span>
+        <hr/>
         <button (click)="callPeter()">call peter</button>
     </ng-container>
 </oitc-coreui>
