@@ -107,7 +107,8 @@
                         <p>{{ t('To be as transparent as possible, we show you all records that will be send to us. (This data was generated on your system.)') }}</p>
                     </c-col>
                     <c-col sm="12">
-                        <div id="jsoneditor"></div>
+                        <div id="jsoneditor"
+                             [ngClass]="{'jse-theme-dark' : (LayoutService.theme$ | async) === 'dark'}"></div>
                     </c-col>
                 </c-row>
 
