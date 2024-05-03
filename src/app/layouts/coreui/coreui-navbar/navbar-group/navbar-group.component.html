@@ -3,7 +3,7 @@
         <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
         {{ item.alias }}
     </a>
-    <ul class="nav-group-items compact">
+    <ul class="nav-group-items compact" [ngClass]="{'d-block':open}">
         @for (groupItem of item.items; track $index) {
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="groupItem.angularUrl">
