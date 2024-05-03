@@ -26,6 +26,20 @@ export class ServicesIndexService {
         )
     }
 
+    public genericRequest(params: ServiceParams, url:string): Observable<any> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}` + url, {
+            params: params as {}
+        })
+            /*.pipe(
+            map(data => {
+                return data;
+            })
+
+        )*/
+    }
+
+
   /*  public getUserTimezone(): Observable<Usertimezone> {
         const proxyPath = this.proxyPath;
 

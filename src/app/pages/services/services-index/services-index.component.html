@@ -26,21 +26,21 @@
                         {{ t('overview') }}
                     </small>
                 </h5>
-                <c-nav class="card-toolbar card-header-pills">
+                <c-nav variant="underline" class="card-toolbar card-header-pills">
                     <c-nav-item>
-                        <a [routerLink]="['/services', 'index']" class="nav-link active">
+                        <a href="javascript:void(0);" (click)="setTab(0)" class="nav-link" [ngClass]="{'active' : tab === 0}">
                             <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
                             {{ t('Monitored') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
-                        <a [routerLink]="['/services', 'index']" class="nav-link">
+                        <a href="javascript:void(0);" (click)="setTab(1)" class="nav-link" [ngClass]="{'active' : tab === 1}">
                             <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                             {{ t('Unmonitored') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
-                        <a [routerLink]="['/services', 'index']" class="nav-link">
+                        <a href="javascript:void(0);" (click)="setTab(2)" class="nav-link" [ngClass]="{'active' : tab === 2}">
                             <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                             {{ t('Disabled') }}
                         </a>
@@ -64,7 +64,7 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="primary" size="xs">
+                        <button cButton class="ripple" color="primary" size="xs" (click)="showFilterToggle()">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
                         </button>
@@ -72,31 +72,33 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
+                <ng-container *ngIf="tab === 0">
+                    <oitc-services-index-filter [filter]="showFilter"></oitc-services-index-filter>
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
                     <thead>
                     <tr>
-                        <th>
+                        <th class="text-center" scope="col">
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
-                        <th mat-sort-header="Servicestatus.current_state">{{ t('State') }} </th>
-                        <th mat-sort-header="Servicestatus.acknowledgement_type">
+                        <th class="text-center" scope="col" mat-sort-header="Servicestatus.current_state">{{ t('State') }} </th>
+                        <th class="text-center" scope="col" mat-sort-header="Servicestatus.acknowledgement_type">
                             <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                         </th>
-                        <th mat-sort-header="Servicestatus.scheduled_downtime_depth">
+                        <th class="text-center" scope="col" mat-sort-header="Servicestatus.scheduled_downtime_depth">
                             <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                         </th>
-                        <th mat-sort-header="Servicestatus.notifications_enabled">
+                        <th class="text-center" scope="col" mat-sort-header="Servicestatus.notifications_enabled">
                             <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                         </th>
-                        <th>
+                        <th class="text-center" scope="col">
                             <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
                         </th>
                         <th>P</th>
-                        <th mat-sort-header="servicepriority">
+                        <th class="text-center" scope="col" mat-sort-header="servicepriority">
                             <fa-icon [icon]="['fas', 'fire']"></fa-icon>
                         </th>
 
-                        <th cass="w-100"><span mat-sort-header="Hosts.name">{{ t('Host') }}</span><span mat-sort-header="servicename">{{ t('Service') }}</span></th>
+                        <th><span mat-sort-header="Hosts.name">{{ t('Host') }}</span><span mat-sort-header="servicename">{{ t('Service') }}</span></th>
                         <th mat-sort-header="Servicestatus.last_state_change">{{ t('Last state change') }}</th>
                         <th mat-sort-header="Servicestatus.last_check">{{ t('Last check') }}</th>
                         <th mat-sort-header="Servicestatus.next_check">{{ t('Next check') }}</th>
@@ -134,7 +136,6 @@
                                         *oitcPermission="['services', 'delete']"
                                         [disabled]="false"
                                         [item]="service"></oitc-item-select>
-
                             </td>
                             <td class="width-50">
                                 <oitc-servicestatus-icon [service]="service.Servicestatus"/>
@@ -187,7 +188,8 @@
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                             </td>
                             <td>
-                                <span><a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a></span>
+                              <span *oitcPermission="['services', 'browser']"> <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a></span>
+                            <span *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
                             </td>
                             <td>{{ service.Hoststatus.last_state_change }}</td>
                             <td>{{ service.Servicestatus.lastCheck }}</td>
@@ -210,6 +212,37 @@
                 </table>
                 <oitc-no-records *ngIf="services && services.all_services.length === 0"></oitc-no-records>
 
+                <ng-container *ngIf="services && services.all_services">
+                    <c-container class="mt-2" fluid>
+                        <c-row class="align-items-start">
+                            <c-col md="4">
+                                <oitc-select-all
+                                        [itemsCount]="services.all_services.length">
+                                </oitc-select-all>
+                            </c-col>
+                            <c-col md="2">
+                                <fa-icon [icon]="['fas', 'file']"></fa-icon> {{t('Copy')}}
+                            </c-col>
+                            <c-col md="3">
+                                <fa-icon [icon]="['fas', 'trash']" class="critical"></fa-icon> <span class="critical">{{t('Delete selected')}}</span>
+                            </c-col>
+                            <c-col md="3">
+                                <c-dropdown>
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a href="javascript:void(0);"  cDropdownItem (click)="linkFor('pdf')"><fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>{{t('List as pdf')}}</a></li>
+                                        <li><a href="javascript:void(0);" cDropdownItem (click)="linkFor('csv')"><fa-icon [icon]="['fas', 'file-csv']"></fa-icon>{{t('List as csv')}}</a></li>
+                                        <li><a href="javascript:void(0);" cDropdownItem (click)="disableServices()"><fa-icon [icon]="['fas', 'plug']"></fa-icon>{{t('Disable services')}}</a></li>
+                                    </ul>
+                                </c-dropdown>
+                            </c-col>
+                        </c-row>
+
+                    </c-container>
+                </ng-container>
+                </ng-container>
                 <c-row class="pt-2">
                     <c-col>
                         <oitc-paginate-or-scroll

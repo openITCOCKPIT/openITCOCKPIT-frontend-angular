@@ -585,6 +585,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
 
     public ngOnDestroy() {
+        this.stopPlay$.next(false);
         this.stopPlay$.complete();
         this.subscriptions.unsubscribe();
     }

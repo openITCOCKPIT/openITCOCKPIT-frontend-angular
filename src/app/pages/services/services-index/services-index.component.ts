@@ -7,24 +7,28 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { ServicesIndexRoot, ServiceParams } from   "./services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { ServicesIndexFilterComponent } from '../../../components/services/services-index-filter/services-index-filter.component';
 import { HoststatusIconComponent} from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
 import {
     CardBodyComponent,
     CardComponent,
-    CardHeaderComponent, CardTitleDirective,
-    ColComponent, ContainerComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     NavComponent,
     NavItemComponent,
-    NavLinkDirective, PopoverDirective,
-    RoundedDirective,
-    RowComponent,
     TabContentComponent,
-    TabContentRefDirective,
+    PopoverDirective,
+    RowComponent,
     TableDirective,
-    TabPaneComponent,
-    TextColorDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { XsButtonDirective}  from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -41,6 +45,8 @@ import {ActionsButtonComponent} from '../../../components/actions-button/actions
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
+import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
+import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 
 @Component({
@@ -59,6 +65,7 @@ import {
         CardBodyComponent,
         NavComponent,
         NavItemComponent,
+        TabContentComponent,
         XsButtonDirective,
         CardTitleDirective,
         MatSort,
@@ -80,7 +87,13 @@ import {
         ServicestatusIconComponent,
         HoststatusIconComponent,
         ActionsButtonComponent,
-        ActionsButtonElementComponent
+        ActionsButtonElementComponent,
+        SelectAllComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        ServicesIndexFilterComponent
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css'
@@ -91,6 +104,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private ServicesIndexService: ServicesIndexService = inject(ServicesIndexService);
+    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public params: ServiceParams = {
         'angular': true,
         'scroll': true,
@@ -114,8 +128,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         'filter[Servicestatus.active_checks_enabled]': '',
         'filter[Servicestatus.notifications_enabled]': '',
         'filter[servicepriority][]': []
-    }
+    };
+    public showFilter: boolean = false;
     public services?: ServicesIndexRoot;
+    public tab: number = 0;
 
     ngOnInit() {
             this.load();
@@ -128,13 +144,17 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     load () {
         this.subscriptions.add(this.ServicesIndexService.getServicesIndex(this.params)
             .subscribe((services) => {
-               /* let random_boolean = Math.random() < 0.5
-                services.all_services[0].Servicestatus.isFlapping = random_boolean;
+                let random_boolean = Math.random() < 0.5
+              /*  services.all_services[0].Servicestatus.isFlapping = random_boolean;
                 services.all_services[7].Servicestatus.isFlapping = random_boolean;
                 services.all_services[0].Hoststatus.isFlapping = random_boolean; */
                 this.services = services;
             })
         );
+    }
+
+    public setTab(tab: number){
+        this.tab = tab;
     }
 
     public onSortChange(sort: Sort) {
@@ -153,6 +173,30 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public refresh() {
         this.load();
     }
+
+    public showFilterToggle() {
+        this.showFilter = !this.showFilter;
+    }
+
+    public linkFor(type: string) {
+        let baseUrl: string = '/services/listToPdf.pdf?';
+        if(type === 'csv'){
+            baseUrl = '/services/listToCsv?';
+        }
+
+    }
+
+    public disableServices() {
+       let items = this.SelectionServiceService.getSelectedItems().map((item): any => {
+            return {
+                id: item.Service.id,
+                displayName: item.Service.servicename
+            };
+           //return item;
+        });
+       console.log(items);
+    }
+
 
 
 }

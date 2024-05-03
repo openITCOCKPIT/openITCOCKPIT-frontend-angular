@@ -1,0 +1,14 @@
+
+<ng-container *transloco="let t">
+    <c-card>
+        <c-card-header>
+            <h5><fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('Filter') }}</h5>
+            <oitc-filter-bookmark class="fa-pull-right"></oitc-filter-bookmark>
+
+        </c-card-header>
+        <c-card-body *ngIf="showFilter">
+
+
+        </c-card-body>
+    </c-card>
+</ng-container>
