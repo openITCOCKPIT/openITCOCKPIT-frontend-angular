@@ -109,6 +109,16 @@ ul {
     margin: 0;
 }
 
-.scroll-hidden-y{
-    overflow-y: hidden;
+.scroll-hidden {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
+.scroll-hidden::-webkit-scrollbar-thumb {
+    display: none; /* for Chrome, Safari, and Opera */
 }
