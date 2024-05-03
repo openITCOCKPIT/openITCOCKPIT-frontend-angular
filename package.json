@@ -28,6 +28,7 @@
     "@fontsource/roboto": "^5.0.12",
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@jsverse/transloco": "^7.1.0",
@@ -42,6 +43,7 @@
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "uplot": "^1.6.30",
+    "vanilla-jsoneditor": "^0.23.2",
     "zone.js": "~0.14.4"
   },
   "devDependencies": {

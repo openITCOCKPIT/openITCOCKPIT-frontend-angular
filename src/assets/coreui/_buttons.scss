@@ -66,3 +66,8 @@ body.dark-theme .btn-outline-default:hover, body.dark-theme .btn-outline-default
     border: var(--cui-btn-border-width) solid rgba(var(--cui-border-color), 1);
     color: #333;
 }
+
+.btn-lower-padding {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}

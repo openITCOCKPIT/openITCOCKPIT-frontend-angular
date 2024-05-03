@@ -4,13 +4,14 @@
 import { CommandTypesEnum } from './command-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { DefaultMacros } from '../../components/code-mirror-container/code-mirror-container.interface';
 
 export interface CommandsIndexParams {
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
-    direction: string, // asc or desc
+    direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Commands.id][]': number[],
     'filter[Commands.name]': string
     'filter[Commands.command_type][]': CommandTypesEnum[]
@@ -68,6 +69,11 @@ export interface CommandPost {
     command_line: string
     description: string
     commandarguments: Commandargument[]
+}
+
+export interface CommandEditGet {
+    command: CommandPost
+    defaultMacros: DefaultMacros[]
 }
 
 export interface Commandargument {

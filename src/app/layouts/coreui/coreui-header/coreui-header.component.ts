@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
     AvatarComponent,
@@ -22,6 +22,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
 import { ChangeLanguageComponent } from '../change-language/change-language.component';
+import { SidebarService } from '../coreui-navbar/sidebar.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -49,12 +51,17 @@ import { ChangeLanguageComponent } from '../change-language/change-language.comp
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css'
 })
-export class CoreuiHeaderComponent extends HeaderComponent {
+export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy {
     @Input() sidebarId: string = 'sidebar1';
+
     readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     readonly #colorModeService = inject(ColorModeService);
     readonly colorMode = this.#colorModeService.colorMode;
     readonly #destroyRef: DestroyRef = inject(DestroyRef);
+    readonly sidebarService: SidebarService = inject(SidebarService);
+
+
+    private readonly subscriptions: Subscription = new Subscription();
 
     constructor() {
         super();
@@ -72,6 +79,14 @@ export class CoreuiHeaderComponent extends HeaderComponent {
                 takeUntilDestroyed(this.#destroyRef)
             )
             .subscribe();
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    public toggleShowOrHideSidebar() {
+        this.sidebarService.toggleShowOrHideSidebar();
     }
 
 }

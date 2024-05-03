@@ -2,17 +2,18 @@
  *    Entity / Index action    *
  **********************/
 import { ObjectTypesEnum } from './object-types.enum';
-import { formatDate } from '@angular/common';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface ChangelogsIndexParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string
-    'filter[to]': string
-    'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
-    'filter[Action]': [],
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
+    'filter[Changelogs.name]': string,
+    'filter[Changelogs.model][]': string[],
+    'filter[Changelogs.action][]': string[],
     'filter[ShowServices]': number
 }
 
@@ -20,11 +21,11 @@ export interface ChangelogsEntityParams {
     angular: true,
     scroll: boolean,
     page: number,
-    'filter[from]': string|Date
-    'filter[to]': string
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
     'filter[Changelogs.object_id]': any,
     'filter[Changelogs.objecttype_id]': ObjectTypesEnum[]
-    'filter[Action]': [],
+    'filter[Changelogs.action][]': string[],
     'filter[ShowServices]': number
 }
 
@@ -34,27 +35,27 @@ export function getDefaultChangelogsIndexParams(): ChangelogsIndexParams {
         angular: true,
         scroll: true,
         page: 1,
-        'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 4), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[Changelogs.objecttype_id]': [],
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
+        'filter[Changelogs.name]': '',
+        'filter[Changelogs.model][]': [],
         'filter[ShowServices]': 0,
-        'filter[Action]': []
+        'filter[Changelogs.action][]': [],
     }
 }
 
-export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams{
+export function getDefaultChangelogsEntityParams(): ChangelogsEntityParams {
     let now = new Date();
     return {
         angular: true,
         scroll: true,
         page: 1,
-        //'filter[from]': formatDate(now.getTime() - (3600 * 24 * 3000 * 500), 'dd.MM.y HH:mm', 'en-US'),
-        'filter[from]':now,
-        'filter[to]': formatDate(now.getTime() + (3600 * 24 * 5), 'dd.MM.y HH:mm', 'en-US'),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
         'filter[Changelogs.object_id]': null,
         'filter[Changelogs.objecttype_id]': [],
         'filter[ShowServices]': 0,
-        'filter[Action]': []
+        'filter[Changelogs.action][]': [],
     }
 }
 
@@ -80,9 +81,11 @@ export interface ChangelogIndex {
     timeAgoInWords: string
     recordExists: boolean
     data_unserialized: any
-    ngState: string
+    ngState: string,
+    routerLink: [],
     color: string
-    icon: string
+    icon: string,
+    faIcon: IconProp
     includeUser: boolean
 }
 
@@ -105,4 +108,34 @@ export interface ChangelogContainer {
         changelog_id: number
         container_id: number
     }
+}
+
+// Raw API result which has a lot of dynamic keys and is not very Angular friendly
+export interface DataUnserializedRaw {
+    [key: string]: {
+        data: any,
+        isArray: boolean
+    }
+}
+
+export interface ChangelogArrayFalseOldNew {
+    old: string,
+    new: string
+}
+
+export interface ChangelogEntry {
+    controllerName: string,
+    changes: ChangelogEntryChange[]
+}
+
+export interface ChangelogEntryChange {
+    hasOld: boolean,
+    hasNew: boolean,
+    old: ChangelogFieldValue[],
+    new: ChangelogFieldValue[],
+}
+
+export interface ChangelogFieldValue {
+    field: string,
+    value: string
 }

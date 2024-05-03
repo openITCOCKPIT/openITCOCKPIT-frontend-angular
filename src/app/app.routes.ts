@@ -1,7 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
-import { ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
-import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
+import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
@@ -51,6 +50,9 @@ export const routes: Routes = [{
     path: 'commands/copy/:ids',
     loadComponent: () => import('./pages/commands/commands-copy/commands-copy.component').then(m => m.CommandsCopyComponent)
 }, {
+    path: 'changelogs/index',
+    loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
+}, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
@@ -59,15 +61,27 @@ export const routes: Routes = [{
 }, {
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
-}, /*{
-    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
-    resolve: {
-        legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-            const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
-            const legacyPath: string = state.url;
-            return `${legacyBaseUrl}${legacyPath}`;
-        }
-    },
-    component: LegacyUrlComponent,
-}*/
-];
+}, , {
+    path: 'systemsettings/index',
+    loadComponent: () => import('./pages/systemsettings/systemsettings-index/systemsettings-index.component').then(m => m.SystemsettingsIndexComponent)
+}, {
+    path: 'statistics/index',
+    loadComponent: () => import('./pages/statistics/statistics-index/statistics-index.component').then(m => m.StatisticsIndexComponent)
+}, {
+    path: 'error/404',
+    loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
+}, {
+    path: '**',
+    loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
+}];
+//}, {
+//    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
+//    resolve: {
+//        legacyUrl: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+//            const legacyBaseUrl: string = inject(LEGACY_BASE_URL);
+//            const legacyPath: string = state.url;
+//            return `${legacyBaseUrl}${legacyPath}`;
+//        }
+//    },
+//    component: LegacyUrlComponent,
+//}];

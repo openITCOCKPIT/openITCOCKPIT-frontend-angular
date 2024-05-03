@@ -60,7 +60,7 @@
                                         {{ t('From') }}
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[from]']"
+                                           [(ngModel)]="from"
                                            [placeholder]="'From date' | transloco"
                                            aria-label="from"
                                            name="from"
@@ -76,7 +76,7 @@
                                         {{ t('To') }}
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[to]']"
+                                           [(ngModel)]="to"
                                            [placeholder]="'From date' | transloco"
                                            aria-label="to"
                                            name="to"
@@ -94,51 +94,100 @@
                                         {{ t('Actions') }}
                                     </h5>
                                     <c-form-check>
-                                        <input cFormCheckInput id="add" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.add" cFormCheckInput
+                                               id="add"
+                                               name="add"
+                                               class="bg-success border-success"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="add">
                                             {{ t('Add') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input cFormCheckInput id="edit" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.edit" cFormCheckInput
+                                               id="edit"
+                                               name="edit"
+                                               class="bg-warning border-warning"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="edit">
                                             {{ t('Edit') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input cFormCheckInput id="copy" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.copy" cFormCheckInput
+                                               id="copy"
+                                               name="copy"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="copy">
                                             {{ t('Copy') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input cFormCheckInput id="delete" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.delete" cFormCheckInput
+                                               id="delete"
+                                               name="delete"
+                                               class="bg-danger border-danger"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="delete">
                                             {{ t('Delete') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input cFormCheckInput id="activate" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.activate" cFormCheckInput
+                                               id="activate"
+                                               name="activate"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="activate">
                                             {{ t('Activate') }}
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input cFormCheckInput id="deactivate" type="checkbox"/>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Action.deactivate" cFormCheckInput
+                                               id="deactivate"
+                                               name="deactivate"
+                                               oitcDebounce
+                                               type="checkbox"/>
                                         <label cFormCheckLabel for="deactivate">
                                             {{ t('Deactivate') }}
                                         </label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-                            <c-col md="6">
+                            <c-col md="6" *ngIf="entityType === 'HOST'">
                                 <fieldset>
                                     <h5>
                                         {{ t('Show services') }}
                                     </h5>
                                     <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[ShowServices]']" cFormCheckInput
+                                               id="ShowServices"
+                                               name="ShowServices"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="ShowServices">
+                                            {{ t('Yes') }}
+                                        </label>
                                     </c-form-check>
                                 </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
                             </c-col>
                         </c-row>
                     </form>

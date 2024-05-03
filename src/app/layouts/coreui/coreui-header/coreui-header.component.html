@@ -2,11 +2,9 @@
 <ng-container>
     <c-container [fluid]="true" class="border-bottom px-4">
         <button
-            [cSidebarToggle]="sidebarId"
-            cHeaderToggler
-            class="btn"
+            class="btn ripple"
             style="margin-inline-start: -14px;"
-            toggle="visible"
+            (click)="toggleShowOrHideSidebar()"
         >
             <svg cIcon name="cilMenu" size="lg"></svg>
         </button>

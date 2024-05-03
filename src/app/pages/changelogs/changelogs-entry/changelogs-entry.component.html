@@ -5,14 +5,13 @@
             <span>{{ changelogentry.timeAgoInWords }}</span>
         </time>
         <div class="cbp_tmicon txt-color-white {{changelogentry.color}}" title="{{changelogentry.action}}">
-            <i class="{{changelogentry.icon}}"></i> *** {{ changelogentry.icon }} ***
+            <fa-icon [icon]="changelogentry.faIcon" class="text-light"></fa-icon>
         </div>
         <div class="cbp_tmlabel">
-            <h2 class="font-md">
-                {{ changelogentry.model }}:
+            <h4 class="font-md">
+                {{ changelogentry.model }}
                 <strong>
-                    <!-- @todo: fix links -->
-                    <a href="{{changelogentry.ngState}}({id: changelogentry.object_id})"
+                    <a [routerLink]="changelogentry.routerLink"
                        *ngIf="changelogentry.ngState && changelogentry.recordExists">
                         {{ changelogentry.name }}
                     </a>
@@ -24,24 +23,67 @@
 
                 </strong>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user">
-                    {{t('by')}}
-
-                    <!-- @todo: fix links -->
-                    <a *oitcPermission="['users', 'edit']" href="UsersEdit({id: changelogentry.user.id})">
+                    {{ t('by') }}
+                    <a *oitcPermission="['users', 'edit']"
+                       [routerLink]="['/','users','edit', changelogentry.user.id]">
                         {{ changelogentry.user.firstname }}
                         {{ changelogentry.user.lastname }}
                     </a>
-                    <!-- @todo: fix permissions user without permissions  -->
-                    <?php else: ?>
-                    {{ changelogentry.user.firstname }}
-                    {{ changelogentry.user.lastname }}
-                    <?php endif; ?>
+                    <span *oitcPermission="['users', 'edit']; negate: true">
+                        {{ changelogentry.user.firstname }}
+                        {{ changelogentry.user.lastname }}
+                    </span>
                 </span>
                 <span class="font-xs" *ngIf="changelogentry.includeUser && changelogentry.user === null">
-                    {{t('by Cronjob')}}
+                    {{ t('by Cronjob') }}
                 </span>
-            </h2>
+            </h4>
 
+            <!-- All Changes -->
+            <blockquote class="blockquote"
+                        [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy', 'changelog-changelog-blockquote-warning': changelogentry.action ==='edit'}">
+                <div class="ms-2">
+                    <div *ngFor="let changeEntry of entry">
+                        <h5 class="pb-3">{{ changeEntry.controllerName }}</h5>
+                        <div *ngFor="let change of changeEntry.changes">
+                            <div class="row mb-2">
+                                <div *ngIf="change.hasNew && !change.hasOld" class="col-6">
+                                    <small *ngFor="let new of change.new" class="text-success">
+                                        <footer class="blockquote-footer">
+                                            {{ new.field.replace('_id', '') }}:
+                                            <span class="text-success">{{ new.value }}</span>
+                                        </footer>
+                                    </small>
+                                </div>
+                                <div *ngIf="change.hasOld && !change.hasNew" class="col-6">
+                                    <small *ngFor="let old of change.old" class="text-danger">
+                                        <footer class="blockquote-footer">
+                                            {{ old.field }}:
+                                            <span class="text-danger changelog_delete">{{ old.value }}</span>
+                                        </footer>
+                                    </small>
+                                </div>
+                                <div *ngIf="change.hasOld && change.hasNew" class="col-6">
+                                    <small *ngFor="let new of change.new; let i = index" class="text-danger">
+                                        <footer class="blockquote-footer">
+                                            {{ new.field.replace('_id', '') }}:
+                                            <span
+                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
+                                                {{ change.old[i].value }}
+                                            </span>
+                                            <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
+                                            <span
+                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
+                                                {{ new.value }}
+                                            </span>
+                                        </footer>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
         </div>
     </ng-container>
 </ng-container>

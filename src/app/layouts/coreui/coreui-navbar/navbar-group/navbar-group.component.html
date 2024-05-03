@@ -1,0 +1,17 @@
+<li class="nav-group" [ngClass]="{'show':open}">
+    <a class="nav-link nav-group-toggle" (click)="toggleGroup($event)">
+        <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+        {{ item.alias }}
+    </a>
+    <ul class="nav-group-items compact">
+        @for (groupItem of item.items; track $index) {
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="groupItem.angularUrl">
+                    <fa-icon [icon]="groupItem.icon"
+                             class="nav-icon"></fa-icon>
+                    {{ groupItem.name }}
+                </a>
+            </li>
+        }
+    </ul>
+</li>

@@ -21,7 +21,7 @@ import { CoreuiFooterComponent } from './coreui-footer/coreui-footer.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CoreuiMenuComponent } from './coreui-menu/coreui-menu.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { GlobalLoaderComponent } from './global-loader/global-loader.component';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -32,6 +32,7 @@ import { NavigationService } from "../../components/navigation/navigation.servic
 import { IconComponent } from "@coreui/icons-angular";
 import { FaIconComponent, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
 
 @Component({
     selector: 'oitc-coreui',
@@ -64,6 +65,8 @@ import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons
         SidebarModule,
         GlobalLoaderComponent,
         FaIconComponent,
+        CoreuiNavbarComponent,
+        RouterOutlet,
     ],
     templateUrl: './coreui.component.html',
     styleUrl: './coreui.component.css'
@@ -127,16 +130,6 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public runSearch(): void {
-        let {searchTerm} = this.navSearch.value;
-        this.searchTerm = searchTerm.toLowerCase();
-
-        this.navigationService.search(this.searchTerm);
-    }
-
-    public clearSearch(): void {
-        this.searchTerm = '';
-    }
 
     onScrollbarUpdate($event: any) {
         // if ($event.verticalUsed) {

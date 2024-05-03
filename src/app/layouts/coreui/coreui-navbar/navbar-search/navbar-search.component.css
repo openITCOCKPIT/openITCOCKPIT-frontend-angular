@@ -1,0 +1,6 @@
+
+.search-result {
+    color: var(--cui-nav-link-color);
+    line-height: 1.5rem;
+    text-decoration: none;
+}
