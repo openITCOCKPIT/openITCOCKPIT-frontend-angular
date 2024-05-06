@@ -9,7 +9,8 @@ import {
     CommandEditGet,
     CommandIndexRoot,
     CommandPost,
-    CommandsIndexParams
+    CommandsIndexParams,
+    CommandUsedBy
 } from './commands.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -127,4 +128,15 @@ export class CommandsService implements DeleteAllModalService {
         });
     }
 
+
+    public usedBy(id: number): Observable<CommandUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<CommandUsedBy>(`${proxyPath}/commands/usedBy/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
 }

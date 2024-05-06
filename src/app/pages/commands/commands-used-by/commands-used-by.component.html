@@ -1,0 +1,152 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Commands') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                    {{ t('Used by') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3" *ngIf="command">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Command') }}
+                    <small class="fw-300">
+                        <i>
+                            <strong>
+                                »{{ command.name }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('objects.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container fluid>
+                    <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="objects">
+                        <tbody>
+                        <!-- Contacts -->
+                        <tr *ngIf="objects.Contacts.length > 0">
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                {{ t('Contacts') }} ({{ objects.Contacts.length }})
+                            </th>
+                        </tr>
+                        <tr *ngFor="let contact of objects.Contacts">
+                            <td colspan="2">
+                                <a *oitcPermission="['contacts', 'edit']"
+                                   [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                    {{ contact.name }}
+                                </a>
+                                <span *oitcPermission="['contacts', 'edit']; negate: true">
+                                    {{ contact.name }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Host templates -->
+                        <tr *ngIf="objects.Hosttemplates.length > 0">
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
+                                {{ t('Host templates') }} ({{ objects.Hosttemplates.length }})
+                            </th>
+                        </tr>
+                        <tr *ngFor="let hosttemplate of objects.Hosttemplates">
+                            <td colspan="2">
+                                <a *oitcPermission="['hosttemplates', 'edit']"
+                                   [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
+                                    {{ hosttemplate.name }}
+                                </a>
+                                <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                    {{ hosttemplate.name }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Service templates -->
+                        <tr *ngIf="objects.Servicetemplates.length > 0">
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
+                                {{ t('Service templates') }} ({{ objects.Servicetemplates.length }})
+                            </th>
+                        </tr>
+                        <tr *ngFor="let servicetemplate of objects.Servicetemplates">
+                            <td>
+                                <a *oitcPermission="['servicetemplates', 'edit']"
+                                   [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
+                                    {{ servicetemplate.name }}
+                                </a>
+                                <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                    {{ servicetemplate.name }}
+                                </span>
+                            </td>
+                            <td class="w-50">
+                                {{ servicetemplate.template_name }}
+                            </td>
+                        </tr>
+
+                        <!-- Hosts -->
+                        <tr *ngIf="objects.Hosts.length > 0">
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                {{ t('Hosts') }} ({{ objects.Hosts.length }})
+                            </th>
+                        </tr>
+                        <tr *ngFor="let host of objects.Hosts">
+                            <td colspan="2">
+                                <a *oitcPermission="['hosts', 'edit']"
+                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                    {{ host.name }}
+                                </a>
+                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                    {{ host.name }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Services -->
+                        <tr *ngIf="objects.Services.length > 0">
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Services') }} ({{ objects.Services.length }})
+                            </th>
+                        </tr>
+                        <tr *ngFor="let service of objects.Services">
+                            <td colspan="2">
+                                <a *oitcPermission="['services', 'edit']"
+                                   [routerLink]="['/', 'services', 'edit', service.id]">
+                                    {{ service._matchingData.Hosts.name }} / {{ service.name }}
+                                </a>
+                                <span *oitcPermission="['services', 'edit']; negate: true">
+                                    {{ service._matchingData.Hosts.name }} / {{ service.name }}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
