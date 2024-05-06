@@ -15,8 +15,8 @@
                     {{ t('Documentation') }}
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    {{ t('View') }}
+                    <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+                    {{ t('Edit') }}
                 </li>
             </ol>
         </nav>
@@ -48,43 +48,30 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <div class="me-3 text-muted">
-                            {{ t('Last update') }}: {{ documentation.lastUpdate }}
-                        </div>
-                    </c-nav-item>
-
-                    <c-nav-item class="px-1">
                         <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
                                 oitcBackButton
                                 size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                            {{ t('Cancel') }}
                         </button>
                     </c-nav-item>
-
                     <c-nav-item class="px-1">
-                        <button [routerLink]="['/', 'documentations', 'edit', uuid, type]" cButton
-                                *ngIf="documentation.allowEdit"
-                                class="ripple"
+                        <button cButton class="ripple"
                                 color="success"
+                                (click)="saveDocumentation()"
                                 size="xs">
-                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                            {{ t('Edit') }}
+                            <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                            {{ t('Save') }}
                         </button>
                     </c-nav-item>
-
                 </c-nav>
             </c-card-header>
             <c-card-body>
                 <c-row>
-                    <c-col xs="12" class="fst-italic" [hidden]="documentation.docuExists">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
-                        {{ t('No documentation has been written yet for this object. Click on "Edit" to start writing.') }}
+                    <c-col xs="12">
+                        <oitc-bb-code-editor [(bbcode)]="documentation.bbcode"></oitc-bb-code-editor>
                     </c-col>
 
-                    <c-col xs="12" class="doku-view" [hidden]="!documentation.docuExists">
-                        <div *ngIf="html" [innerHTML]="html | trustAsHtml "></div>
-                    </c-col>
                 </c-row>
             </c-card-body>
         </c-card>

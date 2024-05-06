@@ -25,9 +25,9 @@ export class BbCodeParserService {
         resString = resString.replace(/\[u\]/gi, '<u>');
         resString = resString.replace(/\[\/u\]/gi, '</u>');
 
-        resString = resString.replace(/\[left\]/gi, '<div class="text-left">');
+        resString = resString.replace(/\[left\]/gi, '<div class="text-start">'); // text-left
         resString = resString.replace(/\[\/left\]/gi, '</div>');
-        resString = resString.replace(/\[right\]/gi, '<div class="text-right">');
+        resString = resString.replace(/\[right\]/gi, '<div class="text-end">'); //text-right
         resString = resString.replace(/\[\/right\]/gi, '</div>');
         resString = resString.replace(/\[center\]/gi, '<div class="text-center">');
         resString = resString.replace(/\[\/center\]/gi, '</div>');
@@ -47,7 +47,6 @@ export class BbCodeParserService {
         // replace javascript <script> tags
         //resString = resString.replace(/<script[^>]*>([\s\S]*?)<\/script([\s\S]*?)>/gi, '$1');
 
-        console.log(resString);
         return resString;
     }
 

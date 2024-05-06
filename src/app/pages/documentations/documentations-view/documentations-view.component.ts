@@ -63,6 +63,7 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 export class DocumentationsViewComponent implements OnInit, OnDestroy {
 
     public documentation: DocumentationView | undefined;
+    public uuid: string = '';
     public type: string = 'unknown';
     public html: string | undefined;
 
@@ -77,9 +78,9 @@ export class DocumentationsViewComponent implements OnInit, OnDestroy {
 
 
     public ngOnInit() {
-        const uuid = String(this.route.snapshot.paramMap.get('uuid'));
+        this.uuid = String(this.route.snapshot.paramMap.get('uuid'));
         this.type = String(this.route.snapshot.paramMap.get('type'));
-        this.subscriptions.add(this.DocumentationsService.getView(uuid, this.type)
+        this.subscriptions.add(this.DocumentationsService.getView(this.uuid, this.type)
             .subscribe((result) => {
                 this.documentation = result;
 

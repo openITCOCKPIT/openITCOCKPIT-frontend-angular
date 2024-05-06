@@ -4,6 +4,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { DocumentationView } from './documentations.interface';
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -24,6 +25,17 @@ export class DocumentationsService {
         }).pipe(
             map(data => {
                 return data;
+            })
+        );
+    }
+
+    public save(uuid: string, type: string, content: string): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/documentations/view/${uuid}/${type}.json?angular=true`, {
+            content: content
+        }).pipe(
+            map(data => {
+                return true;
             })
         );
     }

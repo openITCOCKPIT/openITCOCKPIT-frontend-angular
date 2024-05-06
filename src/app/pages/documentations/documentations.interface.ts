@@ -7,3 +7,8 @@ export interface DocumentationView {
     objectName: string //Only for type host template and service template
     _csrfToken: string
 }
+
+export interface DocumentationLink {
+    url: string,
+    targetBlank: boolean,
+}
