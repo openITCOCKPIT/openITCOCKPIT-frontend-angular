@@ -36,7 +36,12 @@ import {
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
-    InputGroupTextDirective, ModalService, NavComponent, NavItemComponent, RowComponent, TableDirective
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +55,7 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { CommandIndex } from '../../commands/commands.interface';
 
 @Component({
     selector: 'oitc-contacts-index',
@@ -103,7 +109,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
         {provide: DELETE_SERVICE_TOKEN, useClass: ContactsService} // Inject the ContactsService into the DeleteAllModalComponent
     ]
 })
-export class ContactsIndexComponent implements OnInit, OnDestroy{
+export class ContactsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();
@@ -181,7 +187,36 @@ export class ContactsIndexComponent implements OnInit, OnDestroy{
 
 
     // Open the Delete All Modal
+
     public toggleDeleteAllModal(contact?: ContactsIndex) {
+        let items: DeleteAllItem[] = [];
+
+        if (contact) {
+            // User just want to delete a single contact
+            items = [
+                {
+                    id: contact.Contact.id as number,
+                    displayName: contact.Contact.name
+                }
+            ];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.Contact.id,
+                    displayName: item.Contact.name
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
     }
 
     public navigateCopy() {
