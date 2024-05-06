@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
+import { ContactsCopyComponent } from './pages/contacts/contacts-copy/contacts-copy.component';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -55,6 +56,9 @@ export const routes: Routes = [{
 }, {
     path: 'contacts/add',
     loadComponent: () => import('./pages/contacts/contacts-add/contacts-add.component').then(m => m.ContactsAddComponent)
+}, {
+    path: 'contacts/copy/:ids',
+    loadComponent: () => import('./pages/contacts/contacts-copy/contacts-copy.component').then(m => m.ContactsCopyComponent)
 }, {
     path: 'contacts/edit/:id',
     loadComponent: () => import('./pages/contacts/contacts-edit/contacts-edit.component').then(m => m.ContactsEditComponent)
