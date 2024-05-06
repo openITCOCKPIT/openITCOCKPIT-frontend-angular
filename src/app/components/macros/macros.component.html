@@ -1,0 +1,59 @@
+<ng-container *transloco="let t">
+    <div class="row mb-2">
+        <div class="col-lg-3 hidden-mobile {{textClass}}">
+            <div style="padding-top: 29px; width: 100%;">
+            </div>
+            <div *ngIf="macro.name" class="text-purple argname-margin-top">
+                $_{{ macroName }}{{ macro.name }}$
+            </div>
+        </div>
+        <div class="col-lg-4 form-group">
+            <label class="form-label">
+                {{ t('Name') }}
+            </label>
+            <input class="form-control w-100"
+                   type="text"
+                   name="name"
+                   [required]="true"
+                   [placeholder]="'Please enter a name' | transloco"
+                   [(ngModel)]="macro.name"
+                   (ngModelChange)="updateName()"
+            >
+            <div *ngIf="errors.length > 0">
+                ERRORS
+                <div class="text-danger">{{ errors.name }}</div>
+            </div>
+        </div>
+        <div class="col-lg-4 form-group">
+            <label class="form-label">
+                {{ t('Value') }}
+            </label>
+            <input class="form-control w-100" type="text"
+                   [placeholder]="'Please enter a value' | transloco"
+                   name="value"
+                   [(ngModel)]="macro.value">
+            <div *ngIf="errors.length > 0">
+                ERRORS
+                <div class="text-danger">{{ errors.name }}</div>
+            </div>
+        </div>
+        <div class="col-md-1 col-lg-1">
+            <a class="btn btn-default ripple"
+               href="javascript:void(0);"
+               style="margin-top:27px;"
+               (click)="togglePassword()">
+                <fa-icon *ngIf="macro.password === 0" class="text-primary"
+                         [icon]="['fas', 'unlock']" size="lg"></fa-icon>
+                <fa-icon *ngIf="macro.password === 1" class="text-warning"
+                         [icon]="['fas', 'lock']" size="lg"></fa-icon>
+            </a>
+            <a class="btn btn-danger ripple"
+               href="javascript:void(0);"
+               style="margin-top:27px;"
+               (click)="deleteMacro()">
+                <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+            </a>
+        </div>
+    </div>
+
+</ng-container>
