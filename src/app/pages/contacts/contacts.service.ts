@@ -8,12 +8,11 @@ import {
     ContactPost,
     ContactsEditRoot,
     ContactsIndexParams,
-    ContactsIndexRoot,
+    ContactsIndexRoot, ContactUsedBy,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot
 } from './contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { CommandCopyPost } from '../commands/commands.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -134,5 +133,16 @@ export class ContactsService implements DeleteAllModalService {
         return this.http.post<any>(`${proxyPath}/contacts/copy/.json?angular=true`, {
             data: contacts
         });
+    }
+
+    public usedBy(id: number): Observable<ContactUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<ContactUsedBy>(`${proxyPath}/contacts/usedBy/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
     }
 }
