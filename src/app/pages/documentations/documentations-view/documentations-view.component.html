@@ -1,0 +1,90 @@
+<oitc-coreui>
+
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                    {{ t('Documentation') }}
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    {{ t('View') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3" *ngIf="documentation">
+            <c-card-header>
+                <ng-container [ngSwitch]="type">
+                    <h5 cCardTitle *ngSwitchCase="'servicetemplate'">
+                        {{ t('Service template:') }}
+                        <small class="fw-300">
+                            {{ documentation.objectName }}
+                        </small>
+                    </h5>
+
+                    <h5 cCardTitle *ngSwitchCase="'hosttemplate'">
+                        {{ t('Host template:') }}
+                        <small class="fw-300">
+                            {{ documentation.objectName }}
+                        </small>
+                    </h5>
+
+                    <h5 cCardTitle *ngSwitchDefault>
+                        {{ t('Object:') }}
+                        <small class="fw-300">
+                            {{ t('documentation') }}
+                        </small>
+                    </h5>
+                </ng-container>
+
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <div class="me-3 text-muted">
+                            {{ t('Last update') }}: {{ documentation.lastUpdate }}
+                        </div>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button [routerLink]="['/', 'commands', 'add']" cButton
+                                *ngIf="documentation.allowEdit"
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+                            {{ t('Edit') }}
+                        </button>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <c-col xs="12" class="fst-italic" [hidden]="documentation.docuExists">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
+                        {{ t('No documentation has been written yet for this object. Click on "Edit" to start writing.') }}
+                    </c-col>
+
+                    <c-col xs="12" class="doku-view" [hidden]="!documentation.docuExists">
+                        <div *ngIf="html" [innerHTML]="html | trustAsHtml "></div>
+                    </c-col>
+                </c-row>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+
+</oitc-coreui>
