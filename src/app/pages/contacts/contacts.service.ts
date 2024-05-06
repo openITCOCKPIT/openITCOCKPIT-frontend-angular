@@ -4,6 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import {
+    ContactCopyGet, ContactCopyPost,
     ContactPost,
     ContactsEditRoot,
     ContactsIndexParams,
@@ -12,7 +13,7 @@ import {
     LoadTimeperiodsRoot
 } from './contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { CommandPost } from '../commands/commands.interface';
+import { CommandCopyPost } from '../commands/commands.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -35,7 +36,7 @@ export class ContactsService implements DeleteAllModalService {
 
     public getEdit(id: number): Observable<ContactsEditRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/contacts/edit/${id}.json?angular=true` , {}).pipe(
+        return this.http.get<any>(`${proxyPath}/contacts/edit/${id}.json?angular=true`, {}).pipe(
             map(data => {
                 return data;
             })
@@ -114,5 +115,24 @@ export class ContactsService implements DeleteAllModalService {
                 return data;
             })
         )
+    }
+
+    public getContactsCopy(ids: number[]): Observable<ContactCopyGet[]> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ contacts: ContactCopyGet [] }>(`${proxyPath}/contacts/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.contacts;
+                })
+            )
+    }
+
+
+    public saveContactsCopy(contacts: ContactCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/contacts/copy/.json?angular=true`, {
+            data: contacts
+        });
     }
 }

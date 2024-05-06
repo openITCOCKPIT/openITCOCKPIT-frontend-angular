@@ -1,4 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { GenericValidationError } from '../../generic-responses';
+import { CommandCopy, SourceCommand } from '../commands/commands.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -160,12 +162,32 @@ export interface Customvariable {
 
 // Copy action machen wir später.
 export interface ContactCopyGet {
+    Contact: {
+        id: number
+        description: string
+        email: string
+        name: string
+        phone: string
+    }
 }
 
 export interface ContactCopyPost {
+
+    Source: SourceContact
+    Contact: ContactCopy
+    Error: GenericValidationError | null
+}
+
+export interface ContactCopy {
+    description: string
+    email: string
+    name: string
+    phone: string
 }
 
 export interface SourceContact {
+    id: number
+    name: string
 }
 
 
