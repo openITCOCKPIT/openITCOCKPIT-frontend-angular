@@ -15,11 +15,12 @@ import {
     ColComponent,
     RowComponent
 } from '@coreui/angular';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StatisticsService } from '../statistics.service';
 import { StatisticsIndex } from '../statistics.interface';
 import { Statistics } from '../statistics.enum';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-statistics-index',
@@ -38,7 +39,9 @@ import { Statistics } from '../statistics.enum';
         CardTitleDirective,
         RowComponent,
         ColComponent,
-        NgIf
+        NgIf,
+        NgClass,
+        AsyncPipe
     ],
     templateUrl: './statistics-index.component.html',
     styleUrl: './statistics-index.component.css'
@@ -48,6 +51,7 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy {
     public currentSettings: StatisticsIndex | undefined;
 
     private StatisticsService = inject(StatisticsService);
+    public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
     private readonly subscriptions: Subscription = new Subscription();
 

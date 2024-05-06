@@ -1,0 +1,197 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['supports', 'issue']" [routerLink]="['/', 'supports', 'issue']">
+                        <fa-icon [icon]="['fas', 'life-ring']"></fa-icon>
+                        {{ t('Support') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Support') }}
+                    <small class="fw-300">
+                        {{ t('Report an issue') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+
+                <c-row>
+                    <c-col xs="12" sm="12" md="6" lg="4">
+                        <div class="card supportCard">
+                            <div class="card-header enterprise-bg-header text-white">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class="pm-h4">
+                                            {{ t('Commercial support') }}
+                                        </h4>
+                                    </div>
+                                    <div class="col-12 text-end fst-italic">
+                                        {{ t('it-novum GmbH') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body supportCardBody">
+
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        {{ t('Get Professional Support') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Access to a large variety of extensions for your openITCOCKPIT') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Report system issues') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Report system crashes') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Unwanted behavior or bugs') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Get in Touch with us!') }}
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="float-end">
+                                            <a href="mailto:support@itsm.it-novum.com" class="btn btn-primary btn-sm"
+                                               role="button" *ngIf="hasLicense">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                {{ t('Create a Ticket') }}
+                                            </a>
+                                            <a href="https://it-services.it-novum.com/support-2/"
+                                               target="_blank"
+                                               class="btn btn-primary btn-sm"
+                                               role="button" *ngIf="!hasLicense">
+                                                <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
+                                                {{ t('Request a quote') }}
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c-col>
+
+                    <c-col xs="12" sm="12" md="6" lg="4">
+                        <div class="card supportCard">
+                            <div class="card-header community-bg-header text-white">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class="pm-h4">
+                                            {{ t('Social Networks') }}
+                                        </h4>
+                                    </div>
+                                    <div class="col-12 text-end fst-italic">
+                                        {{ t('Community') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body supportCardBody">
+                                <div class="fw-bold">GitHub</div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        {{ t('General questions about openITCOCKPIT') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('System issues') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('System crashes') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Unwanted behavior or bugs') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Errors with packages for your distribution') }}
+                                    </li>
+                                </ul>
+
+                                <div class="fw-bold">
+                                    <fa-icon [icon]="['fab', 'x-twitter']"></fa-icon>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        {{ t('Subscribe to get the very latest news about openITCOCKPIT') }}
+                                    </li>
+                                </ul>
+
+                                <div class="fw-bold">Reddit</div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        {{ t('News') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Group discussions') }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ t('Ask other openITCOCKPIT users') }}
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="float-end">
+                                            <a href="https://twitter.com/openITCOCKPIT"
+                                               target="_blank"
+                                               class="btn btn-default btn-sm me-1">
+                                                <fa-icon [icon]="['fab', 'x-twitter']"></fa-icon>
+                                                {{ t('X') }}
+                                            </a>
+                                            <a href="https://github.com/it-novum/openITCOCKPIT/issues"
+                                               target="_blank"
+                                               class="btn btn-default btn-sm me-1">
+                                                <fa-icon [icon]="['fab', 'github']"></fa-icon>
+                                                {{ t('GitHub') }}
+                                            </a>
+                                            <a href="https://www.reddit.com/r/openitcockpit/"
+                                               target="_blank"
+                                               class="btn btn-default btn-sm">
+                                                <fa-icon [icon]="['fab', 'reddit']"></fa-icon>
+                                                {{ t('Reddit') }}
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c-col>
+
+                    <c-col xs="12" sm="12" md="6" lg="4">
+                        <iframe src="https://discord.com/widget?id=771364054924001290&theme=dark"
+                                height="512" allowtransparency="true" frameborder="0"
+                                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                                class="col-12"></iframe>
+                    </c-col>
+
+                </c-row>
+
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
