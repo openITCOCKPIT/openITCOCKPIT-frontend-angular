@@ -17,7 +17,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
-import { Command, CommandUsedBy, Objects } from '../commands.interface';
+import { CommandUsedByCommand, CommandUsedBy, CommandUsedByObjects } from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
 
@@ -48,9 +48,9 @@ import { MatSort } from '@angular/material/sort';
     styleUrl: './commands-used-by.component.css'
 })
 export class CommandsUsedByComponent implements OnInit {
-    public command: Command | undefined;
+    public command: CommandUsedByCommand | undefined;
     public total: number = 0;
-    public objects: Objects | undefined;
+    public objects: CommandUsedByObjects | undefined;
 
     private CommandsService = inject(CommandsService);
     private router = inject(Router);

@@ -126,13 +126,13 @@ export interface CommandCopy {
 
 
 export interface CommandUsedBy {
-    command: Command
-    objects: Objects
+    command: CommandUsedByCommand
+    objects: CommandUsedByObjects
     total: number
     _csrfToken: string
 }
 
-export interface Command {
+export interface CommandUsedByCommand {
     id: number
     name: string
     command_line: string
@@ -143,15 +143,15 @@ export interface Command {
 }
 
 
-export interface Objects {
-    Contacts: Contact[]
-    Hosttemplates: Hosttemplate[]
-    Servicetemplates: Servicetemplate[]
-    Hosts: Host[]
-    Services: Service[]
+export interface CommandUsedByObjects {
+    Contacts: CommandUsedByContact[]
+    Hosttemplates: CommandUsedByHosttemplate[]
+    Servicetemplates: CommandUsedByServicetemplate[]
+    Hosts: CommandUsedByHost[]
+    Services: CommandUsedByService[]
 }
 
-export interface Contact {
+export interface CommandUsedByContact {
     id: number
     uuid: string
     name: string
@@ -176,81 +176,76 @@ export interface Contact {
     notify_host_downtime: number
     host_push_notifications_enabled: number
     service_push_notifications_enabled: number
-    containers: Container[]
+    containers: CommandUsedByContainer[]
 }
 
-export interface Container {
+export interface CommandUsedByContainer {
     id: number
     containertype_id: number
     name: string
     parent_id: any
     lft: number
     rght: number
-    _joinData: JoinData
+    _joinData: CommandUsedByJoinData
 }
 
-export interface JoinData {
+export interface CommandUsedByJoinData {
     id: number
     contact_id: number
     container_id: number
 }
 
-export interface Hosttemplate {
+export interface CommandUsedByHosttemplate {
     id: number
     name: string
     uuid: string
 }
 
-export interface Servicetemplate {
+export interface CommandUsedByServicetemplate {
     id: number
     name: string
     template_name: string
     uuid: string
 }
 
-export interface Host {
+export interface CommandUsedByHost {
     id: number
     name: string
     uuid: string
-    hosts_to_containers_sharing: HostsToContainersSharing[]
+    hosts_to_containers_sharing: CommandUsedByHostsToContainersSharing[]
 }
 
-export interface HostsToContainersSharing {
+export interface CommandUsedByHostsToContainersSharing {
     id: number
     containertype_id: number
     name: string
     parent_id?: number
     lft: number
     rght: number
-    _joinData: JoinData2
+    _joinData: CommandUsedByJoinData
 }
 
-export interface JoinData2 {
-    id: number
-    host_id: number
-    container_id: number
-}
 
-export interface Service {
+export interface CommandUsedByService {
     id: number
     name: string
     uuid: string
     servicename: string
-    _matchingData: MatchingData
+    _matchingData: CommandUsedByMatchingData
 }
 
-export interface MatchingData {
-    Hosts: Hosts
-    Servicetemplates: Servicetemplates
+export interface CommandUsedByMatchingData {
+    Hosts: CommandUsedByHosts
+    Servicetemplates: CommandUsedByServicetemplates
 }
 
-export interface Hosts {
+export interface CommandUsedByHosts {
     id: number
     name: string
     uuid: string
 }
 
-export interface Servicetemplates {
+export interface CommandUsedByServicetemplates {
     id: number
     name: string
     uuid: string
