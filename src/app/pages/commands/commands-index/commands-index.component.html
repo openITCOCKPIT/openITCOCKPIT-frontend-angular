@@ -139,11 +139,12 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="text-center col-1" scope="col">
+                        <th class="width-50 text-center" scope="col">
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
                         <th scope="col" mat-sort-header="Commands.name">
@@ -152,7 +153,7 @@
                         <th scope="col" mat-sort-header="Commands.command_type">
                             {{ t('Command type') }}
                         </th>
-                        <th class="text-center col-1 width-50" scope="col">
+                        <th class="text-center width-50" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
                     </tr>
