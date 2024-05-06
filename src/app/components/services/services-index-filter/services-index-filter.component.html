@@ -137,72 +137,72 @@
                     <h5>{{ t('Service status') }}</h5>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox" class="checkbox-lg custom-check-ok"/>
-                        <label cFormCheckLabel class="ms-1" for="checkstatusok">{{ t('Ok') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusok">{{ t('Ok') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="checkstatusowarning" type="checkbox" class="checkbox-lg custom-check-warning"/>
-                        <label cFormCheckLabel class="ms-1" for="checkstatusowarning">{{ t('Warning') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusowarning">{{ t('Warning') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="checkstatuscritical" type="checkbox" class="checkbox-lg custom-check-critical"/>
-                        <label cFormCheckLabel class="ms-1" for="checkstatuscritical">{{ t('Critical') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatuscritical">{{ t('Critical') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="checkstatusunknown" type="checkbox" class="checkbox-lg custom-check-unknown"/>
-                        <label cFormCheckLabel class="ms-1" for="checkstatusunknown">{{ t('Unknown') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusunknown">{{ t('Unknown') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Acknowlegements') }}</h5>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="ack" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel  class="ms-1" for="ack">{{ t('Acknowledge') }}</label>
+                        <label cFormCheckLabel  class="ms-1 mt-1" for="ack">{{ t('Acknowledge') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="acknot" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="acknot">{{ t('Not acknowledged') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="acknot">{{ t('Not acknowledged') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Check type') }}</h5>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="activeservice" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="activeservice">{{ t('Active service') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="activeservice">{{ t('Active service') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="passiveservice" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="passiveservice">{{ t('Passive service') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="passiveservice">{{ t('Passive service') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Notifications') }}</h5>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="notifyenabled" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="notifyenabled">{{ t('Enabled') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="notifyenabled">{{ t('Enabled') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="notifydisabled" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="notifydisabled">{{ t('Not enabled') }}</label>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="notifydisabled">{{ t('Not enabled') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Priority') }}</h5>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="prority1" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="prority1">
+                        <label cFormCheckLabel class="ms-1 mt-1" for="prority1">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok-soft ms-1"></fa-icon>
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="prority2" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="prority2">
+                        <label cFormCheckLabel class="ms-1  mt-1" for="prority2">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok ms-1"></fa-icon>
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="prority3" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="prority3">
+                        <label cFormCheckLabel class="ms-1  mt-1" for="prority3">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="warning ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="warning ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="warning ms-1"></fa-icon>
@@ -210,7 +210,7 @@
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="prority4" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="prority4">
+                        <label cFormCheckLabel class="ms-1 mt-1" for="prority4">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
@@ -219,7 +219,7 @@
                     </c-form-check>
                     <c-form-check class="mb-2">
                         <input cFormCheckInput id="prority5" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel class="ms-1" for="prority5">
+                        <label cFormCheckLabel class="ms-1 mt-1" for="prority5">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>
