@@ -3,7 +3,7 @@ export interface ServiceParams {
     'scroll': boolean,
     'sort': string,
     'page': number,
-    'direction': string,
+    'direction': 'asc' | 'desc' | '',
     'filter[Hosts.id]'?: number[],
     'filter[Hosts.name]': string,
     'filter[Hosts.name_regex]': boolean | string,

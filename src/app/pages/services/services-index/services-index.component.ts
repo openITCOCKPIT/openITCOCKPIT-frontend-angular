@@ -48,6 +48,41 @@ import {
 import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
 import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
+type filter = {
+    Servicestatus: {
+        current_state: string[],
+        acknowledged: boolean | string,
+        not_acknowledged: boolean | string,
+        in_downtime: boolean |string,
+        not_in_downtime: boolean | string,
+        passive: boolean | string,
+        active: boolean | string,
+        notifications_enabled: boolean | string,
+        output: string,
+    },
+    Services: {
+        id: number[],
+        name: string,
+        name_regex: boolean | string,
+        keywords:string[],
+        not_keywords: string[],
+        servicedescription: string,
+        priority: {
+            1: boolean,
+            2: boolean,
+            3: boolean,
+            4: boolean,
+            5: boolean
+        },
+        service_type: number[]
+    },
+    Hosts: {
+        id: number[],
+        name: string,
+        name_regex: boolean | string,
+        satellite_id: number[]
+    }
+}
 
 @Component({
   selector: 'oitc-services-index',
@@ -106,11 +141,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     private ServicesIndexService: ServicesIndexService = inject(ServicesIndexService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public params: ServiceParams = {
-        'angular': true,
-        'scroll': true,
-        'sort': 'Servicestatus.current_state',
-        'page': 1,
-        'direction': 'desc',
+        angular: true,
+        scroll: true,
+        sort: 'Servicestatus.current_state',
+        page: 1,
+        direction: 'desc',
         'filter[Hosts.id]': [],
         'filter[Hosts.name]': '',
         'filter[Hosts.name_regex]': false,
@@ -196,6 +231,19 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         });
        console.log(items);
     }
+
+    getFilter(filter: filter) {
+        console.log(filter);
+        this.params['filter[Hosts.name]'] = filter.Hosts.name;
+        this.params['filter[servicename]'] = filter.Services.name;
+        this.params['filter[servicedescription]'] = filter.Services.servicedescription;
+        this.params['filter[keywords][]'] = filter.Services.keywords;
+        this.params['filter[not_keywords][]'] = filter.Services.not_keywords,
+        this.load();
+
+    }
+
+
 
 
 

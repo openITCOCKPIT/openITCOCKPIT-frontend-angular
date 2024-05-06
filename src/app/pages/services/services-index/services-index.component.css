@@ -13,35 +13,3 @@
 .not-monitored {
     color: #4285F4 !important;
 }
-
-.ok, .up {
-    color: #00C851 !important;
-}
-
-.warning {
-    color: #ffbb33 !important;
-}
-
-.critical, .down {
-    color: #CC0000 !important;
-}
-
-.unknown, .unreachable {
-    color: #727b84 !important;
-}
-
-.ok-soft, .up-soft {
-    color: #00ea5f !important;
-}
-
-.warning-soft {
-    color: #f9d180 !important;
-}
-
-.critical-soft, .down-soft {
-    color: #ff4444 !important;
-}
-
-.unknown-soft, .unreachable-soft {
-    color: #CFCFCF !important;
-}

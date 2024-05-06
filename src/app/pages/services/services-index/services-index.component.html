@@ -73,8 +73,9 @@
             </c-card-header>
             <c-card-body>
                 <ng-container *ngIf="tab === 0">
-                    <oitc-services-index-filter [filter]="showFilter"></oitc-services-index-filter>
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)">
+                    <oitc-services-index-filter [show]="showFilter" (filterChange)="getFilter($event)"></oitc-services-index-filter>
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
                         <th class="text-center" scope="col">
@@ -166,7 +167,7 @@
                                      cTooltip="{{t('Notifications disabled')}}">
                                     <fa-stack>
                                         <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x" pull="right"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'times']" class="crit" stackItemSize="1x"
+                                        <fa-icon [icon]="['fas', 'times']" class="critical" stackItemSize="1x"
                                                  transform="shrink-8 right-6 down-6"></fa-icon>
                                     </fa-stack>
                                 </div>

@@ -4,3 +4,50 @@
     width: 20px;
     height: 20px;
 }
+
+.custom-check-ok{
+  border: 2px solid #00C851;
+}
+
+.custom-check-ok:checked{
+  background-color: #00C851;
+  border: none,
+}
+
+.custom-check-warning{
+  border: 2px solid #ffc107;
+}
+
+.custom-check-warning:checked{
+  background-color: #ffc107;
+  border: none,
+}
+
+.custom-check-critical{
+  border: 2px solid #dc3545;
+}
+
+.custom-check-critical:checked{
+  background-color: #dc3545;
+  border: none;
+}
+
+.custom-check-unknown{
+  border: 2px solid #6c757d;
+
+}
+
+.custom-check-unknown:checked{
+  background-color: #6c757d;
+  border: none;
+}
+
+.custom-check-default{
+  border: 2px solid #6c757d;
+
+}
+
+.custom-check-default:checked{
+  background-color: $primary;
+  border: none;
+}
