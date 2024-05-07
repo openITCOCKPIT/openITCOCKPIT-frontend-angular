@@ -641,14 +641,22 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
 
-                    <label>
+                    <label for="createAnother">
 
                         <c-form-check>
                             <input
+                                cFormCheckInput
                                 type="checkbox"
+                                id="createAnother"
                                 [ngModel]="createAnother"
+                                (ngModelChange)="createAnother = $event ? true : false"
+                                name="createAnother"
                             />
-                            {{ t('Create another') }}
+                            <label
+                                cFormCheckLabel
+                                for="createAnother">
+                                {{ t('Create another') }}
+                            </label>
                         </c-form-check>
                     </label>
 
