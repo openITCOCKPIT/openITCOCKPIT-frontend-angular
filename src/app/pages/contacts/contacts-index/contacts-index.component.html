@@ -45,6 +45,15 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
+                        <button [routerLink]="['/', 'contacts', 'ldap']" cButton
+                                class="ripple"
+                                color="warning"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Import from LDAP') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
                         <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
