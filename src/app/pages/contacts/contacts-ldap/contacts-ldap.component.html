@@ -79,22 +79,17 @@
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     </div>
 
-                    <div class="form-group">
-                        <div class="display-inline-block position-absolute">
-                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                        </div>
-                        <div class="text-info display-inline-block margin-left-20">
-                            Connected LDAP server:
-                            <b>{{ ldapConfig.host }}</b>
-                            <br>
-                            Used filter query:
-                            <b>{{ ldapConfig.query }}</b>
-                            <br>
-                            Base DN:
-                            <b>{{ ldapConfig.base_dn }}</b>
-                        </div>
+                    <div class="text-info display-inline-block margin-left-20">
+                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
+                        {{ t('Connected LDAP server') }}:
+                        <b>{{ ldapConfig.host }}</b>
+                        <br>
+                        {{ t('Used filter query') }}:
+                        <b>{{ ldapConfig.query }}</b>
+                        <br>
+                        {{ t('Base DN') }}:
+                        <b>{{ ldapConfig.base_dn }}</b>
                     </div>
-                    <!-- hier der ldap sh!t! -->
 
 
                     <div *ngIf="ldapUser !== null" class="mb-3">
@@ -137,7 +132,8 @@
                                [(ngModel)]="post.email">
                         <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
                         <div class="help-block">
-                            {{ t('Imported value from LDAP.') }}                                </div>
+                            {{ t('Imported value from LDAP.') }}
+                        </div>
                     </div>
 
                     <div *ngIf="ldapUser !== null" class="mb-3">
