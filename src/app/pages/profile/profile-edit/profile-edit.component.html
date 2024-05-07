@@ -248,7 +248,70 @@
             </c-card>
         </form>
 
+
         <!-- Profile picture -->
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Profile') }}
+                    <small class="fw-300">
+                        {{ t('picture') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <c-col>
+                        {{ t('Current image') }}
+                    </c-col>
+                </c-row>
+
+                <!-- No profile pucture -->
+                <c-row *ngIf="UserPost && !UserPost.image">
+                    <c-col xs="12">
+                        <img src="/img/fallback_user.png" class="img-fluid profile-picture-upload"/>
+                    </c-col>
+                    <c-col xs="12" class="text-muted pt-2">
+                        {{ t('You have no own image uploaded yet') }}
+                    </c-col>
+                </c-row>
+
+                <!-- own user picture -->
+                <c-row *ngIf="UserPost && UserPost.image">
+                    <c-col xs="12">
+                        <img [src]="'/img/userimages/'+UserPost.image" class="img-fluid profile-picture-upload"/>
+                    </c-col>
+                    <c-col xs="12" class="pt-2">
+                        <button cButton color="danger" class="ripple" size="xs" (click)="deleteUserImage()">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Delete my image') }}
+                        </button>
+                    </c-col>
+                </c-row>
+
+                <c-row>
+                    <c-col xs="12">
+                        {{ t('Select image') }}
+                    </c-col>
+                    <c-col xs="12" class="text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Max allowed file size: ') }}
+                        {{ maxUploadLimit?.string }}
+                    </c-col>
+                    <c-col xs="12">
+                        <div id="profileImageDropzone" class="dropzone dropzoneStyle">
+                            <div class="dz-message">
+                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                         class="mb-3 text-muted"></fa-icon>
+                                <br>
+                                <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                            </div>
+                        </div>
+                    </c-col>
+                </c-row>
+
+            </c-card-body>
+        </c-card>
+
 
         <!-- Change password -->
 

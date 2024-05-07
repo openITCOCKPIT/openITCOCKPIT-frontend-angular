@@ -3,7 +3,12 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { ProfileApiRoot, ProfileUser } from './profile.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericSuccessResponse,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -50,6 +55,24 @@ export class ProfileService {
                         success: false,
                         data: err
                     });
+                })
+            );
+    }
+
+    public deleteUserImage(): Observable<GenericSuccessResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/profile/deleteImage.json?angular=true`, {})
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true
+                    };
+                }),
+                catchError((error: any) => {
+                    return of({
+                        success: false
+                    })
                 })
             );
     }
