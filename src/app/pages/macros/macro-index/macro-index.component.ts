@@ -61,6 +61,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 
 @Component({
@@ -123,6 +124,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         KeyValuePipe,
         FormErrorDirective,
         FormFeedbackComponent,
+        NgOptionHighlightModule,
     ],
     templateUrl: './macro-index.component.html',
     styleUrl: './macro-index.component.css'

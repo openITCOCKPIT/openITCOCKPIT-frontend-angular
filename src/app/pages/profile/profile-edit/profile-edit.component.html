@@ -164,12 +164,15 @@
                     </label>
                     <ng-select id="language"
                                name="language"
+                               [items]="localeOptions"
+                               bindLabel="name"
+                               bindValue="i18n"
                                [clearable]="false"
                                [(ngModel)]="UserPost.i18n"
                                oitcFormError [errors]="UserErrors" errorField="i18n">
-                        <ng-option *ngFor="let locale of localeOptions" [value]="locale.i18n">
-                            {{ locale.name }}
-                        </ng-option>
+                        <ng-template ng-option-tmp let-locale="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ locale.name }}</div>
+                        </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="i18n"></oitc-form-feedback>
                     <div class="help-block">
@@ -184,12 +187,15 @@
                     </label>
                     <ng-select id="UserDateformat"
                                name="UserDateformat"
+                               [items]="dateformates"
+                               bindLabel="value"
+                               bindValue="key"
                                [clearable]="false"
                                [(ngModel)]="UserPost.dateformat"
                                oitcFormError [errors]="UserErrors" errorField="dateformat">
-                        <ng-option *ngFor="let dateformat of dateformates" [value]="dateformat.key">
-                            {{ dateformat.value }}
-                        </ng-option>
+                        <ng-template ng-option-tmp let-dateformat="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ dateformat.value }}</div>
+                        </ng-template>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="dateformat"></oitc-form-feedback>
                 </div>

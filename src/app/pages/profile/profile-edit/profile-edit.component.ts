@@ -31,6 +31,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
 import { UserDateformat, UserLocaleOption } from '../../users/users.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -60,7 +61,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         FormCheckLabelDirective,
         TrueFalseDirective,
         NgForOf,
-        NgSelectModule
+        NgSelectModule,
+        NgOptionHighlightModule
     ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css'

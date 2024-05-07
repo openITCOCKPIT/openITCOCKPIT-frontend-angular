@@ -151,11 +151,12 @@
                         </label>
                         <ng-select id="macroName"
                                    name="name"
+                                   [items]="availableMacroNames"
                                    [(ngModel)]="currentMacro.Macro.name"
                                    oitcFormError [errors]="errors" errorField="name">
-                            <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
-                                {{ macroName }}
-                            </ng-option>
+                            <ng-template ng-option-tmp let-macro="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ macro }}</div>
+                            </ng-template>
                         </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
