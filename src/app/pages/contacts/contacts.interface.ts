@@ -32,6 +32,7 @@ export function getDefaultContactsIndexParams(): ContactsIndexParams {
 export interface ContactsIndexRoot extends PaginateOrScroll {
     all_contacts: ContactsIndex[];
     _csrfToken: string;
+    isLdapAuth: boolean;
 }
 
 export interface ContactsEditRoot {
