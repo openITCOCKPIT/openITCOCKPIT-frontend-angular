@@ -80,6 +80,12 @@ export const routes: Routes = [{
     path: 'calendars/add',
     loadComponent: () => import('./pages/calendars/calendars-add/calendars-add.component').then(m => m.CalendarsAddComponent)
 }, {
+    path: 'documentations/view/:uuid/:type',
+    loadComponent: () => import('./pages/documentations/documentations-view/documentations-view.component').then(m => m.DocumentationsViewComponent)
+}, {
+    path: 'documentations/edit/:uuid/:type',
+    loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
