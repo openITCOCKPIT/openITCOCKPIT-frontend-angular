@@ -21,7 +21,10 @@ export interface ProfileUser {
     paginatorlength: number
     recursive_browser: number
     image: string
+    password: string | null
+    confirm_password: string | null
 }
+
 
 export interface ProfileMaxUploadLimit {
     value: number
