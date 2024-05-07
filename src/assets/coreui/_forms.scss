@@ -1,0 +1,10 @@
+/* Form classes. */
+
+/************
+ * Hintmark *
+ ************/
+.hintmark:after {
+    color: #4759FF;
+    content: " *";
+    display: inline;
+}
