@@ -527,3 +527,29 @@ export interface Container3 {
     lft: number
     rght: number
 }
+
+export interface LoadLdapUserByStringRoot {
+    ldapUsers: LdapUser[]
+    _csrfToken: string
+}
+
+export interface LdapUser {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: any[]
+    display_name: string
+}
+
+export interface LdapConfigRoot {
+    ldapConfig: LdapConfig
+    _csrfToken: string
+}
+
+export interface LdapConfig {
+    host: string
+    query: string
+    base_dn: string
+}
