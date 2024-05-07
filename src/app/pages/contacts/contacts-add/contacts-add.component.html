@@ -98,6 +98,7 @@
                         </label>
                         <input cFormControl id="email" required type="text"
                                name="email"
+                               [placeholder]="'user@example.org'"
                                oitcFormError [errors]="errors" errorField="email"
                                [(ngModel)]="post.email">
                         <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
@@ -109,6 +110,7 @@
                         </label>
                         <input cFormControl id="phone" required type="text"
                                name="phone"
+                               [placeholder]="'0049123456789'"
                                oitcFormError [errors]="errors" errorField="phone"
                                [(ngModel)]="post.phone">
                         <oitc-form-feedback [errors]="errors" errorField="phone"></oitc-form-feedback>
