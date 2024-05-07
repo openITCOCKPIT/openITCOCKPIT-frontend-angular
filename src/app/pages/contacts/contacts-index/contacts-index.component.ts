@@ -119,7 +119,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
-    public contacts?: ContactsIndexRoot;
+    public contacts: ContactsIndexRoot = {all_contacts: [], _csrfToken: '', isLdapAuth: false}
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
 
@@ -173,7 +173,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy {
         this.SelectionServiceService.deselectAll();
 
         this.subscriptions.add(this.ContactsService.getIndex(this.params)
-            .subscribe((result) => {
+            .subscribe((result: ContactsIndexRoot) => {
                 this.contacts = result;
             }));
     }
