@@ -172,8 +172,27 @@
                         </ng-option>
                     </ng-select>
                     <oitc-form-feedback [errors]="UserErrors" errorField="i18n"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('These options are community translations. Feel free to extend them and open a github pull request.') }}
+                    </div>
                 </div>
 
+                <div class="mb-3">
+                    <label cLabel for="UserDateformat">
+                        {{ t('Date format') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <ng-select id="UserDateformat"
+                               name="UserDateformat"
+                               [clearable]="false"
+                               [(ngModel)]="UserPost.dateformat"
+                               oitcFormError [errors]="UserErrors" errorField="dateformat">
+                        <ng-option *ngFor="let dateformat of dateformates" [value]="dateformat.key">
+                            {{ dateformat.value }}
+                        </ng-option>
+                    </ng-select>
+                    <oitc-form-feedback [errors]="UserErrors" errorField="dateformat"></oitc-form-feedback>
+                </div>
 
             </c-card-body>
             <c-card-footer>
