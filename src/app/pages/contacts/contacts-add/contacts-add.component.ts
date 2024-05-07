@@ -103,35 +103,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
 
-    public post: ContactPost = {
-        containers: {_ids: []},
-        customvariables: [],
-        description: '',
-        email: '',
-        host_commands: {_ids: []},
-        host_notifications_enabled: 1,
-        host_push_notifications_enabled: 0,
-        host_timeperiod_id: null,
-        name: '',
-        notify_host_down: 1,
-        notify_host_downtime: 0,
-        notify_host_flapping: 0,
-        notify_host_recovery: 1,
-        notify_host_unreachable: 1,
-        notify_service_critical: 1,
-        notify_service_downtime: 0,
-        notify_service_flapping: 0,
-        notify_service_recovery: 1,
-        notify_service_unknown: 1,
-        notify_service_warning: 1,
-        phone: '',
-        service_commands: {_ids: []},
-        service_notifications_enabled: 1,
-        service_push_notifications_enabled: 0,
-        service_timeperiod_id: null,
-        user_id: null,
-        uuid: ''
-    };
+    public post: ContactPost = {} as ContactPost;
     protected containers: Container[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
@@ -139,9 +111,45 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
 
+    constructor() {
+        this.post = this.getDefaultPost();
+    }
+
     public ngOnInit() {
         this.loadContainers();
         this.loadCommands();
+    }
+
+    private getDefaultPost(): ContactPost {
+        return {
+            containers: {_ids: []},
+            customvariables: [],
+            description: '',
+            email: '',
+            host_commands: {_ids: []},
+            host_notifications_enabled: 1,
+            host_push_notifications_enabled: 0,
+            host_timeperiod_id: null,
+            name: '',
+            notify_host_down: 1,
+            notify_host_downtime: 0,
+            notify_host_flapping: 0,
+            notify_host_recovery: 1,
+            notify_host_unreachable: 1,
+            notify_service_critical: 1,
+            notify_service_downtime: 0,
+            notify_service_flapping: 0,
+            notify_service_recovery: 1,
+            notify_service_unknown: 1,
+            notify_service_warning: 1,
+            phone: '',
+            service_commands: {_ids: []},
+            service_notifications_enabled: 1,
+            service_push_notifications_enabled: 0,
+            service_timeperiod_id: null,
+            user_id: null,
+            uuid: ''
+        };
     }
 
     public ngOnDestroy() {
@@ -159,6 +167,10 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
+                    if (this.createAnother) {
+                        this.post = this.getDefaultPost();
+                        return;
+                    }
                     this.router.navigate(['/contacts/index']);
                     return;
                 }
