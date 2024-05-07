@@ -103,9 +103,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label cLabel for="email">
+                        <label cLabel for="email" class="hintmark">
                             {{ t('Email') }}
-                            <oitc-required-icon></oitc-required-icon>
                         </label>
                         <input cFormControl id="email" required type="text"
                                name="email"
@@ -115,9 +114,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label cLabel for="phone">
+                        <label cLabel for="phone" class="hintmark">
                             {{ t('Phone') }}
-                            <oitc-required-icon></oitc-required-icon>
                         </label>
                         <input cFormControl id="phone" required type="text"
                                name="phone"
@@ -615,7 +613,7 @@
                         <div class="col-xs-12 col-lg-12 text-info">
                             <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
                             {{ t('Read more about browser push notification in the') }} <a
-                            href="#!/documentations/wiki/additional_help%3Abrowser_push_notifications">
+                            href="/documentations/wiki/additional_help%3Abrowser_push_notifications">
                             {{ t('documentation') }} </a>
                         </div>
                     </div>
@@ -639,7 +637,7 @@
                     </div>
 
                     <div class="row mt-3">
-                        <div class="col-12 col-md-6 right">
+                        <div class="col-12 text-end">
                             <button cButton class="ripple" color="success" type="button"
                                     (click)="addMacro()">
                                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
