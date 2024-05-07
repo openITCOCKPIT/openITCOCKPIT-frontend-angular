@@ -17,14 +17,14 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
+import { ProfileMaxUploadLimit, ProfilePasswordPost, ProfileUser } from '../profile.interface';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -91,12 +91,21 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     public timezones: UserTimezonesSelect[] = [];
     public serverTimezone: TimezoneConfiguration | null = null;
 
+    public PasswordPost: ProfilePasswordPost = {
+        current_password: null,
+        password: null,
+        confirm_password: null
+    }
+    public PasswordErrors: GenericValidationError | null = null;
+
+
     private dropzoneCreated: boolean = false;
     private readonly ProfileService = inject(ProfileService);
     private readonly UsersService = inject(UsersService);
     private readonly TimezoneService = inject(TimezoneService);
     private readonly notyService = inject(NotyService);
     private readonly authService = inject(AuthService);
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly document = inject(DOCUMENT);
 
     private subscriptions: Subscription = new Subscription();
@@ -150,6 +159,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                 .subscribe((result) => {
                     if (result.success) {
                         this.notyService.genericSuccess();
+                        this.UserErrors = null;
                         return;
                     }
 
@@ -158,7 +168,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError();
                     if (result) {
                         this.UserErrors = errorResponse;
-                        console.log(this.UserErrors);
                     }
                 })
             );
@@ -210,5 +219,31 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             });
             this.dropzoneCreated = true;
         }
+    }
+
+    public submitPassword() {
+
+        this.subscriptions.add(this.ProfileService.changePassword(this.PasswordPost)
+            .subscribe((result) => {
+                if (result.success) {
+                    const msg = this.TranslocoService.translate('Password changed successfully.');
+                    this.notyService.genericSuccess(msg);
+                    this.PasswordPost = {
+                        current_password: null,
+                        password: null,
+                        confirm_password: null
+                    };
+                    this.PasswordErrors = null;
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.PasswordErrors = errorResponse;
+                }
+            })
+        );
     }
 }

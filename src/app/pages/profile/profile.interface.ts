@@ -32,4 +32,9 @@ export interface ProfileMaxUploadLimit {
     string: string
 }
 
+export interface ProfilePasswordPost {
+    current_password: string | null,
+    password: string | null,
+    confirm_password: string | null
+}
 

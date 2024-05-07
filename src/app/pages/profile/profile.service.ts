@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
-import { ProfileApiRoot, ProfileUser } from './profile.interface';
+import { ProfileApiRoot, ProfilePasswordPost, ProfileUser } from './profile.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
@@ -73,6 +73,31 @@ export class ProfileService {
                     return of({
                         success: false
                     })
+                })
+            );
+    }
+
+    public changePassword(password: ProfilePasswordPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{ user: ProfileUser }>(`${proxyPath}/profile/changePassword.json?angular=true`, {
+            Password: password
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: {
+                            success: true
+                        } as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
                 })
             );
     }
