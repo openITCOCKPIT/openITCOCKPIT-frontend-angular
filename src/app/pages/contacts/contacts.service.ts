@@ -8,7 +8,7 @@ import {
     ContactPost,
     ContactsEditRoot,
     ContactsIndexParams,
-    ContactsIndexRoot, ContactUsedBy,
+    ContactsIndexRoot, ContactUsedBy, LdapConfigRoot, LoadLdapUserByStringRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot
 } from './contacts.interface';
@@ -144,5 +144,23 @@ export class ContactsService implements DeleteAllModalService {
                     return data;
                 })
             )
+    }
+
+    public loadLdapUserByString(samaccountname: string): Observable<LoadLdapUserByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadLdapUserByStringRoot>(`${proxyPath}/contacts/loadLdapUserByString.json?angular=true&samaccountname=${samaccountname}`, {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public ldapConfiguration(): Observable<LdapConfigRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LdapConfigRoot>(`${proxyPath}/angular/ldap_configuration.json?angular=true`, {}).pipe(
+            map((data: LdapConfigRoot) => {
+                return data;
+            })
+        )
     }
 }
