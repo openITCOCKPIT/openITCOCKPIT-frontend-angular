@@ -15,7 +15,6 @@
                    type="text"
                    name="name"
                    [required]="true"
-                   [placeholder]="'Please enter a name' | transloco"
                    [(ngModel)]="macro.name"
                    (ngModelChange)="updateName()"
             >
@@ -29,7 +28,6 @@
                 {{ t('Value') }}
             </label>
             <input class="form-control w-100" type="text"
-                   [placeholder]="'Please enter a value' | transloco"
                    name="value"
                    [(ngModel)]="macro.value">
             <div *ngIf="errors.length > 0">
