@@ -46,6 +46,7 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button [routerLink]="['/', 'contacts', 'ldap']" cButton
+                                *ngIf="contacts.isLdapAuth"
                                 class="ripple"
                                 color="warning"
                                 size="xs">
