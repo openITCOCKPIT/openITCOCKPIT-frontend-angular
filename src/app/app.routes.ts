@@ -66,6 +66,9 @@ export const routes: Routes = [{
     path: 'contacts/edit/:id',
     loadComponent: () => import('./pages/contacts/contacts-edit/contacts-edit.component').then(m => m.ContactsEditComponent)
 }, {
+    path: 'contacts/ldap',
+    loadComponent: () => import('./pages/contacts/contacts-ldap/contacts-ldap.component').then(m => m.ContactsLdapComponent)
+}, {
     path: 'contacts/usedBy/:id',
     loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
 }, {
