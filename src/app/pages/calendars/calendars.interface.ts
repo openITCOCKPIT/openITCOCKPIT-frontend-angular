@@ -40,10 +40,16 @@ export interface CalendarIndex {
 
 export interface CalendarPost {
     id?: number
+    container_id: number
     name: string
     description: string
 }
 
 export interface CalendarEditGet {
     calendar: CalendarPost
+}
+
+export interface CalendarContainer {
+    key: number
+    value: string
 }

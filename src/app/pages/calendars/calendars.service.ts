@@ -3,7 +3,13 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { CalendarEditGet, CalendarIndexRoot, CalendarPost, CalendarsIndexParams } from './calendars.interface';
+import {
+    CalendarContainer,
+    CalendarEditGet,
+    CalendarIndexRoot,
+    CalendarPost,
+    CalendarsIndexParams
+} from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -97,5 +103,17 @@ export class CalendarsService implements DeleteAllModalService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/calendars/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public getContainers(): Observable<CalendarContainer[]> {
+
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            containers: CalendarContainer[]
+        }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
     }
 }

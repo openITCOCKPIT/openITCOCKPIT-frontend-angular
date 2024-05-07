@@ -132,7 +132,7 @@
                         <td class="text-center">
                             <oitc-item-select
                                 *oitcPermission="['calendars', 'delete']"
-                                [disabled]="false"
+                                [disabled]="!calendar.allowEdit"
                                 [item]="calendar"></oitc-item-select>
 
                         </td>
@@ -141,15 +141,17 @@
 
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'calendars.edit'"
+                            <oitc-actions-button [permission]="'calendars.edit'" [allowEdit]="calendar.allowEdit"
                                                  [url]="'/calendars/edit/' + calendar.id">
                                 <oitc-actions-button-element [permission]="'calendars.edit'"
+                                                             *ngIf="calendar.allowEdit"
                                                              [url]="'/calendars/edit/' + calendar.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(calendar)"
+                                                             *ngIf="calendar.allowEdit"
                                                              [permission]="'calendars.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
