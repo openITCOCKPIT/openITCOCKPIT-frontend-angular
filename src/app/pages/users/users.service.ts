@@ -3,12 +3,15 @@ import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
+    LoadUsersByContainerIdPost,
+    LoadUsersByContainerIdRoot,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
+
 
 @Injectable({
     providedIn: 'root'
@@ -68,5 +71,17 @@ export class UsersService {
                 return result;
             })
         )
+    }
+
+    public loadUsersByContainerId(params: LoadUsersByContainerIdPost): Observable<LoadUsersByContainerIdRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadUsersByContainerIdRoot>(`${proxyPath}/users/loadUsersByContainerId.json?angular=true`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+
     }
 }
