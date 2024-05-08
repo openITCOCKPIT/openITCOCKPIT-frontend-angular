@@ -37,7 +37,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import { ProfileMaxUploadLimit, ProfilePasswordPost, ProfileUser } from '../profile.interface';
+import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -57,6 +57,7 @@ import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { InputCopyComponent } from '../../../layouts/coreui/input-copy/input-copy.component';
 import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
+import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -109,7 +110,8 @@ import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.comp
         ModalTitleDirective,
         ModalToggleDirective,
         InputCopyComponent,
-        ProfileApikeysComponent
+        ProfileApikeysComponent,
+        ProfileChangePasswordComponent
     ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css'
@@ -124,13 +126,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     public dateformates: UserDateformat[] = [];
     public timezones: UserTimezonesSelect[] = [];
     public serverTimezone: TimezoneConfiguration | null = null;
-
-    public PasswordPost: ProfilePasswordPost = {
-        current_password: null,
-        password: null,
-        confirm_password: null
-    };
-    public PasswordErrors: GenericValidationError | null = null;
 
 
     private dropzoneCreated: boolean = false;
@@ -256,29 +251,5 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public submitPassword() {
-        this.subscriptions.add(this.ProfileService.changePassword(this.PasswordPost)
-            .subscribe((result) => {
-                if (result.success) {
-                    const msg = this.TranslocoService.translate('Password changed successfully.');
-                    this.notyService.genericSuccess(msg);
-                    this.PasswordPost = {
-                        current_password: null,
-                        password: null,
-                        confirm_password: null
-                    };
-                    this.PasswordErrors = null;
-                    return;
-                }
-
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.PasswordErrors = errorResponse;
-                }
-            })
-        );
-    }
 
 }
