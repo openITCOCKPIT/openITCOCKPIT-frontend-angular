@@ -19,192 +19,543 @@
                 </li>
             </ol>
         </nav>
-        <c-card class="mb-3" *ngIf="UserPost">
+
+        <!-- User Settings -->
+        <form cForm (ngSubmit)="submitUserPost()">
+            <c-card class="mb-3" *ngIf="UserPost">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Profile') }}
+                        <small class="fw-300">
+                            {{ t('information') }}
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="firstname">
+                            {{ t('First name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="firstname" required type="text"
+                               name="firstname"
+                               oitcFormError [errors]="UserErrors" errorField="firstname"
+                               [disabled]="isLdapUser"
+                               [(ngModel)]="UserPost.firstname">
+                        <oitc-form-feedback [errors]="UserErrors" errorField="firstname"></oitc-form-feedback>
+                        <div class="help-block" *ngIf="isLdapUser">
+                            {{ t('Value imported from LDAP Server') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="lastname">
+                            {{ t('Last name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="lastname" required type="text"
+                               name="lastname"
+                               oitcFormError [errors]="UserErrors" errorField="lastname"
+                               [disabled]="isLdapUser"
+                               [(ngModel)]="UserPost.lastname">
+                        <oitc-form-feedback [errors]="UserErrors" errorField="lastname"></oitc-form-feedback>
+                        <div class="help-block" *ngIf="isLdapUser">
+                            {{ t('Value imported from LDAP Server') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3" *ngIf="isLdapUser">
+                        <label cLabel for="samaccountname">
+                            {{ t('SAM-Account-Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="samaccountname" required type="text"
+                               name="samaccountname"
+                               oitcFormError [errors]="UserErrors" errorField="samaccountname"
+                               [(ngModel)]="UserPost.samaccountname"
+                               disabled>
+                        <oitc-form-feedback [errors]="UserErrors" errorField="samaccountname"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Username for the login') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="Emailaddress">
+                            {{ t('Email address') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="Emailaddress" required type="email"
+                               name="Emailaddress"
+                               oitcFormError [errors]="UserErrors" errorField="email"
+                               [disabled]="isLdapUser"
+                               [(ngModel)]="UserPost.email">
+                        <oitc-form-feedback [errors]="UserErrors" errorField="email"></oitc-form-feedback>
+                        <div class="help-block" *ngIf="isLdapUser">
+                            {{ t('Value imported from LDAP Server') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="PhoneNumber">
+                            {{ t('Phone Number') }}
+                        </label>
+                        <input cFormControl id="PhoneNumber" type="text"
+                               name="PhoneNumber"
+                               oitcFormError [errors]="UserErrors" errorField="phone"
+                               [(ngModel)]="UserPost.phone">
+                        <oitc-form-feedback [errors]="UserErrors" errorField="phone"></oitc-form-feedback>
+                    </div>
+
+                    <hr class="border-dashed">
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="showstatsinmenu"
+                                name="showstatsinmenu"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="UserPost.showstatsinmenu"/>
+                            <label cFormCheckLabel
+                                   for="showstatsinmenu">{{ t('Show status badges in menu') }}</label>
+                        </c-form-check>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="RecursiveBrowser"
+                                name="RecursiveBrowser"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="1"
+                                [falseValue]="0"
+                                [(ngModel)]="UserPost.recursive_browser"/>
+                            <label cFormCheckLabel
+                                   for="RecursiveBrowser">{{ t('Recursive Browser') }}</label>
+                        </c-form-check>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="paginatorlength">
+                            {{ t('Length of lists') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="paginatorlength" required type="number"
+                               min="1"
+                               max="1000"
+                               name="paginatorlength"
+                               oitcFormError [errors]="UserErrors" errorField="paginatorlength"
+                               [(ngModel)]="UserPost.paginatorlength">
+                        <oitc-form-feedback [errors]="UserErrors" errorField="paginatorlength"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('This value defines how many records will load per list. You can choose between 1 and 1000') }}
+                        </div>
+                    </div>
+
+                    <hr class="border-dashed">
+
+                    <div class="mb-3">
+                        <label cLabel for="language">
+                            {{ t('Language') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="language"
+                                   name="language"
+                                   [items]="localeOptions"
+                                   bindLabel="name"
+                                   bindValue="i18n"
+                                   [clearable]="false"
+                                   [(ngModel)]="UserPost.i18n"
+                                   oitcFormError [errors]="UserErrors" errorField="i18n">
+                            <ng-template ng-option-tmp let-locale="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ locale.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="UserErrors" errorField="i18n"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('These options are community translations. Feel free to extend them and open a github pull request.') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="UserDateformat">
+                            {{ t('Date format') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="UserDateformat"
+                                   name="UserDateformat"
+                                   [items]="dateformates"
+                                   bindLabel="value"
+                                   bindValue="key"
+                                   [clearable]="false"
+                                   [(ngModel)]="UserPost.dateformat"
+                                   oitcFormError [errors]="UserErrors" errorField="dateformat">
+                            <ng-template ng-option-tmp let-dateformat="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ dateformat.value }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="UserErrors" errorField="dateformat"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="UserTimezone">
+                            {{ t('Timezone') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="UserTimezone"
+                                   name="UserTimezone"
+                                   [items]="timezones"
+                                   groupBy="group"
+                                   bindLabel="name"
+                                   bindValue="value"
+                                   [clearable]="false"
+                                   [(ngModel)]="UserPost.timezone"
+                                   oitcFormError [errors]="UserErrors" errorField="timezone">
+                            <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="UserErrors" errorField="timezone"></oitc-form-feedback>
+                        <div class="help-block" *ngIf="serverTimezone">
+                            {{ t('Server timezone is:') }}
+                            <strong>
+                                {{ serverTimezone.server_timezone }}.
+                            </strong>
+                            {{ t('Current server time:') }}
+                            <strong>
+                                {{ serverTimezone.server_time }}
+                            </strong>
+                        </div>
+                    </div>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update Profile') }}
+                    </button>
+                    <button [fallbackUrl]="['/', 'dashboards', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+
+
+        <!-- Profile picture -->
+        <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Profile') }}
                     <small class="fw-300">
-                        {{ t('information') }}
+                        {{ t('picture') }}
                     </small>
                 </h5>
             </c-card-header>
             <c-card-body>
+                <c-row>
+                    <c-col>
+                        {{ t('Current image') }}
+                    </c-col>
+                </c-row>
 
-                <div class="mb-3">
-                    <label cLabel for="firstname">
-                        {{ t('First name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="firstname" required type="text"
-                           name="firstname"
-                           oitcFormError [errors]="UserErrors" errorField="firstname"
-                           [disabled]="isLdapUser"
-                           [(ngModel)]="UserPost.firstname">
-                    <oitc-form-feedback [errors]="UserErrors" errorField="firstname"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="isLdapUser">
-                        {{ t('Value imported from LDAP Server') }}
-                    </div>
-                </div>
+                <!-- No profile pucture -->
+                <c-row *ngIf="UserPost && !UserPost.image">
+                    <c-col xs="12">
+                        <img src="/img/fallback_user.png" class="img-fluid profile-picture-upload"/>
+                    </c-col>
+                    <c-col xs="12" class="text-muted pt-2">
+                        {{ t('You have no own image uploaded yet') }}
+                    </c-col>
+                </c-row>
 
-                <div class="mb-3">
-                    <label cLabel for="lastname">
-                        {{ t('Last name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="lastname" required type="text"
-                           name="lastname"
-                           oitcFormError [errors]="UserErrors" errorField="lastname"
-                           [disabled]="isLdapUser"
-                           [(ngModel)]="UserPost.lastname">
-                    <oitc-form-feedback [errors]="UserErrors" errorField="lastname"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="isLdapUser">
-                        {{ t('Value imported from LDAP Server') }}
-                    </div>
-                </div>
+                <!-- own user picture -->
+                <c-row *ngIf="UserPost && UserPost.image">
+                    <c-col xs="12">
+                        <img [src]="'/img/userimages/'+UserPost.image" class="img-fluid profile-picture-upload"/>
+                    </c-col>
+                    <c-col xs="12" class="pt-2">
+                        <button cButton color="danger" class="ripple" size="xs" (click)="deleteUserImage()">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Delete my image') }}
+                        </button>
+                    </c-col>
+                </c-row>
 
-                <div class="mb-3" *ngIf="isLdapUser">
-                    <label cLabel for="samaccountname">
-                        {{ t('SAM-Account-Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="samaccountname" required type="text"
-                           name="samaccountname"
-                           oitcFormError [errors]="UserErrors" errorField="samaccountname"
-                           [(ngModel)]="UserPost.samaccountname"
-                           disabled>
-                    <oitc-form-feedback [errors]="UserErrors" errorField="samaccountname"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Username for the login') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="Emailaddress">
-                        {{ t('Email address') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="Emailaddress" required type="email"
-                           name="Emailaddress"
-                           oitcFormError [errors]="UserErrors" errorField="email"
-                           [disabled]="isLdapUser"
-                           [(ngModel)]="UserPost.email">
-                    <oitc-form-feedback [errors]="UserErrors" errorField="email"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="isLdapUser">
-                        {{ t('Value imported from LDAP Server') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="PhoneNumber">
-                        {{ t('Phone Number') }}
-                    </label>
-                    <input cFormControl id="PhoneNumber" type="text"
-                           name="PhoneNumber"
-                           oitcFormError [errors]="UserErrors" errorField="phone"
-                           [(ngModel)]="UserPost.phone">
-                    <oitc-form-feedback [errors]="UserErrors" errorField="phone"></oitc-form-feedback>
-                </div>
-
-                <hr class="border-dashed">
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            cFormCheckInput
-                            id="showstatsinmenu"
-                            name="showstatsinmenu"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="UserPost.showstatsinmenu"/>
-                        <label cFormCheckLabel
-                               for="showstatsinmenu">{{ t('Show status badges in menu') }}</label>
-                    </c-form-check>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            cFormCheckInput
-                            id="RecursiveBrowser"
-                            name="RecursiveBrowser"
-                            type="checkbox"
-                            trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
-                            [(ngModel)]="UserPost.recursive_browser"/>
-                        <label cFormCheckLabel
-                               for="RecursiveBrowser">{{ t('Recursive Browser') }}</label>
-                    </c-form-check>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="paginatorlength">
-                        {{ t('Length of lists') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="paginatorlength" required type="number"
-                           min="1"
-                           max="1000"
-                           name="paginatorlength"
-                           oitcFormError [errors]="UserErrors" errorField="paginatorlength"
-                           [(ngModel)]="UserPost.paginatorlength">
-                    <oitc-form-feedback [errors]="UserErrors" errorField="paginatorlength"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('This value defines how many records will load per list. You can choose between 1 and 1000') }}
-                    </div>
-                </div>
-
-                <hr class="border-dashed">
-
-                <div class="mb-3">
-                    <label cLabel for="language">
-                        {{ t('Language') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="language"
-                               name="language"
-                               [items]="localeOptions"
-                               bindLabel="name"
-                               bindValue="i18n"
-                               [clearable]="false"
-                               [(ngModel)]="UserPost.i18n"
-                               oitcFormError [errors]="UserErrors" errorField="i18n">
-                        <ng-template ng-option-tmp let-locale="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ locale.name }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="UserErrors" errorField="i18n"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('These options are community translations. Feel free to extend them and open a github pull request.') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="UserDateformat">
-                        {{ t('Date format') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="UserDateformat"
-                               name="UserDateformat"
-                               [items]="dateformates"
-                               bindLabel="value"
-                               bindValue="key"
-                               [clearable]="false"
-                               [(ngModel)]="UserPost.dateformat"
-                               oitcFormError [errors]="UserErrors" errorField="dateformat">
-                        <ng-template ng-option-tmp let-dateformat="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ dateformat.value }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="UserErrors" errorField="dateformat"></oitc-form-feedback>
-                </div>
+                <c-row>
+                    <c-col xs="12">
+                        {{ t('Select image') }}
+                    </c-col>
+                    <c-col xs="12" class="text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Max allowed file size: ') }}
+                        {{ maxUploadLimit?.string }}
+                    </c-col>
+                    <c-col xs="12">
+                        <div id="profileImageDropzone" class="dropzone dropzoneStyle">
+                            <div class="dz-message">
+                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                         class="mb-3 text-muted"></fa-icon>
+                                <br>
+                                <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                            </div>
+                        </div>
+                    </c-col>
+                </c-row>
 
             </c-card-body>
-            <c-card-footer>
-                footer
-            </c-card-footer>
         </c-card>
+
+
+        <!-- Change password -->
+        <form cForm (ngSubmit)="submitPassword()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Change Password') }}
+                        <small class="fw-300">
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <c-row>
+                        <c-col class="text-info" *ngIf="isLdapUser">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('LDAP users need to change their password through the operating system or an LDAP account manager tool.') }}
+                        </c-col>
+                    </c-row>
+
+                    <ng-container *ngIf="!isLdapUser">
+                        <div class="mb-3">
+                            <label cLabel for="current_password">
+                                {{ t('Current password') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="current_password" required type="password"
+                                   name="current_password"
+                                   autocomplete="new-password"
+                                   oitcFormError [errors]="PasswordErrors" errorField="current_password"
+                                   [(ngModel)]="PasswordPost.current_password">
+                            <oitc-form-feedback [errors]="PasswordErrors"
+                                                errorField="current_password"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="password">
+                                {{ t('New password') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="password" required type="password"
+                                   name="password"
+                                   oitcFormError [errors]="PasswordErrors" errorField="password"
+                                   autocomplete="new-password"
+                                   [(ngModel)]="PasswordPost.password">
+                            <oitc-form-feedback [errors]="PasswordErrors" errorField="password"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('The password must consist of 6 alphanumeric characters and must contain at least one digit') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="confirm_password">
+                                {{ t('Confirm new password') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="confirm_password" required type="password"
+                                   name="confirm_password"
+                                   oitcFormError [errors]="PasswordErrors" errorField="confirm_password"
+                                   autocomplete="new-password"
+                                   [(ngModel)]="PasswordPost.confirm_password">
+                            <oitc-form-feedback [errors]="PasswordErrors"
+                                                errorField="confirm_password"></oitc-form-feedback>
+                        </div>
+
+                    </ng-container>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Change Password') }}
+                    </button>
+                    <button [fallbackUrl]="['/', 'dashboards', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+
+        <!-- API Keys -->
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('API keys') }}
+                    <small class="fw-300">
+                    </small>
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="default"
+                                (click)="loadApiKeys()"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="success"
+                                [cModalToggle]="createNewApiKeyModal.id"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                            {{ t('Create new API key') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+                <c-row [hidden]="Apikeys.length > 0">
+                    <c-col class="text-center text-info p-2">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('No API keys created yet. You can still use the api using your username and password.') }}
+                        <br>
+                        {{ ( 'It\'s recommended to create a own API key for every external application.' ) }}
+                    </c-col>
+                </c-row>
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped *ngIf="Apikeys.length > 0">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
+                            {{ t('ID') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Last used') }}
+                        </th>
+                        <th scope="col" class="width-130">
+                            {{ t('Show') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let apikey of Apikeys">
+                        <td>{{ apikey.id }}</td>
+                        <td>{{ apikey.description }}</td>
+                        <td>{{ apikey.last_use }}</td>
+                        <td>
+                            <div class="d-grid">
+                                <button cButton size="xs" class="ripple">
+                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                    {{ t('Show') }}
+                                </button>
+                            </div>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </c-card-body>
+        </c-card>
+
+
+        <c-modal #createNewApiKeyModal fullscreen="sm" id="createNewApiKeyModal" size="lg">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                    {{ t('Create API key') }}
+                </h5>
+                <button [cModalToggle]="createNewApiKeyModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+                <c-row>
+                    <c-col>
+                        <div class="mb-3">
+                            <label cLabel for="ApiKeyCreateDesc">
+                                {{ t('Description') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="ApiKeyCreateDesc" required type="text"
+                                   name="ApiKeyCreateDesc"
+                                   oitcFormError [errors]="ApikeyErrors" errorField="description"
+                                   [(ngModel)]="ApikeyCreatePost.description">
+                            <oitc-form-feedback [errors]="ApikeyErrors" errorField="description"></oitc-form-feedback>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="ApiKeyCreateKey">
+                                {{ t('API key (read-only)') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="ApiKeyCreateKey" required type="text"
+                                   name="ApiKeyCreateKey"
+                                   oitcFormError [errors]="ApikeyErrors" errorField="apikey"
+                                   [(ngModel)]="ApikeyCreatePost.apikey">
+                            <oitc-form-feedback [errors]="ApikeyErrors" errorField="apikey"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <c-row>
+                                <c-col xs="12">
+                                    <span class="fw-bold">
+                                        <code>curl</code> {{ t('example') }}:
+                                    </span>
+                                </c-col>
+                                <c-col xs="12">
+                                    <pre>curl -H \
+"Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
+"https://<?php echo h($_SERVER['SERVER_ADDR']); ?>/hosts/index.json?angular=true"</pre>
+                                </c-col>
+                                <c-col xs="12">
+                                    {{ t('For self-signed certificates, add') }}<code>-k</code>.
+                                </c-col>
+                            </c-row>
+                        </div>
+
+                        <div class="mb-3">
+                            <c-row>
+                                <c-col xs="12">
+                                    <span class="fw-bold">
+                                        <code>curl</code> {{ t('example with JSON processor') }}:
+                                    </span>
+                                </c-col>
+                                <c-col xs="12">
+                                    <pre>curl -k -s -H \
+"Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
+"https://<?php echo h($_SERVER['SERVER_ADDR']); ?>/hosts/index.json?angular=true" |jq .</pre>
+                                </c-col>
+                            </c-row>
+                        </div>
+
+                    </c-col>
+                </c-row>
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="primary" [cModalToggle]="createNewApiKeyModal.id">
+                    {{ t('Insert') }}
+                </button>
+                <button cButton color="secondary" [cModalToggle]="createNewApiKeyModal.id">
+                    {{ t('Cancel') }}
+                </button>
+            </c-modal-footer>
+        </c-modal>
+
+
     </ng-container>
 
 </oitc-coreui>
