@@ -1,0 +1,4 @@
+.hover-primary:hover {
+    color: var(--cui-link-hover-color);
+    cursor: pointer;
+}

@@ -20,6 +20,7 @@ import {
     ModalComponent,
     ModalFooterComponent,
     ModalHeaderComponent,
+    ModalService,
     ModalTitleDirective,
     ModalToggleDirective,
     NavComponent,
@@ -36,13 +37,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import {
-    ProfileApikey,
-    ProfileCreateApiKey,
-    ProfileMaxUploadLimit,
-    ProfilePasswordPost,
-    ProfileUser
-} from '../profile.interface';
+import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -60,6 +55,9 @@ import Dropzone from 'dropzone';
 import { AuthService } from '../../../auth/auth.service';
 import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { InputCopyComponent } from '../../../layouts/coreui/input-copy/input-copy.component';
+import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
+import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -110,7 +108,10 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ModalToggleDirective
+        ModalToggleDirective,
+        InputCopyComponent,
+        ProfileApikeysComponent,
+        ProfileChangePasswordComponent
     ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css'
@@ -126,21 +127,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     public timezones: UserTimezonesSelect[] = [];
     public serverTimezone: TimezoneConfiguration | null = null;
 
-    public PasswordPost: ProfilePasswordPost = {
-        current_password: null,
-        password: null,
-        confirm_password: null
-    };
-    public PasswordErrors: GenericValidationError | null = null;
-
-    public Apikeys: ProfileApikey[] = [];
-
-    public ApikeyCreatePost: ProfileCreateApiKey = {
-        apikey: '',
-        qrcode: '',
-        description: ''
-    };
-    public ApikeyErrors: GenericValidationError | null = null;
 
     private dropzoneCreated: boolean = false;
     private readonly ProfileService = inject(ProfileService);
@@ -149,6 +135,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly authService = inject(AuthService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly modalService = inject(ModalService);
     private readonly document = inject(DOCUMENT);
 
     private subscriptions: Subscription = new Subscription();
@@ -162,7 +149,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.loadUser();
-        this.loadApiKeys();
 
         this.subscriptions.add(this.UsersService.getLocaleOptions().subscribe(data => {
             this.localeOptions = data;
@@ -186,12 +172,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             this.maxUploadLimit = data.maxUploadLimit;
 
             this.createDropzone();
-        }));
-    }
-
-    public loadApiKeys() {
-        this.subscriptions.add(this.ProfileService.getApiKeys().subscribe(data => {
-            this.Apikeys = data;
         }));
     }
 
@@ -269,31 +249,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             });
             this.dropzoneCreated = true;
         }
-    }
-
-    public submitPassword() {
-        this.subscriptions.add(this.ProfileService.changePassword(this.PasswordPost)
-            .subscribe((result) => {
-                if (result.success) {
-                    const msg = this.TranslocoService.translate('Password changed successfully.');
-                    this.notyService.genericSuccess(msg);
-                    this.PasswordPost = {
-                        current_password: null,
-                        password: null,
-                        confirm_password: null
-                    };
-                    this.PasswordErrors = null;
-                    return;
-                }
-
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.PasswordErrors = errorResponse;
-                }
-            })
-        );
     }
 
 

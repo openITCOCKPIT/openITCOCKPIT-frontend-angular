@@ -34,7 +34,7 @@ export class UsersService {
             map(data => {
                 return data.localeOptions;
             })
-        )
+        );
     }
 
     public getDateformats(): Observable<UserDateformatsRoot> {
@@ -70,7 +70,7 @@ export class UsersService {
                 };
                 return result;
             })
-        )
+        );
     }
 
     public loadUsersByContainerId(params: LoadUsersByContainerIdPost): Observable<LoadUsersByContainerIdRoot> {
@@ -81,7 +81,7 @@ export class UsersService {
             map(data => {
                 return data;
             })
-        )
+        );
 
     }
 }
