@@ -39,7 +39,8 @@ export class CalendarsService implements DeleteAllModalService {
     public createCalendar(calendar: CalendarPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/calendars/add.json?angular=true`, {
-            Calendar: calendar
+            Calendar: calendar,
+            events: calendar.events
         })
             .pipe(
                 map(data => {
