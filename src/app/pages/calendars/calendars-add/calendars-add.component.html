@@ -19,7 +19,7 @@
                 </li>
             </ol>
         </nav>
-        <form cForm>
+        <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new calendar') }}</h5>
@@ -40,10 +40,18 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select [items]="containers" bindLabel="value" bindValue="key" name="container_id"
+
+                        <ng-select [items]="containers"
+                                   bindLabel="value"
+                                   bindValue="key"
+                                   name="container_id"
+                                   placeholder=" {{ t('Please select a container.') }}"
+                                   [virtualScroll]="true"
                                    [(ngModel)]="post.container_id">
                             <ng-template ng-option-tmp let-container="item" let-search="searchTerm">
-                                <div [ngOptionHighlight]="search">{{ container.value }}</div>
+                                <div [ngOptionHighlight]="search">
+                                    {{ container.value }}
+                                </div>
                             </ng-template>
                         </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
@@ -68,6 +76,9 @@
                                oitcFormError [errors]="errors" errorField="description"
                                [(ngModel)]="post.description">
                         <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <oitc-full-calendar></oitc-full-calendar>
                     </div>
                 </c-card-body>
                 <c-card-footer class="text-end">

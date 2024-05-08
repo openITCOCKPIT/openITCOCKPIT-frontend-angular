@@ -1,37 +1,63 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import {
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import { ProfileUser } from '../profile.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
+import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../profile.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
-import { UserDateformat, UserLocaleOption } from '../../users/users.interface';
+import { UserDateformat, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { TimezoneConfiguration, TimezoneService } from '../../../services/timezone.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import Dropzone from 'dropzone';
+import { AuthService } from '../../../auth/auth.service';
+import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { InputCopyComponent } from '../../../layouts/coreui/input-copy/input-copy.component';
+import { ProfileApikeysComponent } from '../profile-apikeys/profile-apikeys.component';
+import { ProfileChangePasswordComponent } from '../profile-change-password/profile-change-password.component';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -62,7 +88,30 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
         TrueFalseDirective,
         NgForOf,
         NgSelectModule,
-        NgOptionHighlightModule
+        NgOptionHighlightModule,
+        FormDirective,
+        XsButtonDirective,
+        BackButtonDirective,
+        ColComponent,
+        RowComponent,
+        NavComponent,
+        NavItemComponent,
+        UserMacrosModalComponent,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        ButtonCloseDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalToggleDirective,
+        InputCopyComponent,
+        ProfileApikeysComponent,
+        ProfileChangePasswordComponent
     ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css'
@@ -72,19 +121,34 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     public UserErrors: GenericValidationError | null = null;
     public UserPost: ProfileUser | null = null;
     public isLdapUser: boolean = false;
+    public maxUploadLimit: ProfileMaxUploadLimit | null = null;
     public localeOptions: UserLocaleOption[] = [];
     public dateformates: UserDateformat[] = [];
+    public timezones: UserTimezonesSelect[] = [];
+    public serverTimezone: TimezoneConfiguration | null = null;
 
+
+    private dropzoneCreated: boolean = false;
     private readonly ProfileService = inject(ProfileService);
     private readonly UsersService = inject(UsersService);
+    private readonly TimezoneService = inject(TimezoneService);
     private readonly notyService = inject(NotyService);
+    private readonly authService = inject(AuthService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly modalService = inject(ModalService);
+    private readonly document = inject(DOCUMENT);
+
     private subscriptions: Subscription = new Subscription();
 
+    public constructor() {
+        // disable dropzone auto discover
+        // https://github.com/zefoy/ngx-dropzone-wrapper/blob/fb39139147f3a6d72bcaff51c3c32e2a54e31c9d/src/lib/dropzone.directive.ts#L60
+        const dz = Dropzone;
+        dz.autoDiscover = false;
+    }
+
     public ngOnInit() {
-        this.subscriptions.add(this.ProfileService.getProfile().subscribe(data => {
-            this.UserPost = data.user;
-            this.isLdapUser = data.isLdapUser;
-        }));
+        this.loadUser();
 
         this.subscriptions.add(this.UsersService.getLocaleOptions().subscribe(data => {
             this.localeOptions = data;
@@ -92,10 +156,100 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
             this.dateformates = data.dateformats;
+            this.timezones = data.timezones;
+        }));
+
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.serverTimezone = data;
+        }));
+    }
+
+    private loadUser() {
+        // This is an own method, so we can call it to update the page after a user has uploaded a profile image or so
+        this.subscriptions.add(this.ProfileService.getProfile().subscribe(data => {
+            this.UserPost = data.user;
+            this.isLdapUser = data.isLdapUser;
+            this.maxUploadLimit = data.maxUploadLimit;
+
+            this.createDropzone();
         }));
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
+
+    public submitUserPost() {
+        if (this.UserPost) {
+            // Make validation happy and also we do not want to change the users password at the moment
+            this.UserPost.password = '';
+            this.UserPost.confirm_password = '';
+
+            this.subscriptions.add(this.ProfileService.updateProfile(this.UserPost)
+                .subscribe((result) => {
+                    if (result.success) {
+                        this.notyService.genericSuccess();
+                        this.UserErrors = null;
+                        return;
+                    }
+
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.UserErrors = errorResponse;
+                    }
+                })
+            );
+        }
+    }
+
+    public deleteUserImage() {
+        if (this.UserPost) {
+            this.subscriptions.add(this.ProfileService.deleteUserImage()
+                .subscribe((result) => {
+                    if (result.success) {
+                        this.notyService.genericSuccess();
+                        this.loadUser();
+                    } else {
+                        this.notyService.genericError();
+                    }
+                })
+            );
+        }
+    }
+
+    public createDropzone() {
+        let elm = this.document.getElementById('profileImageDropzone');
+        if (elm && !this.dropzoneCreated) {
+            const dropzone = new Dropzone(elm, {
+                method: "post",
+                maxFilesize: this.maxUploadLimit?.value, //MB
+                //acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
+                //acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
+                paramName: "Picture",
+                headers: {
+                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                },
+                url: "/profile/upload_profile_icon.json?angular=true",
+                success: (file: Dropzone.DropzoneFile) => {
+                    this.notyService.genericSuccess();
+                    this.loadUser();
+                },
+                error: (file: Dropzone.DropzoneFile, message: string, xhr: XMLHttpRequest) => {
+                    if (typeof xhr === 'undefined') {
+                        // User tried to upload illegal file types such as .pdf or so
+                        this.notyService.genericError(message);
+                    } else {
+                        // File got uploaded to the server, but server returned an error
+                        let response = message as unknown as Error;
+                        this.notyService.genericError(response.message);
+                    }
+                }
+            });
+            this.dropzoneCreated = true;
+        }
+    }
+
+
 }

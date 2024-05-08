@@ -2,6 +2,21 @@ body {
     background-color: var(--cui-tertiary-bg);
 }
 
+pre {
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: var(--cui-body-color);
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: var(--cui-tertiary-bg);
+    border: 1px solid var(--cui-secondary-bg);
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    overflow: auto;
+}
+
 .wrapper {
     width: 100%;
     @include ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));

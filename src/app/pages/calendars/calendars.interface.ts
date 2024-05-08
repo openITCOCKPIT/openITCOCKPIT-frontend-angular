@@ -43,6 +43,14 @@ export interface CalendarPost {
     container_id: number
     name: string
     description: string
+    events: CalendarEvent[]
+}
+
+export interface CalendarEvent {
+    start: string
+    title: string
+    default_holiday: boolean
+    className: string
 }
 
 export interface CalendarEditGet {
@@ -52,4 +60,25 @@ export interface CalendarEditGet {
 export interface CalendarContainer {
     key: number
     value: string
+}
+
+export interface CountryRoot {
+    countries: Countries
+    _csrfToken: string
+}
+
+export interface Countries {
+    [key: string]: string
+}
+
+export interface CountriesAndContainers {
+    containers: CalendarContainer[]
+    countries: Countries
+}
+
+export interface CalendarHoliday {
+    start: string
+    title: string
+    default_holiday: boolean
+    className: string
 }
