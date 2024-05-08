@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
-import { ProfileApiRoot, ProfilePasswordPost, ProfileUser } from './profile.interface';
+import { ProfileApikey, ProfileApiRoot, ProfilePasswordPost, ProfileUser } from './profile.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
@@ -100,6 +100,19 @@ export class ProfileService {
                     });
                 })
             );
+    }
+
+    public getApiKeys(): Observable<ProfileApikey[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ apikeys: ProfileApikey[] }>(`${proxyPath}/profile/apikey.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.apikeys;
+            })
+        )
     }
 
 }

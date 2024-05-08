@@ -38,3 +38,16 @@ export interface ProfilePasswordPost {
     confirm_password: string | null
 }
 
+export interface ProfileApikey {
+    id: number
+    userId: number
+    apikey: string
+    description: string
+    last_use: string
+}
+
+export interface ProfileCreateApiKey {
+    apikey: string
+    qrcode: string
+    description: string
+}

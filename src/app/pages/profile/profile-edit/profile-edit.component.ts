@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import {
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -13,7 +14,18 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    RowComponent
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -24,7 +36,13 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
-import { ProfileMaxUploadLimit, ProfilePasswordPost, ProfileUser } from '../profile.interface';
+import {
+    ProfileApikey,
+    ProfileCreateApiKey,
+    ProfileMaxUploadLimit,
+    ProfilePasswordPost,
+    ProfileUser
+} from '../profile.interface';
 import { DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -40,6 +58,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../auth/auth.service';
+import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-profile-edit',
@@ -75,7 +95,22 @@ import { AuthService } from '../../../auth/auth.service';
         XsButtonDirective,
         BackButtonDirective,
         ColComponent,
-        RowComponent
+        RowComponent,
+        NavComponent,
+        NavItemComponent,
+        UserMacrosModalComponent,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        ButtonCloseDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalToggleDirective
     ],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css'
@@ -95,9 +130,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         current_password: null,
         password: null,
         confirm_password: null
-    }
+    };
     public PasswordErrors: GenericValidationError | null = null;
 
+    public Apikeys: ProfileApikey[] = [];
+
+    public ApikeyCreatePost: ProfileCreateApiKey = {
+        apikey: '',
+        qrcode: '',
+        description: ''
+    };
+    public ApikeyErrors: GenericValidationError | null = null;
 
     private dropzoneCreated: boolean = false;
     private readonly ProfileService = inject(ProfileService);
@@ -119,6 +162,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.loadUser();
+        this.loadApiKeys();
 
         this.subscriptions.add(this.UsersService.getLocaleOptions().subscribe(data => {
             this.localeOptions = data;
@@ -142,6 +186,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             this.maxUploadLimit = data.maxUploadLimit;
 
             this.createDropzone();
+        }));
+    }
+
+    public loadApiKeys() {
+        this.subscriptions.add(this.ProfileService.getApiKeys().subscribe(data => {
+            this.Apikeys = data;
         }));
     }
 
@@ -222,7 +272,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     }
 
     public submitPassword() {
-
         this.subscriptions.add(this.ProfileService.changePassword(this.PasswordPost)
             .subscribe((result) => {
                 if (result.success) {
@@ -246,4 +295,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             })
         );
     }
+
+
 }
