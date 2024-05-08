@@ -93,6 +93,15 @@ export const routes: Routes = [{
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
 }, {
+    path: 'profile/edit',
+    loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
+}, {
+    path: 'calendars/index',
+    loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
+}, {
+    path: 'calendars/add',
+    loadComponent: () => import('./pages/calendars/calendars-add/calendars-add.component').then(m => m.CalendarsAddComponent)
+}, {
     path: 'documentations/view/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-view/documentations-view.component').then(m => m.DocumentationsViewComponent)
 }, {
