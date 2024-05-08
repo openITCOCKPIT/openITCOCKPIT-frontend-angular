@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
+import { ContactsCopyComponent } from './pages/contacts/contacts-copy/contacts-copy.component';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -52,6 +53,24 @@ export const routes: Routes = [{
 }, {
     path: 'commands/usedBy/:id',
     loadComponent: () => import('./pages/commands/commands-used-by/commands-used-by.component').then(m => m.CommandsUsedByComponent)
+}, {
+    path: 'contacts/index',
+    loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
+}, {
+    path: 'contacts/add',
+    loadComponent: () => import('./pages/contacts/contacts-add/contacts-add.component').then(m => m.ContactsAddComponent)
+}, {
+    path: 'contacts/copy/:ids',
+    loadComponent: () => import('./pages/contacts/contacts-copy/contacts-copy.component').then(m => m.ContactsCopyComponent)
+}, {
+    path: 'contacts/edit/:id',
+    loadComponent: () => import('./pages/contacts/contacts-edit/contacts-edit.component').then(m => m.ContactsEditComponent)
+}, {
+    path: 'contacts/ldap',
+    loadComponent: () => import('./pages/contacts/contacts-ldap/contacts-ldap.component').then(m => m.ContactsLdapComponent)
+}, {
+    path: 'contacts/usedBy/:id',
+    loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
 }, {
     path: 'changelogs/index',
     loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
