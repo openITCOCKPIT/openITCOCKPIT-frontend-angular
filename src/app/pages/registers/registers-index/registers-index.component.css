@@ -1,0 +1,12 @@
+.img-cert {
+    min-height: 667px; /* 816px */
+    background-repeat: no-repeat !important;
+    background-size: 100% !important;
+}
+
+
+@media screen and (min-width: 2000px) {
+    .img-cert {
+        min-height: 816px;
+    }
+}
