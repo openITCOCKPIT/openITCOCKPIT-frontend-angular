@@ -1,14 +1,17 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { catchError, map, Observable, of } from "rxjs";
+import { catchError, forkJoin, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import {
     CalendarContainer,
     CalendarEditGet,
+    CalendarHoliday,
     CalendarIndexRoot,
     CalendarPost,
-    CalendarsIndexParams
+    CalendarsIndexParams, Countries,
+    CountriesAndContainers,
+    CountryRoot
 } from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -56,14 +59,46 @@ export class CalendarsService implements DeleteAllModalService {
             );
     }
 
-    public getAdd() {
+    public getAdd(): Observable<CountriesAndContainers> {
         const proxyPath = this.proxyPath;
-        return this.http.get(`${proxyPath}/calendars/add/.json?angular=true`).pipe(
-            map(data => {
-                return data;
-            })
-        )
+        return forkJoin([
+            this.http.get<CalendarContainer[]>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`),
+            this.http.get<CountryRoot>(`${proxyPath}/calendars/loadCountryList.json?angular=true`)
+        ]).pipe(
+            map(([containers, countries]) => {
+                return {
+                    containers: containers,
+                    countries: countries.countries
+                }
+            }),
+        );
     }
+
+    public getContainers(): Observable< CalendarContainer[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            containers: CalendarContainer[]
+        }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
+            map(data =>{
+                return data.containers;
+            })
+        );
+    }
+
+    public getCountries(): Observable<Countries> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            countries: Countries
+        }>(`${proxyPath}/calendars/loadCountryList.json?angular=true`).pipe(
+            map(
+                data => {
+                    console.log(data.countries);
+                    return data.countries;
+                }
+            )
+        );
+    }
+
 
     public getEdit(id: number): Observable<CalendarEditGet> {
         const proxyPath = this.proxyPath;
@@ -105,14 +140,15 @@ export class CalendarsService implements DeleteAllModalService {
         return this.http.post(`${proxyPath}/calendars/delete/${item.id}.json?angular=true`, {});
     }
 
-    public getContainers(): Observable<CalendarContainer[]> {
 
+
+    public getHolidays(countryCode: string): Observable<CalendarHoliday[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            containers: CalendarContainer[]
-        }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
+            holidays: CalendarHoliday[]
+        }>(`${proxyPath}/calendars/loadHolidays/${countryCode}.json?angular=true`).pipe(
             map(data => {
-                return data.containers;
+                return data.holidays;
             })
         )
     }
