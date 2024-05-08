@@ -1,0 +1,210 @@
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
+} from '@coreui/angular';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { NgForOf, NgIf } from '@angular/common';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {
+    CalendarIndex,
+    CalendarIndexRoot,
+    CalendarsIndexParams,
+    getDefaultCalendarsIndexParams
+} from '../calendars.interface';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { Subscription } from 'rxjs';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { CalendarsService } from '../calendars.service';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+
+@Component({
+    selector: 'oitc-calendars-index',
+    standalone: true,
+    imports: [
+        CoreuiComponent,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TranslocoPipe,
+        XsButtonDirective
+    ],
+    templateUrl: './calendars-index.component.html',
+    styleUrl: './calendars-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService} // Inject the CalendarsService into the DeleteAllModalComponent
+    ]
+})
+export class CalendarsIndexComponent implements OnInit, OnDestroy {
+    public readonly route = inject(ActivatedRoute);
+    public readonly router = inject(Router);
+    public params: CalendarsIndexParams = getDefaultCalendarsIndexParams()
+    public calendars?: CalendarIndexRoot;
+    public hideFilter: boolean = true;
+    public selectedItems: DeleteAllItem[] = [];
+    private readonly modalService = inject(ModalService);
+    private subscriptions: Subscription = new Subscription();
+    private CalendarsService = inject(CalendarsService)
+    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+
+    constructor(private _liveAnnouncer: LiveAnnouncer) {
+    }
+
+    public ngOnInit() {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.loadCalendars();
+        }));
+    }
+
+    public loadCalendars() {
+        this.SelectionServiceService.deselectAll();
+        this.subscriptions.add(this.CalendarsService.getIndex(this.params)
+            .subscribe((result) => {
+                this.calendars = result;
+            })
+        );
+    }
+
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
+    }
+
+    public resetFilter() {
+        this.params = getDefaultCalendarsIndexParams();
+    }
+
+    public onPaginatorChange(calendar: PaginatorChangeEvent): void {
+        this.params.page = calendar.page;
+        this.params.scroll = calendar.scroll;
+        this.loadCalendars();
+    }
+
+    public onFilterChange($event: any) {
+        this.params.page = 1;
+        this.loadCalendars();
+    }
+
+    public onSortChange(sort: Sort) {
+        if (sort.direction) {
+            this.params.sort = sort.active;
+            this.params.direction = sort.direction;
+            this.loadCalendars();
+        }
+    }
+
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(calendar?: CalendarIndex) {
+        let items: DeleteAllItem[] = [];
+
+        if (calendar) {
+            // User just want to delete a single calendar
+            items = [{
+                id: calendar.id,
+                displayName: calendar.name
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.id,
+                    displayName: item.name
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+
+    // Generic callback whenever a mass action (like delete all) has been finished
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.loadCalendars();
+        }
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+}

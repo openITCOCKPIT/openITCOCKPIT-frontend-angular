@@ -33,6 +33,7 @@ import { IconComponent } from "@coreui/icons-angular";
 import { FaIconComponent, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faClose, faQuestion, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
+import { LayoutService } from './layout.service';
 
 @Component({
     selector: 'oitc-coreui',
@@ -83,6 +84,7 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
         "searchTerm": [''],
     });
     readonly #colorModeService = inject(ColorModeService);
+    readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
     private subscription: Subscription = new Subscription();
 
@@ -99,8 +101,10 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
             // theme can be one of 'light', 'dark', 'auto'
             if (theme === 'dark') {
                 this.document.body.classList.add('dark-theme');
+                this.LayoutService.setTheme('dark');
             } else {
                 this.document.body.classList.remove('dark-theme');
+                this.LayoutService.setTheme('light');
             }
 
         }));
@@ -116,10 +120,15 @@ export class CoreuiComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit(): void {
         const osSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const coreUiTheme: 'light' | 'dark' | 'auto' | null = this.#colorModeService.getStoredTheme('coreui-free-angular-admin-template-theme-default');
+        this.LayoutService.setTheme('light');
+
         if (osSystemDarkMode && coreUiTheme !== 'light') {
             // Enable dark mode for Angular Material because the OS wants dark mode
             // quick and dirty hack
-            setTimeout(() => this.document.body.classList.add('dark-theme'), 100);
+            setTimeout(() => {
+                this.LayoutService.setTheme('dark');
+                this.document.body.classList.add('dark-theme');
+            }, 100);
         }
 
         if (coreUiTheme === 'auto' || coreUiTheme === null) {

@@ -54,3 +54,12 @@
 .unknown-soft, .unreachable-soft {
     color: lighten($secondary, 40%) !important;
 }
+
+/************************
+ * Status label classes *
+ ***********************/
+.notify-label {
+    display: inline-block;
+    line-height: 1.4;
+    min-width: 150px;
+}

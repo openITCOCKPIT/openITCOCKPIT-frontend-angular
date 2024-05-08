@@ -26,3 +26,17 @@ h5.card-title > small.fw-300 {
     align-items: center;
     padding-right: 0.5rem;
 }
+
+
+// card header background images for package manager and support
+.community-bg-header {
+    background-image: url("../images/logos/bgs/community_edition.png");
+    background-repeat: no-repeat;
+    background-color: #3182b1;
+}
+
+.enterprise-bg-header {
+    background-image: url("../images/logos/bgs/enterprise_edition.png");
+    background-repeat: no-repeat;
+    background-color: #cb2522;
+}

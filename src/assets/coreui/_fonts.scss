@@ -28,6 +28,22 @@ code {
     color: #bb1bf4 !important;
 }
 
-.txt-color-red {
-    color: #CC0000 !important;
+.text-justify {
+    text-align: justify;
+}
+
+.text-warning-glow {
+    color: #FCAB20;
+    text-shadow: 0px 0px 9px rgba(252, 137, 23, 0.6);
+}
+
+.text-danger-glow {
+    color: #CC0000;
+    text-shadow: 0px 0px 9px rgba(252, 0, 0, 0.4);
+}
+
+c-card-header > fa-icon {margin-right:5px;}
+
+.fs-md {
+    font-size: 0.875rem !important;
 }

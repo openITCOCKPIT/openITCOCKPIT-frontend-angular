@@ -1,0 +1,666 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['contacts', 'index']" [routerLink]="['/', 'contacts', 'index']">
+                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                        {{ t('Contacts') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Edit') }}
+                </li>
+            </ol>
+        </nav>
+
+
+        <form cForm (ngSubmit)="updateContact()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit contact: ') }}
+
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['contacts', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="containers">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select name="name"
+                                   id="containers"
+                                   #containerIdsRef="ngModel"
+                                   [multiple]="true"
+                                   [(ngModel)]="post.containers._ids"
+                                   (ngModelChange)="onContainerChange()"
+                                   oitcFormError
+                                   [errors]="errors" errorField="containers">
+                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
+                                {{ container.value }}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow">
+                            {{ t('Please select a container.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="name"
+                               required
+                               type="text"
+                               name="name"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="post.name">
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="description">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl
+                               id="description"
+                               type="text"
+                               name="description"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="post.description">
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="email" class="hintmark">
+                            {{ t('Email') }}
+                        </label>
+                        <input cFormControl id="email" required type="text"
+                               name="email"
+                               [placeholder]="'user@example.org'"
+                               oitcFormError [errors]="errors" errorField="email"
+                               [(ngModel)]="post.email">
+                        <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="phone" class="hintmark">
+                            {{ t('Phone') }}
+                        </label>
+                        <input cFormControl id="phone" required type="text"
+                               name="phone"
+                               [placeholder]="'0049123456789'"
+                               oitcFormError [errors]="errors" errorField="phone"
+                               [(ngModel)]="post.phone">
+                        <oitc-form-feedback [errors]="errors" errorField="phone"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="user">
+                            <span *oitcPermission="['users', 'edit']; negate: true">
+                                {{ t('User') }}
+                            </span>
+                            <span *oitcPermission="['users', 'edit']">
+                                <span
+                                    *ngIf="post.user_id"
+                                    [routerLink]="['/', 'users', 'edit', post.user_id]">
+                                    {{ t('User') }}
+                                </span>
+                                <span
+                                    *ngIf="!post.user_id">
+                                    {{ t('User') }}
+                                </span>
+                            </span>
+
+                        </label>
+
+
+                        <ng-select name="contactUser"
+                                   id="user"
+                                   [(ngModel)]="post.user_id"
+                                   oitcFormError [errors]="errors" errorField="user">
+                            <ng-option *ngFor="let user of this.users" [value]="user.key">
+                                {{ user.value }}
+                            </ng-option>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
+
+                        <div class="help-block">
+                            {{t('For browser notifications, a user needs to be assigned to the contact. User Id will be automatically available as $_CONTACTOITCUSERID$ contact macro.')}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <c-card>
+                                <c-card-header>
+                                    <fa-icon [icon]="['fas', 'desktop']"/>
+                                    {{ t('Host notification') }}
+                                </c-card-header>
+                                <c-card-body>
+
+                                    <div class="mb-3">
+
+                                        <label cLabel for="host_timeperiod_id">
+
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ t('Host time period') }}
+                                            </span>
+                                            <span *oitcPermission="['timeperiods', 'edit']">
+                                                <span
+                                                    *ngIf="post.host_timeperiod_id"
+                                                    [routerLink]="['/', 'timeperiods', 'edit', post.host_timeperiod_id]">
+                                                    {{ t('Host time period') }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!post.host_timeperiod_id">
+                                                    {{ t('Host time period') }}
+                                                </span>
+                                            </span>
+                                            <oitc-required-icon></oitc-required-icon>
+
+                                        </label>
+                                        <ng-select name="host_timeperiod_id"
+                                                   id="host_timeperiod_id"
+                                                   [required]="true"
+                                                   [(ngModel)]="post.host_timeperiod_id"
+                                                   oitcFormError [errors]="errors" errorField="host_timeperiod_id">
+                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
+                                                       [value]="timeperiod.key">
+                                                {{ timeperiod.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <oitc-form-feedback
+                                            [errors]="errors"
+                                            errorField="host_timeperiod_id"
+                                        />
+                                    </div>
+
+                                    <div class="mb-3">
+
+                                        <label cLabel for="host_commands">
+                                            {{ t('Host commands') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <ng-select name="host_commands"
+                                                   id="host_commands"
+                                                   [multiple]="true"
+                                                   [(ngModel)]="post.host_commands._ids"
+                                                   (ngModelChange)="updateHostBrowserNotification()"
+                                                   oitcFormError [errors]="errors" errorField="host_commands">
+                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
+                                                       [value]="notificationcommand.key">
+                                                {{ notificationcommand.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <oitc-form-feedback
+                                            [errors]="errors"
+                                            errorField="host_commands"
+                                        />
+                                    </div>
+
+
+                                    <div class="custom-control custom-checkbox margin-bottom-10">
+
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                id="host_notifications_enabled"
+                                                type="checkbox"
+                                                [(ngModel)]="post.host_notifications_enabled"
+                                                (ngModelChange)="post.host_notifications_enabled = $event ? 1 : 0"
+                                                name="host_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="host_notifications_enabled">{{ t('Host notifications enabled') }}</label>
+                                        </c-form-check>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <c-form-check>
+                                            <input
+                                                cFormCheckInput
+                                                type="checkbox"
+                                                id="host_push_notifications_enabled"
+                                                [ngModel]="post.host_push_notifications_enabled"
+                                                (ngModelChange)="post.host_push_notifications_enabled = $event ? 1 : 0"
+                                                (click)="toggleHostBrowserCheckbox()"
+                                                name="host_push_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="host_push_notifications_enabled">
+                                                {{ t('Push notifications to browser') }}
+                                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                                         cTooltip="<img src='/img/browser_host_notification_bg.png'/>"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+                                    <hr>
+                                    <fieldset>
+                                        <legend class="fs-md">
+                                            <label>
+                                                {{ t('Host notification options') }}</label>
+                                        </legend>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="notify_host_recovery"></oitc-form-feedback>
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_host_recovery"
+                                                    [(ngModel)]="post.notify_host_recovery"
+                                                    (ngModelChange)="post.notify_host_recovery = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_host_recovery"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_host_recovery">
+                                                    <c-badge class="notify-label" color="success">{{ t('Recovery') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-success"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_host_down"
+                                                    [(ngModel)]="post.notify_host_down"
+                                                    (ngModelChange)="post.notify_host_down = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_host_down"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_host_down">
+                                                    <c-badge class="notify-label" color="danger">{{ t('Down') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-warning"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_host_unreachable"
+                                                    [(ngModel)]="post.notify_host_unreachable"
+                                                    (ngModelChange)="post.notify_host_unreachable = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_host_unreachable"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_host_unreachable">
+                                                    <c-badge class="notify-label"
+                                                             color="secondary">{{ t('Unreachable') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-danger"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_host_flapping"
+                                                    [(ngModel)]="post.notify_host_flapping"
+                                                    (ngModelChange)="post.notify_host_flapping = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_host_flapping"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_host_flapping">
+                                                    <c-badge class="notify-label" color="primary">{{ t('Flapping') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-primary"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_host_downtime"
+                                                    [(ngModel)]="post.notify_host_downtime"
+                                                    (ngModelChange)="post.notify_host_downtime = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_host_downtime"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_host_downtime">
+                                                    <c-badge class="notify-label" color="primary">{{ t('Downtime') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-primary"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </div>
+                        <div class="col-6">
+                            <c-card>
+                                <c-card-header>
+                                    <fa-icon [icon]="['fas', 'cog']"/>
+                                    {{ t('Service notification') }}
+                                </c-card-header>
+                                <c-card-body>
+
+
+                                    <div class="mb-3">
+                                        <label cLabel for="service_timeperiod_id">
+
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ t('Service time period') }}
+                                            </span>
+                                            <span *oitcPermission="['timeperiods', 'edit']">
+                                                <span
+                                                    *ngIf="post.service_timeperiod_id"
+                                                    [routerLink]="['/', 'timeperiods', 'edit', post.service_timeperiod_id]">
+                                                    {{ t('Service time period') }}
+                                                </span>
+                                                <span
+                                                    *ngIf="!post.service_timeperiod_id">
+                                                    {{ t('Service time period') }}
+                                                </span>
+                                            </span>
+                                            <oitc-required-icon></oitc-required-icon>
+
+                                        </label>
+                                        <ng-select name="service_timeperiod_id"
+                                                   id="service_timeperiod_id"
+                                                   [(ngModel)]="post.service_timeperiod_id"
+                                                   oitcFormError [errors]="errors" errorField="service_timeperiod_id">
+                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
+                                                       [value]="timeperiod.key">
+                                                {{ timeperiod.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <oitc-form-feedback
+                                            [errors]="errors"
+                                            errorField="service_timeperiod_id"
+                                        />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label cLabel for="service_commands">
+                                            {{ t('Service commands') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <ng-select name="service_commands"
+                                                   id="service_commands"
+                                                   [multiple]="true"
+                                                   [(ngModel)]="post.service_commands._ids"
+                                                   (ngModelChange)="updateServiceBrowserNotification()"
+                                                   oitcFormError [errors]="errors" errorField="service_commands">
+                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
+                                                       [value]="notificationcommand.key">
+                                                {{ notificationcommand.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <oitc-form-feedback
+                                            [errors]="errors"
+                                            errorField="service_commands"
+                                        />
+                                    </div>
+
+                                    <div class="custom-control custom-checkbox margin-bottom-10">
+                                        <c-form-check>
+                                            <input
+                                                type="checkbox"
+                                                id="service_notifications_enabled"
+                                                [(ngModel)]="post.service_notifications_enabled"
+                                                (ngModelChange)="post.service_notifications_enabled = $event ? 1 : 0"
+                                                cFormCheckInput
+                                                name="service_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="service_notifications_enabled">{{ t('Service notifications enabled') }}</label>
+                                        </c-form-check>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <c-form-check>
+                                            <input
+                                                type="checkbox"
+                                                id="service_push_notifications_enabled"
+                                                [(ngModel)]="post.service_push_notifications_enabled"
+                                                (ngModelChange)="post.service_push_notifications_enabled = $event ? 1 : 0"
+                                                (click)="toggleServiceBrowserCheckbox()"
+                                                cFormCheckInput
+                                                name="service_push_notifications_enabled"
+                                            />
+                                            <label
+                                                cFormCheckLabel
+                                                for="service_push_notifications_enabled">
+                                                {{ t('Push notifications to browser') }}
+                                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                                         cTooltip="<img src='/img/browser_service_notification_bg.png'/>"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <hr>
+                                    <fieldset>
+                                        <legend class="fs-md">
+                                            <div class="required">
+                                                <label>
+                                                    {{ t('Service notification options') }} </label>
+
+                                            </div>
+                                        </legend>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="notify_service_recovery"></oitc-form-feedback>
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_recovery"
+                                                    [(ngModel)]="post.notify_service_recovery"
+                                                    (ngModelChange)="post.notify_service_recovery = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_recovery"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_recovery">
+                                                    <c-badge class="notify-label" color="success">{{ t('Success') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-success"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_warning"
+                                                    [(ngModel)]="post.notify_service_warning"
+                                                    (ngModelChange)="post.notify_service_warning = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_warning"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_warning">
+                                                    <c-badge class="notify-label" color="warning">{{ t('Warning') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-warning"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_critical"
+                                                    [(ngModel)]="post.notify_service_critical"
+                                                    (ngModelChange)="post.notify_service_critical = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_critical"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_critical">
+                                                    <c-badge class="notify-label" color="danger">{{ t('Critical') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-danger"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_unknown"
+                                                    [(ngModel)]="post.notify_service_unknown"
+                                                    (ngModelChange)="post.notify_service_unknown = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_unknown"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_unknown">
+                                                    <c-badge class="notify-label" color="secondary">{{ t('Unknown') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-secondary"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_flapping"
+                                                    [(ngModel)]="post.notify_service_flapping"
+                                                    (ngModelChange)="post.notify_service_flapping = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_flapping"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_flapping">
+                                                    <c-badge class="notify-label" color="primary">{{ t('Flapping') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-primary"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="custom-control custom-checkbox margin-bottom-10">
+                                            <c-form-check>
+                                                <input
+                                                    type="checkbox"
+                                                    id="notify_service_downtime"
+                                                    [(ngModel)]="post.notify_service_downtime"
+                                                    (ngModelChange)="post.notify_service_downtime = $event ? 1 : 0"
+                                                    cFormCheckInput
+                                                    name="notify_service_downtime"
+                                                />
+                                                <label
+                                                    cFormCheckLabel
+                                                    for="notify_service_downtime">
+                                                    <c-badge class="notify-label" color="primary">{{ t('Downtime') }}
+                                                    </c-badge>
+                                                    <i class="checkbox-primary"></i>
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </div>
+                    </div>
+
+                    <div class="row padding-bottom-10"
+                         oitc-permission="['wiki', 'documentations']">
+                        <div class="col-xs-12 col-lg-12 text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
+                            {{ t('Read more about browser push notification in the') }} <a
+                            href="/documentations/wiki/additional_help%3Abrowser_push_notifications">
+                            {{ t('documentation') }} </a>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <c-form-check class="mb-3">
+                        <h5>{{ t('Define contact macros') }}:</h5>
+                    </c-form-check>
+
+                    <div class="row"
+                         *ngFor="let customVariable of post.customvariables;let i = index;">
+                        <oitc-macros
+                            [macro]="customVariable"
+                            [macroName]="'CONTACT'"
+                            [index]="i"
+                            [deleteMacroCallback]="deleteMacro"
+                            class="col-lg-12"
+                        />
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-end">
+                            <button cButton class="ripple" color="success" type="button"
+                                    (click)="addMacro()">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add new macro') }}
+                            </button>
+                        </div>
+                    </div>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Create contact') }}
+                    </button>
+                    <button [fallbackUrl]="['contacts', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+
+
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>

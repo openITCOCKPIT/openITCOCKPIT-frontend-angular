@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -186,8 +186,8 @@
                                                            [name]="setting.key"
                                                            [value]="getAnonymousStatisticsValue(setting.value)">
                                                     <div>
-                                                        <!-- todo fix link -->
-                                                        <a href="#" *oitcPermission="['statistics', 'index']">
+                                                        <a [routerLink]="['/', 'statistics', 'index']"
+                                                           *oitcPermission="['statistics', 'index']">
                                                             {{ t('Click for more information.') }}
                                                         </a>
                                                     </div>
