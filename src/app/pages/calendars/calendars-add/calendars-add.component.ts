@@ -9,12 +9,14 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -26,13 +28,19 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { CalendarContainer, CalendarHoliday, CalendarPost, Countries } from '../calendars.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { forkJoin, observable, Observable, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { CalendarsService } from '../calendars.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { FullCalendarComponent } from '../../../components/full-calendar/full-calendar.component';
+import { CalendarOptions } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'oitc-calendars-add',
@@ -97,6 +105,94 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public calendarOptions: CalendarOptions = {
+        initialView: 'dayGridMonth',
+        navLinks: false, // can click day/week names to navigate views
+        businessHours: true, // display business hours
+        editable: true,
+        weekNumbers: true,
+        weekNumberCalculation: 'ISO',
+        eventOverlap: false,
+        eventDurationEditable: false,
+        //'interaction', 'dayGrid', 'timeGrid', 'list'
+        plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
+        customButtons: {
+            holidays: {
+                text: this.TranslocoService.translate('Add holiday'),
+                click: function () {
+                    alert('Holidays');
+                }
+            },
+            deleteallholidays: {
+                text: this.TranslocoService.translate('Delete ALL holidays'),
+                click: function () {
+                    alert('Delete All Holidays');
+                }
+            },
+            deletemonthevents: {
+                text: this.TranslocoService.translate('Delete MONTH events'),
+                click: function () {
+                    alert('Delete Month Events');
+                }
+            },
+            deleteallevents: {
+                text: this.TranslocoService.translate('Delete ALL events'),
+                click: function () {
+                    alert('Delete All Events');
+                }
+            }
+
+        },
+        headerToolbar: {
+            left: 'holidays deleteallholidays deletemonthevents deleteallevents',
+            center: 'title',
+            right: 'prev,next today',
+        },
+        dayCellDidMount: (info: any) => {
+            console.log(info);
+            //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon"><fa-icon [icon]="[\'fas\', \'plus\']"></fa-icon></button>';
+            info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon fs-6 px-2 me-1">&plus;</button>';
+            info.el.innerHTML += '<button class="btn btn-primary btn-xs btn-icon fs-6 px-2 me-1">&#9998;</button>';
+            info.el.innerHTML += '<button class="btn btn-danger btn-xs btn-icon fs-6 px-2">&cross;</button>';
+            //info.el.style.padding = "20px 0 0 10px";
+            console.log('add button');
+        },
+        navLinkDayClick: (date: any) => {
+            console.log('navLinkDayClick');
+            console.log(date);
+        },
+        dateClick: (info: any) => {
+            console.log('dateClick');
+            console.log(info.event);
+        },
+        eventClick: (info: any) => {
+            console.log('eventClick');
+            console.log(info);
+        },
+        datesSet: (info: any) => {
+            console.log('datesSet');
+            console.log(info);
+        },
+        eventDidMount: (info: any) => {
+            console.log('eventDidMount');
+            console.log(info);
+        },
+        eventDrop: (info: any) => {
+            /*
+            const event = this.deleteEvent(info.oldEvent.start);
+            if(!event) {
+                return;
+            }
+            event = event[0];
+            //Set new start date
+            event.start = info.event.start;
+
+             */
+            console.log(info);
+        },
+        events: []
+    };
+
 
     public ngOnInit() {
         let request = {
@@ -121,7 +217,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     public loadHolidays() {
         this.subscriptions.add(this.CalendarsService.getHolidays(this.countryCode)
             .subscribe((result) => {
-                this.events = result;
+                this.calendarOptions.events = result;
             })
         );
     }
@@ -150,5 +246,10 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+
+    private deleteEvent(start: Date | null) {
+
     }
 }
