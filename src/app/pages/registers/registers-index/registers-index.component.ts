@@ -28,6 +28,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { RegistersService } from '../registers.service';
 import { NgIf } from '@angular/common';
 import { LicenseResponse } from '../registers.interface';
+import { CreditsComponent } from '../credits/credits.component';
 
 @Component({
     selector: 'oitc-registers-index',
@@ -56,7 +57,8 @@ import { LicenseResponse } from '../registers.interface';
         RequiredIconComponent,
         RowComponent,
         ColComponent,
-        NgIf
+        NgIf,
+        CreditsComponent
     ],
     templateUrl: './registers-index.component.html',
     styleUrl: './registers-index.component.css'
