@@ -23,6 +23,35 @@ export function getDefaultContactgroupsIndexParams(): ContactgroupsIndexParams {
         'filter[Containers.name]': ""
     }
 }
+/************************************
+ *    Definition of Contactgroup    *
+ ***********************************/
+export interface ContactgroupPost {
+    Contactgroup: Contactgroup
+}
+
+export interface Contactgroup {
+    contacts: Contacts
+    container: Container
+    container_id: number
+    description: string
+    id: number
+    uuid: string
+}
+
+export interface Contacts {
+    _ids: number[]
+}
+
+export interface Container {
+    containertype_id: number
+    id: number
+    lft: number
+    name: string
+    parent_id: number
+    rght: number
+}
+
 
 export interface ContactgroupsIndexRoot extends PaginateOrScroll {
     all_contactgroups: ContactgroupsIndex[]
@@ -253,4 +282,16 @@ export interface ContactgroupsToHosttemplates {
 
 export interface ContactgroupsUsedByRootContainer {
     name: string
+}
+
+
+// GET CONTACTS BY CONTAINER
+export interface GetContactsByContainerIdRoot {
+    contacts: GetContactsByContainerIdRootContact[]
+    _csrfToken: string
+}
+
+export interface GetContactsByContainerIdRootContact {
+    key: number
+    value: string
 }

@@ -1,0 +1,142 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['contactgroups', 'index']" [routerLink]="['/', 'contactgroups', 'index']">
+                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                        {{ t('Contact groups') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Edit') }}
+                </li>
+            </ol>
+        </nav>
+
+
+        <form cForm (ngSubmit)="updateContactgroup()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit contact group:') }}
+
+                        <small class="fw-300">
+                            {{ post.container.name }}
+                        </small>
+                    </h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.container.parent_id">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select name="post.container.parent_id"
+                                   id="post.container.parent_id"
+                                   #containerIdsRef="ngModel"
+                                   [(ngModel)]="post.container.parent_id"
+                                   (ngModelChange)="onContainerChange()"
+                                   oitcFormError
+                                   [errors]="errors" errorField="post.container.parent_id">
+                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
+                                {{ container.value }}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="post.container.parent_id === 0" class="text-warning-glow">
+                            {{ t('Please select a container.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="post.container.name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="post.container.name"
+                               required
+                               type="text"
+                               name="post.container.name"
+                               oitcFormError [errors]="errors" errorField="'container.name'"
+                               [(ngModel)]="post.container.name">
+                        <oitc-form-feedback [errors]="errors" errorField="'container.name'"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="description">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl
+                               id="description"
+                               type="text"
+                               name="description"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="post.description">
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="post.contacts._ids">
+                            {{ t('Contacts') }}
+
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+
+                        <ng-select name="post.contacts._ids"
+                                   id="post.contacts._ids"
+                                   [(ngModel)]="post.contacts._ids"
+                                   [multiple]="true"
+                                   oitcFormError [errors]="errors" errorField="contacts">
+                            <ng-option *ngFor="let contact of this.contacts" [value]="contact.key">
+                                {{ contact.value }}
+                            </ng-option>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="contacts"></oitc-form-feedback>
+                    </div>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update contact group') }}
+                    </button>
+                    <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+
+
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>

@@ -11,7 +11,7 @@ import {
     ContactgroupsCopyPost,
     ContactgroupsEditRoot,
     ContactgroupsIndexParams,
-    ContactgroupsIndexRoot, ContactgroupsUsedByRoot
+    ContactgroupsIndexRoot, ContactgroupsUsedByRoot, GetContactsByContainerIdRoot, GetContactsByContainerIdRootContact
 } from './contactgroups.interface';
 
 @Injectable({
@@ -43,10 +43,10 @@ export class ContactgroupsService implements DeleteAllModalService {
     }
 
 
-    public updateContact(contactgroup: ContactgroupPostContactgroup): Observable<GenericResponseWrapper> {
+    public updateContactgroup(contactgroup: ContactgroupPostContactgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/contactgroups/edit/${contactgroup.id}.json?angular=true`, {
-            Contact: contactgroup
+            Contactgroup: contactgroup
         })
             .pipe(
                 map(data => {
@@ -104,6 +104,17 @@ export class ContactgroupsService implements DeleteAllModalService {
                     return data.contactgroups;
                 })
             )
+    }
+
+    public getContactsByContainerId(containerId: number): Observable<GetContactsByContainerIdRootContact[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<GetContactsByContainerIdRoot>(`${proxyPath}/contactgroups/loadContacts/${containerId}.json?angular=true`, {})
+            .pipe(
+                map((data: GetContactsByContainerIdRoot) => {
+                    return data.contacts;
+                })
+            );
+
     }
 
 
