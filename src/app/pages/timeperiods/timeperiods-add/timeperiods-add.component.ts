@@ -49,6 +49,8 @@ import { TimeperiodsService } from '../timeperiods.service';
 import _ from 'lodash';
 import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
 import { WeekdaysService } from '../../../weekdays.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -97,7 +99,9 @@ import { WeekdaysService } from '../../../weekdays.service';
         RouterLink,
         InputGroupTextDirective,
         InputGroupComponent,
-        ColComponent
+        ColComponent,
+        NgSelectModule,
+        NgOptionHighlightModule
     ],
     templateUrl: './timeperiods-add.component.html',
     styleUrl: './timeperiods-add.component.css'
@@ -105,14 +109,12 @@ import { WeekdaysService } from '../../../weekdays.service';
 export class TimeperiodsAddComponent {
 
     public post: TimeperiodPost = {
-        Timeperiod: {
-            container_id: 0,
-            name: '',
-            calendar_id: 0,
-            timeperiod_timeranges: [],
-            validate_timeranges: true,
-            description: '',
-        }
+        container_id: null,
+        name: '',
+        calendar_id: null,
+        timeperiod_timeranges: [],
+        validate_timeranges: true,
+        description: '',
     }
 
     public containers: Container[] = [];
@@ -132,7 +134,7 @@ export class TimeperiodsAddComponent {
     private router = inject(Router);
 
     private subscriptions: Subscription = new Subscription();
-    public readonly weekdays = this.WeekdaysService.getWeekdays();
+    public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
     public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('00:00');
     public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('24:00');
 
@@ -141,7 +143,6 @@ export class TimeperiodsAddComponent {
         this.subscriptions.add(this.TimeperiodsService.getAdd()
             .subscribe((result) => {
                 this.containers = result;
-                console.error(this.containers);
             }));
     }
 
@@ -154,7 +155,7 @@ export class TimeperiodsAddComponent {
     }
 
     public loadCalendars(searchString: string) {
-        this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.Timeperiod.container_id)
+        this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
                 this.calendars = result;
             })
@@ -166,7 +167,7 @@ export class TimeperiodsAddComponent {
 
         this.timeperiod.ranges.push({
             id: count,
-            day: 1,
+            day: '1',
             start: '',
             end: '',
             index: Object.keys(this.timeperiod.ranges).length
@@ -228,9 +229,9 @@ export class TimeperiodsAddComponent {
     public saveTimeperiod() {
 
         let index = 0;
-        this.post.Timeperiod.timeperiod_timeranges = [];
+        this.post.timeperiod_timeranges = [];
         for (let i in this.timeperiod.ranges) {
-            this.post.Timeperiod.timeperiod_timeranges[index] = {
+            this.post.timeperiod_timeranges[index] = {
                 'day': this.timeperiod.ranges[i].day,
                 'start': this.timeperiod.ranges[i].start,
                 'end': this.timeperiod.ranges[i].end
@@ -268,12 +269,15 @@ export class TimeperiodsAddComponent {
         this.loadCalendars('');
     }
 
-    public getTimeperiodTimeranges(index: number, keyName: string): string {
-        if (this.errors) {
+    public getTimeperiodTimeranges(index: number, keyName: string): string[] {
+        if (this.errors && this.errors['timeperiod_timeranges'] && this.errors['timeperiod_timeranges'][index]) {
             let timeranges = <any>this.errors['timeperiod_timeranges'][index];
-            return timeranges[keyName];
+            if (timeranges && timeranges[keyName]) {
+                return Object.keys(timeranges[keyName]).map((key) => timeranges[keyName][key]);
+            }
+            return [];
         } else {
-            return "";
+            return [];
         }
 
     }

@@ -37,13 +37,13 @@ export class TimeperiodsService {
         )
     }
 
-    public getCalendars(searchString: string, containerId: number): Observable<any[]> {
+    public getCalendars(searchString: string, containerId: number | null): Observable<any[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             calendars: any[]
         }>(`${proxyPath}/calendars/loadCalendarsByContainerId.json?angular=true`, {
             params: {
-                containerId: containerId,
+                containerId: containerId ? containerId : '',
                 'filter[Calendar.name]': searchString
             }
         }).pipe(
@@ -53,10 +53,10 @@ export class TimeperiodsService {
         )
     }
 
-    public createTimeperiod(command: TimeperiodPost): Observable<GenericResponseWrapper> {
+    public createTimeperiod(timeperiod: TimeperiodPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/timeperiods/add.json?angular=true`, {
-            Command: command
+            Timeperiod: timeperiod
         })
             .pipe(
                 map(data => {

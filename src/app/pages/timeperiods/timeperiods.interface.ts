@@ -52,18 +52,16 @@ export interface TimeperiodIndex {
  ***************************/
 
 export interface TimeperiodPost {
-    Timeperiod: {
-        container_id: number,
-        name: string,
-        calendar_id: number,
-        timeperiod_timeranges: TimeperiodRange[],
-        validate_timeranges: true,
-        description: string
-    }
+    container_id: number | null,
+    name: string,
+    calendar_id: number | null,
+    timeperiod_timeranges: TimeperiodRange[],
+    validate_timeranges: true,
+    description: string
 }
 
 export interface TimeperiodRange {
-    day: number,
+    day: string,
     start: string,
     end: string,
     timeperiod_id?: number,
@@ -72,7 +70,7 @@ export interface TimeperiodRange {
 
 export interface InternalRange {
     id: number,
-    day: number,
+    day: string,
     start: string,
     end: string,
     index: number

@@ -8,20 +8,19 @@ export class WeekdaysService {
 
     private readonly TranslocoService = inject(TranslocoService);
 
-    private readonly weekdays = {
-        1: this.TranslocoService.translate('Monday'),
-        2: this.TranslocoService.translate('Tuesday'),
-        3: this.TranslocoService.translate('Wednesday'),
-        4: this.TranslocoService.translate('Thursday'),
-        5: this.TranslocoService.translate('Friday'),
-        6: this.TranslocoService.translate('Saturday'),
-        7: this.TranslocoService.translate('Sunday')
-    }
+    private readonly weekdays = [
+        {key: '1', value: this.TranslocoService.translate('Monday')},
+        {key: '2', value: this.TranslocoService.translate('Tuesday')},
+        {key: '3', value: this.TranslocoService.translate('Wednesday')},
+        {key: '4', value: this.TranslocoService.translate('Thursday')},
+        {key: '5', value: this.TranslocoService.translate('Friday')},
+        {key: '6', value: this.TranslocoService.translate('Saturday')},
+        {key: '7', value: this.TranslocoService.translate('Sunday')},]
 
     constructor() {
     }
 
-    public getWeekdays(): { [key: number]: string } {
+    public getWeekdays(): { key: string, value: string }[] {
         return this.weekdays;
     }
 

@@ -19,7 +19,7 @@
                 </li>
             </ol>
         </nav>
-        <form cForm (ngSubmit)="saveTimeperiod()">
+        <form cForm (ngSubmit)="saveTimeperiod()" ngNativeValidate>
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new time period') }}</h5>
@@ -39,23 +39,24 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="TimeperiodContainers">
+                        <label cLabel for="timeperiodContainer">
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <select aria-label="Default select example" cSelect id="TimeperiodContainers"
-                                name="containers"
-                                (ngModelChange)="onContainerIdChange()"
-                                [(ngModel)]="post.Timeperiod.container_id"
-                                oitcFormError [errors]="errors" errorField="containers">
-                            <option value="" disabled selected>{{ t('Please choose') }}</option>
-                            <option *ngFor="let container of containers"
-                                    [value]="container.key">
-                                {{ container.value }}
-                            </option>
-                        </select>
+                        <ng-select id="timeperiodContainer"
+                                   name="container_id"
+                                   [items]="containers"
+                                   [placeholder]="'Please choose' | transloco"
+                                   bindLabel="value" bindValue="key"
+                                   [(ngModel)]="post.container_id"
+                                   (ngModelChange)="onContainerIdChange()"
+                                   oitcFormError [errors]="errors" errorField="containers">
+                            <ng-template ng-option-tmp let-container="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ container.value }}</div>
+                            </ng-template>
+                        </ng-select>
                         <oitc-form-warning
-                            *ngIf="post.Timeperiod.container_id < 1">{{ t('Please select a container.') }}
+                            *ngIf="post.container_id && post.container_id < 1">{{ t('Please select a container.') }}
                         </oitc-form-warning>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     </div>
@@ -65,10 +66,10 @@
                             {{ t('Name') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <input cFormControl id="timeperiodName" required type="text"
+                        <input cFormControl id="timeperiodName" type="text"
                                name="name"
                                oitcFormError [errors]="errors" errorField="name"
-                               [(ngModel)]="post.Timeperiod.name">
+                               [(ngModel)]="post.name">
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
 
@@ -77,22 +78,22 @@
                         <label cLabel for="timeperiodDescription">
                             {{ t('Description') }}
                         </label>
-                        <input cFormControl id="timeperiodDescription" required type="text"
+                        <input cFormControl id="timeperiodDescription" type="text"
                                name="description"
                                oitcFormError [errors]="errors" errorField="description"
-                               [(ngModel)]="post.Timeperiod.description">
+                               [(ngModel)]="post.description">
                         <oitc-form-feedback [errors]="errors" errorField="desciption"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">
-                        <label cLabel for="TimeperiodCalendars">
+                        <label cLabel for="timeperiodCalendar">
                             <span *oitcPermission="['calendars', 'edit']">
-                                <a href="calendars/edit/{{post.Timeperiod.calendar_id}}"
-                                   *ngIf="post.Timeperiod.calendar_id > 0">
+                                <a href="calendars/edit/{{post.calendar_id}}"
+                                   *ngIf="post.calendar_id && post.calendar_id > 0">
                                     {{ t('Calendar') }}
                                     <oitc-required-icon></oitc-required-icon>
                                 </a>
-                                <span *ngIf="!post.Timeperiod.calendar_id">
+                                <span *ngIf="!post.calendar_id">
                                     {{ t('Calendar') }}
                                     <oitc-required-icon></oitc-required-icon>
                                 </span>
@@ -102,16 +103,17 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </span>
                         </label>
-                        <select aria-label="Default select example" cSelect id="TimeperiodCalendars"
-                                name="timeperiod_calendars"
-                                [(ngModel)]="post.Timeperiod.calendar_id"
-                                oitcFormError [errors]="errors" errorField="containers">
-                            <option value="" disabled selected>{{ t('Please choose') }}</option>
-                            <option *ngFor="let calendar of calendars"
-                                    [value]="calendar.key">
-                                {{ calendar.value }}
-                            </option>
-                        </select>
+                        <ng-select id="timeperiodCalendar"
+                                   name="calendar_id"
+                                   [placeholder]="'Please choose' | transloco"
+                                   [items]="calendars"
+                                   bindLabel="value" bindValue="key"
+                                   [(ngModel)]="post.calendar_id"
+                                   oitcFormError [errors]="errors" errorField="containers">
+                            <ng-template ng-option-tmp let-calendar="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ calendar.value }}</div>
+                            </ng-template>
+                        </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                         <span class="help-block">
                             {{ t('In addition to the interval defined by the given time ranges, you are able to add 24x7 days using a calendar. This will only affect the monitoring engine.') }}
@@ -137,15 +139,15 @@
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
                                 </span>
-                                <select class="form-control input-sm select" id="tp_day_{{i}}"
-                                        name="day"
-                                        [(ngModel)]="timeperiod.ranges[i]['day']">
-                                    <option
-                                        *ngFor="let weekday of weekdays | keyvalue"
-                                        [value]="weekday.key">
-                                        {{ weekday.value }}
-                                    </option>
-                                </select>
+                                <ng-select id="tp_day_{{i}}"
+                                           name="tp_day_{{i}}"
+                                           [items]="weekdays"
+                                           bindLabel="value" bindValue="key"
+                                           [(ngModel)]="timeperiod.ranges[i]['day']">
+                                    <ng-template ng-option-tmp let-weekday="item" let-search="searchTerm">
+                                        <div [ngOptionHighlight]="search">{{ weekday.value }}</div>
+                                    </ng-template>
+                                </ng-select>
                             </c-input-group>
                         </div>
                         <div class="col-lg-3 form-group">
@@ -153,8 +155,9 @@
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                 </span>
-                                <input id="tp_start_{{i}}" name="start" class="form-control" required
-                                       [ngClass]="{'border-color-error': hasTimeRange(errors, range) || getTimeperiodTimeranges(range.index, 'start')}"
+                                <input cFormControl id="tp_start_{{i}}" name="tp_start_{{i}}" class="form-control"
+                                       required
+                                       [ngClass]="{'border-color-error': hasTimeRange(errors, range) || getTimeperiodTimeranges(range.index, 'start').length > 0}"
                                        [placeholder]="startPlaceholder"
                                        type="text"
                                        size="5"
@@ -171,9 +174,9 @@
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                 </span>
-                                <input id="tp_end_{{i}}" name="end" class="form-control" required
+                                <input cFormControl id="tp_end_{{i}}" name="tp_end_{{i}}" class="form-control" required
                                        [ngClass]="{'border-color-error': hasTimeRange(errors, range) ||
-                                                       getTimeperiodTimeranges(range.index, 'end')}"
+                                                       getTimeperiodTimeranges(range.index, 'end').length > 0}"
                                        [placeholder]="endPlaceholder"
                                        type="text"
                                        size="5"
