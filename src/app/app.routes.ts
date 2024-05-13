@@ -95,6 +95,9 @@ export const routes: Routes = [{
     path: 'registers/index',
     loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
 }, {
+    path: 'cronjobs/index',
+    loadComponent: () => import('./pages/cronjobs/cronjobs-index/cronjobs-index.component').then(m => m.CronjobsIndexComponent)
+}, {
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
