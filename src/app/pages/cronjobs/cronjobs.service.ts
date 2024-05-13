@@ -86,4 +86,52 @@ export class CronjobsService {
         )
     }
 
+    public updateConjob(cronjob: CronjobPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{ cronjob: Cronjob }>(`${proxyPath}/cronjobs/edit/${cronjob.id}.json?angular=true`, {
+            Cronjob: cronjob
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                const resultData: GenericIdResponse = {
+                    id: Number(cronjob.id)
+                };
+
+                return {
+                    success: true,
+                    data: resultData
+                };
+
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        )
+    }
+
+    public deleteCronjob(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{ Cronjib: Cronjob }>(`${proxyPath}/cronjobs/delete/${id}.json?angular=true`, {}).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: {}
+                };
+
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        )
+    }
+
 }

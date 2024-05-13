@@ -46,7 +46,7 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { CronjobsService } from '../cronjobs.service';
-import { CronjobPost, CronjobsIndex } from '../cronjob.interface';
+import { Cronjob, CronjobPost, CronjobsIndex } from '../cronjob.interface';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -199,6 +199,85 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
+            })
+        );
+    }
+
+    public triggerEditModal(cronjob: Cronjob) {
+        this.CronjobPost = {
+            id: cronjob.id,
+            enabled: cronjob.enabled ? 1 : 0,
+            interval: cronjob.interval,
+            plugin: cronjob.plugin,
+            task: cronjob.task
+
+        };
+        this.errors = null;
+        this.tasks = [];
+        this.plugins = [];
+
+        this.subscriptions.add(this.CronjobsService.getPlugins(cronjob.plugin)
+            .subscribe((result) => {
+                this.plugins = result;
+
+                this.subscriptions.add(this.CronjobsService.getTasks(cronjob.plugin, cronjob.task)
+                    .subscribe((result) => {
+                        this.tasks = result;
+
+                        this.modalService.toggle({
+                            show: true,
+                            id: 'editCronjobModal',
+                        });
+                    })
+                );
+
+            })
+        );
+    }
+
+    public updateCronjob() {
+        this.subscriptions.add(this.CronjobsService.updateConjob(this.CronjobPost)
+            .subscribe((result) => {
+                if (result.success) {
+                    this.notyService.genericSuccess();
+
+                    this.modalService.toggle({
+                        show: false,
+                        id: 'editCronjobModal',
+                    });
+
+                    this.loadCronjobs();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
+    }
+
+    public deleteCronjob() {
+        const id = Number(this.CronjobPost.id);
+        this.subscriptions.add(this.CronjobsService.deleteCronjob(id)
+            .subscribe((result) => {
+                if (result.success) {
+                    this.notyService.genericSuccess();
+
+                    this.modalService.toggle({
+                        show: false,
+                        id: 'editCronjobModal',
+                    });
+
+                    this.loadCronjobs();
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
             })
         );
     }

@@ -97,6 +97,19 @@
 
 
                             <td class="width-50">
+                                <div *oitcPermission="['cronjobs', 'edit']">
+                                    <button (click)="triggerEditModal(cronjob.Cronjob)" cButton class="ripple"
+                                            color="default" size="xs"
+                                            *ngIf="cronjob.Cronjob.id">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </button>
+                                </div>
+
+                                <div *oitcPermission="['cronjobs', 'edit']; negate: true">
+                                    <button cButton class="ripple" color="default" size="xs" disabled>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </button>
+                                </div>
 
                             </td>
                         </tr>
@@ -208,6 +221,105 @@
             </form>
         </c-modal>
 
+
+        <!-- Cronjob Edit Modal -->
+        <c-modal #editCronjobModal fullscreen="md" size="lg" id="editCronjobModal">
+            <form cForm (ngSubmit)="updateCronjob()">
+                <c-modal-header>
+                    <h5 cModalTitle>
+                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                        {{ t('Edit Cronjob') }}
+                    </h5>
+                    <button [cModalToggle]="editCronjobModal.id" cButtonClose></button>
+                </c-modal-header>
+                <c-modal-body *ngIf="CronjobPost">
+
+                    <div class="mb-3">
+                        <label cLabel for="editPlugin">
+                            {{ t('Plugin') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="editPlugin"
+                                   name="editPlugin"
+                                   [items]="plugins"
+                                   [clearable]="false"
+                                   [(ngModel)]="CronjobPost.plugin"
+                                   (change)="loadTasks($event)"
+                                   oitcFormError [errors]="errors" errorField="plugin">
+                            <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ plugin }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="editTask">
+                            {{ t('Task') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select id="editTask"
+                                   name="editTask"
+                                   [items]="tasks"
+                                   [clearable]="false"
+                                   [(ngModel)]="CronjobPost.task"
+                                   oitcFormError [errors]="errors" errorField="task">
+                            <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ task }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="editInterval">
+                            {{ t('Interval') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input id="editInterval" cFormControl type="number"
+                               name="editInterval"
+                               min="0"
+                               [(ngModel)]="CronjobPost.interval"
+                               oitcFormError [errors]="errors" errorField="interval"/>
+                        <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t(' Cronjob schedule interval in minutes') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                [(ngModel)]="CronjobPost.enabled"
+                                cFormCheckInput
+                                id="editEnabled"
+                                name="editEnabled"
+                                type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="editEnabled">{{ t('Enabled') }}</label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Determine if this cronjob should be executed. ') }}
+                        </div>
+                    </div>
+
+                </c-modal-body>
+                <c-modal-footer class="justify-content-start">
+                    <button cButton color="danger" type="button" class="ripple"
+                            (click)="deleteCronjob()">
+                        {{ t('Delete') }}
+                    </button>
+
+                    <button cButton color="primary" type="submit" class="ripple ms-auto">
+                        {{ t('Save') }}
+                    </button>
+                    <button [cModalToggle]="editCronjobModal.id" cButton color="default" class="ripple">
+                        {{ t('Close') }}
+                    </button>
+                </c-modal-footer>
+            </form>
+        </c-modal>
 
     </ng-container>
 </oitc-coreui>
