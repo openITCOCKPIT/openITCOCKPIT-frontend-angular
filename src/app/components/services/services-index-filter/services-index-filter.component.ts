@@ -9,10 +9,13 @@ import {
     CardComponent,
     CardHeaderComponent,
     ColComponent,
-    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
+    PopoverDirective,
     RowComponent,
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -23,17 +26,19 @@ import {NgIf} from '@angular/common';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule} from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 type filter = {
     Servicestatus: {
         current_state: string[],
-        acknowledged: boolean | string,
-        not_acknowledged: boolean | string,
-        in_downtime: boolean |string,
-        not_in_downtime: boolean | string,
-        passive: boolean | string,
-        active: boolean | string,
-        notifications_enabled: boolean | string,
+        acknowledged: boolean,
+        not_acknowledged: boolean,
+        in_downtime: boolean,
+        not_in_downtime: boolean,
+        passive: boolean ,
+        active: boolean ,
+        notifications_enabled: boolean ,
+        notifications_not_enabled: boolean,
         output: string,
     },
     Services: {
@@ -60,6 +65,13 @@ type filter = {
     }
 }
 
+type states = {
+    ok: boolean,
+    warning: boolean,
+    critical: boolean,
+    unknown: boolean
+}
+
 @Component({
     selector: 'oitc-services-index-filter',
     standalone: true,
@@ -83,6 +95,8 @@ type filter = {
         DebounceDirective,
         FormCheckInputDirective,
         FormCheckLabelDirective,
+        PopoverDirective,
+        RegexHelperTooltipComponent
     ],
     templateUrl: './services-index-filter.component.html',
     styleUrl: './services-index-filter.component.css'
@@ -97,19 +111,20 @@ export class ServicesIndexFilterComponent {
     public filter: filter = {
         Servicestatus: {
             current_state: [],
-            acknowledged: '',
-            not_acknowledged: '',
-            in_downtime: '',
-            not_in_downtime: '',
-            passive: '',
-            active: '',
-            notifications_enabled: '',
+            acknowledged: false,
+            not_acknowledged: false,
+            in_downtime: false,
+            not_in_downtime: false,
+            passive: false,
+            active: false,
+            notifications_enabled: false,
+            notifications_not_enabled: false,
             output: '',
         },
         Services: {
             id: [],
             name: '',
-            name_regex: '',
+            name_regex: false,
             keywords:[],
             not_keywords: [],
             servicedescription: '',
@@ -125,13 +140,30 @@ export class ServicesIndexFilterComponent {
         Hosts: {
             id: [],
             name: '',
-            name_regex: '',
+            name_regex: false,
             satellite_id: []
         }
+    }
+
+    public states: states = {
+        ok: false,
+        warning: false,
+        critical: false,
+        unknown: false
     }
 
 
     public onFilterChange(event: Event) {
         this.filterChange.emit(this.filter);
     }
+    public onStateChange(event: Event) {
+        const statesArray:string[] = [];
+        if(this.states.ok) statesArray.push('ok');
+        if(this.states.warning) statesArray.push('warning');
+        if(this.states.critical) statesArray.push('critical');
+        if(this.states.unknown) statesArray.push('unknown');
+        this.filter.Servicestatus.current_state = statesArray;
+        this.filterChange.emit(this.filter);
+    }
+
 }

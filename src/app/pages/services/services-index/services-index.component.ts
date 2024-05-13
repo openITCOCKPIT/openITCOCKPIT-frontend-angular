@@ -45,19 +45,22 @@ import {ActionsButtonComponent} from '../../../components/actions-button/actions
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
+import { AckTooltipComponent} from '../../../components/ack-tooltip/ack-tooltip.component';
+import { DowntimeTooltipComponent} from '../../../components/downtime-tooltip/downtime-tooltip.component';
 import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
 import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 type filter = {
     Servicestatus: {
         current_state: string[],
-        acknowledged: boolean | string,
-        not_acknowledged: boolean | string,
-        in_downtime: boolean |string,
-        not_in_downtime: boolean | string,
-        passive: boolean | string,
-        active: boolean | string,
-        notifications_enabled: boolean | string,
+        acknowledged: boolean,
+        not_acknowledged: boolean,
+        in_downtime: boolean,
+        not_in_downtime: boolean,
+        passive: boolean,
+        active: boolean,
+        notifications_enabled: boolean,
+        notifications_not_enabled: boolean,
         output: string,
     },
     Services: {
@@ -128,7 +131,9 @@ type filter = {
         DropdownItemDirective,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        ServicesIndexFilterComponent
+        ServicesIndexFilterComponent,
+        AckTooltipComponent,
+        DowntimeTooltipComponent
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css'
@@ -153,6 +158,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         'filter[Services.id][]': [],
         'filter[Services.service_type][]': [],
         'filter[servicename]': '',
+        'filter[servicename_regex]': '',
         'filter[servicedescription]': '',
         'filter[Servicestatus.output]': '',
         'filter[Servicestatus.current_state][]': [],
@@ -235,16 +241,49 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     getFilter(filter: filter) {
         console.log(filter);
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
+        this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
         this.params['filter[servicename]'] = filter.Services.name;
+        this.params['filter[servicename_regex]'] = filter.Services.name_regex;
         this.params['filter[servicedescription]'] = filter.Services.servicedescription;
         this.params['filter[keywords][]'] = filter.Services.keywords;
         this.params['filter[not_keywords][]'] = filter.Services.not_keywords,
+        this.params['filter[Servicestatus.current_state][]'] = filter.Servicestatus.current_state;
+
+        if(filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged){
+            this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = filter.Servicestatus.acknowledged;
+        } else {
+            this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = '';
+        }
+        if(filter.Servicestatus.in_downtime !== filter.Servicestatus.not_in_downtime){
+            this.params['filter[Servicestatus.scheduled_downtime_depth]'] = filter.Servicestatus.in_downtime;
+        } else {
+            this.params['filter[Servicestatus.scheduled_downtime_depth]'] = '';
+        }
+
+        if(filter.Servicestatus.notifications_enabled !== filter.Servicestatus.notifications_not_enabled){
+            this.params['filter[Servicestatus.notifications_enabled]'] = filter.Servicestatus.notifications_enabled;
+        } else{
+            this.params['filter[Servicestatus.notifications_enabled]'] = '';
+        }
+
+        if(filter.Servicestatus.passive !== filter.Servicestatus.active){
+            this.params['filter[Servicestatus.active_checks_enabled]'] = !filter.Servicestatus.passive;
+        } else {
+            this.params['filter[Servicestatus.active_checks_enabled]'] = '';
+        }
+        var priorityFilter: number[] = [];
+        const priorityKeys = Object.keys(filter.Services.priority)
+        for(let propt in priorityKeys) {
+            // @ts-ignore
+            if(filter.Services.priority[propt] === true) {
+                priorityFilter.push(parseInt(propt))
+            }
+        }
+        this.params['filter[servicepriority][]'] = priorityFilter
+
         this.load();
 
     }
-
-
-
 
 
 }

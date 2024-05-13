@@ -142,16 +142,26 @@
                                 <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                             </td>
                             <td class="width-50">
-                                <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1">
+                                <!--<div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1">
                                     <fa-icon [icon]="['far', 'user']"></fa-icon>
                                 </div>
                                 <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 2">
                                     <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                </div>
+                                </div>-->
+                                <span *oitcPermission="['services', 'browser']">
+                                    <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
+                                        <oitc-ack-tooltip [type]="'services'" [subtype]="service.Servicestatus.acknowledgement_type" [id]="service.Service.id"></oitc-ack-tooltip>
+                                    </div>
+                                </span>
+                                <span *oitcPermission="['services', 'browser'];negate:true">
+                                    <fa-icon [icon]="['far', 'user']" *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'user']" *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 2" title="{{t('Sticky Acknowledgedment')}}"></fa-icon>
+                                </span>
                             </td>
                             <td class="width-50">
                                 <div *ngIf="service.Servicestatus.scheduledDowntimeDepth > 0">
-                                    <fa-icon [icon]="['fas', 'power-off']" size="lg"></fa-icon>
+                                    <oitc-downtime-tooltip *oitcPermission="['services', 'browser']"  [type]="'services'" [id]="service.Service.id"></oitc-downtime-tooltip>
+                                    <fa-icon [icon]="['fas', 'power-off']" size="lg" *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
                                 </div>
                             </td>
                             <td class="width-50">
@@ -215,19 +225,19 @@
 
                 <ng-container *ngIf="services && services.all_services">
                     <c-container class="mt-2" fluid>
-                        <c-row class="align-items-start">
-                            <c-col md="4">
+                        <c-row>
+                            <c-col xs="4" md="4">
                                 <oitc-select-all
                                         [itemsCount]="services.all_services.length">
                                 </oitc-select-all>
                             </c-col>
-                            <c-col md="2">
+                            <c-col xs="2">
                                 <fa-icon [icon]="['fas', 'file']"></fa-icon> {{t('Copy')}}
                             </c-col>
-                            <c-col md="3">
+                            <c-col xs="3">
                                 <fa-icon [icon]="['fas', 'trash']" class="critical"></fa-icon> <span class="critical">{{t('Delete selected')}}</span>
                             </c-col>
-                            <c-col md="3">
+                            <c-col xs="3">
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}

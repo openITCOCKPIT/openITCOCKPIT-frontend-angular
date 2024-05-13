@@ -11,6 +11,7 @@ export interface ServiceParams {
     'filter[Services.id][]': number[],
     'filter[Services.service_type][]': number[],
     'filter[servicename]': string,
+    'filter[servicename_regex]': boolean | string,
     'filter[servicedescription]': string,
     'filter[Servicestatus.output]': string,
     'filter[Servicestatus.current_state][]': string[],

@@ -26,9 +26,10 @@
                         <span cInputGroupText>
                             <c-form-check>
                                 <input cFormCheckInput id="checkRegexHost" type="checkbox"
-                                />
+                                       [(ngModel)]="filter.Hosts.name_regex"/>
                             </c-form-check>
                             {{ t('Enable regex') }}
+                            <oitc-regex-helper-tooltip/>
                         </span>
                     </c-input-group>
                 </c-col>
@@ -47,9 +48,11 @@
                         />
                         <span cInputGroupText>
                             <c-form-check>
-                                <input cFormCheckInput id="checkregexService" type="checkbox"/>
+                                <input cFormCheckInput id="checkregexService" type="checkbox"
+                                       [(ngModel)]="filter.Services.name_regex"/>
                             </c-form-check>
                             {{ t('Enable regex') }}
+                            <oitc-regex-helper-tooltip/>
                         </span>
                     </c-input-group>
                 </c-col>
@@ -136,72 +139,138 @@
                 <c-col>
                     <h5>{{ t('Service status') }}</h5>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox" class="checkbox-lg custom-check-ok"/>
+                        <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox"
+                               class="checkbox-lg custom-check-ok"
+                               [(ngModel)]="states.ok"
+                               (debouncedValue)="onStateChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusok">{{ t('Ok') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="checkstatusowarning" type="checkbox" class="checkbox-lg custom-check-warning"/>
+                        <input cFormCheckInput id="checkstatusowarning" type="checkbox"
+                               class="checkbox-lg custom-check-warning"
+                               [(ngModel)]="states.warning"
+                               (debouncedValue)="onStateChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusowarning">{{ t('Warning') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="checkstatuscritical" type="checkbox" class="checkbox-lg custom-check-critical"/>
+                        <input cFormCheckInput id="checkstatuscritical" type="checkbox"
+                               class="checkbox-lg custom-check-critical"
+                               [(ngModel)]="states.critical"
+                               (debouncedValue)="onStateChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="checkstatuscritical">{{ t('Critical') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="checkstatusunknown" type="checkbox" class="checkbox-lg custom-check-unknown"/>
+                        <input cFormCheckInput id="checkstatusunknown" type="checkbox"
+                               class="checkbox-lg custom-check-unknown"
+                               [(ngModel)]="states.unknown"
+                               (debouncedValue)="onStateChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusunknown">{{ t('Unknown') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Acknowlegements') }}</h5>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="ack" type="checkbox" class="checkbox-lg custom-check-default"/>
-                        <label cFormCheckLabel  class="ms-1 mt-1" for="ack">{{ t('Acknowledge') }}</label>
+                        <input cFormCheckInput id="ack" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.acknowledged"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="ack">{{ t('Acknowledge') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="acknot" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="acknot" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.not_acknowledged"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="acknot">{{ t('Not acknowledged') }}</label>
                     </c-form-check>
                 </c-col>
+
+                <c-col>
+                    <h5>{{ t('Downtimes') }}</h5>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="downtimes" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.in_downtime"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="downtimes">{{ t('In downtime') }}</label>
+                    </c-form-check>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="not_down" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.not_in_downtime"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="not_down">{{ t('Not in downtime') }}</label>
+                    </c-form-check>
+                </c-col>
+
                 <c-col>
                     <h5>{{ t('Check type') }}</h5>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="activeservice" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="activeservice" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.active"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="activeservice">{{ t('Active service') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="passiveservice" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="passiveservice" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.passive"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="passiveservice">{{ t('Passive service') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Notifications') }}</h5>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="notifyenabled" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="notifyenabled" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.notifications_enabled"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="notifyenabled">{{ t('Enabled') }}</label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="notifydisabled" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="notifydisabled" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Servicestatus.notifications_not_enabled"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="notifydisabled">{{ t('Not enabled') }}</label>
                     </c-form-check>
                 </c-col>
                 <c-col>
                     <h5>{{ t('Priority') }}</h5>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="prority1" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="prority1" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Services.priority[1]"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="prority1">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok-soft ms-1"></fa-icon>
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="prority2" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="prority2" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Services.priority[2]"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1  mt-1" for="prority2">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="ok ms-1"></fa-icon>
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="prority3" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="prority3" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Services.priority[3]"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1  mt-1" for="prority3">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="warning ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="warning ms-1"></fa-icon>
@@ -209,7 +278,10 @@
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="prority4" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="prority4" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Services.priority[4]"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="prority4">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
@@ -218,7 +290,10 @@
                         </label>
                     </c-form-check>
                     <c-form-check class="mb-2">
-                        <input cFormCheckInput id="prority5" type="checkbox" class="checkbox-lg custom-check-default"/>
+                        <input cFormCheckInput id="prority5" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="filter.Services.priority[5]"
+                               (debouncedValue)="onFilterChange($event)"
+                               oitcDebounce/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="prority5">
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>

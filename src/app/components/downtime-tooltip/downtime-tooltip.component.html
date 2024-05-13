@@ -1,0 +1,22 @@
+<ng-container *transloco="let t">
+    <fa-icon [icon]="['fas', 'power-off']" size="lg"
+             (mouseenter)="showTooltip()"
+             (mouseleave)="hideTooltip()"
+             [cPopover]="popoverHtml"
+             cPopoverPlacement="right"
+             [cPopoverVisible]="visible"></fa-icon>
+
+    <ng-template #popoverHtml>
+        <div style="width:300px;">
+            <h3 class="popover-header" *ngIf="type === 'services'">{{t('The service is currently in a planned maintenance period')}} <span
+                    *ngIf="sticky">({{t('Sticky')}})</span></h3>
+
+            <div class="popover-body">
+                <div>{{t('Author')}}: {{author}}</div>
+                <div>{{t('Start')}}: {{start}}</div>
+                <div>{{t('End')}}: {{end}}</div>
+                <div>{{t('Comment')}}: {{comment}}</div>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
