@@ -120,16 +120,16 @@
                         </span>
                     </div>
 
-                    <legend class="font-sm margin-top-30">
+                    <div class="margin-top-30">
                         <div>
-                            <label [ngClass]="{'text-danger': errors?.['validate_timeranges']}">
+                            <h5 [ngClass]="{'text-danger': errors?.['validate_timeranges']}">
                                 {{ t('Time ranges:') }}
-                            </label>
+                            </h5>
                         </div>
                         <div class="text-danger" *ngIf="errors?.['validate_timeranges']">
-                            {{ t('Do not enter overlapping timeframes') }}
+                            <h5>{{ t('Do not enter overlapping timeframes') }}</h5>
                         </div>
-                    </legend>
+                    </div>
                     <hr>
 
                     <div class="row mb-2"
