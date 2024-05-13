@@ -43,15 +43,6 @@ import listPlugin from '@fullcalendar/list';
 import $ from "jquery";
 
 
-function hasEvents(this: any, date: string) {
-    console.log('HAS Events');
-    for (var index in this.events) {
-        if (this.events[index].start === date) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 @Component({
@@ -132,7 +123,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             holidays: {
                 text: this.TranslocoService.translate('Add holiday'),
                 click: (ev: any) => {
-                    console.log(ev);
                     this.clickButtonTest();
                 }
             },
@@ -188,9 +178,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
 
             //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon fs-6 px-2 me-1" type="button" (onClick)="alert(info);">&plus;</button>';
-            $(".fc-day-number").each(function (index, obj) {
-                console.log(obj);
-
+            $(".fc-daygrid-day-number").each(function (index, obj) {
                 //obj = fc-day-number <span>
                 var $span = $(obj);
                 var $parentTd = $span.parent();
@@ -203,7 +191,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         type: 'button',
                         class: 'btn btn-success btn-xs btn-icon'
                     })
-                    .on("click", function () {
+                    .on('click', function () {
                             /*
                                 $('#addEventModal').modal('show');
                                 $scope.newEvent = {
@@ -214,11 +202,14 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                              */
                         }
                     );
-
+                $parentTd.css('text-align', 'right').append($addButton);
+/*
                 if (!hasEvents(currentDate)) {
                     $parentTd.css('text-align', 'right').append($addButton);
                 }
 
+
+ */
 
             });
 
@@ -290,8 +281,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                 );
 
                 for (var key in this.countries) {
-                    console.log(key + ' --> ' + this.countries[key]);
-
                     $('#countryList').append(
                         $('<li/>', {
                             data: {
@@ -369,5 +358,16 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     private deleteEvent(start: Date | null) {
 
     }
+
+    public hasEvents(date: string) {
+        console.log('HAS Events');
+        for (var index in this.events) {
+            if (this.events[index].start === date) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
