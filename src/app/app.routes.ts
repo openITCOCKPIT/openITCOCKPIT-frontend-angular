@@ -92,6 +92,9 @@ export const routes: Routes = [{
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
 }, {
+    path: 'registers/index',
+    loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
+}, {
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
