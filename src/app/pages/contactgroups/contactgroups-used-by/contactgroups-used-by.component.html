@@ -51,7 +51,7 @@
                         <tr *ngIf="objects.hosttemplates.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                                {{ t('Host templates') }} ({{ objects.hosttemplates.length }})
+                                {{ t('Host template') }} ({{ objects.hosttemplates.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let hosttemplate of objects.hosttemplates">
@@ -70,7 +70,7 @@
                         <tr *ngIf="objects.hosts.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ t('Hosts') }} ({{ objects.hosts.length }})
+                                {{ t('Host') }} ({{ objects.hosts.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let host of objects.hosts">
@@ -89,7 +89,7 @@
                         <tr *ngIf="objects.servicetemplates.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                                {{ t('Service templates') }} ({{ objects.servicetemplates.length }})
+                                {{ t('Service template') }} ({{ objects.servicetemplates.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let servicetemplate of objects.servicetemplates">
@@ -108,7 +108,7 @@
                         <tr *ngIf="objects.services.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Services') }} ({{ objects.services.length }})
+                                {{ t('Service') }} ({{ objects.services.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let service of objects.services">
@@ -127,7 +127,7 @@
                         <tr *ngIf="objects.hostescalations.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                                {{ t('Host escalations') }} ({{ objects.hostescalations.length }})
+                                {{ t('Host escalation') }} ({{ objects.hostescalations.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let hostescalation of objects.hostescalations">
@@ -146,7 +146,7 @@
                         <tr *ngIf="objects.serviceescalations.length > 0">
                             <th colspan="2" class="bg-secondary bg-opacity-10">
                                 <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                                {{ t('Service escalations') }} ({{ objects.serviceescalations.length }})
+                                {{ t('Service escalation') }} ({{ objects.serviceescalations.length }})
                             </th>
                         </tr>
                         <tr *ngFor="let serviceescalation of objects.serviceescalations">
