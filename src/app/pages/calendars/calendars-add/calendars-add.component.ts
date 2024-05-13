@@ -195,14 +195,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                             // jQuery like its 2012 again
                             const date = String($(ev.currentTarget).attr('date'));
                             this.addEventClickButton(date);
-                            /*
-                                $('#addEventModal').modal('show');
-                                $scope.newEvent = {
-                                    title: '',
-                                    start: currentDate
-                                };
-
-                             */
                         }
                     );
                 $parentTd.css('text-align', 'right').append($addButton);
@@ -360,6 +352,14 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     public addEventClickButton(date: string) {
         console.log('addEventClickButton für', date);
+
+        //todo modal anzeigen aber mit dem ModalService !
+        /*
+        $('#addEventModal').modal('show');
+        $scope.newEvent = {
+            title: '',
+            start: currentDate
+        };*/
     }
 
     public hasEvents(date: string) {
