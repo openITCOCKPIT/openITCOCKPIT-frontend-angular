@@ -182,11 +182,12 @@ export interface ContactgroupsCopyPostSource {
 
 // USED BY
 export interface ContactgroupsUsedByRoot {
-    contactgroupWithRelations: ContactgroupWithRelations
+    total: number;
+    contactgroupWithRelations: ContactgroupUsedByObjects
     _csrfToken: string
 }
 
-export interface ContactgroupWithRelations {
+export interface ContactgroupUsedByObjects {
     id: number
     uuid: string
     container_id: number
