@@ -1,0 +1,114 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['registers', 'index']" [routerLink]="['/', 'registers', 'index']">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Registration') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'certificate']"></fa-icon>
+                    {{ t('License') }}
+                </li>
+            </ol>
+        </nav>
+
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Register this openICOCKPIT instance') }}
+                        <small class="fw-300">
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <oitc-credits></oitc-credits>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+
+                    <c-row>
+                        <c-col>
+
+                            <div class="mb-3">
+                                <label cLabel for="License_key">
+                                    {{ t('License key') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl id="License_key" required type="text"
+                                       name="License_key"
+                                       autocomplete="off"
+                                       [(ngModel)]="license_key">
+                                <div class="help-block">
+                                    <a href="https://openitcockpit.io/editions/" target="_blank">
+                                        <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                                        {{ t('Get your openITCOCKPIT Enterprise Subscription today') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    <c-row *ngIf="valid && LicenseResponse">
+                        <c-col xs="12">
+
+                            <c-row>
+                                <c-col xs="12" lg="6" class="img-cert"
+                                       [style.background]="'url(./assets/images/certs/license-certificate-' + license_type + '.svg)'">
+
+                                    <c-row class="p-4">
+                                        <c-col xs="12" lg="6">
+                                            <dl class="dl-horizontal" style="padding-top: 55%;">
+                                                <dt>{{ t('First name') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.firstname }}</dd>
+
+                                                <dt>{{ t('Last name') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.lastname }}</dd>
+
+                                                <dt>{{ t('Expires') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.expire }}</dd>
+
+                                                <dt>{{ t('License key') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.license }}</dd>
+                                            </dl>
+
+                                        </c-col>
+
+                                        <c-col xs="12" lg="6">
+                                            <dl class="dl-horizontal" style="padding-top: 55%;">
+                                                <dt>{{ t('Email') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.email }}</dd>
+
+                                                <dt>{{ t('Company') }}:</dt>
+                                                <dd class="code-font text-info">{{ LicenseResponse.license.company }}</dd>
+                                            </dl>
+                                        </c-col>
+
+                                    </c-row>
+
+                                </c-col>
+                            </c-row>
+
+                        </c-col>
+
+                    </c-row>
+
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Register') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>

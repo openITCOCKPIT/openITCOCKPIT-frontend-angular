@@ -50,6 +50,27 @@ export const routes: Routes = [{
     path: 'commands/copy/:ids',
     loadComponent: () => import('./pages/commands/commands-copy/commands-copy.component').then(m => m.CommandsCopyComponent)
 }, {
+    path: 'commands/usedBy/:id',
+    loadComponent: () => import('./pages/commands/commands-used-by/commands-used-by.component').then(m => m.CommandsUsedByComponent)
+}, {
+    path: 'contacts/index',
+    loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
+}, {
+    path: 'contacts/add',
+    loadComponent: () => import('./pages/contacts/contacts-add/contacts-add.component').then(m => m.ContactsAddComponent)
+}, {
+    path: 'contacts/copy/:ids',
+    loadComponent: () => import('./pages/contacts/contacts-copy/contacts-copy.component').then(m => m.ContactsCopyComponent)
+}, {
+    path: 'contacts/edit/:id',
+    loadComponent: () => import('./pages/contacts/contacts-edit/contacts-edit.component').then(m => m.ContactsEditComponent)
+}, {
+    path: 'contacts/ldap',
+    loadComponent: () => import('./pages/contacts/contacts-ldap/contacts-ldap.component').then(m => m.ContactsLdapComponent)
+}, {
+    path: 'contacts/usedBy/:id',
+    loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
+}, {
     path: 'changelogs/index',
     loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
 }, {
@@ -67,6 +88,30 @@ export const routes: Routes = [{
 }, {
     path: 'statistics/index',
     loadComponent: () => import('./pages/statistics/statistics-index/statistics-index.component').then(m => m.StatisticsIndexComponent)
+}, {
+    path: 'supports/issue',
+    loadComponent: () => import('./pages/supports/supports-issue/supports-issue.component').then(m => m.SupportsIssueComponent)
+}, {
+    path: 'proxy/index',
+    loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
+}, {
+    path: 'registers/index',
+    loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
+}, {
+    path: 'profile/edit',
+    loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
+}, {
+    path: 'calendars/index',
+    loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
+}, {
+    path: 'calendars/add',
+    loadComponent: () => import('./pages/calendars/calendars-add/calendars-add.component').then(m => m.CalendarsAddComponent)
+}, {
+    path: 'documentations/view/:uuid/:type',
+    loadComponent: () => import('./pages/documentations/documentations-view/documentations-view.component').then(m => m.DocumentationsViewComponent)
+}, {
+    path: 'documentations/edit/:uuid/:type',
+    loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

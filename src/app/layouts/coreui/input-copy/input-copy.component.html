@@ -1,0 +1,11 @@
+<ng-container *transloco="let t">
+    <span cInputGroupText (click)="copyToClipboard()" [cTooltip]="toolTipContent" cTooltipPlacement="top"
+          class="hover-primary">
+        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+    </span>
+
+    <ng-template #toolTipContent>
+        {{ tooltipText }}
+    </ng-template>
+</ng-container>
+
