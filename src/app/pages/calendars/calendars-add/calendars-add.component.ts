@@ -109,7 +109,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     public calendarOptions: CalendarOptions = {
         initialView: 'dayGridMonth',
         navLinks: false, // can click day/week names to navigate views
-        businessHours: true, // display business hours
+        businessHours: false, // display business hours
         editable: true,
         weekNumbers: true,
         weekNumberCalculation: 'ISO',
