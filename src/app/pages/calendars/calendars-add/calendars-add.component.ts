@@ -53,6 +53,7 @@ function hasEvents(this: any, date: string) {
     return false;
 }
 
+
 @Component({
     selector: 'oitc-calendars-add',
     standalone: true,
@@ -130,25 +131,26 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         customButtons: {
             holidays: {
                 text: this.TranslocoService.translate('Add holiday'),
-                click: function(event){
-                    event.stopPropagation();
+                click: (ev: any) => {
+                    console.log(ev);
+                    this.clickButtonTest();
                 }
             },
             deleteallholidays: {
                 text: this.TranslocoService.translate('Delete ALL holidays'),
-                click: function () {
+                click: () => {
                     alert('Delete All Holidays');
                 }
             },
             deletemonthevents: {
                 text: this.TranslocoService.translate('Delete MONTH events'),
-                click: function () {
+                click: () => {
                     alert('Delete Month Events');
                 }
             },
             deleteallevents: {
                 text: this.TranslocoService.translate('Delete ALL events'),
-                click: function () {
+                click: () => {
                     alert('Delete All Events');
                 }
             }
@@ -201,7 +203,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         type: 'button',
                         class: 'btn btn-success btn-xs btn-icon'
                     })
-                    .click(function () {
+                    .on("click", function () {
                             /*
                                 $('#addEventModal').modal('show');
                                 $scope.newEvent = {
@@ -248,6 +250,11 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         events: []
     };
 
+    public clickButtonTest() {
+        console.log('Hier wurde was angeklcikt!!');
+    }
+
+
     public ngOnInit() {
         let request = {
             containers: this.CalendarsService.getContainers(),
@@ -258,15 +265,8 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             (result) => {
                 this.containers = result.containers;
                 this.countries = result.countries;
-                $(".fc-holidays-button").append('<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">\n' +
-                    '      Dropdown\n' +
-                    '    </button>\n' +
-                    '    <ul class="dropdown-menu">\n' +
-                    '      <li><a class="dropdown-item" href="#">Dropdown link</a></li>\n' +
-                    '      <li><a class="dropdown-item" href="#">Dropdown link</a></li>\n' +
-                    '    </ul>\n');
 
-                /*
+
                 $(".fc-holidays-button")
                     .wrap("<span class='dropdown'></span>")
                     .addClass('btn btn-secondary dropdown-toggle')
@@ -276,7 +276,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         'aria-expanded': false,
                         'aria-haspopup': true
                     })
-                   // .append($('<span/>', {'class': 'mx-1 fi fi-' + this.countryCode}))
+                    .append($('<span/>', {'class': 'mx-1 fi fi-' + this.countryCode}))
                     .append('<span class="caret caret-with-margin-left-5"></span>');
 
                 $('.fc-holidays-button')
@@ -288,48 +288,42 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         }
                     )
                 );
-                console.log($('#countryList'));
 
-                 */
-                /*
-                $('#countryList').append('<c-dropdown>\n' +
-                    '  <button cButton cDropdownToggle color="secondary">\n' +
-                    '    Dropdown button\n' +
-                    '  </button>\n' +
-                    '  <ul cDropdownMenu>\n' +
-                    '    <li><a  cDropdownItem>Action</a></li>\n' +
-                    '    <li><a cDropdownItem>Another action</a></li>\n' +
-                    '    <li><a  cDropdownItem>Something else here</a></li>\n' +
-                    '  </ul>\n' +
-                    '</c-dropdown>');
-
-                 */
-                return;
                 for (var key in this.countries) {
-                    console.log(key+' --> '+this.countries[key]);
+                    console.log(key + ' --> ' + this.countries[key]);
 
                     $('#countryList').append(
                         $('<li/>', {
-                            'ng-click': 'setSelected("' + key + '")'
-                        }).append(
-                            $('<a/>', {
-                                // 'class': 'dropdown-item'
-                            }).append(
-                                $('<span/>', {
-                                    'class': 'mx-1 fi fi-' + key
-                                })
-                            ).append(
-                                $('<span/>', {
-                                    'class': 'padding-left-5',
-                                    'text': this.countries[key]
-                                })
+                            data: {
+                                'language': key
+                            }
+                        }).on("click", (ev) => {
+                            this.setSelected($(ev.currentTarget).data('language'));
+                        })
+                            .append(
+                                $('<a/>', {
+                                    // 'class': 'dropdown-item'
+                                }).append(
+                                    $('<span/>', {
+                                        'class': 'mx-1 fi fi-' + key
+                                    })
+                                ).append(
+                                    $('<span/>', {
+                                        'class': 'padding-left-5',
+                                        'text': this.countries[key]
+                                    })
+                                )
                             )
-                        )
                     );
                 }
 
             });
 
+        this.loadHolidays();
+    }
+
+    public setSelected(countryCode: string) {
+        this.countryCode = countryCode;
         this.loadHolidays();
     }
 
