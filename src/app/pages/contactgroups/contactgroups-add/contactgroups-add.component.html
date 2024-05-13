@@ -14,27 +14,19 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                    {{ t('Edit') }}
+                    <fa-icon [icon]="['fas', 'add']"></fa-icon>
+                    {{ t('Add') }}
                 </li>
             </ol>
         </nav>
 
 
-        <form cForm (ngSubmit)="updateContactgroup()">
+        <form cForm (ngSubmit)="addContactgroup()">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>
-                        {{ t('Edit contact group:') }}
-
-                        <small class="fw-300">
-                            {{ post.container.name }}
-                        </small>
+                        {{ t('Create new contact group') }}
                     </h5>
-
-                    <c-nav class="card-toolbar card-header-pills">
-                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
-                    </c-nav>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
@@ -61,15 +53,15 @@
                                    [(ngModel)]="post.container.parent_id"
                                    (ngModelChange)="onContainerChange()"
                                    oitcFormError
-                                   [errors]="errors" errorField="post.container.parent_id">
+                                   [errors]="errors" errorField="parent_id">
                             <ng-option *ngFor="let container of this.containers" [value]="container.key">
                                 {{ container.value }}
                             </ng-option>
                         </ng-select>
-                        <div *ngIf="post.container.parent_id === 0" class="text-warning-glow">
+                        <div *ngIf="post.container.parent_id === null" class="text-warning-glow">
                             {{ t('Please select a container.') }}
                         </div>
-                        <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>
 
 
@@ -83,9 +75,9 @@
                                required
                                type="text"
                                name="post.container.name"
-                               oitcFormError [errors]="errors" errorField="'container.name'"
+                               oitcFormError [errors]="errors" errorField="container.name"
                                [(ngModel)]="post.container.name">
-                        <oitc-form-feedback [errors]="errors" errorField="'container.name'"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">
@@ -125,8 +117,27 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
 
+                    <label for="createAnother">
+
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                type="checkbox"
+                                id="createAnother"
+                                [ngModel]="createAnother"
+                                (ngModelChange)="createAnother = $event ? true : false"
+                                name="createAnother"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="createAnother">
+                                {{ t('Create another') }}
+                            </label>
+                        </c-form-check>
+                    </label>
+
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Update contact group') }}
+                        {{ t('Create contact group') }}
                     </button>
                     <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

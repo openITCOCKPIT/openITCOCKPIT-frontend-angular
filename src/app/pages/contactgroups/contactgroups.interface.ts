@@ -26,11 +26,11 @@ export function getDefaultContactgroupsIndexParams(): ContactgroupsIndexParams {
 /************************************
  *    Definition of Contactgroup    *
  ***********************************/
-export interface ContactgroupPost {
-    Contactgroup: Contactgroup
+export interface ContactgroupEditPost {
+    Contactgroup: ContactgroupEditContactGroup
 }
 
-export interface Contactgroup {
+export interface ContactgroupEditContactGroup {
     contacts: Contacts
     container: Container
     container_id: number
@@ -42,16 +42,6 @@ export interface Contactgroup {
 export interface Contacts {
     _ids: number[]
 }
-
-export interface Container {
-    containertype_id: number
-    id: number
-    lft: number
-    name: string
-    parent_id: number
-    rght: number
-}
-
 
 export interface ContactgroupsIndexRoot extends PaginateOrScroll {
     all_contactgroups: ContactgroupsIndex[]
@@ -87,17 +77,9 @@ export interface ContactgroupsEditRoot {
 }
 
 export interface ContactgroupEdit {
-    Contactgroup: ContactgroupEditContactgroup
+    Contactgroup: ContactgroupEditPostContactgroup
 }
 
-export interface ContactgroupEditContactgroup {
-    id: number
-    uuid: string
-    container_id: number
-    description: string
-    contacts: Contacts
-    container: Container
-}
 
 export interface Contacts {
     _ids: number[]
@@ -107,31 +89,41 @@ export interface Container {
     id: number
     containertype_id: number
     name: string
-    parent_id: number
+    parent_id: number | null
     lft: number
     rght: number
 }
 
 
 // EDIT (POST)
-export interface ContactgroupPost {
-    Contactgroup: ContactgroupPostContactgroup
+export interface ContactgroupAddPost {
+    Contactgroup: ContactgroupEditPostContactgroup
 }
 
-export interface ContactgroupPostContactgroup {
+export interface ContactgroupEditPostContactgroup {
     contacts: ContactgroupPostContactgroupContacts
-    container: ContactgroupPostContactgroupContainer
+    container: ContactgroupEditPostContactgroupContainer
     container_id: number
     description: string
     id: number
     uuid: string
 }
 
+export interface ContactgroupAddPostContactgroup {
+    contacts: ContactgroupPostContactgroupContacts
+    container: ContactgroupAddPostContactgroupContainer
+    description: string
+}
+export interface ContactgroupAddPostContactgroupContainer {
+    name: string
+    parent_id: number | null
+}
+
 export interface ContactgroupPostContactgroupContacts {
     _ids: number[]
 }
 
-export interface ContactgroupPostContactgroupContainer {
+export interface ContactgroupEditPostContactgroupContainer {
     containertype_id: number
     id: number
     lft: number

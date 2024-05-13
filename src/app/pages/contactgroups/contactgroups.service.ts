@@ -5,7 +5,8 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import {
-    ContactgroupPostContactgroup,
+    ContactgroupAddPost, ContactgroupAddPostContactgroup,
+    ContactgroupEditPostContactgroup,
     ContactgroupsCopyGet,
     ContactgroupsCopyGetContactgroup,
     ContactgroupsCopyPost,
@@ -43,7 +44,7 @@ export class ContactgroupsService implements DeleteAllModalService {
     }
 
 
-    public updateContactgroup(contactgroup: ContactgroupPostContactgroup): Observable<GenericResponseWrapper> {
+    public updateContactgroup(contactgroup: ContactgroupEditPostContactgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/contactgroups/edit/${contactgroup.id}.json?angular=true`, {
             Contactgroup: contactgroup
@@ -66,11 +67,12 @@ export class ContactgroupsService implements DeleteAllModalService {
             );
     }
 
-    public add(contact: ContactgroupPostContactgroup): Observable<GenericResponseWrapper> {
+    public add(contact: ContactgroupAddPostContactgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/contactgroups/add.json?angular=true`, {
-            Contact: contact
-        })
+        const postObject = {
+            Contactgroup: contact
+        }
+        return this.http.post<any>(`${proxyPath}/contactgroups/add.json?angular=true`, postObject)
             .pipe(
                 map(data => {
                     return {

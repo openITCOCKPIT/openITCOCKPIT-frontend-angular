@@ -34,16 +34,15 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ContactgroupsService } from '../contactgroups.service';
 import {
-    ContactgroupAddPost, ContactgroupEditPostContactgroup,
     ContactgroupEditContactGroup,
-    ContactgroupEditPost,
+    ContactgroupAddPost,
     ContactgroupsEditRoot,
-    GetContactsByContainerIdRootContact
+    GetContactsByContainerIdRootContact, ContactgroupEditPostContactgroup, ContactgroupAddPostContactgroup
 } from '../contactgroups.interface';
 import { ContactsService } from '../../contacts/contacts.service';
 
 @Component({
-    selector: 'oitc-contactgroups-edit',
+    selector: 'oitc-contactgroups-add',
     standalone: true,
     imports: [
         BackButtonDirective,
@@ -78,10 +77,10 @@ import { ContactsService } from '../../contacts/contacts.service';
         RouterLink,
         ObjectUuidComponent
     ],
-    templateUrl: './contactgroups-edit.component.html',
-    styleUrl: './contactgroups-edit.component.css'
+    templateUrl: './contactgroups-add.component.html',
+    styleUrl: './contactgroups-add.component.css'
 })
-export class ContactgroupsEditComponent implements OnInit, OnDestroy {
+export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
     private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
@@ -91,57 +90,40 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
+    public createAnother: boolean = false;
 
-    public post: ContactgroupEditPostContactgroup = {
-        contacts: {
-            _ids: []
-        },
-        container: {
-            containertype_id: 0,
-            id: 0,
-            lft: 0,
-            name: '',
-            parent_id: 0,
-            rght: 0
-        },
-        container_id: 0,
-        description: '',
-        id: 0,
-        uuid: ''
-    };
+    public post: ContactgroupAddPostContactgroup = {} as ContactgroupAddPostContactgroup;
     protected containers: Container[] = [];
     private route = inject(ActivatedRoute)
 
+    constructor() {
+        this.post = this.getDefaultPost();
+    }
+
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
         //First, load shit into the component.
         this.loadContainers();
-        this.subscriptions.add(this.ContactgroupsService.getEdit(id)
-            .subscribe((result: ContactgroupsEditRoot) => {
-
-                // Then put post where it belongs. Also unpack that bullshit
-                this.post = result.contactgroup.Contactgroup;
-
-                // Then force containerChange!
-                this.onContainerChange();
-            }));
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    public updateContactgroup(): void {
+    public addContactgroup(): void {
 
-        this.subscriptions.add(this.ContactgroupsService.updateContactgroup(this.post)
+        this.subscriptions.add(this.ContactgroupsService.add(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
                     const title: string = this.TranslocoService.translate('Contactgroup');
-                    const msg: string = this.TranslocoService.translate('updated successfully');
+                    const msg: string = this.TranslocoService.translate('added successfully');
                     const url: (string | number)[] = ['contactgroups', 'edit', response.id];
 
+                    if (this.createAnother) {
+                        this.post = this.getDefaultPost();
+                        return;
+                    }
                     this.notyService.genericSuccess(msg, title, url);
                     this.router.navigate(['/contactgroups/index']);
 
@@ -165,8 +147,21 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
             }))
     }
 
+    private getDefaultPost(): ContactgroupAddPostContactgroup {
+        return {
+            contacts: {
+                _ids: []
+            },
+            container: {
+                name: '',
+                parent_id: null,
+            },
+            description: '',
+        }
+    }
+
     private loadContacts() {
-        if (this.post.container.parent_id === 0) {
+        if (!this.post.container.parent_id) {
             this.contacts = [];
             return;
         }
@@ -178,7 +173,7 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
 
 
     public onContainerChange(): void {
-        if (this.post.container.parent_id === 0) {
+        if (!this.post.container.parent_id) {
             this.contacts = [];
             return;
         }

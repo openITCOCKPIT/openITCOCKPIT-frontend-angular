@@ -219,7 +219,7 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Contact.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Contactgroup.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'contactgroups', 'copy', ids]);
         }
