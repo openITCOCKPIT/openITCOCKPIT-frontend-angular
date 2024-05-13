@@ -40,7 +40,18 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import $ from "jquery";
+
+
+function hasEvents(this: any, date: string) {
+    console.log('HAS Events');
+    for (var index in this.events) {
+        if (this.events[index].start === date) {
+            return true;
+        }
+    }
+    return false;
+}
 
 @Component({
     selector: 'oitc-calendars-add',
@@ -119,8 +130,8 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         customButtons: {
             holidays: {
                 text: this.TranslocoService.translate('Add holiday'),
-                click: function () {
-                    alert('Holidays');
+                click: function(event){
+                    event.stopPropagation();
                 }
             },
             deleteallholidays: {
@@ -148,10 +159,10 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             center: 'title',
             right: 'prev,next today',
         },
+
         dayCellDidMount: (info: any) => {
-            console.log(info);
+            //console.log(info);
             //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon"><fa-icon [icon]="[\'fas\', \'plus\']"></fa-icon></button>';
-            info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon fs-6 px-2 me-1">&plus;</button>';
             info.el.innerHTML += '<button class="btn btn-primary btn-xs btn-icon fs-6 px-2 me-1">&#9998;</button>';
             info.el.innerHTML += '<button class="btn btn-danger btn-xs btn-icon fs-6 px-2">&cross;</button>';
             //info.el.style.padding = "20px 0 0 10px";
@@ -163,19 +174,63 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         },
         dateClick: (info: any) => {
             console.log('dateClick');
-            console.log(info.event);
+            //console.log(info.events);
         },
         eventClick: (info: any) => {
             console.log('eventClick');
-            console.log(info);
+            //console.log(info);
         },
         datesSet: (info: any) => {
+            //console.log(info);
             console.log('datesSet');
-            console.log(info);
+
+
+            //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon fs-6 px-2 me-1" type="button" (onClick)="alert(info);">&plus;</button>';
+            $(".fc-day-number").each(function (index, obj) {
+                console.log(obj);
+
+                //obj = fc-day-number <span>
+                var $span = $(obj);
+                var $parentTd = $span.parent();
+                var currentDate = $parentTd.data('date');
+
+                var $addButton = $('<button>')
+                    .html('<i class="fa fa-plus"></i>LALALALAL')
+                    .attr({
+                        title: 'add',
+                        type: 'button',
+                        class: 'btn btn-success btn-xs btn-icon'
+                    })
+                    .click(function () {
+                            /*
+                                $('#addEventModal').modal('show');
+                                $scope.newEvent = {
+                                    title: '',
+                                    start: currentDate
+                                };
+
+                             */
+                        }
+                    );
+
+                if (!hasEvents(currentDate)) {
+                    $parentTd.css('text-align', 'right').append($addButton);
+                }
+
+
+            });
+
+            //var events = $scope.getEvents(currentDate);
+            /*
+             if(!$scope.hasEvents(currentDate)){
+                 $parentTd.css('text-align', 'right').append($addButton);
+             }
+
+             */
         },
         eventDidMount: (info: any) => {
             console.log('eventDidMount');
-            console.log(info);
+            //console.log(info);
         },
         eventDrop: (info: any) => {
             /*
@@ -193,7 +248,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         events: []
     };
 
-
     public ngOnInit() {
         let request = {
             containers: this.CalendarsService.getContainers(),
@@ -204,6 +258,75 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             (result) => {
                 this.containers = result.containers;
                 this.countries = result.countries;
+                $(".fc-holidays-button").append('<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">\n' +
+                    '      Dropdown\n' +
+                    '    </button>\n' +
+                    '    <ul class="dropdown-menu">\n' +
+                    '      <li><a class="dropdown-item" href="#">Dropdown link</a></li>\n' +
+                    '      <li><a class="dropdown-item" href="#">Dropdown link</a></li>\n' +
+                    '    </ul>\n');
+
+                /*
+                $(".fc-holidays-button")
+                    .wrap("<span class='dropdown'></span>")
+                    .addClass('btn btn-secondary dropdown-toggle')
+                    .attr({
+                        'data-toggle': 'dropdown',
+                        'type': 'button',
+                        'aria-expanded': false,
+                        'aria-haspopup': true
+                    })
+                   // .append($('<span/>', {'class': 'mx-1 fi fi-' + this.countryCode}))
+                    .append('<span class="caret caret-with-margin-left-5"></span>');
+
+                $('.fc-holidays-button')
+                    .parent().append(
+                    $('<ul/>', {
+                            'id': 'countryList',
+                            'class': 'dropdown-menu',
+                            'role': 'button'
+                        }
+                    )
+                );
+                console.log($('#countryList'));
+
+                 */
+                /*
+                $('#countryList').append('<c-dropdown>\n' +
+                    '  <button cButton cDropdownToggle color="secondary">\n' +
+                    '    Dropdown button\n' +
+                    '  </button>\n' +
+                    '  <ul cDropdownMenu>\n' +
+                    '    <li><a  cDropdownItem>Action</a></li>\n' +
+                    '    <li><a cDropdownItem>Another action</a></li>\n' +
+                    '    <li><a  cDropdownItem>Something else here</a></li>\n' +
+                    '  </ul>\n' +
+                    '</c-dropdown>');
+
+                 */
+                return;
+                for (var key in this.countries) {
+                    console.log(key+' --> '+this.countries[key]);
+
+                    $('#countryList').append(
+                        $('<li/>', {
+                            'ng-click': 'setSelected("' + key + '")'
+                        }).append(
+                            $('<a/>', {
+                                // 'class': 'dropdown-item'
+                            }).append(
+                                $('<span/>', {
+                                    'class': 'mx-1 fi fi-' + key
+                                })
+                            ).append(
+                                $('<span/>', {
+                                    'class': 'padding-left-5',
+                                    'text': this.countries[key]
+                                })
+                            )
+                        )
+                    );
+                }
 
             });
 
@@ -252,4 +375,5 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     private deleteEvent(start: Date | null) {
 
     }
+
 }

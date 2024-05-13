@@ -45,6 +45,7 @@
     "dropzone": "^6.0.0-beta.2",
     "flag-icon-css": "^4.1.7",
     "flag-icons": "^7.2.1",
+    "jquery": "^3.7.1",
     "ngx-scrollbar": "^14.0.0",
     "ngx-toastr": "^18.0.0",
     "prettier": "^3.2.5",
