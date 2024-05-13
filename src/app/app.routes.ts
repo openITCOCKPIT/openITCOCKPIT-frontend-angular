@@ -2,7 +2,6 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
-import { ContactsCopyComponent } from './pages/contacts/contacts-copy/contacts-copy.component';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -92,6 +91,9 @@ export const routes: Routes = [{
 }, {
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
+}, {
+    path: 'registers/index',
+    loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
 }, {
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
