@@ -43,8 +43,6 @@ import listPlugin from '@fullcalendar/list';
 import $ from "jquery";
 
 
-
-
 @Component({
     selector: 'oitc-calendars-add',
     standalone: true,
@@ -155,8 +153,8 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         dayCellDidMount: (info: any) => {
             //console.log(info);
             //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon"><fa-icon [icon]="[\'fas\', \'plus\']"></fa-icon></button>';
-            info.el.innerHTML += '<button class="btn btn-primary btn-xs btn-icon fs-6 px-2 me-1">&#9998;</button>';
-            info.el.innerHTML += '<button class="btn btn-danger btn-xs btn-icon fs-6 px-2">&cross;</button>';
+            //info.el.innerHTML += '<button class="btn btn-primary btn-xs btn-icon fs-6 px-2 me-1">&#9998;</button>';
+            //info.el.innerHTML += '<button class="btn btn-danger btn-xs btn-icon fs-6 px-2">&cross;</button>';
             //info.el.style.padding = "20px 0 0 10px";
             console.log('add button');
         },
@@ -178,20 +176,25 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
 
             //info.el.innerHTML += '<button class="btn btn-success btn-xs btn-icon fs-6 px-2 me-1" type="button" (onClick)="alert(info);">&plus;</button>';
-            $(".fc-daygrid-day-number").each(function (index, obj) {
+            $(".fc-daygrid-day-number").each((index, obj) => {
                 //obj = fc-day-number <span>
-                var $span = $(obj);
-                var $parentTd = $span.parent();
-                var currentDate = $parentTd.data('date');
+                let $div = $(obj);
+                let $parentTd = $($div.parents('td')[0]);
 
-                var $addButton = $('<button>')
-                    .html('<i class="fa fa-plus"></i>LALALALAL')
+                let currentDate = $parentTd.data('date');
+
+                let $addButton = $('<button>')
+                    .html('&plus;')
                     .attr({
                         title: 'add',
                         type: 'button',
-                        class: 'btn btn-success btn-xs btn-icon'
+                        class: 'btn btn-success btn-xs btn-icon fs-6 px-2',
+                        date: currentDate
                     })
-                    .on('click', function () {
+                    .on('click', (ev) => {
+                            // jQuery like its 2012 again
+                            const date = String($(ev.currentTarget).attr('date'));
+                            this.addEventClickButton(date);
                             /*
                                 $('#addEventModal').modal('show');
                                 $scope.newEvent = {
@@ -203,14 +206,10 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         }
                     );
                 $parentTd.css('text-align', 'right').append($addButton);
-/*
-                if (!hasEvents(currentDate)) {
+
+                if (!this.hasEvents(currentDate)) {
                     $parentTd.css('text-align', 'right').append($addButton);
                 }
-
-
- */
-
             });
 
             //var events = $scope.getEvents(currentDate);
@@ -359,8 +358,11 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     }
 
+    public addEventClickButton(date: string) {
+        console.log('addEventClickButton für', date);
+    }
+
     public hasEvents(date: string) {
-        console.log('HAS Events');
         for (var index in this.events) {
             if (this.events[index].start === date) {
                 return true;
