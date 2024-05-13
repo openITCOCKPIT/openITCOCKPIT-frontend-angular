@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface ContactgroupsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -23,6 +24,7 @@ export function getDefaultContactgroupsIndexParams(): ContactgroupsIndexParams {
         'filter[Containers.name]': ""
     }
 }
+
 /************************************
  *    Definition of Contactgroup    *
  ***********************************/
@@ -114,6 +116,7 @@ export interface ContactgroupAddPostContactgroup {
     container: ContactgroupAddPostContactgroupContainer
     description: string
 }
+
 export interface ContactgroupAddPostContactgroupContainer {
     name: string
     parent_id: number | null
@@ -139,11 +142,11 @@ export interface ContactgroupsCopyGet {
 }
 
 export interface ContactgroupsCopyGetContactgroup {
-    Contactgroup: ContactgroupsCopyGetContactgroup
+    Contactgroup: ContactgroupsCopyGetContactgroupSource
     Container: ContactgroupsCopyGetContainer
 }
 
-export interface ContactgroupsCopyGetContactgroup {
+export interface ContactgroupsCopyGetContactgroupSource {
     id: number
     description: string
     container_id: number
@@ -159,6 +162,7 @@ export interface ContactgroupsCopyGetContainer {
 export interface ContactgroupsCopyPost {
     Contactgroup: ContactgroupsCopyPostContactgroup
     Source: ContactgroupsCopyPostSource
+    Error: GenericValidationError | null
 }
 
 export interface ContactgroupsCopyPostContactgroup {

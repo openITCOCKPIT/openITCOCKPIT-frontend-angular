@@ -120,7 +120,7 @@ export class ContactgroupsService implements DeleteAllModalService {
     }
 
 
-    public saveContactsCopy(contacts: ContactgroupsCopyPost[]): Observable<Object> {
+    public saveContactgroupsCopy(contacts: ContactgroupsCopyPost[]): Observable<Object> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/contactgroups/copy/.json?angular=true`, {
             data: contacts
