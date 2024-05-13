@@ -9,7 +9,8 @@ import {
     CalendarHoliday,
     CalendarIndexRoot,
     CalendarPost,
-    CalendarsIndexParams, Countries,
+    CalendarsIndexParams,
+    Countries,
     CountriesAndContainers,
     CountryRoot
 } from './calendars.interface';
@@ -75,12 +76,12 @@ export class CalendarsService implements DeleteAllModalService {
         );
     }
 
-    public getContainers(): Observable< CalendarContainer[]> {
+    public getContainers(): Observable<CalendarContainer[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             containers: CalendarContainer[]
         }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
-            map(data =>{
+            map(data => {
                 return data.containers;
             })
         );
@@ -93,7 +94,6 @@ export class CalendarsService implements DeleteAllModalService {
         }>(`${proxyPath}/calendars/loadCountryList.json?angular=true`).pipe(
             map(
                 data => {
-                    console.log(data.countries);
                     return data.countries;
                 }
             )
@@ -140,7 +140,6 @@ export class CalendarsService implements DeleteAllModalService {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/calendars/delete/${item.id}.json?angular=true`, {});
     }
-
 
 
     public getHolidays(countryCode: string): Observable<CalendarHoliday[]> {
