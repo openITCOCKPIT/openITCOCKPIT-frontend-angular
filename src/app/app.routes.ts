@@ -53,6 +53,21 @@ export const routes: Routes = [{
     path: 'commands/usedBy/:id',
     loadComponent: () => import('./pages/commands/commands-used-by/commands-used-by.component').then(m => m.CommandsUsedByComponent)
 }, {
+    path: 'contactgroups/add',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-add/contactgroups-add.component').then(m => m.ContactgroupsAddComponent)
+}, {
+    path: 'contactgroups/copy/:ids',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-copy/contactgroups-copy.component').then(m => m.ContactgroupsCopyComponent)
+}, {
+    path: 'contactgroups/index',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-index/contactgroups-index.component').then(m => m.ContactgroupsIndexComponent)
+}, {
+    path: 'contactgroups/edit/:id',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-edit/contactgroups-edit.component').then(m => m.ContactgroupsEditComponent)
+}, {
+    path: 'contactgroups/usedBy/:id',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-used-by/contactgroups-used-by.component').then(m => m.ContactgroupsUsedByComponent)
+}, {
     path: 'contacts/index',
     loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
 }, {
