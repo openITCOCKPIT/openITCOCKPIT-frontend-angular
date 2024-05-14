@@ -12,8 +12,8 @@
 }
 
 .fc-button-primary {
-    background-color: #4285F4 !important;
-    border-color: #317ABF !important;
+    background-color: var(--cui-link-color) !important;
+    border-color: var(--cui-link-hover-color) !important;
     color: #FFF;
     padding: 0px 4px !important;
 }
@@ -34,43 +34,9 @@
     color: #ffffff;
 }
 
-.fc-deleteallholidays-button {
-    background-color: #6E3671 !important;
-    border-color: #582b5b !important;
-}
-
-.fc-deletemonthevents-button,
-.fc-deleteallevents-button {
-    background-color: #CC0000 !important;
-    border-color: #a94442 !important;
-}
 
 .caret-with-margin-left-5 {
     margin-left: 5px !important;
-}
-
-#countryList.dropdown-menu > li > a {
-    padding: 0px 5px;
-}
-
-.fc-toolbar-chunk .dropdown .dropdown-menu {
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -webkit-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-}
-
-.fc-toolbar-chunk .dropdown:hover .dropdown-menu {
-    visibility: visible;
-    opacity: 1;
-}
-
-.fc-toolbar-chunk .dropdown {
-    display: inline-block;
 }
 
 .fc-title {
@@ -117,4 +83,9 @@ td.fc-day-other {
     background-image: radial-gradient(closest-side at 50% 59%, #C00 0, #C00 46%, #4285F4 30%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+
+.fc-event-title {
+    white-space: normal;
 }
