@@ -1,4 +1,14 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -33,8 +43,7 @@ import { CalendarsService } from '../calendars.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { FullCalendarComponent } from '../../../components/full-calendar/full-calendar.component';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -78,22 +87,23 @@ import $ from "jquery";
         NgIf,
         RowComponent,
         ColComponent,
-        FullCalendarModule,
-        FullCalendarComponent
+        FullCalendarModule
     ],
     templateUrl: './calendars-add.component.html',
     styleUrl: './calendars-add.component.css'
 })
-export class CalendarsAddComponent implements OnInit, OnDestroy {
+export class CalendarsAddComponent implements OnInit, OnDestroy, AfterViewInit {
     public post: CalendarPost = {
         container_id: 0,
         name: "",
         description: "",
         events: []
     }
+    @Input() events: CalendarHoliday[] = [];
+    @Output() crendered = new EventEmitter();
+
     public containers: CalendarContainer[] = [];
     public countries: Countries = {};
-    public events: CalendarHoliday[] = [];
     public errors: GenericValidationError | null = null;
     public defaultDate = new Date();
     public countryCode = 'de';
@@ -105,6 +115,16 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     private router = inject(Router);
 
     private subscriptions: Subscription = new Subscription();
+
+    @ViewChild('#fullCalendar') calendarComponent: FullCalendarComponent | undefined;
+
+    ngAfterViewInit() {
+        console.log('RENDERED!');
+        console.log(this.calendarComponent?.getApi().getEvents());
+        console.log(this.calendarComponent?.getApi());
+        this.crendered.emit(this.calendarComponent);
+    }
+
 
     public calendarOptions: CalendarOptions = {
         initialView: 'dayGridMonth',
@@ -198,7 +218,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                         }
                     );
                 $parentTd.css('text-align', 'right').append($addButton);
-
                 if (!this.hasEvents(currentDate)) {
                     $parentTd.css('text-align', 'right').append($addButton);
                 }
@@ -302,6 +321,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         this.loadHolidays();
     }
 
+
     public setSelected(countryCode: string) {
         this.countryCode = countryCode;
         this.loadHolidays();
@@ -370,6 +390,4 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
         }
         return false;
     }
-
-
 }
