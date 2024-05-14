@@ -2,7 +2,6 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
-import { ContactsCopyComponent } from './pages/contacts/contacts-copy/contacts-copy.component';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -93,6 +92,12 @@ export const routes: Routes = [{
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
 }, {
+    path: 'registers/index',
+    loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
+}, {
+    path: 'cronjobs/index',
+    loadComponent: () => import('./pages/cronjobs/cronjobs-index/cronjobs-index.component').then(m => m.CronjobsIndexComponent)
+}, {
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
@@ -107,6 +112,12 @@ export const routes: Routes = [{
 }, {
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
+}, {
+    path: 'timeperiods/index',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-index/timeperiods-index.component').then(m => m.TimeperiodsIndexComponent)
+}, {
+    path: 'timeperiods/add',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-add/timeperiods-add.component').then(m => m.TimeperiodsAddComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

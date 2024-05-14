@@ -1,0 +1,79 @@
+<ng-container *transloco="let t">
+    <button cButton class="ripple" color="default" size="xs" (click)="openFullscreen()">
+        <fa-icon [icon]="['fas', 'heart']"></fa-icon>
+        {{ t('Credits') }}
+    </button>
+
+    <div class="credits-container" id="credits-container" [hidden]="hideCredits" #fullScreenCredits>
+        <div id="credits">
+            <h1 class="credits-h1">openITCOCKPIT</h1>
+            <br/>
+
+            <h2 class="credits-h2">Developers</h2>
+            <dl>
+                <dd>Irina Bering</dd>
+                <dd>Daniel Ziegler</dd>
+                <dd>Dietmar Jenderny</dd>
+                <dd>Jan Gleim</dd>
+                <dd>Alex Bergen</dd>
+            </dl>
+
+            <h2 class="credits-h2">Special Thanks</h2>
+            <p>Stephan Kraus, Oliver Müller, Laziz Karimov, Timo Triebensky, Robert Braun,<br/>
+                René Kleffel, Michael Ziegler, Jonas Rottmann,<br/>
+                Johannes Drummer, Jens Michelsons, Jeremy Eder, Maximilian Pappert and more...</p>
+
+            <p>Thanks to all the developers for the beautiful libraries.</p>
+
+            <h2 class="credits-h2">Powered by</h2>
+            <p>
+                <img src="./assets/images/logos/3rd/php.png">
+            </p>
+
+            <p>
+                <img src="./assets/images/logos/3rd/We-bake-with-CakePHP.png" style="width: 300px;">
+            </p>
+
+            <p>
+                <img src="./assets/images/logos/3rd/jquery.png">
+            </p>
+
+            <p>
+                <img src="./assets/images/logos/3rd/jquery_ui.png">
+            </p>
+
+            <p>
+                <img src="./assets/images/logos/3rd/angular.png">
+            </p>
+
+            <p class="padding-top-80">
+                <img src="./assets/images/logos/3rd/Statusengine_dark.png">
+            </p>
+
+            <div class="credits-fineprint">All trademarks are the property of the trademark owners.</div>
+
+            <br/>
+            <br/>
+            <h2 class="credits-h2">Image Credits</h2>
+            <p>Milky Way Photo by Denis Degioanni on Unsplash</p>
+            <br/>
+            <br/>
+            <h2 class="credits-h2">Sponsored by it-novum</h2>
+            <p>
+                <img src="./assets/images/logos/it-novum.png">
+            </p>
+
+            <br/>
+            <br/>
+            <br/>
+            <p id="credits-oitc-logo">
+                <img alt="Logo" src="./assets/images/logos/logo_small.png" style="max-height: 250px;">
+            </p>
+
+            <br/>
+            <br/>
+            <div class="credits-fineprint">Press ESC to exit</div>
+
+        </div>
+    </div>
+</ng-container>
