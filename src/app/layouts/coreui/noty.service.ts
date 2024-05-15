@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
-import { LocationStrategy } from '@angular/common';
+import { DOCUMENT, LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 
@@ -13,6 +13,7 @@ export class NotyService {
 
     private locationStrategy = inject(LocationStrategy);
     private router = inject(Router);
+    private readonly document = inject(DOCUMENT);
 
     constructor(private toastr: ToastrService, private TranslocoService: TranslocoService) {
     }
@@ -101,4 +102,22 @@ export class NotyService {
                 });
         }
     }
+
+    scrollContentDivToTop() {
+        const element = this.document.getElementById("mainContentContainer");
+        if (element) {
+            element.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+    }
+
+    scrollTop() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    //scrollToTop() {
+    // window.scrollTo({top: 0, behavior: 'smooth'});
+    //    this.locationStrategy.onPopState(() => {
+    //        window.scrollTo(0, 0);
+    //    });
+    //}
 }

@@ -116,12 +116,8 @@ import { CalendarComponent } from '../calendar/calendar.component';
 })
 export class CalendarsAddComponent implements OnInit, OnDestroy {
 
-    public post: CalendarPost = {
-        container_id: 0,
-        name: "",
-        description: "",
-        events: []
-    }
+    public post = this.getClearForm();
+    public createAnother: boolean = false;
 
     public containers: CalendarContainer[] = [];
     public countries: Countries = {};
@@ -137,6 +133,14 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public getClearForm(): CalendarPost {
+        return {
+            container_id: 0,
+            name: "",
+            description: "",
+            events: []
+        }
+    }
 
     public ngOnInit() {
         let request = {
@@ -198,7 +202,18 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                     const url = ['calendars', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/calendars/index']);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/calendars/index']);
+                        return;
+                    }
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.events = [];
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
 
                     return;
                 }
