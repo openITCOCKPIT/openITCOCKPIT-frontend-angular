@@ -17,3 +17,10 @@
 .border-dashed {
     border-style: dashed;
 }
+
+
+.input-group .ng-select.ng-select-single .ng-select-container {
+    margin-left: calc(var(--cui-border-width) * -1);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
