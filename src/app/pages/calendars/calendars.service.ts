@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { catchError, forkJoin, map, Observable, of } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import {
     CalendarContainer,
@@ -10,9 +10,7 @@ import {
     CalendarIndexRoot,
     CalendarPost,
     CalendarsIndexParams,
-    Countries,
-    CountriesAndContainers,
-    CountryRoot
+    Countries
 } from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -61,6 +59,7 @@ export class CalendarsService implements DeleteAllModalService {
             );
     }
 
+    /*
     public getAdd(): Observable<CountriesAndContainers> {
         const proxyPath = this.proxyPath;
         return forkJoin([
@@ -74,7 +73,7 @@ export class CalendarsService implements DeleteAllModalService {
                 }
             }),
         );
-    }
+    }*/
 
     public getContainers(): Observable<CalendarContainer[]> {
         const proxyPath = this.proxyPath;
