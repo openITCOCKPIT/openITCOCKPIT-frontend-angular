@@ -8,7 +8,7 @@ import {
     ContainerComponent, NavComponent, TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent, FaStackComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -39,7 +39,8 @@ import { Subscription } from 'rxjs';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FaStackComponent
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './contacts-used-by.component.html',
     styleUrl: './contacts-used-by.component.css'

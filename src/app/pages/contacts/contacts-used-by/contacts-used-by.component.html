@@ -62,9 +62,11 @@
                                 <span *oitcPermission="['contactgroups', 'edit']; negate: true">
                                     {{ contactgroup.container.name }}
                                 </span>
+
                                 <fa-stack>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" size="xs" class="text-danger" />
-                                    <fa-icon [icon]="['fas', 'lock']" class="lock-icon-gradient" />
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                             transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
                         </tr>
