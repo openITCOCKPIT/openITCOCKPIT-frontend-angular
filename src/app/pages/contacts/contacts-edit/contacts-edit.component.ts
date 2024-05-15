@@ -94,6 +94,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
+    protected areContainersChangeable: boolean = true;
 
     public post: Contact = {
         containers: {_ids: []},
@@ -131,22 +132,30 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected notificationCommands: LoadCommand[] = [];
     protected timeperiods: Timeperiod[] = [];
 
-    public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactService.getEdit(id)
-            .subscribe((result) => {
-                //First, load shit into the component.
-                this.loadContainers();
-                this.loadCommands();
+    protected requiredContainers: number[] = [];
+    protected requiredContainersString: string = '';
+    protected allContainers: Container[] = []
+    protected contactId: number = 0;
+    protected selectedContainers: number[] = [];
 
+    public ngOnInit() {
+        this.loadCommands();
+        this.contactId = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.ContactService.getEdit(this.contactId)
+            .subscribe((result) => {
                 // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.contact.Contact;
+                this.requiredContainers = result.requiredContainers;
+                this.requiredContainersString = this.requiredContainers.join(',');
+                this.areContainersChangeable = result.areContainersChangeable;
 
-                // Then force containerChange!
                 this.onContainerChange();
 
-                // Another time we override the ids...
-                this.post.containers._ids = [1];
+                // Force empty container selection.
+                this.selectedContainers = this.post.containers._ids;
+                this.post.containers._ids = [];
+                this.loadContainers();
+
             }));
     }
 
@@ -156,6 +165,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public updateContact(): void {
 
+        this.post.containers._ids = this.post.containers._ids.concat(this.requiredContainers);
         this.subscriptions.add(this.ContactService.updateContact(this.post)
             .subscribe((result) => {
                 if (result.success) {
@@ -184,7 +194,26 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.containersService.loadContainers()
             .subscribe((result) => {
-                this.containers = result.containers;
+                let newContainers: Container[] = [];
+
+                // Traverse all containers to filter those in requiredContainers.
+                for (var i in result.containers) {
+                    let index = parseInt(i),
+                        container: Container = result.containers[index];
+
+                    // If in required containers, remove from the list.
+                    if (this.requiredContainers.indexOf(container.key) !== -1) {
+                        continue;
+                    }
+                    newContainers.push(result.containers[index]);
+                    if (this.selectedContainers.indexOf(container.key) === -1) {
+                        this.post.containers._ids.push(container.key);
+                    }
+
+                }
+
+                this.allContainers = result.containers;
+                this.containers = newContainers;
             }))
     }
 
@@ -290,5 +319,14 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        return {
+            '1': {
+                'name': 'asnaeb',
+                'value': 'fake'
+            }
+        }
     }
 }
