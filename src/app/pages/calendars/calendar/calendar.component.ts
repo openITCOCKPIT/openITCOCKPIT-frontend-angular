@@ -27,7 +27,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AddNewEvent, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
+import { AddNewEvent, CalendarEvent, Countries } from '../calendars.interface';
 import {
     CalendarOptions,
     DateSelectArg,
@@ -88,33 +88,13 @@ export class CalendarComponent {
 
     @Input()
     set events(externalEvents: CalendarEvent[]) {
-        /*
-
-        Das this.events ist jetzt entweder ein setter oder ein getter.
-        Immer wenn this.events geändert wird, wird diese funktion hier aufgerufen, welche dann auch den kalender akualisert.
-
-        DAs hat jedoch zur volge, das deleteall events, jetzt auch die customEvents speichert, weil ja diese methode hier aufgeufen wird.
-
-         */
-
-        // External events have changed - trigger update of the calendar
-        let oldEvents = this._events;
-
-        // Keep custom events
-        let customEvents = oldEvents.filter(event => !event.default_holiday);
-
-        // Add new external events, but check for duplicates
-        for (let event of externalEvents) {
-            if (!customEvents.find(customEvent => customEvent.start === event.start)) {
-                customEvents.push(event);
-            }
-        }
-
-        this._events = customEvents;
+        // Setter method for events which will update the calendar whenever [(events)]="events" changes
+        this._events = externalEvents;
         this.calendarOptions.update(options => ({...options, events: this.events}));
     }
 
     get events(): CalendarEvent[] {
+        // Getter method for events, automatically used when you use "this.events" in the code
         return this._events;
     }
 
@@ -124,13 +104,7 @@ export class CalendarComponent {
     @Input() public countryCode: string = 'de';
     @Output() countryCodeChange = new EventEmitter<string>();
 
-    public post: CalendarPost = {
-        container_id: 0,
-        name: "",
-        description: "",
-        events: []
-    }
-
+    // Gets used by the add and edit holiday modal
     public addNewEvent: AddNewEvent = {
         title: '',
         start: ''
@@ -186,19 +160,8 @@ export class CalendarComponent {
     }
 
 
-    public handleCalendarToggle() {
-        this.calendarVisible.update((bool) => !bool);
-    }
-
-    public handleWeekendsToggle() {
-        this.calendarOptions.update((options) => ({
-            ...options,
-            weekends: !options.weekends,
-        }));
-    }
-
     public handleDateSelect(selectInfo: DateSelectArg) {
-        console.log("Implement handleDateSelect");
+        //console.log("Implement handleDateSelect");
     }
 
     // Handle event drag and drop

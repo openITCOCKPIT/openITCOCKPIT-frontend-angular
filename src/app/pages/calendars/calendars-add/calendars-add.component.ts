@@ -49,7 +49,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { CalendarsService } from '../calendars.service';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { CalendarComponent } from '../calendar/calendar.component';
 
@@ -116,12 +116,8 @@ import { CalendarComponent } from '../calendar/calendar.component';
 })
 export class CalendarsAddComponent implements OnInit, OnDestroy {
 
-    public post: CalendarPost = {
-        container_id: 0,
-        name: "",
-        description: "",
-        events: []
-    }
+    public post = this.getClearForm();
+    public createAnother: boolean = false;
 
     public containers: CalendarContainer[] = [];
     public countries: Countries = {};
@@ -137,6 +133,14 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public getClearForm(): CalendarPost {
+        return {
+            container_id: 0,
+            name: "",
+            description: "",
+            events: []
+        }
+    }
 
     public ngOnInit() {
         let request = {
@@ -165,16 +169,63 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     public loadHolidays() {
         this.subscriptions.add(this.CalendarsService.getHolidays(this.countryCode)
             .subscribe((result) => {
-                // Reset events to server result
-                this.events = result;
+
+                // Keep custom events
+                let oldEvents = this.events;
+                let customEvents = oldEvents.filter(event => !event.default_holiday);
+
+                // Add new events, but check for duplicates
+                for (let event of result) {
+                    if (!customEvents.find(customEvent => customEvent.start === event.start)) {
+                        customEvents.push(event);
+                    }
+                }
+
+                // customEvents contains now all events (custom and normal holidays
+                this.events = customEvents;
             })
         );
     }
 
 
     public submit() {
-        console.log('Implement submit');
-        console.log(this.events);
+
+        this.post.events = this.events;
+
+        this.subscriptions.add(this.CalendarsService.createCalendar(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Calendar');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['calendars', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/calendars/index']);
+                        return;
+                    }
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.events = [];
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
     }
 
 }
