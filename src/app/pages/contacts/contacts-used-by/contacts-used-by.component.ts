@@ -8,7 +8,7 @@ import {
     ContainerComponent, NavComponent, TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -38,7 +38,8 @@ import { Subscription } from 'rxjs';
         TableDirective,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        FaStackComponent
     ],
     templateUrl: './contacts-used-by.component.html',
     styleUrl: './contacts-used-by.component.css'
@@ -55,10 +56,15 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute)
 
     private subscriptions: Subscription = new Subscription();
+    private contactId : number = 0;
+    private containerIds: number[] = [];
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactsService.usedBy(id)
+        this.contactId = Number(this.route.snapshot.paramMap.get('id'));
+        this.containerIds = this.route.snapshot.queryParamMap.getAll('containerIds').map(Number);
+
+        console.log(this.route.snapshot.paramMap.getAll('containerIds'));
+        this.subscriptions.add(this.ContactsService.usedBy(this.contactId)
             .subscribe((result) => {
                 this.contact = result.contact;
                 this.objects = result.objects;
