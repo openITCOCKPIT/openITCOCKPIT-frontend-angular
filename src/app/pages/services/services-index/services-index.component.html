@@ -184,7 +184,8 @@
                             </td>
                             <td class="width-50">
                                 <div *ngIf="service.Service.has_graph">
-                                    <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                                    <!--<fa-icon [icon]="['fas', 'area-chart']"></fa-icon>-->
+                                    <oitc-popover-graph [service]="service.Service.uuid" [host]="service.Host.uuid" [timezone]="timezone"></oitc-popover-graph>
                                 </div>
                             </td>
                             <td class="width-50">

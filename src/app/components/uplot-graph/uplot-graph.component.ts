@@ -488,6 +488,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         // @ts-ignore
         this.options.axes[1].label = this.datasource.unit;
         this.chartUPlot.nativeElement.innerHTML = '';
+        console.log(this.options);
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);
     }
 

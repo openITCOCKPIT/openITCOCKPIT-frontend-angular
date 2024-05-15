@@ -5,6 +5,7 @@ import {PopoverDirective} from '@coreui/angular';
 import { AckTooltipService } from './ack-tooltip.service';
 import {Subscription} from 'rxjs';
 import {TranslocoDirective} from '@jsverse/transloco';
+import { debounce } from '../debounce.decorator';
 
 @Component({
   selector: 'oitc-ack-tooltip',
@@ -61,9 +62,10 @@ export class AckTooltipComponent implements OnInit, OnDestroy {
         this.url = this.type + '/browser/' + this.id + ".json";
     }
 
+
     showTooltip(){
         this.getData()
-        this.visible = !this.visible;
+        //this.visible = !this.visible;
     }
 
     hideTooltip(){
@@ -83,6 +85,7 @@ export class AckTooltipComponent implements OnInit, OnDestroy {
                 this.author = data.acknowledgement.author_name ?? '';
                 this.entry = data.acknowledgement.entry_time ?? '';
                 this.comment = data.acknowledgement.comment_data ?? '';
+                this.visible = !this.visible;
             })
         );
     }

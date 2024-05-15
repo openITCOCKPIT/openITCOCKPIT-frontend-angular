@@ -3,7 +3,7 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, map} from "rxjs";
 import { PROXY_PATH } from "../../../tokens/proxy-path.token";
-import { ServicesIndexRoot, ServiceParams } from   "./services.interface"
+import { ServicesIndexRoot, ServiceParams, Usertimezone } from   "./services.interface"
 
 
 @Injectable({
@@ -26,21 +26,9 @@ export class ServicesIndexService {
         )
     }
 
-    public genericRequest(params: ServiceParams, url:string): Observable<any> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}` + url, {
-            params: params as {}
-        })
-            /*.pipe(
-            map(data => {
-                return data;
-            })
-
-        )*/
-    }
 
 
-  /*  public getUserTimezone(): Observable<Usertimezone> {
+    public getUserTimezone(): Observable<Usertimezone> {
         const proxyPath = this.proxyPath;
 
         return this.http.get<Usertimezone>(`${proxyPath}/angular/user_timezone.json`, {
@@ -50,6 +38,6 @@ export class ServicesIndexService {
                 return data;
             })
         )
-    } */
+    }
 
 }

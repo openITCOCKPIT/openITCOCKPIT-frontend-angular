@@ -1,0 +1,31 @@
+<ng-container *transloco="let t">
+    <fa-icon [icon]="['fas', 'area-chart']"
+             (mouseenter)="showTooltip()"
+
+             [cPopover]="popoverHtml"
+             cPopoverPlacement="top"
+             [cPopoverVisible]="visible"
+             id="serviceGraphContainer-{{service}}"
+    ></fa-icon>
+
+
+    <ng-template #popoverHtml>
+       <!-- <c-row>
+            <ng-container *ngFor="let data of perfData;  index as i;">
+
+            <div class="col-sm-12 col-md-12 col-lg-6" [ngStyle]="{'width': '500', 'height': '400px' }"
+                 *ngIf="i < 4"
+                 [ngClass]="{'col-lg-12': perfData.length === 1}">
+
+                <div class="text-center bold word-wrap-anywhere">{{ data.datasource.name }}</div>
+                <div id="serviceGraphUPlot-{{service}}-{{i}}" class="serviceGraphUPlot"></div>
+
+            </div>
+            </ng-container>
+        </c-row>-->
+        <div
+            #chartUPlot>
+        </div>
+    </ng-template>
+
+</ng-container>

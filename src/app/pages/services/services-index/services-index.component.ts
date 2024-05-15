@@ -8,7 +8,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { ServicesIndexRoot, ServiceParams } from   "./services.interface";
+import { ServicesIndexRoot, ServiceParams, TimezoneObject } from   "./services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { ServicesIndexFilterComponent } from '../../../components/services/services-index-filter/services-index-filter.component';
 import { HoststatusIconComponent} from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
@@ -47,8 +47,10 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { AckTooltipComponent} from '../../../components/ack-tooltip/ack-tooltip.component';
 import { DowntimeTooltipComponent} from '../../../components/downtime-tooltip/downtime-tooltip.component';
+import { PopoverGraphComponent} from '../../../components/popover-graph/popover-graph.component';
 import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
 import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {UplotGraphComponent} from '../../../components/uplot-graph/uplot-graph.component';
 
 type filter = {
     Servicestatus: {
@@ -133,7 +135,9 @@ type filter = {
         DropdownMenuDirective,
         ServicesIndexFilterComponent,
         AckTooltipComponent,
-        DowntimeTooltipComponent
+        PopoverGraphComponent,
+        DowntimeTooltipComponent,
+        UplotGraphComponent
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css'
@@ -173,9 +177,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public showFilter: boolean = false;
     public services?: ServicesIndexRoot;
     public tab: number = 0;
+    public timezone!: TimezoneObject;
 
     ngOnInit() {
-            this.load();
+        this.getUserTimezone();
+        this.load();
     }
 
     public ngOnDestroy() {
@@ -283,6 +289,14 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
 
         this.load();
 
+    }
+
+    private getUserTimezone() {
+        this.subscriptions.add(this.ServicesIndexService.getUserTimezone()
+            .subscribe((timezone) => {
+                this.timezone = timezone.timezone;
+            })
+        );
     }
 
 
