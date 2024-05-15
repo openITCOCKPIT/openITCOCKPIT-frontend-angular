@@ -4,6 +4,16 @@
     z-index: 1;
 }
 
+.fc .fc-daygrid-week-number {
+    top: auto;
+    bottom: 0;
+}
+
+.fc .fc-daygrid-day-top {
+    flex-direction: row;
+    background: magenta;
+}
+
 /* fullcalendar 'more+' container style settings */
 .fc-more-popover {
     overflow-y: scroll;
@@ -18,8 +28,7 @@
     padding: 0px 4px !important;
 }
 
-.fc-day-number {
-    float: left !important;
+.fc-daygrid-day-number {
 }
 
 .fc-holidays-button {
@@ -88,4 +97,19 @@ td.fc-day-other {
 
 .fc-event-title {
     white-space: normal;
+}
+
+.bg-color-pinkDark {
+    background-image: linear-gradient(90deg, #0431cb, #21affc);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 1px 5px 0 transparentize(#0431cb, 0.5);
+
+}
+
+.bg-color-magenta {
+    background-image: linear-gradient(90deg, #6a11cb, #2575fc);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 1px 5px 0 transparentize(#6a11cb, 0.5);
 }

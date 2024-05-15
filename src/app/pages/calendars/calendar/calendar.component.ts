@@ -176,7 +176,7 @@ export class CalendarComponent {
             title: changeInfo.event.title,
             start: changeInfo.event.startStr,
             default_holiday: false,
-            className: 'bg-primary'
+            className: 'bg-color-magenta'
         })
 
         this.calendarOptions.update(options => ({...options, events: this.events}));
@@ -310,7 +310,7 @@ export class CalendarComponent {
             title: this.addNewEvent.title,
             start: this.addNewEvent.start,
             default_holiday: false,
-            className: 'bg-primary'
+            className: 'bg-color-magenta'
         });
         this.calendarOptions.update(options => ({...options, events: this.events}));
         this.eventsChange.emit(this.events);
@@ -343,7 +343,7 @@ export class CalendarComponent {
 
         event.title = this.addNewEvent.title;
         event.default_holiday = false;
-        event.className = 'bg-primary';
+        event.className = 'bg-color-magenta';
 
         this.events = this.events.concat(event);
 

@@ -58,7 +58,7 @@
             <!-- https://fullcalendar.io/docs/event-render-hooks-->
             <ng-template #eventContent let-arg>
                 <div class="fc-event-title-container">
-                    <div class="fc-event-title fc-sticky">
+                    <div class="fc-event-title fc-sticky" [className]="arg.event.classNames" [title]="arg.event.title">
                         <!-- Just for reference in case we cant to add some icons in the future -->
                         <!--
                         <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
