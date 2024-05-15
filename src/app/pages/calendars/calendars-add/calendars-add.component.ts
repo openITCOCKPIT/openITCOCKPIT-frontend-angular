@@ -135,7 +135,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     public getClearForm(): CalendarPost {
         return {
-            container_id: 0,
+            container_id: null,
             name: "",
             description: "",
             events: []

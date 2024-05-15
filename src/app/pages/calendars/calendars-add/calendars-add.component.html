@@ -40,7 +40,6 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-
                         <ng-select [items]="containers"
                                    bindLabel="value"
                                    bindValue="key"
@@ -55,7 +54,7 @@
                             </ng-template>
                         </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                        <div [hidden]="post.container_id > 0" class="text-warning-glow pt-1">
+                        <div [hidden]="post.container_id" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
                     </div>
