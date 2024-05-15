@@ -57,14 +57,15 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute)
 
     private subscriptions: Subscription = new Subscription();
-    private contactId : number = 0;
-    private containerIds: number[] = [];
+    private contactId: number = 0;
+    protected containerIds: number[] = [];
 
     public ngOnInit() {
         this.contactId = Number(this.route.snapshot.paramMap.get('id'));
         this.containerIds = this.route.snapshot.queryParamMap.getAll('containerIds').map(Number);
 
-        console.log(this.route.snapshot.paramMap.getAll('containerIds'));
+        let myContainerIds = this.route.snapshot.paramMap.get('containerIds') as string;
+        this.containerIds = myContainerIds.split(',').map(Number);
         this.subscriptions.add(this.ContactsService.usedBy(this.contactId)
             .subscribe((result) => {
                 this.contact = result.contact;
