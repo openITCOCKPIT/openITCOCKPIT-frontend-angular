@@ -41,11 +41,14 @@
         "@ng-select/ng-option-highlight": "^12.0.6",
         "@ng-select/ng-select": "^12.0.7",
         "@types/codemirror": "^5.60.15",
+        "@types/lodash": "^4.17.0",
         "codemirror": "^6.0.1",
         "dropzone": "^6.0.0-beta.2",
         "flag-icon-css": "^4.1.7",
         "flag-icons": "^7.2.1",
         "jquery": "^3.7.1",
+        "lodash": "^4.17.21",
+        "luxon": "^3.4.4",
         "ngx-scrollbar": "^14.0.0",
         "ngx-toastr": "^18.0.0",
         "prettier": "^3.2.5",
@@ -53,9 +56,7 @@
         "tslib": "^2.6.2",
         "uplot": "^1.6.30",
         "vanilla-jsoneditor": "^0.23.2",
-        "zone.js": "~0.14.4",
-        "lodash": "^4.17.21",
-        "@types/lodash": "^4.17.0"
+        "zone.js": "~0.14.4"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^17.3.3",
@@ -65,6 +66,7 @@
         "@jsverse/transloco-keys-manager": "^4.1.0",
         "@types/dropzone": "^5.7.8",
         "@types/jasmine": "~5.1.4",
+        "@types/luxon": "^3.4.2",
         "jasmine-core": "~5.1.2",
         "karma": "~6.4.3",
         "karma-chrome-launcher": "~3.2.0",

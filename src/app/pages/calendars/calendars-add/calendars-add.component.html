@@ -55,6 +55,9 @@
                             </ng-template>
                         </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                        <div [hidden]="post.container_id > 0" class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label cLabel for="calendarName">
@@ -77,9 +80,12 @@
                                [(ngModel)]="post.description">
                         <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                     </div>
-                    <div class="mb-3">
-                        <full-calendar #fullCalendar [options]="calendarOptions"></full-calendar>
-                    </div>
+
+                    <oitc-calendar [(events)]="events"
+                                   [countries]="countries"
+                                   [(countryCode)]="countryCode"
+                                   (countryCodeChange)="setCountryCodeAndLoadHolidays($event);"></oitc-calendar>
+
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">
@@ -93,5 +99,6 @@
                 </c-card-footer>
             </c-card>
         </form>
+
     </ng-container>
 </oitc-coreui>

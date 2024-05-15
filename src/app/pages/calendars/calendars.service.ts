@@ -6,7 +6,7 @@ import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import {
     CalendarContainer,
     CalendarEditGet,
-    CalendarHoliday,
+    CalendarEvent,
     CalendarIndexRoot,
     CalendarPost,
     CalendarsIndexParams,
@@ -142,10 +142,10 @@ export class CalendarsService implements DeleteAllModalService {
     }
 
 
-    public getHolidays(countryCode: string): Observable<CalendarHoliday[]> {
+    public getHolidays(countryCode: string): Observable<CalendarEvent[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            holidays: CalendarHoliday[]
+            holidays: CalendarEvent[]
         }>(`${proxyPath}/calendars/loadHolidays/${countryCode}.json?angular=true`).pipe(
             map(data => {
                 return data.holidays;
