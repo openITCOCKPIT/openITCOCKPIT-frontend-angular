@@ -19,12 +19,12 @@
 }
 
 
-.input-group .ng-select {
+.input-group .ng-select, input-group .ng-select-multiple {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
 }
 
-.input-group .ng-select.ng-select-single .ng-select-container {
+.input-group .ng-select.ng-select-single .ng-select-container, .input-group .ng-select-multiple .ng-select-container {
     margin-left: calc(var(--cui-border-width) * -1);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
