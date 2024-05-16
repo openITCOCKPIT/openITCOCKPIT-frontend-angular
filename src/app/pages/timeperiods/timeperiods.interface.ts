@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface TimeperiodsIndexParams {
     angular: true,
@@ -51,7 +52,13 @@ export interface TimeperiodIndex {
  *    Add / Edit action    *
  ***************************/
 
-export interface TimeperiodPost {
+export interface TimeperiodsEditRoot {
+    timeperiod: Timeperiod;
+    _csrfToken: string;
+}
+
+export interface Timeperiod {
+    id?: number,
     container_id: number | null,
     name: string,
     calendar_id: number | null,
@@ -79,4 +86,159 @@ export interface InternalRange {
 export interface Container {
     key: number,
     value: string
+}
+
+export interface Calendar {
+    key: number,
+    value: string
+}
+
+/**********************
+ *     Copy action    *
+ **********************/
+
+export interface TimeperiodCopyGet {
+    Timeperiod: {
+        id: number
+        name: string,
+        description: string
+    }
+}
+
+export interface TimeperiodCopyPost {
+    Source: SourceTimeperiod
+    Timeperiod: TimeperiodCopy
+    Error: GenericValidationError | null
+}
+
+export interface SourceTimeperiod {
+    id: number
+    name: string
+}
+
+export interface TimeperiodCopy {
+    id?: number,
+    name: string
+    description: string
+}
+
+/**********************
+ *     Used By action    *
+ **********************/
+
+export interface TimeperiodUsedBy {
+    timeperiod: TimeperiodUsedByTimeperiod
+    objects: TimeperiodUsedByObjects
+    total: number
+    _csrfToken: string
+}
+
+export interface TimeperiodUsedByTimeperiod {
+    id: number
+    uuid: string
+    container_id: number
+    name: string
+    description: string
+    calendar_id: number
+    created: string
+    modified: string
+}
+
+
+export interface TimeperiodUsedByObjects {
+    Contacts: TimeperiodUsedByContact[]
+    Hostdependencies: TimeperiodUsedByHostdependency[]
+    Hostescalations: TimeperiodUsedByHostescalation[]
+    Hosts: TimeperiodUsedByHost[]
+    Hosttemplates: TimeperiodUsedByHosttemplate[]
+    Instantreports: TimeperiodUsedByInstantreport[]
+    Servicedependencies: TimeperiodUsedByServicedependency[]
+    Serviceescalations: TimeperiodUsedByServiceescalation[]
+    Services: TimeperiodUsedByService[]
+    Servicetemplates: TimeperiodUsedByServicetemplate[]
+    Autoreports: TimeperiodUsedByAutoreport[]
+}
+
+export interface TimeperiodUsedByContact {
+    id: number
+    name: string
+    containers: TimeperiodUsedByContainer[]
+}
+
+export interface TimeperiodUsedByContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: number
+    lft: number
+    rght: number
+    _joinData: TimeperiodUsedByJoinData
+}
+
+export interface TimeperiodUsedByJoinData {
+    id: number
+    contact_id: number
+    container_id: number
+}
+
+export interface TimeperiodUsedByHosttemplate {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByServicetemplate {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByHost {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByHostdependency {
+    id: number
+}
+
+export interface TimeperiodUsedByHostescalation {
+    id: number
+}
+
+export interface TimeperiodUsedByServicedependency {
+    id: number
+}
+
+export interface TimeperiodUsedByServiceescalation {
+    id: number
+}
+
+export interface TimeperiodUsedByInstantreport {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByAutoreport {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByService {
+    id: number
+    servicename: string
+    _matchingData: TimeperiodUsedByMatchingData
+}
+
+export interface TimeperiodUsedByMatchingData {
+    Hosts: TimeperiodUsedByHosts
+    Servicetemplates: TimeperiodUsedByServicetemplates
+}
+
+export interface TimeperiodUsedByHosts {
+    id: number
+    name: string
+}
+
+export interface TimeperiodUsedByServicetemplates {
+    id: number
+    name: string
 }
