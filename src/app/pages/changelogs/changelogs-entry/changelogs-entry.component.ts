@@ -57,7 +57,7 @@ export class ChangelogsEntryComponent implements OnInit {
                             changeForTemplate.changes.push(changelogEntryChange);
                         }
                     } else {
-                        // The "isArray" key iset set to false in the API response
+                        // The "isArray" key isset set to false in the API response
                         const changelogEntryChange = this.parseApiResponseIntoTypescriptForArrayIsFalse(changeRaw.data);
                         changeForTemplate.changes.push(changelogEntryChange);
                     }
@@ -83,6 +83,9 @@ export class ChangelogsEntryComponent implements OnInit {
             if (hasOld === false && hasNew === true) {
                 const newFieldValues: ChangelogFieldValue[] = [];
                 for (const [newFieldName, newFieldValue] of Object.entries(change.new)) {
+                    if (newFieldName === 'id') {
+                        continue;
+                    }
                     newFieldValues.push({
                         field: newFieldName,
                         value: newFieldValue as string
@@ -99,6 +102,9 @@ export class ChangelogsEntryComponent implements OnInit {
             } else if (hasOld === true && hasNew === false) {
                 const oldFieldValues: ChangelogFieldValue[] = [];
                 for (const [oldFieldName, oldFieldValue] of Object.entries(change.old)) {
+                    if (oldFieldName === 'id') {
+                        continue;
+                    }
                     oldFieldValues.push({
                         field: oldFieldName,
                         value: oldFieldValue as string
@@ -117,6 +123,9 @@ export class ChangelogsEntryComponent implements OnInit {
                 const newFieldValues: ChangelogFieldValue[] = [];
                 const oldFieldValues: ChangelogFieldValue[] = [];
                 for (const [newFieldName, newFieldValue] of Object.entries(change.new)) {
+                    if (newFieldName === 'id') {
+                        continue;
+                    }
                     if (change.old.hasOwnProperty(newFieldName)) {
                         newFieldValues.push({
                             field: newFieldName,
@@ -143,6 +152,9 @@ export class ChangelogsEntryComponent implements OnInit {
         const newFieldValues: ChangelogFieldValue[] = [];
         for (const newFieldName in change) {
             const newFieldValue = change[newFieldName];
+            if (newFieldName === 'id') {
+                continue;
+            }
             newFieldValues.push({
                 field: newFieldName,
                 value: newFieldValue as string
@@ -161,6 +173,9 @@ export class ChangelogsEntryComponent implements OnInit {
         const newFieldValues: ChangelogFieldValue[] = [];
         const oldFieldValues: ChangelogFieldValue[] = [];
         for (const [fieldName, value] of Object.entries(change)) {
+            if (fieldName === 'id') {
+                continue;
+            }
             if (typeof value === "object" && value) {
                 if (value.hasOwnProperty('new') && value.hasOwnProperty('old')) {
                     const valueTS = value as ChangelogArrayFalseOldNew;
