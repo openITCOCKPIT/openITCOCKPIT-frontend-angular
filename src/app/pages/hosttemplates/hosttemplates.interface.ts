@@ -1,5 +1,6 @@
 import { HosttemplateTypesEnum } from './hosttemplate-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 
 /**********************
  *    Index action    *
@@ -19,7 +20,7 @@ export function getDefaultHosttemplatesIndexParams(): HosttemplatesIndexParams {
     return {
         angular: true,
         scroll: true,
-        sort: 'Commands.name',
+        sort: 'Hosttemplates.name',
         page: 1,
         direction: 'asc',
         'filter[Hosttemplates.id][]': [],
@@ -92,5 +93,6 @@ export interface HosttemplateType {
     title: string
     color: string
     class: string
-    icon: string
+    icon: IconProp,
+    rotate: RotateProp,
 }
