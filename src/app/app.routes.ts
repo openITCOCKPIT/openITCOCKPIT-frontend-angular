@@ -119,6 +119,12 @@ export const routes: Routes = [{
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
+    path: 'hosttemplates/index',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-index/hosttemplates-index.component').then(m => m.HosttemplatesIndexComponent)
+}, {
+    path: 'hosttemplates/add',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-add/hosttemplates-add.component').then(m => m.HosttemplatesAddComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

@@ -2,19 +2,37 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
 import {
+    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalToggleDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -23,16 +41,17 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { CalendarContainer, CalendarHoliday, CalendarPost, Countries } from '../calendars.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { forkJoin, observable, Observable, Subscription } from 'rxjs';
-import { CalendarsService } from '../calendars.service';
+import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { FullCalendarComponent } from '../../../components/full-calendar/full-calendar.component';
+import { forkJoin, Subscription } from 'rxjs';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { CalendarsService } from '../calendars.service';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 @Component({
     selector: 'oitc-calendars-add',
@@ -70,25 +89,42 @@ import { FullCalendarComponent } from '../../../components/full-calendar/full-ca
         RowComponent,
         ColComponent,
         FullCalendarModule,
-        FullCalendarComponent
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        KeyValuePipe,
+        DropdownItemDirective,
+        NgClass,
+        ButtonCloseDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        TrueFalseDirective,
+        ModalToggleDirective,
+        TranslocoPipe,
+        CalendarComponent
     ],
     templateUrl: './calendars-add.component.html',
     styleUrl: './calendars-add.component.css'
 })
 export class CalendarsAddComponent implements OnInit, OnDestroy {
-    public post: CalendarPost = {
-        container_id: 0,
-        name: "",
-        description: "",
-        events: []
-    }
+
+    public post = this.getClearForm();
+    public createAnother: boolean = false;
+
     public containers: CalendarContainer[] = [];
     public countries: Countries = {};
-    public events: CalendarHoliday[] = [];
     public errors: GenericValidationError | null = null;
-    public defaultDate = new Date();
-    public countryCode = 'de';
 
+    public events: CalendarEvent[] = [];
+    public countryCode: string = 'de';
 
     private CalendarsService = inject(CalendarsService);
     private readonly notyService = inject(NotyService);
@@ -97,6 +133,14 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public getClearForm(): CalendarPost {
+        return {
+            container_id: null,
+            name: "",
+            description: "",
+            events: []
+        }
+    }
 
     public ngOnInit() {
         let request = {
@@ -108,25 +152,46 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             (result) => {
                 this.containers = result.containers;
                 this.countries = result.countries;
-
             });
 
         this.loadHolidays();
     }
 
-    public ngOnDestroy(): void {
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
+    public setCountryCodeAndLoadHolidays(code: string) {
+        this.countryCode = code;
+        this.loadHolidays();
+    }
 
     public loadHolidays() {
         this.subscriptions.add(this.CalendarsService.getHolidays(this.countryCode)
             .subscribe((result) => {
-                this.events = result;
+
+                // Keep custom events
+                let oldEvents = this.events;
+                let customEvents = oldEvents.filter(event => !event.default_holiday);
+
+                // Add new events, but check for duplicates
+                for (let event of result) {
+                    if (!customEvents.find(customEvent => customEvent.start === event.start)) {
+                        customEvents.push(event);
+                    }
+                }
+
+                // customEvents contains now all events (custom and normal holidays
+                this.events = customEvents;
             })
         );
     }
 
+
     public submit() {
+
+        this.post.events = this.events;
+
         this.subscriptions.add(this.CalendarsService.createCalendar(this.post)
             .subscribe((result) => {
                 if (result.success) {
@@ -137,7 +202,18 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                     const url = ['calendars', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/calendars/index']);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/calendars/index']);
+                        return;
+                    }
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.events = [];
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
 
                     return;
                 }
@@ -151,4 +227,5 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             })
         );
     }
+
 }

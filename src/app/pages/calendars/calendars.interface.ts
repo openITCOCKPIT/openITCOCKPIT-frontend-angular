@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { CalendarApi, EventInput } from '@fullcalendar/core';
 
 export interface CalendarsIndexParams {
     angular: true,
@@ -40,13 +41,13 @@ export interface CalendarIndex {
 
 export interface CalendarPost {
     id?: number
-    container_id: number
+    container_id: number | null
     name: string
     description: string
     events: CalendarEvent[]
 }
 
-export interface CalendarEvent {
+export interface CalendarEvent extends EventInput {
     start: string
     title: string
     default_holiday: boolean
@@ -76,9 +77,8 @@ export interface CountriesAndContainers {
     countries: Countries
 }
 
-export interface CalendarHoliday {
-    start: string
-    title: string
-    default_holiday: boolean
-    className: string
+export interface AddNewEvent {
+    title: string,
+    start: string,
+    CalendarApi?: CalendarApi
 }
