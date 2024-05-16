@@ -42,16 +42,20 @@
             <!-- dayCellContent  Content Injection -->
             <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
             <ng-template #dayCellContent let-arg>
-                <div class="fc-daygrid-day-number">
-                    {{ arg.dayNumberText }}
+                <div class="d-inline-flex w-100">
+                    <div class="fc-daygrid-day-number">
+                        {{ arg.dayNumberText }}
+                    </div>
+                    <div>
+                        <button cButton
+                                (click)="triggerAddEventModal(arg)"
+                                *ngIf="!hasEvents(formatJsDateToFullcalendarString(arg.date))"
+                                class="ripple" size="xs"
+                                color="success">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        </button>
+                    </div>
                 </div>
-                <button cButton
-                        (click)="triggerAddEventModal(arg)"
-                        *ngIf="!hasEvents(formatJsDateToFullcalendarString(arg.date))"
-                        class="ripple" size="xs"
-                        color="success">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                </button>
             </ng-template>
 
             <!-- eventContent Content Injection -->

@@ -13,7 +13,12 @@ import {
     Countries
 } from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -123,7 +128,7 @@ export class CalendarsService implements DeleteAllModalService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data
                     };
                 }),
                 catchError((error: any) => {
