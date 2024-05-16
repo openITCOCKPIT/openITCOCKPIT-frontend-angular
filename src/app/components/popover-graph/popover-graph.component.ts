@@ -98,34 +98,35 @@ export class PopoverGraphComponent implements OnDestroy {
     set timezone (timezone: TimezoneObject) {
         this._timezone = timezone;
     }
-   // @debounce(200)
+
+    // @debounce(200)
     showTooltip (hoverIcon: HTMLElement) {
         this.visible = true;
         let self = this;
-       // if (this.timer === null) {
-         //   this.timer = setTimeout(function () {
-                let position = hoverIcon.getBoundingClientRect();
-                //console.log(position);
-                let offset = {
-                    relativeTop: hoverIcon.offsetTop + 40,
-                    relativeLeft: hoverIcon.offsetLeft + 40,
-                    absoluteTop: position.top,
-                    absoluteLeft: position.left,
-                };
-                self.popoverOffset = offset;
-               // console.log(offset);
-                self.placePopoverGraph()
-                self.setParams();
+        // if (this.timer === null) {
+        //   this.timer = setTimeout(function () {
+        let position = hoverIcon.getBoundingClientRect();
+        //console.log(position);
+        let offset = {
+            relativeTop: hoverIcon.offsetTop + 40,
+            relativeLeft: hoverIcon.offsetLeft + 40,
+            absoluteTop: position.top,
+            absoluteLeft: position.left,
+        };
+        self.popoverOffset = offset;
+        // console.log(offset);
+        self.placePopoverGraph()
+        self.setParams();
 
-                self.timer = null;
-         //   }, 150);
-      //  }
+        self.timer = null;
+        //   }, 150);
+        //  }
 
     }
 
     hideTooltip () {
         this.visible = false;
-        if(this.timer !== null) {
+        if (this.timer !== null) {
             clearTimeout(this.timer);
             this.timer = null;
         }
@@ -158,37 +159,37 @@ export class PopoverGraphComponent implements OnDestroy {
         let absoluteBottomPositionOfPopoverGraphContainer = this.popoverOffset.absoluteTop + margin + popupGraphContainerHeight;
 
         //if (absoluteBottomPositionOfPopoverGraphContainer > window.innerHeight) {
-        if ((window.innerHeight - absoluteBottomPositionOfPopoverGraphContainer) < 272 ) {
-           // console.log('top')
+        if ((window.innerHeight - absoluteBottomPositionOfPopoverGraphContainer) < 272) {
+            // console.log('top')
             //There is no space in the window for the popup, we need to place it above the mouse cursor
             let marginTop = this.popoverOffset.relativeTop - popupGraphContainerHeight - margin + 10;
-           // console.log(marginTop);
+            // console.log(marginTop);
             this.popoverStyle = {
                 'top': (marginTop > 1) ? marginTop : 1,
                 'left': this.popoverOffset.relativeLeft + margin,
-               // 'height': popupGraphContainerHeight + 'px',
+                // 'height': popupGraphContainerHeight + 'px',
                 'padding': '6px'
             }
-           // console.log(this.popoverStyle);
+            // console.log(this.popoverStyle);
         } else {
             //Default Popup
-           // console.log(this.popoverOffset.relativeTop + margin)
+            // console.log(this.popoverOffset.relativeTop + margin)
             this.popoverStyle = {
                 'top': parseInt(this.popoverOffset.relativeTop + margin),
                 'left': parseInt(this.popoverOffset.relativeLeft + margin),
                 //'height': popupGraphContainerHeight + 'px',
                 'padding': '6px'
             }
-           // console.log(this.popoverStyle);
+            // console.log(this.popoverStyle);
         }
-       // console.log(this.popoverStyle)
+        // console.log(this.popoverStyle)
 
     }
 
     getPerfData () {
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
-                if(perfdata.performance_data && perfdata.performance_data.length > 4){
+                if (perfdata.performance_data && perfdata.performance_data.length > 4) {
                     this.perfData = perfdata.performance_data.slice(0, 4);
                 } else {
                     this.perfData = perfdata.performance_data ?? [];
@@ -202,69 +203,62 @@ export class PopoverGraphComponent implements OnDestroy {
     @debounce(300)
     renderGraphs () {
         for (let i = 0; i < this.perfData.length; i++) {
-                //Only render 4 gauges in popover...
+            //Only render 4 gauges in popover...
+            let uPlotGraphDefaultsObj = new PopoverConfigBuilder();
+            let data: any = [];
+            let xData: string[] = [];
+            let yData: number[] = [];
+            const graphData = this.perfData[i].data;
+            for (let timestamp in graphData) {
+                xData.push(timestamp); // Timestamps
+                yData.push(graphData[timestamp]); // values
+            }
+            data.push(xData);
+            data.push(yData);
 
-                let uPlotGraphDefaultsObj = new PopoverConfigBuilder();
+            let title = this.perfData[i].datasource.name;
+            if (title.length > 80) {
+                title = title.substring(0, 80);
+                title += '...';
+            }
 
-                let data: any = [];
-                let xData: string[] = [];
-                let yData: number[] = [];
-                const graphData = this.perfData[i].data;
-                for (let timestamp in graphData) {
-                    xData.push(timestamp); // Timestamps
-                    yData.push(graphData[timestamp]); // values
+            let $elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+            let colors = uPlotGraphDefaultsObj.getColorByIndex(i);
+            let options = uPlotGraphDefaultsObj.getDefaultOptions({
+                unit: this.perfData[i].datasource.unit,
+                showLegend: false,
+                timezone: this.timezone.user_timezone,
+                lineWidth: 2,
+                thresholds: {
+                    show: true,
+                    warning: parseFloat(<string>this.perfData[i].datasource.warn),
+                    critical: parseFloat(<string>this.perfData[i].datasource.crit),
+                },
+                // X-Axis min / max
+                start: this.perfParams.start,
+                end: this.perfParams.end,
+                //Fallback if no thresholds exists
+                strokeColor: colors.stroke,
+                fillColor: colors.fill,
+                YAxisLabelLength: 100,
+            });
+            //options.series[1].stroke = this.colors.stroke.default;
+            //options.series[1].fill = this.colors.fill.default;
+            options.axes[0].label = this.perfData[i].datasource.name
+            options.height = $elm.offsetHeight; // 27px for headline
+            options.width = $elm.offsetWidth - 20;
+            //this.uPlotChart = new uPlot(options, data, $elm);
+            if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
+                try {
+                    let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+
+                    elm.innerHTML = ''
+                    let plot = new uPlot(options, data, elm);
+
+                } catch (e) {
+                    console.error(e);
                 }
-                data.push(xData);
-                data.push(yData);
-
-                let title = this.perfData[i].datasource.name;
-                if (title.length > 80) {
-                    title = title.substring(0, 80);
-                    title += '...';
-                }
-
-                let $elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
-
-                let colors = uPlotGraphDefaultsObj.getColorByIndex(i);
-                let options = uPlotGraphDefaultsObj.getDefaultOptions({
-                    unit: this.perfData[i].datasource.unit,
-                    showLegend: false,
-                    timezone: this.timezone.user_timezone,
-                    lineWidth: 2,
-                    thresholds: {
-                        show: true,
-                        warning: parseFloat(<string>this.perfData[i].datasource.warn),
-                        critical: parseFloat(<string>this.perfData[i].datasource.crit),
-                    },
-                    // X-Axis min / max
-                    start: this.perfParams.start,
-                    end: this.perfParams.end,
-                    //Fallback if no thresholds exists
-                    strokeColor: colors.stroke,
-                    fillColor: colors.fill,
-                    YAxisLabelLength: 100,
-                });
-                //options.series[1].stroke = this.colors.stroke.default;
-                //options.series[1].fill = this.colors.fill.default;
-                options.axes[0].label = this.perfData[i].datasource.name
-
-
-                options.height = $elm.offsetHeight ; // 27px for headline
-                options.width = $elm.offsetWidth - 20;
-
-                //this.uPlotChart = new uPlot(options, data, $elm);
-                // if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
-                ///  try {
-                let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
-
-                elm.innerHTML = ''
-                let plot = new uPlot(options, data, elm);
-
-                /*   } catch (e) {
-                       console.error(e);
-                   }
-
-               } */
+            }
         }
     }
 
