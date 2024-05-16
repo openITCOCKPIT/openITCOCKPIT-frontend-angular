@@ -56,6 +56,7 @@ export interface CalendarEvent extends EventInput {
 
 export interface CalendarEditGet {
     calendar: CalendarPost
+    events: CalendarEvent[]
 }
 
 export interface CalendarContainer {
