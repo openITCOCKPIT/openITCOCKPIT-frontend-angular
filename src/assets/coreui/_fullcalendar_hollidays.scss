@@ -1,0 +1,115 @@
+/* BugFix Style Issue events are not visible*/
+.fc-time-grid .fc-time-grid fc-bgevent {
+    position: relative;
+    z-index: 1;
+}
+
+.fc .fc-daygrid-week-number {
+    top: auto;
+    bottom: 0;
+}
+
+.fc .fc-daygrid-day-top {
+    flex-direction: row;
+}
+
+/* fullcalendar 'more+' container style settings */
+.fc-more-popover {
+    overflow-y: scroll;
+    max-height: 20%;
+    max-width: 14%;
+}
+
+.fc .fc-daygrid-day-number {
+    width: 100%;
+}
+
+.fc-button-primary {
+    background-color: var(--cui-link-color) !important;
+    border-color: var(--cui-link-hover-color) !important;
+    color: #FFF;
+    padding: 0px 4px !important;
+}
+
+.fc-holidays-button {
+    background-color: #00C851 !important;
+    border-color: #449D44 !important;
+    color: #ffffff;
+}
+
+.fc-holidays-button:hover,
+.fc-holidays-button:active,
+.fc-holidays-button:focus {
+    color: #ffffff;
+}
+
+
+.caret-with-margin-left-5 {
+    margin-left: 5px !important;
+}
+
+.fc-title {
+    color: #ffffff;
+}
+
+td.fc-other-month,
+td.fc-day-other {
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(0, 0, 0, .03)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(0, 0, 0, .03)), color-stop(0.75, rgba(0, 0, 0, .03)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(135deg, rgba(0, 0, 0, .03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .03) 50%, rgba(0, 0, 0, .03) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(135deg, rgba(0, 0, 0, .03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .03) 50%, rgba(0, 0, 0, .03) 75%, transparent 75%, transparent);
+    background-image: -ms-linear-gradient(135deg, rgba(0, 0, 0, .03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .03) 50%, rgba(0, 0, 0, .03) 75%, transparent 75%, transparent);
+    background-image: -o-linear-gradient(135deg, rgba(0, 0, 0, .03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .03) 50%, rgba(0, 0, 0, .03) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(0, 0, 0, .03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .03) 50%, rgba(0, 0, 0, .03) 75%, transparent 75%, transparent);
+    background-color: #FAFCFD33;
+    background-size: 16px 16px
+}
+
+.fc-content {
+    color: #fff;
+}
+
+.fc-bgevent:not(.fc-nonbusiness) {
+    /* default look for background events */
+    background: transparent;
+}
+
+.fc-unthemed td.fc-today, /*old*/
+.fc-theme-standard td.fc-day-today { /*new*/
+    background: #00C85133 !important;
+}
+
+.no-events:before {
+    content: "\f273";
+    font-family: FontAwesome;
+    font-size: 50px;
+    position: absolute;
+    white-space: pre;
+    display: inline;
+    top: 6%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background-image: radial-gradient(closest-side at 50% 59%, #C00 0, #C00 46%, #4285F4 30%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.fc-event-title {
+    white-space: normal;
+}
+
+.bg-color-pinkDark {
+    background-image: linear-gradient(90deg, #0431cb, #21affc);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 1px 5px 0 transparentize(#0431cb, 0.5);
+
+}
+
+.bg-color-magenta {
+    background-image: linear-gradient(90deg, #6a11cb, #d85fd6);
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: 0 1px 5px 0 transparentize(#6a11cb, 0.5);
+}

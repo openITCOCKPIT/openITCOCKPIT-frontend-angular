@@ -36,8 +36,10 @@ export interface ContactsIndexRoot extends PaginateOrScroll {
 }
 
 export interface ContactsEditRoot {
+    areContainersChangeable: boolean;
     contact: ContactNest;
     _csrfToken: string;
+    requiredContainers: number[];
 }
 
 export interface ContactNest {

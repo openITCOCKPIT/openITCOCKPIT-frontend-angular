@@ -5,7 +5,10 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormControlDirective, FormLabelDirective, NavComponent
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    NavComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -59,10 +62,10 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
 
     private subscriptions: Subscription = new Subscription()
-    private ContactsService = inject(ContactsService);
-    private readonly notyService = inject(NotyService);
-    private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private ContactsService: ContactsService = inject(ContactsService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private router: Router = inject(Router);
+    private route: ActivatedRoute = inject(ActivatedRoute)
 
 
     public ngOnInit() {
@@ -72,7 +75,6 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'contacts', 'index']);
             return;
         }
-        console.log(ids);
 
         this.subscriptions.add(this.ContactsService.getContactsCopy(ids).subscribe(contacts => {
             for (let contact of contacts) {
@@ -106,6 +108,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'contacts', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.contacts = error.error.result as ContactCopyPost[];
                 }
             })

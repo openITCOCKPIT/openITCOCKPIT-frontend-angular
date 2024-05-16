@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -57,7 +57,7 @@
                                 {{ container.value }}
                             </ng-option>
                         </ng-select>
-                        <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow">
+                        <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
@@ -147,7 +147,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
 
                         <div class="help-block">
-                            {{t('For browser notifications, a user needs to be assigned to the contact. User Id will be automatically available as $_CONTACTOITCUSERID$ contact macro.')}}
+                            {{ t('For browser notifications, a user needs to be assigned to the contact. User Id will be automatically available as $_CONTACTOITCUSERID$ contact macro.') }}
                         </div>
                     </div>
 
@@ -253,11 +253,17 @@
                                                 for="host_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_host_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent">
+                                                    <ng-template #tooltipContent>
+                                                        <img src="./assets/images/docs/browser_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
-                                    <hr>
+
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <label>
@@ -462,12 +468,17 @@
                                                 for="service_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_service_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent2">
+                                                    <ng-template #tooltipContent2>
+                                                        <img
+                                                            src="./assets/images/docs/browser_service_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
 
-                                    <hr>
+                                    <hr class="border-dashed">
                                     <fieldset>
                                         <legend class="fs-md">
                                             <div class="required">
@@ -608,7 +619,7 @@
                         </div>
                     </div>
 
-                    <hr>
+                    <hr class="border-dashed">
 
                     <c-form-check class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
@@ -639,7 +650,7 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
 
-                    <label for="createAnother">
+                    <label for="createAnother" class="me-2">
 
                         <c-form-check>
                             <input

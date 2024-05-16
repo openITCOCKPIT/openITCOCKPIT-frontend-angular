@@ -40,7 +40,6 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-
                         <ng-select [items]="containers"
                                    bindLabel="value"
                                    bindValue="key"
@@ -55,6 +54,9 @@
                             </ng-template>
                         </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                        <div [hidden]="post.container_id" class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label cLabel for="calendarName">
@@ -77,11 +79,19 @@
                                [(ngModel)]="post.description">
                         <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                     </div>
-                    <div class="mb-3">
-                        <oitc-full-calendar></oitc-full-calendar>
-                    </div>
+
+                    <oitc-calendar [(events)]="events"
+                                   [countries]="countries"
+                                   [(countryCode)]="countryCode"
+                                   (countryCodeChange)="setCountryCodeAndLoadHolidays($event);"></oitc-calendar>
+
                 </c-card-body>
                 <c-card-footer class="text-end">
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
+                    </label>
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Create calendar') }}
                     </button>
@@ -93,5 +103,6 @@
                 </c-card-footer>
             </c-card>
         </form>
+
     </ng-container>
 </oitc-coreui>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FullCalendarComponent } from './full-calendar.component';
+import { CronjobsIndexComponent } from './cronjobs-index.component';
 
-describe('FullCalendarComponent', () => {
-  let component: FullCalendarComponent;
-  let fixture: ComponentFixture<FullCalendarComponent>;
+describe('CronjobsIndexComponent', () => {
+  let component: CronjobsIndexComponent;
+  let fixture: ComponentFixture<CronjobsIndexComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FullCalendarComponent]
+      imports: [CronjobsIndexComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(FullCalendarComponent);
+    fixture = TestBed.createComponent(CronjobsIndexComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

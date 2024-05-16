@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -55,9 +55,10 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="name"
+                        <ng-select name="containers"
                                    id="containers"
                                    #containerIdsRef="ngModel"
+                                   [disabled]="!areContainersChangeable"
                                    [multiple]="true"
                                    [(ngModel)]="post.containers._ids"
                                    (ngModelChange)="onContainerChange()"
@@ -67,12 +68,37 @@
                                 {{ container.value }}
                             </ng-option>
                         </ng-select>
-                        <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow">
+                        <div *ngIf="post.containers._ids.length === 0 && requiredContainers.length === 0"
+                             class="text-warning-glow">
                             {{ t('Please select a container.') }}
                         </div>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     </div>
 
+                    <div class="mb-3" *ngIf="requiredContainers.length > 0">
+                        <label cLabel for="requiredContainers">
+                            {{ t('Required containers') }}
+
+                            <a [routerLink]="['/', 'contacts', 'usedBy', contactId, requiredContainersString]">
+                                <fa-icon [icon]="['fas', 'reply-all']"
+                                         class="fa-flip-horizontal text-primary"></fa-icon>
+                                {{ t('Used by') }}
+                                <sup>
+                                    <fa-icon [icon]="['fas', 'info-circle']" class="text-info"/>
+                                </sup>
+                            </a>
+                        </label>
+                        <ng-select name="requiredContainers"
+                                   id="requiredContainers"
+                                   #containerIdsRef="ngModel"
+                                   [multiple]="true"
+                                   [(ngModel)]="requiredContainers"
+                                   [disabled]="true">
+                            <ng-option *ngFor="let container of this.allContainers" [value]="container.key">
+                                {{ container.value }}  🔒
+                            </ng-option>
+                        </ng-select>
+                    </div>
 
                     <div class="mb-3">
                         <label cLabel for="name">
@@ -157,7 +183,7 @@
                         <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
 
                         <div class="help-block">
-                            {{t('For browser notifications, a user needs to be assigned to the contact. User Id will be automatically available as $_CONTACTOITCUSERID$ contact macro.')}}
+                            {{ t('For browser notifications, a user needs to be assigned to the contact. User Id will be automatically available as $_CONTACTOITCUSERID$ contact macro.') }}
                         </div>
                     </div>
 
@@ -263,11 +289,17 @@
                                                 for="host_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_host_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent">
+                                                    <ng-template #tooltipContent>
+                                                        <img src="./assets/images/docs/browser_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
-                                    <hr>
+
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <label>
@@ -472,12 +504,18 @@
                                                 for="service_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_service_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent2">
+                                                    <ng-template #tooltipContent2>
+                                                        <img
+                                                            src="./assets/images/docs/browser_service_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
 
-                                    <hr>
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <div class="required">
@@ -618,10 +656,12 @@
                         </div>
                     </div>
 
-                    <hr>
+                    <hr class="border-dashed">
 
                     <c-form-check class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
+                        <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                            *ngIf="hasMacroErrors"></oitc-form-feedback>
                     </c-form-check>
 
                     <div class="row"
@@ -631,6 +671,7 @@
                             [macroName]="'CONTACT'"
                             [index]="i"
                             [deleteMacroCallback]="deleteMacro"
+                            [errors]="getMacroErrors"
                             class="col-lg-12"
                         />
 
@@ -650,7 +691,7 @@
                 <c-card-footer class="text-end">
 
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create contact') }}
+                        {{ t('Update contact') }}
                     </button>
                     <button [fallbackUrl]="['contacts', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

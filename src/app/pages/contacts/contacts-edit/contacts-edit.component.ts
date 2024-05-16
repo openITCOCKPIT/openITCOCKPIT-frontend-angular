@@ -10,7 +10,12 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -22,11 +27,10 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     Contact,
-    ContactPost,
     LoadCommand,
     LoadCommandsRoot,
     LoadTimeperiodsPost,
@@ -94,6 +98,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
+    protected areContainersChangeable: boolean = true;
 
     public post: Contact = {
         containers: {_ids: []},
@@ -130,23 +135,32 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private servicePushCommandId: number = 0;
     protected notificationCommands: LoadCommand[] = [];
     protected timeperiods: Timeperiod[] = [];
+    protected hasMacroErrors: boolean = false;
+
+    protected requiredContainers: number[] = [];
+    protected requiredContainersString: string = '';
+    protected allContainers: Container[] = []
+    protected contactId: number = 0;
+    protected selectedContainers: number[] = [];
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactService.getEdit(id)
+        this.loadCommands();
+        this.contactId = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.ContactService.getEdit(this.contactId)
             .subscribe((result) => {
-                //First, load shit into the component.
-                this.loadContainers();
-                this.loadCommands();
-
                 // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.contact.Contact;
+                this.requiredContainers = result.requiredContainers;
+                this.requiredContainersString = this.requiredContainers.join(',');
+                this.areContainersChangeable = result.areContainersChangeable;
 
-                // Then force containerChange!
                 this.onContainerChange();
 
-                // Another time we override the ids...
-                this.post.containers._ids = [1];
+                // Force empty container selection.
+                this.selectedContainers = this.post.containers._ids;
+                this.post.containers._ids = [];
+                this.loadContainers();
+
             }));
     }
 
@@ -156,6 +170,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public updateContact(): void {
 
+        this.post.containers._ids = this.post.containers._ids.concat(this.requiredContainers);
         this.subscriptions.add(this.ContactService.updateContact(this.post)
             .subscribe((result) => {
                 if (result.success) {
@@ -176,6 +191,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        this.hasMacroErrors = true;
+                    }
                 }
             })
         );
@@ -184,7 +204,40 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.containersService.loadContainers()
             .subscribe((result) => {
-                this.containers = result.containers;
+                // Fetch all containers.
+                this.allContainers = result.containers;
+
+                // If no containers are required, the selectedContainers can remain where they belong.
+                if (this.requiredContainers.length === 0) {
+                    this.post.containers._ids = this.selectedContainers;
+                    this.containers = this.allContainers;
+                    return;
+                }
+
+                let newContainers: Container[] = [];
+                let newPostIds: number[] = [];
+
+                // Otherwise, we need to only add the selected containers that are not required to the container list.
+                for (var i in this.allContainers) {
+                    let index = parseInt(i),
+                        container: Container = this.allContainers[index];
+
+                    // The container is required? Then skip.
+                    if (this.requiredContainers.indexOf(container.key) !== -1) {
+                        continue;
+                    }
+
+                    // Otherwise add to the container dropdown.
+                    newContainers.push(container);
+
+                    // And if it is selected, add it to the overwrite-array.
+                    if (this.selectedContainers.indexOf(container.key) !== -1) {
+                        newPostIds.push(container.key);
+                    }
+
+                }
+                this.containers = newContainers;
+                this.post.containers._ids = newPostIds;
             }))
     }
 
@@ -290,5 +343,13 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
