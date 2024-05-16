@@ -80,7 +80,7 @@
                                 </c-input-group>
                             </c-col>
 
-                            <c-col md="6">
+                            <c-col md="6" class="mb-1">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -107,11 +107,8 @@
                                             let-item="item"
                                             let-item$="item$"
                                             let-index="index">
-                                            <div class="ng-select select-all-option">
-                                                <input id="item-{{ index }}" type="checkbox" name="ngSelectSelectAll"
-                                                       [ngModel]="item$.selected" class="me-2"/>
-                                                {{ t('Select All') }}
-                                            </div>
+                                            <oitc-ng-select-select-all [item]="item" [item$]="item$"
+                                                                       [index]="index"></oitc-ng-select-select-all>
                                         </ng-template>
 
                                         <ng-template
@@ -119,10 +116,11 @@
                                             let-item="item"
                                             let-item$="item$"
                                             let-index="index"
+                                            let-search="searchTerm"
                                         >
-                                            <input id="item-{{ index }}" [name]="'ngSelectCheckbox-'+index"
-                                                   type="checkbox" [ngModel]="item$.selected"/>
-                                            {{ item.name }}
+                                            <oitc-ng-select-option-checkbox [item]="item" [item$]="item$"
+                                                                            [index]="index"
+                                                                            [search]="search"></oitc-ng-select-option-checkbox>
                                         </ng-template>
 
                                     </ng-select>
@@ -142,7 +140,135 @@
                 </c-container>
                 <!-- End Filter -->
 
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hosttemplates.name">
+                            {{ t('Host template name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosttemplates.hosttemplatetype_id">
+                            {{ t('Type') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="hosttemplates">
+                    <tr *ngFor="let hosttemplate of hosttemplates.all_hosttemplates">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['hosttemplates', 'delete']"
+                                [disabled]="!hosttemplate.Hosttemplate.allow_edit"
+                                [item]="hosttemplate"></oitc-item-select>
+
+                        </td>
+                        <td>{{ hosttemplate.Hosttemplate.name }}</td>
+                        <td>
+                            <span
+                                class="badge border"
+                                [ngClass]="[hosttemplate.Hosttemplate.type.class, hosttemplate.Hosttemplate.type.color]">
+                                <fa-icon [icon]="hosttemplate.Hosttemplate.type.icon"
+                                         [rotate]="hosttemplate.Hosttemplate.type.rotate"></fa-icon>
+                                {{ hosttemplate.Hosttemplate.type.title }}
+                            </span>
+                        </td>
+
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'hosttemplates.edit'"
+                                                 [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id"
+                                                 [allowEdit]="hosttemplate.Hosttemplate.allow_edit">
+                                <oitc-actions-button-element [permission]="'hosttemplates.edit'"
+                                                             [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                             [url]="'/changelogs/entity/hosttemplate/' + hosttemplate.Hosttemplate.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'hosttemplates.usedBy'"
+                                                             [url]="'/hosttemplates/usedBy/' + hosttemplate.Hosttemplate.id">
+                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                    {{ t('Used By') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'documentations.view'"
+                                                             [url]="'/documentations/view/' + hosttemplate.Hosttemplate.uuid+'/hosttemplate'">
+                                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                    {{ t('Documentation') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element [permission]="'hosttemplates.copy'"
+                                                             [url]="'/hosttemplates/copy/' + hosttemplate.Hosttemplate.id">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hosttemplate)"
+                                                             [permission]="'hosttemplates.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="hosttemplates && hosttemplates.all_hosttemplates.length === 0"></oitc-no-records>
+                <ng-container *ngIf="hosttemplates && hosttemplates.all_hosttemplates">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="hosttemplates.all_hosttemplates.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+                                    <button class="btn btn-outline-primary col-3" type="button"
+                                            (click)="navigateCopy()">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </button>
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="hosttemplates"
+                                [paginateOrScroll]="hosttemplates"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+
             </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
         </c-card>
     </ng-container>
 </oitc-coreui>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
