@@ -26,7 +26,6 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Container } from '../../containers/containers.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
 import { ContainersService } from '../../containers/containers.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -34,12 +33,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ContactgroupsService } from '../contactgroups.service';
 import {
-    ContactgroupEditContactGroup,
-    ContactgroupAddPost,
-    ContactgroupsEditRoot,
-    GetContactsByContainerIdRootContact, ContactgroupEditPostContactgroup, ContactgroupAddPostContactgroup
+    GetContactsByContainerIdRootContact, ContactgroupAddPostContactgroup
 } from '../contactgroups.interface';
-import { ContactsService } from '../../contacts/contacts.service';
 
 @Component({
     selector: 'oitc-contactgroups-add',
@@ -85,7 +80,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
-    protected contacts: UserByContainer[] = [];
+    protected contacts: GetContactsByContainerIdRootContact[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
