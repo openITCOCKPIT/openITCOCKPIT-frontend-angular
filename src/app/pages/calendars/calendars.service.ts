@@ -13,7 +13,12 @@ import {
     Countries
 } from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -103,7 +108,8 @@ export class CalendarsService implements DeleteAllModalService {
     public getEdit(id: number): Observable<CalendarEditGet> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            calendar: CalendarPost
+            calendar: CalendarPost,
+            events: CalendarEvent[]
         }>(`${proxyPath}/calendars/edit/${id}.json?angular=true`).pipe(
             map(data => {
                 return data;
@@ -114,14 +120,15 @@ export class CalendarsService implements DeleteAllModalService {
     public updateCalendar(calendar: CalendarPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/calendars/edit/${calendar.id}.json?angular=true`, {
-            Calendar: calendar
+            Calendar: calendar,
+            events: calendar.events
         })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data
                     };
                 }),
                 catchError((error: any) => {
@@ -133,6 +140,7 @@ export class CalendarsService implements DeleteAllModalService {
                 })
             );
     }
+
 
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {

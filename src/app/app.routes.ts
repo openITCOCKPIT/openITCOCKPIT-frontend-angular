@@ -86,6 +86,9 @@ export const routes: Routes = [{
     path: 'contacts/usedBy/:id',
     loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
 }, {
+    path: 'contacts/usedBy/:id/:containerIds',
+    loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
+}, {
     path: 'changelogs/index',
     loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
 }, {
@@ -127,6 +130,9 @@ export const routes: Routes = [{
 }, {
     path: 'calendars/add',
     loadComponent: () => import('./pages/calendars/calendars-add/calendars-add.component').then(m => m.CalendarsAddComponent)
+}, {
+    path: 'calendars/edit/:id',
+    loadComponent: () => import('./pages/calendars/calendars-edit/calendars-edit.component').then(m => m.CalendarsEditComponent)
 }, {
     path: 'documentations/view/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-view/documentations-view.component').then(m => m.DocumentationsViewComponent)
