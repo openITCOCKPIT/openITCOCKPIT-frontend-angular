@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -293,7 +293,9 @@
                                             </label>
                                         </c-form-check>
                                     </div>
-                                    <hr>
+
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <label>
@@ -507,7 +509,7 @@
                                         </c-form-check>
                                     </div>
 
-                                    <hr>
+                                    <hr class="border-dashed">
                                     <fieldset>
                                         <legend class="fs-md">
                                             <div class="required">
@@ -648,7 +650,7 @@
                         </div>
                     </div>
 
-                    <hr *ngIf="ldapUser !== null">
+                    <hr *ngIf="ldapUser !== null" class="border-dashed">
 
                     <c-form-check *ngIf="ldapUser !== null" class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>

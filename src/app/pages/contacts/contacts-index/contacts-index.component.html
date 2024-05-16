@@ -1,7 +1,7 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
 
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -182,36 +182,62 @@
                         <td>{{ contact.Contact.phone }}</td>
 
                         <td>
-                            <c-badge *ngIf="contact.Contact.host_notifications_enabled" color="success" textColor="white">{{t('Enabled')}}</c-badge>
-                            <c-badge *ngIf="! contact.Contact.host_notifications_enabled" color="danger" textColor="white">{{t('Disabled')}}</c-badge>
+                            <c-badge *ngIf="contact.Contact.host_notifications_enabled" color="success"
+                                     textColor="white">{{ t('Enabled') }}
+                            </c-badge>
+                            <c-badge *ngIf="! contact.Contact.host_notifications_enabled" color="danger"
+                                     textColor="white">{{ t('Disabled') }}
+                            </c-badge>
                         </td>
                         <td>
-                            <c-badge *ngIf="contact.Contact.notify_host_recovery"    color="success"   textColor="white" class="margin-right-5">{{t('R')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_host_down"        color="danger"    textColor="white" class="margin-right-5">{{t('D')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_host_unreachable" color="secondary" textColor="white" class="margin-right-5">{{t('U')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_host_flapping"    color="primary"   textColor="white" class="margin-right-5">
+                            <c-badge *ngIf="contact.Contact.notify_host_recovery" color="success" textColor="white"
+                                     class="margin-right-5">{{ t('R') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_host_down" color="danger" textColor="white"
+                                     class="margin-right-5">{{ t('D') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_host_unreachable" color="secondary" textColor="white"
+                                     class="margin-right-5">{{ t('U') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_host_flapping" color="primary" textColor="white"
+                                     class="margin-right-5">
                                 <fa-icon [icon]="['fas', 'circle']"></fa-icon>
                                 <fa-icon [icon]="['far', 'circle']"></fa-icon>
                             </c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_host_downtime"    color="primary"   textColor="white" class="margin-right-5">
+                            <c-badge *ngIf="contact.Contact.notify_host_downtime" color="primary" textColor="white"
+                                     class="margin-right-5">
                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                             </c-badge>
                         </td>
 
                         <td>
-                            <c-badge *ngIf="contact.Contact.service_notifications_enabled" color="success" textColor="white">{{t('Enabled')}}</c-badge>
-                            <c-badge *ngIf="! contact.Contact.service_notifications_enabled" color="danger" textColor="white">{{t('Disabled')}}</c-badge>
+                            <c-badge *ngIf="contact.Contact.service_notifications_enabled" color="success"
+                                     textColor="white">{{ t('Enabled') }}
+                            </c-badge>
+                            <c-badge *ngIf="! contact.Contact.service_notifications_enabled" color="danger"
+                                     textColor="white">{{ t('Disabled') }}
+                            </c-badge>
                         </td>
                         <td>
-                            <c-badge *ngIf="contact.Contact.notify_service_recovery" color="success"   textColor="white" class="margin-right-5">{{t('R')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_service_warning"  color="warning"   textColor="white" class="margin-right-5">{{t('W')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_service_critical" color="danger"    textColor="white" class="margin-right-5">{{t('C')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_service_unknown"  color="secondary" textColor="white" class="margin-right-5">{{t('U')}}</c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_service_flapping" color="primary"   textColor="white" class="margin-right-5">
+                            <c-badge *ngIf="contact.Contact.notify_service_recovery" color="success" textColor="white"
+                                     class="margin-right-5">{{ t('R') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_service_warning" color="warning" textColor="white"
+                                     class="margin-right-5">{{ t('W') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_service_critical" color="danger" textColor="white"
+                                     class="margin-right-5">{{ t('C') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_service_unknown" color="secondary" textColor="white"
+                                     class="margin-right-5">{{ t('U') }}
+                            </c-badge>
+                            <c-badge *ngIf="contact.Contact.notify_service_flapping" color="primary" textColor="white"
+                                     class="margin-right-5">
                                 <fa-icon [icon]="['fas', 'circle']"></fa-icon>
                                 <fa-icon [icon]="['far', 'circle']"></fa-icon>
                             </c-badge>
-                            <c-badge *ngIf="contact.Contact.notify_service_downtime" color="primary"   textColor="white" class="margin-right-5">
+                            <c-badge *ngIf="contact.Contact.notify_service_downtime" color="primary" textColor="white"
+                                     class="margin-right-5">
                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                             </c-badge>
 
