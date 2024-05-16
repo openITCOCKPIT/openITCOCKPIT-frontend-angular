@@ -106,11 +106,12 @@
                                             ng-optgroup-tmp
                                             let-item="item"
                                             let-item$="item$"
-                                            let-index="index"
-                                        >
-                                            <input id="item-{{ index }}" type="checkbox" name="ngSelectSelectAll"
-                                                   [ngModel]="item$.selected"/>
-                                            {{ t('Select All') }}
+                                            let-index="index">
+                                            <div class="ng-select select-all-option">
+                                                <input id="item-{{ index }}" type="checkbox" name="ngSelectSelectAll"
+                                                       [ngModel]="item$.selected" class="me-2"/>
+                                                {{ t('Select All') }}
+                                            </div>
                                         </ng-template>
 
                                         <ng-template
