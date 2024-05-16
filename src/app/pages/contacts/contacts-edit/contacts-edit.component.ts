@@ -10,7 +10,12 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -22,11 +27,10 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     Contact,
-    ContactPost,
     LoadCommand,
     LoadCommandsRoot,
     LoadTimeperiodsPost,
@@ -131,6 +135,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private servicePushCommandId: number = 0;
     protected notificationCommands: LoadCommand[] = [];
     protected timeperiods: Timeperiod[] = [];
+    protected hasMacroErrors: boolean = false;
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
@@ -186,6 +191,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (typeof(this.errors['customvariables']['custom']) === "string") {
+                        this.hasMacroErrors = true;
+                    }
                 }
             })
         );
@@ -322,11 +332,10 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     }
 
     protected getMacroErrors = (index: number): GenericValidationError => {
-        return {
-            '1': {
-                'name': 'asnaeb',
-                'value': 'fake'
-            }
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
         }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
