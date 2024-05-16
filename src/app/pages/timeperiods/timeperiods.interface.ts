@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { GenericValidationError } from '../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../generic-responses';
 
 export interface TimeperiodsIndexParams {
     angular: true,
@@ -91,6 +91,10 @@ export interface Container {
 export interface Calendar {
     key: number,
     value: string
+}
+
+export interface TimeperiodAddResponse extends GenericIdResponse {
+    timeperiod: Timeperiod
 }
 
 /**********************

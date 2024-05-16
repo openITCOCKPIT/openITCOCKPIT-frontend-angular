@@ -255,7 +255,6 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
                     const title = this.TranslocoService.translate('Time period');
                     const msg = this.TranslocoService.translate('updated successfully');
-                    // @ts-ignore
                     const url = ['timeperiods', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);

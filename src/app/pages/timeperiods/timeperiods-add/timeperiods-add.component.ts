@@ -1,10 +1,10 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Calendar, Container, InternalRange, Timeperiod } from '../timeperiods.interface';
+import { Calendar, Container, InternalRange, Timeperiod, TimeperiodAddResponse } from '../timeperiods.interface';
 import { TimeperiodsService } from '../timeperiods.service';
 import _ from 'lodash';
 import { WeekdaysService } from '../../../weekdays.service';
@@ -214,11 +214,11 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimeperiodsService.createTimeperiod(this.post)
             .subscribe((result) => {
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
+                    const response = result.data as TimeperiodAddResponse;
 
                     const title = this.TranslocoService.translate('Time period');
                     const msg = this.TranslocoService.translate('created successfully');
-                    // @ts-ignore
+
                     const url = ['timeperiods', 'edit', response.timeperiod.id];
 
                     this.notyService.genericSuccess(msg, title, url);
