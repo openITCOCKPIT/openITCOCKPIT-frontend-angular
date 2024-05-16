@@ -1,3 +1,5 @@
 <input id="item-{{ index }}" [name]="'ngSelectCheckbox-'+index"
        type="checkbox" [ngModel]="item$.selected"/>
-{{ item.name }}
+
+<div [ngOptionHighlight]="search" class="d-inline ms-1">{{ item.name }}</div>
+
