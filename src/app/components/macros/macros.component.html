@@ -11,6 +11,7 @@
             <label class="form-label">
                 {{ t('Name') }}
             </label>
+            <oitc-required-icon></oitc-required-icon>
             <input class="form-control w-100"
                    type="text"
                    name="name"
@@ -18,22 +19,17 @@
                    [(ngModel)]="macro.name"
                    (ngModelChange)="updateName()"
             >
-            <div *ngIf="errors.length > 0">
-                ERRORS
-                <div class="text-danger">{{ errors.name }}</div>
-            </div>
+            <oitc-form-feedback [errors]="getErrors()" errorField="name"></oitc-form-feedback>
         </div>
         <div class="col-lg-4 form-group">
             <label class="form-label">
                 {{ t('Value') }}
             </label>
+            <oitc-required-icon></oitc-required-icon>
             <input class="form-control w-100" type="text"
                    name="value"
                    [(ngModel)]="macro.value">
-            <div *ngIf="errors.length > 0">
-                ERRORS
-                <div class="text-danger">{{ errors.name }}</div>
-            </div>
+            <oitc-form-feedback [errors]="getErrors()" errorField="value"></oitc-form-feedback>
         </div>
         <div class="col-md-1 col-lg-1">
             <a class="btn btn-default ripple"
