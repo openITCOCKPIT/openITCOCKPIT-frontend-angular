@@ -107,7 +107,7 @@ a {
     overflow-y: auto;
 }
 
-ul {
+.sidebar-nav ul {
     display: inline-flex;
     list-style: none;
     margin: 0;

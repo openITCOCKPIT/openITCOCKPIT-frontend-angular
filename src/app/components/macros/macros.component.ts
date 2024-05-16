@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Customvariable } from '../../pages/contacts/contacts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,8 @@ import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericValidationError } from '../../generic-responses';
+import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
+import { RequiredIconComponent } from '../required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-macros',
@@ -20,7 +22,9 @@ import { GenericValidationError } from '../../generic-responses';
         CoreuiComponent,
         TranslocoDirective,
         FormErrorDirective,
-        NgSelectModule
+        NgSelectModule,
+        FormFeedbackComponent,
+        RequiredIconComponent
     ],
     templateUrl: './macros.component.html',
     styleUrl: './macros.component.css'
@@ -29,11 +33,11 @@ export class MacrosComponent implements OnInit {
 
     @Input() public macro: Customvariable = {} as Customvariable;
     @Input() public macroName: string = '';
-    @Input() public index: number | string = 0;
+    @Input() public index: number = 0;
     @Input() public deleteMacroCallback: Function = () => {
     };
-    @Input() public errors: Function = (): GenericValidationError[] => {
-        return [] as GenericValidationError[];
+    @Input() public errors: Function = (index: number): GenericValidationError => {
+        return {} as GenericValidationError;
     };
 
     protected textClass: string = 'text-primary';
@@ -62,5 +66,9 @@ export class MacrosComponent implements OnInit {
 
     public deleteMacro() {
         this.deleteMacroCallback(this.index);
+    }
+
+    public getErrors(): GenericValidationError {
+        return this.errors(this.index);
     }
 }

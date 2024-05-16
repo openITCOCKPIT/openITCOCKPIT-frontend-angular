@@ -285,7 +285,11 @@
                                                 for="host_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_host_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent">
+                                                    <ng-template #tooltipContent>
+                                                        <img src="/img/browser_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
@@ -494,7 +498,11 @@
                                                 for="service_push_notifications_enabled">
                                                 {{ t('Push notifications to browser') }}
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                                         cTooltip="<img src='/img/browser_service_notification_bg.png'/>"></fa-icon>
+                                                         [cTooltip]="tooltipContent2">
+                                                    <ng-template #tooltipContent2>
+                                                        <img src="/img/browser_service_notification_bg.png"/>
+                                                    </ng-template>
+                                                </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>

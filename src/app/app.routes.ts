@@ -53,6 +53,21 @@ export const routes: Routes = [{
     path: 'commands/usedBy/:id',
     loadComponent: () => import('./pages/commands/commands-used-by/commands-used-by.component').then(m => m.CommandsUsedByComponent)
 }, {
+    path: 'contactgroups/add',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-add/contactgroups-add.component').then(m => m.ContactgroupsAddComponent)
+}, {
+    path: 'contactgroups/copy/:ids',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-copy/contactgroups-copy.component').then(m => m.ContactgroupsCopyComponent)
+}, {
+    path: 'contactgroups/index',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-index/contactgroups-index.component').then(m => m.ContactgroupsIndexComponent)
+}, {
+    path: 'contactgroups/edit/:id',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-edit/contactgroups-edit.component').then(m => m.ContactgroupsEditComponent)
+}, {
+    path: 'contactgroups/usedBy/:id',
+    loadComponent: () => import('./pages/contactgroups/contactgroups-used-by/contactgroups-used-by.component').then(m => m.ContactgroupsUsedByComponent)
+}, {
     path: 'contacts/index',
     loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
 }, {
@@ -69,6 +84,9 @@ export const routes: Routes = [{
     loadComponent: () => import('./pages/contacts/contacts-ldap/contacts-ldap.component').then(m => m.ContactsLdapComponent)
 }, {
     path: 'contacts/usedBy/:id',
+    loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
+}, {
+    path: 'contacts/usedBy/:id/:containerIds',
     loadComponent: () => import('./pages/contacts/contacts-used-by/contacts-used-by.component').then(m => m.ContactsUsedByComponent)
 }, {
     path: 'changelogs/index',
@@ -98,8 +116,17 @@ export const routes: Routes = [{
     path: 'registers/index',
     loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
 }, {
+    path: 'cronjobs/index',
+    loadComponent: () => import('./pages/cronjobs/cronjobs-index/cronjobs-index.component').then(m => m.CronjobsIndexComponent)
+}, {
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
+}, {
+    path: 'hosttemplates/index',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-index/hosttemplates-index.component').then(m => m.HosttemplatesIndexComponent)
+}, {
+    path: 'hosttemplates/add',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-add/hosttemplates-add.component').then(m => m.HosttemplatesAddComponent)
 }, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
@@ -107,11 +134,20 @@ export const routes: Routes = [{
     path: 'calendars/add',
     loadComponent: () => import('./pages/calendars/calendars-add/calendars-add.component').then(m => m.CalendarsAddComponent)
 }, {
+    path: 'calendars/edit/:id',
+    loadComponent: () => import('./pages/calendars/calendars-edit/calendars-edit.component').then(m => m.CalendarsEditComponent)
+}, {
     path: 'documentations/view/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-view/documentations-view.component').then(m => m.DocumentationsViewComponent)
 }, {
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
+}, {
+    path: 'timeperiods/index',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-index/timeperiods-index.component').then(m => m.TimeperiodsIndexComponent)
+}, {
+    path: 'timeperiods/add',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-add/timeperiods-add.component').then(m => m.TimeperiodsAddComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

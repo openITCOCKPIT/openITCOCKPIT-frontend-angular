@@ -1,20 +1,24 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { catchError, forkJoin, map, Observable, of } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import {
     CalendarContainer,
     CalendarEditGet,
-    CalendarHoliday,
+    CalendarEvent,
     CalendarIndexRoot,
     CalendarPost,
-    CalendarsIndexParams, Countries,
-    CountriesAndContainers,
-    CountryRoot
+    CalendarsIndexParams,
+    Countries
 } from './calendars.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -60,6 +64,7 @@ export class CalendarsService implements DeleteAllModalService {
             );
     }
 
+    /*
     public getAdd(): Observable<CountriesAndContainers> {
         const proxyPath = this.proxyPath;
         return forkJoin([
@@ -73,14 +78,14 @@ export class CalendarsService implements DeleteAllModalService {
                 }
             }),
         );
-    }
+    }*/
 
-    public getContainers(): Observable< CalendarContainer[]> {
+    public getContainers(): Observable<CalendarContainer[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             containers: CalendarContainer[]
         }>(`${proxyPath}/containers/loadContainersForAngular.json?angular=true`).pipe(
-            map(data =>{
+            map(data => {
                 return data.containers;
             })
         );
@@ -93,7 +98,6 @@ export class CalendarsService implements DeleteAllModalService {
         }>(`${proxyPath}/calendars/loadCountryList.json?angular=true`).pipe(
             map(
                 data => {
-                    console.log(data.countries);
                     return data.countries;
                 }
             )
@@ -104,7 +108,8 @@ export class CalendarsService implements DeleteAllModalService {
     public getEdit(id: number): Observable<CalendarEditGet> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            calendar: CalendarPost
+            calendar: CalendarPost,
+            events: CalendarEvent[]
         }>(`${proxyPath}/calendars/edit/${id}.json?angular=true`).pipe(
             map(data => {
                 return data;
@@ -115,14 +120,15 @@ export class CalendarsService implements DeleteAllModalService {
     public updateCalendar(calendar: CalendarPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/calendars/edit/${calendar.id}.json?angular=true`, {
-            Calendar: calendar
+            Calendar: calendar,
+            events: calendar.events
         })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data
                     };
                 }),
                 catchError((error: any) => {
@@ -135,6 +141,7 @@ export class CalendarsService implements DeleteAllModalService {
             );
     }
 
+
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
@@ -142,11 +149,10 @@ export class CalendarsService implements DeleteAllModalService {
     }
 
 
-
-    public getHolidays(countryCode: string): Observable<CalendarHoliday[]> {
+    public getHolidays(countryCode: string): Observable<CalendarEvent[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            holidays: CalendarHoliday[]
+            holidays: CalendarEvent[]
         }>(`${proxyPath}/calendars/loadHolidays/${countryCode}.json?angular=true`).pipe(
             map(data => {
                 return data.holidays;

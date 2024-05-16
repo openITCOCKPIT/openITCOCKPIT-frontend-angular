@@ -366,7 +366,15 @@
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
-    color: $input-disabled-bg;
+    //color: $input-disabled-bg;
+    color: $input-disabled-color;
+    background-color: $input-disabled-bg;
+}
+
+.dark-theme .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+    //color: $input-disabled-bg;
+    color: #9a9b9d;
+    background-color: #262626;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-child {
@@ -397,6 +405,13 @@
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
     background-color: var(--cui-secondary-bg);
+    color: var(--cui-body-color);
+}
+
+
+// ITN Custom
+.ng-select .select-all-option {
+    font-weight: bold;
     color: var(--cui-body-color);
 }
 
