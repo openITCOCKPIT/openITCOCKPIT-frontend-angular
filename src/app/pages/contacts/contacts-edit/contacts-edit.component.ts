@@ -193,7 +193,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof(this.errors['customvariables']['custom']) === "string") {
+                    if (typeof (this.errors['customvariables']['custom']) === "string") {
                         this.hasMacroErrors = true;
                     }
                 }
@@ -204,26 +204,40 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.containersService.loadContainers()
             .subscribe((result) => {
+                // Fetch all containers.
+                this.allContainers = result.containers;
+
+                // If no containers are required, the selectedContainers can remain where they belong.
+                if (this.requiredContainers.length === 0) {
+                    this.post.containers._ids = this.selectedContainers;
+                    this.containers = this.allContainers;
+                    return;
+                }
+
                 let newContainers: Container[] = [];
+                let newPostIds: number[] = [];
 
-                // Traverse all containers to filter those in requiredContainers.
-                for (var i in result.containers) {
+                // Otherwise, we need to only add the selected containers that are not required to the container list.
+                for (var i in this.allContainers) {
                     let index = parseInt(i),
-                        container: Container = result.containers[index];
+                        container: Container = this.allContainers[index];
 
-                    // If in required containers, remove from the list.
+                    // The container is required? Then skip.
                     if (this.requiredContainers.indexOf(container.key) !== -1) {
                         continue;
                     }
-                    newContainers.push(result.containers[index]);
-                    if (this.selectedContainers.indexOf(container.key) === -1) {
-                        this.post.containers._ids.push(container.key);
+
+                    // Otherwise add to the container dropdown.
+                    newContainers.push(container);
+
+                    // And if it is selected, add it to the overwrite-array.
+                    if (this.selectedContainers.indexOf(container.key) !== -1) {
+                        newPostIds.push(container.key);
                     }
 
                 }
-
-                this.allContainers = result.containers;
                 this.containers = newContainers;
+                this.post.containers._ids = newPostIds;
             }))
     }
 
