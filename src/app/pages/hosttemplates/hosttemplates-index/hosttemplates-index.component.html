@@ -80,7 +80,7 @@
                                 </c-input-group>
                             </c-col>
 
-                            <c-col md="6">
+                            <c-col md="6" class="mb-1">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -202,16 +202,16 @@
                                     <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                     {{ t('Used By') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'hosttemplates.usedBy'"
-                                                             [url]="'/hosttemplates/usedBy/' + hosttemplate.Hosttemplate.id">
-                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                    {{ t('Used By') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
                                 <oitc-actions-button-element [permission]="'documentations.view'"
-                                                             [url]="'/documentations/view/' + hosttemplate.Hosttemplate.uuid">
+                                                             [url]="'/documentations/view/' + hosttemplate.Hosttemplate.uuid+'/hosttemplate'">
                                     <fa-icon [icon]="['fas', 'book']"></fa-icon>
                                     {{ t('Documentation') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element [permission]="'hosttemplates.copy'"
+                                                             [url]="'/hosttemplates/copy/' + hosttemplate.Hosttemplate.id">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(hosttemplate)"
