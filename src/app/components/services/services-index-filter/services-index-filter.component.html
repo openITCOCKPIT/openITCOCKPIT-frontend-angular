@@ -9,9 +9,9 @@
 
         </c-card-header>
         <c-card-body *ngIf="showFilter">
-            <c-row>
+            <c-row  class="mb-3">
                 <c-col>
-                    <c-input-group class="mb-3">
+                    <c-input-group>
                         <span cInputGroupText id="hostname">
                             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                         </span>
@@ -34,7 +34,7 @@
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group class="mb-3">
+                    <c-input-group>
                         <span cInputGroupText id="servicename">
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </span>
@@ -57,9 +57,9 @@
                     </c-input-group>
                 </c-col>
             </c-row>
-            <c-row>
+            <c-row  class="mb-3">
                 <c-col>
-                    <c-input-group class="mb-3">
+                    <c-input-group>
                         <span cInputGroupText id="description">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         </span>
@@ -74,7 +74,7 @@
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group class="mb-3">
+                    <c-input-group>
                         <span cInputGroupText id="output">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         </span>
@@ -89,44 +89,36 @@
                     </c-input-group>
                 </c-col>
             </c-row>
-            <c-row>
-                <c-col>
-                    <!--<c-input-group class="mb-3">
-                        <span cInputGroupText id="Servicestags"><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>-->
-                    <!--<span  cInputGroupText><oitc-tags-input></oitc-tags-input></span>-->
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">
+            <c-row  class="mb-3">
+                <c-col md="6">
+                    <c-input-group>
+                        <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         </span>
-
-                        <ng-select style="width:93%;" [items]="[]"
-                                   [(ngModel)]="filter.Services.keywords"
-                                   [addTag]="true"
-                                   [multiple]="true"
-                                   [selectOnTab]="true"
-                                   [placeholder]="t('Filter by tags')"
-                                   [isOpen]="false"
-                                   (change)="onFilterChange($event)">
+                        <ng-select [items]="[]"
+                           [(ngModel)]="filter.Services.keywords"
+                           [addTag]="true"
+                           [multiple]="true"
+                           [selectOnTab]="true"
+                           [placeholder]="t('Filter by tags')"
+                           [isOpen]="false"
+                           (change)="onFilterChange($event)">
                         </ng-select>
-
-                    </div>
-                    <!--</c-input-group>-->
+                    </c-input-group>
                 </c-col>
-                <c-col>
-                    <c-input-group class="mb-3">
-                        <span cInputGroupText id="ServicesNotTags">
+                <c-col md="6">
+                    <c-input-group>
+                        <span cInputGroupText>
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         </span>
-                        <!--<span  cInputGroupText><oitc-tags-input></oitc-tags-input></span>-->
-                        <ng-select style="width:93%;" [items]="[]"
-                                   [(ngModel)]="filter.Services.not_keywords"
-                                   appendTo="input-group-text"
-                                   [addTag]="true"
-                                   [multiple]="true"
-                                   [selectOnTab]="true"
-                                   [placeholder]="t('Filter by excluded tags')"
-                                   [isOpen]="false"
-                                   (change)="onFilterChange($event)">
+                        <ng-select [items]="[]"
+                           [(ngModel)]="filter.Services.not_keywords"
+                           [addTag]="true"
+                           [multiple]="true"
+                           [selectOnTab]="true"
+                           [placeholder]="t('Filter by excluded tags')"
+                           [isOpen]="false"
+                           (change)="onFilterChange($event)">
                         </ng-select>
                     </c-input-group>
                 </c-col>

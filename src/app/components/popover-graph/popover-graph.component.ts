@@ -1,14 +1,15 @@
-import { Component, inject, Input, OnDestroy, ViewChild } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PopoverDirective, RowComponent } from '@coreui/angular';
-import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
-import { PopoverGraphService } from './popover-graph.service';
-import { Subscription } from 'rxjs';
-import { PopoverGraphInterface, PerformanceData } from './popover-graph.interface';
+import {Component, inject, Input, OnDestroy, ViewChild} from '@angular/core';
+import {TranslocoDirective} from '@jsverse/transloco';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {ContainerComponent, PopoverDirective, RowComponent} from '@coreui/angular';
+import {TimezoneObject} from "../../pages/services/services-browser-page/timezone.interface";
+import {PopoverGraphService} from './popover-graph.service';
+import {Subscription} from 'rxjs';
+import {PopoverGraphInterface, PerformanceData} from './popover-graph.interface';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import { PopoverConfigBuilder } from './popover-config-builder';
+import {PopoverConfigBuilder} from './popover-config-builder';
 import * as _uPlot from 'uplot';
+import {debounce} from '../debounce.decorator';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -33,7 +34,8 @@ type PerfParams = {
         NgForOf,
         NgClass,
         RowComponent,
-        NgIf
+        NgIf,
+        ContainerComponent
     ],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css'
@@ -43,9 +45,12 @@ export class PopoverGraphComponent implements OnDestroy {
     public popoverWidth: string = '272px'
     public _hostUuid: string = '';
     public _serviceUuid: string = '';
+    public uPlotGraphDefaultsObj = new PopoverConfigBuilder();
+    public perfData: PerformanceData[] = [];
+    public popoverStyle: {} = {};
+    protected colors: any;
     private PopoverGraphService = inject(PopoverGraphService);
     private subscriptions: Subscription = new Subscription();
-    public uPlotGraphDefaultsObj = new PopoverConfigBuilder();
     private perfParams: PerfParams = {
         angular: true,
         host_uuid: this._hostUuid,
@@ -55,14 +60,14 @@ export class PopoverGraphComponent implements OnDestroy {
         jsTimestamp: 0
     };
     private timer: ReturnType<typeof setTimeout> | null = null;
-    protected colors:any;
-    @ViewChild('chartUPlot', {static: true}) chartUPlot: any | HTMLElement;
+    // private resizeObservable$: Observable<Event> = fromEvent(window, 'resize');
+    private popoverOffset: any = {};
     private uPlotChart: any;
-    public perfData!: PerformanceData[];
     private startTimestamp: number = new Date().getTime();
 
-    constructor () {
+    constructor (private window: Window) {
         this.colors = this.uPlotGraphDefaultsObj.getColors();
+
     }
 
     get service () {
@@ -93,21 +98,37 @@ export class PopoverGraphComponent implements OnDestroy {
     set timezone (timezone: TimezoneObject) {
         this._timezone = timezone;
     }
+   // @debounce(200)
+    showTooltip (hoverIcon: HTMLElement) {
+        this.visible = true;
+        let self = this;
+       // if (this.timer === null) {
+         //   this.timer = setTimeout(function () {
+                let position = hoverIcon.getBoundingClientRect();
+                //console.log(position);
+                let offset = {
+                    relativeTop: hoverIcon.offsetTop + 40,
+                    relativeLeft: hoverIcon.offsetLeft + 40,
+                    absoluteTop: position.top,
+                    absoluteLeft: position.left,
+                };
+                self.popoverOffset = offset;
+               // console.log(offset);
+                self.placePopoverGraph()
+                self.setParams();
 
-    showTooltip () {
-        this.setParams();
-        if(this.timer === null){
-            this.timer = setTimeout(() => {
-                this.getPerfData();
-                this.visible = !this.visible;
-                this.timer = null;
-            }, 150);
-        }
+                self.timer = null;
+         //   }, 150);
+      //  }
 
     }
 
     hideTooltip () {
-       // this.visible = !this.visible;
+        this.visible = false;
+        if(this.timer !== null) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
     }
 
     setParams () {
@@ -123,103 +144,128 @@ export class PopoverGraphComponent implements OnDestroy {
         this.perfParams.end = graphEnd;
 
         this.getPerfData();
+    }
+
+    placePopoverGraph () {
+        let margin = 15;
+        let $popupGraphContainer = <HTMLElement>document.getElementById('serviceGraphContainer-' + this.service);
+
+        let popupGraphContainerHeight = $popupGraphContainer.offsetHeight + 53;
+        if (popupGraphContainerHeight < 272) {
+            // The popupGraphContainerHeight is at least 272px in height.
+            popupGraphContainerHeight = 272;
+        }
+        let absoluteBottomPositionOfPopoverGraphContainer = this.popoverOffset.absoluteTop + margin + popupGraphContainerHeight;
+
+        //if (absoluteBottomPositionOfPopoverGraphContainer > window.innerHeight) {
+        if ((window.innerHeight - absoluteBottomPositionOfPopoverGraphContainer) < 272 ) {
+           // console.log('top')
+            //There is no space in the window for the popup, we need to place it above the mouse cursor
+            let marginTop = this.popoverOffset.relativeTop - popupGraphContainerHeight - margin + 10;
+           // console.log(marginTop);
+            this.popoverStyle = {
+                'top': (marginTop > 1) ? marginTop : 1,
+                'left': this.popoverOffset.relativeLeft + margin,
+               // 'height': popupGraphContainerHeight + 'px',
+                'padding': '6px'
+            }
+           // console.log(this.popoverStyle);
+        } else {
+            //Default Popup
+           // console.log(this.popoverOffset.relativeTop + margin)
+            this.popoverStyle = {
+                'top': parseInt(this.popoverOffset.relativeTop + margin),
+                'left': parseInt(this.popoverOffset.relativeLeft + margin),
+                //'height': popupGraphContainerHeight + 'px',
+                'padding': '6px'
+            }
+           // console.log(this.popoverStyle);
+        }
+       // console.log(this.popoverStyle)
 
     }
 
     getPerfData () {
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
-                this.perfData = perfdata.performance_data;
-              //  console.log(this.perfData);
-                const element = document.getElementById('serviceGraphContainer-' + this.service);
-               // console.log(element?.getBoundingClientRect());
-                if (this.perfData.length > 1) {
-                    this.popoverWidth = '200px';
+                if(perfdata.performance_data && perfdata.performance_data.length > 4){
+                    this.perfData = perfdata.performance_data.slice(0, 4);
+                } else {
+                    this.perfData = perfdata.performance_data ?? [];
                 }
-
-
+                this.placePopoverGraph();
                 this.renderGraphs();
-
             })
         );
     }
 
+    @debounce(300)
     renderGraphs () {
         for (let i = 0; i < this.perfData.length; i++) {
-            if (i > 0) {
                 //Only render 4 gauges in popover...
-                break;
-            }
 
-            let uPlotGraphDefaultsObj = new PopoverConfigBuilder();
+                let uPlotGraphDefaultsObj = new PopoverConfigBuilder();
 
-            let data: any = [];
-            let xData: string[] = [];
-            let yData: number[] = [];
-            const graphData = this.perfData[i].data;
-            for (let timestamp in graphData) {
-                xData.push(timestamp); // Timestamps
-                yData.push(graphData[timestamp]); // values
-            }
-            data.push(xData);
-            data.push(yData);
+                let data: any = [];
+                let xData: string[] = [];
+                let yData: number[] = [];
+                const graphData = this.perfData[i].data;
+                for (let timestamp in graphData) {
+                    xData.push(timestamp); // Timestamps
+                    yData.push(graphData[timestamp]); // values
+                }
+                data.push(xData);
+                data.push(yData);
 
-            let title = this.perfData[i].datasource.name;
-            if (title.length > 80) {
-                title = title.substring(0, 80);
-                title += '...';
-            }
+                let title = this.perfData[i].datasource.name;
+                if (title.length > 80) {
+                    title = title.substring(0, 80);
+                    title += '...';
+                }
 
-            let $elm = document.getElementById('#serviceGraphUPlot-' + this._serviceUuid + '-' + i);
+                let $elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
 
-            let colors = uPlotGraphDefaultsObj.getColorByIndex(i);
-            let options = uPlotGraphDefaultsObj.getDefaultOptions({
-                unit: this.perfData[i].datasource.unit,
-                showLegend: false,
-                timezone: this.timezone.user_timezone,
-                lineWidth: 2,
-                thresholds: {
-                    show: true,
-                    warning: this.perfData[i].datasource.warn,
-                    critical: this.perfData[i].datasource.crit,
-                },
-                // X-Axis min / max
-                start: this.perfParams.start,
-                end: this.perfParams.end,
-                //Fallback if no thresholds exists
-                strokeColor: colors.stroke,
-                fillColor: colors.fill,
-                YAxisLabelLength: 100,
-            });
-            options.series[1].stroke = this.colors.stroke.default;
-            options.series[1].fill = this.colors.fill.default;
-            // @ts-ignore
-           // options.height = $elm.height(); // 27px for headline
-            // @ts-ignore
-           // options.width = $elm.width();
-          //  this.chartUPlot.nativeElement.innerHTML = '';
-            console.log('serviceGraphUPlot-' + this._serviceUuid + '-' + i);
-            this.chartUPlot.nativeElement.innerHTML = '';
-            let plot= new uPlot(options, data, this.chartUPlot.nativeElement);
-          //  this.uPlotChart = new uPlot(options, data, this.chartUPlot.nativeElement);
-           // if(document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
-              //  try{
-                //    let elm = document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i);
-                 //   console.log(options);
-                  //   let plot = new uPlot(options, data, elm);
-              //  }catch(e){
-               //     console.error(e);
-               // }
-
-            }
+                let colors = uPlotGraphDefaultsObj.getColorByIndex(i);
+                let options = uPlotGraphDefaultsObj.getDefaultOptions({
+                    unit: this.perfData[i].datasource.unit,
+                    showLegend: false,
+                    timezone: this.timezone.user_timezone,
+                    lineWidth: 2,
+                    thresholds: {
+                        show: true,
+                        warning: parseFloat(<string>this.perfData[i].datasource.warn),
+                        critical: parseFloat(<string>this.perfData[i].datasource.crit),
+                    },
+                    // X-Axis min / max
+                    start: this.perfParams.start,
+                    end: this.perfParams.end,
+                    //Fallback if no thresholds exists
+                    strokeColor: colors.stroke,
+                    fillColor: colors.fill,
+                    YAxisLabelLength: 100,
+                });
+                //options.series[1].stroke = this.colors.stroke.default;
+                //options.series[1].fill = this.colors.fill.default;
+                options.axes[0].label = this.perfData[i].datasource.name
 
 
-           /* let elm = document.getElementById('chartUPlot');
-            // @ts-ignore
-            elm.innerHTML = '';
-            let plot = new uPlot(options, data, elm); */
+                options.height = $elm.offsetHeight ; // 27px for headline
+                options.width = $elm.offsetWidth - 20;
 
-       // }
+                //this.uPlotChart = new uPlot(options, data, $elm);
+                // if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
+                ///  try {
+                let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+
+                elm.innerHTML = ''
+                let plot = new uPlot(options, data, elm);
+
+                /*   } catch (e) {
+                       console.error(e);
+                   }
+
+               } */
+        }
     }
 
 

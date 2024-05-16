@@ -379,9 +379,8 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
         let data: any = [];
         let xData: string[] = [];
-        let yData: number [] = [];
+        let yData: any [] = [];
         xData.push(this.perfParams.start.toString()); //necessary for threshold lines in full graph-width
-        // @ts-ignore
         yData.push(null);
 
         const graphData = this.perfData.performance_data[0].data
@@ -481,12 +480,14 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
 
 
-        // @ts-ignore
-        this.options.scales.x.min = this.perfParams.start;
-        // @ts-ignore
-        this.options.scales.x.max = this.perfParams.end;
-        // @ts-ignore
-        this.options.axes[1].label = this.datasource.unit;
+        if(this.options.scales && this.options.scales['x']) {
+            this.options.scales['x'].min = this.perfParams.start;
+            this.options.scales['x'].max = this.perfParams.end;
+        }
+
+       if(this.options.axes) {
+           this.options.axes[1].label = this.datasource.unit;
+       }
         this.chartUPlot.nativeElement.innerHTML = '';
         console.log(this.options);
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);

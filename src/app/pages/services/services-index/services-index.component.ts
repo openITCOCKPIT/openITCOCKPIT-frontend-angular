@@ -241,11 +241,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             };
            //return item;
         });
-       console.log(items);
+
     }
 
     getFilter(filter: filter) {
-        console.log(filter);
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
         this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
         this.params['filter[servicename]'] = filter.Services.name;
@@ -280,6 +279,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         var priorityFilter: number[] = [];
         const priorityKeys = Object.keys(filter.Services.priority)
         for(let propt in priorityKeys) {
+
             // @ts-ignore
             if(filter.Services.priority[propt] === true) {
                 priorityFilter.push(parseInt(propt))
