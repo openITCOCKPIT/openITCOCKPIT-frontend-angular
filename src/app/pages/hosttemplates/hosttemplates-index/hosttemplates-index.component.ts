@@ -58,7 +58,12 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-
+import {
+    NgSelectSelectAllComponent
+} from '../../../components/ng-select/ng-select-select-all/ng-select-select-all.component';
+import {
+    NgSelectOptionCheckboxComponent
+} from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
@@ -108,7 +113,9 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         SelectAllComponent,
         TableDirective,
         NgClass,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        NgSelectSelectAllComponent,
+        NgSelectOptionCheckboxComponent
     ],
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',
