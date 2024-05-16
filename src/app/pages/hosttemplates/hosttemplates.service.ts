@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { HosttemplateIndexRoot, HosttemplatesIndexParams } from './hosttemplates.interface';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 
 @Injectable({
@@ -44,5 +45,11 @@ export class HosttemplatesService {
                 return data;
             })
         )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/hosttemplates/delete/${item.id}.json?angular=true`, {});
     }
 }
