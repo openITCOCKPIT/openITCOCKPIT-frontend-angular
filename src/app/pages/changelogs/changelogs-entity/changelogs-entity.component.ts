@@ -83,7 +83,7 @@ export class ChangelogsEntityComponent implements OnInit {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
     public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
