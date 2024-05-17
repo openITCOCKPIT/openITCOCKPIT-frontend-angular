@@ -14,15 +14,21 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add') }}
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Edit') }}
                 </li>
             </ol>
         </nav>
-        <form cForm ngNativeValidate (ngSubmit)="saveTimeperiod()">
+        <form cForm (ngSubmit)="saveTimeperiod()" ngNativeValidate>
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new time period') }}</h5>
+                    <h5 cCardTitle>
+                        {{ t('Edit time period:') }}
+
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
@@ -31,6 +37,14 @@
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
                                 {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                        <c-nav-item class="px-1">
+                            <button [routerLink]="'timeperiods/viewDetails/' + post.id" cButton class="ripple"
+                                    color="default"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
+                                {{ t('View details') }}
                             </button>
                         </c-nav-item>
                     </c-nav>
@@ -45,9 +59,9 @@
                         </label>
                         <ng-select id="timeperiodContainer"
                                    name="container_id"
+                                   oitcDebounce
                                    [items]="containers"
                                    [placeholder]="'Please choose' | transloco"
-                                   oitcDebounce
                                    bindLabel="value" bindValue="key"
                                    [clearable]="false"
                                    [(ngModel)]="post.container_id"
@@ -218,7 +232,7 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create time period') }}
+                        {{ t('Update time period') }}
                     </button>
                     <button [fallbackUrl]="['timeperiods', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

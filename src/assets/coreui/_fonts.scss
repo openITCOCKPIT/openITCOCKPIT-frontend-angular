@@ -42,8 +42,14 @@ code {
     text-shadow: 0px 0px 9px rgba(252, 0, 0, 0.4);
 }
 
-c-card-header > fa-icon {margin-right:5px;}
+c-card-header > fa-icon {
+    margin-right: 5px;
+}
 
 .fs-md {
     font-size: 0.875rem !important;
+}
+
+.italic {
+    font-style: italic;
 }
