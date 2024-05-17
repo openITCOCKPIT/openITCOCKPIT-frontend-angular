@@ -1,0 +1,464 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['nagiostats', 'index']" [routerLink]="['/', 'nagiostats', 'index']">
+                        <fa-icon [icon]="['fas', 'fighter-jet']"></fa-icon>
+                        {{ t('Performance Info') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Performance Information') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+
+                <c-row>
+                    <!-- Executed Active Service Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Executed Active Service Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Timeframe') }}</th>
+                                        <th>{{ t('Checks performed') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><= 1 {{ t('minute') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK1M}">
+                                            {{ stats?.NUMSVCACTCHK1M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 5 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK5M}">
+                                            {{ stats?.NUMSVCACTCHK5M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 15 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK15M}">
+                                            {{ stats?.NUMSVCACTCHK15M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 60 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK60M}">
+                                            {{ stats?.NUMSVCACTCHK60M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Since start') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMSVCCHECKED}">
+                                            {{ stats?.NUMSVCCHECKED }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Executed Active Service Checks -->
+
+                    <!-- Active Service Checks Timings -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Active Service Checks Timings') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Key') }}</th>
+                                        <th>{{ t('Min.') }}</th>
+                                        <th>{{ t('Max.') }}</th>
+                                        <th>&#216;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf="stats">
+                                    <tr>
+                                        <td>{{ t('Execution time') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTSVCEXT > 20000, 'text-danger': stats.MINACTSVCEXT > 30000}">
+                                            {{ stats.MINACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTSVCEXT > 20000, 'text-danger': stats.MAXACTSVCEXT > 30000}">
+                                            {{ stats.MAXACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTSVCEXT > 20000, 'text-danger': stats.AVGACTSVCEXT > 30000}">
+                                            {{ stats.AVGACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Latency') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTSVCLAT > 20000, 'text-danger': stats.MINACTSVCLAT > 30000}">
+                                            {{ stats.MINACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTSVCLAT > 20000, 'text-danger': stats.MAXACTSVCLAT > 30000}">
+                                            {{ stats.MAXACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTSVCLAT > 20000, 'text-danger': stats.AVGACTSVCLAT > 30000}">
+                                            {{ stats.AVGACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINACTSVCPSC }} %</td>
+                                        <td>{{ stats.MAXACTSVCPSC }} %</td>
+                                        <td>{{ stats.AVGACTSVCPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Active Service Checks Timings -->
+
+                    <!-- Additional information -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Additional information') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Key') }}</th>
+                                        <th>{{ t('Value') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Version') }}</td>
+                                        <td>
+                                            {{ stats?.NAGIOSVERSION }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Core PID') }}</td>
+                                        <td>
+                                            {{ stats?.NAGIOSPID }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Total hosts') }}</td>
+                                        <td>
+                                            {{ stats?.NUMHOSTS }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Total services') }}</td>
+                                        <td>
+                                            {{ stats?.NUMSERVICES }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Program uptime') }}</td>
+                                        <td>
+                                            {{ stats?.PROGRUNTIME }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Additional information -->
+                </c-row>
+
+
+                <c-row class="mt-3">
+                    <!-- Passive Service Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Passive Service Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Timeframe') }}</th>
+                                        <th>{{ t('Checks performed') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><= 1 {{ t('minute') }}</td>
+                                        <td>
+                                            {{ stats?.NUMSVCPSVCHK1M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 5 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMSVCPSVCHK5M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 15 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMSVCPSVCHK15M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 60 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMSVCPSVCHK60M }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Passive Service Checks -->
+
+                    <!-- Processed Passive Service Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Processed Passive Service Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Key') }}</th>
+                                        <th>{{ t('Min.') }}</th>
+                                        <th>{{ t('Max.') }}</th>
+                                        <th>&#216;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf="stats">
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINPSVSVCPSC }} %</td>
+                                        <td>{{ stats.MAXPSVSVCPSC }} %</td>
+                                        <td>{{ stats.AVGPSVSVCPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Processed Passive Service Checks -->
+                </c-row>
+
+                <c-row>
+                    <!-- Executed Active Host Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Executed Active Host Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Timeframe') }}</th>
+                                        <th>{{ t('Checks performed') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><= 1 {{ t('minute') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK1M}">
+                                            {{ stats?.NUMHSTACTCHK1M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 5 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK5M}">
+                                            {{ stats?.NUMHSTACTCHK5M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 15 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK15M}">
+                                            {{ stats?.NUMHSTACTCHK15M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 60 {{ t('minutes') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK60M}">
+                                            {{ stats?.NUMHSTACTCHK60M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Since start') }}</td>
+                                        <td [ngClass]="{'text-danger': !stats?.NUMHSTCHECKED}">
+                                            {{ stats?.NUMHSTCHECKED }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Executed Active Host Checks -->
+
+                    <!-- Active Host Checks Timing -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Active Host Checks Timing') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Key') }}</th>
+                                        <th>{{ t('Min.') }}</th>
+                                        <th>{{ t('Max.') }}</th>
+                                        <th>&#216;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf="stats">
+                                    <tr>
+                                        <td>{{ t('Execution time') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTHSTEXT > 20000, 'text-danger': stats.MINACTHSTEXT > 30000}">
+                                            {{ stats.MINACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTHSTEXT > 20000, 'text-danger': stats.MAXACTHSTEXT > 30000}">
+                                            {{ stats.MAXACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTHSTEXT > 20000, 'text-danger': stats.AVGACTHSTEXT > 30000}">
+                                            {{ stats.AVGACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Latency') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTHSTLAT > 20000, 'text-danger': stats.MINACTHSTLAT > 30000}">
+                                            {{ stats.MINACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTHSTLAT > 20000, 'text-danger': stats.MAXACTHSTLAT > 30000}">
+                                            {{ stats.MAXACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTHSTLAT > 20000, 'text-danger': stats.AVGACTHSTLAT > 30000}">
+                                            {{ stats.AVGACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINACTHSTPSC }} %</td>
+                                        <td>{{ stats.MAXACTHSTPSC }} %</td>
+                                        <td>{{ stats.AVGACTHSTPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Active Host Checks Timing -->
+                </c-row>
+
+                <c-row>
+                    <!-- Processed Passive Host Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Processed Passive Host Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Timeframe') }}</th>
+                                        <th>{{ t('Checks performed') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><= 1 {{ t('minute') }}</td>
+                                        <td>
+                                            {{ stats?.NUMHSTPSVCHK1M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 5 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMHSTPSVCHK5M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 15 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMHSTPSVCHK15M }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><= 60 {{ t('minutes') }}</td>
+                                        <td>
+                                            {{ stats?.NUMHSTPSVCHK60M }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Processed Passive Host Checks -->
+
+                    <!-- Passive Host Checks -->
+                    <c-col xs="12" md="6" lg="4">
+                        <c-card>
+                            <c-card-header>
+                                <h5 cCardTitle>{{ t('Processed Passive Service Checks') }}</h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                    <thead>
+                                    <tr>
+                                        <th>{{ t('Key') }}</th>
+                                        <th>{{ t('Min.') }}</th>
+                                        <th>{{ t('Max.') }}</th>
+                                        <th>&#216;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody *ngIf="stats">
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINPSVHSTPSC }} %</td>
+                                        <td>{{ stats.MAXPSVHSTPSC }} %</td>
+                                        <td>{{ stats.AVGPSVHSTPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <!-- End Passive Host Checks -->
+                </c-row>
+
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
