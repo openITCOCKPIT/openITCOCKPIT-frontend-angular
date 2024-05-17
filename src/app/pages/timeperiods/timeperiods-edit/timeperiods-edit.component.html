@@ -107,16 +107,13 @@
                                 <a href="calendars/edit/{{post.calendar_id}}"
                                    *ngIf="post.calendar_id && post.calendar_id > 0">
                                     {{ t('Calendar') }}
-                                    <oitc-required-icon></oitc-required-icon>
                                 </a>
                                 <span *ngIf="!post.calendar_id">
                                     {{ t('Calendar') }}
-                                    <oitc-required-icon></oitc-required-icon>
                                 </span>
                             </span>
                             <span *oitcPermission="['calendars', 'edit']; negate: true">
                                 {{ t('Calendar') }}
-                                <oitc-required-icon></oitc-required-icon>
                             </span>
                         </label>
                         <ng-select id="timeperiodCalendar"

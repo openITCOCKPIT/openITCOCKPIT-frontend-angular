@@ -97,7 +97,6 @@
                                 </a>
                                 <span *ngIf="!post.calendar_id">
                                     {{ t('Calendar') }}
-                                    <oitc-required-icon></oitc-required-icon>
                                 </span>
                             </span>
                             <span *oitcPermission="['calendars', 'edit']; negate: true">
