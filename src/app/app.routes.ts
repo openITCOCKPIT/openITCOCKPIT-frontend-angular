@@ -146,6 +146,15 @@ export const routes: Routes = [{
     path: 'timeperiods/add',
     loadComponent: () => import('./pages/timeperiods/timeperiods-add/timeperiods-add.component').then(m => m.TimeperiodsAddComponent)
 }, {
+    path: 'timeperiods/edit/:id',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-edit/timeperiods-edit.component').then(m => m.TimeperiodsEditComponent)
+}, {
+    path: 'timeperiods/copy/:ids',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-copy/timeperiods-copy.component').then(m => m.TimeperiodsCopyComponent)
+}, {
+    path: 'timeperiods/usedBy/:id',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-used-by/timeperiods-used-by.component').then(m => m.TimeperiodsUsedByComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

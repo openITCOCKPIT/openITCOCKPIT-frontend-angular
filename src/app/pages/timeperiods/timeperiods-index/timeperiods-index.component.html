@@ -172,7 +172,7 @@
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(timeperiod)"
                                                              [permission]="'timeperiods.delete'"
                                                              [allow]="timeperiod.Timeperiod.allow_edit">
-                                    <span class="txt-color-red">
+                                    <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
                                     </span>

@@ -1,15 +1,14 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Calendar, Container, InternalRange, Timeperiod, TimeperiodAddResponse } from '../timeperiods.interface';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TimeperiodsService } from '../timeperiods.service';
+import { Calendar, Container, InternalRange, Timeperiod } from '../timeperiods.interface';
 import _ from 'lodash';
 import { WeekdaysService } from '../../../weekdays.service';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -24,21 +23,22 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
-    selector: 'oitc-timeperiods-add',
+    selector: 'oitc-timeperiods-edit',
     standalone: true,
     imports: [
         BackButtonDirective,
@@ -74,12 +74,13 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         NgOptionHighlightModule,
         DebounceDirective
     ],
-    templateUrl: './timeperiods-add.component.html',
-    styleUrl: './timeperiods-add.component.css'
+    templateUrl: './timeperiods-edit.component.html',
+    styleUrl: './timeperiods-edit.component.css'
 })
-export class TimeperiodsAddComponent implements OnInit, OnDestroy {
+export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
     public post: Timeperiod = {
+        id: 0,
         container_id: null,
         name: '',
         calendar_id: null,
@@ -96,30 +97,66 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
     public calendars: Calendar[] = [];
 
-    public errors: GenericValidationError | null = null;
-
+    private router: Router = inject(Router);
     private TimeperiodsService = inject(TimeperiodsService);
-    private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    private route = inject(ActivatedRoute);
     private readonly WeekdaysService = inject(WeekdaysService);
-    private router = inject(Router);
-
+    public errors: GenericValidationError = {} as GenericValidationError;
     private subscriptions: Subscription = new Subscription();
     public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
     public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('(00:00)');
     public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('(24:00)');
 
-
-    public ngOnInit() {
-        this.subscriptions.add(this.TimeperiodsService.getAdd()
-            .subscribe((result) => {
-                this.containers = result;
-            }));
+    ngOnInit() {
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.TimeperiodsService.getEdit(id).subscribe(data => {
+            this.init(data.timeperiod);
+        }));
+        this.loadContainer();
     }
 
-    public ngOnDestroy() {
+    ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
+
+    private init(timeperiod: Timeperiod) {
+        this.post = timeperiod;
+
+        this.timeperiod.ranges = [];
+
+        for (let key in this.post.timeperiod_timeranges) {
+            this.timeperiod.ranges.push({
+                id: <number>this.post.timeperiod_timeranges[key].id,
+                day: this.post.timeperiod_timeranges[key].day.toString(),
+                start: this.post.timeperiod_timeranges[key].start,
+                end: this.post.timeperiod_timeranges[key].end,
+                index: Number(key)
+            });
+        }
+
+        this.timeperiod.ranges = _(this.timeperiod.ranges)
+            .chain()
+            .flatten()
+            .sortBy(
+                function (range) {
+                    return [range.day, range.start];
+                })
+            .value();
+
+        this.convertContainerIdEmptyValue();
+        this.onContainerIdChange();
+
+    }
+
+    public loadContainer() {
+        this.subscriptions.add(this.TimeperiodsService.getContainers()
+            .subscribe((result) => {
+                this.containers = result;
+            })
+        );
+    };
 
     trackByIndex(index: number, item: any): number {
         return index;
@@ -128,36 +165,9 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
     public loadCalendars(searchString: string) {
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
-                console.error(result);
                 this.calendars = result;
             })
         );
-    }
-
-    public addTimerange() {
-        let count = this.timeperiod.ranges.length + 1;
-
-        this.timeperiod.ranges.push({
-            id: count,
-            day: '1',
-            start: '',
-            end: '',
-            index: Object.keys(this.timeperiod.ranges).length
-        });
-
-        if (this.errors && (typeof this.errors['validate_timeranges'] !== 'undefined' ||
-            typeof this.errors['timeperiod_timeranges'] !== 'undefined')) {
-            this.timeperiod.ranges = this.timeperiod.ranges;
-        } else {
-            this.timeperiod.ranges = _(this.timeperiod.ranges)
-                .chain()
-                .flatten()
-                .sortBy(
-                    function (range) {
-                        return [range.day, range.start];
-                    })
-                .value();
-        }
     }
 
     public removeTimerange(rangeIndex: any) {
@@ -182,6 +192,30 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         }
     };
 
+    public addTimerange() {
+        this.timeperiod.ranges.push({
+            id: 0,
+            day: '1',
+            start: '',
+            end: '',
+            index: Object.keys(this.timeperiod.ranges).length
+        });
+
+        if (this.errors && (typeof this.errors['validate_timeranges'] !== 'undefined' ||
+            typeof this.errors['timeperiod_timeranges'] !== 'undefined')) {
+            this.timeperiod.ranges = this.timeperiod.ranges;
+        } else {
+            this.timeperiod.ranges = _(this.timeperiod.ranges)
+                .chain()
+                .flatten()
+                .sortBy(
+                    function (range) {
+                        return [range.day, range.start];
+                    })
+                .value();
+        }
+    }
+
     public hasTimeRange(errors: any, range: any) {
         if (errors && errors['validate_timeranges']) {
             errors = errors['validate_timeranges'];
@@ -204,6 +238,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         this.post.timeperiod_timeranges = [];
         for (let i in this.timeperiod.ranges) {
             this.post.timeperiod_timeranges[index] = {
+                'id': this.timeperiod.ranges[i].id,
                 'day': this.timeperiod.ranges[i].day,
                 'start': this.timeperiod.ranges[i].start,
                 'end': this.timeperiod.ranges[i].end
@@ -211,15 +246,16 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
             index++;
         }
 
-        this.subscriptions.add(this.TimeperiodsService.createTimeperiod(this.post)
+        this.convertContainerIdEmptyValue();
+
+        this.subscriptions.add(this.TimeperiodsService.updateTimeperiod(this.post)
             .subscribe((result) => {
                 if (result.success) {
-                    const response = result.data as TimeperiodAddResponse;
+                    const response = result.data as GenericIdResponse;
 
                     const title = this.TranslocoService.translate('Time period');
-                    const msg = this.TranslocoService.translate('created successfully');
-
-                    const url = ['timeperiods', 'edit', response.timeperiod.id];
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['timeperiods', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
                     this.router.navigate(['/timeperiods/index']);
@@ -231,6 +267,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
                 const errorResponse = result.data as GenericValidationError;
                 this.notyService.genericError();
                 if (result) {
+                    this.convertContainerIdEmptyValue();
                     this.errors = errorResponse;
                 }
             })
@@ -254,5 +291,15 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
     }
 
+    // Empty value will be saved as 0 but it does not show the placeholder in the select
+    private convertContainerIdEmptyValue() {
+
+        if (this.post.calendar_id === 0) {
+            this.post.calendar_id = null;
+        } else if (this.post.calendar_id === null) {
+            this.post.calendar_id = 0;
+        }
+
+    }
 
 }
