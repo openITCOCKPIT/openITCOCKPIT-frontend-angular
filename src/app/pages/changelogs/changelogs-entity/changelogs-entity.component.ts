@@ -35,6 +35,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-changelogs-entity',
@@ -72,7 +73,8 @@ import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.c
         DecimalPipe,
         PaginateOrScrollComponent,
         ChangelogsEntryComponent,
-        NgForOf
+        NgForOf,
+        BackButtonDirective
     ],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'

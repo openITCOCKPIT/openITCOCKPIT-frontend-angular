@@ -39,6 +39,14 @@
                             {{ t('Filter') }}
                         </button>
                     </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['changelogs', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
                 </c-nav>
             </c-card-header>
             <c-card-body>
