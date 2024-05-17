@@ -36,7 +36,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { ContainersService } from '../../containers/containers.service';
 import { ContactsService } from '../contacts.service';
 import { UsersService } from '../../users/users.service';
 import {
@@ -45,10 +44,10 @@ import {
     LoadCommandsRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod
+    Timeperiod,
+    LoadContainersContainer, LoadContainersRoot
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
-import { Container } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -93,7 +92,6 @@ import { Container } from '../../containers/containers.interface';
     styleUrl: './contacts-ldap.component.css'
 })
 export class ContactsLdapComponent implements OnInit, OnDestroy {
-    private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
@@ -104,7 +102,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError = {} as GenericValidationError;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: Container[] = [];
+    protected containers: LoadContainersContainer[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
     protected notificationCommands: LoadCommand[] = [];
@@ -206,8 +204,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.containersService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(this.ContactService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
             }))
     }

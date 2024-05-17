@@ -556,3 +556,16 @@ export interface LdapConfig {
     query: string
     base_dn: string
 }
+
+/*********************************
+ *    Definition of Container    *
+ *********************************/
+export interface LoadContainersRoot {
+    containers: LoadContainersContainer[]
+    _csrfToken: string
+}
+
+export interface LoadContainersContainer {
+    key: number
+    value: string
+}

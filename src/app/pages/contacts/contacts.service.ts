@@ -10,7 +10,8 @@ import {
     ContactsIndexParams,
     ContactsIndexRoot, ContactUsedBy, LdapConfigRoot, LoadLdapUserByStringRoot,
     LoadTimeperiodsPost,
-    LoadTimeperiodsRoot
+    LoadTimeperiodsRoot,
+    LoadContainersRoot
 } from './contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -162,5 +163,10 @@ export class ContactsService implements DeleteAllModalService {
                 return data;
             })
         )
+    }
+
+    public loadContainers(): Observable<LoadContainersRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/contactgroups/loadContainers.json?angular=true`);
     }
 }
