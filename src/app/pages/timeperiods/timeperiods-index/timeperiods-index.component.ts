@@ -44,7 +44,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
@@ -64,7 +63,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
     selector: 'oitc-timeperiods-index',
     standalone: true,
     imports: [
-        ActionsButtonComponent,
         ActionsButtonElementComponent,
         CardBodyComponent,
         CardComponent,
