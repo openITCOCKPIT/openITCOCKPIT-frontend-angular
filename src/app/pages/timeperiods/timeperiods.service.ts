@@ -11,7 +11,11 @@ import {
     TimeperiodIndexRoot,
     TimeperiodsEditRoot,
     TimeperiodsIndexParams,
-    TimeperiodUsedBy
+    TimeperiodUsedBy,
+    User,
+    UserRoot,
+    ViewDetailsTimeperiod,
+    ViewDetailsTimeperiodRoot
 } from './timeperiods.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -158,6 +162,26 @@ export class TimeperiodsService {
                     return data;
                 })
             )
+    }
+
+    public getViewDetailsTimeperiod(id: number): Observable<ViewDetailsTimeperiod> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ViewDetailsTimeperiodRoot>(`${proxyPath}/timeperiods/viewDetails/${id}.json?angular=true`).pipe(
+            map(data => {
+                return data.timeperiod;
+            })
+        );
+    }
+
+    public getUser(): Observable<User> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UserRoot>(`${proxyPath}/profile/edit.json?angular=true`).pipe(
+            map(
+                data => {
+                    return data.user;
+                }
+            )
+        );
     }
 
 }

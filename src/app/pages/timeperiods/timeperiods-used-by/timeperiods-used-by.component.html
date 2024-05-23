@@ -245,11 +245,11 @@
                         </tr>
                         <tr *ngFor="let autoreport of objects.Autoreports">
                             <td colspan="2">
-                                <a *oitcPermission="['autoreports', 'edit']"
-                                   [routerLink]="['/', 'autoreports', 'editStepOne', autoreport.id]">
+                                <a *oitcPermission="['autoreportmodule', 'autoreports', 'edit']"
+                                   [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepOne', autoreport.id]">
                                     {{ autoreport.name }}
                                 </a>
-                                <span *oitcPermission="['autoreports', 'edit']; negate: true">
+                                <span *oitcPermission="['autoreportmodule', 'autoreports', 'edit']; negate: true">
                                     {{ autoreport.name }}
                                 </span>
                             </td>

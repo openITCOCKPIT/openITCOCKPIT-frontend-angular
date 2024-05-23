@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -7,7 +8,10 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -54,6 +58,7 @@ import {
 import { NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-timeperiods-index',
@@ -97,7 +102,11 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        ButtonGroupComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',
@@ -119,8 +128,9 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
     }
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
-    private TimeperiodsService = inject(TimeperiodsService)
+    private TimeperiodsService = inject(TimeperiodsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    public PermissionService: PermissionsService = inject(PermissionsService);
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -192,15 +202,14 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
             }];
         } else {
             // User clicked on delete selected button
-            // @ts-ignore
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            for (const item of this.SelectionServiceService.getSelectedItems()) {
                 if (item.Timeperiod.allow_edit === true) {
-                    return {
+                    items.push({
                         id: item.Timeperiod.id,
                         displayName: item.Timeperiod.name
-                    };
+                    });
                 }
-            });
+            }
         }
 
         // Pass selection to the modal
@@ -229,6 +238,10 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
         if (ids) {
             this.router.navigate(['/', 'timeperiods', 'copy', ids]);
         }
+    }
+
+    public onActionButtonClick(url: string): void {
+        this.router.navigateByUrl(url);
     }
 
 }
