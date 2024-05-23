@@ -18,6 +18,7 @@ import {
     ViewDetailsTimeperiodRoot
 } from './timeperiods.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -182,6 +183,12 @@ export class TimeperiodsService {
                 }
             )
         );
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/timeperiods/delete/${item.id}.json?angular=true`, {});
     }
 
 }
