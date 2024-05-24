@@ -145,6 +145,9 @@
                         </tr>
                         </tbody>
                     </table>
+                    <oitc-not-used-by-object *ngIf="total === 0">
+                        {{ t('This command is not used by any object') }}
+                    </oitc-not-used-by-object>
                 </c-container>
             </c-card-body>
         </c-card>

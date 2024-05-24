@@ -257,11 +257,9 @@
 
                         </tbody>
                     </table>
-                    <c-row class="mt-10 mb-10" *ngIf="total === 0">
-                        <c-col lg="12" class="d-flex justify-content-center text-danger italic">
-                            {{ t('This timeperiod is not used by any object') }}
-                        </c-col>
-                    </c-row>
+                    <oitc-not-used-by-object *ngIf="total === 0">
+                        {{ t('This timeperiod is not used by any object') }}
+                    </oitc-not-used-by-object>
                 </c-container>
             </c-card-body>
         </c-card>
