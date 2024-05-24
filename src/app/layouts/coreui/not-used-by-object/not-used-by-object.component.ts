@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-not-used-by-object',
     standalone: true,
     imports: [
         ColComponent,
-        NgIf,
         RowComponent,
         ContainerComponent
     ],
