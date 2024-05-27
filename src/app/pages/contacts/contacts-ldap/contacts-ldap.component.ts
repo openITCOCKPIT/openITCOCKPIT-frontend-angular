@@ -37,7 +37,6 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { ContactsService } from '../contacts.service';
-import { UsersService } from '../../users/users.service';
 import {
     ContactPost, LdapConfig, LdapUser,
     LoadCommand,
@@ -95,7 +94,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private UsersService: UsersService = inject(UsersService);
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -218,7 +216,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         const param = {
             containerIds: this.post.containers._ids
         };
-        this.subscriptions.add(this.UsersService.loadUsersByContainerId(param)
+        this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
             }))
