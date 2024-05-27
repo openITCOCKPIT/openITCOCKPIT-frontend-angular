@@ -18,13 +18,13 @@ export class NotyService {
     constructor(private toastr: ToastrService, private TranslocoService: TranslocoService) {
     }
 
-    genericSuccess(message?: string, title?: string, url?: any[]) {
+    genericSuccess(message?: string, title?: string, url?: any[], timeout?: number) {
         if (!message) {
             message = this.TranslocoService.translate('Data saved successfully');
         }
 
         const toast = this.toastr.success(message, title, {
-            timeOut: 3500,
+            timeOut: (timeout) ? timeout : 3500,
             progressBar: true,
             enableHtml: true
         });
@@ -39,6 +39,7 @@ export class NotyService {
         }
 
     }
+
 
     genericError(message?: string, title?: string, url?: any[]) {
         if (!message) {
