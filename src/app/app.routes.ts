@@ -119,6 +119,9 @@ export const routes: Routes = [{
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
+    path: 'nagiostats/index',
+    loadComponent: () => import('./pages/nagiostats/nagiostats-index/nagiostats-index.component').then(m => m.NagiostatsIndexComponent)
+}, {
     path: 'hosttemplates/index',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-index/hosttemplates-index.component').then(m => m.HosttemplatesIndexComponent)
 }, {
