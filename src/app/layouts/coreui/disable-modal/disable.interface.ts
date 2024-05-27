@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 
 export interface DisableItem {
-    id: number,           // ID of the item to delete
-    displayName: string   // name of the item that will be displayed in the modal
+    id: number,
+    displayName: string
 }
 
 export interface DisableModalService {

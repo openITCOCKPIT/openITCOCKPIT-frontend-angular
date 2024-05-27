@@ -1,0 +1,61 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="serviceMaintenanceModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                {{ t('Set planned maintenance times') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="inputcomment">{{ t('Comment') }}</label>
+                        <input cFormControl id="inputcomment">
+                        <div cFormText>
+                            <small class="text-danger">*required</small>
+                        </div>
+                    </div>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col>
+                    <label>{{ t('From') }}:</label>
+                </c-col>
+                <c-col>
+                    <label>{{ t('To') }}:</label>
+                </c-col>
+            </c-row>
+
+
+            <c-row [hidden]="!isSend" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Deleting...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="warning" variant="striped"/>
+                </c-col>
+            </c-row>
+
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="send()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+
+

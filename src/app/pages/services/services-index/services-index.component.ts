@@ -11,6 +11,7 @@ import { ServicesIndexService } from './services-index.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "./services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component'
 import {
     ServicesIndexFilterComponent
 } from '../../../components/services/services-index-filter/services-index-filter.component';
@@ -61,6 +62,7 @@ import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import {MaintenanceItem} from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
 
 @Component({
   selector: 'oitc-services-index',
@@ -113,7 +115,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         DowntimeTooltipComponent,
         UplotGraphComponent,
         DeleteAllModalComponent,
-
+        ServiceMaintenanceModalComponent
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
@@ -196,7 +198,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public services?: ServicesIndexRoot;
     public tab: number = 0;
     public timezone!: TimezoneObject;
-    public selectedItems: DisableItem[] = [];
+    public selectedItems: any[] = [];
 
 
     ngOnInit() {
@@ -365,6 +367,27 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
 
             setTimeout(()=>{this.load()}, 7000);
         }));
+    }
+
+    public toggleDowntimeModal(){
+        let items: MaintenanceItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): MaintenanceItem => {
+            return {
+                command: 'submitServiceDowntime',
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid,
+                start: '',
+                end: '',
+                author: '',
+                comment: '',
+            };
+        });
+
+    this.selectedItems = items;
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceMaintenanceModal',
+        });
     }
 
     public toggleDisableModal(service?: Service){

@@ -152,12 +152,6 @@
                                     <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                                 </td>
                                 <td class="width-50">
-                                    <!--<div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1">
-                                        <fa-icon [icon]="['far', 'user']"></fa-icon>
-                                    </div>
-                                    <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 2">
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    </div>-->
                                     <span *oitcPermission="['services', 'browser']">
                                         <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
                                             <oitc-ack-tooltip [type]="'services'"
@@ -262,10 +256,10 @@
                     <oitc-no-records *ngIf="services && services.all_services.length === 0"></oitc-no-records>
 
                     <ng-container *ngIf="services && services.all_services">
-                        <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                        <c-container class="bg-secondary bg-opacity-10 mb-3 rounded-bottom border border-top-0"
                                      fluid>
-                            <c-row>
-                                <c-col>
+                            <c-row class="p-3">
+                                <c-col xs="6">
                                     <oitc-select-all
                                             [itemsCount]="services.all_services.length">
                                     </oitc-select-all>
@@ -274,6 +268,7 @@
                                     <fa-icon [icon]="['fas', 'file']"></fa-icon>
                                     {{ t('Copy') }}
                                 </c-col>
+
                                 <c-col>
                                     <fa-icon [icon]="['fas', 'trash']" class="critical"></fa-icon>
                                     <span class="critical">{{ t('Delete selected') }}</span>
@@ -305,7 +300,7 @@
                                             <li><a href="javascript:void(0);" cDropdownItem (click)="enableNotifications()">
                                                 <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                                 {{ t('Enable notification') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem>
+                                            <li><a href="javascript:void(0);" cDropdownItem (click)="toggleDowntimeModal()">
                                                 <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                                 {{ t('Set planned maintenance times') }}</a></li>
                                             <li><a href="javascript:void(0);" cDropdownItem>
@@ -335,3 +330,4 @@
 </oitc-coreui>
 
 <oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
+<oitc-service-maintenance-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-service-maintenance-modal>
