@@ -4,7 +4,7 @@ export interface ServiceParams {
     'sort': string,
     'page': number,
     'direction': 'asc' | 'desc' | '',
-    'filter[Hosts.id]'?: number[],
+    'filter[Hosts.id]': number[],
     'filter[Hosts.name]': string,
     'filter[Hosts.name_regex]': boolean | string,
     'filter[Hosts.satellite_id][]': number[],
@@ -22,6 +22,43 @@ export interface ServiceParams {
     'filter[Servicestatus.active_checks_enabled]': boolean |string,
     'filter[Servicestatus.notifications_enabled]': boolean | string,
     'filter[servicepriority][]': number[]
+}
+
+export interface filter {
+    Servicestatus: {
+        current_state: string[],
+        acknowledged: boolean,
+        not_acknowledged: boolean,
+        in_downtime: boolean,
+        not_in_downtime: boolean,
+        passive: boolean ,
+        active: boolean ,
+        notifications_enabled: boolean ,
+        notifications_not_enabled: boolean,
+        output: string,
+    },
+    Services: {
+        id: number[],
+        name: string,
+        name_regex: boolean | string,
+        keywords:string[],
+        not_keywords: string[],
+        servicedescription: string,
+        priority: {
+            1: boolean,
+            2: boolean,
+            3: boolean,
+            4: boolean,
+            5: boolean
+        },
+        service_type: number[]
+    },
+    Hosts: {
+        id: number[],
+        name: string,
+        name_regex: boolean | string,
+        satellite_id: number[]
+    }
 }
 
 export interface ServicesIndexRoot {
@@ -67,7 +104,7 @@ export interface Host {
     satelliteId: number
     containerId: any
     containerIds: any
-    tags: any
+    tags?: any
     usageFlag: any
     allow_edit: boolean
     disabled: boolean

@@ -42,12 +42,14 @@ type PerfParams = {
 })
 export class PopoverGraphComponent implements OnDestroy {
     public visible: boolean = false;
-    public popoverWidth: string = '272px'
+    private popoverWidth:number = 440;
+    private popoverHeight: number = 220;
     public _hostUuid: string = '';
     public _serviceUuid: string = '';
     public uPlotGraphDefaultsObj = new PopoverConfigBuilder();
     public perfData: PerformanceData[] = [];
     public popoverStyle: {} = {};
+
     protected colors: any;
     private PopoverGraphService = inject(PopoverGraphService);
     private subscriptions: Subscription = new Subscription();
@@ -99,28 +101,25 @@ export class PopoverGraphComponent implements OnDestroy {
         this._timezone = timezone;
     }
 
-    // @debounce(200)
     showTooltip (hoverIcon: HTMLElement) {
         this.visible = true;
         let self = this;
-        // if (this.timer === null) {
-        //   this.timer = setTimeout(function () {
-        let position = hoverIcon.getBoundingClientRect();
-        //console.log(position);
-        let offset = {
-            relativeTop: hoverIcon.offsetTop + 40,
-            relativeLeft: hoverIcon.offsetLeft + 40,
-            absoluteTop: position.top,
-            absoluteLeft: position.left,
-        };
-        self.popoverOffset = offset;
-        // console.log(offset);
-        self.placePopoverGraph()
-        self.setParams();
+        if (this.timer === null) {
+            this.timer = setTimeout(function () {
+                let position = hoverIcon.getBoundingClientRect();
+                let offset = {
+                    relativeTop: hoverIcon.offsetTop,
+                    relativeLeft: hoverIcon.offsetLeft,
+                    absoluteTop: position.top + 20,
+                    absoluteLeft: position.left + 20,
+                };
+                self.popoverOffset = offset;
 
-        self.timer = null;
-        //   }, 150);
-        //  }
+                self.setParams();
+                self.timer = null;
+                self.placePopoverGraph()
+            }, 250);
+        }
 
     }
 
@@ -148,42 +147,39 @@ export class PopoverGraphComponent implements OnDestroy {
     }
 
     placePopoverGraph () {
-        let margin = 15;
+        let margin = 25;
         let $popupGraphContainer = <HTMLElement>document.getElementById('serviceGraphContainer-' + this.service);
-
         let popupGraphContainerHeight = $popupGraphContainer.offsetHeight + 53;
-        if (popupGraphContainerHeight < 272) {
-            // The popupGraphContainerHeight is at least 272px in height.
-            popupGraphContainerHeight = 272;
+        if (popupGraphContainerHeight < 220) {
+            popupGraphContainerHeight = 300;
         }
-        let absoluteBottomPositionOfPopoverGraphContainer = this.popoverOffset.absoluteTop + margin + popupGraphContainerHeight;
+        if (this.perfData.length > 2) {
+            popupGraphContainerHeight = 450;
+        }
+        this.popoverHeight = popupGraphContainerHeight;
 
-        //if (absoluteBottomPositionOfPopoverGraphContainer > window.innerHeight) {
-        if ((window.innerHeight - absoluteBottomPositionOfPopoverGraphContainer) < 272) {
-            // console.log('top')
+        let absoluteBottomPositionOfPopoverGraphContainer = this.popoverOffset.absoluteTop + margin + popupGraphContainerHeight;
+        this.popoverWidth = window.innerWidth - this.popoverOffset.absoluteLeft - 80
+        if ((window.innerHeight - this.popoverOffset.absoluteTop) < popupGraphContainerHeight) {
             //There is no space in the window for the popup, we need to place it above the mouse cursor
-            let marginTop = this.popoverOffset.relativeTop - popupGraphContainerHeight - margin + 10;
-            // console.log(marginTop);
+            let marginTop = window.innerHeight - popupGraphContainerHeight - margin; //this.popoverOffset.relativeTop - popupGraphContainerHeight - margin + 10;
             this.popoverStyle = {
-                'top': (marginTop > 1) ? marginTop : 1,
-                'left': this.popoverOffset.relativeLeft + margin,
-                // 'height': popupGraphContainerHeight + 'px',
+                'top': marginTop + 'px',
+                'left': (this.popoverOffset.absoluteLeft + margin) + 'px',
+                'width': this.popoverWidth + 'px',//(window.innerWidth - this.popoverOffset.absoluteLeft - 40) + 'px',
+                'height': popupGraphContainerHeight + 'px',
                 'padding': '6px'
             }
-            // console.log(this.popoverStyle);
         } else {
             //Default Popup
-            // console.log(this.popoverOffset.relativeTop + margin)
             this.popoverStyle = {
                 'top': parseInt(this.popoverOffset.relativeTop + margin),
-                'left': parseInt(this.popoverOffset.relativeLeft + margin),
-                //'height': popupGraphContainerHeight + 'px',
+                'left': parseInt(this.popoverOffset.absoluteLeft + margin) + 'px',
+                'width': this.popoverWidth + 'px',
+                'height': this.popoverHeight + 'px',
                 'padding': '6px'
             }
-            // console.log(this.popoverStyle);
         }
-        // console.log(this.popoverStyle)
-
     }
 
     getPerfData () {
@@ -194,8 +190,9 @@ export class PopoverGraphComponent implements OnDestroy {
                 } else {
                     this.perfData = perfdata.performance_data ?? [];
                 }
-                this.placePopoverGraph();
-                this.renderGraphs();
+               // this.placePopoverGraph();
+                // @ts-ignore
+                setTimeout(this.renderGraphs(),150);
             })
         );
     }
@@ -242,17 +239,15 @@ export class PopoverGraphComponent implements OnDestroy {
                 fillColor: colors.fill,
                 YAxisLabelLength: 100,
             });
-            //options.series[1].stroke = this.colors.stroke.default;
-            //options.series[1].fill = this.colors.fill.default;
-            options.axes[0].label = this.perfData[i].datasource.name
-            options.height = $elm.offsetHeight; // 27px for headline
-            options.width = $elm.offsetWidth - 20;
-            //this.uPlotChart = new uPlot(options, data, $elm);
+            options.axes[0].label = this.perfData[i].datasource.name;
+            options.height = $elm.offsetHeight -25;//(this.popoverHeight === 300) ? 180:  (this.popoverHeight / 2); // 27px for headline
+            options.width = $elm.offsetWidth//(this.perfData.length === 1) ? this.popoverWidth - 2 : (this.popoverWidth / 2) - 2 ;
+
             if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
                 try {
                     let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
 
-                    elm.innerHTML = ''
+                    elm.innerHTML = '';
                     let plot = new uPlot(options, data, elm);
 
                 } catch (e) {
@@ -260,6 +255,7 @@ export class PopoverGraphComponent implements OnDestroy {
                 }
             }
         }
+        this.placePopoverGraph();
     }
 
 

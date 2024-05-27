@@ -27,43 +27,8 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule} from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { filter } from '../../../pages/services/services-index/services.interface';
 
-type filter = {
-    Servicestatus: {
-        current_state: string[],
-        acknowledged: boolean,
-        not_acknowledged: boolean,
-        in_downtime: boolean,
-        not_in_downtime: boolean,
-        passive: boolean ,
-        active: boolean ,
-        notifications_enabled: boolean ,
-        notifications_not_enabled: boolean,
-        output: string,
-    },
-    Services: {
-        id: number[],
-        name: string,
-        name_regex: boolean | string,
-        keywords:string[],
-        not_keywords: string[],
-        servicedescription: string,
-        priority: {
-            1: boolean,
-            2: boolean,
-            3: boolean,
-            4: boolean,
-            5: boolean
-        },
-        service_type: number[]
-    },
-    Hosts: {
-        id: number[],
-        name: string,
-        name_regex: boolean | string,
-        satellite_id: number[]
-    }
-}
 
 type states = {
     ok: boolean,
@@ -143,7 +108,7 @@ export class ServicesIndexFilterComponent {
             name_regex: false,
             satellite_id: []
         }
-    }
+    };
 
     public states: states = {
         ok: false,

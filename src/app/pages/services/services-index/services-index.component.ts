@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
@@ -8,10 +9,13 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { ServicesIndexRoot, ServiceParams, TimezoneObject } from   "./services.interface";
+import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "./services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import { ServicesIndexFilterComponent } from '../../../components/services/services-index-filter/services-index-filter.component';
-import { HoststatusIconComponent} from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
+import {
+    ServicesIndexFilterComponent
+} from '../../../components/services/services-index-filter/services-index-filter.component';
+import { HoststatusIconComponent } from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -23,15 +27,16 @@ import {
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
-    TabContentComponent,
     PopoverDirective,
     RowComponent,
+    TabContentComponent,
     TableDirective,
-    TooltipDirective
+    TooltipDirective,
 } from '@coreui/angular';
-import { XsButtonDirective}  from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -41,53 +46,21 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import { AckTooltipComponent} from '../../../components/ack-tooltip/ack-tooltip.component';
-import { DowntimeTooltipComponent} from '../../../components/downtime-tooltip/downtime-tooltip.component';
-import { PopoverGraphComponent} from '../../../components/popover-graph/popover-graph.component';
-import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
-import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {UplotGraphComponent} from '../../../components/uplot-graph/uplot-graph.component';
-
-type filter = {
-    Servicestatus: {
-        current_state: string[],
-        acknowledged: boolean,
-        not_acknowledged: boolean,
-        in_downtime: boolean,
-        not_in_downtime: boolean,
-        passive: boolean,
-        active: boolean,
-        notifications_enabled: boolean,
-        notifications_not_enabled: boolean,
-        output: string,
-    },
-    Services: {
-        id: number[],
-        name: string,
-        name_regex: boolean | string,
-        keywords:string[],
-        not_keywords: string[],
-        servicedescription: string,
-        priority: {
-            1: boolean,
-            2: boolean,
-            3: boolean,
-            4: boolean,
-            5: boolean
-        },
-        service_type: number[]
-    },
-    Hosts: {
-        id: number[],
-        name: string,
-        name_regex: boolean | string,
-        satellite_id: number[]
-    }
-}
+import { AckTooltipComponent } from '../../../components/ack-tooltip/ack-tooltip.component';
+import { DowntimeTooltipComponent } from '../../../components/downtime-tooltip/downtime-tooltip.component';
+import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
+import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
   selector: 'oitc-services-index',
@@ -98,6 +71,7 @@ type filter = {
         FaIconComponent,
         PermissionDirective,
         DebounceDirective,
+        DisableModalComponent,
         RouterLink,
         RouterModule,
         CardComponent,
@@ -137,27 +111,71 @@ type filter = {
         AckTooltipComponent,
         PopoverGraphComponent,
         DowntimeTooltipComponent,
-        UplotGraphComponent
+        UplotGraphComponent,
+        DeleteAllModalComponent,
+
     ],
   templateUrl: './services-index.component.html',
-  styleUrl: './services-index.component.css'
+  styleUrl: './services-index.component.css',
+    providers: [
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesIndexService} // Inject the CommandsService into the DeleteAllModalComponent
+    ]
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy  {
-
+    private readonly http = inject(HttpClient);
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private ServicesIndexService: ServicesIndexService = inject(ServicesIndexService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly modalService = inject(ModalService);
+    public filter: filter = {
+        Servicestatus: {
+            current_state: [],
+            acknowledged: false,
+            not_acknowledged: false,
+            in_downtime: false,
+            not_in_downtime: false,
+            passive: false,
+            active: false,
+            notifications_enabled: false,
+            notifications_not_enabled: false,
+            output: '',
+        },
+        Services: {
+            id: [],
+            name: '',
+            name_regex: false,
+            keywords:[],
+            not_keywords: [],
+            servicedescription: '',
+            priority: {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            },
+            service_type: []
+        },
+        Hosts: {
+            id: [],
+            name: '',
+            name_regex: false,
+            satellite_id: []
+        }
+    };
     public params: ServiceParams = {
-        angular: true,
-        scroll: true,
-        sort: 'Servicestatus.current_state',
-        page: 1,
-        direction: 'desc',
+        'angular': true,
+        'scroll': true,
+        'sort': 'Servicestatus.current_state',
+        'page': 1,
+        'direction': 'desc',
         'filter[Hosts.id]': [],
         'filter[Hosts.name]': '',
-        'filter[Hosts.name_regex]': false,
+        'filter[Hosts.name_regex]': '',
         'filter[Hosts.satellite_id][]': [],
         'filter[Services.id][]': [],
         'filter[Services.service_type][]': [],
@@ -178,6 +196,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public services?: ServicesIndexRoot;
     public tab: number = 0;
     public timezone!: TimezoneObject;
+    public selectedItems: DisableItem[] = [];
+
 
     ngOnInit() {
         this.getUserTimezone();
@@ -191,10 +211,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     load () {
         this.subscriptions.add(this.ServicesIndexService.getServicesIndex(this.params)
             .subscribe((services) => {
-                let random_boolean = Math.random() < 0.5
-              /*  services.all_services[0].Servicestatus.isFlapping = random_boolean;
-                services.all_services[7].Servicestatus.isFlapping = random_boolean;
-                services.all_services[0].Hoststatus.isFlapping = random_boolean; */
                 this.services = services;
             })
         );
@@ -231,17 +247,154 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             baseUrl = '/services/listToCsv?';
         }
 
+        let urlParams = {
+            'angular': true,
+            'sort': this.params['sort'],
+            'page': this.params['page'],
+            'direction': this.params['direction'],
+            'filter[Hosts.id]': this.params['filter[Hosts.id]'],
+            'filter[Hosts.name]': this.params['filter[Hosts.name]'],
+            'filter[Hosts.name_regex]': this.params['filter[Hosts.name_regex]'],
+            'filter[Hosts.satellite_id][]': this.params['filter[Hosts.satellite_id][]'],
+            'filter[Services.id][]': this.params['filter[Services.id][]'],
+            'filter[Services.service_type][]': this.params['filter[Services.service_type][]'],
+            'filter[servicename]': this.params['filter[servicename]'],
+            'filter[servicename_regex]': this.params['filter[servicename_regex]'],
+            'filter[servicedescription]': this.params['filter[servicedescription]'],
+            'filter[Servicestatus.output]': this.params['filter[Servicestatus.output]'],
+            'filter[Servicestatus.current_state][]': this.filter.Servicestatus.current_state,
+            'filter[keywords][]': this.params['filter[keywords][]'],
+            'filter[not_keywords][]': this.params['filter[not_keywords][]'],
+            'filter[Servicestatus.problem_has_been_acknowledged]': this.params['filter[Servicestatus.problem_has_been_acknowledged]'],
+            'filter[Servicestatus.scheduled_downtime_depth]': this.params['filter[Servicestatus.scheduled_downtime_depth]'],
+            'filter[Servicestatus.active_checks_enabled]': this.params['filter[Servicestatus.active_checks_enabled]'],
+            'filter[Servicestatus.notifications_enabled]': this.params['filter[Servicestatus.notifications_enabled]'],
+            'filter[servicepriority][]': this.params['filter[servicepriority][]']
+        };
+
+
+        let stringParams:HttpParams = new HttpParams();
+
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
+
     }
 
-    public disableServices() {
-       let items = this.SelectionServiceService.getSelectedItems().map((item): any => {
+    public resetChecktime() {
+        let commands = [];
+        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
             return {
-                id: item.Service.id,
-                displayName: item.Service.servicename
+                command: 'rescheduleService',
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid,
+                satelliteId: item.Host.satelliteId
             };
-           //return item;
-        });
 
+        });
+        if(commands.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return
+        }
+        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+           if(result.message){
+               const title = this.TranslocoService.translate('Reschedule');
+               const url = ['services', 'index'];
+               this.notyService.genericSuccess(result.message, title, url);
+           } else {
+               this.notyService.genericError();
+           }
+        }));
+    }
+
+    public disableNotifications() {
+        let commands = [];
+        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+            return {
+                command: 'submitDisableServiceNotifications',
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid
+            };
+
+        });
+        if(commands.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return
+        }
+        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+            if(result.message){
+                const title = this.TranslocoService.translate('Disable Notifications');
+
+                this.notyService.genericSuccess(result.message, title, [], 7000);
+                this.notyService.scrollContentDivToTop();
+                this.SelectionServiceService.deselectAll()
+            } else {
+                this.notyService.genericError();
+            }
+
+            setTimeout(()=>{this.load()}, 7000);
+        }));
+    }
+
+    public enableNotifications() {
+        let commands = [];
+        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+            return {
+                command: 'submitEnableServiceNotifications',
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid
+            };
+
+        });
+        if(commands.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+            if(result.message){
+                const title = this.TranslocoService.translate('enable Notifications');
+
+                this.notyService.genericSuccess(result.message, title, [],7000);
+                this.notyService.scrollContentDivToTop();
+                this.SelectionServiceService.deselectAll()
+            } else {
+                this.notyService.genericError();
+            }
+
+            setTimeout(()=>{this.load()}, 7000);
+        }));
+    }
+
+    public toggleDisableModal(service?: Service){
+        let items: DisableItem[] = [];
+
+        if (service) {
+            // User just want to delete a single command
+            items = [{
+                id: service.id,
+                displayName: service.hostname + '/' + service.servicename
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
+                return {
+                    id: item.Service.id,
+                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                };
+            });
+        }
+        this.selectedItems = items;
+        this.modalService.toggle({
+            show: true,
+            id: 'disableModal',
+        });
+    }
+
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.load();
+        }
     }
 
     getFilter(filter: filter) {
@@ -277,16 +430,13 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.params['filter[Servicestatus.active_checks_enabled]'] = '';
         }
         var priorityFilter: number[] = [];
-        const priorityKeys = Object.keys(filter.Services.priority)
-        for(let propt in priorityKeys) {
-
-            // @ts-ignore
-            if(filter.Services.priority[propt] === true) {
-                priorityFilter.push(parseInt(propt))
+        Object.entries(filter.Services.priority).forEach(([key, value]) => {
+            if(value){
+                priorityFilter.push(parseInt(key));
             }
-        }
+        });
         this.params['filter[servicepriority][]'] = priorityFilter
-
+        this.filter = filter;
         this.load();
 
     }

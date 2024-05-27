@@ -7,7 +7,7 @@ import {inject, Injectable} from "@angular/core";
 
 
 export class PopoverConfigBuilder {
-    public can = document.createElement("canvas");
+    public can: HTMLCanvasElement = document.createElement("canvas");
     public ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>this.can.getContext('2d');
     public unit: string = '';
     public seriesIdx = 0;
@@ -71,13 +71,10 @@ export class PopoverConfigBuilder {
     }
 
     public getDefaultOptions (opts: any) {
-        const {linear, spline, stepped, bars} = uPlot.paths;
-        if (linear) {
-            const _linear = linear();
-        }
-        if (spline) {
-            const _spline = spline();
-        }
+        // @ts-ignore
+        let _linear: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.linear();
+        // @ts-ignore
+        let _spline: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.spline();
         opts = opts || {};
         opts.unit = opts.unit || '';
         opts.timezone = opts.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -99,11 +96,10 @@ export class PopoverConfigBuilder {
 
         this.unit = opts.unit;
 
-
         let uPlotOptions = {
             title: "",
-            height: 100,
-            width: 600,
+            height:0,
+            width: 0,
 
             cursor: {
                 drag: {
@@ -121,6 +117,7 @@ export class PopoverConfigBuilder {
                 },
                 y: {
                     auto: true,
+                  //  min: -1,
                     // range: (self, dataMin, dataMax) => uPlot.rangeNum(0, dataMax, 0.2, true),
                     distr: 1
 
@@ -129,11 +126,9 @@ export class PopoverConfigBuilder {
             series: [
                 {},
                 {
-
-
                     label: "Series Title",
                     width: opts.lineWidth,
-                    //paths: spline(),
+                   // paths: spline(),//(spline) ? spline() : (linear) ? linear() : null,
 
                     stroke: opts.strokeColor,
                     fill: opts.fillColor,
@@ -173,7 +168,7 @@ export class PopoverConfigBuilder {
                 }
             ],
             legend: {
-                show: opts.showLegend
+                show: false//opts.showLegend
             }
         };
 

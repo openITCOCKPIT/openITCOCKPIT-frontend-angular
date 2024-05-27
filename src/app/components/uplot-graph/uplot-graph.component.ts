@@ -212,7 +212,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
             x: {
                 time: true,
                 auto: true,
-                min: 0,
+               // min: 0,
                 max: new Date().getTime()
             },
             y: {
