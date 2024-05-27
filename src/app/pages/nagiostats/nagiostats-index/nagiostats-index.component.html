@@ -26,6 +26,14 @@
                         {{ t('overview') }}
                     </small>
                 </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadStats()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
             </c-card-header>
             <c-card-body>
 
@@ -48,31 +56,61 @@
                                     <tr>
                                         <td><= 1 {{ t('minute') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK1M}">
-                                            {{ stats?.NUMSVCACTCHK1M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCACTCHK1M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCACTCHK1M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 5 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK5M}">
-                                            {{ stats?.NUMSVCACTCHK5M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCACTCHK5M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCACTCHK5M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 15 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK15M}">
-                                            {{ stats?.NUMSVCACTCHK15M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCACTCHK15M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCACTCHK15M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 60 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMSVCACTCHK60M}">
-                                            {{ stats?.NUMSVCACTCHK60M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCACTCHK60M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCACTCHK60M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{{ t('Since start') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMSVCCHECKED}">
-                                            {{ stats?.NUMSVCCHECKED }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCCHECKED }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCCHECKED"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -211,25 +249,49 @@
                                     <tr>
                                         <td><= 1 {{ t('minute') }}</td>
                                         <td>
-                                            {{ stats?.NUMSVCPSVCHK1M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCPSVCHK1M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCPSVCHK1M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 5 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMSVCPSVCHK5M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCPSVCHK5M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCPSVCHK5M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 15 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMSVCPSVCHK15M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCPSVCHK15M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCPSVCHK15M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 60 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMSVCPSVCHK60M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMSVCPSVCHK60M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMSVCPSVCHK60M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -289,31 +351,61 @@
                                     <tr>
                                         <td><= 1 {{ t('minute') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK1M}">
-                                            {{ stats?.NUMHSTACTCHK1M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTACTCHK1M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTACTCHK1M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 5 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK5M}">
-                                            {{ stats?.NUMHSTACTCHK5M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTACTCHK5M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTACTCHK5M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 15 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK15M}">
-                                            {{ stats?.NUMHSTACTCHK15M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTACTCHK15M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTACTCHK15M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 60 {{ t('minutes') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMHSTACTCHK60M}">
-                                            {{ stats?.NUMHSTACTCHK60M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTACTCHK60M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTACTCHK60M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{{ t('Since start') }}</td>
                                         <td [ngClass]="{'text-danger': !stats?.NUMHSTCHECKED}">
-                                            {{ stats?.NUMHSTCHECKED }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTCHECKED }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTCHECKED"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -399,25 +491,49 @@
                                     <tr>
                                         <td><= 1 {{ t('minute') }}</td>
                                         <td>
-                                            {{ stats?.NUMHSTPSVCHK1M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTPSVCHK1M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTPSVCHK1M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 5 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMHSTPSVCHK5M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTPSVCHK5M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTPSVCHK5M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 15 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMHSTPSVCHK15M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTPSVCHK15M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTPSVCHK15M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><= 60 {{ t('minutes') }}</td>
                                         <td>
-                                            {{ stats?.NUMHSTPSVCHK60M }}
+                                            <div class="d-flex flex-row">
+                                                {{ stats?.NUMHSTPSVCHK60M }}
+                                                <oitc-sparkline-stats
+                                                    class="ps-1"
+                                                    [lastUpdate]="lastUpdate"
+                                                    [value]="stats?.NUMHSTPSVCHK60M"></oitc-sparkline-stats>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
