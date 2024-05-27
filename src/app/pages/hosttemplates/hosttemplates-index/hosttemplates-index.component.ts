@@ -64,6 +64,7 @@ import {
 import {
     NgSelectOptionCheckboxComponent
 } from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
@@ -115,7 +116,8 @@ import {
         NgClass,
         DeleteAllModalComponent,
         NgSelectSelectAllComponent,
-        NgSelectOptionCheckboxComponent
+        NgSelectOptionCheckboxComponent,
+        MultiSelectModule
     ],
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',

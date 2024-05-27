@@ -129,6 +129,32 @@
                             </c-col>
 
                         </c-row>
+
+                        <c-row>
+                            <c-col md="6" class="mb-1">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+
+
+                                    <p-multiSelect
+                                        [options]="hosttemplateTypes"
+                                        name="hosttemplatetype_id"
+                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']"
+                                        [filter]="true"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        [placeholder]="'Filter by host template types' | transloco"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                    />
+
+
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
                         <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
