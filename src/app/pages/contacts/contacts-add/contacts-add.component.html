@@ -623,6 +623,8 @@
 
                     <c-form-check class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
+                        <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                            *ngIf="hasMacroErrors"></oitc-form-feedback>
                     </c-form-check>
 
                     <div class="row"

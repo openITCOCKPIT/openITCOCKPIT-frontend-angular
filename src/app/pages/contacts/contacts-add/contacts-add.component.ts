@@ -97,6 +97,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError | null = null;
+    protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
     protected containers: LoadContainersContainer[] = [];
@@ -178,6 +179,11 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        this.hasMacroErrors = true;
+                    }
                 }
             }))
     }
