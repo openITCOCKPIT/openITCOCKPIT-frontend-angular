@@ -5,14 +5,18 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import {
-    ContactgroupAddPost, ContactgroupAddPostContactgroup,
+    ContactgroupAddPostContactgroup,
     ContactgroupEditPostContactgroup,
     ContactgroupsCopyGet,
     ContactgroupsCopyGetContactgroup,
     ContactgroupsCopyPost,
     ContactgroupsEditRoot,
     ContactgroupsIndexParams,
-    ContactgroupsIndexRoot, ContactgroupsUsedByRoot, GetContactsByContainerIdRoot, GetContactsByContainerIdRootContact
+    ContactgroupsIndexRoot,
+    ContactgroupsUsedByRoot,
+    GetContactsByContainerIdRoot,
+    GetContactsByContainerIdRootContact,
+    LoadContainersRoot
 } from './contactgroups.interface';
 
 @Injectable({
@@ -119,6 +123,11 @@ export class ContactgroupsService implements DeleteAllModalService {
 
     }
 
+    public loadContainers(): Observable<LoadContainersRoot>{
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/contactgroups/loadContainers.json?angular=true`);
+
+    }
 
     public saveContactgroupsCopy(contacts: ContactgroupsCopyPost[]): Observable<Object> {
         const proxyPath: string = this.proxyPath;

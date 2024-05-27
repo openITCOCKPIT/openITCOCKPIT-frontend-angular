@@ -292,3 +292,16 @@ export interface GetContactsByContainerIdRootContact {
     key: number
     value: string
 }
+
+/*********************************
+ *    Definition of Container    *
+ *********************************/
+export interface LoadContainersRoot {
+    containers: LoadContainersContainer[]
+    _csrfToken: string
+}
+
+export interface LoadContainersContainer {
+    key: number
+    value: string
+}
