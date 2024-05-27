@@ -127,7 +127,7 @@ export interface TimeperiodCopy {
 }
 
 /**********************
- *     Used By action    *
+ *   Used By action   *
  **********************/
 
 export interface TimeperiodUsedBy {
@@ -245,4 +245,88 @@ export interface TimeperiodUsedByHosts {
 export interface TimeperiodUsedByServicetemplates {
     id: number
     name: string
+}
+
+/************************
+ *  view Details action *
+ ************************/
+
+export interface ViewDetailsTimeperiodRoot {
+    timeperiod: ViewDetailsTimeperiod
+    _csrfToken: string
+}
+
+export interface ViewDetailsTimeperiod {
+    id: number
+    uuid: string
+    container_id: number
+    name: string
+    description: string
+    calendar_id: number
+    created: string
+    modified: string
+    timeperiod_timeranges: TimeperiodTimerange[]
+    events: Event[]
+}
+
+export interface TimeperiodTimerange {
+    id: number
+    timeperiod_id: number
+    day: number
+    start: string
+    end: string
+}
+
+export interface Event {
+    daysOfWeek: number[]
+    startTime?: string
+    endTime?: string
+    title?: string
+    rendering?: string
+    className?: string
+    allDay?: boolean
+    overLap?: boolean
+}
+
+export interface UserRoot {
+    user: User
+    isLdapUser: boolean
+    maxUploadLimit: MaxUploadLimit
+    newDesktopApi: boolean
+    oitcVersion: string
+    _csrfToken: string
+}
+
+export interface User {
+    id: number
+    usergroup_id: number
+    email: string
+    firstname: string
+    lastname: string
+    position: any
+    company: any
+    phone: any
+    timezone: string
+    i18n: string
+    dateformat: string
+    samaccountname: any
+    ldap_dn: any
+    showstatsinmenu: number
+    is_active: number
+    dashboard_tab_rotation: number
+    paginatorlength: number
+    recursive_browser: number
+    image: any
+    is_oauth: boolean
+    usercontainerroles_ldap: UsercontainerrolesLdap
+}
+
+export interface UsercontainerrolesLdap {
+    _ids: any[]
+}
+
+export interface MaxUploadLimit {
+    value: number
+    unit: string
+    string: string
 }

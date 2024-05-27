@@ -100,11 +100,9 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
                 this.defaultMacros = [];
                 this._macros = [];
             } else if (this.isDefaultMacros(macros[0])) {
-                // @ts-ignore
-                this.defaultMacros = macros;
+                this.defaultMacros = macros as DefaultMacros[];
             } else if (this.isMacroIndex(macros[0])) {
-                // @ts-ignore
-                this._macros = macros;
+                this._macros = macros as MacroIndex[];
             }
         } else if (this.isMacros(macros)) {
             this.defaultMacros = macros.defaultMacros;

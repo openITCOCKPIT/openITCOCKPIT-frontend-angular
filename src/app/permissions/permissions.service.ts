@@ -75,4 +75,16 @@ export class PermissionsService {
             next: permissions => this.permissions$$.next(permissions),
         });
     }
+
+    public hasPermission(checkChunks: string | string[], negate: boolean = false): boolean {
+        let permissions = this.permissions$$.getValue();
+        let hasPermission = this.checkPermission(checkChunks, permissions);
+
+        if (negate) {
+            return !hasPermission;
+        }
+
+        return hasPermission;
+    }
+
 }

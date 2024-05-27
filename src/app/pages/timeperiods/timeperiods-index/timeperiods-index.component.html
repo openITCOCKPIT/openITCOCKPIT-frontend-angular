@@ -95,7 +95,7 @@
                                 </c-input-group>
                             </c-col>
                         </c-row>
-                        <c-row>
+                        <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
                                     {{ t('Reset filter') }}
@@ -133,51 +133,87 @@
                                 [item]="timeperiod"></oitc-item-select>
 
                         </td>
-                        <td>{{ timeperiod.Timeperiod.name }}</td>
+                        <td *oitcPermission="['timeperiods', 'viewdetails']" class="word-break">
+                            <a [routerLink]="['/', 'timeperiods', 'viewDetails', timeperiod.Timeperiod.id]">
+                                {{ timeperiod.Timeperiod.name }}
+                            </a>
+                        </td>
+                        <td *oitcPermission="['timeperiods', 'viewdetails']; negate: true"
+                            class="word-break">
+                            {{ timeperiod.Timeperiod.name }}
+                        </td>
                         <td>{{ timeperiod.Timeperiod.description }}</td>
 
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'timeperiods.edit'"
-                                                 [url]="'/timeperiods/edit/' + timeperiod.Timeperiod.id"
-                                                 [allowEdit]="timeperiod.Timeperiod.allow_edit">
-                                <oitc-actions-button-element [permission]="'timeperiods.edit'"
-                                                             [url]="'/timeperiods/edit/' + timeperiod.Timeperiod.id"
-                                                             [allow]="timeperiod.Timeperiod.allow_edit">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'timeperiods.viewDetails'"
-                                                             [url]="'/timeperiods/viewDetails/' + timeperiod.Timeperiod.id">
-                                    <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
-                                    {{ t('View details') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'timeperiods.copy'"
-                                                             [url]="'/timeperiods/copy/' + timeperiod.Timeperiod.id"
-                                                             [allow]="timeperiod.Timeperiod.allow_edit">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/timeperiod/' + timeperiod.Timeperiod.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'timeperiods.usedBy'"
-                                                             [url]="'/timeperiods/usedBy/' + timeperiod.Timeperiod.id">
-                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                    {{ t('Used By') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(timeperiod)"
-                                                             [permission]="'timeperiods.delete'"
-                                                             [allow]="timeperiod.Timeperiod.allow_edit">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
+
+                            <c-button-group role="group">
+                                @if (PermissionService.hasPermission(['timeperiods', 'edit'])) {
+                                    <button cButton class="ripple btn-lower-padding" color="default"
+                                            *ngIf="timeperiod.Timeperiod.allow_edit" size="xs"
+                                            (click)="onActionButtonClick('/timeperiods/edit/' + timeperiod.Timeperiod.id)">
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    </button>
+                                    <button cButton class="ripple btn-lower-padding" color="default" size="xs"
+                                            *ngIf="!timeperiod.Timeperiod.allow_edit" disabled>
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    </button>
+                                } @else if (PermissionService.hasPermission(['timeperiods', 'viewdetails'])) {
+                                    <button cButton class="ripple btn-lower-padding" color="default" size="xs"
+                                            (click)="onActionButtonClick('/timeperiods/viewDetails/' + timeperiod.Timeperiod.id)">
+                                        <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
+                                    </button>
+                                } @else {
+                                    <button cButton class="ripple btn-lower-padding" color="default" size="xs" disabled>
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    </button>
+                                }
+                                <c-dropdown variant="btn-group">
+                                    <button cButton cDropdownToggle class="ripple btn-lower-padding dropdown-btn"
+                                            color="default" [caret]="false"
+                                            size="xs">
+                                        <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <oitc-actions-button-element [permission]="'timeperiods.edit'"
+                                                                     [url]="'/timeperiods/edit/' + timeperiod.Timeperiod.id"
+                                                                     [allow]="timeperiod.Timeperiod.allow_edit">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'timeperiods.viewdetails'"
+                                                                     [url]="'/timeperiods/viewDetails/' + timeperiod.Timeperiod.id">
+                                            <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
+                                            {{ t('View details') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'timeperiods.copy'"
+                                                                     [url]="'/timeperiods/copy/' + timeperiod.Timeperiod.id"
+                                                                     [allow]="timeperiod.Timeperiod.allow_edit">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/timeperiod/' + timeperiod.Timeperiod.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'timeperiods.usedBy'"
+                                                                     [url]="'/timeperiods/usedBy/' + timeperiod.Timeperiod.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(timeperiod)"
+                                                                     [permission]="'timeperiods.delete'"
+                                                                     [allow]="timeperiod.Timeperiod.allow_edit">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </ul>
+                                </c-dropdown>
+                            </c-button-group>
                         </td>
                     </tr>
                     </tbody>

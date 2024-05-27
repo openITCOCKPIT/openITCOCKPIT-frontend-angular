@@ -39,8 +39,8 @@
                                 {{ t('Back') }}
                             </button>
                         </c-nav-item>
-                        <c-nav-item class="px-1">
-                            <button [routerLink]="'timeperiods/viewDetails/' + post.id" cButton class="ripple"
+                        <c-nav-item class="px-1" *oitcPermission="['timeperiods', 'viewdetails']">
+                            <button [routerLink]="['/','timeperiods','viewDetails', post.id]" cButton class="ripple"
                                     color="default"
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>

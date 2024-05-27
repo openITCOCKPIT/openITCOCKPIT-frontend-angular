@@ -17,9 +17,10 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
-import { CommandUsedByCommand, CommandUsedBy, CommandUsedByObjects } from '../commands.interface';
+import { CommandUsedByCommand, CommandUsedByObjects } from '../commands.interface';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
+import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
 
 @Component({
@@ -42,7 +43,8 @@ import { MatSort } from '@angular/material/sort';
         ContainerComponent,
         MatSort,
         TableDirective,
-        NgForOf
+        NgForOf,
+        NotUsedByObjectComponent
     ],
     templateUrl: './commands-used-by.component.html',
     styleUrl: './commands-used-by.component.css'

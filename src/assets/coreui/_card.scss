@@ -6,6 +6,7 @@
 
 .card-header {
     display: flex;
+    background: transparentize($white, 0.97);
 }
 
 .card-title {

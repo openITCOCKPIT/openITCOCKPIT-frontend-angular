@@ -353,7 +353,7 @@
                                 </fieldset>
                             </c-col>
                         </c-row>
-                        <c-row>
+                        <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
                                     {{ t('Reset filter') }}
@@ -369,6 +369,7 @@
                         </li>
                     </ul>
                 </c-container>
+                <oitc-no-records *ngIf="changes && changes.all_changes.length === 0"></oitc-no-records>
                 <c-container fluid>
                     <c-row>
                         <c-col>

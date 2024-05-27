@@ -36,6 +36,7 @@ import {
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 
 @Component({
     selector: 'oitc-changelogs-entity',
@@ -74,7 +75,8 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         PaginateOrScrollComponent,
         ChangelogsEntryComponent,
         NgForOf,
-        BackButtonDirective
+        BackButtonDirective,
+        NoRecordsComponent
     ],
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
@@ -83,7 +85,7 @@ export class ChangelogsEntityComponent implements OnInit {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
     public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
