@@ -1,0 +1,205 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['servicetemplategroups', 'index']"
+                       [routerLink]="['/', 'servicetemplategroups', 'index']">
+                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                        {{ t('Service template group') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Allocate service template group to host group') }}
+                </li>
+            </ol>
+        </nav>
+
+        <form cForm (ngSubmit)="allocateToHostgroup()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Allocate service template group') }}
+                        <small>
+                            {{ t('to host group') }}
+                        </small>
+                    </h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['servicetemplategroups', 'index']" cButton class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="id">
+                            {{ t('Service template group') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select name="id"
+                                   id="id"
+                                   oitcFormError
+                                   [(ngModel)]="id"
+                                   [errors]="errors" errorField="id">
+                            <ng-option *ngFor="let servicetemplategroup of this.servicetemplategroups"
+                                       [value]="servicetemplategroup.key">
+                                {{ servicetemplategroup.value }}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="id === null" class="text-warning-glow pt-1">
+                            {{ t('Please select a service template group.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="id"></oitc-form-feedback>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label cLabel for="hostgroupId">
+                            {{ t('Host group') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <ng-select name="hostgroupId"
+                                   id="hostgroupId"
+                                   [(ngModel)]="hostgroupId"
+                                   (ngModelChange)="hostGroupIdChanged()"
+                                   oitcFormError
+                                   [errors]="errors" errorField="id">
+                            <ng-option *ngFor="let hostgroup of this.hostgroups" [value]="hostgroup.key">
+                                {{ hostgroup.value }}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="hostgroupId === null" class="text-warning-glow pt-1">
+                            {{ t('Please select a host group.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="hostgroupId"></oitc-form-feedback>
+                    </div>
+
+                    <ng-container *ngIf="hostgroupId !== null">
+                        <c-alert color="info">
+                            <c-row>
+                                <c-col>
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                                    </fa-stack>
+                                </c-col>
+                                <c-col>
+                                    <h5 class="txt-primary">
+                                        {{ t('Please notice') }}
+                                    </h5>
+                                    <br/>
+                                    {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
+                                </c-col>
+                            </c-row>
+                        </c-alert>
+                    </ng-container>
+
+                    <ng-container *ngIf="hostgroupId !== null">
+                        <c-row
+                            *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
+                            <fieldset>
+                                <legend>
+                                    <h4>
+                                        <!-- 🚩🚩BULLSHIT DEBUG STUPH --->{{ hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue | json }}
+                                        <!-- END BULLSHIT HERE 🚩🚩 -->
+                                        <input type="checkbox"
+                                               (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
+                                               [ngModelOptions]="{standalone: true}"
+                                               [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
+                                        >
+                                        {{ t('Service/s to deploy on host:') }}
+                                        <span class="text-info">
+                                            {{ hostWithServicesToDeploy.host.hostname }}
+                                            ({{ hostWithServicesToDeploy.host.address }})
+                                        </span>
+                                    </h4>
+
+                                </legend>
+
+                                <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services"
+                                     class="padding-bottom-5 padding-left-10">
+                                    <input type="checkbox"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"
+                                    >
+
+                                    {{ serviceToDeploy.servicetemplate.name }}
+                                    <span class="text-info"
+                                          *ngIf="serviceToDeploy.servicetemplate.description">
+                                        ({{ serviceToDeploy.servicetemplate.description }})
+                                    </span>
+
+                                    <span class="text-info"
+                                          *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHost"
+                                          [matTooltip]="'Service already exist on selected host. Tick the box to create a duplicate.' | transloco"
+                                    >
+                                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    </span>
+
+                                    <span
+                                        *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
+                                        [matTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
+                                    >
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    </span>
+                                </div>
+                            </fieldset>
+
+                        </c-row>
+                    </ng-container>
+
+
+                    <div class="row padding-left-10 padding-top-10" *ngIf="hostgroupId !== null">
+                        <div class="col-xs-6 col-md-2">
+                            <span (click)="selectAll()" class="pointer">
+                                <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
+                                {{ t('Select all') }}
+                            </span>
+                        </div>
+                        <div class="col-xs-6 col-md-2">
+                            <span (click)="undoSelection()" class="pointer">
+                                <fa-icon [icon]="['fas', 'square']"></fa-icon>
+                                {{ t('Undo selection') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row padding-top-15"><!-- spacer--></div>
+
+                    <c-progress-bar [value]="percentage"></c-progress-bar>
+
+                </c-card-body>
+                <c-card-footer class="text-end">
+
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Allocate to host group') }}
+                    </button>
+                    <button [fallbackUrl]="['servicetemplategroups', 'index']" cButton class="ms-1 ripple"
+                            color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+
+
+                </c-card-footer>
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>
