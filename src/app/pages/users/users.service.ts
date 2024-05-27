@@ -72,16 +72,4 @@ export class UsersService {
             })
         );
     }
-
-    public loadUsersByContainerId(params: LoadUsersByContainerIdPost): Observable<LoadUsersByContainerIdRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadUsersByContainerIdRoot>(`${proxyPath}/users/loadUsersByContainerId.json?angular=true`, {
-            params: params as {}
-        }).pipe(
-            map(data => {
-                return data;
-            })
-        );
-
-    }
 }

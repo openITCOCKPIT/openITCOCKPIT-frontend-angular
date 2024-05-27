@@ -569,3 +569,18 @@ export interface LoadContainersContainer {
     key: number
     value: string
 }
+
+// LoadUsersByContainerId
+export interface LoadUsersByContainerId {
+    users: LoadUsersByContainerIdUserByContainer[]
+}
+
+export interface LoadUsersByContainerIdUserByContainer {
+    key: number
+    value: string
+}
+
+// LoadUsersByContainerIdRequest
+export interface LoadUsersByContainerIdRequest {
+    containerIds: number[]
+}
