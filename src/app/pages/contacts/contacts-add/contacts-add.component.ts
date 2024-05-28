@@ -96,7 +96,8 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError = {} as GenericValidationError;
+    public errors: GenericValidationError | null = null;
+    protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
     protected containers: LoadContainersContainer[] = [];
@@ -162,11 +163,14 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (this.createAnother) {
-                        this.post = this.getDefaultPost();
+                    if (!this.createAnother) {
+                        this.router.navigate(['/contacts/index']);
                         return;
                     }
-                    this.router.navigate(['/contacts/index']);
+                    this.post = this.getDefaultPost();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
                     return;
                 }
 
@@ -175,6 +179,11 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        this.hasMacroErrors = true;
+                    }
                 }
             }))
     }

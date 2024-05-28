@@ -106,6 +106,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    protected hasMacroErrors: boolean = false;
 
     protected ldapUsers: LdapUser[] = [];
     protected ldapUser: LdapUser | null = null;
@@ -197,6 +198,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        this.hasMacroErrors = true;
+                    }
                 }
             }))
     }

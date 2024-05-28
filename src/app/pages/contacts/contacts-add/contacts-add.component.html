@@ -623,6 +623,8 @@
 
                     <c-form-check class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
+                        <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                            *ngIf="hasMacroErrors"></oitc-form-feedback>
                     </c-form-check>
 
                     <div class="row"
@@ -650,23 +652,10 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
 
-                    <label for="createAnother" class="me-2">
-
-                        <c-form-check>
-                            <input
-                                cFormCheckInput
-                                type="checkbox"
-                                id="createAnother"
-                                [ngModel]="createAnother"
-                                (ngModelChange)="createAnother = $event ? true : false"
-                                name="createAnother"
-                            />
-                            <label
-                                cFormCheckLabel
-                                for="createAnother">
-                                {{ t('Create another') }}
-                            </label>
-                        </c-form-check>
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">

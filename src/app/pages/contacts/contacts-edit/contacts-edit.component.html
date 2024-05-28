@@ -60,7 +60,7 @@
                                    #containerIdsRef="ngModel"
                                    [disabled]="!areContainersChangeable"
                                    [multiple]="true"
-                                   [(ngModel)]="post.containers._ids"
+                                   [(ngModel)]="containersSelection"
                                    (ngModelChange)="onContainerChange()"
                                    oitcFormError
                                    [errors]="errors" errorField="containers">
@@ -68,7 +68,7 @@
                                 {{ container.value }}
                             </ng-option>
                         </ng-select>
-                        <div *ngIf="post.containers._ids.length === 0 && requiredContainers.length === 0"
+                        <div *ngIf="containersSelection.length === 0 && requiredContainers.length === 0"
                              class="text-warning-glow">
                             {{ t('Please select a container.') }}
                         </div>
