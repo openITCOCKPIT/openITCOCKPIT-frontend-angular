@@ -80,63 +80,11 @@
                                 </c-input-group>
                             </c-col>
 
-                            <c-col md="6" class="mb-1">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-
-                                    <ng-select
-                                        name="hosttemplatetype_id"
-                                        [placeholder]="'Filter by host template types' | transloco"
-                                        [clearable]="true"
-                                        [items]="hosttemplateTypes"
-                                        [multiple]="true"
-                                        [closeOnSelect]="false"
-                                        bindValue="id"
-                                        bindLabel="name"
-                                        groupBy="group"
-                                        [selectableGroup]="true"
-                                        [selectableGroupAsModel]="false"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']">
-
-                                        <ng-template
-                                            ng-optgroup-tmp
-                                            let-item="item"
-                                            let-item$="item$"
-                                            let-index="index">
-                                            <oitc-ng-select-select-all [item]="item" [item$]="item$"
-                                                                       [index]="index"></oitc-ng-select-select-all>
-                                        </ng-template>
-
-                                        <ng-template
-                                            ng-option-tmp
-                                            let-item="item"
-                                            let-item$="item$"
-                                            let-index="index"
-                                            let-search="searchTerm"
-                                        >
-                                            <oitc-ng-select-option-checkbox [item]="item" [item$]="item$"
-                                                                            [index]="index"
-                                                                            [search]="search"></oitc-ng-select-option-checkbox>
-                                        </ng-template>
-
-                                    </ng-select>
-
-                                </c-input-group>
-                            </c-col>
-
-                        </c-row>
-
-                        <c-row>
                             <c-col md="6" class="mb-1 ui-fluid">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
-
 
                                     <p-multiSelect
                                         [options]="hosttemplateTypes"
@@ -148,14 +96,12 @@
                                         title="name"
                                         class="w-auto d-flex"
                                         [placeholder]="'Filter by host template types' | transloco"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
+                                        (onChange)="onFilterChange(null)"
                                         display="chip"
                                     />
-
-
                                 </c-input-group>
                             </c-col>
+
                         </c-row>
 
                         <c-row class="mt-2">

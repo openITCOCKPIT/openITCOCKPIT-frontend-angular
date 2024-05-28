@@ -4,6 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     AlertComponent,
     AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -16,7 +17,6 @@ import {
     FormDirective,
     FormLabelDirective,
     FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -40,12 +40,16 @@ import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
     LoadCommand,
-    LoadCommandsRoot, LoadContainersContainer, LoadContainersRoot,
+    LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
     Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { HighlightSearchPipe } from '../../../pipes/highlight-search.pipe';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -84,7 +88,9 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
         MacrosComponent,
         CardFooterComponent,
         FormCheckLabelDirective,
-        TooltipDirective
+        TooltipDirective,
+        MultiSelectModule,
+        HighlightSearchPipe
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'

@@ -167,7 +167,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
     }
 
     // Callback when a filter has changed
-    public onFilterChange(event: Event) {
+    public onFilterChange(event: any) {
         this.params.page = 1;
         this.loadHosttemplates();
     }

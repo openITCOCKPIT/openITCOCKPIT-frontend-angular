@@ -45,18 +45,27 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="name"
-                                   id="containers"
-                                   #containerIdsRef="ngModel"
-                                   [multiple]="true"
-                                   [(ngModel)]="post.containers._ids"
-                                   (ngModelChange)="onContainerChange()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="containers">
-                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
-                                {{ container.value }}
-                            </ng-option>
-                        </ng-select>
+
+                        <p-multiSelect
+                            [options]="containers"
+                            id="containers"
+                            name="containers"
+                            [(ngModel)]="post.containers._ids"
+                            [filter]="true"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="w-auto d-flex"
+                            [placeholder]="'Please choose' | transloco"
+                            (onChange)="onContainerChange()"
+                            [maxSelectedLabels]="null"
+                            display="chip"
+                            #filterValue
+                            (onFilter)="filterValue = $event.filter">
+                            <ng-template let-item pTemplate="item">
+                                <div [innerHTML]="item.value | highlightSearch : filterValue"></div>
+                            </ng-template>
+                        </p-multiSelect>
+
                         <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
