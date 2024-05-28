@@ -34,6 +34,10 @@
     margin-left: 0.5rem;
 }
 
+.p-multiselect-panel {
+    background: var(--cui-body-bg);
+}
+
 .p-multiselect-panel .p-multiselect-items .p-multiselect-empty-message {
     padding: 0.15rem 0 0.5rem;
     color: var(--cui-body-color);
@@ -177,14 +181,4 @@
     padding: 0.75rem 0.75rem;
     color: var(--cui-body-color);
     background: var(--cui-body-bg);
-}
-
-.p-overlay .p-component {
-    border: 1px solid cyan;
-    top: 0px;
-}
-
-
-.p-overlay .p-component {
-    border: 1px solid magenta;
 }
