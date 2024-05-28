@@ -1,9 +1,9 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, inject, Input, Output } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { ControlValueAccessor, FormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 
 @Component({
@@ -15,6 +15,13 @@ import { ControlValueAccessor, FormsModule } from '@angular/forms';
         SharedModule,
         TranslocoPipe,
         FormsModule
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => MultiSelectComponent),
+            multi: true
+        }
     ],
     templateUrl: './multi-select.component.html',
     styleUrl: './multi-select.component.css'
