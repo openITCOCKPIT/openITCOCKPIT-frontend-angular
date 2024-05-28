@@ -5,9 +5,13 @@
     display: flex;
     flex-grow: 1;
     border: 1px solid var(--cui-border-color);
-    border-radius: 0 var(--cui-border-radius) var(--cui-border-radius) 0;
     color: var(--cui-body-color);
 }
+
+.input-group .p-multiselect {
+    border-radius: 0 var(--cui-border-radius) var(--cui-border-radius) 0;
+}
+
 
 .p-multiselect-label {
     white-space: normal;
@@ -244,4 +248,10 @@
 
 .p-multiselect-token-label {
     max-width: none;
+}
+
+.mark-highlight{
+    background-color: transparentize($primary, 0.85);
+    text-decoration: underline;
+    font-weight: bold;
 }

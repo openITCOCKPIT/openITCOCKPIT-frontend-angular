@@ -23,7 +23,7 @@ export class HighlightSearchPipe implements PipeTransform {
             return value;
         }
 
-        let replacedValue = value.replace(re, "<mark>" + match[0] + "</mark>")
+        let replacedValue = value.replace(re, '<span class="mark-highlight">' + match[0] + '</span>')
         return this.sanitizer.bypassSecurityTrustHtml(replacedValue)
     }
 
