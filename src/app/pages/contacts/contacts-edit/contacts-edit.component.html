@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -80,7 +80,8 @@
                             {{ t('Required containers') }}
 
                             <a [routerLink]="['/', 'contacts', 'usedBy', contactId, requiredContainersString]">
-                                <fa-icon [icon]="['fas', 'reply-all']" class="fa-flip-horizontal text-primary"></fa-icon>
+                                <fa-icon [icon]="['fas', 'reply-all']"
+                                         class="fa-flip-horizontal text-primary"></fa-icon>
                                 {{ t('Used by') }}
                                 <sup>
                                     <fa-icon [icon]="['fas', 'info-circle']" class="text-info"/>
@@ -290,13 +291,15 @@
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
                                                          [cTooltip]="tooltipContent">
                                                     <ng-template #tooltipContent>
-                                                        <img src="/img/browser_notification_bg.png"/>
+                                                        <img src="./assets/images/docs/browser_notification_bg.png"/>
                                                     </ng-template>
                                                 </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
-                                    <hr>
+
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <label>
@@ -503,14 +506,16 @@
                                                 <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
                                                          [cTooltip]="tooltipContent2">
                                                     <ng-template #tooltipContent2>
-                                                        <img src="/img/browser_service_notification_bg.png"/>
+                                                        <img
+                                                            src="./assets/images/docs/browser_service_notification_bg.png"/>
                                                     </ng-template>
                                                 </fa-icon>
                                             </label>
                                         </c-form-check>
                                     </div>
 
-                                    <hr>
+                                    <hr class="border-dashed">
+
                                     <fieldset>
                                         <legend class="fs-md">
                                             <div class="required">
@@ -651,11 +656,12 @@
                         </div>
                     </div>
 
-                    <hr>
+                    <hr class="border-dashed">
 
                     <c-form-check class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
-                        <oitc-form-feedback [errors]="errors" errorField="customvariables" *ngIf="hasMacroErrors"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                            *ngIf="hasMacroErrors"></oitc-form-feedback>
                     </c-form-check>
 
                     <div class="row"

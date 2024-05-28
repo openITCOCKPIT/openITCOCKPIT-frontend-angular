@@ -122,6 +122,9 @@ export const routes: Routes = [{
     path: 'profile/edit',
     loadComponent: () => import('./pages/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent)
 }, {
+    path: 'nagiostats/index',
+    loadComponent: () => import('./pages/nagiostats/nagiostats-index/nagiostats-index.component').then(m => m.NagiostatsIndexComponent)
+}, {
     path: 'hosttemplates/index',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-index/hosttemplates-index.component').then(m => m.HosttemplatesIndexComponent)
 }, {
@@ -148,6 +151,18 @@ export const routes: Routes = [{
 }, {
     path: 'timeperiods/add',
     loadComponent: () => import('./pages/timeperiods/timeperiods-add/timeperiods-add.component').then(m => m.TimeperiodsAddComponent)
+}, {
+    path: 'timeperiods/edit/:id',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-edit/timeperiods-edit.component').then(m => m.TimeperiodsEditComponent)
+}, {
+    path: 'timeperiods/copy/:ids',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-copy/timeperiods-copy.component').then(m => m.TimeperiodsCopyComponent)
+}, {
+    path: 'timeperiods/usedBy/:id',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-used-by/timeperiods-used-by.component').then(m => m.TimeperiodsUsedByComponent)
+}, {
+    path: 'timeperiods/viewDetails/:id',
+    loadComponent: () => import('./pages/timeperiods/timeperiods-view-details/timeperiods-view-details.component').then(m => m.TimeperiodsViewDetailsComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

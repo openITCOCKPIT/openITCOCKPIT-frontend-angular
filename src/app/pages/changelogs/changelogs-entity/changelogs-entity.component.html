@@ -8,14 +8,14 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
-                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                        {{ t('Commands') }}
+                    <a *oitcPermission="['changelogs', 'index']" [routerLink]="['/', 'changelogs', 'index']">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Change log') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                    {{ t('Changelog') }}
+                    {{ t('Overview') }}
                 </li>
             </ol>
         </nav>
@@ -23,7 +23,7 @@
             <c-card-header>
                 <h5 cCardTitle>{{ t('Change log') }}
                     <small class="fw-300">
-                        {{ t('overview') }}
+                        {{ t('entity') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
@@ -37,6 +37,14 @@
                         <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['changelogs', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
                         </button>
                     </c-nav-item>
                 </c-nav>
@@ -183,7 +191,7 @@
                                 </fieldset>
                             </c-col>
                         </c-row>
-                        <c-row>
+                        <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
                                     {{ t('Reset filter') }}
@@ -199,6 +207,7 @@
                         </li>
                     </ul>
                 </c-container>
+                <oitc-no-records *ngIf="changes && changes.all_changes.length === 0"></oitc-no-records>
                 <c-container fluid>
                     <c-row>
                         <c-col>

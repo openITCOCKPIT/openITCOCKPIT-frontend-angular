@@ -5,7 +5,10 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormControlDirective, FormLabelDirective, NavComponent
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    NavComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -105,6 +108,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'contacts', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.contacts = error.error.result as ContactCopyPost[];
                 }
             })

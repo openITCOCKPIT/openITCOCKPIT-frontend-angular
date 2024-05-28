@@ -1,87 +1,60 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { GenericValidationError } from '../../../generic-responses';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Calendar, Container, InternalRange, Timeperiod, TimeperiodAddResponse } from '../timeperiods.interface';
+import { TimeperiodsService } from '../timeperiods.service';
+import _ from 'lodash';
+import { WeekdaysService } from '../../../weekdays.service';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
-    ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent,
-    FormCheckComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    FormSelectDirective,
-    FormTextDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CodeMirrorContainerComponent
-} from '../../../components/code-mirror-container/code-mirror-container.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Container, InternalRange, TimeperiodPost } from '../timeperiods.interface';
-import { TimeperiodsService } from '../timeperiods.service';
-import _ from 'lodash';
-import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
-import { WeekdaysService } from '../../../weekdays.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-timeperiods-add',
     standalone: true,
     imports: [
-        AlertComponent,
-        AlertHeadingDirective,
         BackButtonDirective,
-        ButtonCloseDirective,
         CardBodyComponent,
         CardComponent,
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CodeMirrorContainerComponent,
         CoreuiComponent,
         FaIconComponent,
-        FormCheckComponent,
         FormControlDirective,
         FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormSelectDirective,
-        FormTextDirective,
         FormsModule,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
         NavComponent,
         NavItemComponent,
         NgForOf,
@@ -91,24 +64,22 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
         RequiredIconComponent,
         TranslocoDirective,
         TranslocoPipe,
-        UserMacrosModalComponent,
         XsButtonDirective,
         FormWarningComponent,
         NgClass,
-        KeyValuePipe,
         RouterLink,
         InputGroupTextDirective,
         InputGroupComponent,
-        ColComponent,
         NgSelectModule,
-        NgOptionHighlightModule
+        NgOptionHighlightModule,
+        DebounceDirective
     ],
     templateUrl: './timeperiods-add.component.html',
     styleUrl: './timeperiods-add.component.css'
 })
-export class TimeperiodsAddComponent {
+export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
-    public post: TimeperiodPost = {
+    public post: Timeperiod = {
         container_id: null,
         name: '',
         calendar_id: null,
@@ -123,7 +94,7 @@ export class TimeperiodsAddComponent {
         ranges: []
     };
 
-    public calendars: any[] = [];
+    public calendars: Calendar[] = [];
 
     public errors: GenericValidationError | null = null;
 
@@ -135,8 +106,8 @@ export class TimeperiodsAddComponent {
 
     private subscriptions: Subscription = new Subscription();
     public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
-    public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('00:00');
-    public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('24:00');
+    public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('(00:00)');
+    public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('(24:00)');
 
 
     public ngOnInit() {
@@ -157,6 +128,7 @@ export class TimeperiodsAddComponent {
     public loadCalendars(searchString: string) {
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
+                console.error(result);
                 this.calendars = result;
             })
         );
@@ -242,11 +214,11 @@ export class TimeperiodsAddComponent {
         this.subscriptions.add(this.TimeperiodsService.createTimeperiod(this.post)
             .subscribe((result) => {
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
+                    const response = result.data as TimeperiodAddResponse;
 
                     const title = this.TranslocoService.translate('Time period');
                     const msg = this.TranslocoService.translate('created successfully');
-                    // @ts-ignore
+
                     const url = ['timeperiods', 'edit', response.timeperiod.id];
 
                     this.notyService.genericSuccess(msg, title, url);

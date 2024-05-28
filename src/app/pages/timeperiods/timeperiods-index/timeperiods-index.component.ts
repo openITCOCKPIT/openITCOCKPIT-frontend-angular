@@ -1,9 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import {
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -11,7 +8,10 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -25,22 +25,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
@@ -54,12 +39,30 @@ import {
 } from '../timeperiods.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-timeperiods-index',
     standalone: true,
     imports: [
-        ActionsButtonComponent,
         ActionsButtonElementComponent,
         CardBodyComponent,
         CardComponent,
@@ -97,7 +100,11 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        ButtonGroupComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',
@@ -119,8 +126,9 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
     }
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
-    private TimeperiodsService = inject(TimeperiodsService)
+    private TimeperiodsService = inject(TimeperiodsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    public PermissionService: PermissionsService = inject(PermissionsService);
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -192,15 +200,14 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
             }];
         } else {
             // User clicked on delete selected button
-            // @ts-ignore
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            for (const item of this.SelectionServiceService.getSelectedItems()) {
                 if (item.Timeperiod.allow_edit === true) {
-                    return {
+                    items.push({
                         id: item.Timeperiod.id,
                         displayName: item.Timeperiod.name
-                    };
+                    });
                 }
-            });
+            }
         }
 
         // Pass selection to the modal
@@ -229,6 +236,10 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
         if (ids) {
             this.router.navigate(['/', 'timeperiods', 'copy', ids]);
         }
+    }
+
+    public onActionButtonClick(url: string): void {
+        this.router.navigateByUrl(url);
     }
 
 }

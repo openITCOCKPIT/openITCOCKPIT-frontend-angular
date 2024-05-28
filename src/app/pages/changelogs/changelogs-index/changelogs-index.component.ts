@@ -34,6 +34,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 
 
 @Component({
@@ -69,7 +70,8 @@ import { ChangelogsService } from '../changelogs.service';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        NoRecordsComponent
     ],
     templateUrl: './changelogs-index.component.html',
     styleUrl: './changelogs-index.component.css'
@@ -78,7 +80,7 @@ export class ChangelogsIndexComponent {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
     public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)

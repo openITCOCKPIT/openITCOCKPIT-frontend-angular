@@ -1,7 +1,7 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
 
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -36,7 +36,8 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['contactgroups', 'add']" [routerLink]="['/', 'contactgroups', 'add']" cButton
+                        <button *oitcPermission="['contactgroups', 'add']" [routerLink]="['/', 'contactgroups', 'add']"
+                                cButton
                                 class="ripple"
                                 color="success"
                                 size="xs">
@@ -99,7 +100,7 @@
                                 </c-input-group>
                             </c-col>
                         </c-row>
-                        <c-row>
+                        <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
                                     {{ t('Reset Filter') }}
@@ -181,7 +182,8 @@
                     </tbody>
                 </table>
 
-                <oitc-no-records *ngIf="contactgroups && contactgroups.all_contactgroups.length === 0"></oitc-no-records>
+                <oitc-no-records
+                    *ngIf="contactgroups && contactgroups.all_contactgroups.length === 0"></oitc-no-records>
                 <ng-container *ngIf="contactgroups && contactgroups.all_contactgroups">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>

@@ -35,17 +35,14 @@ import {
     LoadCommandsRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod
+    Timeperiod, LoadContainersRoot, LoadContainersContainer
 } from '../contacts.interface';
-import { Container } from '../../containers/containers.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
-import { ContainersService } from '../../containers/containers.service';
 import { Subscription } from 'rxjs';
 import { ContactsService } from '../contacts.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { UsersService } from '../../users/users.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
@@ -89,11 +86,9 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 })
 export class ContactsEditComponent implements OnInit, OnDestroy {
 
-    private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private UsersService: UsersService = inject(UsersService);
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -129,7 +124,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         user_id: null,
         uuid: ''
     };
-    protected containers: Container[] = [];
+    protected containers: LoadContainersContainer[] = [];
     private route = inject(ActivatedRoute)
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
@@ -139,7 +134,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
-    protected allContainers: Container[] = []
+    protected allContainers: LoadContainersContainer[] = []
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
 
@@ -160,7 +155,6 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 this.selectedContainers = this.post.containers._ids;
                 this.post.containers._ids = [];
                 this.loadContainers();
-
             }));
     }
 
@@ -202,8 +196,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.containersService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(this.ContactService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
                 // Fetch all containers.
                 this.allContainers = result.containers;
 
@@ -214,13 +208,13 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                let newContainers: Container[] = [];
+                let newContainers: LoadContainersContainer[] = [];
                 let newPostIds: number[] = [];
 
                 // Otherwise, we need to only add the selected containers that are not required to the container list.
                 for (var i in this.allContainers) {
                     let index = parseInt(i),
-                        container: Container = this.allContainers[index];
+                        container: LoadContainersContainer = this.allContainers[index];
 
                     // The container is required? Then skip.
                     if (this.requiredContainers.indexOf(container.key) !== -1) {
@@ -249,7 +243,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         const param = {
             containerIds: this.post.containers._ids
         };
-        this.subscriptions.add(this.UsersService.loadUsersByContainerId(param)
+        this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
             }))

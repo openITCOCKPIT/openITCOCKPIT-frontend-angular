@@ -1,6 +1,6 @@
 <oitc-coreui>
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a [routerLink]="['/']">
@@ -58,7 +58,7 @@
                                 {{ container.value }}
                             </ng-option>
                         </ng-select>
-                        <div *ngIf="post.container.parent_id === null" class="text-warning-glow">
+                        <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
