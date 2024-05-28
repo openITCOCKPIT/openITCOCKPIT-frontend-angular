@@ -18,9 +18,6 @@ export class HighlightSearchPipe implements PipeTransform {
         let re = new RegExp(args, 'gi');
         let match = value.match(re);
 
-        console.log(value);
-        console.log(args);
-
         // If there's no match, just return the original value.
         if (!match) {
             return value;
