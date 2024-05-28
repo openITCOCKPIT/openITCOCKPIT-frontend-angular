@@ -296,7 +296,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         if(commands.length === 0){
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
-            return
+            return;
         }
         this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
            if(result.message){
@@ -407,7 +407,13 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
                 };
             });
         }
+        if(items.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
         this.selectedItems = items;
+
         this.modalService.toggle({
             show: true,
             id: 'disableModal',
