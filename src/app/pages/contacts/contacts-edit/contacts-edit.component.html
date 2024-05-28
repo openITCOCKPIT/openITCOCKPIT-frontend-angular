@@ -95,7 +95,7 @@
                                    [(ngModel)]="requiredContainers"
                                    [disabled]="true">
                             <ng-option *ngFor="let container of this.allContainers" [value]="container.key">
-                                {{ container.value }}  🔒
+                                <span class="text-primary">{{ container.value }}  🔒</span>
                             </ng-option>
                         </ng-select>
                     </div>
