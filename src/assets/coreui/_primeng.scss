@@ -10,11 +10,14 @@
 }
 
 .p-multiselect .p-multiselect-label.p-placeholder {
-    color: var(--cui-secondary-color);
-    font-size: 0.77rem;
+    /*color: var(--cui-input-placeholder-color);*/
+    color: $input-placeholder-color;
     padding: .375rem .75rem;
+
+    font-size: 0.8rem;
     font-weight: 400;
     line-height: 1.5;
+    appearance: none;
 }
 
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
@@ -24,10 +27,14 @@
 .p-multiselect.p-multiselect-chip .p-multiselect-token {
     padding: 0 .75rem;
     font-weight: 400;
-    background: var(--cui-body-bg);
-    color: var(--cui-body-color);
-    border-radius: 16px;
-    border: 1px solid var(--cui-border-color);
+    //background: var(--cui-body-bg);
+    //color: var(--cui-body-color);
+    //border-radius: 16px;
+    //border: 1px solid var(--cui-border-color);
+
+    background-color: var(--cui-tertiary-bg) !important;
+    color: var(--cui-secondary-color) !important;
+    border-radius: var(--cui-border-radius) !important;
 }
 
 .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
@@ -84,6 +91,20 @@
 
 .p-inputtext {
     padding: 0.1rem;
+}
+
+.p-inputtext:enabled:hover {
+    border-color: var(--cui-primary);
+}
+
+.p-inputtext:enabled:focus {
+    font-size: 0.77rem;
+    font-weight: 400;
+    line-height: 1.5;
+
+    border-color: #acabeb;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(88, 86, 214, 0.25);
 }
 
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
@@ -181,4 +202,34 @@
     padding: 0.75rem 0.75rem;
     color: var(--cui-body-color);
     background: var(--cui-body-bg);
+}
+
+
+.p-checkbox .p-checkbox-box {
+    --cui-form-check-bg: var(--cui-body-bg);
+    appearance: none;
+    background-color: var(--cui-form-check-bg);
+    background-image: var(--cui-form-check-bg-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: var(--cui-border-width) solid var(--cui-border-color);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    outline-color: transparent;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+    border-color: var(--cui-primary);
+    background: var(--cui-primary);
+}
+
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+    border-color: #acabeb;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(88, 86, 214, 0.25);
 }
