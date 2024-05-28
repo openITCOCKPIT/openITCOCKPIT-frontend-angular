@@ -38,8 +38,10 @@ export class MultiSelectComponent implements ControlValueAccessor {
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
     @Input() placeholder: string | undefined;
+    @Input() filterPlaceHolder: string | undefined;
     @Input() maxSelectedLabels: number | null | undefined = null;
     @Input() display: string | 'comma' | 'chip' = 'chip';
+    @Input() showClear: boolean = false;
 
 
     @Output() ngModelChange = new EventEmitter();
@@ -52,6 +54,10 @@ export class MultiSelectComponent implements ControlValueAccessor {
     public constructor() {
         if (this.placeholder == undefined) {
             this.placeholder = this.TranslocoService.translate('Please choose');
+        }
+
+        if (this.filterPlaceHolder == undefined) {
+            this.filterPlaceHolder = this.TranslocoService.translate('Type to search');
         }
     }
 

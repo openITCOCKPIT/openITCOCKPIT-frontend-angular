@@ -53,7 +53,8 @@
                             optionLabel="value"
                             [(ngModel)]="post.containers._ids"
                             [options]="containers"
-                            (onChange)="onContainerChange()">
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="containers">
                         </oitc-multi-select>
 
                         <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow pt-1">
@@ -202,17 +203,16 @@
                                             {{ t('Host commands') }}
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
-                                        <ng-select name="host_commands"
-                                                   id="host_commands"
-                                                   [multiple]="true"
-                                                   [(ngModel)]="post.host_commands._ids"
-                                                   (ngModelChange)="updateHostBrowserNotification()"
-                                                   oitcFormError [errors]="errors" errorField="host_commands">
-                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
-                                                       [value]="notificationcommand.key">
-                                                {{ notificationcommand.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-multi-select
+                                            name="host_commands"
+                                            id="host_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.host_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateHostBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="host_commands">
+                                        </oitc-multi-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="host_commands"
@@ -419,17 +419,16 @@
                                             {{ t('Service commands') }}
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
-                                        <ng-select name="service_commands"
-                                                   id="service_commands"
-                                                   [multiple]="true"
-                                                   [(ngModel)]="post.service_commands._ids"
-                                                   (ngModelChange)="updateServiceBrowserNotification()"
-                                                   oitcFormError [errors]="errors" errorField="service_commands">
-                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
-                                                       [value]="notificationcommand.key">
-                                                {{ notificationcommand.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-multi-select
+                                            name="service_commands"
+                                            id="service_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.service_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateServiceBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="service_commands">
+                                        </oitc-multi-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="service_commands"
