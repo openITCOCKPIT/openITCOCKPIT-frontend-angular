@@ -1,9 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -16,14 +14,13 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    FormSelectDirective,
     NavComponent,
     NavItemComponent,
     TooltipDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -49,51 +46,46 @@ import {
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { HighlightSearchPipe } from '../../../pipes/highlight-search.pipe';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
         BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        AlertHeadingDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective,
-        MultiSelectModule,
-        HighlightSearchPipe,
         MultiSelectComponent,
-        JsonPipe
+        MultiSelectModule,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        ObjectUuidComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'

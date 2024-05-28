@@ -33,9 +33,11 @@ import {
     Contact,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod, LoadContainersRoot, LoadContainersContainer
+    Timeperiod
 } from '../contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
@@ -73,13 +75,13 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         NgForOf,
         NgIf,
         NgSelectModule,
+        ObjectUuidComponent,
         PermissionDirective,
         RequiredIconComponent,
+        RouterLink,
         TooltipDirective,
         TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent
+        XsButtonDirective
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css'
@@ -172,7 +174,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
                     const title: string = this.TranslocoService.translate('Contact');
-                    const msg:string = this.TranslocoService.translate('updated successfully');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
                     const url: (string | number)[] = ['contacts', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
