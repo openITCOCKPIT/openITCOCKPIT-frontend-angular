@@ -129,7 +129,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
 
     public params: HosttemplatesIndexParams = getDefaultHosttemplatesIndexParams();
     public hosttemplates?: HosttemplateIndexRoot;
-    public hideFilter: boolean = true;
+    public hideFilter: boolean = false;
 
     public hosttemplateTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];

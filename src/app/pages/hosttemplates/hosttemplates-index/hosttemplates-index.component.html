@@ -131,7 +131,7 @@
                         </c-row>
 
                         <c-row>
-                            <c-col md="6" class="mb-1">
+                            <c-col md="6" class="mb-1 ui-fluid">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -145,6 +145,8 @@
                                         [filter]="true"
                                         optionValue="id"
                                         optionLabel="name"
+                                        title="name"
+                                        class="w-auto d-flex"
                                         [placeholder]="'Filter by host template types' | transloco"
                                         oitcDebounce
                                         (debouncedValue)="onFilterChange($event)"
