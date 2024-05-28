@@ -23,7 +23,7 @@ import {
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -50,6 +50,7 @@ import {
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { HighlightSearchPipe } from '../../../pipes/highlight-search.pipe';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -90,7 +91,9 @@ import { HighlightSearchPipe } from '../../../pipes/highlight-search.pipe';
         FormCheckLabelDirective,
         TooltipDirective,
         MultiSelectModule,
-        HighlightSearchPipe
+        HighlightSearchPipe,
+        MultiSelectComponent,
+        JsonPipe
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'

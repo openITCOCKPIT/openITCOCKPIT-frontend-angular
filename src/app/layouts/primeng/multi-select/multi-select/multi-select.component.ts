@@ -1,0 +1,85 @@
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
+import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { SharedModule } from 'primeng/api';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { ControlValueAccessor, FormsModule } from '@angular/forms';
+
+
+@Component({
+    selector: 'oitc-multi-select',
+    standalone: true,
+    imports: [
+        HighlightSearchPipe,
+        MultiSelectModule,
+        SharedModule,
+        TranslocoPipe,
+        FormsModule
+    ],
+    templateUrl: './multi-select.component.html',
+    styleUrl: './multi-select.component.css'
+})
+export class MultiSelectComponent implements ControlValueAccessor {
+    @Input() id: string | undefined;
+    @Input() name: string | undefined;
+    @Input() options: any[] | undefined;
+    @Input() ngModel: any | undefined;
+    @Input() filter: boolean = true;
+    @Input() class: string = 'w-auto d-flex';
+    @Input() optionValue: string | undefined;
+    @Input() optionLabel: string | undefined;
+    @Input() optionDisabled: string | undefined;
+    @Input() disabled: boolean = false;
+    @Input() placeholder: string | undefined;
+    @Input() maxSelectedLabels: number | null | undefined = null;
+    @Input() display: string | 'comma' | 'chip' = 'chip';
+
+
+    @Output() ngModelChange = new EventEmitter();
+    @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
+    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
+    private readonly TranslocoService = inject(TranslocoService);
+
+    public searchText: string = '';
+
+    public constructor() {
+        if (this.placeholder == undefined) {
+            this.placeholder = this.TranslocoService.translate('Please choose');
+        }
+    }
+
+    updateNgModel(value: any) {
+        this.ngModel = value;
+        this.ngModelChange.emit(this.ngModel);
+    }
+
+    triggerOnChange(event: any) {
+        this.onChange.emit(event);
+    }
+
+    triggerOnFilter(event: any) {
+        this.onFilter.emit(event);
+    }
+
+    public doHighlightSearch(searchText: string) {
+        this.searchText = searchText;
+    }
+
+    public writeValue(obj: any): void {
+        this.ngModel = obj;
+    }
+
+    public registerOnChange(fn: Function): void {
+        this.ngModelChange.subscribe(fn);
+    }
+
+    public registerOnTouched(fn: Function): void {
+        this.ngModelChange.subscribe(fn);
+    }
+
+    public setDisabledState?(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
+
+    protected readonly String = String;
+}

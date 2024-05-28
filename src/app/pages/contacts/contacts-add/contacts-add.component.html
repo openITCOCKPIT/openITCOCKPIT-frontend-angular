@@ -41,30 +41,20 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="containers">
+                        <label cLabel for="container">
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
 
-                        <p-multiSelect
-                            [options]="containers"
-                            id="containers"
-                            name="containers"
-                            [(ngModel)]="post.containers._ids"
-                            [filter]="true"
+                        <oitc-multi-select
+                            name="container"
+                            id="container"
                             optionValue="key"
                             optionLabel="value"
-                            class="w-auto d-flex"
-                            [placeholder]="'Please choose' | transloco"
-                            (onChange)="onContainerChange()"
-                            [maxSelectedLabels]="null"
-                            display="chip"
-                            #filterValue
-                            (onFilter)="filterValue = $event.filter">
-                            <ng-template let-item pTemplate="item">
-                                <div [innerHTML]="item.value | highlightSearch : filterValue"></div>
-                            </ng-template>
-                        </p-multiSelect>
+                            [(ngModel)]="post.containers._ids"
+                            [options]="containers"
+                            (onChange)="onContainerChange()">
+                        </oitc-multi-select>
 
                         <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
