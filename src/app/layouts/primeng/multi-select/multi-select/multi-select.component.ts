@@ -35,7 +35,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     @Input() ngModel: any | undefined;
     @Input() filter: boolean = true;
     @Input() class: string = 'w-auto d-flex';
-    @Input() optionValue: string = 'key';
+    @Input() optionValue: string | undefined;
     @Input() optionLabel: string = 'value';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;

@@ -35,7 +35,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     @Input() ngModel: any | undefined;
     @Input() filter: boolean = true;
     @Input() class: string = 'w-auto d-flex';
-    @Input() optionValue: string = 'value';
+    @Input() optionValue: string | undefined;
     @Input() optionLabel: string = 'key';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
@@ -75,6 +75,15 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                 }));
         }
 
+        if (this.searchCallback) {
+            this.Subscriptions.add(
+                this.searchCallbackSubject.pipe(
+                    debounceTime(this.debounceTime),
+                    distinctUntilChanged()
+                ).subscribe(value => {
+                    this.searchCallback!(this.searchText);
+                }));
+        }
     }
 
     public ngOnDestroy(): void {
@@ -101,9 +110,9 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     public doHighlightSearch(searchText: string) {
         this.searchText = searchText;
 
+        // Call the search callback debounced
         if (this.searchCallback) {
-            this.searchCallback(this.searchText);
-
+            this.searchCallbackSubject.next(searchText);
         }
     }
 

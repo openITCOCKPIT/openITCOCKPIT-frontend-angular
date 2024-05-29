@@ -68,7 +68,6 @@
                             name="ldapUser"
                             id="ldapUser"
                             [(ngModel)]="ldapUser"
-                            optionValue="samaccountname"
                             optionLabel="display_name"
                             [options]="ldapUsers"
                             (onChange)="onLdapUserChange()"
@@ -666,6 +665,7 @@
                                 [macroName]="'CONTACT'"
                                 [index]="i"
                                 [deleteMacroCallback]="deleteMacro"
+                                [errors]="getMacroErrors"
                                 class="col-lg-12"
                             />
 

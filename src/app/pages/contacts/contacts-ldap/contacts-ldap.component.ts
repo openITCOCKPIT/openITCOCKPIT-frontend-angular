@@ -57,42 +57,42 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
-        BackButtonDirective,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
         AlertComponent,
         AlertHeadingDirective,
+        BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
         SelectComponent,
-        MultiSelectComponent
+        TooltipDirective,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
@@ -121,6 +121,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
+
+        this.loadLdapUsers = this.loadLdapUsers.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
     public ngOnInit() {
@@ -137,7 +139,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private loadLdapUsers(samaccountname: string): void {
+    public loadLdapUsers(samaccountname: string): void {
         this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {
                 this.ldapUsers = result.ldapUsers;
@@ -207,8 +209,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof (this.errors['customvariables']['custom']) === "string") {
-                        this.hasMacroErrors = true;
+
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
                     }
                 }
             }))
@@ -257,6 +262,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     }
 
     public onLdapUserChange(): void {
+        console.log(this.ldapUser);
+        console.log('change und so');
         this.post.name = this.ldapUser?.givenname as string;
         this.post.description = this.ldapUser?.display_name as string;
         this.post.email = this.ldapUser?.email as string;
@@ -326,5 +333,13 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
