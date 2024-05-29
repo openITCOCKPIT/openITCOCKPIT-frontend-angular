@@ -46,6 +46,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     @Input() debounceTime: number = 500;
     private onChangeSubject = new Subject<any>();
 
+    private searchCallbackSubject = new Subject<any>();
+    @Input() searchCallback: Function | undefined;
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
@@ -72,6 +74,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                     this.onChange.emit(value);
                 }));
         }
+
     }
 
     public ngOnDestroy(): void {
@@ -97,6 +100,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
 
     public doHighlightSearch(searchText: string) {
         this.searchText = searchText;
+
+        if (this.searchCallback) {
+            this.searchCallback(this.searchText);
+
+        }
     }
 
     public writeValue(obj: any): void {

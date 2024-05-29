@@ -68,10 +68,11 @@
                             name="ldapUser"
                             id="ldapUser"
                             [(ngModel)]="ldapUser"
-                            optionValue="display_name"
+                            optionValue="samaccountname"
                             optionLabel="display_name"
-                            [options]="users"
+                            [options]="ldapUsers"
                             (onChange)="onLdapUserChange()"
+                            [searchCallback]="loadLdapUsers"
                             oitcFormError [errors]="errors" errorField="name">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
