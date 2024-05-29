@@ -46,6 +46,8 @@ import { ContactsService } from '../contacts.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -81,7 +83,9 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         RouterLink,
         TooltipDirective,
         TranslocoDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        MultiSelectComponent,
+        SelectComponent
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css'

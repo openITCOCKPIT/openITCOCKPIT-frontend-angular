@@ -193,16 +193,15 @@
                                             <oitc-required-icon></oitc-required-icon>
 
                                         </label>
-                                        <ng-select name="host_timeperiod_id"
-                                                   id="host_timeperiod_id"
-                                                   [required]="true"
-                                                   [(ngModel)]="post.host_timeperiod_id"
-                                                   oitcFormError [errors]="errors" errorField="host_timeperiod_id">
-                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
-                                                       [value]="timeperiod.key">
-                                                {{ timeperiod.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-select
+                                            name="host_timeperiod_id"
+                                            id="host_timeperiod_id"
+                                            [(ngModel)]="post.host_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="host_timeperiod_id">
+                                        </oitc-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="host_timeperiod_id"
@@ -411,15 +410,15 @@
                                             <oitc-required-icon></oitc-required-icon>
 
                                         </label>
-                                        <ng-select name="service_timeperiod_id"
-                                                   id="service_timeperiod_id"
-                                                   [(ngModel)]="post.service_timeperiod_id"
-                                                   oitcFormError [errors]="errors" errorField="service_timeperiod_id">
-                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
-                                                       [value]="timeperiod.key">
-                                                {{ timeperiod.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-select
+                                            name="service_timeperiod_id"
+                                            id="service_timeperiod_id"
+                                            [(ngModel)]="post.service_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="service_timeperiod_id">
+                                        </oitc-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="service_timeperiod_id"

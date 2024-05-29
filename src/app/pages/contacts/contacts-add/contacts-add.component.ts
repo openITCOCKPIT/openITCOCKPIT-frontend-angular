@@ -183,9 +183,12 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof (this.errors['customvariables']['custom']) === "string") {
-                        this.hasMacroErrors = true;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
                     }
+
                 }
             }))
     }
