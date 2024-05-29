@@ -1,48 +1,45 @@
 import { Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
-import { SharedModule } from 'primeng/api';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
+import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
+import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
-
+import { JsonPipe } from '@angular/common';
 
 @Component({
-    selector: 'oitc-multi-select',
+    selector: 'oitc-select',
     standalone: true,
     imports: [
-        HighlightSearchPipe,
+        DropdownModule,
         MultiSelectModule,
-        SharedModule,
-        TranslocoPipe,
-        FormsModule
+        FormsModule,
+        HighlightSearchPipe,
+        JsonPipe
     ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MultiSelectComponent),
+            useExisting: forwardRef(() => SelectComponent),
             multi: true
         }
     ],
-    templateUrl: './multi-select.component.html',
-    styleUrl: './multi-select.component.css'
+    templateUrl: './select.component.html',
+    styleUrl: './select.component.css'
 })
-export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @Input() id: string | undefined;
     @Input() name: string | undefined;
     @Input() options: any[] | undefined;
     @Input() ngModel: any | undefined;
     @Input() filter: boolean = true;
     @Input() class: string = 'w-auto d-flex';
-    @Input() optionValue: string = 'key';
-    @Input() optionLabel: string = 'value';
+    @Input() optionValue: string = 'value';
+    @Input() optionLabel: string = 'key';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
     @Input() placeholder: string | undefined;
-    @Input() filterPlaceHolder: string | undefined;
-    @Input() maxSelectedLabels: number | null | undefined = null;
-    @Input() display: string | 'comma' | 'chip' = 'chip';
     @Input() showClear: boolean = false;
 
     @Input() debounce: boolean = false;
@@ -62,10 +59,6 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     public constructor() {
         if (this.placeholder == undefined) {
             this.placeholder = this.TranslocoService.translate('Please choose');
-        }
-
-        if (this.filterPlaceHolder == undefined) {
-            this.filterPlaceHolder = this.TranslocoService.translate('Type to search');
         }
     }
 

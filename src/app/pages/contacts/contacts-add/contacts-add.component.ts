@@ -48,6 +48,7 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -85,7 +86,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         RouterLink,
         TooltipDirective,
         TranslocoDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        SelectComponent
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'

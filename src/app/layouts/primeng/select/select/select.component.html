@@ -1,16 +1,14 @@
-<p-multiSelect
+<p-dropdown
     [attr.id]="id"
     [name]="String(name)"
     [options]="options"
     [filter]="filter"
     [optionValue]="optionValue"
     [optionLabel]="optionLabel"
+    [filterBy]="optionLabel"
     [class]="class"
     [placeholder]="placeholder"
-    [filterPlaceHolder]="filterPlaceHolder"
     (onChange)="triggerOnChange($event)"
-    [maxSelectedLabels]="null"
-    [display]="display"
     [disabled]="disabled"
     [(ngModel)]="ngModel"
     (ngModelChange)="ngModelChange.emit($event)"
@@ -19,4 +17,5 @@
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item[this.optionLabel] | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>
-</p-multiSelect>
+</p-dropdown>
+
