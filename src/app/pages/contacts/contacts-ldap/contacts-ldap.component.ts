@@ -52,40 +52,40 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
-        BackButtonDirective,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
         AlertComponent,
         AlertHeadingDirective,
+        BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
@@ -319,5 +319,13 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
