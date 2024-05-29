@@ -86,19 +86,17 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
 
-                                    <p-multiSelect
-                                        [options]="hosttemplateTypes"
+                                    <oitc-multi-select
                                         name="hosttemplatetype_id"
-                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']"
-                                        [filter]="true"
+                                        id="hosttemplatetype_id"
                                         optionValue="id"
                                         optionLabel="name"
-                                        title="name"
-                                        class="w-auto d-flex"
+                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']"
+                                        [options]="hosttemplateTypes"
+                                        [debounce]="true"
                                         [placeholder]="'Filter by host template types' | transloco"
-                                        (onChange)="onFilterChange(null)"
-                                        display="chip"
-                                    />
+                                        (onChange)="onFilterChange(null)">
+                                    </oitc-multi-select>
                                 </c-input-group>
                             </c-col>
 
