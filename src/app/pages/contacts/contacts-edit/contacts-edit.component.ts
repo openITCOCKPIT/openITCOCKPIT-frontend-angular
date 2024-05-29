@@ -33,9 +33,11 @@ import {
     Contact,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod, LoadContainersRoot, LoadContainersContainer
+    Timeperiod
 } from '../contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
@@ -44,6 +46,8 @@ import { ContactsService } from '../contacts.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -73,13 +77,15 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         NgForOf,
         NgIf,
         NgSelectModule,
+        ObjectUuidComponent,
         PermissionDirective,
         RequiredIconComponent,
+        RouterLink,
         TooltipDirective,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent
+        MultiSelectComponent,
+        SelectComponent
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css'
@@ -172,7 +178,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
                     const title: string = this.TranslocoService.translate('Contact');
-                    const msg:string = this.TranslocoService.translate('updated successfully');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
                     const url: (string | number)[] = ['contacts', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);

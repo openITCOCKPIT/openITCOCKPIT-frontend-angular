@@ -1,0 +1,21 @@
+<p-dropdown
+    [attr.id]="id"
+    [name]="String(name)"
+    [options]="options"
+    [filter]="filter"
+    [optionValue]="optionValue"
+    [optionLabel]="optionLabel"
+    [filterBy]="optionLabel"
+    [class]="class"
+    [placeholder]="placeholder"
+    (onChange)="triggerOnChange($event)"
+    [disabled]="disabled"
+    [(ngModel)]="ngModel"
+    (ngModelChange)="ngModelChange.emit($event)"
+    (onFilter)="doHighlightSearch($event.filter)"
+    [showClear]="showClear">
+    <ng-template let-item pTemplate="item">
+        <div [innerHTML]="item[this.optionLabel] | highlightSearch : this.searchText:this.optionLabel"></div>
+    </ng-template>
+</p-dropdown>
+

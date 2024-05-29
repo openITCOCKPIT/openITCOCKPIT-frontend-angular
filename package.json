@@ -53,6 +53,7 @@
         "ngx-scrollbar": "^14.0.0",
         "ngx-toastr": "^18.0.0",
         "prettier": "^3.2.5",
+        "primeng": "^17.17.0",
         "rxjs": "~7.8.1",
         "tslib": "^2.6.2",
         "uplot": "^1.6.30",

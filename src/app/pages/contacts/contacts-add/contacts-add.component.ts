@@ -1,9 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -15,8 +14,6 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -40,51 +37,57 @@ import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
     LoadCommand,
-    LoadCommandsRoot, LoadContainersContainer, LoadContainersRoot,
+    LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
     Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
         BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        AlertHeadingDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective
+        MultiSelectComponent,
+        MultiSelectModule,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        ObjectUuidComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        SelectComponent
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'
@@ -96,7 +99,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError | null = null;
     protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
@@ -106,6 +108,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    public errors: GenericValidationError = {} as GenericValidationError;
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -168,7 +171,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.post = this.getDefaultPost();
-                    this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
                     return;
@@ -181,9 +183,12 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof (this.errors['customvariables']['custom']) === "string") {
-                        this.hasMacroErrors = true;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
                     }
+
                 }
             }))
     }
@@ -294,5 +299,13 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
