@@ -171,9 +171,12 @@
     box-shadow: none;
 }
 
-.p-multiselect-panel .p-multiselect-items,
-.p-dropdown-panel .p-dropdown-items {
+.p-multiselect-panel .p-multiselect-items {
     padding: 0;
+}
+
+.p-dropdown-panel .p-dropdown-items {
+    padding: 0 0.2rem;
 }
 
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item,
