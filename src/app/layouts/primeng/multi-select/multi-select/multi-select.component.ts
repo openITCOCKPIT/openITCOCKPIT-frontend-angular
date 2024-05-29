@@ -49,6 +49,8 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     @Input() debounceTime: number = 500;
     private onChangeSubject = new Subject<any>();
 
+    private searchCallbackSubject = new Subject<any>();
+    @Input() searchCallback: Function | undefined;
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
@@ -79,6 +81,16 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
                     this.onChange.emit(value);
                 }));
         }
+
+        if (this.searchCallback) {
+            this.Subscriptions.add(
+                this.searchCallbackSubject.pipe(
+                    debounceTime(this.debounceTime),
+                    distinctUntilChanged()
+                ).subscribe(value => {
+                    this.searchCallback!(this.searchText);
+                }));
+        }
     }
 
     public ngOnDestroy(): void {
@@ -104,6 +116,11 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
 
     public doHighlightSearch(searchText: string) {
         this.searchText = searchText;
+
+        // Call the search callback debounced
+        if (this.searchCallback) {
+            this.searchCallbackSubject.next(searchText);
+        }
     }
 
     public writeValue(obj: any): void {
