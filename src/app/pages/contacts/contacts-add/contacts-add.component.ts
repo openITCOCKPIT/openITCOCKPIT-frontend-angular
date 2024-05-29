@@ -97,7 +97,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError | null = null;
     protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
@@ -107,6 +106,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    public errors: GenericValidationError = {} as GenericValidationError;
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -169,7 +169,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.post = this.getDefaultPost();
-                    this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
                     return;
@@ -295,5 +294,13 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
