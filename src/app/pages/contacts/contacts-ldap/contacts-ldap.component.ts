@@ -4,6 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     AlertComponent,
     AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -16,7 +17,6 @@ import {
     FormDirective,
     FormLabelDirective,
     FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -38,15 +38,20 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { ContactsService } from '../contacts.service';
 import {
-    ContactPost, LdapConfig, LdapUser,
+    ContactPost,
+    LdapConfig,
+    LdapUser,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod,
-    LoadContainersContainer, LoadContainersRoot
+    Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -85,7 +90,9 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
         MacrosComponent,
         CardFooterComponent,
         FormCheckLabelDirective,
-        TooltipDirective
+        TooltipDirective,
+        SelectComponent,
+        MultiSelectComponent
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
@@ -120,7 +127,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.loadContainers();
         this.loadCommands();
         this.loadLdapConfig();
-        this.loadLdapUsers();
+        this.loadLdapUsers('');
     }
 
     private loadLdapConfig(): void {
@@ -130,11 +137,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private loadLdapUsers(): void {
-        this.subscriptions.add(this.ContactService.loadLdapUserByString('')
+    private loadLdapUsers(samaccountname: string): void {
+        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {
                 this.ldapUsers = result.ldapUsers;
-            }))
+            }));
     }
 
     private getDefaultPost(): ContactPost {
