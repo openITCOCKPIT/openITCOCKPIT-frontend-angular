@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -15,7 +15,6 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    FormSelectDirective,
     BadgeComponent,
     NavComponent,
     NavItemComponent,
@@ -51,40 +50,36 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
         BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        AlertHeadingDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective,
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'
@@ -96,7 +91,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError | null = null;
     protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
@@ -106,6 +100,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    public errors: GenericValidationError = {} as GenericValidationError;
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -168,7 +163,6 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.post = this.getDefaultPost();
-                    this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
                     return;
@@ -294,5 +288,13 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }
