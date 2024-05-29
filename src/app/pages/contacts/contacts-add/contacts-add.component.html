@@ -147,15 +147,6 @@
                             [options]="users"
                             oitcFormError [errors]="errors" errorField="user">
                         </oitc-select>
-
-                        <ng-select name="contactUser"
-                                   id="user"
-                                   [(ngModel)]="post.user_id"
-                                   oitcFormError [errors]="errors" errorField="user">
-                            <ng-option *ngFor="let user of this.users" [value]="user.key">
-                                {{ user.value }}
-                            </ng-option>
-                        </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
 
                         <div class="help-block">
