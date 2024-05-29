@@ -1,9 +1,11 @@
-import { Component, EventEmitter, forwardRef, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -26,7 +28,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
     templateUrl: './multi-select.component.html',
     styleUrl: './multi-select.component.css'
 })
-export class MultiSelectComponent implements ControlValueAccessor {
+export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @Input() id: string | undefined;
     @Input() name: string | undefined;
     @Input() options: any[] | undefined;
@@ -43,6 +45,10 @@ export class MultiSelectComponent implements ControlValueAccessor {
     @Input() display: string | 'comma' | 'chip' = 'chip';
     @Input() showClear: boolean = false;
 
+    @Input() debounce: boolean = false;
+    @Input() debounceTime: number = 500;
+    private onChangeSubject = new Subject<any>();
+
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
@@ -50,6 +56,8 @@ export class MultiSelectComponent implements ControlValueAccessor {
     private readonly TranslocoService = inject(TranslocoService);
 
     public searchText: string = '';
+
+    private Subscriptions: Subscription = new Subscription();
 
     public constructor() {
         if (this.placeholder == undefined) {
@@ -61,13 +69,33 @@ export class MultiSelectComponent implements ControlValueAccessor {
         }
     }
 
+    public ngOnInit(): void {
+        if (this.debounce) {
+            this.Subscriptions.add(
+                this.onChangeSubject.pipe(
+                    debounceTime(this.debounceTime),
+                    distinctUntilChanged()
+                ).subscribe(value => {
+                    this.onChange.emit(value);
+                }));
+        }
+    }
+
+    public ngOnDestroy(): void {
+        this.Subscriptions.unsubscribe();
+    }
+
     updateNgModel(value: any) {
         this.ngModel = value;
         this.ngModelChange.emit(this.ngModel);
     }
 
     triggerOnChange(event: any) {
-        this.onChange.emit(event);
+        if (this.debounce) {
+            this.onChangeSubject.next(event);
+        } else {
+            this.onChange.emit(event);
+        }
     }
 
     triggerOnFilter(event: any) {

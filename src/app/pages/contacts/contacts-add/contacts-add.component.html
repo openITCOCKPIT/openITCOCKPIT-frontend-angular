@@ -53,6 +53,7 @@
                             optionLabel="value"
                             [(ngModel)]="post.containers._ids"
                             [options]="containers"
+                            [debounce]="true"
                             (onChange)="onContainerChange()"
                             oitcFormError [errors]="errors" errorField="containers">
                         </oitc-multi-select>
