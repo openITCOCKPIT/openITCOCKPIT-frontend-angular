@@ -1,0 +1,236 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hostescalations', 'index']" [routerLink]="['/', 'hostescalations', 'index']">
+                        <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                        {{ t('Host escalations') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Host Escalations') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadHostescalations()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['hostescalations', 'add']"
+                                [routerLink]="['/', 'hostescalations', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Hosts.name]']"
+                                           [placeholder]="'Filter by host template name' | transloco"
+                                           cFormControl
+                                           name="Hosts.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Hosts') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts groups ') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Host groups') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('First') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Last') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Time period') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contacts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contact groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Options') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="hostescalations">
+                    <tr *ngFor="let hostescalation of hostescalations.all_hostescalations">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['hostescalations', 'delete']"
+                                [item]="hostescalation"></oitc-item-select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ hostescalation.first_notification }}</td>
+                        <td>{{ hostescalation.last_notification }}</td>
+                        <td>{{ hostescalation.notification_interval }}</td>
+                        <td>
+                            <a *oitcPermission="['timeperiods', 'edit']"
+                               [routerLink]="['/', 'timeperiods', 'edit', hostescalation.timeperiod.id]">
+                                {{ hostescalation.timeperiod.name }}
+                            </a>
+                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                {{ hostescalation.timeperiod.name }}
+                            </span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'hostescalations.edit'"
+                                                 [url]="'/hostescalations/edit/' + hostescalation.id"
+                                                 [allowEdit]="hostescalation.allowEdit">
+                                <oitc-actions-button-element [permission]="'hostescalations.edit'"
+                                                             [url]="'/hostescalations/edit/' + hostescalation.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                             [url]="'/changelogs/entity/hostescalation/' + hostescalation.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hostescalation)"
+                                                             [permission]="'hostescalation.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="hostescalations && hostescalations.all_hostescalations.length === 0"></oitc-no-records>
+                <ng-container *ngIf="hostescalations && hostescalations.all_hostescalations">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="hostescalations.all_hostescalations.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="hostescalations"
+                                [paginateOrScroll]="hostescalations"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
