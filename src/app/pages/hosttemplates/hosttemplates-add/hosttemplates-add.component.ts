@@ -6,6 +6,9 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -39,6 +42,7 @@ import { GenericValidationError } from '../../../generic-responses';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -72,7 +76,11 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
         SelectComponent,
         NgSelectModule,
         PriorityComponent,
-        LabelLinkComponent
+        LabelLinkComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
