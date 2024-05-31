@@ -15,7 +15,7 @@
     (onFilter)="doHighlightSearch($event.filter)"
     [showClear]="showClear">
     <ng-template let-item pTemplate="item">
-        <div [innerHTML]="item[this.optionLabel] | highlightSearch : this.searchText:this.optionLabel"></div>
+        <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>
 </p-dropdown>
 

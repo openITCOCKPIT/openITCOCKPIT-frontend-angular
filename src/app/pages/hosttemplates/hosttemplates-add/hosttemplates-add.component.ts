@@ -36,6 +36,8 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { GenericValidationError } from '../../../generic-responses';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -66,7 +68,9 @@ import { GenericValidationError } from '../../../generic-responses';
         NgIf,
         NgClass,
         MultiSelectComponent,
-        SelectComponent
+        SelectComponent,
+        NgSelectModule,
+        PriorityComponent
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
@@ -76,6 +80,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     public hosttemplateTypes: HosttemplateTypeResult[] = [];
     public containers: HosttemplateContainerResult | undefined;
     public commands: SelectKeyValue[] = [];
+    public tagsForSelect: string[] = [];
     public post: HosttemplatePost = {} as HosttemplatePost;
     public typeDetails: HosttemplateTypeResultDetails | undefined;
 
@@ -111,6 +116,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
             this.post = this.getDefaultPost(this.hosttemplateTypeId);
         });
+        
     }
 
     public ngOnDestroy(): void {
@@ -225,6 +231,10 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+    }
+
+    public onTypeChange() {
+        this.setDetailsForType();
     }
 
 }

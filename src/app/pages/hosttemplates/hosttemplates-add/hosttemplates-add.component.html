@@ -81,6 +81,109 @@
                                 <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                             </div>
 
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateName">
+                                    {{ t('Template name') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl id="HosttemplateName" required type="text"
+                                       name="HosttemplateName"
+                                       oitcFormError [errors]="errors" errorField="name"
+                                       [(ngModel)]="post.name">
+                                <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HostHosttemplateSelect">
+                                    {{ t('Template Type') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+
+                                <oitc-select
+                                    name="HostHosttemplateSelect"
+                                    id="HostHosttemplateSelect"
+                                    optionValue="key"
+                                    optionLabel="value.title"
+                                    [(ngModel)]="post.hosttemplatetype_id"
+                                    [options]="hosttemplateTypes"
+                                    (onChange)="onTypeChange()"
+                                    oitcFormError [errors]="errors" errorField="hosttemplatetype_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="hosttemplatetype_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Defines the type of the template. Use "Generic template" if you are not sure.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="description">
+                                    {{ t('Description') }}
+                                </label>
+                                <input cFormControl id="description" type="text"
+                                       name="description"
+                                       oitcFormError [errors]="errors" errorField="description"
+                                       [(ngModel)]="post.description">
+                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateHostgroups">
+                                    {{ t('Host groups') }}
+                                </label>
+
+                                <oitc-multi-select
+                                    name="HosttemplateHostgroups"
+                                    id="HosttemplateHostgroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hostgroups._ids"
+                                    [options]="hostgroups"
+                                    oitcFormError [errors]="errors" errorField="hostgroups">
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="hostgroups"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateHostgroups">
+                                    {{ t('Host groups') }}
+                                </label>
+
+                                <ng-select
+                                    id="HosttemplateHostgroups"
+                                    name="HosttemplateHostgroups"
+                                    [items]="[]"
+                                    [(ngModel)]="tagsForSelect"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="t('Add tags')"
+                                    [isOpen]="false"
+                                    oitcFormError [errors]="errors" errorField="tags">
+                                </ng-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="tags"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Press return to separate tags') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel>
+                                    {{ t('Priority') }}
+                                </label>
+
+                                <div>
+                                    <oitc-priority
+                                        [priority]="post.priority"
+                                        (onChange)="post.priority = $event"
+                                    ></oitc-priority>
+                                </div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="priority"></oitc-form-feedback>
+                            </div>
+
                         </c-card-body>
                     </c-card>
                     <!-- BASIC CONFIGURATION END -->
