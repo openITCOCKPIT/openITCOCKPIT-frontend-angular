@@ -38,6 +38,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { GenericValidationError } from '../../../generic-responses';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -70,7 +71,8 @@ import { PriorityComponent } from '../../../layouts/coreui/priority/priority.com
         MultiSelectComponent,
         SelectComponent,
         NgSelectModule,
-        PriorityComponent
+        PriorityComponent,
+        LabelLinkComponent
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
@@ -116,7 +118,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
             this.post = this.getDefaultPost(this.hosttemplateTypeId);
         });
-        
+
     }
 
     public ngOnDestroy(): void {

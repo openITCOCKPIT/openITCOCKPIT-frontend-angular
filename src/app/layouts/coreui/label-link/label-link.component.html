@@ -1,0 +1,18 @@
+<!--
+Angular limits us to only have one ng-content per template
+https://github.com/angular/angular/issues/22972#issuecomment-407358396
+-->
+
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
+
+<ng-container *ngIf="hasPermission() && objectId">
+    <a [routerLink]="route + '/' + objectId">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </a>
+</ng-container>
+
+<ng-container *ngIf="!hasPermission() || !objectId">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</ng-container>

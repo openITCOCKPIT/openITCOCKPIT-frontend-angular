@@ -188,6 +188,44 @@
                     </c-card>
                     <!-- BASIC CONFIGURATION END -->
 
+                    <!-- CHECK CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Check configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="CheckPeriodSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.check_period_id"
+                                        [route]="'/timeperiods/edit'"
+                                        [permissions]="'timeperiods.edit'"
+                                    >
+                                        {{ t('Check period') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="CheckPeriodSelect"
+                                    id="CheckPeriodSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.check_period_id"
+                                    [options]="checkperiods"
+                                    oitcFormError [errors]="errors" errorField="check_period_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="check_period_id"></oitc-form-feedback>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- CHECK CONFIGURATION END -->
                 </c-card-body>
             </c-card>
         </form>
