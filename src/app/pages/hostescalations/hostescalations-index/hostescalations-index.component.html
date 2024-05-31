@@ -67,11 +67,11 @@
                             <c-col md="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Hosts.name]']"
-                                           [placeholder]="'Filter by host template name' | transloco"
+                                           [placeholder]="'Filter by host name' | transloco"
                                            cFormControl
                                            name="Hosts.name"
                                            oitcDebounce
@@ -151,7 +151,19 @@
                                 *oitcPermission="['hostescalations', 'delete']"
                                 [item]="hostescalation"></oitc-item-select>
                         </td>
-                        <td></td>
+                        <td>
+                            <ul>
+                                <li *ngFor="let host of hostescalation.hosts">
+                                    <a *oitcPermission="['hosts', 'edit']"
+                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                        {{ host.name }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                        {{ host.name }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
                         <td></td>
                         <td>{{ hostescalation.first_notification }}</td>
                         <td>{{ hostescalation.last_notification }}</td>

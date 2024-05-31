@@ -51,9 +51,7 @@ export interface HostescalationIndex {
     allowEdit: boolean
     timeperiod: HostescalationTimeperiod
 
-    Hosts: {
-        name: string
-    }
+    hosts: HostescalationHost[]
     HostsExcluded: {
         name: string
     }
