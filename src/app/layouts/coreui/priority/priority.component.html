@@ -1,0 +1,9 @@
+@for (i of [1, 2, 3, 4, 5]; track $index; ) {
+    <fa-icon [icon]="['fas', 'fire']" size="lg"
+             (click)="setPriority(i)"
+             (mouseenter)="hoverPriority(i)"
+             (mouseleave)="mouseleave()"
+             class="cursor-pointer icon-padding"
+             [ngClass]="priorityClass[i-1]"></fa-icon>
+}
+
