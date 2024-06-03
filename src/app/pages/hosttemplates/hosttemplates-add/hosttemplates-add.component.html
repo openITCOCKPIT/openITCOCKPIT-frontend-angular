@@ -251,7 +251,7 @@
                                            id="freshness_checks_enabled"
                                            type="checkbox"
                                            trueFalseValue
-                                           [disabled]="!post.active_checks_enabled"
+                                           [disabled]="post.active_checks_enabled == 1"
                                            [falseValue]="0"
                                            [trueValue]="1"
                                            [(ngModel)]="post.freshness_checks_enabled"/>
@@ -268,11 +268,17 @@
 
                             <div class="mb-3"
                                  *ngIf="post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1">
-                                <label cFormCheckLabel for="">
+                                <label cFormCheckLabel for="freshness_threshold">
                                     {{ t('Freshness threshold') }}
+                                    <oitc-required-icon></oitc-required-icon>
                                 </label>
-
-
+                                <oitc-interval-input
+                                    id="freshness_threshold"
+                                    name="freshness_threshold"
+                                    [selectedInterval]="post.freshness_threshold"
+                                    (selectedIntervalChange)="post.freshness_threshold = $event"
+                                ></oitc-interval-input>
+                                {{ post.freshness_threshold }}
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="freshness_threshold"></oitc-form-feedback>
                             </div>

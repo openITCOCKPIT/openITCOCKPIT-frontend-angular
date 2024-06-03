@@ -43,6 +43,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -80,7 +81,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        IntervalInputComponent
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
