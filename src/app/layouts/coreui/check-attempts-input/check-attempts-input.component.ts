@@ -29,17 +29,8 @@ export class CheckAttemptsInputComponent {
     @Input() id: string | undefined;
     @Input() name: string = '';
 
-    private _selectedAttempts: number = 3;
+    @Input() selectedAttempts: number = 3;
     @Output() selectedAttemptsChange = new EventEmitter<number>();
-
-    @Input()
-    get selectedAttempts(): number {
-        return this._selectedAttempts;
-    }
-
-    set selectedAttempts(value: number) {
-        this._selectedAttempts = value;
-    }
 
     public constructor() {
 
