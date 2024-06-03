@@ -170,7 +170,7 @@ export interface HosttemplatePost {
         _ids: number[]
     }
     customvariables: Customvariable[]
-    hosttemplatecommandargumentvalues: any[]
+    hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
     prometheus_exporters: {
         _ids: number[]
     }
@@ -185,4 +185,14 @@ export interface HosttemplateElements {
     hostgroups: SelectKeyValue[]
     exporters: SelectKeyValue[]
     slas: SelectKeyValue[]
+}
+
+export interface HosttemplateCommandArgument {
+    commandargument_id: number
+    value: string
+    commandargument: {
+        name: string
+        human_name: string
+        command_id: number
+    }
 }

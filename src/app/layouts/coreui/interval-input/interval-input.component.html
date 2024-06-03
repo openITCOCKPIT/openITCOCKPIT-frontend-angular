@@ -6,7 +6,7 @@
                 class="rounded-0"
                 color="primary"
                 *ngFor="let intervalArray of interval"
-                [ngClass]="{'active': selectedInterval == intervalArray.interval}"
+                [ngClass]="{'active show': selectedInterval == intervalArray.interval}"
                 (click)="changeInterval(intervalArray.interval)"
                 [title]="intervalArray.long">
                 {{ intervalArray.short }}
