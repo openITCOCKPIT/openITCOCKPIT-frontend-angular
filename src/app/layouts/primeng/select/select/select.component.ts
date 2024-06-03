@@ -31,21 +31,60 @@ import { JsonPipe } from '@angular/common';
 export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @Input() id: string | undefined;
     @Input() name: string | undefined;
+
+    /**
+     * Array of the options for the select box
+     * @group Props
+     */
     @Input() options: any[] | undefined;
+
+    /**
+     * ngModel for the form
+     * @group Props
+     */
     @Input() ngModel: any | undefined;
+
+    /**
+     * Enable / Disable filter input
+     * @group Props
+     */
     @Input() filter: boolean = true;
+
+    /**
+     * String of CSS classes to apply to the select box
+     * @group Props
+     */
     @Input() class: string = 'w-auto d-flex';
+
+    /**
+     * Name of the label field of an option.
+     * @group Props
+     */
     @Input() optionValue: string | undefined;
+
+    /**
+     * Name of the label field of an option.
+     * This can be a string or path like 'key.subkey'
+     * @group Props
+     */
     @Input() optionLabel: string = 'key';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
     @Input() placeholder: string | undefined;
     @Input() showClear: boolean = false;
 
+    /**
+     * If ngModel should be debounced
+     * @group Props
+     */
     @Input() debounce: boolean = false;
     @Input() debounceTime: number = 500;
     private onChangeSubject = new Subject<any>();
 
+    /**
+     * Callback that will be called when the user enter a search text
+     * @group Props
+     */
     private searchCallbackSubject = new Subject<any>();
     @Input() searchCallback: Function | undefined;
 

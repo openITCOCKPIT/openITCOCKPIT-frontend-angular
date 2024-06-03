@@ -31,11 +31,42 @@ import { debounceTime } from 'rxjs/operators';
 export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @Input() id: string | undefined;
     @Input() name: string | undefined;
+
+    /**
+     * Array of the options for the select box
+     * @group Props
+     */
     @Input() options: any[] | undefined;
+
+    /**
+     * ngModel for the form
+     * @group Props
+     */
     @Input() ngModel: any | undefined;
+
+    /**
+     * Enable / Disable filter input
+     * @group Props
+     */
     @Input() filter: boolean = true;
+
+    /**
+     * String of CSS classes to apply to the select box
+     * @group Props
+     */
     @Input() class: string = 'w-auto d-flex';
+
+    /**
+     * Name of the label field of an option.
+     * @group Props
+     */
     @Input() optionValue: string | undefined;
+
+    /**
+     * Name of the label field of an option.
+     * This can be a string or path like 'key.subkey'
+     * @group Props
+     */
     @Input() optionLabel: string = 'value';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
@@ -45,10 +76,18 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     @Input() display: string | 'comma' | 'chip' = 'chip';
     @Input() showClear: boolean = false;
 
+    /**
+     * If ngModel should be debounced
+     * @group Props
+     */
     @Input() debounce: boolean = false;
     @Input() debounceTime: number = 500;
     private onChangeSubject = new Subject<any>();
 
+    /**
+     * Callback that will be called when the user enter a search text
+     * @group Props
+     */
     private searchCallbackSubject = new Subject<any>();
     @Input() searchCallback: Function | undefined;
 
