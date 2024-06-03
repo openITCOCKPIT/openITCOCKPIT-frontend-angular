@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -43,6 +44,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
+import {
+    CheckAttemptsInputComponent
+} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -80,7 +86,11 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        IntervalInputComponent,
+        AlertComponent,
+        CheckAttemptsInputComponent,
+        HumanTimeComponent,
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
@@ -214,11 +224,11 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public setDetailsForType() {
+    private setDetailsForType() {
         this.typeDetails = this.hosttemplateTypes.find(type => type.key === this.post.hosttemplatetype_id)?.value;
     };
 
-    public loadElements() {
+    private loadElements() {
         const containerId = this.post.container_id;
 
         if (!containerId) {
@@ -239,12 +249,31 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
     }
 
+    private loadCommandArguments() {
+        const commandId = this.post.command_id;
+
+        if (!commandId) {
+            return;
+        }
+
+        this.subscriptions.add(this.HosttemplatesService.loadCommandArguments(commandId)
+            .subscribe((result) => {
+                this.post.hosttemplatecommandargumentvalues = result;
+            })
+        );
+
+    }
+
     public onContainerChange() {
         this.loadElements();
     }
 
     public onTypeChange() {
         this.setDetailsForType();
+    }
+
+    public onCommandChange() {
+        this.loadCommandArguments();
     }
 
 }

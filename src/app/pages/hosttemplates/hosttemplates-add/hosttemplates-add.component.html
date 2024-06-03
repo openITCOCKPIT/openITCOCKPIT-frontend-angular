@@ -251,7 +251,7 @@
                                            id="freshness_checks_enabled"
                                            type="checkbox"
                                            trueFalseValue
-                                           [disabled]="!post.active_checks_enabled"
+                                           [disabled]="post.active_checks_enabled == 1"
                                            [falseValue]="0"
                                            [trueValue]="1"
                                            [(ngModel)]="post.freshness_checks_enabled"/>
@@ -268,14 +268,130 @@
 
                             <div class="mb-3"
                                  *ngIf="post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1">
-                                <label cFormCheckLabel for="">
+                                <label cFormCheckLabel for="freshness_threshold">
                                     {{ t('Freshness threshold') }}
+                                    <oitc-required-icon></oitc-required-icon>
                                 </label>
-
-
+                                <oitc-interval-input
+                                    id="freshness_threshold"
+                                    name="freshness_threshold"
+                                    [selectedInterval]="post.freshness_threshold"
+                                    (selectedIntervalChange)="post.freshness_threshold = $event"
+                                ></oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="freshness_threshold"></oitc-form-feedback>
                             </div>
+
+
+                            <div class="mb-3">
+                                <label cLabel for="HostCheckCommandSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.command_id"
+                                        [route]="'/commands/edit'"
+                                        [permissions]="'commands.edit'"
+                                    >
+                                        {{ t('Check command') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="HostCheckCommandSelect"
+                                    id="HostCheckCommandSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.command_id"
+                                    [options]="commands"
+                                    (onChange)="onCommandChange()"
+                                    oitcFormError [errors]="errors" errorField="command_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="command_id"></oitc-form-feedback>
+                                <div class="help-block" [hidden]="post.active_checks_enabled">
+                                    {{ t('Due to active checking is disabled, this command will only be used as freshness check command.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3"
+                                 [hidden]="!(post.command_id && post.hosttemplatecommandargumentvalues.length == 0)">
+                                <c-alert color="info">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{ t('This command does not have any parameters.') }}
+                                </c-alert>
+                            </div>
+
+                            <div class="mb-3 ms-4"
+                                 *ngFor="let hosttemplatecommandargumentvalue of post.hosttemplatecommandargumentvalues; index as i">
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ hosttemplatecommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'hosttemplatecommandargumentvalue_'+i"
+                                        [(ngModel)]="hosttemplatecommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ hosttemplatecommandargumentvalue.commandargument.name }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="check_interval">
+                                    {{ t('Check interval') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="check_interval"
+                                    name="check_interval"
+                                    [selectedInterval]="post.check_interval"
+                                    (selectedIntervalChange)="post.check_interval = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="check_interval"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="check_interval">
+                                    {{ t('Retry interval') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="retry_interval"
+                                    name="retry_interval"
+                                    [selectedInterval]="post.retry_interval"
+                                    (selectedIntervalChange)="post.retry_interval = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="retry_interval"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="max_check_attempts">
+                                    {{ t('Max. number of check attempts') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-check-attempts-input
+                                    id="max_check_attempts"
+                                    name="max_check_attempts"
+                                    [selectedAttempts]="post.max_check_attempts"
+                                    (selectedAttemptsChange)="post.max_check_attempts = $event">
+                                </oitc-check-attempts-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="max_check_attempts"></oitc-form-feedback>
+                            </div>
+
+                            <c-alert color="light">
+                                <div>
+                                    {{ t('Number of failed attempts before the host will switch into hard state.') }}
+                                </div>
+                                <div>
+                                    {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
+                                    <oitc-human-time
+                                        [seconds]="(post.check_interval + (post.max_check_attempts -1) * post.retry_interval)"></oitc-human-time>
+                                </div>
+                            </c-alert>
 
 
                         </c-card-body>

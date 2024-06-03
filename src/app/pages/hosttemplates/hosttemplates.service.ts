@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
+    HosttemplateCommandArgument,
     HosttemplateContainerResult,
     HosttemplateElements,
     HosttemplateIndexRoot,
@@ -113,6 +114,21 @@ export class HosttemplatesService {
         }).pipe(
             map(data => {
                 return data
+            })
+        )
+    }
+
+    public loadCommandArguments(commandId: number): Observable<HosttemplateCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
+        }>(`${proxyPath}/hosttemplates/loadCommandArguments/${commandId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hosttemplatecommandargumentvalues;
             })
         )
     }
