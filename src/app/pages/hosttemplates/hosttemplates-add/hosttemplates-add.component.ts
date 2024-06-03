@@ -3,8 +3,10 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormCheckComponent,
@@ -19,10 +21,10 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -39,7 +41,7 @@ import { HosttemplatesService } from '../hosttemplates.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
@@ -49,6 +51,10 @@ import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
+import { MacrosComponent } from '../../../components/macros/macros.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -91,6 +97,9 @@ import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human
         AlertComponent,
         CheckAttemptsInputComponent,
         HumanTimeComponent,
+        BadgeComponent,
+        MacrosComponent,
+        CardFooterComponent,
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'
@@ -114,8 +123,15 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
     public errors: GenericValidationError | null = null;
 
+    public createAnother: boolean = false;
+
     private hosttemplateTypeId = HosttemplateTypesEnum.GENERIC_HOSTTEMPLATE;
     private readonly HosttemplatesService = inject(HosttemplatesService);
+    public PermissionsService: PermissionsService = inject(PermissionsService);
+    public TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    private router: Router = inject(Router);
+
     private subscriptions: Subscription = new Subscription();
 
     constructor(private route: ActivatedRoute) {
@@ -274,6 +290,78 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
     public onCommandChange() {
         this.loadCommandArguments();
+    }
+
+    /*******************
+     * MACRO functions *
+     *******************/
+    public addMacro() {
+        this.post.customvariables.push({
+            name: '',
+            objecttype_id: ObjectTypesEnum["HOSTTEMPLATE"],
+            password: 0,
+            value: '',
+        });
+    }
+
+    protected deleteMacro = (index: number) => {
+        this.post.customvariables.splice(index, 1);
+    }
+
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (!this.errors) {
+            return {} as GenericValidationError;
+        }
+
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
+    }
+
+    public submit() {
+        this.post.tags = this.tagsForSelect.join(',');
+
+
+        this.subscriptions.add(this.HosttemplatesService.add(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('Host template');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['hosttemplates', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/hosttemplates/index']);
+                        return;
+                    }
+                    this.post = this.getDefaultPost(this.hosttemplateTypeId);
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+
+                    /*
+                    this.hasMacroErrors = false;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
+                    }*/
+
+                }
+            }))
+
     }
 
 }

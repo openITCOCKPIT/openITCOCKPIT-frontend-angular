@@ -3,17 +3,19 @@ import { HosttemplateTypesEnum } from './hosttemplate-types.enum';
 import { TranslocoService } from '@jsverse/transloco';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import {
     HosttemplateCommandArgument,
     HosttemplateContainerResult,
     HosttemplateElements,
     HosttemplateIndexRoot,
+    HosttemplatePost,
     HosttemplatesIndexParams,
     HosttemplateTypeResult
 } from './hosttemplates.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -131,6 +133,30 @@ export class HosttemplatesService {
                 return data.hosttemplatecommandargumentvalues;
             })
         )
+    }
+
+
+    public add(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosttemplates/add.json?angular=true`, {
+            Hosttemplate: hosttemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }

@@ -52,6 +52,7 @@ import {
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -282,7 +283,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: 32,
+            objecttype_id: ObjectTypesEnum["CONTACT"],
             password: 0,
             value: '',
         });
