@@ -47,20 +47,16 @@ export interface HostescalationIndex {
     last_notification: string
     escalate_on_recovery: string
     escalate_on_unreachable: string
+    escalate_on_down: string
     notification_interval: any
     allowEdit: boolean
     timeperiod: HostescalationTimeperiod
-
     hosts: HostescalationHost[]
-    HostsExcluded: {
-        name: string
-    }
-    Hostgroups: {
-        name: string
-    }
-    HostgroupsExcluded: {
-        name: string
-    }
+    hosts_excluded: HostescalationHost[]
+    hostgroups: HostescalationHostgroup[]
+    hostgroups_excluded: HostescalationHostgroup[]
+    contacts: HostescalationContact[]
+    contactgroups: HostescalationContactgroup[]
 }
 
 export interface AllHostescalation {

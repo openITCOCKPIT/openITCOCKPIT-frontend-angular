@@ -5,19 +5,25 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownDividerDirective,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     ModalService,
     NavComponent,
-    NavItemComponent, RowComponent, TableDirective
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -46,6 +52,9 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hostescalations-index',
@@ -87,15 +96,31 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
         SelectAllComponent,
         TableDirective,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        DeleteAllModalComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './hostescalations-index.component.html',
-    styleUrl: './hostescalations-index.component.css'
+    styleUrl: './hostescalations-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostescalationsService} // Inject the HostescalationsService into the DeleteAllModalComponent
+    ]
 })
 export class HostescalationsIndexComponent implements OnInit, OnDestroy {
+    private readonly TranslocoService = inject(TranslocoService);
     public params: HostescalationsIndexParams = getDefaultHostescalationsIndexParams();
     public hostescalations?: HostescalationIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
+
+    public hostFocus: boolean = true;
+    public hostExcludeFocus: boolean = false;
+
+    public hostgroupFocus: boolean = true;
+    public hostgroupExcludeFocus: boolean = false;
+
 
     public selectedItems: DeleteAllItem[] = [];
 
@@ -115,11 +140,9 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy {
 
     public loadHostescalations() {
         this.SelectionServiceService.deselectAll();
-
         this.subscriptions.add(this.HostescalationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.hostescalations = result;
-                console.log('HERERER');
             })
         );
     }
@@ -150,19 +173,18 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy {
     // Open the Delete All Modal
     public toggleDeleteAllModal(hostescalation?: HostescalationIndex) {
         let items: DeleteAllItem[] = [];
-
         if (hostescalation) {
             // User just want to delete a single command
             items = [{
                 id: hostescalation.id,
-                displayName: 'test'
+                displayName: this.TranslocoService.translate('Host escalation #{id}', {id: hostescalation.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: 'test'
+                    displayName: this.TranslocoService.translate('Host escalation #{id}', {id: item.id})
                 };
             });
         }
@@ -178,6 +200,7 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy {
     }
 
     // Generic callback whenever a mass action (like delete all) has been finished
+
     public onMassActionComplete(success: boolean) {
         if (success) {
             this.loadHostescalations();

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
@@ -11,8 +10,6 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
     providedIn: 'root'
 })
 export class HostescalationsService {
-
-    private TranslocoService = inject(TranslocoService);
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
