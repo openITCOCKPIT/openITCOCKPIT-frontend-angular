@@ -609,7 +609,10 @@
                                         </label>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notify_on_recovery"></oitc-form-feedback>
                             </div>
 
                         </c-card-body>
@@ -746,6 +749,13 @@
                         </c-card-header>
                         <c-card-body>
 
+                            <div class="row">
+                                <div class="col-12">
+                                    <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                                        *ngIf="hasMacroErrors"></oitc-form-feedback>
+                                </div>
+                            </div>
+
                             <div class="row"
                                  *ngFor="let customVariable of post.customvariables;let i = index;">
                                 <oitc-macros
@@ -825,7 +835,6 @@
                                         [permissions]="'SLAModule.slas.edit'"
                                     >
                                         {{ t('Service class') }}
-                                        <oitc-required-icon></oitc-required-icon>
                                     </oitc-label-link>
                                 </label>
 
@@ -836,10 +845,14 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.sla_id"
                                     [options]="slas"
+                                    [showClear]="true"
                                     oitcFormError [errors]="errors" errorField="sla_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="sla_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('You can define service levels for all hosts using this host template.') }}
+                                </div>
                             </div>
 
                         </c-card-body>

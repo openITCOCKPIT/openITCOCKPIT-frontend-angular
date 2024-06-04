@@ -7,6 +7,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HosttemplateCommandArgument,
     HosttemplateContainerResult,
+    HosttemplateEditApiResult,
     HosttemplateElements,
     HosttemplateIndexRoot,
     HosttemplatePost,
@@ -94,9 +95,14 @@ export class HosttemplatesService {
         )
     }
 
-    public loadContainers(): Observable<HosttemplateContainerResult> {
+    public loadContainers(hosttemplateId?: number): Observable<HosttemplateContainerResult> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HosttemplateContainerResult>(`${proxyPath}/hosttemplates/loadContainers.json`, {
+        let url = `${proxyPath}/hosttemplates/loadContainers.json`;
+        if (hosttemplateId) {
+            url = `${proxyPath}/hosttemplates/loadContainers/${hosttemplateId}.json`;
+        }
+
+        return this.http.get<HosttemplateContainerResult>(url, {
             params: {
                 angular: true
             }
@@ -120,11 +126,26 @@ export class HosttemplatesService {
         )
     }
 
-    public loadCommandArguments(commandId: number): Observable<HosttemplateCommandArgument[]> {
+    public loadCommandArgumentsForAdd(commandId: number): Observable<HosttemplateCommandArgument[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
         }>(`${proxyPath}/hosttemplates/loadCommandArguments/${commandId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hosttemplatecommandargumentvalues;
+            })
+        )
+    }
+
+    public loadCommandArgumentsForEdit(commandId: number, hosttemplateId: number): Observable<HosttemplateCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
+        }>(`${proxyPath}/hosttemplates/loadCommandArguments/${commandId}/${hosttemplateId}.json`, {
             params: {
                 angular: true
             }
@@ -158,5 +179,45 @@ export class HosttemplatesService {
                 })
             );
     }
+
+    public edit(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosttemplates/edit/${hosttemplate.id}.json?angular=true`, {
+            Hosttemplate: hosttemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HosttemplateEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HosttemplateEditApiResult>(`${proxyPath}/hosttemplates/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
 
 }

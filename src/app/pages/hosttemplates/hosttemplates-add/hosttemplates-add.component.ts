@@ -122,6 +122,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     public slas: SelectKeyValue[] = [];
 
     public errors: GenericValidationError | null = null;
+    public hasMacroErrors: boolean = false;
 
     public createAnother: boolean = false;
 
@@ -156,6 +157,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private getDefaultPost(hosttemplateTypeId: number): HosttemplatePost {
@@ -272,7 +274,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HosttemplatesService.loadCommandArguments(commandId)
+        this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForAdd(commandId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
             })
@@ -342,6 +344,8 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost(this.hosttemplateTypeId);
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+                    this.errors = null;
+                    this.hasMacroErrors = false;
                     return;
                 }
 
@@ -351,14 +355,12 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
 
-                    /*
                     this.hasMacroErrors = false;
                     if (this.errors.hasOwnProperty('customvariables')) {
                         if (typeof (this.errors['customvariables']['custom']) === "string") {
                             this.hasMacroErrors = true;
                         }
-                    }*/
-
+                    }
                 }
             }))
 

@@ -105,7 +105,7 @@
     padding: 0.1rem 0.7rem;
 }
 
-.p-multiselect .p-inputtext {
+.p-multiselect .p-inputtext, .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext, .p-dropdown-panel .p-dropdown-header .p-dropdown-filter-container .p-inputtext {
     padding: 0.1rem;
     font-size: 0.77rem;
     font-weight: 400;

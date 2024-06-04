@@ -128,6 +128,9 @@ export const routes: Routes = [{
     path: 'hosttemplates/add',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-add/hosttemplates-add.component').then(m => m.HosttemplatesAddComponent)
 }, {
+    path: 'hosttemplates/edit/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-edit/hosttemplates-edit.component').then(m => m.HosttemplatesEditComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
