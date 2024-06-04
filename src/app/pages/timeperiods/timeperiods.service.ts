@@ -11,9 +11,14 @@ import {
     TimeperiodIndexRoot,
     TimeperiodsEditRoot,
     TimeperiodsIndexParams,
-    TimeperiodUsedBy
+    TimeperiodUsedBy,
+    User,
+    UserRoot,
+    ViewDetailsTimeperiod,
+    ViewDetailsTimeperiodRoot
 } from './timeperiods.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -158,6 +163,32 @@ export class TimeperiodsService {
                     return data;
                 })
             )
+    }
+
+    public getViewDetailsTimeperiod(id: number): Observable<ViewDetailsTimeperiod> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ViewDetailsTimeperiodRoot>(`${proxyPath}/timeperiods/viewDetails/${id}.json?angular=true`).pipe(
+            map(data => {
+                return data.timeperiod;
+            })
+        );
+    }
+
+    public getUser(): Observable<User> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UserRoot>(`${proxyPath}/profile/edit.json?angular=true`).pipe(
+            map(
+                data => {
+                    return data.user;
+                }
+            )
+        );
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/timeperiods/delete/${item.id}.json?angular=true`, {});
     }
 
 }

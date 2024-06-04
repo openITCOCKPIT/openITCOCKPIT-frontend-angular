@@ -28,7 +28,7 @@ import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
 import { Permission } from './permission.type';
 
-import { BehaviorSubject, filter, map, switchMap, take } from "rxjs";
+import { BehaviorSubject, filter, switchMap, take } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 
 @Injectable({
@@ -41,6 +41,9 @@ export class PermissionsService {
 
     private readonly permissions$$ = new BehaviorSubject<Permission>({});
     public readonly permissions$ = this.permissions$$.asObservable();
+
+    private readonly modules$$ = new BehaviorSubject<String[]>([]);
+    public readonly modules$ = this.modules$$.asObservable();
 
     public constructor() {
         this.loadPermissions();
@@ -69,10 +72,31 @@ export class PermissionsService {
         this.authService.authenticated$.pipe(
             filter(authenticated => authenticated),
             take(1),
-            switchMap(() => this.http.get<{ permissions: Permission }>(`${proxyPath}/users/getUserPermissions.json`)),
-            map(({permissions}) => permissions)
+            switchMap(() => this.http.get<{
+                permissions: Permission,
+                modules: string[]
+            }>(`${proxyPath}/users/getUserPermissions.json`))
         ).subscribe({
-            next: permissions => this.permissions$$.next(permissions),
+            next: ({permissions, modules}) => {
+                this.permissions$$.next(permissions);
+                this.modules$$.next(modules);
+            }
         });
     }
+
+    public hasPermission(checkChunks: string | string[], negate: boolean = false): boolean {
+        let permissions = this.permissions$$.getValue();
+        let hasPermission = this.checkPermission(checkChunks, permissions);
+
+        if (negate) {
+            return !hasPermission;
+        }
+
+        return hasPermission;
+    }
+
+    public hasModule(module: string): boolean {
+        return this.modules$$.getValue().includes(module);
+    }
+
 }

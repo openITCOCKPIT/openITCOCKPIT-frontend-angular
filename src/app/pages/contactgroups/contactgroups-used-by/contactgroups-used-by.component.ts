@@ -19,13 +19,12 @@ import {
     ContactgroupsUsedByRootContainer,
     ContactgroupUsedByObjects
 } from '../contactgroups.interface';
-import { ContactUsedByObjects } from '../../contacts/contacts.interface';
 import { ContactgroupsService } from '../contactgroups.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'oitc-contactgroups-used-by',
-  standalone: true,
+    selector: 'oitc-contactgroups-used-by',
+    standalone: true,
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -44,10 +43,10 @@ import { Subscription } from 'rxjs';
         XsButtonDirective,
         RouterLink
     ],
-  templateUrl: './contactgroups-used-by.component.html',
-  styleUrl: './contactgroups-used-by.component.css'
+    templateUrl: './contactgroups-used-by.component.html',
+    styleUrl: './contactgroups-used-by.component.css'
 })
-export class ContactgroupsUsedByComponent implements OnInit, OnDestroy{
+export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
     public contactgroup?: ContactgroupsUsedByRootContainer | null;
     public total: number = 0;
     public objects: ContactgroupUsedByObjects | undefined;
@@ -73,7 +72,6 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy{
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe()
-
     }
 
 }

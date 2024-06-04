@@ -6,6 +6,9 @@
 @import "ng-select-dark";
 @import "dropzone/dist/dropzone.css";
 
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
 // regular style toast
 @import 'ngx-toastr/toastr';
 @import "toast";
@@ -15,6 +18,7 @@
 @import "fonts";
 @import "forms";
 @import "layout";
+@import "cursor";
 
 @import "scrollbar";
 
@@ -29,4 +33,5 @@
 @import "object_types";
 
 @import "fullcalendar_hollidays";
-
+@import "primeng";
+@import "fontawesome";

@@ -21,6 +21,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
 @Component({
     selector: 'oitc-timeperiods-used-by',
@@ -43,7 +44,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective,
         RouterLink,
         RowComponent,
-        ColComponent
+        ColComponent,
+        NotUsedByObjectComponent
     ],
     templateUrl: './timeperiods-used-by.component.html',
     styleUrl: './timeperiods-used-by.component.css'

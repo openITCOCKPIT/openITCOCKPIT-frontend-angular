@@ -4,6 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     AlertComponent,
     AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -16,7 +17,6 @@ import {
     FormDirective,
     FormLabelDirective,
     FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -36,80 +36,85 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { ContainersService } from '../../containers/containers.service';
 import { ContactsService } from '../contacts.service';
-import { UsersService } from '../../users/users.service';
 import {
-    ContactPost, LdapConfig, LdapUser,
+    ContactPost,
+    LdapConfig,
+    LdapUser,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
     Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
-import { Container } from '../../containers/containers.interface';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
-        BackButtonDirective,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
         AlertComponent,
         AlertHeadingDirective,
+        BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        SelectComponent,
+        TooltipDirective,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
 })
 export class ContactsLdapComponent implements OnInit, OnDestroy {
-    private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private UsersService: UsersService = inject(UsersService);
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: Container[] = [];
+    protected containers: LoadContainersContainer[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    protected hasMacroErrors: boolean = false;
 
     protected ldapUsers: LdapUser[] = [];
     protected ldapUser: LdapUser | null = null;
@@ -117,13 +122,15 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
+
+        this.loadLdapUsers = this.loadLdapUsers.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
     public ngOnInit() {
         this.loadContainers();
         this.loadCommands();
         this.loadLdapConfig();
-        this.loadLdapUsers();
+        this.loadLdapUsers('');
     }
 
     private loadLdapConfig(): void {
@@ -133,11 +140,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private loadLdapUsers(): void {
-        this.subscriptions.add(this.ContactService.loadLdapUserByString('')
+    public loadLdapUsers(samaccountname: string): void {
+        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {
                 this.ldapUsers = result.ldapUsers;
-            }))
+            }));
     }
 
     private getDefaultPost(): ContactPost {
@@ -201,13 +208,21 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
+                    }
                 }
             }))
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.containersService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(this.ContactService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
             }))
     }
@@ -220,7 +235,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         const param = {
             containerIds: this.post.containers._ids
         };
-        this.subscriptions.add(this.UsersService.loadUsersByContainerId(param)
+        this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
             }))
@@ -248,6 +263,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     }
 
     public onLdapUserChange(): void {
+        console.log(this.ldapUser);
+        console.log('change und so');
         this.post.name = this.ldapUser?.givenname as string;
         this.post.description = this.ldapUser?.display_name as string;
         this.post.email = this.ldapUser?.email as string;
@@ -266,7 +283,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: 32,
+            objecttype_id: ObjectTypesEnum["CONTACT"],
             password: 0,
             value: '',
         });
@@ -317,5 +334,13 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }

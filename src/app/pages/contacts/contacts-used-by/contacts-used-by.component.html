@@ -63,9 +63,12 @@
                                     {{ contactgroup.container.name }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(contactgroup.container.parent_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(contactgroup.container.parent_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
@@ -88,9 +91,12 @@
                                     {{ hosttemplate.name }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(hosttemplate.container_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(hosttemplate.container_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
@@ -113,9 +119,12 @@
                                     {{ servicetemplate.name }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(servicetemplate.container_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(servicetemplate.container_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
@@ -138,9 +147,12 @@
                                     {{ host.name }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(host.container_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(host.container_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
@@ -183,9 +195,12 @@
                                     {{ t('Host escalation') }} #{{ hostescalation.id }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(hostescalation.container_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(hostescalation.container_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
@@ -208,15 +223,21 @@
                                     {{ t('Service escalation') }} #{{ serviceescalation.id }}
                                 </span>
 
-                                <fa-stack *ngIf="containerIds.length > 0 && containerIds.indexOf(serviceescalation.container_id) !== -1">
-                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient" stackItemSize="1x" pull="right"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger" stackItemSize="1x"
+                                <fa-stack
+                                    *ngIf="containerIds.length > 0 && containerIds.indexOf(serviceescalation.container_id) !== -1">
+                                    <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                 </fa-stack>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    <oitc-not-used-by-object *ngIf="total === 0">
+                        {{ t('This contact is not used by any object') }}
+                    </oitc-not-used-by-object>
                 </c-container>
             </c-card-body>
         </c-card>

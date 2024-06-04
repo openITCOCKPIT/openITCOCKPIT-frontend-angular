@@ -1,6 +1,8 @@
 import { HosttemplateTypesEnum } from './hosttemplate-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { Customvariable } from '../contacts/contacts.interface';
 
 /**********************
  *    Index action    *
@@ -95,4 +97,102 @@ export interface HosttemplateType {
     class: string
     icon: IconProp,
     rotate: RotateProp,
+}
+
+/**********************
+ *    Add action    *
+ **********************/
+
+export interface HosttemplateTypeResult {
+    key: number
+    value: HosttemplateTypeResultDetails
+}
+
+export interface HosttemplateTypeResultDetails {
+    title: string
+    color: string
+    class: string
+    icon: IconProp,
+    rotate: RotateProp,
+}
+
+export interface HosttemplateContainerResult {
+    areContainersRestricted: boolean,
+    containers: SelectKeyValue[]
+}
+
+export interface HosttemplatePost {
+    id?: null | number
+    name: string
+    description: string
+    command_id: number
+    eventhandler_command_id: number
+    check_interval: number
+    retry_interval: number
+    max_check_attempts: number
+    first_notification_delay: number
+    notification_interval: number
+    notify_on_down: number
+    notify_on_unreachable: number
+    notify_on_recovery: number
+    notify_on_flapping: number
+    notify_on_downtime: number
+    flap_detection_enabled: number
+    flap_detection_on_up: number
+    flap_detection_on_down: number
+    flap_detection_on_unreachable: number
+    low_flap_threshold: number
+    high_flap_threshold: number
+    process_performance_data: number
+    freshness_checks_enabled: number
+    freshness_threshold: number
+    passive_checks_enabled: number
+    event_handler_enabled: number
+    active_checks_enabled: number
+    retain_status_information: number
+    retain_nonstatus_information: number
+    notifications_enabled: number
+    notes: string
+    priority: number
+    check_period_id: number
+    notify_period_id: number
+    tags: string
+    container_id: number
+    host_url: string
+    hosttemplatetype_id: number
+    contacts: {
+        _ids: number[]
+    }
+    contactgroups: {
+        _ids: number[]
+    }
+    hostgroups: {
+        _ids: number[]
+    }
+    customvariables: Customvariable[]
+    hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
+    prometheus_exporters: {
+        _ids: number[]
+    }
+    sla_id: number | null
+}
+
+export interface HosttemplateElements {
+    timeperiods: SelectKeyValue[]
+    checkperiods: SelectKeyValue[]
+    contacts: SelectKeyValue[]
+    contactgroups: SelectKeyValue[]
+    hostgroups: SelectKeyValue[]
+    exporters: SelectKeyValue[]
+    slas: SelectKeyValue[]
+}
+
+export interface HosttemplateCommandArgument {
+    commandargument_id: number
+    value: string
+    commandargument: {
+        name: string
+        human_name: string
+        command_id: number
+    }
 }

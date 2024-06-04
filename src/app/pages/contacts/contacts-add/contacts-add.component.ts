@@ -1,9 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -15,8 +14,6 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -36,80 +33,83 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { ContainersService } from '../../containers/containers.service';
 import { ContactsService } from '../contacts.service';
-import { UsersService } from '../../users/users.service';
 import {
     ContactPost,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
     Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
-import { Container } from '../../containers/containers.interface';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-contacts-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        CardComponent,
         BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        AlertHeadingDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        FormSelectDirective,
-        FormControlDirective,
-        RequiredIconComponent,
-        BadgeComponent,
-        FormCheckInputDirective,
-        NgForOf,
-        NgSelectModule,
-        FormCheckComponent,
-        NgIf,
-        TranslocoPipe,
+        FormsModule,
         MacrosComponent,
-        CardFooterComponent,
-        FormCheckLabelDirective,
-        TooltipDirective
+        MultiSelectComponent,
+        MultiSelectModule,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        ObjectUuidComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        RouterLink,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        SelectComponent
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'
 })
 export class ContactsAddComponent implements OnInit, OnDestroy {
-    private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private UsersService: UsersService = inject(UsersService);
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError = {} as GenericValidationError;
+    protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: Container[] = [];
+    protected containers: LoadContainersContainer[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
     protected notificationCommands: LoadCommand[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
+    public errors: GenericValidationError = {} as GenericValidationError;
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -167,11 +167,13 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (this.createAnother) {
-                        this.post = this.getDefaultPost();
+                    if (!this.createAnother) {
+                        this.router.navigate(['/contacts/index']);
                         return;
                     }
-                    this.router.navigate(['/contacts/index']);
+                    this.post = this.getDefaultPost();
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
                     return;
                 }
 
@@ -180,13 +182,21 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
+                    }
+
                 }
             }))
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.containersService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(this.ContactService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
             }))
     }
@@ -199,7 +209,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         const param = {
             containerIds: this.post.containers._ids
         };
-        this.subscriptions.add(this.UsersService.loadUsersByContainerId(param)
+        this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
             }))
@@ -239,7 +249,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: 32,
+            objecttype_id: ObjectTypesEnum["CONTACT"],
             password: 0,
             value: '',
         });
@@ -290,5 +300,13 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['customvariables'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }

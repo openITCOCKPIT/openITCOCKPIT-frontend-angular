@@ -64,6 +64,8 @@ import {
 import {
     NgSelectOptionCheckboxComponent
 } from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
@@ -115,7 +117,9 @@ import {
         NgClass,
         DeleteAllModalComponent,
         NgSelectSelectAllComponent,
-        NgSelectOptionCheckboxComponent
+        NgSelectOptionCheckboxComponent,
+        MultiSelectModule,
+        MultiSelectComponent
     ],
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',
@@ -127,7 +131,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
 
     public params: HosttemplatesIndexParams = getDefaultHosttemplatesIndexParams();
     public hosttemplates?: HosttemplateIndexRoot;
-    public hideFilter: boolean = true;
+    public hideFilter: boolean = false;
 
     public hosttemplateTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];
@@ -165,7 +169,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
     }
 
     // Callback when a filter has changed
-    public onFilterChange(event: Event) {
+    public onFilterChange(event: any) {
         this.params.page = 1;
         this.loadHosttemplates();
     }

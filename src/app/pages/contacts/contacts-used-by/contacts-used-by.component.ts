@@ -1,11 +1,13 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ContainerComponent, NavComponent, TableDirective
+    ContainerComponent,
+    NavComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
@@ -14,10 +16,10 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommandUsedByCommand, CommandUsedByObjects } from '../../commands/commands.interface';
 import { ContactUsedByContact, ContactUsedByObjects } from '../contacts.interface';
 import { ContactsService } from '../contacts.service';
 import { Subscription } from 'rxjs';
+import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
 @Component({
     selector: 'oitc-contacts-used-by',
@@ -40,7 +42,8 @@ import { Subscription } from 'rxjs';
         XsButtonDirective,
         RouterLink,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        NotUsedByObjectComponent
     ],
     templateUrl: './contacts-used-by.component.html',
     styleUrl: './contacts-used-by.component.css'
@@ -65,7 +68,9 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
         this.containerIds = this.route.snapshot.queryParamMap.getAll('containerIds').map(Number);
 
         let myContainerIds = this.route.snapshot.paramMap.get('containerIds') as string;
-        this.containerIds = myContainerIds.split(',').map(Number);
+        if (myContainerIds !== null) {
+            this.containerIds = myContainerIds.split(',').map(Number);
+        }
         this.subscriptions.add(this.ContactsService.usedBy(this.contactId)
             .subscribe((result) => {
                 this.contact = result.contact;
