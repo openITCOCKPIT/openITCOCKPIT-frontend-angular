@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HostescalationContainerResult,
     HostescalationElements,
+    HostescalationHosts,
     HostescalationIndexRoot,
     HostescalationPost,
     HostescalationsIndexParams
@@ -59,6 +60,21 @@ export class HostescalationsService {
         return this.http.get<HostescalationElements>(`${proxyPath}/hostescalations/loadElementsByContainerId/${containerId}.json`, {
             params: {
                 angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadHosts(containerId: number, searchString: string, hostsIds: number []): Observable<HostescalationHosts> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationHosts>(`${proxyPath}/hostescalations/loadElementsByContainerId/${containerId}.json`, {
+            params: {
+                angular: true,
+                'filter[Hosts.name]': searchString,
+                'selected[]': hostsIds
             }
         }).pipe(
             map(data => {

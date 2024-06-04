@@ -9,9 +9,16 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormDirective, FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -31,6 +38,9 @@ import { NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -60,7 +70,14 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         SelectComponent,
         MultiSelectComponent,
         InputGroupComponent,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        FormControlDirective,
+        FormCheckLabelDirective,
+        IntervalInputComponent,
+        LabelLinkComponent,
+        FormCheckInputDirective,
+        TrueFalseDirective,
+        CardFooterComponent
     ],
     templateUrl: './hostescalations-add.component.html',
     styleUrl: './hostescalations-add.component.css'
@@ -69,6 +86,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
     public post: HostescalationPost = {} as HostescalationPost;
     public hosts: SelectKeyValue[] = [];
+    public hosts_excluded: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
@@ -84,6 +102,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     constructor(private route: ActivatedRoute) {
+        this.loadHosts = this.loadHosts.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
 
@@ -91,10 +110,8 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             //Fire on page load
             this.loadContainers();
-
             this.post = this.getDefaultPost();
         });
-
     }
 
     public ngOnDestroy(): void {
@@ -149,10 +166,37 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
             .subscribe((result) => {
                 this.hosts = result.hosts;
+                /*
+                this.hosts = this.hosts.map(obj => ({
+                    ...obj,
+                    disabled: true
+                }));
+
+                 */
+                this.hosts_excluded = this.hosts;
                 this.hostgroups = result.hostgroups;
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
+            })
+        );
+    }
+
+    public loadHosts(searchString: string) {
+        const containerId = this.post.container_id;
+        if (!containerId) {
+            return;
+        }
+        this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
+            .subscribe((result) => {
+                this.hosts = result.hosts;
+               /*
+                this.hosts = this.hosts.map(obj => ({
+                    ...obj,
+                    disabled: false
+                }));
+
+                */
             })
         );
     }

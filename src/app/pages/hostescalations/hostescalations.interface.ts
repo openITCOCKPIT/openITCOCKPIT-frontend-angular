@@ -197,3 +197,7 @@ export interface HostescalationElements {
     contacts: SelectKeyValue[]
     contactgroups: SelectKeyValue[]
 }
+
+export interface HostescalationHosts {
+    hosts: SelectKeyValue[]
+}
