@@ -49,6 +49,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
+import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -86,7 +87,8 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
         TranslocoDirective,
         XsButtonDirective,
         MultiSelectComponent,
-        SelectComponent
+        SelectComponent,
+        LabelLinkComponent
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css'
