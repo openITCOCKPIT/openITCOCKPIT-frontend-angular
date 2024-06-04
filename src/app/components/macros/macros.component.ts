@@ -10,6 +10,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericValidationError } from '../../generic-responses';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
+import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-macros',
@@ -50,8 +51,8 @@ export class MacrosComponent implements OnInit {
 
     public ngOnInit() {
         switch (this.macro.objecttype_id) {
-            case 512:
-            case 4096:
+            case ObjectTypesEnum['HOSTTEMPLATE']:
+            case ObjectTypesEnum['SERVICETEMPLATE']:
                 this.textClass = 'text-success';
                 break;
             default:
