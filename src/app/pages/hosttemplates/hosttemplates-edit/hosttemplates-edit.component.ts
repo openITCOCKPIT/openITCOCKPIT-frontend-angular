@@ -112,7 +112,7 @@ export class HosttemplatesEditComponent {
     public containers: HosttemplateContainerResult | undefined;
     public commands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
-    public post: HosttemplatePost = {} as HosttemplatePost;
+    public post!: HosttemplatePost;
     public typeDetails: HosttemplateTypeResultDetails | undefined;
 
     public timeperiods: SelectKeyValue[] = [];
@@ -125,8 +125,6 @@ export class HosttemplatesEditComponent {
 
     public errors: GenericValidationError | null = null;
     public hasMacroErrors: boolean = false;
-
-    public createAnother: boolean = false;
 
     private hosttemplateTypeId = HosttemplateTypesEnum.GENERIC_HOSTTEMPLATE;
     private readonly HosttemplatesService = inject(HosttemplatesService);
@@ -144,92 +142,29 @@ export class HosttemplatesEditComponent {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.HosttemplatesService.getEdit(id)
             .subscribe((result) => {
-                //this.post = result.command;
+                this.post = result.hosttemplate.Hosttemplate;
+                this.hosttemplateTypes = result.types;
+                this.commands = result.commands;
 
+                if (this.post.tags) {
+                    this.tagsForSelect = this.post.tags.split(',');
+                }
+
+                this.setDetailsForType();
+
+                this.loadContainers(id);
+                this.loadElements();
             }));
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
-    private getDefaultPost(hosttemplateTypeId: number): HosttemplatePost {
-        return {
-            name: '',
-            description: '',
-            command_id: 0,
-            eventhandler_command_id: 0,
-            check_interval: 3600,
-            retry_interval: 60,
-            max_check_attempts: 3,
-            first_notification_delay: 0,
-            notification_interval: 7200,
-            notify_on_down: 1,
-            notify_on_unreachable: 1,
-            notify_on_recovery: 1,
-            notify_on_flapping: 0,
-            notify_on_downtime: 0,
-            flap_detection_enabled: 0,
-            flap_detection_on_up: 0,
-            flap_detection_on_down: 0,
-            flap_detection_on_unreachable: 0,
-            low_flap_threshold: 0,
-            high_flap_threshold: 0,
-            process_performance_data: 0,
-            freshness_checks_enabled: 0,
-            freshness_threshold: 0,
-            passive_checks_enabled: 1,
-            event_handler_enabled: 0,
-            active_checks_enabled: 1,
-            retain_status_information: 0,
-            retain_nonstatus_information: 0,
-            notifications_enabled: 1,
-            notes: '',
-            priority: 1,
-            check_period_id: 0,
-            notify_period_id: 0,
-            tags: '',
-            container_id: 0,
-            host_url: '',
-            hosttemplatetype_id: hosttemplateTypeId,
-            contacts: {
-                _ids: []
-            },
-            contactgroups: {
-                _ids: []
-            },
-            hostgroups: {
-                _ids: []
-            },
-            customvariables: [],
-            hosttemplatecommandargumentvalues: [],
-            prometheus_exporters: {
-                _ids: []
-            },
-            sla_id: null
-        };
-    }
-
-    public loadContainers() {
-        this.subscriptions.add(this.HosttemplatesService.loadContainers()
+    public loadContainers(hosttemplateId: number) {
+        this.subscriptions.add(this.HosttemplatesService.loadContainers(hosttemplateId)
             .subscribe((result) => {
                 this.containers = result;
-            })
-        );
-    }
-
-    public loadCommands() {
-        this.subscriptions.add(this.HosttemplatesService.loadCommands()
-            .subscribe((result) => {
-                this.commands = result;
-            })
-        );
-    }
-
-    public loadHosttemplateTypes() {
-        this.subscriptions.add(this.HosttemplatesService.loadHosttemplateTypes()
-            .subscribe((result) => {
-                this.hosttemplateTypes = result;
-                this.setDetailsForType();
             })
         );
     }
@@ -261,12 +196,13 @@ export class HosttemplatesEditComponent {
 
     private loadCommandArguments() {
         const commandId = this.post.command_id;
+        const hosttemplateId = this.post.id;
 
-        if (!commandId) {
+        if (!commandId || !hosttemplateId) {
             return;
         }
 
-        this.subscriptions.add(this.HosttemplatesService.loadCommandArguments(commandId)
+        this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForEdit(commandId, hosttemplateId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
             })
@@ -319,24 +255,19 @@ export class HosttemplatesEditComponent {
         this.post.tags = this.tagsForSelect.join(',');
 
 
-        this.subscriptions.add(this.HosttemplatesService.add(this.post)
+        this.subscriptions.add(this.HosttemplatesService.edit(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host template');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const msg = this.TranslocoService.translate('updated successfully');
                     const url = ['hosttemplates', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (!this.createAnother) {
-                        this.router.navigate(['/hosttemplates/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost(this.hosttemplateTypeId);
-                    this.ngOnInit();
+
+                    this.router.navigate(['/hosttemplates/index']);
                     this.notyService.scrollContentDivToTop();
-                    this.errors = null;
                     return;
                 }
 
@@ -355,7 +286,7 @@ export class HosttemplatesEditComponent {
                     }
 
                 }
-            }))
+            }));
 
     }
 }

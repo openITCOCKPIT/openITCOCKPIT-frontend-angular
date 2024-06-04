@@ -20,7 +20,7 @@
             </ol>
         </nav>
         <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3">
+            <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
                     <h5 cCardTitle>
                         {{ t('Edit host template:') }}
@@ -873,14 +873,8 @@
 
                 <c-card-footer class="text-end">
 
-                    <label class="me-2">
-                        <input cFormCheckInput type="checkbox" name="createAnother"
-                               [(ngModel)]="createAnother">
-                        {{ t('Create another') }}
-                    </label>
-
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create host template') }}
+                        {{ t('Update host template') }}
                     </button>
                     <button [fallbackUrl]="['hosttemplates', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

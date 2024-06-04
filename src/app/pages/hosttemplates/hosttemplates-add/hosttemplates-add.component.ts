@@ -157,6 +157,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private getDefaultPost(hosttemplateTypeId: number): HosttemplatePost {
@@ -273,7 +274,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HosttemplatesService.loadCommandArguments(commandId)
+        this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForAdd(commandId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
             })
