@@ -156,10 +156,14 @@ export interface ServiceCommandIds extends GenericIds {
 
 
 export interface Customvariable {
-    name: string
+    id?: number
+    object_id?: number
     objecttype_id: number
-    password: number
+    name: string
     value: string
+    password: number
+    created?: string
+    modified?: string
 }
 
 // Copy action machen wir später.

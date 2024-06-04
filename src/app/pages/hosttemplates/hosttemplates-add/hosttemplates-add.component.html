@@ -749,6 +749,13 @@
                         </c-card-header>
                         <c-card-body>
 
+                            <div class="row">
+                                <div class="col-12">
+                                    <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                                        *ngIf="hasMacroErrors"></oitc-form-feedback>
+                                </div>
+                            </div>
+
                             <div class="row"
                                  *ngFor="let customVariable of post.customvariables;let i = index;">
                                 <oitc-macros

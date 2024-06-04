@@ -7,6 +7,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HosttemplateCommandArgument,
     HosttemplateContainerResult,
+    HosttemplateEditApiResult,
     HosttemplateElements,
     HosttemplateIndexRoot,
     HosttemplatePost,
@@ -158,5 +159,22 @@ export class HosttemplatesService {
                 })
             );
     }
+
+    public getEdit(id: number): Observable<HosttemplateEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HosttemplateEditApiResult>(`${proxyPath}/hosttemplates/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
 
 }

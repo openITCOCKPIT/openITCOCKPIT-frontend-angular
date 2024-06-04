@@ -124,6 +124,7 @@ export interface HosttemplateContainerResult {
 export interface HosttemplatePost {
     id?: null | number
     name: string
+    uuid?: string
     description: string
     command_id: number
     eventhandler_command_id: number
@@ -170,11 +171,34 @@ export interface HosttemplatePost {
         _ids: number[]
     }
     customvariables: Customvariable[]
+    check_command?: HosttemplateCheckCommand,
     hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
     prometheus_exporters: {
         _ids: number[]
     }
     sla_id: number | null
+    created?: string
+    modified?: string
+}
+
+export interface HosttemplateCheckCommand {
+    id: number
+    name: string
+    command_line: string
+    command_type: number
+    human_args: any
+    uuid: string
+    description: string
+    commandarguments: Commandargument[]
+}
+
+export interface Commandargument {
+    id: number
+    command_id: number
+    name: string
+    human_name: string
+    created: string
+    modified: string
 }
 
 export interface HosttemplateElements {
@@ -188,11 +212,26 @@ export interface HosttemplateElements {
 }
 
 export interface HosttemplateCommandArgument {
+    id?: number
     commandargument_id: number
+    hosttemplate_id?: number
     value: string
+    created?: string
+    modified?: string
     commandargument: {
+        id?: number
         name: string
         human_name: string
         command_id: number
+        created?: string
+        modified?: string
     }
+}
+
+export interface HosttemplateEditApiResult {
+    hosttemplate: {
+        Hosttemplate: HosttemplatePost,
+    }
+    commands: SelectKeyValue[],
+    types: HosttemplateTypeResult[],
 }
