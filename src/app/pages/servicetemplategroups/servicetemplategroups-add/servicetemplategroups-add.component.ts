@@ -25,7 +25,6 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { ContainersService } from '../../containers/containers.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -79,7 +78,6 @@ import {
 })
 export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
-    private containersService: ContainersService = inject(ContainersService);
     private subscriptions: Subscription = new Subscription();
     private ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
     private router: Router = inject(Router);
@@ -144,7 +142,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     }
 
     private loadContainers(): void {
-        this.subscriptions.add(this.containersService.loadContainers()
+        this.subscriptions.add(this.ServicetemplategroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot): void => {
                 this.containers = result.containers;
             }))
