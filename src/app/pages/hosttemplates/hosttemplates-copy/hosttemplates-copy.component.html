@@ -38,61 +38,86 @@
             </c-card-header>
             <c-card-body>
 
-                <c-card class="mb-3" *ngFor="let command of commands; let i = index">
+                <c-card class="mb-3" *ngFor="let hosttemplate of hosttemplates; let i = index">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         <span class="ms-1">
                             {{ t('Source host template:') }}
-                            {{ command.Source.name }}
+                            {{ hosttemplate.Source.name }}
                         </span>
                     </c-card-header>
                     <c-card-body>
 
                         <div class="mb-3">
                             <label cLabel for="name{{i}}">
-                                {{ t('Name') }}
+                                {{ t('Host template name') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <input cFormControl required type="text"
                                    name="name{{i}}"
                                    id="name{{i}}"
-                                   [(ngModel)]="command.Command.name"
-                                   oitcFormError [errors]="command.Error" errorField="name">
-                            <oitc-form-feedback [errors]="command.Error" errorField="name"></oitc-form-feedback>
+                                   [(ngModel)]="hosttemplate.Hosttemplate.name"
+                                   oitcFormError [errors]="hosttemplate.Error" errorField="name">
+                            <oitc-form-feedback [errors]="hosttemplate.Error" errorField="name"></oitc-form-feedback>
                             <div class="help-block">
-                                {{ t('Name of the new command ') }}
+                                {{ t('Name of the new host template') }}
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label cLabel for="commandLine{{i}}">
-                                {{ t('Command line') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <textarea cFormControl required
-                                      cols="30"
-                                      rows="6"
-                                      name="commandLine{{i}}"
-                                      id="commandLine{{i}}"
-                                      [(ngModel)]="command.Command.command_line"
-                                      oitcFormError [errors]="command.Error" errorField="command_line"></textarea>
-                            <oitc-form-feedback [errors]="command.Error" errorField="command_line"></oitc-form-feedback>
                         </div>
 
                         <div class="mb-3">
                             <label cLabel for="description{{i}}">
                                 {{ t('Description') }}
-                                <oitc-required-icon></oitc-required-icon>
                             </label>
-                            <textarea cFormControl required
-                                      cols="30"
-                                      rows="6"
-                                      name="description{{i}}"
-                                      id="description{{i}}"
-                                      [(ngModel)]="command.Command.description"
-                                      oitcFormError [errors]="command.Error" errorField="description"></textarea>
-                            <oitc-form-feedback [errors]="command.Error" errorField="description"></oitc-form-feedback>
+                            <input cFormControl required type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="hosttemplate.Hosttemplate.description"
+                                   oitcFormError [errors]="hosttemplate.Error" errorField="description">
+                            <oitc-form-feedback [errors]="hosttemplate.Error"
+                                                errorField="description"></oitc-form-feedback>
                         </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Check command') }}
+                            </label>
+                            <oitc-select
+                                name="HostCheckCommandSelect{{i}}"
+                                id="HostCheckCommandSelect{{i}}"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="hosttemplate.Hosttemplate.command_id"
+                                [options]="commands"
+                                (onChange)="loadCommandArguments(hosttemplate.Source.id, hosttemplate.Hosttemplate.command_id, i)"
+                                oitcFormError [errors]="hosttemplate.Error" errorField="command_id">
+                            </oitc-select>
+                        </div>
+
+                        <div class="mb-3"
+                             [hidden]="!(hosttemplate.Hosttemplate.command_id && hosttemplate.Hosttemplate.hosttemplatecommandargumentvalues.length == 0)">
+                            <c-alert color="info">
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('This command does not have any parameters.') }}
+                            </c-alert>
+                        </div>
+
+                        <div class="mb-3 ms-4"
+                             *ngFor="let hosttemplatecommandargumentvalue of hosttemplate.Hosttemplate.hosttemplatecommandargumentvalues; index as argsIndex">
+                            <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                {{ hosttemplatecommandargumentvalue.commandargument.human_name }}
+                            </label>
+                            <div class="col-xs-12 col-lg-8">
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    [name]="'hosttemplatecommandargumentvalue_'+argsIndex"
+                                    [(ngModel)]="hosttemplatecommandargumentvalue.value">
+                                <div class="help-block">
+                                    {{ hosttemplatecommandargumentvalue.commandargument.name }}
+                                </div>
+                            </div>
+                        </div>
+
 
                     </c-card-body>
                 </c-card>

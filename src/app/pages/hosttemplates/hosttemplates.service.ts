@@ -7,6 +7,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HosttemplateCommandArgument,
     HosttemplateContainerResult,
+    HosttemplateCopyGet,
+    HosttemplateCopyPost,
     HosttemplateEditApiResult,
     HosttemplateElements,
     HosttemplateIndexRoot,
@@ -138,7 +140,7 @@ export class HosttemplatesService {
             map(data => {
                 return data.hosttemplatecommandargumentvalues;
             })
-        )
+        );
     }
 
     public loadCommandArgumentsForEdit(commandId: number, hosttemplateId: number): Observable<HosttemplateCommandArgument[]> {
@@ -153,9 +155,12 @@ export class HosttemplatesService {
             map(data => {
                 return data.hosttemplatecommandargumentvalues;
             })
-        )
+        );
     }
 
+    public loadCommandArgumentsForCopy(commandId: number, sourcehosttemplateId: number): Observable<HosttemplateCommandArgument[]> {
+        return this.loadCommandArgumentsForEdit(commandId, sourcehosttemplateId);
+    }
 
     public add(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
@@ -180,6 +185,9 @@ export class HosttemplatesService {
             );
     }
 
+    /**********************
+     *    Edit action    *
+     **********************/
     public edit(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hosttemplates/edit/${hosttemplate.id}.json?angular=true`, {
@@ -217,7 +225,23 @@ export class HosttemplatesService {
     }
 
     /**********************
-     *    Edit action    *
+     *    Copy action    *
      **********************/
+    public getHosttemplatesCopy(ids: number[]): Observable<HosttemplateCopyGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HosttemplateCopyGet>(`${proxyPath}/hosttemplates/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
 
+
+    public saveHosttemplatesCopy(hosttemplates: HosttemplateCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosttemplates/copy/.json?angular=true`, {
+            data: hosttemplates
+        });
+    }
 }
