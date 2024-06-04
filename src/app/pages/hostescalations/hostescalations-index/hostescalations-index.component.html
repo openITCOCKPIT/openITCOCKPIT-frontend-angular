@@ -1,0 +1,519 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hostescalations', 'index']" [routerLink]="['/', 'hostescalations', 'index']">
+                        <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                        {{ t('Host escalations') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Host Escalations') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadHostescalations()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['hostescalations', 'add']"
+                                [routerLink]="['/', 'hostescalations', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col [lg]="6" class="border-start border-primary border-4 rounded-top rounded-bottom">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Hosts.name]']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           name="Hosts.name"
+                                           oitcDebounce
+                                           type="text"
+                                           (focus)="hostFocus=true;params['filter[HostsExcluded.name]']='';hostExcludeFocus=false;onFilterChange(true);"
+                                    />
+                                </c-input-group>
+                                <c-row class="my-1">
+                                    <c-col class="text-info small">
+                                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
+                                        {{ t('You can either search for "host" OR "excluded host". Opposing Field will be reset automatically') }}
+                                    </c-col>
+                                </c-row>
+                                <c-input-group>
+                                    <span cInputGroupText class="pe-0 ps-2">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'desktop']"
+                                                     stackItemSize="1x" pull="right"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-8 right-3 down-7"></fa-icon>
+                                        </fa-stack>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[HostsExcluded.name]']"
+                                           [placeholder]="'Filter by excluded host' | transloco"
+                                           cFormControl
+                                           name="HostsExcluded.name"
+                                           oitcDebounce
+                                           type="text"
+                                           (focus)="hostExcludeFocus=true;params['filter[Hosts.name]']='';hostFocus=false;onFilterChange(true);"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col [lg]="6" class="border-start border-primary border-4 rounded-top rounded-bottom">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Hostgroups.name]']"
+                                           [placeholder]="'Filter by host group' | transloco"
+                                           cFormControl
+                                           name="Hostgroups.name"
+                                           oitcDebounce
+                                           type="text"
+                                           (focus)="hostgroupFocus=true;params['filter[HostgroupsExcluded.name]']='';hostgroupExcludeFocus=false;onFilterChange(true);"
+                                    />
+                                </c-input-group>
+                                <c-row class="my-1">
+                                    <c-col class="text-info small">
+                                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
+                                        {{ t('You can either search for "host group" OR "excluded host group". Opposing Field will be reset automatically') }}
+                                    </c-col>
+                                </c-row>
+                                <c-input-group>
+                                    <span cInputGroupText class="pe-0 ps-2">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'server']"
+                                                     stackItemSize="1x" pull="right"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-8 right-3 down-7"></fa-icon>
+                                        </fa-stack>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[HostgroupsExcluded.name]']"
+                                           [placeholder]="'Filter by excluded host group' | transloco"
+                                           cFormControl
+                                           name="HostgroupsExcluded.name"
+                                           oitcDebounce
+                                           type="text"
+                                           (focus)="hostgroupExcludeFocus=true;params['filter[Hostgroups.name]']='';hostgroupFocus=false;onFilterChange(true);"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+                            <c-col md="3">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Notification options') }}
+                                    </h5>
+                                    <c-input-group class="mt-2">
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                        </span>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[Hostescalations.first_notification]']"
+                                               [placeholder]="'Filter by first notification' | transloco"
+                                               name="Hostescalations.first_notification"
+                                               min="0"
+                                               step="1"
+                                               cFormControl
+                                               oitcDebounce
+                                               type="text"/>
+                                    </c-input-group>
+                                    <c-input-group class="mt-2">
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                        </span>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[Hostescalations.last_notification]']"
+                                               [placeholder]="'Filter by last notification' | transloco"
+                                               name="Hostescalations.last_notification"
+                                               min="0"
+                                               step="1"
+                                               cFormControl
+                                               oitcDebounce
+                                               type="text"/>
+                                    </c-input-group>
+                                    <c-input-group class="mt-2">
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                        </span>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[Hostescalations.notification_interval]']"
+                                               [placeholder]="'Filter by notification interval' | transloco"
+                                               name="Hostescalations.notification_interval"
+                                               min="0"
+                                               step="1"
+                                               cFormControl
+                                               oitcDebounce
+                                               type="text"/>
+                                    </c-input-group>
+                                </fieldset>
+                            </c-col>
+                            <c-col md="9">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Escalate on ...') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="Hostescalations.escalate_on_recovery"
+                                            id="Hostescalations.escalate_on_recovery"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [falseValue]="''"
+                                            [trueValue]="'1'"
+                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_recovery]']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hostescalations.escalate_on_recovery">{{ t('Up') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="Hostescalations.escalate_on_down"
+                                            id="Hostescalations.escalate_on_down"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [falseValue]="''"
+                                            [trueValue]="'1'"
+                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_down]']"/>
+                                        <label cFormCheckLabel
+                                               for="Hostescalations.escalate_on_down">{{ t('Down') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="Hostescalations.escalate_on_unreachable"
+                                            id="Hostescalations.escalate_on_unreachable"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [falseValue]="''"
+                                            [trueValue]="'1'"
+                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_unreachable]']"/>
+                                        <label cFormCheckLabel
+                                               for="Hostescalations.escalate_on_unreachable">{{ t('Unreachable') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Hosts') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts groups ') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Host groups') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('First') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Last') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Time period') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contacts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contact groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Options') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="hostescalations">
+                    <tr *ngFor="let hostescalation of hostescalations.all_hostescalations">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['hostescalations', 'delete']"
+                                [disabled]="!hostescalation.allowEdit"
+                                [item]="hostescalation"></oitc-item-select>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let host of hostescalation.hosts">
+                                    <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
+                                    <a *oitcPermission="['hosts', 'edit']"
+                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                        {{ host.name }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                        {{ host.name }}
+                                    </span>
+                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                             class="text-danger"></fa-icon>
+                                </li>
+                                <div class="d-flex" *ngIf="hostescalation.hostgroups_excluded.length > 0">
+                                    <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                    <div>
+                                        <fa-icon
+                                            [icon]="['fas', 'filter']"
+                                            class="text-primary opacity-50"></fa-icon>
+                                    </div>
+                                    <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                </div>
+                                <li *ngFor="let hostgroup of hostescalation.hostgroups_excluded">
+                                    <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
+                                    <a *oitcPermission="['hostgroups', 'edit']"
+                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                        {{ hostgroup.container.name }}
+                                    </a>
+                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                        {{ hostgroup.container.name }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let hostgroup of hostescalation.hostgroups">
+                                    <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
+                                    <a *oitcPermission="['hostgroups', 'edit']"
+                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                        {{ hostgroup.container.name }}
+                                    </a>
+                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                        {{ hostgroup.container.name }}
+                                    </span>
+
+                                </li>
+                                <div class="d-flex" *ngIf="hostescalation.hosts_excluded.length > 0">
+                                    <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                    <div>
+                                        <fa-icon
+                                            [icon]="['fas', 'filter']"
+                                            class="text-primary opacity-50"></fa-icon>
+                                    </div>
+                                    <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                </div>
+                                <li *ngFor="let host of hostescalation.hosts_excluded">
+                                    <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
+                                    <a *oitcPermission="['hosts', 'edit']"
+                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                        {{ host.name }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                        {{ host.name }}
+                                    </span>
+                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                             class="text-danger"></fa-icon>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>{{ hostescalation.first_notification }}</td>
+                        <td>{{ hostescalation.last_notification }}</td>
+                        <td>{{ hostescalation.notification_interval }}</td>
+                        <td>
+                            <div *ngIf="hostescalation.timeperiod">
+                                <a *oitcPermission="['timeperiods', 'edit']"
+                                   [routerLink]="['/', 'timeperiods', 'edit', hostescalation.timeperiod.id]">
+                                    {{ hostescalation.timeperiod.name }}
+                                </a>
+                                <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                    {{ hostescalation.timeperiod.name }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let contact of hostescalation.contacts">
+                                    <a *oitcPermission="['contacts', 'edit']"
+                                       [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                        {{ contact.name }}
+                                    </a>
+                                    <span *oitcPermission="['contacts', 'edit']; negate: true">
+                                        {{ contact.name }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let contactgroup of hostescalation.contactgroups">
+                                    <a *oitcPermission="['contactgroups', 'edit']"
+                                       [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
+                                        {{ contactgroup.container.name }}
+                                    </a>
+                                    <span *oitcPermission="['contactgroups', 'edit']; negate: true">
+                                        {{ contactgroup.container.name }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
+                                  *ngIf="hostescalation.escalate_on_recovery">
+                                {{ t('R') }}
+                            </span>
+                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
+                                  *ngIf="hostescalation.escalate_on_down">
+                                {{ t('D') }}
+                            </span>
+                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
+                                  *ngIf="hostescalation.escalate_on_unreachable">
+                                {{ t('U') }}
+                            </span>
+                        </td>
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'hostescalations.edit'"
+                                                 [url]="'/hostescalations/edit/' + hostescalation.id"
+                                                 [allowEdit]="hostescalation.allowEdit">
+                                <oitc-actions-button-element [permission]="'hostescalations.edit'"
+                                                             [url]="'/hostescalations/edit/' + hostescalation.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hostescalation)"
+                                                             [permission]="'hostescalations.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="hostescalations && hostescalations.all_hostescalations.length === 0"></oitc-no-records>
+                <ng-container *ngIf="hostescalations && hostescalations.all_hostescalations">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="hostescalations.all_hostescalations.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="hostescalations"
+                                [paginateOrScroll]="hostescalations"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
