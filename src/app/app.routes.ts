@@ -161,6 +161,9 @@ export const routes: Routes = [{
     path: 'timeperiods/viewDetails/:id',
     loadComponent: () => import('./pages/timeperiods/timeperiods-view-details/timeperiods-view-details.component').then(m => m.TimeperiodsViewDetailsComponent)
 }, {
+    path: 'hostescalations/index',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-index/hostescalations-index.component').then(m => m.HostescalationsIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
