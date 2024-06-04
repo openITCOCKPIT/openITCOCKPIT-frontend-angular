@@ -342,6 +342,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost(this.hosttemplateTypeId);
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+                    this.errors = null;
                     return;
                 }
 

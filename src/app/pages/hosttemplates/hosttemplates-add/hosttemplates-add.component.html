@@ -609,7 +609,10 @@
                                         </label>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notify_on_recovery"></oitc-form-feedback>
                             </div>
 
                         </c-card-body>
@@ -825,7 +828,6 @@
                                         [permissions]="'SLAModule.slas.edit'"
                                     >
                                         {{ t('Service class') }}
-                                        <oitc-required-icon></oitc-required-icon>
                                     </oitc-label-link>
                                 </label>
 
@@ -836,10 +838,14 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.sla_id"
                                     [options]="slas"
+                                    [showClear]="true"
                                     oitcFormError [errors]="errors" errorField="sla_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="sla_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('You can define service levels for all hosts using this host template.') }}
+                                </div>
                             </div>
 
                         </c-card-body>
