@@ -2,8 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -15,7 +14,6 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -39,12 +37,19 @@ import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
     LoadCommand,
-    LoadCommandsRoot, LoadContainersContainer, LoadContainersRoot,
+    LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
     Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -69,17 +74,21 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
         FormLabelDirective,
         FormsModule,
         MacrosComponent,
+        MultiSelectComponent,
+        MultiSelectModule,
         NavComponent,
         NavItemComponent,
         NgForOf,
         NgIf,
         NgSelectModule,
+        ObjectUuidComponent,
         PermissionDirective,
         RequiredIconComponent,
         RouterLink,
         TooltipDirective,
         TranslocoDirective,
         XsButtonDirective,
+        SelectComponent
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'
@@ -175,9 +184,12 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof (this.errors['customvariables']['custom']) === "string") {
-                        this.hasMacroErrors = true;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
                     }
+
                 }
             }))
     }
@@ -237,7 +249,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: 32,
+            objecttype_id: ObjectTypesEnum["CONTACT"],
             password: 0,
             value: '',
         });

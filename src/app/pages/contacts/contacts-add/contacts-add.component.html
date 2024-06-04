@@ -41,22 +41,23 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="containers">
+                        <label cLabel for="container">
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="name"
-                                   id="containers"
-                                   #containerIdsRef="ngModel"
-                                   [multiple]="true"
-                                   [(ngModel)]="post.containers._ids"
-                                   (ngModelChange)="onContainerChange()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="containers">
-                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
-                                {{ container.value }}
-                            </ng-option>
-                        </ng-select>
+
+                        <oitc-multi-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.containers._ids"
+                            [options]="containers"
+                            [debounce]="true"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="containers">
+                        </oitc-multi-select>
+
                         <div *ngIf="post.containers._ids.length === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
@@ -136,14 +137,16 @@
                         </label>
 
 
-                        <ng-select name="contactUser"
-                                   id="user"
-                                   [(ngModel)]="post.user_id"
-                                   oitcFormError [errors]="errors" errorField="user">
-                            <ng-option *ngFor="let user of this.users" [value]="user.key">
-                                {{ user.value }}
-                            </ng-option>
-                        </ng-select>
+                        <oitc-select
+                            name="contactUser"
+                            id="user"
+                            [(ngModel)]="post.user_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [showClear]="true"
+                            [options]="users"
+                            oitcFormError [errors]="errors" errorField="user">
+                        </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
 
                         <div class="help-block">
@@ -181,16 +184,15 @@
                                             <oitc-required-icon></oitc-required-icon>
 
                                         </label>
-                                        <ng-select name="host_timeperiod_id"
-                                                   id="host_timeperiod_id"
-                                                   [required]="true"
-                                                   [(ngModel)]="post.host_timeperiod_id"
-                                                   oitcFormError [errors]="errors" errorField="host_timeperiod_id">
-                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
-                                                       [value]="timeperiod.key">
-                                                {{ timeperiod.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-select
+                                            name="host_timeperiod_id"
+                                            id="host_timeperiod_id"
+                                            [(ngModel)]="post.host_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="host_timeperiod_id">
+                                        </oitc-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="host_timeperiod_id"
@@ -203,17 +205,16 @@
                                             {{ t('Host commands') }}
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
-                                        <ng-select name="host_commands"
-                                                   id="host_commands"
-                                                   [multiple]="true"
-                                                   [(ngModel)]="post.host_commands._ids"
-                                                   (ngModelChange)="updateHostBrowserNotification()"
-                                                   oitcFormError [errors]="errors" errorField="host_commands">
-                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
-                                                       [value]="notificationcommand.key">
-                                                {{ notificationcommand.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-multi-select
+                                            name="host_commands"
+                                            id="host_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.host_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateHostBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="host_commands">
+                                        </oitc-multi-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="host_commands"
@@ -400,15 +401,15 @@
                                             <oitc-required-icon></oitc-required-icon>
 
                                         </label>
-                                        <ng-select name="service_timeperiod_id"
-                                                   id="service_timeperiod_id"
-                                                   [(ngModel)]="post.service_timeperiod_id"
-                                                   oitcFormError [errors]="errors" errorField="service_timeperiod_id">
-                                            <ng-option *ngFor="let timeperiod of this.timeperiods"
-                                                       [value]="timeperiod.key">
-                                                {{ timeperiod.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-select
+                                            name="service_timeperiod_id"
+                                            id="service_timeperiod_id"
+                                            [(ngModel)]="post.service_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="service_timeperiod_id">
+                                        </oitc-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="service_timeperiod_id"
@@ -420,17 +421,16 @@
                                             {{ t('Service commands') }}
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
-                                        <ng-select name="service_commands"
-                                                   id="service_commands"
-                                                   [multiple]="true"
-                                                   [(ngModel)]="post.service_commands._ids"
-                                                   (ngModelChange)="updateServiceBrowserNotification()"
-                                                   oitcFormError [errors]="errors" errorField="service_commands">
-                                            <ng-option *ngFor="let notificationcommand of this.notificationCommands"
-                                                       [value]="notificationcommand.key">
-                                                {{ notificationcommand.value }}
-                                            </ng-option>
-                                        </ng-select>
+                                        <oitc-multi-select
+                                            name="service_commands"
+                                            id="service_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.service_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateServiceBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="service_commands">
+                                        </oitc-multi-select>
                                         <oitc-form-feedback
                                             [errors]="errors"
                                             errorField="service_commands"

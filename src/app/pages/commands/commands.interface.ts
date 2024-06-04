@@ -250,3 +250,4 @@ export interface CommandUsedByServicetemplates {
     name: string
     uuid: string
 }
+

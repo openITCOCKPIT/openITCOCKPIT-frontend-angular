@@ -4,6 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     AlertComponent,
     AlertHeadingDirective,
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -16,7 +17,6 @@ import {
     FormDirective,
     FormLabelDirective,
     FormSelectDirective,
-    BadgeComponent,
     NavComponent,
     NavItemComponent,
     TooltipDirective
@@ -38,15 +38,21 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { ContactsService } from '../contacts.service';
 import {
-    ContactPost, LdapConfig, LdapUser,
+    ContactPost,
+    LdapConfig,
+    LdapUser,
     LoadCommand,
     LoadCommandsRoot,
+    LoadContainersContainer,
+    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
-    Timeperiod,
-    LoadContainersContainer, LoadContainersRoot
+    Timeperiod
 } from '../contacts.interface';
 import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.interface';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -74,6 +80,7 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
         FormSelectDirective,
         FormsModule,
         MacrosComponent,
+        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
         NgForOf,
@@ -82,10 +89,11 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
         PermissionDirective,
         RequiredIconComponent,
         RouterLink,
+        SelectComponent,
         TooltipDirective,
         TranslocoDirective,
         TranslocoPipe,
-        XsButtonDirective,
+        XsButtonDirective
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
@@ -114,13 +122,15 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
+
+        this.loadLdapUsers = this.loadLdapUsers.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
     public ngOnInit() {
         this.loadContainers();
         this.loadCommands();
         this.loadLdapConfig();
-        this.loadLdapUsers();
+        this.loadLdapUsers('');
     }
 
     private loadLdapConfig(): void {
@@ -130,11 +140,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private loadLdapUsers(): void {
-        this.subscriptions.add(this.ContactService.loadLdapUserByString('')
+    public loadLdapUsers(samaccountname: string): void {
+        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {
                 this.ldapUsers = result.ldapUsers;
-            }))
+            }));
     }
 
     private getDefaultPost(): ContactPost {
@@ -200,8 +210,11 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (typeof (this.errors['customvariables']['custom']) === "string") {
-                        this.hasMacroErrors = true;
+
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
+                        }
                     }
                 }
             }))
@@ -250,6 +263,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     }
 
     public onLdapUserChange(): void {
+        console.log(this.ldapUser);
+        console.log('change und so');
         this.post.name = this.ldapUser?.givenname as string;
         this.post.description = this.ldapUser?.display_name as string;
         this.post.email = this.ldapUser?.email as string;
@@ -268,7 +283,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: 32,
+            objecttype_id: ObjectTypesEnum["CONTACT"],
             password: 0,
             value: '',
         });
