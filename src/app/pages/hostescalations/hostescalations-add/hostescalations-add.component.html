@@ -1,0 +1,93 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hostescalations', 'index']" [routerLink]="['/', 'hostescalations', 'index']">
+                        <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                        {{ t('Host escalations') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add') }}
+                </li>
+            </ol>
+        </nav>
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Create new host escalation') }}</h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['hostescalations', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="container">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers?.containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+
+                        <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                    <div class="text-secondary small">
+                        {{
+                            t('Notification escalations could be used to notify a certain user group in case of an emergency.\n' +
+                                'Once a host or service escalated, contacts, contact group and notification options will be overwritten by the escalation.')
+                        }}
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="Hosts">
+                            <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
+                            {{ t('Hosts') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText class="bg-success">
+                                <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
+                            </span>
+                            <oitc-multi-select
+                                name="Hosts"
+                                id="Hosts"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.hosts._ids"
+                                [options]="hosts"
+                                oitcFormError [errors]="errors" errorField="hosts">
+                            </oitc-multi-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="hosts"></oitc-form-feedback>
+                        </c-input-group>
+                    </div>
+                </c-card-body>
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>

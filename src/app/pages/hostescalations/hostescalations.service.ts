@@ -1,9 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { HostescalationIndexRoot, HostescalationsIndexParams } from './hostescalations.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+    HostescalationContainerResult,
+    HostescalationElements,
+    HostescalationIndexRoot,
+    HostescalationPost,
+    HostescalationsIndexParams
+} from './hostescalations.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -32,5 +39,54 @@ export class HostescalationsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/hostescalations/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadContainers(): Observable<HostescalationContainerResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationContainerResult>(`${proxyPath}/hostescalations/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadElements(containerId: number): Observable<HostescalationElements> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationElements>(`${proxyPath}/hostescalations/loadElementsByContainerId/${containerId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public add(hostescalation: HostescalationPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hostescalations/add.json?angular=true`, {
+            Hostescalation: hostescalation
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }
