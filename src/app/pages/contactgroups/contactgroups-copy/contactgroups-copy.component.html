@@ -76,7 +76,8 @@
                                    id="description{{i}}"
                                    [(ngModel)]="contactgroup.Contactgroup.description"
                                    oitcFormError [errors]="contactgroup.Error" errorField="description">
-                            <oitc-form-feedback [errors]="contactgroup.Error" errorField="description"></oitc-form-feedback>
+                            <oitc-form-feedback [errors]="contactgroup.Error"
+                                                errorField="description"></oitc-form-feedback>
                         </div>
 
                     </c-card-body>
@@ -87,9 +88,8 @@
                 <button cButton class="ripple" color="primary" type="button" (click)="copyContactgroups()">
                     {{ t('Copy') }}
                 </button>
-                <button [fallbackUrl]="['contacts', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="submit">
+                <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton>
                     {{ t('Cancel') }}
                 </button>
             </c-card-footer>

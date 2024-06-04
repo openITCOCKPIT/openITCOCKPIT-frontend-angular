@@ -115,6 +115,7 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.notyService.genericError();
                 this.timeperiods = error.error.result as TimeperiodCopyPost[];
             }
         });

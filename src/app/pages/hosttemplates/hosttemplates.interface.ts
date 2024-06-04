@@ -3,6 +3,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 /**********************
  *    Index action    *
@@ -234,4 +235,47 @@ export interface HosttemplateEditApiResult {
     }
     commands: SelectKeyValue[],
     types: HosttemplateTypeResult[],
+}
+
+export interface HosttemplateCopyGet {
+    hosttemplates: HosttemplateCopy[]
+    commands: SelectKeyValue[]
+}
+
+export interface HosttemplateCopy {
+    id?: number
+    name: string
+    description: string
+    command_id: number
+    active_checks_enabled: number,
+    prometheus_exporters: PrometheusExporter[] // Not used by the server
+    hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
+}
+
+export interface PrometheusExporter {
+    id: number
+    name: string
+    container_id: number
+    metric_path: string
+    port: number
+    scrape_interval: string
+    scrape_timeout: string
+    service: string
+    yaml: string
+    add_target_port: boolean
+    _joinData: {
+        id: number
+        prometheus_exporter_id: number
+        hosttemplate_id: number
+    }
+}
+
+
+export interface HosttemplateCopyPost {
+    Source: {
+        id: number,
+        name: string
+    }
+    Hosttemplate: HosttemplateCopy
+    Error?: GenericValidationError | null
 }
