@@ -11,6 +11,7 @@ import {
     HosttemplateCopyPost,
     HosttemplateEditApiResult,
     HosttemplateElements,
+    HosttemplateEntity,
     HosttemplateIndexRoot,
     HosttemplatePost,
     HosttemplatesIndexParams,
@@ -19,6 +20,7 @@ import {
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HostObjectCake2 } from '../hosts/hosts.interface';
 
 
 @Injectable({
@@ -243,5 +245,30 @@ export class HosttemplatesService {
         return this.http.post<any>(`${proxyPath}/hosttemplates/copy/.json?angular=true`, {
             data: hosttemplates
         });
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public getHosttemplateUsedBy(id: number): Observable<{
+        all_hosts: HostObjectCake2[],
+        hosttemplate: HosttemplateEntity
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            all_hosts: HostObjectCake2[],
+            hosttemplate: HosttemplateEntity
+        }>(`${proxyPath}/hosttemplates/usedBy/${id}.json`, {
+            params: {
+                angular: true,
+                'filter[Hosts.disabled]': true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
     }
 }

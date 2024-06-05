@@ -34,12 +34,20 @@
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
-                    <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
                 </c-nav>
             </c-card-header>
             <c-card-body>
@@ -163,6 +171,11 @@
 
                         </tbody>
                     </table>
+
+                    <oitc-not-used-by-object *ngIf="total === 0">
+                        {{ t('This timeperiod is not used by any object') }}
+                    </oitc-not-used-by-object>
+
                 </c-container>
             </c-card-body>
         </c-card>
