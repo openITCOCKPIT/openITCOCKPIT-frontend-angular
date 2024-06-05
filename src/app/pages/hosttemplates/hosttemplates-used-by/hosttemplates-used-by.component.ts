@@ -42,6 +42,8 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
 })
 export class HosttemplatesUsedByComponent implements OnInit, OnDestroy {
 
+    public total: number = 0;
+    
     private subscriptions: Subscription = new Subscription();
     private HosttemplatesService = inject(HosttemplatesService);
     private router = inject(Router);
