@@ -21,6 +21,7 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { HostObjectCake2 } from '../hosts/hosts.interface';
+import { PermissionsService } from '../../permissions/permissions.service';
 
 
 @Injectable({
@@ -29,6 +30,7 @@ import { HostObjectCake2 } from '../hosts/hosts.interface';
 export class HosttemplatesService {
 
     private TranslocoService = inject(TranslocoService);
+    private PermissionsService = inject(PermissionsService);
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
@@ -41,16 +43,23 @@ export class HosttemplatesService {
      *    Index action    *
      **********************/
     public getHosttemplateTypes(): { id: number, name: string }[] {
-        return [
+        let types = [
             {
                 id: HosttemplateTypesEnum.GENERIC_HOSTTEMPLATE,
                 name: this.TranslocoService.translate('Generic templates'),
-            },
-            {
-                id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
-                name: this.TranslocoService.translate('EVC templates'),
-            },
+            }
         ];
+
+        this.PermissionsService.hasModuleObservable('EventcorrelationModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
+                    name: this.TranslocoService.translate('EVC templates'),
+                });
+            }
+        });
+
+        return types;
     }
 
     public getIndex(params: HosttemplatesIndexParams): Observable<HosttemplateIndexRoot> {
