@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -11,6 +11,7 @@ import {
     CardTitleDirective,
     ContainerComponent,
     NavComponent,
+    NavItemComponent,
     TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -44,12 +45,13 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         MatSort,
         TableDirective,
         NgForOf,
-        NotUsedByObjectComponent
+        NotUsedByObjectComponent,
+        NavItemComponent
     ],
     templateUrl: './commands-used-by.component.html',
     styleUrl: './commands-used-by.component.css'
 })
-export class CommandsUsedByComponent implements OnInit {
+export class CommandsUsedByComponent implements OnInit, OnDestroy {
     public command: CommandUsedByCommand | undefined;
     public total: number = 0;
     public objects: CommandUsedByObjects | undefined;
@@ -59,14 +61,24 @@ export class CommandsUsedByComponent implements OnInit {
     private route = inject(ActivatedRoute)
 
     private subscriptions: Subscription = new Subscription();
+    private commandId: number = 0;
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.CommandsService.usedBy(id)
+        this.commandId = Number(this.route.snapshot.paramMap.get('id'));
+        this.load();
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    public load() {
+        this.subscriptions.add(this.CommandsService.usedBy(this.commandId)
             .subscribe((result) => {
                 this.command = result.command;
                 this.objects = result.objects;
                 this.total = result.total;
             }));
     }
+
 }

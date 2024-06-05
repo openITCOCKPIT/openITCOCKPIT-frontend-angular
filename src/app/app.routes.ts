@@ -134,6 +134,9 @@ export const routes: Routes = [{
     path: 'hosttemplates/copy/:ids',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-copy/hosttemplates-copy.component').then(m => m.HosttemplatesCopyComponent)
 }, {
+    path: 'hosttemplates/usedBy/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-used-by/hosttemplates-used-by.component').then(m => m.HosttemplatesUsedByComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

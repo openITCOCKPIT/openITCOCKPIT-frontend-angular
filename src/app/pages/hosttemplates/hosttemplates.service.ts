@@ -11,6 +11,7 @@ import {
     HosttemplateCopyPost,
     HosttemplateEditApiResult,
     HosttemplateElements,
+    HosttemplateEntity,
     HosttemplateIndexRoot,
     HosttemplatePost,
     HosttemplatesIndexParams,
@@ -19,6 +20,8 @@ import {
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HostObjectCake2 } from '../hosts/hosts.interface';
+import { PermissionsService } from '../../permissions/permissions.service';
 
 
 @Injectable({
@@ -27,6 +30,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 export class HosttemplatesService {
 
     private TranslocoService = inject(TranslocoService);
+    private PermissionsService = inject(PermissionsService);
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
@@ -39,16 +43,23 @@ export class HosttemplatesService {
      *    Index action    *
      **********************/
     public getHosttemplateTypes(): { id: number, name: string }[] {
-        return [
+        let types = [
             {
                 id: HosttemplateTypesEnum.GENERIC_HOSTTEMPLATE,
                 name: this.TranslocoService.translate('Generic templates'),
-            },
-            {
-                id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
-                name: this.TranslocoService.translate('EVC templates'),
-            },
+            }
         ];
+
+        this.PermissionsService.hasModuleObservable('EventcorrelationModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
+                    name: this.TranslocoService.translate('EVC templates'),
+                });
+            }
+        });
+
+        return types;
     }
 
     public getIndex(params: HosttemplatesIndexParams): Observable<HosttemplateIndexRoot> {
@@ -243,5 +254,30 @@ export class HosttemplatesService {
         return this.http.post<any>(`${proxyPath}/hosttemplates/copy/.json?angular=true`, {
             data: hosttemplates
         });
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number): Observable<{
+        all_hosts: HostObjectCake2[],
+        hosttemplate: HosttemplateEntity
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            all_hosts: HostObjectCake2[],
+            hosttemplate: HosttemplateEntity
+        }>(`${proxyPath}/hosttemplates/usedBy/${id}.json`, {
+            params: {
+                angular: true,
+                'filter[Hosts.disabled]': true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
     }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TimeperiodsService } from '../timeperiods.service';
@@ -12,6 +12,7 @@ import {
     ColComponent,
     ContainerComponent,
     NavComponent,
+    NavItemComponent,
     RowComponent,
     TableDirective
 } from '@coreui/angular';
@@ -45,16 +46,19 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         RouterLink,
         RowComponent,
         ColComponent,
-        NotUsedByObjectComponent
+        NotUsedByObjectComponent,
+        NavItemComponent
     ],
     templateUrl: './timeperiods-used-by.component.html',
     styleUrl: './timeperiods-used-by.component.css'
 })
-export class TimeperiodsUsedByComponent implements OnInit {
+export class TimeperiodsUsedByComponent implements OnInit, OnDestroy {
 
     public timeperiod: TimeperiodUsedByTimeperiod | undefined;
     public total: number = 0;
     public objects: TimeperiodUsedByObjects | undefined;
+
+    private timeperiodId: number = 0;
 
     private TimeperiodsService = inject(TimeperiodsService);
     private router = inject(Router);
@@ -62,15 +66,22 @@ export class TimeperiodsUsedByComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
-    ngOnInit(): void {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.TimeperiodsService.usedBy(id)
+    public ngOnInit(): void {
+        this.timeperiodId = Number(this.route.snapshot.paramMap.get('id'));
+        this.load();
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    public load() {
+        this.subscriptions.add(this.TimeperiodsService.usedBy(this.timeperiodId)
             .subscribe((result) => {
                 this.timeperiod = result.timeperiod;
                 this.objects = result.objects;
                 this.total = result.total;
             }));
     }
-
 
 }

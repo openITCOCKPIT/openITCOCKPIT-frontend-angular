@@ -28,7 +28,7 @@ import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
 import { Permission } from './permission.type';
 
-import { BehaviorSubject, filter, switchMap, take } from "rxjs";
+import { BehaviorSubject, filter, map, Observable, switchMap, take } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 
 @Injectable({
@@ -42,8 +42,11 @@ export class PermissionsService {
     private readonly permissions$$ = new BehaviorSubject<Permission>({});
     public readonly permissions$ = this.permissions$$.asObservable();
 
-    private readonly modules$$ = new BehaviorSubject<String[]>([]);
+    private readonly modules$$ = new BehaviorSubject<string[]>([]);
     public readonly modules$ = this.modules$$.asObservable();
+
+    public permissions: any = {};
+    public modules: any = {};
 
     public constructor() {
         this.loadPermissions();
@@ -84,6 +87,7 @@ export class PermissionsService {
         });
     }
 
+    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
     public hasPermission(checkChunks: string | string[], negate: boolean = false): boolean {
         let permissions = this.permissions$$.getValue();
         let hasPermission = this.checkPermission(checkChunks, permissions);
@@ -95,8 +99,17 @@ export class PermissionsService {
         return hasPermission;
     }
 
+    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
     public hasModule(module: string): boolean {
         return this.modules$$.getValue().includes(module);
+    }
+
+    // USE this method for Components and Services
+    public hasModuleObservable(module: string): Observable<boolean> {
+        return this.modules$$.asObservable().pipe(
+            filter(modules => modules.length > 0),
+            map(modules => modules.includes(module))
+        );
     }
 
 }
