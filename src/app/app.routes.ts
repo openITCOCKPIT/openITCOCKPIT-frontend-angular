@@ -176,6 +176,9 @@ export const routes: Routes = [{
     path: 'hostescalations/index',
     loadComponent: () => import('./pages/hostescalations/hostescalations-index/hostescalations-index.component').then(m => m.HostescalationsIndexComponent)
 }, {
+    path: 'hostescalations/add',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-add/hostescalations-add.component').then(m => m.HostescalationsAddComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

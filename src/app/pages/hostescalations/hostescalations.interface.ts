@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
 
 export interface HostescalationsIndexParams {
     angular: true,
@@ -152,4 +153,59 @@ export interface HostescalationContactJoinData {
     id: number
     contact_id: number
     hostescalation_id: number
+}
+
+export interface HostescalationContainerResult {
+    areContainersRestricted: boolean,
+    containers: SelectKeyValue[]
+}
+
+export interface HostescalationPost {
+    id?: null | number
+    container_id?: null | number
+    first_notification: number
+    last_notification: number
+    notification_interval: number
+    timeperiod_id?: null | number
+    escalate_on_recovery: number
+    escalate_on_down: number
+    escalate_on_unreachable: number
+    hosts: {
+        _ids: number[]
+    }
+    hosts_excluded: {
+        _ids: number[]
+    }
+    hostgroups: {
+        _ids: number[]
+    }
+    hostgroups_excluded: {
+        _ids: number[]
+    }
+    contacts: {
+        _ids: number[]
+    }
+    contactgroups: {
+        _ids: number[]
+    }
+}
+
+export interface HostescalationElements {
+    hosts: SelectKeyValueWithDisabled[]
+    hostgroups: SelectKeyValueWithDisabled[]
+    timeperiods: SelectKeyValue[]
+    contacts: SelectKeyValue[]
+    contactgroups: SelectKeyValue[]
+}
+
+export interface HostescalationHosts {
+    hosts: SelectKeyValueWithDisabled[]
+}
+
+export interface HostescalationExcludedHosts {
+    excludedHosts: SelectKeyValueWithDisabled[]
+}
+
+export interface HostescalationExcludedHostgroups {
+    excludedHostgroups: SelectKeyValueWithDisabled[]
 }
