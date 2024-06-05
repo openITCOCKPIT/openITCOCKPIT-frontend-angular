@@ -25,16 +25,6 @@ export function getDefaultServicetemplategroupsIndexParams(): ServiceTemplateGro
     }
 }
 
-export function getDefaultAllocateToHostgroupPost(): AllocateToHostgroup {
-    return {
-        Host: {
-            id: null
-        },
-        Servicetemplates: {
-            _ids: []
-        }
-    }
-}
 
 /* INDEX */
 export interface ServiceTemplateGroupsIndexRoot extends PaginateOrScroll {
@@ -241,7 +231,7 @@ export interface LoadHostGroupsByStringHostgroup {
 }
 
 /** ALLOCATE TO HOSTGROUP POST **/
-export interface AllocateToHostgroup {
+export interface AllocateToHostgroupPost {
     Host: AllocateToHostgroupHost
     Servicetemplates: AllocateToHostgroupServicetemplates
 }

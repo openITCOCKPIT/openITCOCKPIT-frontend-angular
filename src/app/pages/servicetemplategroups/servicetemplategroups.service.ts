@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { HttpClient } from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {PROXY_PATH} from '../../tokens/proxy-path.token';
+import {HttpClient} from '@angular/common/http';
 import {
     ServiceTemplateGroupsIndexRoot,
     ServiceTemplateGroupsIndexParams,
@@ -14,11 +14,11 @@ import {
     ServiceTemplateGroupssGetCopyGetRoot,
     ServiceTemplateGroupsGetCopyPostData,
     LoadServicetemplategroupsByString,
-    LoadHostgroupsByString, AllocateToHostGroupGet
+    LoadHostgroupsByString, AllocateToHostGroupGet, AllocateToHostgroupPost
 } from './servicetemplategroups.interface';
-import { catchError, map, Observable, of } from 'rxjs';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {catchError, map, Observable, of} from 'rxjs';
+import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
+import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -141,5 +141,11 @@ export class ServicetemplategroupsService {
     public allocateToHostgroupGet(servicetemplategroupId: number, hostgroupId: number): Observable<AllocateToHostGroupGet> {
         const proxyPath: string = this.proxyPath;
         return this.http.get<AllocateToHostGroupGet>(`${proxyPath}/servicetemplategroups/allocateToHostgroup/${servicetemplategroupId}.json?angular=true&hostgroupId=${hostgroupId}`);
+    }
+
+    public allocateToHostgroup(servicetemplategroupId: number, item: AllocateToHostgroupPost): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<GenericResponseWrapper>(`${proxyPath}/servicetemplategroups/allocateToHostgroup/${servicetemplategroupId}.json?angular=true`, item);
     }
 }

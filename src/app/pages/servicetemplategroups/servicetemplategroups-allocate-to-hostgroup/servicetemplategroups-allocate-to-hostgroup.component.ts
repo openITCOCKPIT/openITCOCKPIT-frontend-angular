@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {BackButtonDirective} from '../../../directives/back-button.directive';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -16,34 +16,33 @@ import {
     NavComponent,
     NavItemComponent, ProgressBarComponent, RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent, FaStackComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule } from '@angular/forms';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { Subscription } from 'rxjs';
+import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
+import {FaIconComponent, FaStackComponent} from '@fortawesome/angular-fontawesome';
+import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {FormsModule} from '@angular/forms';
+import {JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
+import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {Subscription} from 'rxjs';
 import {
-    AllocateToHostgroup,
     AllocateToHostGroupGet,
-    AllocateToHostGroupGetHostsWithServicetemplatesForDeploy, AllocateToHostGroupGetService,
-    getDefaultAllocateToHostgroupPost,
+    AllocateToHostGroupGetHostsWithServicetemplatesForDeploy, AllocateToHostGroupGetService, AllocateToHostgroupPost,
     LoadHostgroupsByString,
     LoadHostGroupsByStringHostgroup,
     LoadServicetemplategroupsByString,
     LoadServicetemplategroupsByStringServicetemplategroup,
     ServiceTemplateGroupsIndexParams
 } from '../servicetemplategroups.interface';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { ServicetemplategroupsService } from '../servicetemplategroups.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { GenericValidationError } from '../../../generic-responses';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {ServicetemplategroupsService} from '../servicetemplategroups.service';
+import {MatTooltip} from '@angular/material/tooltip';
+import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
+import {NotyService} from "../../../layouts/coreui/noty.service";
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-hostgroup',
@@ -105,9 +104,8 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
 
-    protected id: number | null = null;
+    protected id: number = 0;
     protected hostgroupId: number | null = null;
-    protected post: AllocateToHostgroup = getDefaultAllocateToHostgroupPost();
 
     protected percentage: number = 42;
 
@@ -159,13 +157,91 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
 
     protected selectAll(): void {
 
+        if (typeof this.hostsWithServicetemplatesForDeploy === "undefined") {
+            return;
+        }
+
+        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+            for (var serviceIndex in this.hostsWithServicetemplatesForDeploy[hostIndex].services) {
+                this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost = true;
+            }
+        }
     }
 
     protected undoSelection(): void {
+
+        if (typeof this.hostsWithServicetemplatesForDeploy === "undefined") {
+            return;
+        }
+
+        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+            for (var serviceIndex in this.hostsWithServicetemplatesForDeploy[hostIndex].services) {
+                this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost = false;
+            }
+        }
     }
 
-    protected allocateToHostgroup(): void {
+    protected handleChangesOnHostsWitchServicesToDeploy(): void {
 
+    }
+
+    private isProcessing: boolean = false;
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+
+    protected allocateToHostgroup(): void {
+        console.log('allocateToHostgroup');
+        let i = 0;
+        let count = this.hostsWithServicetemplatesForDeploy.length;
+        this.isProcessing = true;
+
+        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+            var hostId = this.hostsWithServicetemplatesForDeploy[hostIndex].host.id;
+
+            var servicetemplateIds = [];
+            for (var serviceIndex in this.hostsWithServicetemplatesForDeploy[hostIndex].services) {
+                if (this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost) {
+                    servicetemplateIds.push(this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].servicetemplate.id);
+                }
+            }
+
+            if (servicetemplateIds.length === 0) {
+                i++;
+                this.percentage = Math.round(i / count * 100);
+                continue;
+            }
+
+            let item: AllocateToHostgroupPost =
+                {
+                    Host: {
+                        id: hostId
+                    },
+                    Servicetemplates: {
+                        _ids: servicetemplateIds
+                    }
+                };
+            this.subscriptions.add(this.ServicetemplategroupsService.allocateToHostgroup(this.id, item)
+                .subscribe((result: GenericResponseWrapper) => {
+                    if (result.success) {
+                        i++;
+                        this.percentage = Math.round(i / count * 100);
+
+                        if (i === count) {
+                            this.notyService.genericSuccess();
+                            // RedirectService.redirectWithFallback('ServicesNotMonitored');
+                        }
+                        return;
+                    }
+
+                    // Error
+                    this.notyService.genericError();
+                    const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                })
+            );
+        }
     }
 
 }

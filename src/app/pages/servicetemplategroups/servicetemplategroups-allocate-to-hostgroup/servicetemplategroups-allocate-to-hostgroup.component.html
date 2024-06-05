@@ -112,11 +112,9 @@
                     <ng-container *ngIf="hostgroupId !== null">
                         <c-row
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
-                            <fieldset>
+                            <fieldset class="hostWithServicesToDeploy">
                                 <legend>
                                     <h4>
-                                        <!-- 🚩🚩BULLSHIT DEBUG STUPH --->{{ hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue | json }}
-                                        <!-- END BULLSHIT HERE 🚩🚩 -->
                                         <input type="checkbox"
                                                (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
                                                [ngModelOptions]="{standalone: true}"
@@ -131,8 +129,7 @@
 
                                 </legend>
 
-                                <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services"
-                                     class="padding-bottom-5 padding-left-10">
+                                <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                     <input type="checkbox"
                                            [ngModelOptions]="{standalone: true}"
                                            [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"

@@ -81,8 +81,8 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
     private router: Router = inject(Router);
-    private readonly TranslocoService = inject(TranslocoService);
-    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService:NotyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
     public createAnother: boolean = false;
 
