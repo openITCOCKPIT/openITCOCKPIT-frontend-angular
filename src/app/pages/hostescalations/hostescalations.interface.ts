@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
 
 export interface HostescalationsIndexParams {
     angular: true,
@@ -191,13 +191,21 @@ export interface HostescalationPost {
 }
 
 export interface HostescalationElements {
-    hosts: SelectKeyValue[]
-    hostgroups: SelectKeyValue[]
+    hosts: SelectKeyValueWithDisabled[]
+    hostgroups: SelectKeyValueWithDisabled[]
     timeperiods: SelectKeyValue[]
     contacts: SelectKeyValue[]
     contactgroups: SelectKeyValue[]
 }
 
 export interface HostescalationHosts {
-    hosts: SelectKeyValue[]
+    hosts: SelectKeyValueWithDisabled[]
+}
+
+export interface HostescalationExcludedHosts {
+    excludedHosts: SelectKeyValueWithDisabled[]
+}
+
+export interface HostescalationExcludedHostgroups {
+    excludedHostgroups: SelectKeyValueWithDisabled[]
 }

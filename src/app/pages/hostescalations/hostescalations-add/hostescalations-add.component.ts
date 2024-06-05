@@ -27,7 +27,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostescalationContainerResult, HostescalationPost } from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
@@ -85,9 +85,10 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
     public post: HostescalationPost = {} as HostescalationPost;
-    public hosts: SelectKeyValue[] = [];
-    public hosts_excluded: SelectKeyValue[] = [];
-    public hostgroups: SelectKeyValue[] = [];
+    public hosts: SelectKeyValueWithDisabled[] = [];
+    public hosts_excluded: SelectKeyValueWithDisabled[] = [];
+    public hostgroups: SelectKeyValueWithDisabled[] = [];
+    public hostgroups_excluded: SelectKeyValueWithDisabled[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
@@ -102,7 +103,9 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     constructor(private route: ActivatedRoute) {
-        this.loadHosts = this.loadHosts.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
+        // IMPORTANT for the searchCallback the use the same "this" context
+        this.loadHosts = this.loadHosts.bind(this);
+        this.loadExcludedHosts = this.loadExcludedHosts.bind(this);
     }
 
 
@@ -166,15 +169,20 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
             .subscribe((result) => {
                 this.hosts = result.hosts;
-                /*
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
-                    disabled: true
+                    disabled: this.post.hosts_excluded._ids.includes(obj.key) ? true : false
                 }));
 
-                 */
-                this.hosts_excluded = this.hosts;
+                this.processChosenExcludedHosts();
+
+
                 this.hostgroups = result.hostgroups;
+                this.hostgroups = this.hostgroups.map(obj => ({
+                    ...obj,
+                    disabled: this.post.hostgroups_excluded._ids.includes(obj.key) ? true : false
+                }));
+
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
@@ -190,13 +198,50 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
             .subscribe((result) => {
                 this.hosts = result.hosts;
-               /*
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
-                    disabled: false
+                    disabled: this.post.hosts_excluded._ids.includes(obj.key) ? true : false
                 }));
+            })
+        );
+    }
 
-                */
+    public loadExcludedHosts(searchString: string) {
+        const containerId = this.post.container_id;
+        if (!containerId) {
+            return;
+        }
+        if (this.post.hostgroups._ids.length === 0) {
+            this.post.hosts_excluded._ids = [];
+            return;
+        }
+        this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
+            .subscribe((result) => {
+                this.hosts_excluded = result.excludedHosts;
+                this.hosts_excluded = this.hosts_excluded.map(obj => ({
+                    ...obj,
+                    disabled: this.post.hosts._ids.includes(obj.key) ? true : false
+                }));
+            })
+        );
+    }
+
+    public loadExcludedHostgroups(searchString: string) {
+        const containerId = this.post.container_id;
+        if (!containerId) {
+            return;
+        }
+        if (this.post.hosts._ids.length === 0) {
+            this.post.hostgroups_excluded._ids = [];
+            return;
+        }
+        this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
+            .subscribe((result) => {
+                this.hostgroups_excluded = result.excludedHostgroups;
+                this.hostgroups_excluded = this.hostgroups_excluded.map(obj => ({
+                    ...obj,
+                    disabled: this.post.hostgroups._ids.includes(obj.key) ? true : false
+                }));
             })
         );
     }
@@ -204,6 +249,59 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public onContainerChange() {
         this.loadElements();
     }
+
+    public processChosenHosts() {
+        if (this.hosts.length === 0) {
+            return;
+        }
+        for (let key in this.hosts) {
+            if (this.post.hosts_excluded._ids.includes(this.hosts[key].key)) {
+                this.hosts[key].disabled = true;
+            } else {
+                this.hosts[key].disabled = false;
+            }
+        }
+    }
+
+    public processChosenExcludedHosts() {
+        if (this.hosts_excluded.length === 0) {
+            return;
+        }
+        for (let key in this.hosts_excluded) {
+            if (this.post.hosts._ids.includes(this.hosts_excluded[key].key)) {
+                this.hosts_excluded[key].disabled = true;
+            } else {
+                this.hosts_excluded[key].disabled = false;
+            }
+        }
+    }
+
+    public processChosenHostgroups() {
+        if (this.hostgroups.length === 0) {
+            return;
+        }
+        for (let key in this.hostgroups) {
+            if (this.post.hostgroups_excluded._ids.includes(this.hostgroups[key].key)) {
+                this.hostgroups[key].disabled = true;
+            } else {
+                this.hostgroups[key].disabled = false;
+            }
+        }
+    }
+
+    public processChosenExcludedHostgroups() {
+        if (this.hostgroups_excluded.length === 0) {
+            return;
+        }
+        for (let key in this.hostgroups_excluded) {
+            if (this.post.hostgroups._ids.includes(this.hostgroups_excluded[key].key)) {
+                this.hostgroups_excluded[key].disabled = true;
+            } else {
+                this.hostgroups_excluded[key].disabled = false;
+            }
+        }
+    }
+
 
     public submit() {
         this.subscriptions.add(this.HostescalationsService.add(this.post)

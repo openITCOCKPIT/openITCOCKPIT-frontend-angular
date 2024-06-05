@@ -81,15 +81,17 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.hosts._ids"
                                     [options]="hosts"
-                                    class="flex-fill"
                                     [searchCallback]="loadHosts"
+                                    (onChange)="loadExcludedHostgroups('')"
+                                    (ngModelChange)="processChosenExcludedHosts()"
+                                    class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hosts">
                                 </oitc-multi-select>
                             </c-input-group>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="hosts"></oitc-form-feedback>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 arrowd-vertical-on-right">
                             <label cLabel for="HostescalationExcludeHostgroups">
                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                 {{ t('Excluded host groups') }}
@@ -104,9 +106,10 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     [(ngModel)]="post.hostgroups_excluded._ids"
-                                    [options]="hostgroups"
+                                    [options]="hostgroups_excluded"
                                     [disabled]="post.hosts._ids.length == 0"
-                                    class="flex-fill"
+                                    (ngModelChange)="processChosenHostgroups()"
+                                    class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hosts">
                                 </oitc-multi-select>
                             </c-input-group>
@@ -130,14 +133,16 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.hostgroups._ids"
                                     [options]="hostgroups"
-                                    class="flex-fill"
-                                    oitcFormError [errors]="errors" errorField="hosts">
+                                    (onChange)="loadExcludedHosts('')"
+                                    (ngModelChange)="processChosenExcludedHostgroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="hostgroups">
                                 </oitc-multi-select>
                             </c-input-group>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="hostgroups"></oitc-form-feedback>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 arrowd-vertical-on-right">
                             <label cLabel for="HostescalationExcludeHosts">
                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                 {{ t('Excluded Hosts') }}
@@ -152,9 +157,11 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     [(ngModel)]="post.hosts_excluded._ids"
-                                    [options]="hosts"
+                                    [options]="hosts_excluded"
                                     [disabled]="post.hostgroups._ids.length == 0"
-                                    class="flex-fill"
+                                    [searchCallback]="loadExcludedHosts"
+                                    (ngModelChange)="processChosenHosts()"
+                                    class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hosts_excluded">
                                 </oitc-multi-select>
                             </c-input-group>

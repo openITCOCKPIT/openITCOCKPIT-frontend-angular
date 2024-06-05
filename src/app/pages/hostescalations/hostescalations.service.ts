@@ -5,6 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HostescalationContainerResult,
     HostescalationElements,
+    HostescalationExcludedHostgroups,
+    HostescalationExcludedHosts,
     HostescalationHosts,
     HostescalationIndexRoot,
     HostescalationPost,
@@ -75,6 +77,40 @@ export class HostescalationsService {
                 angular: true,
                 'filter[Hosts.name]': searchString,
                 'selected[]': hostsIds
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadExcludedHosts(containerId: number, searchString: string, excludedHostsIds: number [], hostgroupIds: number []): Observable<HostescalationExcludedHosts> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationExcludedHosts>(`${proxyPath}/hostescalations/loadExcludedHostsByContainerIdAndHostgroupIds.json`, {
+            params: {
+                angular: true,
+                'containerId': containerId,
+                'filter[Hosts.name]': searchString,
+                'selected[]': excludedHostsIds,
+                'hostgroupIds[]': hostgroupIds
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadExcludedHostgroups(containerId: number, searchString: string, hostsIds: number [], excludedHostgroupIds: number []): Observable<HostescalationExcludedHostgroups> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationExcludedHostgroups>(`${proxyPath}/hostescalations/loadExcludedHostgroupsByContainerIdAndHostIds.json`, {
+            params: {
+                angular: true,
+                'containerId': containerId,
+                'filter[Containers.name]': searchString,
+                'selected[]': excludedHostgroupIds,
+                'hostIds[]': hostsIds
             }
         }).pipe(
             map(data => {
