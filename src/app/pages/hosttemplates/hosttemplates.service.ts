@@ -250,7 +250,7 @@ export class HosttemplatesService {
     /**********************
      *   Used by action   *
      **********************/
-    public getHosttemplateUsedBy(id: number): Observable<{
+    public usedBy(id: number): Observable<{
         all_hosts: HostObjectCake2[],
         hosttemplate: HosttemplateEntity
     }> {

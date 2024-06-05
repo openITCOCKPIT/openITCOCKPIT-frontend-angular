@@ -2,7 +2,7 @@
 export interface HostObject {
     id?: number
     uuid?: string
-    hostname?: string
+    hostname?: string // same as name
     address?: string
     description?: string
     hosttemplate_id?: number
@@ -17,7 +17,7 @@ export interface HostObject {
     priority?: number
     notes?: string
     is_satellite_host: boolean
-    name?: string
+    name?: string // same as hostname
 }
 
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
