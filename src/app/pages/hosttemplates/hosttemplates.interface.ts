@@ -172,7 +172,7 @@ export interface HosttemplatePost {
         _ids: number[]
     }
     customvariables: Customvariable[]
-    check_command?: HosttemplateCheckCommand,
+    check_command?: TemplateCheckCommand,
     hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
     prometheus_exporters: {
         _ids: number[]
@@ -182,7 +182,7 @@ export interface HosttemplatePost {
     modified?: string
 }
 
-export interface HosttemplateCheckCommand {
+export interface TemplateCheckCommand {
     id: number
     name: string
     command_line: string
