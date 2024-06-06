@@ -18,7 +18,6 @@ import {
     AllocateToHostGroupGet,
     AllocateToHostgroupPost,
     AllocateToHostGet,
-    AllocateToHostPost,
     AllocateToMatchingHostgroupResponse, LoadHostsByStringResponse
 } from './servicetemplategroups.interface';
 import {catchError, map, Observable, of} from 'rxjs';
@@ -162,7 +161,7 @@ export class ServicetemplategroupsService {
                 catchError((error: any) => {
                     if (error.status === 400) {
                         return of({
-                            success:false,
+                            success: false,
                             message: error.error.message,
                             _csrfToken: ''
                         });
@@ -179,15 +178,14 @@ export class ServicetemplategroupsService {
         return this.http.get<AllocateToHostGet>(`${proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true&hostId=${hostId}`);
     }
 
-    public allocateToHost(servicetemplategroupId: number, item: AllocateToHostPost): Observable<GenericResponseWrapper> {
+    public loadHostsByString(containerId: number, hostsName: string): Observable<LoadHostsByStringResponse> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadHostsByStringResponse>(`${proxyPath}/hosts/loadHostsByString/${containerId}.json?angular=true&filter[Hosts.name]=${hostsName}&includeDisabled=false`);
+    }
+
+    public allocateToHost(servicetemplategroupId: number, item: AllocateToHostgroupPost): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
         return this.http.post<GenericResponseWrapper>(`${proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item);
-    }
-
-    public loadHostsByString(containerId: number, hostsName: string): Observable<LoadHostsByStringResponse>
-{
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadHostsByStringResponse>(`${proxyPath}/hosts/loadHostsByString/${containerId}.json?angular=true&filter[Hosts.name]=${hostsName}&includeDisabled=false`);
     }
 }
