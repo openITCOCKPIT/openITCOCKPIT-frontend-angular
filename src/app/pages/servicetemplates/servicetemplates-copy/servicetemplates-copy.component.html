@@ -23,7 +23,7 @@
         </nav>
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host templates') }}
+                <h5 cCardTitle>{{ t('Service templates') }}
                     <small class="fw-300">
                         {{ t('Copy service template/s') }}
                     </small>
@@ -50,8 +50,25 @@
                     <c-card-body>
 
                         <div class="mb-3">
-                            <label cLabel for="name{{i}}">
+                            <label cLabel for="template_name{{i}}">
                                 {{ t('Service template name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="template_name{{i}}"
+                                   id="template_name{{i}}"
+                                   [(ngModel)]="servicetemplate.Servicetemplate.template_name"
+                                   oitcFormError [errors]="servicetemplate.Error" errorField="template_name">
+                            <oitc-form-feedback [errors]="servicetemplate.Error"
+                                                errorField="template_name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new service template') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Service name') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <input cFormControl required type="text"
@@ -60,9 +77,6 @@
                                    [(ngModel)]="servicetemplate.Servicetemplate.name"
                                    oitcFormError [errors]="servicetemplate.Error" errorField="name">
                             <oitc-form-feedback [errors]="servicetemplate.Error" errorField="name"></oitc-form-feedback>
-                            <div class="help-block">
-                                {{ t('Name of the new service template') }}
-                            </div>
                         </div>
 
                         <div class="mb-3">

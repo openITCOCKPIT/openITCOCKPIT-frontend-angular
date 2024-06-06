@@ -794,6 +794,32 @@
                                 </div>
                             </div>
 
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="isVolatile"
+                                           id="isVolatile"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.is_volatile"/>
+                                    <label cFormCheckLabel for="isVolatile">
+                                        {{ t('Status volatile') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="is_volatile"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Will force the monitoring engine to send a notification on each Non-Ok check result that will occur.') }}
+                                    <a href="https://www.naemon.org/documentation/usersguide/volatileservices.html"
+                                       target="_blank">
+                                        <i class="fa fa-external-link-alt"></i>
+                                        {{ t('Online documentation') }}
+                                    </a>
+                                </div>
+                            </div>
+
                         </c-card-body>
                     </c-card>
                     <!-- MISC CONFIGURATION END -->

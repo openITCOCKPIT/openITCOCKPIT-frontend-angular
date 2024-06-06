@@ -237,6 +237,10 @@ export interface HosttemplateEditApiResult {
     types: HosttemplateTypeResult[],
 }
 
+/**********************
+ *    Copy action    *
+ **********************/
+
 export interface HosttemplateCopyGet {
     hosttemplates: HosttemplateCopy[]
     commands: SelectKeyValue[]
@@ -279,6 +283,10 @@ export interface HosttemplateCopyPost {
     Hosttemplate: HosttemplateCopy
     Error?: GenericValidationError | null
 }
+
+/**********************
+ *   Used By action   *
+ **********************/
 
 // 1:1 the same as the src/Model/Entity/Hosttemplate.php class
 export interface HosttemplateEntity {

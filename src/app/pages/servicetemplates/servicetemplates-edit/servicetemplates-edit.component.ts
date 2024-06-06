@@ -305,7 +305,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-            }))
+            }));
 
     }
 }

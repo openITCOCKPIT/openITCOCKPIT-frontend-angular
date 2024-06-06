@@ -3,6 +3,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 /**********************
  *    Index action    *
@@ -228,4 +229,87 @@ export interface ServicetemplateEditApiResult {
     commands: SelectKeyValue[],
     eventhandlerCommands: SelectKeyValue[],
     types: ServicetemplateTypeResult[],
+}
+
+/**********************
+ *    Copy action    *
+ **********************/
+export interface ServicetemplateCopyGet {
+    servicetemplates: ServicetemplateCopy[]
+    commands: SelectKeyValue[]
+    eventhandlerCommands: SelectKeyValue[]
+}
+
+
+export interface ServicetemplateCopy {
+    id?: number
+    name: string
+    template_name: string
+    description: string
+    command_id: number
+    active_checks_enabled: number,
+    servicetemplateeventcommandargumentvalues: ServicetemplateCommandArgument[]
+    servicetemplatecommandargumentvalues: ServicetemplateCommandArgument[]
+}
+
+export interface ServicetemplateCopyPost {
+    Source: {
+        id: number,
+        name: string
+    }
+    Servicetemplate: ServicetemplateCopy
+    Error?: GenericValidationError | null
+}
+
+/**********************
+ *   Used By action   *
+ **********************/
+// 1:1 the same as the src/Model/Entity/Servicetemplate.php class
+export interface ServicetemplateEntity {
+    id: number
+    uuid: string
+    name: string
+    template_name: string
+    description: string
+    servicetemplatetype_id: number
+    command_id: number
+    check_command_args: string
+    eventhandler_command_id: number
+    timeperiod_id: number
+    check_interval: number
+    retry_interval: number
+    max_check_attempts: number
+    first_notification_delay: number
+    notification_interval: number
+    notify_on_down: number
+    notify_on_unreachable: number
+    notify_on_recovery: number
+    notify_on_flapping: number
+    notify_on_downtime: number
+    flap_detection_enabled: number
+    flap_detection_on_up: number
+    flap_detection_on_down: number
+    flap_detection_on_unreachable: number
+    low_flap_threshold: number
+    high_flap_threshold: number
+    process_performance_data: number
+    freshness_checks_enabled: number
+    freshness_threshold: number
+    passive_checks_enabled: number
+    event_handler_enabled: number
+    active_checks_enabled: number
+    retain_status_information: number
+    retain_nonstatus_information: number
+    notifications_enabled: number
+    notes: string
+    priority: number
+    check_period_id: number
+    notify_period_id: number
+    tags: string
+    container_id: number
+    service_url: string
+    sla_relevant: number
+    is_volatile: number
+    created: string
+    modified: string
 }

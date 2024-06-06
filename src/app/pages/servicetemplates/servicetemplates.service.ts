@@ -9,6 +9,8 @@ import { PermissionsService } from '../../permissions/permissions.service';
 import {
     ServicetemplateCommandArgument,
     ServicetemplateContainerResult,
+    ServicetemplateCopyGet,
+    ServicetemplateCopyPost,
     ServicetemplateEditApiResult,
     ServicetemplateElements,
     ServicetemplateIndexRoot,
@@ -175,7 +177,7 @@ export class ServicetemplatesService {
         let url = `${proxyPath}/servicetemplates/loadCommandArguments/${commandId}.json`;
         if (servicetemplateId) {
             // Edit or copy
-            `${proxyPath}/servicetemplates/loadCommandArguments/${commandId}/${servicetemplateId}.json`
+            url = `${proxyPath}/servicetemplates/loadCommandArguments/${commandId}/${servicetemplateId}.json`
         }
 
         return this.http.get<{
@@ -197,7 +199,7 @@ export class ServicetemplatesService {
         let url = `${proxyPath}/servicetemplates/loadEventhandlerCommandArguments/${commandId}.json`;
         if (servicetemplateId) {
             // Edit or copy
-            `${proxyPath}/servicetemplates/loadEventhandlerCommandArguments/${commandId}/${servicetemplateId}.json`
+            url = `${proxyPath}/servicetemplates/loadEventhandlerCommandArguments/${commandId}/${servicetemplateId}.json`
         }
 
         return this.http.get<{
@@ -273,5 +275,26 @@ export class ServicetemplatesService {
                 return data;
             })
         );
+    }
+
+    /**********************
+     *    Copy action    *
+     **********************/
+    public getServicetemplatesCopy(ids: number[]): Observable<ServicetemplateCopyGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicetemplateCopyGet>(`${proxyPath}/servicetemplates/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+
+    public saveServicetemplatesCopy(servicetemplates: ServicetemplateCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplates/copy/.json?angular=true`, {
+            data: servicetemplates
+        });
     }
 }
