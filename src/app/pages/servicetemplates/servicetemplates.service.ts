@@ -1,12 +1,25 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { ServicetemplateTypesEnum } from './servicetemplate-types.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
-import { ServicetemplateIndexRoot, ServicetemplatesIndexParams } from './servicetemplates.interface';
+import {
+    ServicetemplateCommandArgument,
+    ServicetemplateContainerResult,
+    ServicetemplateCopyGet,
+    ServicetemplateCopyPost,
+    ServicetemplateEditApiResult,
+    ServicetemplateElements,
+    ServicetemplateIndexRoot,
+    ServicetemplatePost,
+    ServicetemplatesIndexParams,
+    ServicetemplateTypeResult
+} from './servicetemplates.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -93,5 +106,195 @@ export class ServicetemplatesService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/servicetemplates/delete/${item.id}.json?angular=true`, {});
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public loadContainers(servicetemplateId?: number): Observable<ServicetemplateContainerResult> {
+        const proxyPath = this.proxyPath;
+        let url = `${proxyPath}/servicetemplates/loadContainers.json`;
+        if (servicetemplateId) {
+            url = `${proxyPath}/servicetemplates/loadContainers/${servicetemplateId}.json`;
+        }
+
+        return this.http.get<ServicetemplateContainerResult>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadCommands(): Observable<{ commands: SelectKeyValue[], eventhandlerCommands: SelectKeyValue[] }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            commands: SelectKeyValue[],
+            eventhandlerCommands: SelectKeyValue[]
+        }>(`${proxyPath}/servicetemplates/loadCommands.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadServicetemplateTypes(): Observable<ServicetemplateTypeResult[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ types: ServicetemplateTypeResult[] }>(`${proxyPath}/servicetemplates/add.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.types
+            })
+        )
+    }
+
+    public loadElements(containerId: number): Observable<ServicetemplateElements> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicetemplateElements>(`${proxyPath}/servicetemplates/loadElementsByContainerId/${containerId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadCommandArguments(commandId: number, servicetemplateId?: number): Observable<ServicetemplateCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        // Add action
+        let url = `${proxyPath}/servicetemplates/loadCommandArguments/${commandId}.json`;
+        if (servicetemplateId) {
+            // Edit or copy
+            url = `${proxyPath}/servicetemplates/loadCommandArguments/${commandId}/${servicetemplateId}.json`
+        }
+
+        return this.http.get<{
+            servicetemplatecommandargumentvalues: ServicetemplateCommandArgument[]
+        }>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.servicetemplatecommandargumentvalues;
+            })
+        );
+    }
+
+    public loadEventHandlerCommandArguments(commandId: number, servicetemplateId?: number): Observable<ServicetemplateCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        // Add action
+        let url = `${proxyPath}/servicetemplates/loadEventhandlerCommandArguments/${commandId}.json`;
+        if (servicetemplateId) {
+            // Edit or copy
+            url = `${proxyPath}/servicetemplates/loadEventhandlerCommandArguments/${commandId}/${servicetemplateId}.json`
+        }
+
+        return this.http.get<{
+            servicetemplateeventhandlercommandargumentvalues: ServicetemplateCommandArgument[]
+        }>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.servicetemplateeventhandlercommandargumentvalues;
+            })
+        );
+    }
+
+    public add(servicetemplate: ServicetemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplates/add.json?angular=true`, {
+            Servicetemplate: servicetemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(servicetemplate: ServicetemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplates/edit/${servicetemplate.id}.json?angular=true`, {
+            Servicetemplate: servicetemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<ServicetemplateEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicetemplateEditApiResult>(`${proxyPath}/servicetemplates/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Copy action    *
+     **********************/
+    public getServicetemplatesCopy(ids: number[]): Observable<ServicetemplateCopyGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicetemplateCopyGet>(`${proxyPath}/servicetemplates/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+
+    public saveServicetemplatesCopy(servicetemplates: ServicetemplateCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplates/copy/.json?angular=true`, {
+            data: servicetemplates
+        });
     }
 }

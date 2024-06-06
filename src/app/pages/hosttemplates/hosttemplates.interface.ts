@@ -172,7 +172,7 @@ export interface HosttemplatePost {
         _ids: number[]
     }
     customvariables: Customvariable[]
-    check_command?: HosttemplateCheckCommand,
+    check_command?: TemplateCheckCommand,
     hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
     prometheus_exporters: {
         _ids: number[]
@@ -182,7 +182,7 @@ export interface HosttemplatePost {
     modified?: string
 }
 
-export interface HosttemplateCheckCommand {
+export interface TemplateCheckCommand {
     id: number
     name: string
     command_line: string
@@ -237,6 +237,10 @@ export interface HosttemplateEditApiResult {
     types: HosttemplateTypeResult[],
 }
 
+/**********************
+ *    Copy action    *
+ **********************/
+
 export interface HosttemplateCopyGet {
     hosttemplates: HosttemplateCopy[]
     commands: SelectKeyValue[]
@@ -279,6 +283,10 @@ export interface HosttemplateCopyPost {
     Hosttemplate: HosttemplateCopy
     Error?: GenericValidationError | null
 }
+
+/**********************
+ *   Used By action   *
+ **********************/
 
 // 1:1 the same as the src/Model/Entity/Hosttemplate.php class
 export interface HosttemplateEntity {

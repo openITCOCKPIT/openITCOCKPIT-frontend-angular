@@ -161,6 +161,8 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     private getDefaultPost(hosttemplateTypeId: number): HosttemplatePost {
+        this.tagsForSelect = [];
+
         return {
             name: '',
             description: '',

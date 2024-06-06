@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -106,7 +106,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
     templateUrl: './hosttemplates-edit.component.html',
     styleUrl: './hosttemplates-edit.component.css'
 })
-export class HosttemplatesEditComponent {
+export class HosttemplatesEditComponent implements OnInit, OnDestroy {
 
     public hosttemplateTypes: HosttemplateTypeResult[] = [];
     public containers: HosttemplateContainerResult | undefined;

@@ -10,7 +10,7 @@
                 <li class="breadcrumb-item">
                     <a *oitcPermission="['hosttemplates', 'index']" [routerLink]="['/', 'hosttemplates', 'index']">
                         <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                        {{ t('Host template') }}
+                        {{ t('Host templates') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -83,6 +83,9 @@
                                     (onChange)="onContainerChange()"
                                     oitcFormError [errors]="errors" errorField="container_id">
                                 </oitc-select>
+                                <div *ngIf="containers?.areContainersRestricted" class="help-block text-info">
+                                    {{ t('There are Hosts using this Host Template. Therefore the number of Containers is decreased.') }}
+                                </div>
 
                                 <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
                                     {{ t('Please select a container.') }}
@@ -155,7 +158,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="HosttemplateHostgroups">
+                                <label cLabel for="HosttemplateTags">
                                     {{ t('Tags') }}
                                 </label>
 
