@@ -9,6 +9,7 @@ import { PermissionsService } from '../../permissions/permissions.service';
 import {
     ServicetemplateCommandArgument,
     ServicetemplateContainerResult,
+    ServicetemplateEditApiResult,
     ServicetemplateElements,
     ServicetemplateIndexRoot,
     ServicetemplatePost,
@@ -233,5 +234,44 @@ export class ServicetemplatesService {
                     });
                 })
             );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(servicetemplate: ServicetemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicetemplates/edit/${servicetemplate.id}.json?angular=true`, {
+            Servicetemplate: servicetemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<ServicetemplateEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicetemplateEditApiResult>(`${proxyPath}/servicetemplates/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 }

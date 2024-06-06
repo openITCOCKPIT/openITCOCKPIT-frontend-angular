@@ -143,6 +143,9 @@ export const routes: Routes = [{
     path: 'servicetemplates/add',
     loadComponent: () => import('./pages/servicetemplates/servicetemplates-add/servicetemplates-add.component').then(m => m.ServicetemplatesAddComponent)
 }, {
+    path: 'servicetemplates/edit/:id',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-edit/servicetemplates-edit.component').then(m => m.ServicetemplatesEditComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

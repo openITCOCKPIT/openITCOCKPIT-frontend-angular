@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     ServicetemplateContainerResult,
     ServicetemplatePost,
@@ -103,7 +103,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     templateUrl: './servicetemplates-add.component.html',
     styleUrl: './servicetemplates-add.component.css'
 })
-export class ServicetemplatesAddComponent {
+export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     public servicetemplateTypes: ServicetemplateTypeResult[] = [];
     public containers: ServicetemplateContainerResult | undefined;
     public commands: SelectKeyValue[] = [];
@@ -286,6 +286,8 @@ export class ServicetemplatesAddComponent {
         const eventHandlerCommandId = this.post.eventhandler_command_id;
 
         if (!eventHandlerCommandId) {
+            //"None" selected
+            this.post.servicetemplateeventcommandargumentvalues = [];
             return;
         }
 

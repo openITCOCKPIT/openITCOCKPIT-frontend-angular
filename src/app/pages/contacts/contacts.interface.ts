@@ -461,11 +461,11 @@ export interface ContactUsedByService {
     name: string
     host_id: number
     servicename: string
-    servicetemplate: Servicetemplate2
+    servicetemplate: ServicetemplateContactsUsedBy
     _matchingData: MatchingData
 }
 
-export interface Servicetemplate2 {
+export interface ServicetemplateContactsUsedBy {
     id: number
     uuid: string
     name: string

@@ -158,10 +158,10 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.servicegroups._ids"
                                     [options]="servicegroups"
-                                    oitcFormError [errors]="errors" errorField="hostgroups">
+                                    oitcFormError [errors]="errors" errorField="servicegroups">
                                 </oitc-multi-select>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="hostgroups"></oitc-form-feedback>
+                                                    errorField="servicegroups"></oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
@@ -737,7 +737,7 @@
                                     <span class="input-group-text">
                                         <input
                                             cFormCheckInput
-                                            class="checkbox-danger"
+                                            class="checkbox-warning"
                                             name="flap_detection_on_warning"
                                             id="flap_detection_on_warning"
                                             type="checkbox"

@@ -220,3 +220,12 @@ export interface ServicetemplateElements {
     contactgroups: SelectKeyValue[]
     servicegroups: SelectKeyValue[]
 }
+
+export interface ServicetemplateEditApiResult {
+    servicetemplate: {
+        Servicetemplate: ServicetemplatePost,
+    }
+    commands: SelectKeyValue[],
+    eventhandlerCommands: SelectKeyValue[],
+    types: ServicetemplateTypeResult[],
+}
