@@ -60,26 +60,6 @@ export interface HostescalationIndex {
     contactgroups: HostescalationContactgroup[]
 }
 
-export interface AllHostescalation {
-    id: number
-    uuid: string
-    container_id: number
-    first_notification: number
-    last_notification: number
-    notification_interval: number
-    escalate_on_recovery: number
-    escalate_on_down: number
-    escalate_on_unreachable: number
-    hostgroups_excluded: any[]
-    hostgroups: HostescalationHostgroup[]
-    hosts_excluded: HostescalationHostsExcluded[]
-    hosts: HostescalationHost[]
-    timeperiod: HostescalationTimeperiod
-    contactgroups: HostescalationContactgroup[]
-    contacts: HostescalationContact[]
-    allowEdit: boolean
-}
-
 export interface HostescalationHostgroup {
     id: number
     uuid: string
@@ -101,14 +81,7 @@ export interface HostescalationContainer {
     name: string
 }
 
-export interface HostescalationHostsExcluded {
-    id: number
-    name: string
-    disabled: number
-    _joinData: HostescalationHostsExcludedJoinData
-}
-
-export interface HostescalationHostsExcludedJoinData {
+export interface HostescalationHostsJoinData {
     id: number
     host_id: number
     hostescalation_id: number
@@ -119,7 +92,7 @@ export interface HostescalationHost {
     id: number
     name: string
     disabled: number
-    _joinData: HostescalationHostsExcludedJoinData
+    _joinData: HostescalationHostsJoinData
 }
 
 export interface HostescalationTimeperiod {
@@ -190,6 +163,24 @@ export interface HostescalationPost {
     }
 }
 
+export interface HostescalationGet {
+    id?: null | number
+    container_id?: null | number
+    first_notification: number
+    last_notification: number
+    notification_interval: number
+    timeperiod_id?: null | number
+    escalate_on_recovery: number
+    escalate_on_down: number
+    escalate_on_unreachable: number
+    hosts: HostescalationHost[]
+    hosts_excluded: HostescalationHost[]
+    hostgroups: HostescalationHostgroup[]
+    hostgroups_excluded: HostescalationHostgroup[]
+    contacts: HostescalationContactJoinData[]
+    contactgroups: HostescalationContactgroupJoinData[]
+}
+
 export interface HostescalationElements {
     hosts: SelectKeyValueWithDisabled[]
     hostgroups: SelectKeyValueWithDisabled[]
@@ -208,4 +199,8 @@ export interface HostescalationExcludedHosts {
 
 export interface HostescalationExcludedHostgroups {
     excludedHostgroups: SelectKeyValueWithDisabled[]
+}
+
+export interface HostescalationEditApiResult {
+    hostescalation: HostescalationGet
 }
