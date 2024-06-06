@@ -146,6 +146,9 @@ export const routes: Routes = [{
     path: 'servicetemplates/edit/:id',
     loadComponent: () => import('./pages/servicetemplates/servicetemplates-edit/servicetemplates-edit.component').then(m => m.ServicetemplatesEditComponent)
 }, {
+    path: 'servicetemplates/copy/:ids',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-copy/servicetemplates-copy.component').then(m => m.ServicetemplatesCopyComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
