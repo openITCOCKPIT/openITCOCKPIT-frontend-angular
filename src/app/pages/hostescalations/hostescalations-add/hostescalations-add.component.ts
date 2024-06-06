@@ -171,7 +171,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
-                    disabled: this.post.hosts_excluded._ids.includes(obj.key) ? true : false
+                    disabled: this.post.hosts_excluded._ids.includes(obj.key)
                 }));
 
                 this.processChosenExcludedHosts();
@@ -180,7 +180,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                 this.hostgroups = result.hostgroups;
                 this.hostgroups = this.hostgroups.map(obj => ({
                     ...obj,
-                    disabled: this.post.hostgroups_excluded._ids.includes(obj.key) ? true : false
+                    disabled: this.post.hostgroups_excluded._ids.includes(obj.key)
                 }));
 
                 this.timeperiods = result.timeperiods;
@@ -200,7 +200,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
-                    disabled: this.post.hosts_excluded._ids.includes(obj.key) ? true : false
+                    disabled: this.post.hosts_excluded._ids.includes(obj.key)
                 }));
             })
         );
@@ -217,13 +217,19 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
             .subscribe((result) => {
+                let currentHostsExcludedIds: number[] = [];
                 this.hosts_excluded = result.excludedHosts;
-                this.hosts_excluded = this.hosts_excluded.map(obj => ({
-                    ...obj,
-                    disabled: this.post.hosts._ids.includes(obj.key) ? true : false
-                }));
-            })
-        );
+                this.hosts_excluded = this.hosts_excluded.map(obj => {
+                    currentHostsExcludedIds.push(obj.key);
+                    return {
+                        ...obj,
+                        disabled: this.post.hosts._ids.includes(obj.key)
+                    }
+                });
+                this.post.hosts_excluded._ids = this.post.hosts_excluded._ids.filter(
+                    id => currentHostsExcludedIds.includes(id)
+                );
+            }));
     }
 
     public loadExcludedHostgroups(searchString: string) {
@@ -231,19 +237,27 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         if (!containerId) {
             return;
         }
+        console.log(this.post.hostgroups_excluded._ids);
+
         if (this.post.hosts._ids.length === 0) {
             this.post.hostgroups_excluded._ids = [];
             return;
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
             .subscribe((result) => {
+                let currentHostGroupsExcludedIds: number[] = [];
                 this.hostgroups_excluded = result.excludedHostgroups;
-                this.hostgroups_excluded = this.hostgroups_excluded.map(obj => ({
-                    ...obj,
-                    disabled: this.post.hostgroups._ids.includes(obj.key) ? true : false
-                }));
-            })
-        );
+                this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
+                    currentHostGroupsExcludedIds.push(obj.key);
+                    return {
+                        ...obj,
+                        disabled: this.post.hostgroups._ids.includes(obj.key)
+                    }
+                });
+                this.post.hostgroups_excluded._ids = this.post.hostgroups_excluded._ids.filter(
+                    id => currentHostGroupsExcludedIds.includes(id)
+                );
+            }));
     }
 
     public onContainerChange() {
@@ -255,11 +269,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hosts) {
-            if (this.post.hosts_excluded._ids.includes(this.hosts[key].key)) {
-                this.hosts[key].disabled = true;
-            } else {
-                this.hosts[key].disabled = false;
-            }
+            this.hosts[key].disabled = this.post.hosts_excluded._ids.includes(this.hosts[key].key);
         }
     }
 
@@ -267,12 +277,9 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         if (this.hosts_excluded.length === 0) {
             return;
         }
+
         for (let key in this.hosts_excluded) {
-            if (this.post.hosts._ids.includes(this.hosts_excluded[key].key)) {
-                this.hosts_excluded[key].disabled = true;
-            } else {
-                this.hosts_excluded[key].disabled = false;
-            }
+            this.hosts_excluded[key].disabled = this.post.hosts._ids.includes(this.hosts_excluded[key].key);
         }
     }
 
@@ -281,11 +288,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hostgroups) {
-            if (this.post.hostgroups_excluded._ids.includes(this.hostgroups[key].key)) {
-                this.hostgroups[key].disabled = true;
-            } else {
-                this.hostgroups[key].disabled = false;
-            }
+            this.hostgroups[key].disabled = this.post.hostgroups_excluded._ids.includes(this.hostgroups[key].key);
         }
     }
 
@@ -294,11 +297,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hostgroups_excluded) {
-            if (this.post.hostgroups._ids.includes(this.hostgroups_excluded[key].key)) {
-                this.hostgroups_excluded[key].disabled = true;
-            } else {
-                this.hostgroups_excluded[key].disabled = false;
-            }
+            this.hostgroups_excluded[key].disabled = this.post.hostgroups._ids.includes(this.hostgroups_excluded[key].key);
         }
     }
 
