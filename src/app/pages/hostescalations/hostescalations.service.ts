@@ -4,6 +4,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     HostescalationContainerResult,
+    HostescalationEditApiResult,
     HostescalationElements,
     HostescalationExcludedHostgroups,
     HostescalationExcludedHosts,
@@ -140,5 +141,44 @@ export class HostescalationsService {
                     });
                 })
             );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(hostescalation: HostescalationPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hostescalations/edit/${hostescalation.id}.json?angular=true`, {
+            Hostescalation: hostescalation
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HostescalationEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostescalationEditApiResult>(`${proxyPath}/hostescalations/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 }
