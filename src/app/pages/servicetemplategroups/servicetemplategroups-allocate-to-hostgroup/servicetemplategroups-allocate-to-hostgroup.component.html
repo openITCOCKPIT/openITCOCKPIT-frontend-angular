@@ -47,21 +47,22 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="id">
+                        <label cLabel for="servicetemplategroupId">
                             {{ t('Service template group') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="id"
-                                   id="id"
-                                   oitcFormError
-                                   [(ngModel)]="id"
-                                   [errors]="errors" errorField="id">
-                            <ng-option *ngFor="let servicetemplategroup of this.servicetemplategroups"
-                                       [value]="servicetemplategroup.key">
-                                {{ servicetemplategroup.value }}
-                            </ng-option>
-                        </ng-select>
-                        <div *ngIf="id === null" class="text-warning-glow pt-1">
+                        <oitc-select
+                                name="servicetemplategroupId"
+                                id="servicetemplategroupId"
+                                [(ngModel)]="servicetemplategroupId"
+                                optionValue="key"
+                                (ngModelChange)="hostGroupIdChanged()"
+                                optionLabel="value"
+                                [searchCallback]="loadServicetemplategroups"
+                                [options]="servicetemplategroups"
+                                oitcFormError [errors]="errors" errorField="id">
+                        </oitc-select>
+                        <div *ngIf="servicetemplategroupId === null" class="text-warning-glow pt-1">
                             {{ t('Please select a service template group.') }}
                         </div>
                         <oitc-form-feedback [errors]="errors" errorField="id"></oitc-form-feedback>
@@ -73,16 +74,18 @@
                             {{ t('Host group') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="hostgroupId"
-                                   id="hostgroupId"
-                                   [(ngModel)]="hostgroupId"
-                                   (ngModelChange)="hostGroupIdChanged()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="id">
-                            <ng-option *ngFor="let hostgroup of this.hostgroups" [value]="hostgroup.key">
-                                {{ hostgroup.value }}
-                            </ng-option>
-                        </ng-select>
+
+                        <oitc-select
+                                name="hostgroupId"
+                                id="hostgroupId"
+                                [(ngModel)]="hostgroupId"
+                                (ngModelChange)="hostGroupIdChanged()"
+                                optionValue="key"
+                                optionLabel="value"
+                                [searchCallback]="loadHostgroups"
+                                [options]="hostgroups"
+                                oitcFormError [errors]="errors" errorField="hostgroupId">
+                        </oitc-select>
                         <div *ngIf="hostgroupId === null" class="text-warning-glow pt-1">
                             {{ t('Please select a host group.') }}
                         </div>

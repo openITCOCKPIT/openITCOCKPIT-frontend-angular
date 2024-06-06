@@ -36,6 +36,8 @@ import {
     LoadServiceTemplatesRoot, LoadServiceTemplatesServicetemplate,
     ServiceTemplateGroupsAddPostServicetemplategroup
 } from '../servicetemplategroups.interface';
+import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
+import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 
 @Component({
     selector: 'oitc-servicetemplategroups-add',
@@ -71,7 +73,9 @@ import {
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        SelectComponent,
+        MultiSelectComponent
     ],
     templateUrl: './servicetemplategroups-add.component.html',
     styleUrl: './servicetemplategroups-add.component.css'
@@ -94,6 +98,8 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
+
+        this.loadServicetemplates = this.loadServicetemplates.bind(this);
     }
 
     public ngOnInit() {
@@ -161,12 +167,12 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadServicetemplates(): void {
+    protected loadServicetemplates(servicetemplateName: string): void {
         if (!this.post.container.parent_id) {
             this.servicetemplates = [];
             return;
         }
-        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id)
+        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
             }))
@@ -178,6 +184,6 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             this.servicetemplates = [];
             return;
         }
-        this.loadServicetemplates();
+        this.loadServicetemplates('');
     }
 }

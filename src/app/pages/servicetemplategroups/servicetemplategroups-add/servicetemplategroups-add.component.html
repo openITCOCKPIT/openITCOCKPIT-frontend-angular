@@ -47,21 +47,20 @@
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="post.container.parent_id"
-                                   id="post.container.parent_id"
-                                   #containerIdsRef="ngModel"
-                                   [(ngModel)]="post.container.parent_id"
-                                   (ngModelChange)="onContainerChange()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="parent_id">
-                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
-                                {{ container.value }}
-                            </ng-option>
-                        </ng-select>
+                        <oitc-select
+                                name="post.container.parent_id"
+                                id="post.container.parent_id"
+                                [(ngModel)]="post.container.parent_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="containers"
+                                (onChange)="onContainerChange()"
+                                oitcFormError [errors]="errors" errorField="parent_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                         <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
-                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>
 
 
@@ -102,38 +101,26 @@
                         </label>
 
 
-                        <ng-select name="post.servicetemplates._ids"
-                                   id="post.servicetemplates._ids"
-                                   [(ngModel)]="post.servicetemplates._ids"
-                                   [multiple]="true"
-                                   oitcFormError [errors]="errors" errorField="servicetemplates">
-                            <ng-option *ngFor="let servicetemplate of this.servicetemplates" [value]="servicetemplate.key">
-                                {{ servicetemplate.value }}
-                            </ng-option>
-                        </ng-select>
+                        <oitc-multi-select
+                                name="post.servicetemplates._ids"
+                                id="post.servicetemplates._ids"
+                                [(ngModel)]="post.servicetemplates._ids"
+                                optionValue="key"
+                                optionLabel="value"
+                                [searchCallback]="loadServicetemplates"
+                                [options]="servicetemplates"
+                                oitcFormError [errors]="errors" errorField="servicetemplates">
+                        </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="servicetemplates"></oitc-form-feedback>
                     </div>
 
                 </c-card-body>
                 <c-card-footer class="text-end">
 
-                    <label for="createAnother">
-
-                        <c-form-check>
-                            <input
-                                cFormCheckInput
-                                type="checkbox"
-                                id="createAnother"
-                                [ngModel]="createAnother"
-                                (ngModelChange)="createAnother = $event ? true : false"
-                                name="createAnother"
-                            />
-                            <label
-                                cFormCheckLabel
-                                for="createAnother">
-                                {{ t('Create another') }}
-                            </label>
-                        </c-form-check>
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">

@@ -343,3 +343,14 @@ export interface AllocateToMatchingHostgroupResponse {
     message: string
     _csrfToken: string
 }
+
+/** LOAD HOSTS BY STRING RESPONSE **/
+export interface LoadHostsByStringResponse {
+    hosts: LoadHostsByStringResponseHost[]
+    _csrfToken: string
+}
+
+export interface LoadHostsByStringResponseHost {
+    key: number
+    value: string
+}

@@ -19,7 +19,7 @@ import {
     AllocateToHostgroupPost,
     AllocateToHostGet,
     AllocateToHostPost,
-    AllocateToMatchingHostgroupResponse
+    AllocateToMatchingHostgroupResponse, LoadHostsByStringResponse
 } from './servicetemplategroups.interface';
 import {catchError, map, Observable, of} from 'rxjs';
 import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
@@ -74,9 +74,9 @@ export class ServicetemplategroupsService {
         return this.http.get<LoadContainersRoot>(`${proxyPath}/servicetemplategroups/loadContainers.json?angular=true`);
     }
 
-    public loadServicetemplatesByContainerId(containerId: number): Observable<LoadServiceTemplatesRoot> {
+    public loadServicetemplatesByContainerId(containerId: number, servicetemplatesTemplateName: string): Observable<LoadServiceTemplatesRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadServiceTemplatesRoot>(`${proxyPath}/servicetemplategroups/loadServicetemplatesByContainerId.json?angular=true&containerId=${containerId}`);
+        return this.http.get<LoadServiceTemplatesRoot>(`${proxyPath}/servicetemplategroups/loadServicetemplatesByContainerId.json?angular=true&containerId=${containerId}&filter[Servicetemplates.template_name]=${servicetemplatesTemplateName}`);
     }
 
     public getServicetemplategroupEdit(servicetemplateId: number): Observable<ServiceTemplateGroupsGetEditRoot> {
@@ -133,14 +133,14 @@ export class ServicetemplategroupsService {
         return this.http.post(`${proxyPath}/servicetemplategroups/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadServicetemplategroupsByString(): Observable<LoadServicetemplategroupsByString> {
+    public loadServicetemplategroupsByString(containerName: string): Observable<LoadServicetemplategroupsByString> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadServicetemplategroupsByString>(`${proxyPath}/servicetemplategroups/loadServicetemplategroupsByString.json?angular=true`);
+        return this.http.get<LoadServicetemplategroupsByString>(`${proxyPath}/servicetemplategroups/loadServicetemplategroupsByString.json?angular=true&filter[Containers.name]=${containerName}`);
     }
 
-    public loadHostgroupsByString(): Observable<LoadHostgroupsByString> {
+    public loadHostgroupsByString(containerName: string): Observable<LoadHostgroupsByString> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadHostgroupsByString>(`${proxyPath}/servicetemplategroups/loadHostgroupsByString.json?angular=true`);
+        return this.http.get<LoadHostgroupsByString>(`${proxyPath}/servicetemplategroups/loadHostgroupsByString.json?angular=true&filter[Containers.name]=${containerName}`);
     }
 
     public allocateToHostgroupGet(servicetemplategroupId: number, hostgroupId: number): Observable<AllocateToHostGroupGet> {
@@ -183,5 +183,11 @@ export class ServicetemplategroupsService {
         const proxyPath: string = this.proxyPath;
 
         return this.http.post<GenericResponseWrapper>(`${proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item);
+    }
+
+    public loadHostsByString(containerId: number, hostsName: string): Observable<LoadHostsByStringResponse>
+{
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadHostsByStringResponse>(`${proxyPath}/hosts/loadHostsByString/${containerId}.json?angular=true&filter[Hosts.name]=${hostsName}&includeDisabled=false`);
     }
 }

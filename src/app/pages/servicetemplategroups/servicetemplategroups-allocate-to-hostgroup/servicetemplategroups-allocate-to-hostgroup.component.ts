@@ -43,6 +43,8 @@ import {ServicetemplategroupsService} from '../servicetemplategroups.service';
 import {MatTooltip} from '@angular/material/tooltip';
 import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
 import {NotyService} from "../../../layouts/coreui/noty.service";
+import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-hostgroup',
@@ -82,7 +84,9 @@ import {NotyService} from "../../../layouts/coreui/noty.service";
         TranslocoPipe,
         ProgressBarComponent,
         RouterLink,
-        JsonPipe
+        JsonPipe,
+        MultiSelectComponent,
+        SelectComponent
     ],
     templateUrl: './servicetemplategroups-allocate-to-hostgroup.component.html',
     styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css'
@@ -104,15 +108,20 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
 
-    protected id: number = 0;
+    protected servicetemplategroupId: number  = 0;
     protected hostgroupId: number | null = null;
 
     protected percentage: number = 42;
 
+    public constructor() {
+        this.loadServicetemplategroups = this.loadServicetemplategroups.bind(this);
+        this.loadHostgroups = this.loadHostgroups.bind(this);
+    }
+
     public ngOnInit() {
-        this.id = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadServicetemplategroups();
-        this.loadHostgroups();
+        this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadServicetemplategroups('');
+        this.loadHostgroups('');
     }
 
     public ngOnDestroy() {
@@ -121,10 +130,10 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
 
 
     private loadServices(): void {
-        if (this.id === null || this.hostgroupId === null) {
+        if (this.servicetemplategroupId === null || this.hostgroupId === null) {
             return;
         }
-        this.ServicetemplategroupsService.allocateToHostgroupGet(this.id, this.hostgroupId).subscribe(
+        this.ServicetemplategroupsService.allocateToHostgroupGet(this.servicetemplategroupId, this.hostgroupId).subscribe(
             (result: AllocateToHostGroupGet): void => {
                 this.hostsWithServicetemplatesForDeploy = result.hostsWithServicetemplatesForDeploy
             }
@@ -135,15 +144,15 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         this.loadServices();
     }
 
-    private loadServicetemplategroups(): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString()
+    protected loadServicetemplategroups(containerName: string): void {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
             .subscribe((result: LoadServicetemplategroupsByString): void => {
                 this.servicetemplategroups = result.servicetemplategroups;
             }))
     }
 
-    private loadHostgroups(): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadHostgroupsByString()
+    protected loadHostgroups(containerName: string): void {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadHostgroupsByString(containerName)
             .subscribe((result: LoadHostgroupsByString): void => {
                 this.hostgroups = result.hostgroups;
             }))
@@ -220,7 +229,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
                         _ids: servicetemplateIds
                     }
                 };
-            this.subscriptions.add(this.ServicetemplategroupsService.allocateToHostgroup(this.id, item)
+            this.subscriptions.add(this.ServicetemplategroupsService.allocateToHostgroup(this.servicetemplategroupId, item)
                 .subscribe((result: GenericResponseWrapper) => {
                     if (result.success) {
                         i++;
