@@ -296,3 +296,50 @@ export interface AllocateToHostGroupGetJoinData {
     servicetemplate_id: number
     servicetemplategroup_id: number
 }
+
+/** ALLOCATE TO HOST GET **/
+export interface AllocateToHostGet {
+    servicetemplatesForDeploy: AllocateToHostGetServicetemplatesForDeploy[]
+    _csrfToken: string
+}
+
+export interface AllocateToHostGetServicetemplatesForDeploy {
+    servicetemplate: AllocateToHostGetServicetemplate
+    doesServicetemplateExistsOnTargetHost: boolean
+    doesServicetemplateExistsOnTargetHostAndIsDisabled: boolean
+    createServiceOnTargetHost: boolean
+}
+
+export interface AllocateToHostGetServicetemplate {
+    id: number
+    name: string
+    description: string
+    _joinData: AllocateToHostGetJoinData
+}
+
+export interface AllocateToHostGetJoinData {
+    id: number
+    servicetemplate_id: number
+    servicetemplategroup_id: number
+}
+
+/** ALLOCATE TO HOST POST **/
+export interface AllocateToHostPost {
+    Host: AllocateToHostPostHost
+    Servicetemplates: AllocateToHostPostServicetemplates
+}
+
+export interface AllocateToHostPostHost {
+    id: number
+}
+
+export interface AllocateToHostPostServicetemplates {
+    _ids: number[]
+}
+
+/** ALLOCATE TO HOST POST RESPONSE */
+export interface AllocateToMatchingHostgroupResponse {
+    success: boolean
+    message: string
+    _csrfToken: string
+}

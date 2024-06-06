@@ -14,7 +14,12 @@ import {
     ServiceTemplateGroupssGetCopyGetRoot,
     ServiceTemplateGroupsGetCopyPostData,
     LoadServicetemplategroupsByString,
-    LoadHostgroupsByString, AllocateToHostGroupGet, AllocateToHostgroupPost
+    LoadHostgroupsByString,
+    AllocateToHostGroupGet,
+    AllocateToHostgroupPost,
+    AllocateToHostGet,
+    AllocateToHostPost,
+    AllocateToMatchingHostgroupResponse
 } from './servicetemplategroups.interface';
 import {catchError, map, Observable, of} from 'rxjs';
 import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
@@ -147,5 +152,36 @@ export class ServicetemplategroupsService {
         const proxyPath: string = this.proxyPath;
 
         return this.http.post<GenericResponseWrapper>(`${proxyPath}/servicetemplategroups/allocateToHostgroup/${servicetemplategroupId}.json?angular=true`, item);
+    }
+
+    public allocateToMatchingHostgroup(servicetemplategroupId: number): Observable<AllocateToMatchingHostgroupResponse> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<AllocateToMatchingHostgroupResponse>(`${proxyPath}/servicetemplategroups/allocateToMatchingHostgroup/${servicetemplategroupId}.json?angular=true`, {})
+            .pipe(
+                catchError((error: any) => {
+                    if (error.status === 400) {
+                        return of({
+                            success:false,
+                            message: error.error.message,
+                            _csrfToken: ''
+                        });
+                    } else {
+                        // For other errors, re-throw the error
+                        return error;
+                    }
+                })
+            ) as Observable<AllocateToMatchingHostgroupResponse>
+    }
+
+    public allocateToHostGet(servicetemplategroupId: number, hostId: number): Observable<AllocateToHostGet> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<AllocateToHostGet>(`${proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true&hostId=${hostId}`);
+    }
+
+    public allocateToHost(servicetemplategroupId: number, item: AllocateToHostPost): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<GenericResponseWrapper>(`${proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true`, item);
     }
 }

@@ -1,15 +1,15 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { Subscription } from 'rxjs';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
+import {TranslocoDirective, TranslocoService, TranslocoPipe} from '@jsverse/transloco';
+import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
+import {Subscription} from 'rxjs';
+import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
@@ -36,25 +36,28 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import {DebounceDirective} from '../../../directives/debounce.directive';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {NgForOf, NgIf} from '@angular/common';
+import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ServicetemplategroupsService } from '../servicetemplategroups.service';
+import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
+import {ServicetemplategroupsService} from '../servicetemplategroups.service';
 import {
+    AllocateToMatchingHostgroupResponse,
     getDefaultServicetemplategroupsIndexParams,
     ServiceTemplateGroupsIndex,
     ServiceTemplateGroupsIndexParams,
     ServiceTemplateGroupsIndexRoot
 } from '../servicetemplategroups.interface';
+import {GenericResponseWrapper, GenericValidationError} from "../../../generic-responses";
+import {NotyService} from "../../../layouts/coreui/noty.service";
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
@@ -124,6 +127,8 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
     }
     protected readonly router: Router = inject(Router);
     protected hideFilter: boolean = true;
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
 
     // Show or hide the filter
     public toggleFilter() {
@@ -187,8 +192,19 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public allocateToMatchingHostgroup(servicetemplategroupId: number): void {
 
-    // Open the Delete All Modal
+        this.subscriptions.add(this.ServicetemplategroupsService.allocateToMatchingHostgroup(servicetemplategroupId)
+            .subscribe((result: AllocateToMatchingHostgroupResponse) => {
+                if (result.success) {
+                    this.notyService.genericSuccess(result.message);
+                    return;
+                }
+
+                this.notyService.genericWarning(result.message);
+            })
+        );
+    }
 
     public toggleDeleteAllModal(servicetemplategroup?: ServiceTemplateGroupsIndex) {
         let items: DeleteAllItem[] = [];
@@ -223,7 +239,10 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => {console.warn(item); return item.id;}).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => {
+            console.warn(item);
+            return item.id;
+        }).join(',');
         if (ids) {
             this.router.navigate(['/', 'servicetemplategroups', 'copy', ids]);
         }

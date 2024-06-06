@@ -158,7 +158,7 @@
                                     {{ t('Allocate to host group') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToMatchingHostgroup'"
-                                                             [url]="'/servicetemplategroups/edit/' + servicetemplategroup.id">
+                                (click)="allocateToMatchingHostgroup(servicetemplategroup.id)">
                                     <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                                     {{ t('Allocate to matching host group') }}
                                 </oitc-actions-button-element>
