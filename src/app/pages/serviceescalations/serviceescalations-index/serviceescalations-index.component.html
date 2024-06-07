@@ -8,9 +8,10 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['hostescalations', 'index']" [routerLink]="['/', 'hostescalations', 'index']">
+                    <a *oitcPermission="['serviceescalations', 'index']"
+                       [routerLink]="['/', 'serviceescalations', 'index']">
                         <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                        {{ t('Host escalations') }}
+                        {{ t('Service escalations') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -21,21 +22,21 @@
         </nav>
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host Escalations') }}
+                <h5 cCardTitle>{{ t('Service Escalations') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadHostescalations()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadServiceescalations()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['hostescalations', 'add']"
-                                [routerLink]="['/', 'hostescalations', 'add']"
+                        <button *oitcPermission="['serviceescalations', 'add']"
+                                [routerLink]="['/', 'serviceescalations', 'add']"
                                 cButton
                                 class="ripple"
                                 color="success"
@@ -67,28 +68,28 @@
                             <c-col [lg]="6" class="border-start border-primary border-4 rounded-top rounded-bottom">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Hosts.name]']"
-                                           [placeholder]="'Filter by host name' | transloco"
+                                           [(ngModel)]="params['filter[Services.servicename]']"
+                                           [placeholder]="'Filter by service name' | transloco"
                                            cFormControl
-                                           name="Hosts.name"
+                                           name="Services.servicename"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostFocus=true;params['filter[HostsExcluded.name]']='';hostExcludeFocus=false;onFilterChange(true);"
+                                           (focus)="serviceFocus=true;params['filter[ServicesExcluded.servicename]']='';serviceExcludeFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                                 <c-row class="my-1">
                                     <c-col class="text-info small">
                                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                                        {{ t('You can either search for "host" OR "excluded host". Opposing Field will be reset automatically') }}
+                                        {{ t('You can either search for "service" OR "excluded service". Opposing Field will be reset automatically') }}
                                     </c-col>
                                 </c-row>
                                 <c-input-group>
                                     <span cInputGroupText class="pe-0 ps-2">
                                         <fa-stack>
-                                            <fa-icon [icon]="['fas', 'desktop']"
+                                            <fa-icon [icon]="['fas', 'cog']"
                                                      stackItemSize="1x" pull="right"></fa-icon>
                                             <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"
                                                      stackItemSize="1x"
@@ -96,41 +97,41 @@
                                         </fa-stack>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[HostsExcluded.name]']"
-                                           [placeholder]="'Filter by excluded host' | transloco"
+                                           [(ngModel)]="params['filter[ServicesExcluded.servicename]']"
+                                           [placeholder]="'Filter by excluded service' | transloco"
                                            cFormControl
-                                           name="HostsExcluded.name"
+                                           name="ServicesExcluded.servicename"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostExcludeFocus=true;params['filter[Hosts.name]']='';hostFocus=false;onFilterChange(true);"
+                                           (focus)="serviceExcludeFocus=true;params['filter[Services.servicename]']='';serviceFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                             </c-col>
                             <c-col [lg]="6" class="border-start border-primary border-4 rounded-top rounded-bottom">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Hostgroups.name]']"
-                                           [placeholder]="'Filter by host group' | transloco"
+                                           [(ngModel)]="params['filter[Servicegroups.name]']"
+                                           [placeholder]="'Filter by service group' | transloco"
                                            cFormControl
-                                           name="Hostgroups.name"
+                                           name="Servicegroups.name"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostgroupFocus=true;params['filter[HostgroupsExcluded.name]']='';hostgroupExcludeFocus=false;onFilterChange(true);"
+                                           (focus)="servicegroupFocus=true;params['filter[ServicegroupsExcluded.name]']='';servicegroupExcludeFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                                 <c-row class="my-1">
                                     <c-col class="text-info small">
                                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                                        {{ t('You can either search for "host group" OR "excluded host group". Opposing Field will be reset automatically') }}
+                                        {{ t('You can either search for "service group" OR "excluded service group". Opposing Field will be reset automatically') }}
                                     </c-col>
                                 </c-row>
                                 <c-input-group>
                                     <span cInputGroupText class="pe-0 ps-2">
                                         <fa-stack>
-                                            <fa-icon [icon]="['fas', 'server']"
+                                            <fa-icon [icon]="['fas', 'cogs']"
                                                      stackItemSize="1x" pull="right"></fa-icon>
                                             <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"
                                                      stackItemSize="1x"
@@ -138,13 +139,13 @@
                                         </fa-stack>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[HostgroupsExcluded.name]']"
-                                           [placeholder]="'Filter by excluded host group' | transloco"
+                                           [(ngModel)]="params['filter[ServicegroupsExcluded.name]']"
+                                           [placeholder]="'Filter by excluded service group' | transloco"
                                            cFormControl
-                                           name="HostgroupsExcluded.name"
+                                           name="ServicegroupsExcluded.name"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostgroupExcludeFocus=true;params['filter[Hostgroups.name]']='';hostgroupFocus=false;onFilterChange(true);"
+                                           (focus)="servicegroupExcludeFocus=true;params['filter[Servicegroups.name]']='';servicegroupFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                             </c-col>
@@ -160,9 +161,9 @@
                                             <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                         </span>
                                         <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="params['filter[Hostescalations.first_notification]']"
+                                               [(ngModel)]="params['filter[Serviceescalations.first_notification]']"
                                                [placeholder]="'Filter by first notification' | transloco"
-                                               name="Hostescalations.first_notification"
+                                               name="Serviceescalations.first_notification"
                                                min="0"
                                                step="1"
                                                cFormControl
@@ -174,9 +175,9 @@
                                             <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                         </span>
                                         <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="params['filter[Hostescalations.last_notification]']"
+                                               [(ngModel)]="params['filter[Serviceescalations.last_notification]']"
                                                [placeholder]="'Filter by last notification' | transloco"
-                                               name="Hostescalations.last_notification"
+                                               name="Serviceescalations.last_notification"
                                                min="0"
                                                step="1"
                                                cFormControl
@@ -188,9 +189,9 @@
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                         </span>
                                         <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="params['filter[Hostescalations.notification_interval]']"
+                                               [(ngModel)]="params['filter[Serviceescalations.notification_interval]']"
                                                [placeholder]="'Filter by notification interval' | transloco"
-                                               name="Hostescalations.notification_interval"
+                                               name="Serviceescalations.notification_interval"
                                                min="0"
                                                step="1"
                                                cFormControl
@@ -209,49 +210,66 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-success"
-                                            name="Hostescalations.escalate_on_recovery"
-                                            id="Hostescalations.escalate_on_recovery"
+                                            name="Serviceescalations.escalate_on_recovery"
+                                            id="Serviceescalations.escalate_on_recovery"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_recovery]']"/>
+                                            [(ngModel)]="params['filter[Serviceescalations.escalate_on_recovery]']"/>
 
                                         <label cFormCheckLabel
-                                               for="Hostescalations.escalate_on_recovery">{{ t('Up') }}</label>
+                                               for="Serviceescalations.escalate_on_recovery">{{ t('Ok') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-warning"
+                                            name="Serviceescalations.escalate_on_warning"
+                                            id="Serviceescalations.escalate_on_warning"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [falseValue]="''"
+                                            [trueValue]="'1'"
+                                            [(ngModel)]="params['filter[Serviceescalations.escalate_on_warning]']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Serviceescalations.escalate_on_warning">{{ t('Warning') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-danger"
-                                            name="Hostescalations.escalate_on_down"
-                                            id="Hostescalations.escalate_on_down"
+                                            name="Serviceescalations.escalate_on_critical"
+                                            id="Serviceescalations.escalate_on_critical"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_down]']"/>
+                                            [(ngModel)]="params['filter[Serviceescalations.escalate_on_critical]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostescalations.escalate_on_down">{{ t('Down') }}</label>
+                                               for="Serviceescalations.escalate_on_critical">{{ t('Critical') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-secondary"
-                                            name="Hostescalations.escalate_on_unreachable"
-                                            id="Hostescalations.escalate_on_unreachable"
+                                            name="Serviceescalations.escalate_on_unknown"
+                                            id="Serviceescalations.escalate_on_unknown"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostescalations.escalate_on_unreachable]']"/>
+                                            [(ngModel)]="params['filter[Serviceescalations.escalate_on_unknown]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostescalations.escalate_on_unreachable">{{ t('Unreachable') }}</label>
+                                               for="Serviceescalations.escalate_on_unknown">{{ t('Unknown') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
@@ -274,7 +292,7 @@
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
                         <th scope="col">
-                            {{ t('Hosts') }}
+                            {{ t('Services') }}
                             <fa-stack>
                                 <fa-icon [icon]="['fas', 'plus']" class="text-primary"
                                          stackItemSize="1x" pull="right"></fa-icon>
@@ -282,10 +300,10 @@
                                          stackItemSize="1x"
                                          transform="shrink-8 right-3 down-7"></fa-icon>
                             </fa-stack>
-                            {{ t('Excluded hosts groups ') }}
+                            {{ t('Excluded services groups ') }}
                         </th>
                         <th scope="col">
-                            {{ t('Host groups') }}
+                            {{ t('Service groups') }}
                             <fa-stack>
                                 <fa-icon [icon]="['fas', 'plus']" class="text-primary"
                                          stackItemSize="1x" pull="right"></fa-icon>
@@ -293,7 +311,7 @@
                                          stackItemSize="1x"
                                          transform="shrink-8 right-3 down-7"></fa-icon>
                             </fa-stack>
-                            {{ t('Excluded hosts') }}
+                            {{ t('Excluded services') }}
                         </th>
                         <th scope="col">
                             {{ t('First') }}
@@ -321,29 +339,29 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="hostescalations">
-                    <tr *ngFor="let hostescalation of hostescalations.all_hostescalations">
+                    <tbody *ngIf="serviceescalations">
+                    <tr *ngFor="let serviceescalation of serviceescalations.all_serviceescalations">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['hostescalations', 'delete']"
-                                [disabled]="!hostescalation.allowEdit"
-                                [item]="hostescalation"></oitc-item-select>
+                                *oitcPermission="['serviceescalations', 'delete']"
+                                [disabled]="!serviceescalation.allowEdit"
+                                [item]="serviceescalation"></oitc-item-select>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let host of hostescalation.hosts">
+                                <li *ngFor="let service of serviceescalation.services">
                                     <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
-                                    <a *oitcPermission="['hosts', 'edit']"
-                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                        {{ host.name }}
+                                    <a *oitcPermission="['services', 'edit']"
+                                       [routerLink]="['/', 'services', 'edit', service.id]">
+                                        {{ service.servicename }}
                                     </a>
-                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                        {{ host.name }}
+                                    <span *oitcPermission="['services', 'edit']; negate: true">
+                                        {{ service.servicename }}
                                     </span>
-                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                    <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
                                              class="text-danger"></fa-icon>
                                 </li>
-                                <div class="d-flex" *ngIf="hostescalation.hostgroups_excluded.length > 0">
+                                <div class="d-flex" *ngIf="serviceescalation.servicegroups_excluded.length > 0">
                                     <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
                                     <div>
                                         <fa-icon
@@ -352,32 +370,32 @@
                                     </div>
                                     <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
                                 </div>
-                                <li *ngFor="let hostgroup of hostescalation.hostgroups_excluded">
+                                <li *ngFor="let servicegroup of serviceescalation.servicegroups_excluded">
                                     <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
-                                    <a *oitcPermission="['hostgroups', 'edit']"
-                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                        {{ hostgroup.container.name }}
+                                    <a *oitcPermission="['servicegroups', 'edit']"
+                                       [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                        {{ servicegroup.container.name }}
                                     </a>
-                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                        {{ hostgroup.container.name }}
+                                    <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                        {{ servicegroup.container.name }}
                                     </span>
                                 </li>
                             </ul>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let hostgroup of hostescalation.hostgroups">
+                                <li *ngFor="let servicegroup of serviceescalation.servicegroups">
                                     <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
-                                    <a *oitcPermission="['hostgroups', 'edit']"
-                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                        {{ hostgroup.container.name }}
+                                    <a *oitcPermission="['servicegroups', 'edit']"
+                                       [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                        {{ servicegroup.container.name }}
                                     </a>
-                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                        {{ hostgroup.container.name }}
+                                    <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                        {{ servicegroup.container.name }}
                                     </span>
 
                                 </li>
-                                <div class="d-flex" *ngIf="hostescalation.hosts_excluded.length > 0">
+                                <div class="d-flex" *ngIf="serviceescalation.services_excluded.length > 0">
                                     <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
                                     <div>
                                         <fa-icon
@@ -386,37 +404,37 @@
                                     </div>
                                     <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
                                 </div>
-                                <li *ngFor="let host of hostescalation.hosts_excluded">
+                                <li *ngFor="let service of serviceescalation.services_excluded">
                                     <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
-                                    <a *oitcPermission="['hosts', 'edit']"
-                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                        {{ host.name }}
+                                    <a *oitcPermission="['services', 'edit']"
+                                       [routerLink]="['/', 'services', 'edit', service.id]">
+                                        {{ service.servicename }}
                                     </a>
-                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                        {{ host.name }}
+                                    <span *oitcPermission="['services', 'edit']; negate: true">
+                                        {{ service.servicename }}
                                     </span>
-                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                    <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
                                              class="text-danger"></fa-icon>
                                 </li>
                             </ul>
                         </td>
-                        <td>{{ hostescalation.first_notification }}</td>
-                        <td>{{ hostescalation.last_notification }}</td>
-                        <td>{{ hostescalation.notification_interval }}</td>
+                        <td>{{ serviceescalation.first_notification }}</td>
+                        <td>{{ serviceescalation.last_notification }}</td>
+                        <td>{{ serviceescalation.notification_interval }}</td>
                         <td>
-                            <div *ngIf="hostescalation.timeperiod">
+                            <div *ngIf="serviceescalation.timeperiod">
                                 <a *oitcPermission="['timeperiods', 'edit']"
-                                   [routerLink]="['/', 'timeperiods', 'edit', hostescalation.timeperiod.id]">
-                                    {{ hostescalation.timeperiod.name }}
+                                   [routerLink]="['/', 'timeperiods', 'edit', serviceescalation.timeperiod.id]">
+                                    {{ serviceescalation.timeperiod.name }}
                                 </a>
                                 <span *oitcPermission="['timeperiods', 'edit']; negate: true">
-                                    {{ hostescalation.timeperiod.name }}
+                                    {{ serviceescalation.timeperiod.name }}
                                 </span>
                             </div>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let contact of hostescalation.contacts">
+                                <li *ngFor="let contact of serviceescalation.contacts">
                                     <a *oitcPermission="['contacts', 'edit']"
                                        [routerLink]="['/', 'contacts', 'edit', contact.id]">
                                         {{ contact.name }}
@@ -429,7 +447,7 @@
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let contactgroup of hostescalation.contactgroups">
+                                <li *ngFor="let contactgroup of serviceescalation.contactgroups">
                                     <a *oitcPermission="['contactgroups', 'edit']"
                                        [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
                                         {{ contactgroup.container.name }}
@@ -441,32 +459,36 @@
                             </ul>
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
-                                  *ngIf="hostescalation.escalate_on_recovery">
+                            <span class="badge bg-success mx-1" title="{{ t('Ok') }}"
+                                  *ngIf="serviceescalation.escalate_on_recovery">
                                 {{ t('R') }}
                             </span>
-                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                                  *ngIf="hostescalation.escalate_on_down">
+                            <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
+                                  *ngIf="serviceescalation.escalate_on_warning">
+                                {{ t('W') }}
+                            </span>
+                            <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
+                                  *ngIf="serviceescalation.escalate_on_critical">
                                 {{ t('D') }}
                             </span>
-                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                                  *ngIf="hostescalation.escalate_on_unreachable">
+                            <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
+                                  *ngIf="serviceescalation.escalate_on_unknown">
                                 {{ t('U') }}
                             </span>
                         </td>
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'hostescalations.edit'"
-                                                 [url]="'/hostescalations/edit/' + hostescalation.id"
-                                                 [allowEdit]="hostescalation.allowEdit">
-                                <oitc-actions-button-element [permission]="'hostescalations.edit'"
-                                                             [url]="'/hostescalations/edit/' + hostescalation.id">
+                            <oitc-actions-button [permission]="'serviceescalations.edit'"
+                                                 [url]="'/serviceescalations/edit/' + serviceescalation.id"
+                                                 [allowEdit]="serviceescalation.allowEdit">
+                                <oitc-actions-button-element [permission]="'serviceescalations.edit'"
+                                                             [url]="'/serviceescalations/edit/' + serviceescalation.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hostescalation)"
-                                                             [permission]="'hostescalations.delete'">
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(serviceescalation)"
+                                                             [permission]="'serviceescalations.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
@@ -479,13 +501,13 @@
                 </table>
 
                 <oitc-no-records
-                    *ngIf="hostescalations && hostescalations.all_hostescalations.length === 0"></oitc-no-records>
-                <ng-container *ngIf="hostescalations && hostescalations.all_hostescalations">
+                    *ngIf="serviceescalations && serviceescalations.all_serviceescalations.length === 0"></oitc-no-records>
+                <ng-container *ngIf="serviceescalations && serviceescalations.all_serviceescalations">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="hostescalations.all_hostescalations.length"></oitc-select-all>
+                                    [itemsCount]="serviceescalations.all_serviceescalations.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group btn-group-xs d-flex flex-row" role="group">
@@ -506,8 +528,8 @@
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="hostescalations"
-                                [paginateOrScroll]="hostescalations"></oitc-paginate-or-scroll>
+                                *ngIf="serviceescalations"
+                                [paginateOrScroll]="serviceescalations"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>
