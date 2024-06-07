@@ -106,15 +106,18 @@
 
                             <td>
                                 <oitc-actions-button [permission]="'hosts.edit'"
+                                                     [allowEdit]="host.Host.allow_edit"
                                                      [url]="'/hosts/edit/' + host.Host.id">
                                     <oitc-actions-button-element [permission]="'hosts.edit'"
-                                                                 [url]="'/hosts/edit/' + host.Host.id">
+                                                                 [url]="'/hosts/edit/' + host.Host.id"
+                                                                 *ngIf="host.Host.allow_edit">
                                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                         {{ t('Edit') }}
                                     </oitc-actions-button-element>
 
-                                    <li cDropdownDivider></li>
+                                    <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
                                     <oitc-actions-button-element (click)="toggleDeleteAllModal(host)"
+                                                                 *ngIf="host.Host.allow_edit"
                                                                  [permission]="'hosts.delete'">
                                         <span class="text-danger">
                                             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
