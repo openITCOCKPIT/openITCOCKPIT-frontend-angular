@@ -1,0 +1,205 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
+                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                        {{ t('Hosts') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Hosts') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadHosts()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['hosts', 'add']" [routerLink]="['/', 'hosts', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host template name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.hosttype_id">
+                            {{ t('Type') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="hosts">
+                    <tr *ngFor="let host of hosts.all_hosts">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['hosts', 'delete']"
+                                [disabled]="!host.Host.allow_edit"
+                                [item]="host"></oitc-item-select>
+
+                        </td>
+                        <td>{{ host.Host.name }}</td>
+                        <td>
+                            <span
+                                *ngIf="host.Host.type"
+                                class="badge border"
+                                [ngClass]="[host.Host.type.class, host.Host.type.color]">
+                                <fa-icon [icon]="host.Host.type.icon"
+                                         [rotate]="host.Host.type.rotate"></fa-icon>
+                                {{ host.Host.type.title }}
+                            </span>
+                        </td>
+
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'hosts.edit'"
+                                                 [url]="'/hosts/edit/' + host.Host.id"
+                                                 [allowEdit]="host.Host.allow_edit">
+                                <oitc-actions-button-element [permission]="'hosts.edit'"
+                                                             *ngIf="host.Host.allow_edit"
+                                                             [url]="'/hosts/edit/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                             [url]="'/changelogs/entity/host/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'hosts.usedBy'"
+                                                             [url]="'/hosts/usedBy/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                    {{ t('Used By') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'documentations.view'"
+                                                             [url]="'/documentations/view/' + host.Host.uuid+'/host'">
+                                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                    {{ t('Documentation') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element [permission]="'hosts.copy'"
+                                                             [url]="'/hosts/copy/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </oitc-actions-button-element>
+
+                                <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                                             [permission]="'hosts.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="hosts && hosts.all_hosts.length === 0"></oitc-no-records>
+                <ng-container *ngIf="hosts && hosts.all_hosts">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="hosts.all_hosts.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+                                    <button class="btn btn-outline-primary col-3" type="button"
+                                            (click)="navigateCopy()">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </button>
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="hosts"
+                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+
+            </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

@@ -1,6 +1,7 @@
 // This interface is 1:1 the same as the src/itnovum/openITCOCKPIT/Core/Views/Host.php class
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
+import { HostTypesEnum } from './hosts.enum';
 
 export interface HostObject {
     id?: number
@@ -24,6 +25,7 @@ export interface HostObject {
     allow_sharing?: boolean // hosts/index
     satelliteName?: string // hosts/index
     additionalInformationExists?: boolean // hosts/index
+    type?: HostOrServiceType // hosts/index
 }
 
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
@@ -148,7 +150,74 @@ export interface HostOrServiceType {
 export interface HostsIndexRoot extends PaginateOrScroll {
     all_hosts: {
         Host: HostObject
-        Hoststatus: HoststatusObject
+        Hoststatus: HoststatusObject,
+        ServicestatusSummary: {
+            ok: number
+            warning: number
+            critical: number
+            unknown: number
+            total: number
+        }
     }[]
-    _csrfToken: string
+}
+
+export interface HostsIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | ''
+    // Filters are handled by POST data
+}
+
+export function getDefaultHostsIndexParams(): HostsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hoststatus.current_state',
+        page: 1,
+        direction: 'desc'
+    }
+}
+
+export interface HostsIndexFilter {
+    'Hosts.id': number[]
+    'Hosts.name': string
+    'Hosts.name_regex': boolean
+    'Hosts.keywords': string[]
+    'Hosts.not_keywords': string[]
+    'Hosts.address': string
+    'Hosts.address_regex': boolean
+    'Hosts.satellite_id': number[]
+    'Hosts.host_type': HostTypesEnum[]
+    'hostdescription': string
+    'Hoststatus.output': string
+    'Hoststatus.current_state': string[]
+    'Hoststatus.problem_has_been_acknowledged': string,
+    'Hoststatus.scheduled_downtime_depth': string,
+    'Hoststatus.notifications_enabled': string,
+    'Hoststatus.is_hardstate': string,
+    'hostpriority': number[]
+}
+
+export function getDefaultHostsIndexFilter(): HostsIndexFilter {
+    return {
+        'Hosts.id': [],
+        'Hosts.name': '',
+        'Hosts.name_regex': false,
+        'Hosts.keywords': [],
+        'Hosts.not_keywords': [],
+        'Hosts.address': '',
+        'Hosts.address_regex': false,
+        'Hosts.satellite_id': [],
+        'Hosts.host_type': [],
+        'hostdescription': '',
+        'Hoststatus.output': '',
+        'Hoststatus.current_state': [],
+        'Hoststatus.problem_has_been_acknowledged': '',
+        'Hoststatus.scheduled_downtime_depth': '',
+        'Hoststatus.notifications_enabled': '',
+        'Hoststatus.is_hardstate': '',
+        'hostpriority': []
+    }
 }
