@@ -7,15 +7,18 @@ import { TranslocoService } from '@jsverse/transloco';
 import { ServicetemplateTypesEnum } from './servicetemplate-types.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import {
+    HostWithServices,
     ServicetemplateCommandArgument,
     ServicetemplateContainerResult,
     ServicetemplateCopyGet,
     ServicetemplateCopyPost,
     ServicetemplateEditApiResult,
     ServicetemplateElements,
+    ServicetemplateEntity,
     ServicetemplateIndexRoot,
     ServicetemplatePost,
     ServicetemplatesIndexParams,
+    ServicetemplatesUsedByParams,
     ServicetemplateTypeResult
 } from './servicetemplates.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -296,5 +299,29 @@ export class ServicetemplatesService {
         return this.http.post<any>(`${proxyPath}/servicetemplates/copy/.json?angular=true`, {
             data: servicetemplates
         });
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number, params: ServicetemplatesUsedByParams): Observable<{
+        hostsWithServices: HostWithServices[]
+        servicetemplate: ServicetemplateEntity,
+        count: number
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hostsWithServices: HostWithServices[]
+            servicetemplate: ServicetemplateEntity,
+            count: number
+        }>(`${proxyPath}/servicetemplates/usedBy/${id}.json`, {
+            params: params as {}
+
+        })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
     }
 }

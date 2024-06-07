@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostsToContainersSharing } from '../hosts/hosts.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -439,21 +440,6 @@ export interface ContactUsedByHost {
     hosts_to_containers_sharing: HostsToContainersSharing[]
 }
 
-export interface HostsToContainersSharing {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-    _joinData: JoinData
-}
-
-export interface JoinData {
-    id: number
-    host_id: number
-    container_id: number
-}
 
 export interface ContactUsedByService {
     id: number

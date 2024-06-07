@@ -4,6 +4,7 @@ import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostEntity, HostsToContainersSharing } from '../hosts/hosts.interface';
 
 /**********************
  *    Index action    *
@@ -264,6 +265,19 @@ export interface ServicetemplateCopyPost {
 /**********************
  *   Used By action   *
  **********************/
+
+export interface ServicetemplatesUsedByParams {
+    angular: true,
+    'filter[Services.disabled]': boolean
+}
+
+export function getDefaultServicetemplatesUsedByParams(): ServicetemplatesUsedByParams {
+    return {
+        angular: true,
+        'filter[Services.disabled]': true
+    }
+}
+
 // 1:1 the same as the src/Model/Entity/Servicetemplate.php class
 export interface ServicetemplateEntity {
     id: number
@@ -312,4 +326,22 @@ export interface ServicetemplateEntity {
     is_volatile: number
     created: string
     modified: string
+}
+
+export interface HostWithServices extends HostEntity {
+    hosts_to_container_sharing: HostsToContainersSharing[]
+    services: ServicetemplatesUsedByService[]
+}
+
+export interface ServicetemplatesUsedByService {
+    id: number
+    name?: string
+    disabled: number
+    host_id: number
+    servicetemplate: {
+        id: number
+        name: string
+    }
+    servicename: string
+    hostname: string
 }
