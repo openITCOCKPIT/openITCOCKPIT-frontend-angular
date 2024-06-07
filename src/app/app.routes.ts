@@ -191,7 +191,7 @@ export const routes: Routes = [{
     path: 'hostescalations/edit/:id',
     loadComponent: () => import('./pages/hostescalations/hostescalations-edit/hostescalations-edit.component').then(m => m.HostescalationsEditComponent)
 }, {
-    path: 'servicescalations/index',
+    path: 'serviceescalations/index',
     loadComponent: () => import('./pages/serviceescalations/serviceescalations-index/serviceescalations-index.component').then(m => m.ServiceescalationsIndexComponent)
 },{
     path: 'error/404',
