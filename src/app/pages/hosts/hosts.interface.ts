@@ -1,4 +1,7 @@
 // This interface is 1:1 the same as the src/itnovum/openITCOCKPIT/Core/Views/Host.php class
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
+
 export interface HostObject {
     id?: number
     uuid?: string
@@ -18,6 +21,9 @@ export interface HostObject {
     notes?: string
     is_satellite_host: boolean
     name?: string // same as hostname
+    allow_sharing?: boolean // hosts/index
+    satelliteName?: string // hosts/index
+    additionalInformationExists?: boolean // hosts/index
 }
 
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
@@ -81,6 +87,39 @@ export interface HostEntity {
     allow_edit?: boolean
 }
 
+export interface HoststatusObject {
+    currentState?: number
+    isFlapping?: boolean
+    problemHasBeenAcknowledged?: boolean
+    scheduledDowntimeDepth?: number
+    lastCheck?: string
+    nextCheck?: string
+    activeChecksEnabled?: boolean
+    lastHardState?: string
+    lastHardStateChange?: string
+    last_state_change?: string
+    output?: string
+    long_output?: string
+    acknowledgement_type?: number
+    state_type?: number
+    flap_detection_enabled?: any
+    notifications_enabled?: boolean
+    current_check_attempt?: any
+    max_check_attempts?: any
+    latency?: number
+    last_time_up?: string
+    lastHardStateChangeInWords?: string
+    last_state_change_in_words?: string
+    lastCheckInWords?: string
+    nextCheckInWords?: string
+    isHardstate?: boolean
+    isInMonitoring?: boolean
+    humanState?: string
+    cssClass?: string
+    textClass?: string
+    outputHtml?: string
+}
+
 export interface HostsToContainersSharing {
     id: number
     containertype_id: number
@@ -93,4 +132,23 @@ export interface HostsToContainersSharing {
         host_id: number
         container_id: number
     }
+}
+
+export interface HostOrServiceType {
+    title: string
+    color: string
+    class: string
+    icon: IconProp,
+    rotate: RotateProp,
+}
+
+/**********************
+ *    Index action    *
+ **********************/
+export interface HostsIndexRoot extends PaginateOrScroll {
+    all_hosts: {
+        Host: HostObject
+        Hoststatus: HoststatusObject
+    }[]
+    _csrfToken: string
 }

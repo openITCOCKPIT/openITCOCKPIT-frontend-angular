@@ -3,7 +3,6 @@ import {
     ServicetemplateContainerResult,
     ServicetemplatePost,
     ServicetemplateTypeResult,
-    ServicetemplateTypeResultDetails
 } from '../../servicetemplates/servicetemplates.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -54,6 +53,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 
 @Component({
@@ -110,7 +110,7 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     public eventhandlerCommands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
     public post: ServicetemplatePost = {} as ServicetemplatePost;
-    public typeDetails: ServicetemplateTypeResultDetails | undefined;
+    public typeDetails: HostOrServiceType | undefined;
 
     public timeperiods: SelectKeyValue[] = [];
     public checkperiods: SelectKeyValue[] = [];

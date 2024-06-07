@@ -30,12 +30,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import {
-    HosttemplateContainerResult,
-    HosttemplatePost,
-    HosttemplateTypeResult,
-    HosttemplateTypeResultDetails
-} from '../hosttemplates.interface';
+import { HosttemplateContainerResult, HosttemplatePost, HosttemplateTypeResult, } from '../hosttemplates.interface';
 import { Subscription } from 'rxjs';
 import { HosttemplatesService } from '../hosttemplates.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
@@ -56,6 +51,7 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-edit',
@@ -113,7 +109,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
     public commands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
     public post!: HosttemplatePost;
-    public typeDetails: HosttemplateTypeResultDetails | undefined;
+    public typeDetails: HostOrServiceType | undefined;
 
     public timeperiods: SelectKeyValue[] = [];
     public checkperiods: SelectKeyValue[] = [];

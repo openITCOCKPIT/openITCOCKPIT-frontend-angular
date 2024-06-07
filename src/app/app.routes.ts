@@ -152,6 +152,9 @@ export const routes: Routes = [{
     path: 'servicetemplates/usedBy/:id',
     loadComponent: () => import('./pages/servicetemplates/servicetemplates-used-by/servicetemplates-used-by.component').then(m => m.ServicetemplatesUsedByComponent)
 }, {
+    path: 'hosts/index',
+    loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

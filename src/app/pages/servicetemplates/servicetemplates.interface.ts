@@ -1,10 +1,9 @@
 import { ServicetemplateTypesEnum } from './servicetemplate-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { GenericValidationError } from '../../generic-responses';
-import { HostEntity, HostsToContainersSharing } from '../hosts/hosts.interface';
+import { HostEntity, HostOrServiceType, HostsToContainersSharing } from '../hosts/hosts.interface';
 
 /**********************
  *    Index action    *
@@ -98,17 +97,10 @@ export interface ServicetemplateIndex {
         created: string
         modified: string
         allow_edit: boolean
-        type: ServicetemplateType
+        type: HostOrServiceType
     }
 }
 
-export interface ServicetemplateType {
-    title: string
-    color: string
-    class: string
-    icon: IconProp,
-    rotate: RotateProp,
-}
 
 /**********************
  *    Add action    *
@@ -121,15 +113,7 @@ export interface ServicetemplateContainerResult {
 
 export interface ServicetemplateTypeResult {
     key: number
-    value: ServicetemplateTypeResultDetails
-}
-
-export interface ServicetemplateTypeResultDetails {
-    title: string
-    color: string
-    class: string
-    icon: IconProp,
-    rotate: RotateProp,
+    value: HostOrServiceType
 }
 
 export interface ServicetemplateContainerResult {

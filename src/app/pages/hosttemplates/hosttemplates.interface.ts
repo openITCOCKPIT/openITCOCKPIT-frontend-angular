@@ -1,9 +1,9 @@
 import { HosttemplateTypesEnum } from './hosttemplate-types.enum';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostOrServiceType } from '../hosts/hosts.interface';
 
 /**********************
  *    Index action    *
@@ -88,16 +88,8 @@ export interface HosttemplateIndex {
         created: string
         modified: string
         allow_edit: boolean
-        type: HosttemplateType
+        type: HostOrServiceType
     }
-}
-
-export interface HosttemplateType {
-    title: string
-    color: string
-    class: string
-    icon: IconProp,
-    rotate: RotateProp,
 }
 
 /**********************
@@ -106,15 +98,7 @@ export interface HosttemplateType {
 
 export interface HosttemplateTypeResult {
     key: number
-    value: HosttemplateTypeResultDetails
-}
-
-export interface HosttemplateTypeResultDetails {
-    title: string
-    color: string
-    class: string
-    icon: IconProp,
-    rotate: RotateProp,
+    value: HostOrServiceType
 }
 
 export interface HosttemplateContainerResult {

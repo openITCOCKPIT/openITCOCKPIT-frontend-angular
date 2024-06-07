@@ -43,7 +43,6 @@ import {
     ServicetemplateContainerResult,
     ServicetemplatePost,
     ServicetemplateTypeResult,
-    ServicetemplateTypeResultDetails
 } from '../servicetemplates.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -55,6 +54,7 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 
 @Component({
@@ -112,7 +112,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
     public eventhandlerCommands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
     public post!: ServicetemplatePost;
-    public typeDetails: ServicetemplateTypeResultDetails | undefined;
+    public typeDetails: HostOrServiceType | undefined;
 
     public timeperiods: SelectKeyValue[] = [];
     public checkperiods: SelectKeyValue[] = [];
