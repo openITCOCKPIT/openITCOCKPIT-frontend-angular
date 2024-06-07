@@ -17,7 +17,7 @@ import {
     NavItemComponent, ProgressBarComponent, RowComponent, TooltipDirective
 } from '@coreui/angular';
 import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {FaIconComponent, FaStackComponent} from '@fortawesome/angular-fontawesome';
+import {FaIconComponent, FaStackComponent, FaStackItemSizeDirective} from '@fortawesome/angular-fontawesome';
 import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
 import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import {FormsModule} from '@angular/forms';
@@ -94,7 +94,8 @@ import {SelectComponent} from "../../../layouts/primeng/select/select/select.com
         JsonPipe,
         MultiSelectComponent,
         SelectComponent,
-        TooltipDirective
+        TooltipDirective,
+        FaStackItemSizeDirective
     ],
     templateUrl: './servicetemplategroups-allocate-to-host.component.html',
     styleUrl: './servicetemplategroups-allocate-to-host.component.css'
@@ -143,7 +144,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         }
         this.ServicetemplategroupsService.allocateToHostGet(this.servicetemplategroupId, this.hostId).subscribe(
             (result: AllocateToHostGet): void => {
-                console.warn(result);
                 this.hostsWithServicetemplatesForDeploy = result.servicetemplatesForDeploy
             }
         )
@@ -165,14 +165,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
             .subscribe((result: LoadHostsByStringResponse): void => {
                 this.hosts = result.hosts;
             }))
-    }
-
-    protected handleHostSelect(hostIndex: number, areAllCreateServiceOnTargetHostTrue: boolean, services: AllocateToHostGroupGetService[]): void {
-        /*
-        for (let serviceIndex in services) {
-            this.hostsWithServicetemplatesForDeploy[hostIndex].servicetemplate[serviceIndex].createServiceOnTargetHost = !areAllCreateServiceOnTargetHostTrue;
-        }
-         */
     }
 
     protected selectAll(): void {

@@ -93,12 +93,14 @@
                     </div>
 
                     <ng-container *ngIf="hostId !== null">
-                        <c-alert color="info">
+                        <c-alert color="light">
                             <c-row>
-                                <c-col>
+                                <c-col class="alertLeftIcon">
                                     <fa-stack>
-                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'circle']" class="text-info"
+                                                 stackItemSize="2x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'info']" class="text-light"
+                                                 stackItemSize="1x"></fa-icon>
                                     </fa-stack>
                                 </c-col>
                                 <c-col>
@@ -132,22 +134,17 @@
                                     </span>
 
 
-                                    <span class="text-info"
-                                          *ngIf="hostWithServicesToDeploy.doesServicetemplateExistsOnTargetHost"
-                                          [cTooltip]="'Service already exist on selected host. Tick the box to create a duplicate.' | transloco"
-                                          data-placement="right"
-                                          rel="tooltip"
-                                          data-container="body">
-                                        <i class="fa fa-info-circle"></i>
-                                    </span>
+                                    <fa-icon [icon]="['fas', 'info-circle']"
+                                             class="text-info"
+                                             [cTooltip]="'Service already exist on selected host. Tick the box to create a duplicate.' | transloco"
+                                             *ngIf="hostWithServicesToDeploy.doesServicetemplateExistsOnTargetHost"
+                                    />
 
-                                    <span *ngIf="hostWithServicesToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
-                                          [cTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
-                                          data-placement="right"
-                                          rel="tooltip"
-                                          data-container="body">
-                                        <i class="fa fa-plug"></i>
-                                    </span>
+                                    <fa-icon [icon]="['fas', 'plug']"
+                                             class="text-info"
+                                             [cTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
+                                             *ngIf="hostWithServicesToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
+                                    />
                                 </label>
                             </div>
                         </fieldset>
