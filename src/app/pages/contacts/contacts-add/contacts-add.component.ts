@@ -50,6 +50,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
+import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -88,7 +89,8 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
         TooltipDirective,
         TranslocoDirective,
         XsButtonDirective,
-        SelectComponent
+        SelectComponent,
+        LabelLinkComponent
     ],
     templateUrl: './contacts-add.component.html',
     styleUrl: './contacts-add.component.css'
