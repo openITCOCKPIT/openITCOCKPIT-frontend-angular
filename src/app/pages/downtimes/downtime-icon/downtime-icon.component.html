@@ -1,0 +1,57 @@
+<ng-container *transloco="let t">
+    @if (this.PermissionsService.hasPermission([type, 'browser'])) {
+
+        <span
+            (mouseenter)="loadDowntimeDetails()"
+            (mouseleave)="cancelDebounce()">
+            <fa-icon
+                [icon]="['fas', 'power-off']"
+                [cPopover]="popoverHtml"
+                cPopoverPlacement="right"
+                [cPopoverTrigger]="'hover'">
+                <ng-template #popoverHtml>
+                    @if (isLoading) {
+                        <c-row>
+                            <c-col xs="12" class="p-4">
+                                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+
+                                <p-skeleton styleClass="mb-2"></p-skeleton>
+                                <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+                                <p-skeleton width="7rem" styleClass="mb-2"></p-skeleton>
+                                <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                    } @else {
+                        <h3 class="popover-header">
+                            <ng-container *ngIf="type === 'hosts'">
+                                {{ t('The host is currently in a planned maintenance period') }}
+                            </ng-container>
+                            <ng-container *ngIf="type === 'services'">>
+                                {{ t('The service is currently in a planned maintenance period') }}
+                            </ng-container>
+                        </h3>
+                        <div class="popover-body">
+                            <dl class="row">
+                                <dt class="col-4">{{ t('Author') }}:</dt>
+                                <dd class="col-8">{{ downtime?.authorName }}</dd>
+
+                                <dt class="col-4">{{ t('Start') }}:</dt>
+                                <dd class="col-8">{{ downtime?.scheduledStartTime }}</dd>
+
+                                <dt class="col-4">{{ t('End') }}:</dt>
+                                <dd class="col-8">{{ downtime?.scheduledEndTime }}</dd>
+
+                                <dt class="col-4">{{ t('Comment') }}:</dt>
+                                <dd class="col-8">{{ downtime?.commentData }}</dd>
+                            </dl>
+                        </div>
+                    }
+                </ng-template>
+            </fa-icon>
+        </span>
+    } @else {
+        <!-- User has no permissions to browser action -->
+        <fa-icon [icon]="['fas', 'power-off']"
+                 [cTooltip]="'Scheduled maintenance' | transloco" cTooltipPlacement="right"></fa-icon>
+    }
+</ng-container>

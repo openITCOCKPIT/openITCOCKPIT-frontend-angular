@@ -20,12 +20,13 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -56,6 +57,17 @@ import { HostsService } from '../hosts.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import {
+    AcknowledgementIconComponent
+} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -99,7 +111,16 @@ import { ServicesService } from '../../services/services.service';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        QueryHandlerCheckerComponent,
+        TooltipDirective,
+        HoststatusIconComponent,
+        AcknowledgementIconComponent,
+        DowntimeIconComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        CopyToClipboardComponent,
+        TrustAsHtmlPipe
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -112,13 +133,14 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public filter: HostsIndexFilter = getDefaultHostsIndexFilter();
 
     public hosts?: HostsIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
 
     public hostTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];
 
     private readonly HostsService = inject(HostsService);
     private subscriptions: Subscription = new Subscription();
+    public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
@@ -147,6 +169,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     // Show or hide the filter
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
+    }
+
+    public problemsOnly() {
+        this.params = getDefaultHostsIndexParams();
+        this.filter = getDefaultHostsIndexFilter();
+        console.log('implement me!')
     }
 
     // Callback when a filter has changed
@@ -219,4 +247,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
         }
     }
+
+    protected readonly String = String;
 }

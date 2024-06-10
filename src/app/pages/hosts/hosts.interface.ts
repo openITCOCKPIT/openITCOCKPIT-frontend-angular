@@ -2,6 +2,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { HostTypesEnum } from './hosts.enum';
+import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
 
 export interface HostObject {
     id?: number
@@ -102,7 +103,7 @@ export interface HoststatusObject {
     last_state_change?: string
     output?: string
     long_output?: string
-    acknowledgement_type?: number
+    acknowledgement_type?: AcknowledgementTypes
     state_type?: number
     flap_detection_enabled?: any
     notifications_enabled?: boolean
@@ -152,11 +153,13 @@ export interface HostsIndexRoot extends PaginateOrScroll {
         Host: HostObject
         Hoststatus: HoststatusObject,
         ServicestatusSummary: {
-            ok: number
-            warning: number
-            critical: number
-            unknown: number
-            total: number
+            state: {
+                ok: number
+                warning: number
+                critical: number
+                unknown: number
+                total: number
+            }
         }
     }[]
 }
