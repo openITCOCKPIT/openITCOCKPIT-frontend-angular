@@ -20,7 +20,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -59,6 +60,7 @@ import { ServicesService } from '../../services/services.service';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -103,7 +105,9 @@ import {
         XsButtonDirective,
         RouterLink,
         NgClass,
-        QueryHandlerCheckerComponent
+        QueryHandlerCheckerComponent,
+        TooltipDirective,
+        HoststatusIconComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',

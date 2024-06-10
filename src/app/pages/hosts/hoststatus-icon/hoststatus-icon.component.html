@@ -1,0 +1,11 @@
+<a href="javascript:void(0);"
+   class="btn status-circle"
+   [ngClass]="[btnColor, opacity]"
+   *ngIf="!isFlapping"
+   [cTooltip]="humanState" cTooltipPlacement="right"
+></a>
+<span class="flapping_airport stateClass" *ngIf="isFlapping">
+    <fa-icon [icon]="(flappingState === 1 ? ['fas', 'circle']: ['far', 'circle'])" [ngClass]="flappingColor"
+             class="flapping-padding"></fa-icon>
+    <fa-icon [icon]="(flappingState === 0 ? ['fas', 'circle']: ['far', 'circle'])" [ngClass]="flappingColor"></fa-icon>
+</span>

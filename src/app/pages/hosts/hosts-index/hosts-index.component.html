@@ -115,16 +115,92 @@
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        <th colspan="2" class="width-90"
+                            mat-sort-header="Hoststatus.current_state">
+                            {{ t('Hoststatus') }}
                         </th>
-                        <th scope="col" mat-sort-header="Hosts.name">
-                            {{ t('Host template name') }}
+
+                        <th class="text-center"
+                            mat-sort-header="Hoststatus.acknowledgement_type"
+                            [cTooltip]="'is acknowledged' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
                         </th>
-                        <th scope="col" mat-sort-header="Hosts.hosttype_id">
-                            {{ t('Type') }}
+
+                        <th class="text-center"
+                            mat-sort-header="Hoststatus.scheduled_downtime_depth"
+                            [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                         </th>
-                        <th class="text-center width-50" scope="col">
+
+                        <th class="text-center"
+                            mat-sort-header="Hoststatus.notifications_enabled"
+                            [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                        </th>
+
+                        <th class="text-center"
+                            [cTooltip]="'Shared' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                        </th>
+
+                        <th class="text-center"
+                            [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="top">
+                            <strong>P</strong>
+                        </th>
+
+                        <th class="text-center"
+                            mat-sort-header="hostpriority"
+                            [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                        </th>
+
+                        <th>
+                            mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+
+                        <th>
+                            {{ t('Host description') }}
+                        </th>
+
+                        <th
+                            mat-sort-header="Hosts.address">
+                            {{ t('IP address') }}
+                        </th>
+
+                        <th class="tableStatewidth"
+                            mat-sort-header="Hoststatus.last_state_change">
+                            {{ t('Last state change') }}
+                        </th>
+
+                        <th class="tableStatewidth"
+                            mat-sort-header="Hoststatus.last_check">
+                            {{ t('Last check') }}
+                        </th>
+
+                        <th
+                            mat-sort-header="Hoststatus.output">
+                            {{ t('Host output') }}
+                        </th>
+
+                        <th
+                            mat-sort-header="Hosts.satellite_id">
+                            {{ t('Instance') }}
+                        </th>
+
+                        <th *oitcPermission="['services', 'serviceList']">
+                            {{ t('Service Summary ') }}
+                        </th>
+
+                        <th>
+                            {{ t('Host notes') }}
+                        </th>
+
+                        <th>
+                            {{ t('Host type') }}
+                        </th>
+
+                        <th class="text-center editItemWidth" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
                     </tr>
@@ -136,7 +212,9 @@
                                 *oitcPermission="['hosts', 'delete']"
                                 [disabled]="!host.Host.allow_edit"
                                 [item]="host"></oitc-item-select>
-
+                        </td>
+                        <td class="text-center">
+                            <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
                         </td>
                         <td>{{ host.Host.name }}</td>
                         <td>

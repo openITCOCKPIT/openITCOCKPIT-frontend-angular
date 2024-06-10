@@ -7,11 +7,24 @@
 }
 
 .width-50 {
-    width: 50px
+    width: 50px;
+}
+
+.width-90 {
+    width: 90px;
 }
 
 .width-130 {
-    width: 130px
+    width: 130px;
+}
+
+.tableStatewidth {
+    min-width: 155px;
+}
+
+.editItemWidth {
+    min-width: 52px;
+    max-width: 52px;
 }
 
 .border-dashed {
