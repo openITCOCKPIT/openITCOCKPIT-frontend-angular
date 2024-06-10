@@ -154,7 +154,7 @@
                             <fa-icon [icon]="['fas', 'fire']"></fa-icon>
                         </th>
 
-                        <th>
+                        <th
                             mat-sort-header="Hosts.name">
                             {{ t('Host name') }}
                         </th>
@@ -216,7 +216,31 @@
                         <td class="text-center">
                             <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
                         </td>
-                        <td>{{ host.Host.name }}</td>
+                        <td class="text-center">
+                            <oitc-acknowledgement-icon
+                                *ngIf="host.Hoststatus.problemHasBeenAcknowledged"
+                                type="hosts"
+                                [objectId]="host.Host.id"
+                                [acknowledgement_type]="host.Hoststatus.acknowledgement_type"></oitc-acknowledgement-icon>
+                        </td>
+
+                        <td class="text-center">
+                            <oitc-downtime-icon
+                                *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
+                                type="hosts"
+                                [objectId]="host.Host.id"></oitc-downtime-icon>
+                        </td>
+
+                        <td>
+                            @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                    {{ host.Host.name }}
+                                </a>
+                            } @else {
+                                {{ host.Host.name }}
+                            }
+                        </td>
+
                         <td>
                             <span
                                 *ngIf="host.Host.type"

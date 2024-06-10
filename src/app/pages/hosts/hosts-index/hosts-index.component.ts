@@ -61,6 +61,11 @@ import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import {
+    AcknowledgementIconComponent
+} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -107,7 +112,9 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
         NgClass,
         QueryHandlerCheckerComponent,
         TooltipDirective,
-        HoststatusIconComponent
+        HoststatusIconComponent,
+        AcknowledgementIconComponent,
+        DowntimeIconComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -127,6 +134,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     private readonly HostsService = inject(HostsService);
     private subscriptions: Subscription = new Subscription();
+    public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
