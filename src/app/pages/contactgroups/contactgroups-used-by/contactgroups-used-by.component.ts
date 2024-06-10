@@ -5,7 +5,10 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ContainerComponent, NavComponent, TableDirective
+    ContainerComponent,
+    NavComponent,
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,6 +24,7 @@ import {
 } from '../contactgroups.interface';
 import { ContactgroupsService } from '../contactgroups.service';
 import { Subscription } from 'rxjs';
+import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
 @Component({
     selector: 'oitc-contactgroups-used-by',
@@ -41,7 +45,9 @@ import { Subscription } from 'rxjs';
         TableDirective,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        NavItemComponent,
+        NotUsedByObjectComponent
     ],
     templateUrl: './contactgroups-used-by.component.html',
     styleUrl: './contactgroups-used-by.component.css'
@@ -55,12 +61,21 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
 
     private router = inject(Router);
     private route = inject(ActivatedRoute)
+    private contactgroupId: number = 0;
 
     private subscriptions: Subscription = new Subscription();
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ContactgroupsService.usedBy(id)
+        this.contactgroupId = Number(this.route.snapshot.paramMap.get('id'));
+        this.load();
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe()
+    }
+
+    public load() {
+        this.subscriptions.add(this.ContactgroupsService.usedBy(this.contactgroupId)
             .subscribe((result: ContactgroupsUsedByRoot) => {
                 this.contactgroup = {
                     name: result.contactgroupWithRelations.container.name
@@ -68,10 +83,6 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
                 this.objects = result.contactgroupWithRelations;
                 this.total = result.total;
             }));
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe()
     }
 
 }

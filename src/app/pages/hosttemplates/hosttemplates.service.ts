@@ -7,7 +7,11 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     HosttemplateCommandArgument,
     HosttemplateContainerResult,
+    HosttemplateCopyGet,
+    HosttemplateCopyPost,
+    HosttemplateEditApiResult,
     HosttemplateElements,
+    HosttemplateEntity,
     HosttemplateIndexRoot,
     HosttemplatePost,
     HosttemplatesIndexParams,
@@ -16,6 +20,8 @@ import {
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HostObjectCake2 } from '../hosts/hosts.interface';
+import { PermissionsService } from '../../permissions/permissions.service';
 
 
 @Injectable({
@@ -24,6 +30,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 export class HosttemplatesService {
 
     private TranslocoService = inject(TranslocoService);
+    private PermissionsService = inject(PermissionsService);
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
@@ -36,16 +43,23 @@ export class HosttemplatesService {
      *    Index action    *
      **********************/
     public getHosttemplateTypes(): { id: number, name: string }[] {
-        return [
+        let types = [
             {
                 id: HosttemplateTypesEnum.GENERIC_HOSTTEMPLATE,
                 name: this.TranslocoService.translate('Generic templates'),
-            },
-            {
-                id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
-                name: this.TranslocoService.translate('EVC templates'),
-            },
+            }
         ];
+
+        this.PermissionsService.hasModuleObservable('EventcorrelationModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: HosttemplateTypesEnum.EVK_HOSTTEMPLATE,
+                    name: this.TranslocoService.translate('EVC templates'),
+                });
+            }
+        });
+
+        return types;
     }
 
     public getIndex(params: HosttemplatesIndexParams): Observable<HosttemplateIndexRoot> {
@@ -94,9 +108,14 @@ export class HosttemplatesService {
         )
     }
 
-    public loadContainers(): Observable<HosttemplateContainerResult> {
+    public loadContainers(hosttemplateId?: number): Observable<HosttemplateContainerResult> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HosttemplateContainerResult>(`${proxyPath}/hosttemplates/loadContainers.json`, {
+        let url = `${proxyPath}/hosttemplates/loadContainers.json`;
+        if (hosttemplateId) {
+            url = `${proxyPath}/hosttemplates/loadContainers/${hosttemplateId}.json`;
+        }
+
+        return this.http.get<HosttemplateContainerResult>(url, {
             params: {
                 angular: true
             }
@@ -120,7 +139,7 @@ export class HosttemplatesService {
         )
     }
 
-    public loadCommandArguments(commandId: number): Observable<HosttemplateCommandArgument[]> {
+    public loadCommandArgumentsForAdd(commandId: number): Observable<HosttemplateCommandArgument[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
@@ -132,9 +151,27 @@ export class HosttemplatesService {
             map(data => {
                 return data.hosttemplatecommandargumentvalues;
             })
-        )
+        );
     }
 
+    public loadCommandArgumentsForEdit(commandId: number, hosttemplateId: number): Observable<HosttemplateCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hosttemplatecommandargumentvalues: HosttemplateCommandArgument[]
+        }>(`${proxyPath}/hosttemplates/loadCommandArguments/${commandId}/${hosttemplateId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hosttemplatecommandargumentvalues;
+            })
+        );
+    }
+
+    public loadCommandArgumentsForCopy(commandId: number, sourcehosttemplateId: number): Observable<HosttemplateCommandArgument[]> {
+        return this.loadCommandArgumentsForEdit(commandId, sourcehosttemplateId);
+    }
 
     public add(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
@@ -159,4 +196,88 @@ export class HosttemplatesService {
             );
     }
 
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(hosttemplate: HosttemplatePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosttemplates/edit/${hosttemplate.id}.json?angular=true`, {
+            Hosttemplate: hosttemplate
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HosttemplateEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HosttemplateEditApiResult>(`${proxyPath}/hosttemplates/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Copy action    *
+     **********************/
+    public getHosttemplatesCopy(ids: number[]): Observable<HosttemplateCopyGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HosttemplateCopyGet>(`${proxyPath}/hosttemplates/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+
+    public saveHosttemplatesCopy(hosttemplates: HosttemplateCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosttemplates/copy/.json?angular=true`, {
+            data: hosttemplates
+        });
+    }
+
+    /**********************
+     *   Used by action   *
+     **********************/
+    public usedBy(id: number): Observable<{
+        all_hosts: HostObjectCake2[],
+        hosttemplate: HosttemplateEntity
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            all_hosts: HostObjectCake2[],
+            hosttemplate: HosttemplateEntity
+        }>(`${proxyPath}/hosttemplates/usedBy/${id}.json`, {
+            params: {
+                angular: true,
+                'filter[Hosts.disabled]': true
+            }
+
+        })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
+    }
 }

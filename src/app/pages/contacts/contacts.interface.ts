@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostsToContainersSharing } from '../hosts/hosts.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -156,10 +157,14 @@ export interface ServiceCommandIds extends GenericIds {
 
 
 export interface Customvariable {
-    name: string
+    id?: number
+    object_id?: number
     objecttype_id: number
-    password: number
+    name: string
     value: string
+    password: number
+    created?: string
+    modified?: string
 }
 
 // Copy action machen wir später.
@@ -435,21 +440,6 @@ export interface ContactUsedByHost {
     hosts_to_containers_sharing: HostsToContainersSharing[]
 }
 
-export interface HostsToContainersSharing {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-    _joinData: JoinData
-}
-
-export interface JoinData {
-    id: number
-    host_id: number
-    container_id: number
-}
 
 export interface ContactUsedByService {
     id: number
@@ -457,11 +447,11 @@ export interface ContactUsedByService {
     name: string
     host_id: number
     servicename: string
-    servicetemplate: Servicetemplate2
+    servicetemplate: ServicetemplateContactsUsedBy
     _matchingData: MatchingData
 }
 
-export interface Servicetemplate2 {
+export interface ServicetemplateContactsUsedBy {
     id: number
     uuid: string
     name: string

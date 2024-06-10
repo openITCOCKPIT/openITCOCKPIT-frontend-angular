@@ -7,6 +7,7 @@ import {
     CardTitleDirective,
     ContainerComponent,
     NavComponent,
+    NavItemComponent,
     TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -43,7 +44,8 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         RouterLink,
         FaStackComponent,
         FaStackItemSizeDirective,
-        NotUsedByObjectComponent
+        NotUsedByObjectComponent,
+        NavItemComponent
     ],
     templateUrl: './contacts-used-by.component.html',
     styleUrl: './contacts-used-by.component.css'
@@ -71,18 +73,22 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
         if (myContainerIds !== null) {
             this.containerIds = myContainerIds.split(',').map(Number);
         }
+
+        this.load();
+    }
+
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe()
+    }
+
+    public load() {
         this.subscriptions.add(this.ContactsService.usedBy(this.contactId)
             .subscribe((result) => {
                 this.contact = result.contact;
                 this.objects = result.objects;
                 this.total = result.total;
             }));
-    }
-
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe()
-
     }
 
 }

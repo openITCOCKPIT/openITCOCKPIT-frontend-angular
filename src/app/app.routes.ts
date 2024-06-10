@@ -146,6 +146,33 @@ export const routes: Routes = [{
     path: 'hosttemplates/add',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-add/hosttemplates-add.component').then(m => m.HosttemplatesAddComponent)
 }, {
+    path: 'hosttemplates/edit/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-edit/hosttemplates-edit.component').then(m => m.HosttemplatesEditComponent)
+}, {
+    path: 'hosttemplates/copy/:ids',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-copy/hosttemplates-copy.component').then(m => m.HosttemplatesCopyComponent)
+}, {
+    path: 'hosttemplates/usedBy/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-used-by/hosttemplates-used-by.component').then(m => m.HosttemplatesUsedByComponent)
+}, {
+    path: 'servicetemplates/index',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-index/servicetemplates-index.component').then(m => m.ServicetemplatesIndexComponent)
+}, {
+    path: 'servicetemplates/add',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-add/servicetemplates-add.component').then(m => m.ServicetemplatesAddComponent)
+}, {
+    path: 'servicetemplates/edit/:id',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-edit/servicetemplates-edit.component').then(m => m.ServicetemplatesEditComponent)
+}, {
+    path: 'servicetemplates/copy/:ids',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-copy/servicetemplates-copy.component').then(m => m.ServicetemplatesCopyComponent)
+}, {
+    path: 'servicetemplates/usedBy/:id',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-used-by/servicetemplates-used-by.component').then(m => m.ServicetemplatesUsedByComponent)
+}, {
+    path: 'hosts/index',
+    loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
@@ -182,6 +209,15 @@ export const routes: Routes = [{
     path: 'hostescalations/index',
     loadComponent: () => import('./pages/hostescalations/hostescalations-index/hostescalations-index.component').then(m => m.HostescalationsIndexComponent)
 }, {
+    path: 'hostescalations/add',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-add/hostescalations-add.component').then(m => m.HostescalationsAddComponent)
+}, {
+    path: 'hostescalations/edit/:id',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-edit/hostescalations-edit.component').then(m => m.HostescalationsEditComponent)
+}, {
+    path: 'serviceescalations/index',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-index/serviceescalations-index.component').then(m => m.ServiceescalationsIndexComponent)
+},{
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

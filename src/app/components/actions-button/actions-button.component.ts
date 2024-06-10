@@ -31,7 +31,7 @@ import {
     DropdownToggleDirective
 } from '@coreui/angular';
 import { PermissionDirective } from '../../permissions/permission.directive';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -47,7 +47,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
         FaIconComponent,
         XsButtonDirective,
         DropdownToggleDirective,
-        DropdownMenuDirective
+        DropdownMenuDirective,
+        RouterLink
     ],
     templateUrl: './actions-button.component.html',
     styleUrl: './actions-button.component.css'
@@ -59,10 +60,6 @@ export class ActionsButtonComponent {
     @Input({required: true}) permission: string = '';
 
     constructor(private router: Router) {
-    }
-
-    public onClick(): void {
-        this.router.navigateByUrl(this.url);
     }
 
 }
