@@ -164,25 +164,13 @@
                                 <c-card-body>
 
                                     <div class="mb-3">
-
                                         <label cLabel for="host_timeperiod_id">
-
-                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                            <oitc-label-link [objectId]="post.host_timeperiod_id"
+                                                             [route]="'/timeperiods/edit'"
+                                                             [permissions]="'timeperiods.edit'">
                                                 {{ t('Host time period') }}
-                                            </span>
-                                            <span *oitcPermission="['timeperiods', 'edit']">
-                                                <span
-                                                    *ngIf="post.host_timeperiod_id"
-                                                    [routerLink]="['/', 'timeperiods', 'edit', post.host_timeperiod_id]">
-                                                    {{ t('Host time period') }}
-                                                </span>
-                                                <span
-                                                    *ngIf="!post.host_timeperiod_id">
-                                                    {{ t('Host time period') }}
-                                                </span>
-                                            </span>
-                                            <oitc-required-icon></oitc-required-icon>
-
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </oitc-label-link>
                                         </label>
                                         <oitc-select
                                             name="host_timeperiod_id"
@@ -383,23 +371,12 @@
 
                                     <div class="mb-3">
                                         <label cLabel for="service_timeperiod_id">
-
-                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                            <oitc-label-link [objectId]="post.service_timeperiod_id"
+                                                             [route]="'/timeperiods/edit'"
+                                                             [permissions]="'timeperiods.edit'">
                                                 {{ t('Service time period') }}
-                                            </span>
-                                            <span *oitcPermission="['timeperiods', 'edit']">
-                                                <span
-                                                    *ngIf="post.service_timeperiod_id"
-                                                    [routerLink]="['/', 'timeperiods', 'edit', post.service_timeperiod_id]">
-                                                    {{ t('Service time period') }}
-                                                </span>
-                                                <span
-                                                    *ngIf="!post.service_timeperiod_id">
-                                                    {{ t('Service time period') }}
-                                                </span>
-                                            </span>
-                                            <oitc-required-icon></oitc-required-icon>
-
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </oitc-label-link>
                                         </label>
                                         <oitc-select
                                             name="service_timeperiod_id"
