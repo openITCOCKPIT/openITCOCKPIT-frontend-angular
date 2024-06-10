@@ -8,13 +8,14 @@ import {
     ServiceescalationElements,
     ServiceescalationExcludedServicegroups,
     ServiceescalationExcludedServices,
-    ServiceescalationServices,
     ServiceescalationIndexRoot,
     ServiceescalationPost,
+    ServiceescalationServices, ServiceescalationServiceValue, ServiceescalationServiceValues,
     ServiceescalationsIndexParams
 } from './serviceescalations.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -73,9 +74,10 @@ export class ServiceescalationsService {
 
     public loadServices(containerId: number, searchString: string, servicesIds: number []): Observable<ServiceescalationServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServiceescalationServices>(`${proxyPath}/serviceescalations/loadElementsByContainerId/${containerId}.json`, {
+        return this.http.get<ServiceescalationServices>(`${proxyPath}/services/loadServicesByStringCake4.json`, {
             params: {
                 angular: true,
+                'containerId': containerId,
                 'filter[Services.name]': searchString,
                 'selected[]': servicesIds
             }

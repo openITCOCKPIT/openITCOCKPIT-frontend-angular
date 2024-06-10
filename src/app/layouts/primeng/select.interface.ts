@@ -9,3 +9,8 @@ export interface SelectKeyValueWithDisabled {
     value: string,
     disabled?: boolean
 }
+
+export interface SelectKeyValueWithDisabledWithGroup {
+    label: string,
+    items: SelectKeyValueWithDisabled[]
+}

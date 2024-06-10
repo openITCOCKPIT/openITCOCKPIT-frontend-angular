@@ -209,3 +209,32 @@ export interface ServiceescalationExcludedServicegroups {
 export interface ServiceescalationEditApiResult {
     serviceescalation: ServiceescalationGet
 }
+
+export interface ServiceescalationServiceValues {
+    services: ServiceescalationService[]
+}
+
+export interface ServiceescalationService {
+    key: number
+    value: ServiceescalationServiceValue
+}
+
+export interface ServiceescalationServiceValue {
+    servicename: string
+    id: number
+    disabled: number
+    _matchingData: ServiceescalationMatchingData
+}
+
+export interface ServiceescalationMatchingData {
+    Hosts: ServiceescalationServiceHosts
+}
+
+export interface ServiceescalationServiceHosts {
+    name: string
+}
+
+export interface City {
+    name: string;
+    code: string;
+}

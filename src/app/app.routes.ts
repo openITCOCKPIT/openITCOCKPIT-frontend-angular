@@ -199,7 +199,10 @@ export const routes: Routes = [{
 }, {
     path: 'serviceescalations/index',
     loadComponent: () => import('./pages/serviceescalations/serviceescalations-index/serviceescalations-index.component').then(m => m.ServiceescalationsIndexComponent)
-},{
+}, {
+    path: 'serviceescalations/add',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-add/serviceescalations-add.component').then(m => m.ServiceescalationsAddComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

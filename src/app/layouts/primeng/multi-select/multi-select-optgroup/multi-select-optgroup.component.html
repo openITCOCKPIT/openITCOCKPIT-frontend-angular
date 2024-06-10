@@ -1,0 +1,39 @@
+<!--
+appendTo=body is used to fix a bug where the dropdown closes when you scroll the body or reach the end of the dropdown list
+https://stackoverflow.com/a/74795986
+
+Alternative solution in case this makes any trouble:
+https://stackoverflow.com/a/76688561
+-->
+
+<p-multiSelect
+    [attr.id]="id"
+    [name]="String(name)"
+    [options]="options"
+    [filter]="filter"
+    [optionValue]="optionValue"
+    [optionLabel]="optionLabel"
+    [class]="class"
+    [placeholder]="placeholder"
+    [filterPlaceHolder]="filterPlaceHolder"
+    (onChange)="triggerOnChange($event)"
+    [maxSelectedLabels]="null"
+    [display]="display"
+    [disabled]="disabled"
+    [(ngModel)]="ngModel"
+    (ngModelChange)="ngModelChange.emit($event)"
+    (onFilter)="doHighlightSearch($event.filter)"
+    [showClear]="showClear"
+    group="true"
+    optionGroupLabel="label"
+    appendTo="body">
+    <ng-template let-item pTemplate="item">
+        <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
+    </ng-template>
+    <ng-template let-group pTemplate="group" class="py-0">
+        <div class="border-bottom border-primary border-opacity-25 py-1 cursor-pointer"
+             (click)="onClickSetSelected(group)">
+            {{ group.label }}
+        </div>
+    </ng-template>
+</p-multiSelect>
