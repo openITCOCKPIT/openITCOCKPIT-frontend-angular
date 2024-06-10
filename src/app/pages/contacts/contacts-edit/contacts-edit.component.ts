@@ -131,7 +131,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         service_push_notifications_enabled: 0,
         service_timeperiod_id: null,
         user_id: null,
-        uuid: ''
+        uuid: '',
+        allow_edit: true
     };
     protected containers: LoadContainersContainer[] = [];
     private route = inject(ActivatedRoute)

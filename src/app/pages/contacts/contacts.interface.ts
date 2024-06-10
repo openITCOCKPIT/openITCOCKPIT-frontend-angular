@@ -89,6 +89,7 @@ export interface Contact {
     service_timeperiod_id: number | null
     user_id: number | null
     uuid: string
+    allow_edit: boolean
 }
 
 /*********************************
