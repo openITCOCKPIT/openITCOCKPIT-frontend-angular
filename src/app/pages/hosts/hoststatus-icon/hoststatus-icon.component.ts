@@ -3,7 +3,6 @@ import { HoststatusObject } from '../hosts.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
-import { interval, map, Subscription } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -77,10 +76,9 @@ export class HoststatusIconComponent implements OnInit, OnDestroy {
                     this.opacity = 'opacity-50';
                 }
 
+                this.stopFlapping();
                 if (this.isFlapping) {
                     this.startFlapping();
-                } else {
-                    this.stopFlapping();
                 }
 
             }
@@ -95,28 +93,35 @@ export class HoststatusIconComponent implements OnInit, OnDestroy {
     public currentState: number = -1; //Not found in monitoring
     public humanState: string = this.TranslocoService.translate('not in monitoring');
     public opacity: string = '';
+
     public flappingState: number = 0;
 
-    private flappingSubscription: Subscription = new Subscription();
+
+    private interval: any;
 
     public ngOnInit(): void {
 
     }
 
     public ngOnDestroy(): void {
-        this.flappingSubscription.unsubscribe();
+        this.stopFlapping();
     }
 
     public startFlapping() {
-        this.flappingSubscription.add(
-            interval(750).pipe(
-                map(() => this.flappingState = this.flappingState === 0 ? 1 : 0)
-            ).subscribe()
-        );
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+
+        // We use a classic setInterval as it is way more constant and needs WAY LESS cpu power as the new RxJS fancy hipster stuff
+        this.interval = setInterval(() => {
+            this.flappingState = this.flappingState === 0 ? 1 : 0;
+        }, 750);
     }
 
     public stopFlapping() {
-        this.flappingSubscription.unsubscribe();
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
     }
 
 }
