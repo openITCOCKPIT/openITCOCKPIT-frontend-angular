@@ -1,0 +1,13 @@
+<ng-container *transloco="let t">
+    <c-alert color="danger" *ngIf="showError">
+        <h4 class="alert-heading">
+            <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+            {{ t('Monitoring Engine is not running!') }}
+        </h4>
+        {{
+            t('File {0} does not exists', {
+                '0': queryHandler.path
+            })
+        }}
+    </c-alert>
+</ng-container>

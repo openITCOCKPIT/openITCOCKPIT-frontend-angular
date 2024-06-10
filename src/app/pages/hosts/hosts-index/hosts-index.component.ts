@@ -56,6 +56,9 @@ import { HostsService } from '../hosts.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -99,7 +102,8 @@ import { ServicesService } from '../../services/services.service';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        QueryHandlerCheckerComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -147,6 +151,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     // Show or hide the filter
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
+    }
+
+    public problemsOnly() {
+        this.params = getDefaultHostsIndexParams();
+        this.filter = getDefaultHostsIndexFilter();
+        console.log('implement me!')
     }
 
     // Callback when a filter has changed

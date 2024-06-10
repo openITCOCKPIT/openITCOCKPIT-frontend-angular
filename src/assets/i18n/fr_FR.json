@@ -730,7 +730,7 @@
     "Total": "Total",
     "entries": "les entrées",
     "Monitoring Engine is not running!": "Monitoring Engine n'est pas en marche!",
-    "File {{queryHandler.path}} does not exists": "Le fichier {{queryHandler.path}} n'existe pas",
+    "File {0} does not exists": "Le fichier {{0}} n'existe pas",
     "Reload of interface required": "Recharger l'interface requise",
     "To apply changes, a reload of the interface is required.": "Pour appliquer les modifications, un rechargement de l'interface est requis.",
     "Automatically reload in {{ delay - i }} seconds.": "Recharger automatiquement en {{delay - i}} secondes.",

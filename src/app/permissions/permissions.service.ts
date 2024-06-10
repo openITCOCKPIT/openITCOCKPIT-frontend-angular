@@ -58,7 +58,8 @@ export class PermissionsService {
         if (!Array.isArray(checkChunks)) {
             _chunks = checkChunks.toLowerCase().split('.');
         } else {
-            _chunks = checkChunks;
+            _chunks = checkChunks
+            _chunks = checkChunks.map(chunk => chunk.toLowerCase());
         }
 
         const result = _chunks.reduce<any>((acc, chunk) => {

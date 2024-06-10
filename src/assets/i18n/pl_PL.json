@@ -1281,7 +1281,7 @@
     "Total": "Wszystkich",
     "entries": "wpisy",
     "Monitoring Engine is not running!": "Silnik Monitoringu nie działa!",
-    "File {{queryHandler.path}} does not exists": "Plik {{queryHandler.path}} nie istnieje",
+    "File {0} does not exists": "Plik {{0}} nie istnieje",
     "RegEx Examples": "Przykłady wyrażeń regularnych",
     "Match anything regex": "Pasuje do dowolnego wyrażenia regularnego",
     "Match any character": "Pasuje do dowolnego znaku",

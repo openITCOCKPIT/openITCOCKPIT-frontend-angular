@@ -19,6 +19,9 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-query-handler-checker></oitc-query-handler-checker>
+
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Hosts') }}
@@ -26,6 +29,38 @@
                         {{ t('overview') }}
                     </small>
                 </h5>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'hosts', 'index']"
+                           *oitcPermission="['hosts', 'index']" class="nav-link active">
+                            <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                            {{ t('Monitored') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'hosts', 'notMonitored']"
+                           *oitcPermission="['hosts', 'notMonitored']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                            {{ t('Not monitored') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'hosts', 'disabled']"
+                           *oitcPermission="['hosts', 'disabled']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                            {{ t('Disabled') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'deletedHosts', 'index']"
+                           *oitcPermission="['deletedHosts', 'index']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Deleted') }}
+                        </a>
+                    </c-nav-item>
+                </c-nav>
+
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadHosts()" cButton class="ripple" color="default" size="xs">
@@ -41,6 +76,12 @@
                                 size="xs">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                             {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="problemsOnly()" cButton class="ripple" color="danger" size="xs">
+                            <fa-icon [icon]="['fas', 'filter-circle-xmark']"></fa-icon>
+                            {{ t('Unhandled only') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
