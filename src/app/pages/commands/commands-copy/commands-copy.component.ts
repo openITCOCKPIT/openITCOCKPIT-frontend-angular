@@ -116,6 +116,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.notyService.genericError();
                 this.commands = error.error.result as CommandCopyPost[];
             }
         });

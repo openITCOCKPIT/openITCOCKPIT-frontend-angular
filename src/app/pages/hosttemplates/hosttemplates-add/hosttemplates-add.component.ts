@@ -30,12 +30,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import {
-    HosttemplateContainerResult,
-    HosttemplatePost,
-    HosttemplateTypeResult,
-    HosttemplateTypeResultDetails
-} from '../hosttemplates.interface';
+import { HosttemplateContainerResult, HosttemplatePost, HosttemplateTypeResult, } from '../hosttemplates.interface';
 import { Subscription } from 'rxjs';
 import { HosttemplatesService } from '../hosttemplates.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
@@ -55,6 +50,7 @@ import { MacrosComponent } from '../../../components/macros/macros.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-add',
@@ -111,7 +107,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     public commands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
     public post: HosttemplatePost = {} as HosttemplatePost;
-    public typeDetails: HosttemplateTypeResultDetails | undefined;
+    public typeDetails: HostOrServiceType | undefined;
 
     public timeperiods: SelectKeyValue[] = [];
     public checkperiods: SelectKeyValue[] = [];
@@ -122,6 +118,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     public slas: SelectKeyValue[] = [];
 
     public errors: GenericValidationError | null = null;
+    public hasMacroErrors: boolean = false;
 
     public createAnother: boolean = false;
 
@@ -156,9 +153,12 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private getDefaultPost(hosttemplateTypeId: number): HosttemplatePost {
+        this.tagsForSelect = [];
+
         return {
             name: '',
             description: '',
@@ -272,7 +272,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HosttemplatesService.loadCommandArguments(commandId)
+        this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForAdd(commandId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
             })
@@ -343,6 +343,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
                     this.errors = null;
+                    this.hasMacroErrors = false;
                     return;
                 }
 
@@ -352,14 +353,12 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
 
-                    /*
                     this.hasMacroErrors = false;
                     if (this.errors.hasOwnProperty('customvariables')) {
                         if (typeof (this.errors['customvariables']['custom']) === "string") {
                             this.hasMacroErrors = true;
                         }
-                    }*/
-
+                    }
                 }
             }))
 

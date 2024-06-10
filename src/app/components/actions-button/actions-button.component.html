@@ -25,10 +25,9 @@
 
 <c-button-group role="group">
     @if (allowEdit) {
-        <button cButton class="ripple btn-lower-padding" color="default" *oitcPermission="permission" size="xs"
-                (click)="onClick()">
+        <a class="ripple btn btn-default btn-xs btn-lower-padding" [routerLink]="url" *oitcPermission="permission">
             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-        </button>
+        </a>
         <button cButton class="ripple btn-lower-padding" color="default" size="xs"
                 *oitcPermission="permission; negate: true" disabled>
             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
