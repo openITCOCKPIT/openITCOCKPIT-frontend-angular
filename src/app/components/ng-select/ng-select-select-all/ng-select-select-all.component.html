@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <div class="ng-select select-all-option">
         <input id="item-{{ index }}" type="checkbox" name="ngSelectSelectAll"
-               [ngModel]="item$.selected" class="me-2"/>
+               [(ngModel)]="item$.selected" class="me-2"/>
         {{ t('Select All') }}
     </div>
 </ng-container>

@@ -105,6 +105,33 @@
                     </c-row>
                     <form cForm>
 
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="filter['Hosts.name']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       cFormControl
+                                       name="Hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               name="filter.Host.name_regex"
+                                               (change)="onFilterChange($event)"
+                                               [(ngModel)]="filter['Hosts.name_regex']"
+                                        />
+                                    </label>
+                                </span>
+                            </c-input-group>
+                        </c-col>
+
+
                     </form>
                 </c-container>
                 <!-- End Filter -->
