@@ -92,20 +92,22 @@
                         <oitc-form-feedback [errors]="errors" errorField="hostgroupId"></oitc-form-feedback>
                     </div>
 
+
                     <ng-container *ngIf="hostgroupId !== null">
-                        <c-alert color="info">
+                        <c-alert color="light">
                             <c-row>
-                                <c-col>
+                                <c-col class="alertLeftIcon">
                                     <fa-stack>
-                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'circle']" class="text-info"
+                                                 stackItemSize="2x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'info']" class="text-light"
+                                                 stackItemSize="1x"></fa-icon>
                                     </fa-stack>
                                 </c-col>
                                 <c-col>
-                                    <h5 class="txt-primary">
+                                    <h5 class="text-primary">
                                         {{ t('Please notice') }}
                                     </h5>
-                                    <br/>
                                     {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
                                 </c-col>
                             </c-row>
@@ -114,49 +116,56 @@
 
                     <ng-container *ngIf="hostgroupId !== null">
                         <c-row
-                            *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
+                                *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
                             <fieldset class="hostWithServicesToDeploy">
-                                <legend>
-                                    <h4>
-                                        <input type="checkbox"
-                                               (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
-                                               [ngModelOptions]="{standalone: true}"
-                                               [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
-                                        >
-                                        {{ t('Service/s to deploy on host:') }}
-                                        <span class="text-info">
-                                            {{ hostWithServicesToDeploy.host.hostname }}
-                                            ({{ hostWithServicesToDeploy.host.address }})
-                                        </span>
-                                    </h4>
+                                <h4>
+                                    <legend>
+                                        <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
+                                            <input type="checkbox"
+                                                   id="{{hostWithServicesToDeploy.host.id}}_ALL"
+                                                   (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
+                                                   [ngModelOptions]="{standalone: true}"
+                                                   [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
+                                            >
+                                            {{ t('Service/s to deploy on host:') }}
+                                            <span class="text-info">
+                                                {{ hostWithServicesToDeploy.host.hostname }}
+                                                ({{ hostWithServicesToDeploy.host.address }})
+                                            </span>
+                                        </label>
 
-                                </legend>
+                                    </legend>
+                                </h4>
 
                                 <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
-                                    <input type="checkbox"
-                                           [ngModelOptions]="{standalone: true}"
-                                           [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"
-                                    >
+                                    <label for="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}">
+                                        <input type="checkbox"
+                                               [ngModelOptions]="{standalone: true}"
+                                               [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"
+                                               (ngModelChange)="handleServiceCheckboxClick(hostWithServicesToDeploy.host.id)"
+                                               id="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}"
+                                        >
 
-                                    {{ serviceToDeploy.servicetemplate.name }}
-                                    <span class="text-info"
-                                          *ngIf="serviceToDeploy.servicetemplate.description">
-                                        ({{ serviceToDeploy.servicetemplate.description }})
-                                    </span>
+                                        {{ serviceToDeploy.servicetemplate.name }}
+                                        <span class="text-info"
+                                              *ngIf="serviceToDeploy.servicetemplate.description">
+                                            ({{ serviceToDeploy.servicetemplate.description }})
+                                        </span>
 
-                                    <span class="text-info"
-                                          *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHost"
-                                          [matTooltip]="'Service already exist on selected host. Tick the box to create a duplicate.' | transloco"
-                                    >
-                                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                    </span>
+                                        <span class="text-info"
+                                              *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHost"
+                                              [matTooltip]="'Service already exist on selected host. Tick the box to create a duplicate.' | transloco"
+                                        >
+                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                        </span>
 
-                                    <span
-                                        *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
-                                        [matTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
-                                    >
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    </span>
+                                        <span
+                                                *ngIf="serviceToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
+                                                [matTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
+                                        >
+                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        </span>
+                                    </label>
                                 </div>
                             </fieldset>
 
@@ -186,7 +195,6 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
 
-
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Allocate to host group') }}
                     </button>
@@ -196,7 +204,6 @@
                             type="button">
                         {{ t('Cancel') }}
                     </button>
-
 
                 </c-card-footer>
             </c-card>

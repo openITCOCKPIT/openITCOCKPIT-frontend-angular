@@ -218,10 +218,8 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
                     i++;
                     this.percentage = Math.round(i / count * 100);
 
-                    if (i === count) {
-                        this.notyService.genericSuccess();
-                        // RedirectService.redirectWithFallback('ServicesNotMonitored');
-                    }
+                    this.notyService.genericSuccess();
+                    this.router.navigate(['/servicetemplategroups/index']);
                     return;
                 }
 

@@ -143,7 +143,8 @@
                         <td>{{ servicetemplategroup.container.name }}</td>
                         <td>{{ servicetemplategroup.description }}</td>
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'servicetemplategroups.edit'"
+                            <oitc-actions-button *ngIf="servicetemplategroup.allow_edit"
+                                                 [permission]="'servicetemplategroups.edit'"
                                                  [url]="'/servicetemplategroups/edit/' + servicetemplategroup.id">
                                 <oitc-actions-button-element [permission]="'servicetemplategroups.edit'"
                                                              [url]="'/servicetemplategroups/edit/' + servicetemplategroup.id">

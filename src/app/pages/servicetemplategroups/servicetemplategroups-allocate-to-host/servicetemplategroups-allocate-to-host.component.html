@@ -104,10 +104,9 @@
                                     </fa-stack>
                                 </c-col>
                                 <c-col>
-                                    <h5 class="txt-primary">
+                                    <h5 class="text-primary">
                                         {{ t('Please notice') }}
                                     </h5>
-                                    <br/>
                                     {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
                                 </c-col>
                             </c-row>
@@ -115,14 +114,15 @@
                     </ng-container>
 
                     <ng-container *ngIf="hostId !== null">
-                        <fieldset>
+                        <fieldset class="hostWithServicesToDeploy">
                             <legend>
                                 <h4>{{ t('Service/s to deploy on host:') }}</h4>
                             </legend>
                             <div *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
-                                <label>
+                                <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
                                     <input type="checkbox"
+                                           id="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}"
                                            [ngModelOptions]="{standalone: true}"
                                            [(ngModel)]="hostWithServicesToDeploy.createServiceOnTargetHost"
                                     >
@@ -141,7 +141,7 @@
                                     />
 
                                     <fa-icon [icon]="['fas', 'plug']"
-                                             class="text-info"
+                                             class="text-dark"
                                              [cTooltip]="'Service already exist on selected host but is disabled. Tick the box to create a duplicate.' | transloco"
                                              *ngIf="hostWithServicesToDeploy.doesServicetemplateExistsOnTargetHostAndIsDisabled"
                                     />

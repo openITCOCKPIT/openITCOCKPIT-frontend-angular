@@ -17,7 +17,7 @@ import {
     NavItemComponent, ProgressBarComponent, RowComponent
 } from '@coreui/angular';
 import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {FaIconComponent, FaStackComponent} from '@fortawesome/angular-fontawesome';
+import {FaIconComponent, FaStackComponent, FaStackItemSizeDirective} from '@fortawesome/angular-fontawesome';
 import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
 import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import {FormsModule} from '@angular/forms';
@@ -86,7 +86,8 @@ import {SelectComponent} from "../../../layouts/primeng/select/select/select.com
         RouterLink,
         JsonPipe,
         MultiSelectComponent,
-        SelectComponent
+        SelectComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './servicetemplategroups-allocate-to-hostgroup.component.html',
     styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css'
@@ -108,7 +109,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
 
-    protected servicetemplategroupId: number  = 0;
+    protected servicetemplategroupId: number = 0;
     protected hostgroupId: number | null = null;
 
     protected percentage: number = 42;
@@ -174,6 +175,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
             for (var serviceIndex in this.hostsWithServicetemplatesForDeploy[hostIndex].services) {
                 this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost = true;
             }
+            this.handleServiceCheckboxClick(this.hostsWithServicetemplatesForDeploy[hostIndex].host.id);
         }
     }
 
@@ -187,6 +189,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
             for (var serviceIndex in this.hostsWithServicetemplatesForDeploy[hostIndex].services) {
                 this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost = false;
             }
+            this.handleServiceCheckboxClick(this.hostsWithServicetemplatesForDeploy[hostIndex].host.id);
         }
     }
 
@@ -199,7 +202,6 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     private readonly notyService: NotyService = inject(NotyService);
 
     protected allocateToHostgroup(): void {
-        console.log('allocateToHostgroup');
         let i = 0;
         let count = this.hostsWithServicetemplatesForDeploy.length;
         this.isProcessing = true;
@@ -237,7 +239,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
 
                         if (i === count) {
                             this.notyService.genericSuccess();
-                            // RedirectService.redirectWithFallback('ServicesNotMonitored');
+                            this.router.navigate(['/services/notMonitored']);
                         }
                         return;
                     }
@@ -251,6 +253,24 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
                 })
             );
         }
+    }
+
+    protected handleServiceCheckboxClick(hostId: number): void {
+        const host = this.hostsWithServicetemplatesForDeploy.find(host => host.host.id === hostId);
+
+        if (!host) {
+            return;
+        }
+        let isAllChecked = true;
+
+        for (const service of host.services) {
+            if (!service.createServiceOnTargetHost) {
+                isAllChecked = false;
+                break;
+            }
+        }
+
+        host.areAllCreateServiceOnTargetHostTrue = isAllChecked;
     }
 
 }
