@@ -53,6 +53,7 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
+import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -93,7 +94,8 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
         TooltipDirective,
         TranslocoDirective,
         TranslocoPipe,
-        XsButtonDirective
+        XsButtonDirective,
+        LabelLinkComponent
     ],
     templateUrl: './contacts-ldap.component.html',
     styleUrl: './contacts-ldap.component.css'
