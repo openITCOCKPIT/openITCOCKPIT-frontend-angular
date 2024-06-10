@@ -231,6 +231,54 @@
                                 [objectId]="host.Host.id"></oitc-downtime-icon>
                         </td>
 
+                        <td class="text-center">
+                            @if (host.Hoststatus.notifications_enabled) {
+                                <fa-stack
+                                    [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
+                                    <fa-icon [icon]="['fas', 'envelope']"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                             stackItemSize="1x"
+                                             transform="shrink-3 right-3 down-7"></fa-icon>
+                                </fa-stack>
+                            } @else {
+                                <fa-stack
+                                    [cTooltip]="'Notifications disabled' | transloco" cTooltipPlacement="right">
+                                    <fa-icon [icon]="['fas', 'envelope']"
+                                             stackItemSize="1x" pull="right"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                             stackItemSize="1x"
+                                             transform="shrink-3 right-3 down-7"></fa-icon>
+                                </fa-stack>
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            @if (host.Host.allow_sharing === true && host.Host.containerIds && host.Host.containerIds.length > 1) {
+                                <a [routerLink]="['/', 'hosts', 'sharing', host.Host.id]"
+                                   [cTooltip]="'Shared' | transloco" cTooltipPlacement="right">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                </a>
+                            } @else if (host.Host.allow_sharing === false && host.Host.containerIds && host.Host.containerIds.length > 1) {
+                                <fa-icon [icon]="['fas', 'low-vision']"
+                                         [cTooltip]="'Restricted view' | transloco" cTooltipPlacement="right"></fa-icon>
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            <strong
+                                *ngIf="host.Host.active_checks_enabled === true || host.Host.is_satellite_host === true"
+                                [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right">
+                                P
+                            </strong>
+                        </td>
+
+                        <td class="text-center">
+                            <fa-icon [icon]="['fas', 'fire']" [ngClass]="{'ok-soft' : host.Host.priority==1,
+                                        'ok' : host.Host.priority==2, 'warning' : host.Host.priority==3,
+                                        'critical-soft' : host.Host.priority==4, 'critical' : host.Host.priority==5}"></fa-icon>
+                        </td>
+
                         <td>
                             @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
                                 <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
@@ -239,6 +287,68 @@
                             } @else {
                                 {{ host.Host.name }}
                             }
+
+                            @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                                <span class="badge border border-info"
+                                      [hidden]="!host.Host.additionalInformationExists">
+                                    <!-- todo fix link to tab6 -->
+                                    <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
+                                       class="text-info">
+                                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        {{ t('CMDB') }}
+                                    </a>
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+                            {{ host.Host.description }}
+                        </td>
+
+                        <td>
+                            <oitc-copy-to-clipboard [data]="host.Host.address">
+                                {{ host.Host.address }}
+                            </oitc-copy-to-clipboard>
+                        </td>
+
+                        <td>
+                            {{ host.Hoststatus.last_state_change }}
+                        </td>
+
+                        <td>
+                            {{ host.Hoststatus.lastCheck }}
+                        </td>
+
+                        <td>
+                            <div class="word-break"
+                                 [innerHTML]="String(host.Hoststatus.outputHtml) | trustAsHtml "></div>
+                        </td>
+
+                        <td>
+                            {{ host.Host.satelliteName }}
+                        </td>
+
+                        <td class="width-160">
+                            <div class="btn-group btn-group-justified w-100" role="group">
+                                <!-- todo fix links and permissiosn -->
+                                <a class="btn btn-success state-button-small">
+                                    {{ host.ServicestatusSummary.state.ok }}
+                                </a>
+                                <a class="btn btn-warning state-button-small">
+                                    {{ host.ServicestatusSummary.state.warning }}
+                                </a>
+                                <a class="btn btn-danger state-button-small">
+                                    {{ host.ServicestatusSummary.state.critical }}
+                                </a>
+                                <a class="btn btn-secondary state-button-small">
+                                    {{ host.ServicestatusSummary.state.unknown }}
+                                </a>
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ host.Host.notes }}
                         </td>
 
                         <td>
@@ -263,21 +373,78 @@
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
+
+                                <oitc-actions-button-element [permission]="'hosts.deactivate'"
+                                                             *ngIf="host.Host.allow_edit">
+                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                    {{ t('Disable') }}
+                                    <!-- todo implement -->
+                                </oitc-actions-button-element>
+
                                 <oitc-actions-button-element [permission]="'changelogs.index'"
                                                              [url]="'/changelogs/entity/host/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                                     {{ t('Changelog') }}
                                 </oitc-actions-button-element>
+
+                                @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                                    <oitc-actions-button-element [permission]="'hosts.browser'"
+                                                                 [url]="'/hosts/browser/' + host.Host.id">
+                                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        {{ t('CMDB') }}
+                                        <!-- todo open tab6 -->
+                                    </oitc-actions-button-element>
+                                }
+
+                                <oitc-actions-button-element [permission]="'services.serviceList'"
+                                                             [url]="'/services/serviceList/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                    {{ t('Service list') }}
+                                    <!-- todo open tab6 -->
+                                </oitc-actions-button-element>
+
+                                <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHost'"
+                                                             [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
+                                    {{ t('Allocate service template group') }}
+                                    <!-- todo implement link -->
+                                </oitc-actions-button-element>
+
+                                <oitc-actions-button-element [permission]="'hostgroups.add'"
+                                >
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Append to host group') }}
+                                    <!-- todo implement modal -->
+                                </oitc-actions-button-element>
+
+                                <oitc-actions-button-element [permission]="'wizard.agentconnector'"
+                                                             [url]="'/agentconnector/wizard/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                    {{ t('openITCOCKPIT Agent discovery') }}
+                                </oitc-actions-button-element>
+
+                                @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                                    <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
+                                                                 [url]="'/checkmk_module/scans/index/' + host.Host.id">
+                                        <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                        {{ t('Checkmk discovery') }}
+                                    </oitc-actions-button-element>
+                                }
+
+
+
                                 <oitc-actions-button-element [permission]="'hosts.usedBy'"
                                                              [url]="'/hosts/usedBy/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                     {{ t('Used By') }}
                                 </oitc-actions-button-element>
+
                                 <oitc-actions-button-element [permission]="'documentations.view'"
                                                              [url]="'/documentations/view/' + host.Host.uuid+'/host'">
                                     <fa-icon [icon]="['fas', 'book']"></fa-icon>
                                     {{ t('Documentation') }}
                                 </oitc-actions-button-element>
+
                                 <li cDropdownDivider></li>
                                 <oitc-actions-button-element [permission]="'hosts.copy'"
                                                              [url]="'/hosts/copy/' + host.Host.id">
@@ -293,6 +460,7 @@
                                         {{ t('Delete') }}
                                     </span>
                                 </oitc-actions-button-element>
+
                             </oitc-actions-button>
                         </td>
                     </tr>

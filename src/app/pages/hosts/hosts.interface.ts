@@ -153,11 +153,13 @@ export interface HostsIndexRoot extends PaginateOrScroll {
         Host: HostObject
         Hoststatus: HoststatusObject,
         ServicestatusSummary: {
-            ok: number
-            warning: number
-            critical: number
-            unknown: number
-            total: number
+            state: {
+                ok: number
+                warning: number
+                critical: number
+                unknown: number
+                total: number
+            }
         }
     }[]
 }

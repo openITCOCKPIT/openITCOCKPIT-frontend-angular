@@ -26,7 +26,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -66,6 +66,8 @@ import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -114,7 +116,11 @@ import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-ic
         TooltipDirective,
         HoststatusIconComponent,
         AcknowledgementIconComponent,
-        DowntimeIconComponent
+        DowntimeIconComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        CopyToClipboardComponent,
+        TrustAsHtmlPipe
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -127,7 +133,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public filter: HostsIndexFilter = getDefaultHostsIndexFilter();
 
     public hosts?: HostsIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
 
     public hostTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];
@@ -241,4 +247,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
         }
     }
+
+    protected readonly String = String;
 }
