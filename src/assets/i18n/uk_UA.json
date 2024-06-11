@@ -1199,7 +1199,7 @@
     "Total": "Всього",
     "entries": "записи",
     "Monitoring Engine is not running!": "Монітор моніторингу не працює!",
-    "File {{queryHandler.path}} does not exists": "Файл {{queryHandler.path}} не існує",
+    "File {0} does not exists": "Файл {{0}} не існує",
     "Reload of interface required": "Потрібно перезавантажити інтерфейс",
     "To apply changes, a reload of the interface is required.": "Щоб застосувати зміни, потрібно перезавантажити інтерфейс.",
     "Automatically reload in {{ delay - i }} seconds.": "Автоматично перезавантажити через {{затримку - i}} секунд.",

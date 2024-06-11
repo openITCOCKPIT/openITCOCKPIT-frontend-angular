@@ -7,11 +7,41 @@
 }
 
 .width-50 {
-    width: 50px
+    width: 50px;
+}
+
+.width-90 {
+    width: 90px;
 }
 
 .width-130 {
-    width: 130px
+    width: 130px;
+}
+
+.width-150 {
+    width: 150px;
+}
+
+.width-160 {
+    width: 160px;
+}
+
+.width-240 {
+    width: 240px;
+}
+
+.tableStatewidth {
+    min-width: 155px;
+}
+
+.state-button-small {
+    padding: 0 2px;
+    font-size: 12px;
+}
+
+.editItemWidth {
+    min-width: 52px;
+    max-width: 52px;
 }
 
 .border-dashed {

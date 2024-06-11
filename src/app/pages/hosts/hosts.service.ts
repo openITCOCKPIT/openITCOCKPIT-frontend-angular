@@ -55,6 +55,7 @@ export class HostsService {
 
     public getIndex(params: HostsIndexParams, filter: HostsIndexFilter): Observable<HostsIndexRoot> {
         const proxyPath = this.proxyPath;
+        // ITC-2599 Change load function to use POST
         return this.http.post<HostsIndexRoot>(`${proxyPath}/hosts/index.json`, {
             filter: filter as {} // POST data used for filter
         }, {

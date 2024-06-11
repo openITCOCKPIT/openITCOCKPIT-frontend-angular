@@ -261,7 +261,7 @@
                                                 cFormCheckInput
                                                 type="checkbox"
                                                 id="host_push_notifications_enabled"
-                                                [ngModel]="post.host_push_notifications_enabled"
+                                                [(ngModel)]="post.host_push_notifications_enabled"
                                                 (ngModelChange)="post.host_push_notifications_enabled = $event ? 1 : 0"
                                                 (click)="toggleHostBrowserCheckbox()"
                                                 name="host_push_notifications_enabled"

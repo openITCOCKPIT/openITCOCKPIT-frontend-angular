@@ -1284,7 +1284,7 @@
     "Total": "Total",
     "entries": "entradas",
     "Monitoring Engine is not running!": "¡La supervisión del Motor no se está ejecutando!",
-    "File {{queryHandler.path}} does not exists": "El archivo {{queryHandler.path}} no existe",
+    "File {0} does not exists": "El archivo {{0}} no existe",
     "RegEx Examples": "Ejemplos RegEx",
     "Match anything regex": "Hacer coincidir con cualquier regex",
     "Match any character": "Hacer coincidir con cualquier carácter",
