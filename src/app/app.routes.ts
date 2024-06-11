@@ -158,6 +158,9 @@ export const routes: Routes = [{
     path: 'hosts/sharing/:id',
     loadComponent: () => import('./pages/hosts/hosts-sharing/hosts-sharing.component').then(m => m.HostsSharingComponent)
 }, {
+    path: 'hosts/add',
+    loadComponent: () => import('./pages/hosts/hosts-add/hosts-add.component').then(m => m.HostsAddComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

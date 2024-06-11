@@ -6,7 +6,14 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { HostSharing, HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
+import {
+    HostCommandArgument,
+    HostElements,
+    HostSharing,
+    HostsIndexFilter,
+    HostsIndexParams,
+    HostsIndexRoot
+} from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -133,4 +140,75 @@ export class HostsService {
                 })
             );
     }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public loadCommands(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ commands: SelectKeyValue[] }>(`${proxyPath}/hosts/loadCommands.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.commands
+            })
+        )
+    }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/hosts/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers
+            })
+        )
+    }
+
+    public loadElements(containerId: number): Observable<HostElements> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostElements>(`${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadCommandArguments(commandId: number): Observable<HostCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hostcommandargumentvalues: HostCommandArgument[]
+        }>(`${proxyPath}/hosts/loadCommandArguments/${commandId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hostcommandargumentvalues;
+            })
+        );
+    }
+
+    public checkForDuplicateHostname(hostname: string): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            isHostnameInUse: boolean
+        }>(`${proxyPath}/hosts/checkForDuplicateHostname.json?angular=true`, {
+            hostname: hostname
+        }).pipe(
+            map(data => {
+                return data.isHostnameInUse;
+            })
+        );
+    }
+
 }
