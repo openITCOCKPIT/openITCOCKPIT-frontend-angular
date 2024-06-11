@@ -258,9 +258,21 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public problemsOnly() {
-        this.params = getDefaultHostsIndexParams();
-        this.filter = getDefaultHostsIndexFilter();
-        console.log('implement me!')
+        this.resetFilter();
+
+        this.currentStateFilter = {
+            up: false,
+            down: true,
+            unreachable: true
+        };
+        this.acknowledgementsFilter = {
+            acknowledged: false,
+            not_acknowledged: true
+        };
+        this.downtimeFilter = {
+            in_downtime: false,
+            not_in_downtime: true
+        };
     }
 
     // Callback when a filter has changed
