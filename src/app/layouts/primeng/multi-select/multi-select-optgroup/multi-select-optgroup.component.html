@@ -31,7 +31,7 @@ https://stackoverflow.com/a/76688561
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>
     <ng-template let-group pTemplate="group" class="py-0">
-        <div class="border-bottom border-primary border-opacity-25 py-1 cursor-pointer"
+        <div class="border-bottom border-primary border-opacity-25 py-1 cursor-pointer small"
              (click)="onClickSetSelected(group)">
             {{ group.label }}
         </div>

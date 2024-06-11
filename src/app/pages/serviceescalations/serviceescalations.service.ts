@@ -74,7 +74,7 @@ export class ServiceescalationsService {
 
     public loadServices(containerId: number, searchString: string, servicesIds: number []): Observable<ServiceescalationServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServiceescalationServices>(`${proxyPath}/services/loadServicesByStringCake4.json`, {
+        return this.http.get<ServiceescalationServices>(`${proxyPath}/services/loadServicesByStringForOptionGroup.json`, {
             params: {
                 angular: true,
                 'containerId': containerId,
@@ -90,7 +90,7 @@ export class ServiceescalationsService {
 
     public loadExcludedServices(containerId: number, searchString: string, excludedServicesIds: number [], servicegroupIds: number []): Observable<ServiceescalationExcludedServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServiceescalationExcludedServices>(`${proxyPath}/serviceescalations/loadExcludedServicesByContainerIdAndServicegroupIds.json`, {
+        return this.http.get<ServiceescalationExcludedServices>(`${proxyPath}/serviceescalations/loadExcludedServicesByContainerIdAndServicegroupIdsForOptionGroup.json`, {
             params: {
                 angular: true,
                 'containerId': containerId,

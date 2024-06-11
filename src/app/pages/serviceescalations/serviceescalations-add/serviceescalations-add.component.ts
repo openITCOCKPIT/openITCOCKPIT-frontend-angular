@@ -25,9 +25,10 @@ import {
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { City, ServiceescalationContainerResult, ServiceescalationPost } from '../serviceescalations.interface';
+import { ServiceescalationContainerResult, ServiceescalationPost } from '../serviceescalations.interface';
 import { ServiceescalationsService } from '../serviceescalations.service';
 import {
+    SelectItemOptionGroup,
     SelectKeyValue,
     SelectKeyValueWithDisabled
 } from '../../../layouts/primeng/select.interface';
@@ -44,7 +45,6 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { SelectItemGroup, TreeNode } from 'primeng/api';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
@@ -94,8 +94,10 @@ import {
 export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     public containers: ServiceescalationContainerResult | undefined;
     public post: ServiceescalationPost = {} as ServiceescalationPost;
-    public services: SelectKeyValueWithDisabled[] = [];
-    public services_excluded: SelectKeyValueWithDisabled[] = [];
+    public services: SelectItemOptionGroup[] = [];
+    private disabled_services: number[] = [];
+    public services_excluded: SelectItemOptionGroup[] = [];
+    private disabled_excluded_services: number[] = [];
     public servicegroups: SelectKeyValueWithDisabled[] = [];
     public servicegroups_excluded: SelectKeyValueWithDisabled[] = [];
     public timeperiods: SelectKeyValue[] = [];
@@ -111,90 +113,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    public options = [
-        {
-            label: 'Category-1',
-            value: {
-                label: 'Category-1',
-                childOptions: [
-                    {
-                        label: 'Sub-Category-1-1',
-                        value: {
-                            label: 'Sub-Category-1-1',
-                            childOptions: []
-                        }
-                    },
-                    {
-                        label: 'Sub-Category-1-2',
-                        value: {
-                            label: 'Sub-Category-1-2',
-                            childOptions: []
-                        }
-                    }
-                ],
-                selectedChildOptions: []
-            }
-        },
-        {
-            label: 'Category-2',
-            value: {
-                label: 'Category-2',
-                childOptions: [
-                    {
-                        label: 'Sub-Category-2-1',
-                        value: {
-                            label: 'Sub-Category-2-1',
-                            childOptions: []
-                        }
-                    },
-                    {
-                        label: 'Sub-Category-2-2',
-                        value: {
-                            label: 'Sub-Category-2-2',
-                            childOptions: []
-                        }
-                    },
-                    {
-                        label: 'Sub-Category-2-3',
-                        value: {
-                            label: 'Sub-Category-2-3',
-                            childOptions: []
-                        }
-                    }
-                ],
-                selectedChildOptions: []
-            }
-        },
-        {
-            label: 'Category-3',
-            value: {
-                label: 'Category-3',
-                childOptions: [
-                    {
-                        label: 'Sub-Category-3-1',
-                        value: {
-                            label: 'Sub-Category-3-1',
-                            childOptions: []
-                        }
-                    },
-                    {
-                        label: 'Sub-Category-3-2',
-                        value: {
-                            label: 'Sub-Category-3-2',
-                            childOptions: []
-                        }
-                    }
-                ],
-                selectedChildOptions: []
-            }
-        }
-    ];
-
-
-
-    public groupedCities!: SelectItemGroup[];
-    public selectedCities!: City[];
-
 
     constructor(private route: ActivatedRoute) {
         // IMPORTANT for the searchCallback the use the same "this" context
@@ -209,39 +127,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             this.loadContainers();
             this.post = this.getDefaultPost();
         });
-        this.groupedCities = [
-            {
-                label: 'Germany',
-                value: 'de',
-                items: [
-                    { label: 'Berlin', value: 'Berlin' },
-                    { label: 'Frankfurt', value: 'Frankfurt' },
-                    { label: 'Hamburg', value: 'Hamburg' },
-                    { label: 'Munich', value: 'Munich' }
-                ]
-            },
-            {
-                label: 'USA',
-                value: 'us',
-                items: [
-                    { label: 'Chicago', value: 'Chicago' },
-                    { label: 'Los Angeles', value: 'Los Angeles' },
-                    { label: 'New York', value: 'New York' },
-                    { label: 'San Francisco', value: 'San Francisco' }
-                ]
-            },
-            {
-                label: 'Japan',
-                value: 'jp',
-                items: [
-                    { label: 'Kyoto', value: 'Kyoto' },
-                    { label: 'Osaka', value: 'Osaka' },
-                    { label: 'Tokyo', value: 'Tokyo' },
-                    { label: 'Yokohama', value: 'Yokohama' }
-                ]
-            },
-        ] as SelectItemGroup[];
-
     }
 
     public ngOnDestroy(): void {
@@ -318,56 +203,23 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
-                /*
-                let reorderedServices: SelectKeyValueWithDisabledWithGroup[] = [];
-                for (let key in result.services) {
-                    console.log(result.services[key]);
-                    let groupName = result.services[key].value._matchingData.Hosts.name;
-                    if(reorderedServices.hasOwnProperty(groupName) === false) {
-                        let optGroup: SelectKeyValueWithDisabledWithGroup = {
-                            label: groupName,
-                            items: []
-                        };
-                    }
-                    //reorderedServices[groupName].items.push(result.services[key]);
+                let currentServicesIds: number[] = [];
 
-
-
-                }
-
-                 */
-
-
-
-                /*
-                this.hosts = this.hosts.map(obj => {
-                    currentHostsIds.push(obj.key);
-                    return {
-                        ...obj,
-                        disabled: this.post.hosts_excluded._ids.includes(obj.key)
-                    }
+                this.services = result.services;
+                this.services.map(obj => {
+                    //currentServicesExcludedIds.push(obj.key);
+                    obj.items.map(service => {
+                        currentServicesIds.push(service.value);
+                        if (service.disabled === true) {
+                            this.disabled_services.push(service.value);
+                        }
+                    })
                 });
+                this.post.services._ids = this.post.services._ids.filter(
+                    id => currentServicesIds.includes(id)
+                );
 
-                 */
-
-                                this.services = result.services;
-
-                                this.services = this.services
-                                    .map(obj => {
-                                    //Check if the service is disabled (inactive)
-                                    let serviceSuffix: string = obj.disabled ? '🔌' : '';
-                                    return {
-                                        ...obj,
-                                        disabled: this.post.services_excluded._ids.includes(obj.key)
-                                        //servicename: obj.value + ' ' + serviceSuffix
-                                    }
-                                });
-
-
-
-                //console.log(this.services);
-
-                this.processChosenExcludedServices();
+                this.processChosenServices();
             })
         );
     }
@@ -385,16 +237,20 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 let currentServicesExcludedIds: number[] = [];
                 this.services_excluded = result.excludedServices;
-                this.services_excluded = this.services_excluded.map(obj => {
-                    currentServicesExcludedIds.push(obj.key);
-                    return {
-                        ...obj,
-                        disabled: this.post.services._ids.includes(obj.key)
-                    }
+                this.services_excluded.map(obj => {
+                    //currentServicesExcludedIds.push(obj.key);
+                    obj.items.map(service => {
+                        currentServicesExcludedIds.push(service.value);
+                        if (service.disabled === true) {
+                            this.disabled_excluded_services.push(service.value);
+                        }
+                    })
+
                 });
                 this.post.services_excluded._ids = this.post.services_excluded._ids.filter(
                     id => currentServicesExcludedIds.includes(id)
                 );
+                this.processChosenExcludedServices();
             }));
     }
 
@@ -403,7 +259,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         if (!containerId) {
             return;
         }
-        console.log(this.post.servicegroups_excluded._ids);
 
         if (this.post.services._ids.length === 0) {
             this.post.servicegroups_excluded._ids = [];
@@ -436,7 +291,12 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.services) {
-            this.services[key].disabled = this.post.services_excluded._ids.includes(this.services[key].key);
+            for (let itemKey in this.services[key]['items']) {
+                if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
+                    continue;
+                }
+                this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
+            }
         }
     }
 
@@ -444,9 +304,13 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         if (this.services_excluded.length === 0) {
             return;
         }
-
         for (let key in this.services_excluded) {
-            this.services_excluded[key].disabled = this.post.services._ids.includes(this.services_excluded[key].key);
+            for (let itemKey in this.services_excluded[key]['items']) {
+                if (this.disabled_excluded_services.includes(this.services_excluded[key]['items'][itemKey].value)) {
+                    continue;
+                }
+                this.services_excluded[key]['items'][itemKey].disabled = this.post.services._ids.includes(this.services_excluded[key]['items'][itemKey].value);
+            }
         }
     }
 

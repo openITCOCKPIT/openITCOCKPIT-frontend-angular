@@ -37,30 +37,6 @@
                     </c-nav>
                 </c-card-header>
                 <c-card-body>
-
-                    <c-input-group>
-                        <span cInputGroupText class="bg-success">
-                            <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
-                        </span>
-                        <oitc-multi-select-optgroup
-                            name="city"
-                            id="city"
-                            optionValue="label"
-                            optionLabel="value"
-                            class="flex-1"
-                            [options]="groupedCities"
-                            [group]="true"
-                            [(ngModel)]="selectedCities">
-                        </oitc-multi-select-optgroup>
-
-                    </c-input-group>
-
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
-
                     <div class="mb-3">
                         <label cLabel for="container">
                             {{ t('Container') }}
@@ -95,24 +71,26 @@
                                 <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
                                 {{ t('Services') }}
                                 <oitc-required-icon></oitc-required-icon>
+                               ---> {{post.services._ids}} <---
                             </label>
                             <c-input-group>
                                 <span cInputGroupText class="bg-success">
                                     <fa-icon [icon]="['fas', 'cog']" class="text-white"></fa-icon>
                                 </span>
-                                <oitc-multi-select
+                                <oitc-multi-select-optgroup
                                     name="ServiceescalationIncludeServices"
                                     id="ServiceescalationIncludeServices"
-                                    optionValue="key"
-                                    optionLabel="value"
+                                    optionLabel="label"
+                                    optionValue="value"
                                     [(ngModel)]="post.services._ids"
                                     [options]="services"
                                     [searchCallback]="loadServices"
                                     (onChange)="loadExcludedServicegroups('')"
                                     (ngModelChange)="processChosenExcludedServices()"
+                                    [group]="true"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="services">
-                                </oitc-multi-select>
+                                </oitc-multi-select-optgroup>
                             </c-input-group>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="services"></oitc-form-feedback>
@@ -172,24 +150,26 @@
                             <label cLabel for="ServiceescalationExcludeServices">
                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                 {{ t('Excluded Services') }}
+                                ---> {{post.services_excluded._ids}} <---
                             </label>
                             <c-input-group>
                                 <span cInputGroupText class="bg-danger">
                                     <fa-icon [icon]="['fas', 'cogs']" class="text-white"></fa-icon>
                                 </span>
-                                <oitc-multi-select
+                                <oitc-multi-select-optgroup
                                     name="ServiceescalationExcludeServices"
                                     id="ServiceescalationExcludeServices"
-                                    optionValue="key"
-                                    optionLabel="value"
+                                    optionLabel="label"
+                                    optionValue="value"
                                     [(ngModel)]="post.services_excluded._ids"
                                     [options]="services_excluded"
                                     [disabled]="post.servicegroups._ids.length == 0"
                                     [searchCallback]="loadExcludedServices"
                                     (ngModelChange)="processChosenServices()"
+                                    [group]="true"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="services_excluded">
-                                </oitc-multi-select>
+                                </oitc-multi-select-optgroup>
                             </c-input-group>
                         </div>
                     </div>

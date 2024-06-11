@@ -184,10 +184,11 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
     public onClickSetSelected(group: any) {
         group.items.forEach((item: any) => {
             this.ngModel = this.ngModel ? [...this.ngModel] : [];
-            if (!this.ngModel.includes(item.value)) {
+            if (!this.ngModel.includes(item.value) && !item.disabled) {
                 this.ngModel.push(item.value);
             }
         });
+        this.ngModelChange.emit(this.ngModel);
     }
 
     protected readonly String = String;
