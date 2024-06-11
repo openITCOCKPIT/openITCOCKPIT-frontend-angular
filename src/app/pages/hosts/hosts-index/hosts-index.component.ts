@@ -68,6 +68,8 @@ import {
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -120,7 +122,9 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         FaStackComponent,
         FaStackItemSizeDirective,
         CopyToClipboardComponent,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        FormErrorDirective,
+        NgSelectModule
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -201,6 +205,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     public resetFilter() {
         this.params = getDefaultHostsIndexParams();
+        this.filter = getDefaultHostsIndexFilter();
         this.loadHosts();
     }
 

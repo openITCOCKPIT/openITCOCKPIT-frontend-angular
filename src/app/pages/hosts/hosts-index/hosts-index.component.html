@@ -105,32 +105,174 @@
                     </c-row>
                     <form cForm>
 
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="filter['Hosts.name']"
-                                       [placeholder]="'Filter by host name' | transloco"
-                                       cFormControl
-                                       name="Hosts.name"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                                <span cInputGroupText>
-                                    <label>
-                                        {{ t('Enable RegEx') }}
-                                        <input type="checkbox"
-                                               name="filter.Host.name_regex"
-                                               (change)="onFilterChange($event)"
-                                               [(ngModel)]="filter['Hosts.name_regex']"
-                                        />
-                                    </label>
-                                </span>
-                            </c-input-group>
-                        </c-col>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hosts.name']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           name="Hosts.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   name="filter.Host.name_regex"
+                                                   oitcDebounce
+                                                   (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.name_regex']"
+                                            />
+                                            <!-- todo implement regex light bulb -->
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
 
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['hostdescription']"
+                                           [placeholder]="'Filter by host description' | transloco"
+                                           cFormControl
+                                           name="Hosts.hostdescription"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hosts.address']"
+                                           [placeholder]="'Filter by IP address' | transloco"
+                                           cFormControl
+                                           name="Hosts.address"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   name="filter.Host.address_regex"
+                                                   oitcDebounce
+                                                   (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.address_regex']"
+                                            />
+                                            <!-- todo implement regex light bulb -->
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hoststatus.output']"
+                                           [placeholder]="'Filter by output' | transloco"
+                                           cFormControl
+                                           name="Hosts.output"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <ng-select
+                                        id="HostKeywordsInput"
+                                        name="HostKeywordsInput"
+                                        [items]="[]"
+                                        [(ngModel)]="filter['Hosts.keywords']"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="t('Filter by tags')"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <ng-select
+                                        id="HostNotKeywordsInput"
+                                        name="HostNotKeywordsInput"
+                                        [items]="[]"
+                                        [(ngModel)]="filter['Hosts.not_keywords']"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="t('Filter by excluded tags')"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </span>
+
+                                    <oitc-multi-select
+                                        name="hosttemplatetype_id"
+                                        id="hosttemplatetype_id"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        [(ngModel)]="filter['Hosts.host_type']"
+                                        [options]="hostTypes"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by host types' | transloco"
+                                        (onChange)="onFilterChange(null)">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </c-col>
+
+
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
 
                     </form>
                 </c-container>
