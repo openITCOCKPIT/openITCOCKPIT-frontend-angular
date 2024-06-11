@@ -16,7 +16,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf, NgStyle, NgSwitch, NgSwitchCase } from '@angular/common';
+import { NgForOf, NgIf, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -59,7 +59,8 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
         NgForOf,
         NgStyle,
         DropdownColorpickerComponent,
-        BbCodeEditorComponent
+        BbCodeEditorComponent,
+        NgSwitchDefault
     ],
     templateUrl: './documentations-edit.component.html',
     styleUrl: './documentations-edit.component.css'
