@@ -76,6 +76,7 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -179,6 +180,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     public hosts?: HostsIndexRoot;
     public hideFilter: boolean = true;
+    public satellites: SelectKeyValue[] = [];
 
     public hostTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];
@@ -195,6 +197,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
         this.loadHosts();
+
+        this.subscriptions.add(this.HostsService.getSatellites()
+            .subscribe((result) => {
+                this.satellites = result;
+            })
+        );
     }
 
     public ngOnDestroy() {

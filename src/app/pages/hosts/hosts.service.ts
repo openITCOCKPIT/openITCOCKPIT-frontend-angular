@@ -7,6 +7,7 @@ import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -64,6 +65,15 @@ export class HostsService {
             map(data => {
                 return data;
             })
-        )
+        );
+    }
+
+    public getSatellites(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ satellites: SelectKeyValue[] }>(`${proxyPath}/angular/getSatellites.json`).pipe(
+            map(data => {
+                return data.satellites
+            })
+        );
     }
 }
