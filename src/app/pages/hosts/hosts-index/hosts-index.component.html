@@ -878,6 +878,13 @@
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
 
+                                <oitc-actions-button-element [permission]="'hosts.sharing'"
+                                                             *ngIf="host.Host.allow_sharing">
+                                    [url]="'/hosts/sharing/' + host.Host.id">
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                    {{ t('Sharing') }}
+                                </oitc-actions-button-element>
+
                                 <oitc-actions-button-element [permission]="'hosts.deactivate'"
                                                              *ngIf="host.Host.allow_edit">
                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
