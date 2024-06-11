@@ -73,9 +73,13 @@ export class ServicetemplategroupsService {
         return this.http.get<LoadContainersRoot>(`${proxyPath}/servicetemplategroups/loadContainers.json?angular=true`);
     }
 
-    public loadServicetemplatesByContainerId(containerId: number, servicetemplatesTemplateName: string): Observable<LoadServiceTemplatesRoot> {
+    public loadServicetemplatesByContainerId(containerId: number, servicetemplatesTemplateName: string, selected:number[]): Observable<LoadServiceTemplatesRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadServiceTemplatesRoot>(`${proxyPath}/servicetemplategroups/loadServicetemplatesByContainerId.json?angular=true&containerId=${containerId}&filter[Servicetemplates.template_name]=${servicetemplatesTemplateName}`);
+        let selectedString = '';
+        for (let i = 0; i < selected.length; i++) {
+            selectedString += `&selected[]=${selected[i]}`;
+        }
+        return this.http.get<LoadServiceTemplatesRoot>(`${proxyPath}/servicetemplategroups/loadServicetemplatesByContainerId.json?angular=true&containerId=${containerId}&filter[Servicetemplates.template_name]=${servicetemplatesTemplateName}${selectedString}`);
     }
 
     public getServicetemplategroupEdit(servicetemplateId: number): Observable<ServiceTemplateGroupsGetEditRoot> {

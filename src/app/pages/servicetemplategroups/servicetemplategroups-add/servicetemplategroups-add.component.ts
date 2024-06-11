@@ -172,7 +172,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             this.servicetemplates = [];
             return;
         }
-        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName)
+        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
             }))
