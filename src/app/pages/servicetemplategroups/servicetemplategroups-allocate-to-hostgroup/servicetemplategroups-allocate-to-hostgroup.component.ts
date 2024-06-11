@@ -231,7 +231,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
                         _ids: servicetemplateIds
                     }
                 };
-            this.subscriptions.add(this.ServicetemplategroupsService.allocateToHostgroup(this.servicetemplategroupId, item)
+            this.subscriptions.add(this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item)
                 .subscribe((result: GenericResponseWrapper) => {
                     if (result.success) {
                         i++;
