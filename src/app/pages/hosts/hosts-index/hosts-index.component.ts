@@ -12,6 +12,9 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -48,7 +51,9 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import {
     getDefaultHostsIndexFilter,
     getDefaultHostsIndexParams,
+    getHostCurrentStateForApi,
     HostObject,
+    HostsCurrentStateFilter,
     HostsIndexFilter,
     HostsIndexParams,
     HostsIndexRoot
@@ -70,6 +75,7 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -124,7 +130,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
         CopyToClipboardComponent,
         TrustAsHtmlPipe,
         FormErrorDirective,
-        NgSelectModule
+        NgSelectModule,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -133,8 +143,39 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ]
 })
 export class HostsIndexComponent implements OnInit, OnDestroy {
+    // Filter vars
     public params: HostsIndexParams = getDefaultHostsIndexParams();
     public filter: HostsIndexFilter = getDefaultHostsIndexFilter();
+    public currentStateFilter: HostsCurrentStateFilter = {
+        up: false,
+        down: false,
+        unreachable: false
+    };
+    public state_typesFilter = {
+        soft: false,
+        hard: false
+    };
+    public acknowledgementsFilter = {
+        acknowledged: false,
+        not_acknowledged: false
+    };
+    public downtimeFilter = {
+        in_downtime: false,
+        not_in_downtime: false
+    };
+    public notificationsFilter = {
+        enabled: false,
+        not_enabled: false
+    };
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
+
+    // Filter end
 
     public hosts?: HostsIndexRoot;
     public hideFilter: boolean = true;
@@ -162,6 +203,39 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     public loadHosts() {
         this.SelectionServiceService.deselectAll();
+
+        let hasBeenAcknowledged = '';
+        let inDowntime = '';
+        let notificationsEnabled = '';
+        if (this.acknowledgementsFilter.acknowledged !== this.acknowledgementsFilter.not_acknowledged) {
+            hasBeenAcknowledged = String(this.acknowledgementsFilter.acknowledged === true);
+        }
+        if (this.downtimeFilter.in_downtime !== this.downtimeFilter.not_in_downtime) {
+            inDowntime = String(this.downtimeFilter.in_downtime === true);
+        }
+        if (this.notificationsFilter.enabled !== this.notificationsFilter.not_enabled) {
+            notificationsEnabled = String(this.notificationsFilter.enabled === true);
+        }
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+        let state_type: string = '';
+        if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
+            state_type = '0';
+            if (this.state_typesFilter.hard) {
+                state_type = '1';
+            }
+        }
+
+        this.filter['Hoststatus.problem_has_been_acknowledged'] = hasBeenAcknowledged;
+        this.filter['Hoststatus.scheduled_downtime_depth'] = inDowntime;
+        this.filter['Hoststatus.notifications_enabled'] = notificationsEnabled;
+        this.filter['hostpriority'] = priorityFilter;
+        this.filter['Hoststatus.is_hardstate'] = state_type;
+        this.filter['Hoststatus.current_state'] = getHostCurrentStateForApi(this.currentStateFilter);
 
         this.subscriptions.add(this.HostsService.getIndex(this.params, this.filter)
             .subscribe((result) => {
@@ -206,6 +280,34 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public resetFilter() {
         this.params = getDefaultHostsIndexParams();
         this.filter = getDefaultHostsIndexFilter();
+        this.currentStateFilter = {
+            up: false,
+            down: false,
+            unreachable: false
+        };
+        this.state_typesFilter = {
+            soft: false,
+            hard: false
+        };
+        this.acknowledgementsFilter = {
+            acknowledged: false,
+            not_acknowledged: false
+        };
+        this.downtimeFilter = {
+            in_downtime: false,
+            not_in_downtime: false
+        };
+        this.notificationsFilter = {
+            enabled: false,
+            not_enabled: false
+        };
+        this.priorityFilter = {
+            '1': false,
+            '2': false,
+            '3': false,
+            '4': false,
+            '5': false
+        };
         this.loadHosts();
     }
 

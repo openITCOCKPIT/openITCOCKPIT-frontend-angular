@@ -200,8 +200,30 @@ export interface HostsIndexFilter {
     'Hoststatus.scheduled_downtime_depth': string,
     'Hoststatus.notifications_enabled': string,
     'Hoststatus.is_hardstate': string,
-    'hostpriority': number[]
+    'hostpriority': string[]
 }
+
+export interface HostsCurrentStateFilter {
+    up: boolean
+    down: boolean
+    unreachable: boolean
+}
+
+export function getHostCurrentStateForApi(currentState: HostsCurrentStateFilter): string[] {
+    let result = [];
+    if (currentState.up) {
+        result.push('up');
+    }
+    if (currentState.down) {
+        result.push('down');
+    }
+    if (currentState.unreachable) {
+        result.push('unreachable');
+    }
+
+    return result;
+}
+
 
 export function getDefaultHostsIndexFilter(): HostsIndexFilter {
     return {
