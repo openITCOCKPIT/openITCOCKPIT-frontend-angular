@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
+import { HostSharing, HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -75,5 +76,61 @@ export class HostsService {
                 return data.satellites
             })
         );
+    }
+
+    /**********************
+     *    Sharing action    *
+     **********************/
+    public getSharing(id: number): Observable<{
+        host: HostSharing,
+        primaryContainerPathSelect: SelectKeyValue[],
+        sharingContainers: SelectKeyValue[]
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            host: HostSharing,
+            primaryContainerPathSelect: SelectKeyValue[],
+            sharingContainers: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/sharing/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return {
+                    host: data.host,
+                    primaryContainerPathSelect: data.primaryContainerPathSelect,
+                    sharingContainers: data.sharingContainers
+                };
+            })
+        );
+    }
+
+    public updateSharing(host: HostSharing): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosts/sharing/${host.Host.id}.json?angular=true`, {
+            Host: {
+                id: host.Host.id,
+                hosts_to_containers_sharing: {
+                    _ids: host.Host.hosts_to_containers_sharing._ids
+                }
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

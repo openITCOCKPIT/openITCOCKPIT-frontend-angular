@@ -155,6 +155,9 @@ export const routes: Routes = [{
     path: 'hosts/index',
     loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
 }, {
+    path: 'hosts/sharing/:id',
+    loadComponent: () => import('./pages/hosts/hosts-sharing/hosts-sharing.component').then(m => m.HostsSharingComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
@@ -199,7 +202,7 @@ export const routes: Routes = [{
 }, {
     path: 'serviceescalations/index',
     loadComponent: () => import('./pages/serviceescalations/serviceescalations-index/serviceescalations-index.component').then(m => m.ServiceescalationsIndexComponent)
-},{
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

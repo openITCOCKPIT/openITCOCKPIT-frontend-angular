@@ -246,3 +246,19 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'hostpriority': []
     }
 }
+
+/**********************
+ *    Sharing action    *
+ **********************/
+export interface HostSharing {
+    Host: {
+        id: number
+        uuid: string
+        name: string
+        container_id: number
+        host_type: number
+        hosts_to_containers_sharing: {
+            _ids: number[]
+        }
+    }
+}
