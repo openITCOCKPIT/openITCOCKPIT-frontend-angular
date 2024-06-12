@@ -1,5 +1,9 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
+import {
+    SelectItemOptionGroup,
+    SelectKeyValue,
+    SelectKeyValueWithDisabled
+} from '../../layouts/primeng/select.interface';
 
 export interface ServiceescalationsIndexParams {
     angular: true,
@@ -195,11 +199,11 @@ export interface ServiceescalationElements {
 }
 
 export interface ServiceescalationServices {
-    services: SelectKeyValueWithDisabled[]
+    services: SelectItemOptionGroup[]
 }
 
 export interface ServiceescalationExcludedServices {
-    excludedServices: SelectKeyValueWithDisabled[]
+    excludedServices: SelectItemOptionGroup[]
 }
 
 export interface ServiceescalationExcludedServicegroups {
@@ -208,4 +212,28 @@ export interface ServiceescalationExcludedServicegroups {
 
 export interface ServiceescalationEditApiResult {
     serviceescalation: ServiceescalationGet
+}
+
+export interface ServiceescalationServiceValues {
+    services: ServiceescalationService[]
+}
+
+export interface ServiceescalationService {
+    key: number
+    value: ServiceescalationServiceValue
+}
+
+export interface ServiceescalationServiceValue {
+    servicename: string
+    id: number
+    disabled: number
+    _matchingData: ServiceescalationMatchingData
+}
+
+export interface ServiceescalationMatchingData {
+    Hosts: ServiceescalationServiceHosts
+}
+
+export interface ServiceescalationServiceHosts {
+    name: string
 }
