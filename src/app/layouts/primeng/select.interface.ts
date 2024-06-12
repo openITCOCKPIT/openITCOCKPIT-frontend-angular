@@ -13,7 +13,6 @@ export interface SelectKeyValueWithDisabled {
 }
 
 export interface SelectItemOptionGroup {
-    key: string;
     label: string;
     value?: any;
     disabled?: boolean

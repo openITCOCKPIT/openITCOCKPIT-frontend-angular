@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -114,7 +114,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {
     }
 
 
@@ -193,11 +193,12 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadServices = (searchString: string)=> {
+    public loadServices = (searchString: string) => {
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
         }
+
         this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
                 let currentServicesIds: number[] = [];
@@ -212,9 +213,11 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                         }
                     })
                 });
+
                 this.post.services._ids = this.post.services._ids.filter(
                     id => currentServicesIds.includes(id)
                 );
+console.log(JSON.parse(JSON.stringify(this.services)));
 
                 this.processChosenServices();
             })
@@ -222,6 +225,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     }
 
     public loadExcludedServices = (searchString: string) => {
+
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -249,6 +253,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 );
                 this.processChosenExcludedServices();
             }));
+
     }
 
     public loadExcludedServicegroups(searchString: string) {
@@ -287,14 +292,22 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         if (this.services.length === 0) {
             return;
         }
+        //console.log('Check for enable/disable');
+        //console.log(this.disabled_services);
+        console.log(JSON.parse(JSON.stringify(this.services)));
         for (let key in this.services) {
             for (let itemKey in this.services[key]['items']) {
                 if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
                     continue;
                 }
+                //console.log(this.services[key]['items'][itemKey].value + ' --> ' + this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value));
                 this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
+
             }
         }
+        console.log(JSON.parse(JSON.stringify(this.services)));
+        this.cdr.detectChanges();
+
     }
 
     public processChosenExcludedServices() {

@@ -71,7 +71,7 @@
                                 <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
                                 {{ t('Services') }}
                                 <oitc-required-icon></oitc-required-icon>
-                               ---> {{post.services._ids}} <---
+                                ---> {{ post.services._ids }} <---
                             </label>
                             <c-input-group>
                                 <span cInputGroupText class="bg-success">
@@ -85,8 +85,7 @@
                                     [(ngModel)]="post.services._ids"
                                     [options]="services"
                                     [searchCallback]="loadServices"
-                                    (onChange)="loadExcludedServicegroups('')"
-                                    (ngModelChange)="processChosenExcludedServices()"
+                                    (onChange)="loadExcludedServicegroups('');processChosenExcludedServices()"
                                     [group]="true"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="services">
@@ -150,7 +149,7 @@
                             <label cLabel for="ServiceescalationExcludeServices">
                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                 {{ t('Excluded Services') }}
-                                ---> {{post.services_excluded._ids}} <---
+                                ---> {{ post.services_excluded._ids }} <---
                             </label>
                             <c-input-group>
                                 <span cInputGroupText class="bg-danger">
@@ -165,7 +164,7 @@
                                     [options]="services_excluded"
                                     [disabled]="post.servicegroups._ids.length == 0"
                                     [searchCallback]="loadExcludedServices"
-                                    (ngModelChange)="processChosenServices()"
+                                    (onChange)="processChosenServices()"
                                     [group]="true"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="services_excluded">

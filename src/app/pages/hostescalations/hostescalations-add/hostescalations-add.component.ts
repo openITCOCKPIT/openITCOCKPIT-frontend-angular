@@ -236,7 +236,6 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         if (!containerId) {
             return;
         }
-        console.log(this.post.hostgroups_excluded._ids);
 
         if (this.post.hosts._ids.length === 0) {
             this.post.hostgroups_excluded._ids = [];
