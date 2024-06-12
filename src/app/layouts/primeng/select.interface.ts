@@ -1,4 +1,6 @@
 // Used for select boxes
+import { SelectItem } from 'primeng/api/selectitem';
+
 export interface SelectKeyValue {
     key: number,
     value: string
@@ -8,4 +10,11 @@ export interface SelectKeyValueWithDisabled {
     key: number,
     value: string,
     disabled?: boolean
+}
+
+export interface SelectItemOptionGroup {
+    label: string;
+    value?: any;
+    disabled?: boolean
+    items: SelectItem[];
 }
