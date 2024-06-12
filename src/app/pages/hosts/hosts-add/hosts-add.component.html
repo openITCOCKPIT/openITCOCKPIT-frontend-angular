@@ -196,10 +196,17 @@
                                     <label cLabel for="description">
                                         {{ t('Description') }}
                                     </label>
-                                    <input cFormControl id="description" type="text"
-                                           name="description"
-                                           oitcFormError [errors]="errors" errorField="description"
-                                           [(ngModel)]="post.description">
+                                    <c-input-group>
+                                        <input cFormControl id="description" type="text"
+                                               name="description"
+                                               oitcFormError [errors]="errors" errorField="description"
+                                               [(ngModel)]="post.description">
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.description"
+                                                            [(value)]="post.description"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    </c-input-group>
                                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                                 </div>
 
@@ -208,15 +215,23 @@
                                         {{ t('Host groups') }}
                                     </label>
 
-                                    <oitc-multi-select
-                                        name="HostHostgroups"
-                                        id="HostHostgroups"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="post.hostgroups._ids"
-                                        [options]="hostgroups"
-                                        oitcFormError [errors]="errors" errorField="hostgroups">
-                                    </oitc-multi-select>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                            name="HostHostgroups"
+                                            id="HostHostgroups"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.hostgroups._ids"
+                                            [options]="hostgroups"
+                                            class="flex-1"
+                                            oitcFormError [errors]="errors" errorField="hostgroups">
+                                        </oitc-multi-select>
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.hostgroups._ids"
+                                                            [(value)]="post.hostgroups._ids"
+                                                            class="bg-transparent p-0 d-flex"></oitc-template-diff>
+                                    </c-input-group>
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="hostgroups"></oitc-form-feedback>
                                 </div>

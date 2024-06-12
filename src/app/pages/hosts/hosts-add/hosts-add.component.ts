@@ -14,6 +14,8 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -52,6 +54,7 @@ import { HostDnsLookup, HostPost } from '../hosts.interface';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
+import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -95,7 +98,10 @@ import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
         XsButtonDirective,
         RouterLink,
         TranslocoPipe,
-        AlertHeadingDirective
+        AlertHeadingDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TemplateDiffComponent
     ],
     templateUrl: './hosts-add.component.html',
     styleUrl: './hosts-add.component.css'
@@ -134,7 +140,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
 
     public createAnother: boolean = false;
 
-    private hosttemplate?: HosttemplatePost;
+    protected hosttemplate?: HosttemplatePost;
 
     private readonly HostsService = inject(HostsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
