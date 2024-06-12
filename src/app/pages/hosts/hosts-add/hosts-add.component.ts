@@ -438,10 +438,45 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         for (let index in fields) {
             let field = fields[index];
             if (this.hosttemplate.hasOwnProperty(field)) {
+
+                // Basically, we are doing the following:
                 //this.post[field] = this.hosttemplate[field];
+
+                (this.post as any)[field] = (this.hosttemplate as any)[field];
             }
         }
 
+        var hasManyAssociations = [
+            'hostgroups', 'contacts', 'contactgroups', 'prometheus_exporters'
+        ];
+        for (let index in hasManyAssociations) {
+            let field = hasManyAssociations[index];
+            if (this.hosttemplate.hasOwnProperty(field)) {
+                // @ts-ignore
+                this.post[field]._ids = this.hosttemplate[field]._ids;
+            }
+        }
+
+        this.post.customvariables = [];
+        for (let index in this.hosttemplate.customvariables) {
+            this.post.customvariables.push({
+                objecttype_id: ObjectTypesEnum['HOSTTEMPLATE'], //OBJECT_HOSTTEMPLATE because value from host template
+                name: this.hosttemplate.customvariables[index].name,
+                value: this.hosttemplate.customvariables[index].value,
+                password: this.hosttemplate.customvariables[index].password
+            });
+        }
+
+        this.post.hostcommandargumentvalues = [];
+        for (let index in this.hosttemplate.hosttemplatecommandargumentvalues) {
+            this.post.hostcommandargumentvalues.push({
+                commandargument_id: this.hosttemplate.hosttemplatecommandargumentvalues[index].commandargument_id,
+                value: this.hosttemplate.hosttemplatecommandargumentvalues[index].value,
+                commandargument: this.hosttemplate.hosttemplatecommandargumentvalues[index].commandargument
+            });
+        }
+
+        this.tagsForSelect = this.post.tags.split(',');
     }
 
     /*******************
