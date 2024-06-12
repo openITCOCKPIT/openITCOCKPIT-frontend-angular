@@ -1,12 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
+import {
+    HostCommandArgument,
+    HostElements,
+    HostSharing,
+    HostsIndexFilter,
+    HostsIndexParams,
+    HostsIndexRoot
+} from './hosts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -64,6 +73,142 @@ export class HostsService {
             map(data => {
                 return data;
             })
+        );
+    }
+
+    public getSatellites(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ satellites: SelectKeyValue[] }>(`${proxyPath}/angular/getSatellites.json`).pipe(
+            map(data => {
+                return data.satellites
+            })
+        );
+    }
+
+    /**********************
+     *    Sharing action    *
+     **********************/
+    public getSharing(id: number): Observable<{
+        host: HostSharing,
+        primaryContainerPathSelect: SelectKeyValue[],
+        sharingContainers: SelectKeyValue[]
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            host: HostSharing,
+            primaryContainerPathSelect: SelectKeyValue[],
+            sharingContainers: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/sharing/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return {
+                    host: data.host,
+                    primaryContainerPathSelect: data.primaryContainerPathSelect,
+                    sharingContainers: data.sharingContainers
+                };
+            })
+        );
+    }
+
+    public updateSharing(host: HostSharing): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosts/sharing/${host.Host.id}.json?angular=true`, {
+            Host: {
+                id: host.Host.id,
+                hosts_to_containers_sharing: {
+                    _ids: host.Host.hosts_to_containers_sharing._ids
+                }
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public loadCommands(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ commands: SelectKeyValue[] }>(`${proxyPath}/hosts/loadCommands.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.commands
+            })
         )
     }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/hosts/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers
+            })
+        )
+    }
+
+    public loadElements(containerId: number): Observable<HostElements> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostElements>(`${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadCommandArguments(commandId: number): Observable<HostCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hostcommandargumentvalues: HostCommandArgument[]
+        }>(`${proxyPath}/hosts/loadCommandArguments/${commandId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hostcommandargumentvalues;
+            })
+        );
+    }
+
+    public checkForDuplicateHostname(hostname: string): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            isHostnameInUse: boolean
+        }>(`${proxyPath}/hosts/checkForDuplicateHostname.json?angular=true`, {
+            hostname: hostname
+        }).pipe(
+            map(data => {
+                return data.isHostnameInUse;
+            })
+        );
+    }
+
 }

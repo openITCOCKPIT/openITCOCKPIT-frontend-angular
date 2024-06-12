@@ -3,6 +3,8 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
+import { Customvariable } from '../contacts/contacts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface HostObject {
     id?: number
@@ -200,8 +202,30 @@ export interface HostsIndexFilter {
     'Hoststatus.scheduled_downtime_depth': string,
     'Hoststatus.notifications_enabled': string,
     'Hoststatus.is_hardstate': string,
-    'hostpriority': number[]
+    'hostpriority': string[]
 }
+
+export interface HostsCurrentStateFilter {
+    up: boolean
+    down: boolean
+    unreachable: boolean
+}
+
+export function getHostCurrentStateForApi(currentState: HostsCurrentStateFilter): string[] {
+    let result = [];
+    if (currentState.up) {
+        result.push('up');
+    }
+    if (currentState.down) {
+        result.push('down');
+    }
+    if (currentState.unreachable) {
+        result.push('unreachable');
+    }
+
+    return result;
+}
+
 
 export function getDefaultHostsIndexFilter(): HostsIndexFilter {
     return {
@@ -223,4 +247,119 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'Hoststatus.is_hardstate': '',
         'hostpriority': []
     }
+}
+
+/**********************
+ *    Sharing action    *
+ **********************/
+export interface HostSharing {
+    Host: {
+        id: number
+        uuid: string
+        name: string
+        container_id: number
+        host_type: number
+        hosts_to_containers_sharing: {
+            _ids: number[]
+        }
+    }
+}
+
+/**********************
+ *      Add action    *
+ **********************/
+export interface HostPost {
+    id?: null | number
+    name: string
+    description: string
+    hosttemplate_id: number
+    address: string
+    command_id: number
+    eventhandler_command_id: number
+    check_interval: number
+    retry_interval: number
+    max_check_attempts: number
+    first_notification_delay: number
+    notification_interval: number
+    notify_on_down: number
+    notify_on_unreachable: number
+    notify_on_recovery: number
+    notify_on_flapping: number
+    notify_on_downtime: number
+    flap_detection_enabled: number
+    flap_detection_on_up: number
+    flap_detection_on_down: number
+    flap_detection_on_unreachable: number
+    low_flap_threshold: number
+    high_flap_threshold: number
+    process_performance_data: number
+    freshness_checks_enabled: number
+    freshness_threshold: number
+    passive_checks_enabled: number
+    event_handler_enabled: number
+    active_checks_enabled: number
+    retain_status_information: number
+    retain_nonstatus_information: number
+    notifications_enabled: number
+    notes: string
+    priority: number
+    check_period_id: number
+    notify_period_id: number
+    tags: string
+    container_id: number
+    host_url: string
+    satellite_id: number
+    sla_id?: number | null,
+    contacts: {
+        _ids: number[]
+    },
+    contactgroups: {
+        _ids: number[]
+    },
+    hostgroups: {
+        _ids: number[]
+    },
+    hosts_to_containers_sharing: {
+        _ids: number[]
+    },
+    parenthosts: {
+        _ids: number[]
+    },
+    customvariables: Customvariable[],
+    hostcommandargumentvalues: HostCommandArgument[],
+    prometheus_exporters: {
+        _ids: number[]
+    }
+    created?: string
+    modified?: string
+}
+
+export interface HostCommandArgument {
+    id?: number
+    commandargument_id: number
+    host_id?: number
+    value: string
+    created?: string
+    modified?: string
+    commandargument: {
+        id?: number
+        name: string
+        human_name: string
+        command_id: number
+        created?: string
+        modified?: string
+    }
+}
+
+export interface HostElements {
+    hosttemplates: SelectKeyValue[]
+    hostgroups: SelectKeyValue[]
+    timeperiods: SelectKeyValue[]
+    checkperiods: SelectKeyValue[]
+    contacts: SelectKeyValue[]
+    contactgroups: SelectKeyValue[]
+    satellites: SelectKeyValue[]
+    sharingContainers: SelectKeyValue[]
+    exporters: SelectKeyValue[]
+    slas: SelectKeyValue[]
 }
