@@ -260,18 +260,25 @@
                                         {{ t('Tags') }}
                                     </label>
 
-                                    <ng-select
-                                        id="HostTags"
-                                        name="HostTags"
-                                        [items]="[]"
-                                        [(ngModel)]="tagsForSelect"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="t('Add tags')"
-                                        [isOpen]="false"
-                                        oitcFormError [errors]="errors" errorField="tags">
-                                    </ng-select>
+                                    <c-input-group>
+                                        <ng-select
+                                            id="HostTags"
+                                            name="HostTags"
+                                            [items]="[]"
+                                            [(ngModel)]="tagsForSelect"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="t('Add tags')"
+                                            [isOpen]="false"
+                                            oitcFormError [errors]="errors" errorField="tags">
+                                        </ng-select>
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.tags.split(',')"
+                                                            [(value)]="tagsForSelect"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    </c-input-group>
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="tags"></oitc-form-feedback>
                                     <div class="help-block">
@@ -348,15 +355,23 @@
                                     </oitc-label-link>
                                 </label>
 
-                                <oitc-select
-                                    name="CheckPeriodSelect"
-                                    id="CheckPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.check_period_id"
-                                    [options]="checkperiods"
-                                    oitcFormError [errors]="errors" errorField="check_period_id">
-                                </oitc-select>
+                                <c-input-group>
+                                    <oitc-select
+                                        name="CheckPeriodSelect"
+                                        id="CheckPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.check_period_id"
+                                        [options]="checkperiods"
+                                        oitcFormError [errors]="errors" errorField="check_period_id">
+                                    </oitc-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.check_period_id"
+                                                        [(value)]="post.check_period_id"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="check_period_id"></oitc-form-feedback>
                             </div>
@@ -433,16 +448,25 @@
                                     </oitc-label-link>
                                 </label>
 
-                                <oitc-select
-                                    name="HostCheckCommandSelect"
-                                    id="HostCheckCommandSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.command_id"
-                                    [options]="commands"
-                                    (onChange)="onCommandChange()"
-                                    oitcFormError [errors]="errors" errorField="command_id">
-                                </oitc-select>
+                                <c-input-group>
+                                    <oitc-select
+                                        name="HostCheckCommandSelect"
+                                        id="HostCheckCommandSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.command_id"
+                                        [options]="commands"
+                                        (onChange)="onCommandChange()"
+                                        oitcFormError [errors]="errors" errorField="command_id">
+                                    </oitc-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.command_id"
+                                                        [(value)]="post.command_id"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="command_id"></oitc-form-feedback>
                                 <div class="help-block" [hidden]="post.active_checks_enabled">
@@ -579,15 +603,23 @@
                                     </oitc-label-link>
                                 </label>
 
-                                <oitc-select
-                                    name="NotifyPeriodSelect"
-                                    id="NotifyPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.notify_period_id"
-                                    [options]="timeperiods"
-                                    oitcFormError [errors]="errors" errorField="notify_period_id">
-                                </oitc-select>
+                                <c-input-group>
+                                    <oitc-select
+                                        name="NotifyPeriodSelect"
+                                        id="NotifyPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.notify_period_id"
+                                        [options]="timeperiods"
+                                        oitcFormError [errors]="errors" errorField="notify_period_id">
+                                    </oitc-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_period_id"
+                                                        [(value)]="post.notify_period_id"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notify_period_id"></oitc-form-feedback>
                             </div>
@@ -612,15 +644,24 @@
                                     {{ t('Contacts') }}
                                 </label>
 
-                                <oitc-multi-select
-                                    name="ContactsPeriodSelect"
-                                    id="ContactsPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.contacts._ids"
-                                    [options]="contacts"
-                                    oitcFormError [errors]="errors" errorField="contacts">
-                                </oitc-multi-select>
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        name="ContactsPeriodSelect"
+                                        id="ContactsPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.contacts._ids"
+                                        [options]="contacts"
+                                        oitcFormError [errors]="errors" errorField="contacts">
+                                    </oitc-multi-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.contacts._ids"
+                                                        [(value)]="post.contacts._ids"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="contacts"></oitc-form-feedback>
                             </div>
@@ -630,15 +671,24 @@
                                     {{ t('Contact groups') }}
                                 </label>
 
-                                <oitc-multi-select
-                                    name="ContactgroupsSelect"
-                                    id="ContactgroupsSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.contactgroups._ids"
-                                    [options]="contactgroups"
-                                    oitcFormError [errors]="errors" errorField="contactgroups">
-                                </oitc-multi-select>
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        name="ContactgroupsSelect"
+                                        id="ContactgroupsSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.contactgroups._ids"
+                                        [options]="contactgroups"
+                                        oitcFormError [errors]="errors" errorField="contactgroups">
+                                    </oitc-multi-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.contactgroups._ids"
+                                                        [(value)]="post.contactgroups._ids"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="contactgroups"></oitc-form-feedback>
                             </div>
@@ -771,11 +821,21 @@
                                 <label cLabel for="HostURL">
                                     {{ t('Host URL') }}
                                 </label>
-                                <input cFormControl id="HostURL" type="text"
-                                       name="HostURL"
-                                       placeholder="https://issues.example.org?host=$HOSTNAME$"
-                                       oitcFormError [errors]="errors" errorField="host_url"
-                                       [(ngModel)]="post.host_url">
+
+                                <c-input-group>
+                                    <input cFormControl id="HostURL" type="text"
+                                           name="HostURL"
+                                           placeholder="https://issues.example.org?host=$HOSTNAME$"
+                                           oitcFormError [errors]="errors" errorField="host_url"
+                                           [(ngModel)]="post.host_url">
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.host_url"
+                                                        [(value)]="post.host_url"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
+
                                 <oitc-form-feedback [errors]="errors" errorField="host_url"></oitc-form-feedback>
                                 <div class="help-block">
                                     {{ t('The macros $HOSTID$, $HOSTNAME$, $HOSTDISPLAYNAME$ and $HOSTADDRESS$ will be replaced') }}
@@ -786,10 +846,19 @@
                                 <label cLabel for="HostURL">
                                     {{ t('Notes') }}
                                 </label>
-                                <input cFormControl id="HostNotes" type="text"
-                                       name="HostNotes"
-                                       oitcFormError [errors]="errors" errorField="notes"
-                                       [(ngModel)]="post.notes">
+
+                                <c-input-group>
+                                    <input cFormControl id="HostNotes" type="text"
+                                           name="HostNotes"
+                                           oitcFormError [errors]="errors" errorField="notes"
+                                           [(ngModel)]="post.notes">
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notes"
+                                                        [(value)]="post.notes"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors" errorField="notes"></oitc-form-feedback>
                             </div>
 
@@ -936,15 +1005,25 @@
                                 <label cLabel for="ExportersSelect">
                                     {{ t('Exporters') }}
                                 </label>
-                                <oitc-multi-select
-                                    name="ExportersSelect"
-                                    id="ExportersSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.prometheus_exporters._ids"
-                                    [options]="exporters"
-                                    oitcFormError [errors]="errors" errorField="prometheus_exporters">
-                                </oitc-multi-select>
+
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        name="ExportersSelect"
+                                        id="ExportersSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.prometheus_exporters._ids"
+                                        [options]="exporters"
+                                        oitcFormError [errors]="errors" errorField="prometheus_exporters">
+                                    </oitc-multi-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.prometheus_exporters._ids"
+                                                        [(value)]="post.prometheus_exporters._ids"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="prometheus_exporters"></oitc-form-feedback>
                                 <div class="help-block">
@@ -980,16 +1059,25 @@
                                     </oitc-label-link>
                                 </label>
 
-                                <oitc-select
-                                    name="SlasSelect"
-                                    id="SlasSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.sla_id"
-                                    [options]="slas"
-                                    [showClear]="true"
-                                    oitcFormError [errors]="errors" errorField="sla_id">
-                                </oitc-select>
+                                <c-input-group>
+                                    <oitc-select
+                                        name="SlasSelect"
+                                        id="SlasSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="post.sla_id"
+                                        [options]="slas"
+                                        [showClear]="true"
+                                        oitcFormError [errors]="errors" errorField="sla_id">
+                                    </oitc-select>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.sla_id"
+                                                        [(value)]="post.sla_id"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
+
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="sla_id"></oitc-form-feedback>
                                 <div class="help-block">

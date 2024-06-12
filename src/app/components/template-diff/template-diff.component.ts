@@ -29,7 +29,6 @@ export class TemplateDiffComponent implements OnChanges {
     private readonly TranslocoService = inject(TranslocoService);
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes);
         if (changes['value']) {
             this.runDiff();
         }
