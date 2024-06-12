@@ -438,7 +438,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         for (let index in fields) {
             let field = fields[index];
             if (this.hosttemplate.hasOwnProperty(field)) {
-                this.post[field] = this.hosttemplate[field];
+                //this.post[field] = this.hosttemplate[field];
             }
         }
 
