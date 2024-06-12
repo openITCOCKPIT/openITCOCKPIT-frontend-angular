@@ -10,12 +10,11 @@ import {
     ServiceescalationExcludedServices,
     ServiceescalationIndexRoot,
     ServiceescalationPost,
-    ServiceescalationServices, ServiceescalationServiceValue, ServiceescalationServiceValues,
+    ServiceescalationServices,
     ServiceescalationsIndexParams
 } from './serviceescalations.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -78,7 +77,7 @@ export class ServiceescalationsService {
             params: {
                 angular: true,
                 'containerId': containerId,
-                'filter[Services.name]': searchString,
+                'filter[servicename]': searchString,
                 'selected[]': servicesIds
             }
         }).pipe(

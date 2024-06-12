@@ -11,6 +11,7 @@ export class HighlightSearchPipe implements PipeTransform {
     }
 
     transform(value: any, searchText: string | null, optionLabel: string): any {
+        //console.log(value);
         // Add support for path such as "value.title"
         let optionLabels = optionLabel.split('.');
         let selectboxValue: string = "";

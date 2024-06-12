@@ -52,13 +52,21 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
     private _options: any[] | undefined;
     @Input()
     set options(options) {
-        this._options = options;
+
+        // Fix for the issue that the options are not updated when search
+        // Probably some JavaScript objects reference issue
+        this._options = [];
+
         this.cdr.markForCheck();
         this.cdr.detectChanges();
+
+        this._options = options;
     }
+
     get options() {
         return this._options;
     }
+
 
     /**
      * ngModel for the form

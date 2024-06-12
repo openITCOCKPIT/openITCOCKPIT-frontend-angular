@@ -217,7 +217,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 this.post.services._ids = this.post.services._ids.filter(
                     id => currentServicesIds.includes(id)
                 );
-console.log(JSON.parse(JSON.stringify(this.services)));
+                console.log(JSON.parse(JSON.stringify(this.services)));
 
                 this.processChosenServices();
             })
