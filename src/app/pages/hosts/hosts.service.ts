@@ -8,6 +8,7 @@ import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
     HostCommandArgument,
+    HostDnsLookup,
     HostElements,
     HostSharing,
     HostsIndexFilter,
@@ -207,6 +208,21 @@ export class HostsService {
         }).pipe(
             map(data => {
                 return data.isHostnameInUse;
+            })
+        );
+    }
+
+    public runDnsLookup(data: HostDnsLookup): Observable<HostDnsLookup> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            result: HostDnsLookup
+        }>(`${proxyPath}/hosts/runDnsLookup.json?angular=true`, {
+            address: data.address,
+            hostname: data.hostname
+
+        }).pipe(
+            map(data => {
+                return data.result;
             })
         );
     }

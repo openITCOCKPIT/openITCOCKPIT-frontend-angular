@@ -363,3 +363,8 @@ export interface HostElements {
     exporters: SelectKeyValue[]
     slas: SelectKeyValue[]
 }
+
+export interface HostDnsLookup {
+    hostname: string | null
+    address: string | null
+}

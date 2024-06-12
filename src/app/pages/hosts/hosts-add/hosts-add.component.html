@@ -143,7 +143,7 @@
                                        name="HostName"
                                        oitcFormError [errors]="errors" errorField="name"
                                        [(ngModel)]="post.name"
-                                       (blur)="checkForDuplicateHostname()">
+                                       (blur)="checkForDuplicateHostname(); runDnsLookup(true)">
                                 <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
 
                                 <c-form-check class="mb-3 ms-3 mt-1">
@@ -157,6 +157,10 @@
                                         {{ t('DNS Lookup') }}
                                     </label>
                                 </c-form-check>
+                            </div>
+                            <div class="help-block text-info" *ngIf="data.dnsHostnameNotFound">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve hostname.') }}
                             </div>
 
                             <c-alert color="warning" *ngIf="data.isHostnameInUse">
@@ -178,76 +182,83 @@
                                        name="HostAddress"
                                        [placeholder]="'IPv4/IPv6 address or FQDN' | transloco"
                                        oitcFormError [errors]="errors" errorField="address"
-                                       [(ngModel)]="post.address">
+                                       [(ngModel)]="post.address"
+                                       (blur)="runDnsLookup(false)">
                                 <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
                             </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="description">
-                                    {{ t('Description') }}
-                                </label>
-                                <input cFormControl id="description" type="text"
-                                       name="description"
-                                       oitcFormError [errors]="errors" errorField="description"
-                                       [(ngModel)]="post.description">
-                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            <div class="help-block text-info" *ngIf="data.dnsAddressNotFound">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve address.') }}
                             </div>
 
-                            <div class="mb-3">
-                                <label cLabel for="HostHostgroups">
-                                    {{ t('Host groups') }}
-                                </label>
-
-                                <oitc-multi-select
-                                    name="HostHostgroups"
-                                    id="HostHostgroups"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.hostgroups._ids"
-                                    [options]="hostgroups"
-                                    oitcFormError [errors]="errors" errorField="hostgroups">
-                                </oitc-multi-select>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="hostgroups"></oitc-form-feedback>
-                            </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="HostTags">
-                                    {{ t('Tags') }}
-                                </label>
-
-                                <ng-select
-                                    id="HostTags"
-                                    name="HostTags"
-                                    [items]="[]"
-                                    [(ngModel)]="tagsForSelect"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="t('Add tags')"
-                                    [isOpen]="false"
-                                    oitcFormError [errors]="errors" errorField="tags">
-                                </ng-select>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="tags"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Press return to separate tags') }}
+                            <div [hidden]="!post.hosttemplate_id">
+                                <div class="mb-3">
+                                    <label cLabel for="description">
+                                        {{ t('Description') }}
+                                    </label>
+                                    <input cFormControl id="description" type="text"
+                                           name="description"
+                                           oitcFormError [errors]="errors" errorField="description"
+                                           [(ngModel)]="post.description">
+                                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                                 </div>
-                            </div>
 
-                            <div class="mb-3">
-                                <label cLabel>
-                                    {{ t('Priority') }}
-                                </label>
+                                <div class="mb-3">
+                                    <label cLabel for="HostHostgroups">
+                                        {{ t('Host groups') }}
+                                    </label>
 
-                                <div>
-                                    <oitc-priority
-                                        [priority]="post.priority"
-                                        (onChange)="post.priority = $event"
-                                    ></oitc-priority>
+                                    <oitc-multi-select
+                                        name="HostHostgroups"
+                                        id="HostHostgroups"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.hostgroups._ids"
+                                        [options]="hostgroups"
+                                        oitcFormError [errors]="errors" errorField="hostgroups">
+                                    </oitc-multi-select>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostgroups"></oitc-form-feedback>
                                 </div>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="priority"></oitc-form-feedback>
+
+                                <div class="mb-3">
+                                    <label cLabel for="HostTags">
+                                        {{ t('Tags') }}
+                                    </label>
+
+                                    <ng-select
+                                        id="HostTags"
+                                        name="HostTags"
+                                        [items]="[]"
+                                        [(ngModel)]="tagsForSelect"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="t('Add tags')"
+                                        [isOpen]="false"
+                                        oitcFormError [errors]="errors" errorField="tags">
+                                    </ng-select>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="tags"></oitc-form-feedback>
+                                    <div class="help-block">
+                                        {{ t('Press return to separate tags') }}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label cLabel>
+                                        {{ t('Priority') }}
+                                    </label>
+
+                                    <div>
+                                        <oitc-priority
+                                            [priority]="post.priority"
+                                            (onChange)="post.priority = $event"
+                                        ></oitc-priority>
+                                    </div>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="priority"></oitc-form-feedback>
+                                </div>
                             </div>
 
                         </c-card-body>
@@ -255,7 +266,7 @@
                     <!-- BASIC CONFIGURATION END -->
 
                     <!-- CHECK CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
                             <span class="ms-1">
@@ -465,7 +476,7 @@
                     <!-- CHECK CONFIGURATION END -->
 
                     <!-- NOTIFICATION CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'envelope-open']"></fa-icon>
                             <span class="ms-1">
@@ -686,7 +697,7 @@
                     <!-- NOTIFICATION CONFIGURATION END -->
 
                     <!-- MISC CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
                             <span class="ms-1">
@@ -806,7 +817,7 @@
                     <!-- MISC CONFIGURATION END -->
 
                     <!-- HOST MACRO CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'usd']"></fa-icon>
                             <span class="ms-1">
@@ -850,7 +861,8 @@
                     <!-- HOST MACRO CONFIGURATION END -->
 
                     <!-- PROMETHEUS CONFIGURATION START -->
-                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('PrometheusModule')">
+                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('PrometheusModule')"
+                            [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
                             <span class="ms-1">
@@ -884,7 +896,8 @@
                     <!-- PROMETHEUS CONFIGURATION END -->
 
                     <!-- SLA CONFIGURATION START -->
-                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')">
+                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')"
+                            [hidden]="!post.hosttemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'award']"></fa-icon>
                             <span class="ms-1">

@@ -48,8 +48,9 @@ import { Subscription } from 'rxjs';
 import { ObjectTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { HostsService } from '../hosts.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { HostPost } from '../hosts.interface';
+import { HostDnsLookup, HostPost } from '../hosts.interface';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import { AnimateCssService } from '../../../services/animate-css.service';
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -136,6 +137,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly LocalStorageService = inject(LocalStorageService);
+    private readonly AnimateCssService = inject(AnimateCssService);
     private router: Router = inject(Router);
 
     private subscriptions: Subscription = new Subscription();
@@ -295,10 +297,59 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         const value = this.data.dnsLookUp ? 'true' : 'false';
         this.LocalStorageService.setItem('HostsDnsLookUpEnabled', value);
 
-        if (this.data.dnsLookUp === false) {
+        if (!this.data.dnsLookUp) {
             this.data.dnsHostnameNotFound = false;
             this.data.dnsAddressNotFound = false;
         }
+    }
+
+    public runDnsLookup(lookupByHostname: boolean) {
+        if (!this.data.dnsLookUp) {
+            return;
+        }
+
+        let data: HostDnsLookup = {
+            hostname: null,
+            address: null
+        };
+
+
+        if (lookupByHostname) {
+            if (this.post.name == '') {
+                return;
+            }
+            data.hostname = this.post.name;
+        } else {
+            if (this.post.address == '') {
+                return;
+            }
+            data.address = this.post.address;
+        }
+
+        this.subscriptions.add(this.HostsService.runDnsLookup(data)
+            .subscribe((result) => {
+                if (lookupByHostname) {
+                    const address = result.address;
+                    if (address === null) {
+                        this.data.dnsHostnameNotFound = true;
+                    } else {
+                        this.data.dnsHostnameNotFound = false;
+                        this.post.address = address;
+                        this.AnimateCssService.animateCSS('#HostAddress', 'headShake');
+                    }
+                } else {
+                    const hostname = result.hostname;
+                    if (hostname === null) {
+                        this.data.dnsAddressNotFound = true;
+                    } else {
+                        this.data.dnsAddressNotFound = false;
+                        this.post.name = hostname;
+                        this.checkForDuplicateHostname();
+                        this.AnimateCssService.animateCSS('#HostName', 'headShake');
+                    }
+                }
+            })
+        );
     }
 
     public checkForDuplicateHostname() {
