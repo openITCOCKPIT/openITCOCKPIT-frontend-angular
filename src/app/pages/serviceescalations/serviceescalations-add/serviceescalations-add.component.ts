@@ -115,9 +115,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
 
 
     constructor(private route: ActivatedRoute) {
-        // IMPORTANT for the searchCallback the use the same "this" context
-        this.loadServices = this.loadServices.bind(this);
-        this.loadExcludedServices = this.loadExcludedServices.bind(this);
     }
 
 
@@ -196,7 +193,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadServices(searchString: string) {
+    public loadServices = (searchString: string)=> {
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -224,7 +221,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadExcludedServices(searchString: string) {
+    public loadExcludedServices = (searchString: string) => {
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
