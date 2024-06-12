@@ -25,6 +25,7 @@ https://stackoverflow.com/a/76688561
     (onFilter)="doHighlightSearch($event.filter)"
     [showClear]="showClear"
     [resetFilterOnHide]="true"
+    (onPanelHide)="resetSearchString()"
     group="true"
     optionGroupLabel="label"
     appendTo="body">

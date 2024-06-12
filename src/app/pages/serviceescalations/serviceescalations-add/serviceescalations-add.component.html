@@ -71,6 +71,9 @@
                                 <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
                                 {{ t('Services') }}
                                 <oitc-required-icon></oitc-required-icon>
+                                <button type="button" (click)="services[0].items[0].disabled=!services[0].items[0].disabled">
+                                    Click here
+                                </button>
                                 ---> {{ post.services._ids }} <---
                             </label>
                             <c-input-group>

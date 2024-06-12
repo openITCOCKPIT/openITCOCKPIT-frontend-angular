@@ -1,4 +1,14 @@
-import { Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    forwardRef,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
@@ -38,7 +48,17 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      * Array of the options for the select box
      * @group Props
      */
-    @Input() options: any[] | undefined;
+        //@Input() options: any[] | undefined;
+    private _options: any[] | undefined;
+    @Input()
+    set options(options) {
+        this._options = options;
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
+    }
+    get options() {
+        return this._options;
+    }
 
     /**
      * ngModel for the form
@@ -103,7 +123,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
 
     private Subscriptions: Subscription = new Subscription();
 
-    public constructor() {
+    public constructor(private cdr: ChangeDetectorRef) {
         if (this.placeholder == undefined) {
             this.placeholder = this.TranslocoService.translate('Please choose');
         }
@@ -133,6 +153,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
                     this.searchCallback!(this.searchText);
                 }));
         }
+
     }
 
     public ngOnDestroy(): void {
@@ -192,4 +213,8 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
     }
 
     protected readonly String = String;
+
+    public resetSearchString() {
+        this.searchText = '';
+    }
 }
