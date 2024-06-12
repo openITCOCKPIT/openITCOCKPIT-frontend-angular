@@ -296,6 +296,12 @@
                                             [priority]="post.priority"
                                             (onChange)="post.priority = $event"
                                         ></oitc-priority>
+
+                                        <oitc-template-diff-btn
+                                            *ngIf="hosttemplate"
+                                            [templateValue]="hosttemplate.priority"
+                                            [(value)]="post.priority"></oitc-template-diff-btn>
+
                                     </div>
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="priority"></oitc-form-feedback>
@@ -389,6 +395,11 @@
                                     <label cFormCheckLabel for="activeChecksEnabled">
                                         {{ t('Enable active checks') }}
                                     </label>
+                                    <oitc-template-diff-btn
+                                        *ngIf="hosttemplate"
+                                        [templateValue]="hosttemplate.active_checks_enabled"
+                                        [(value)]="post.active_checks_enabled"></oitc-template-diff-btn>
+
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="active_checks_enabled"></oitc-form-feedback>
@@ -411,6 +422,11 @@
                                     <label cFormCheckLabel for="freshness_checks_enabled">
                                         {{ t('Enable freshness check') }}
                                     </label>
+                                    <oitc-template-diff-btn
+                                        *ngIf="hosttemplate"
+                                        [templateValue]="hosttemplate.freshness_checks_enabled"
+                                        [(value)]="post.freshness_checks_enabled"></oitc-template-diff-btn>
+
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="freshness_checks_enabled"></oitc-form-feedback>
@@ -488,11 +504,18 @@
                                     {{ hostcommandargumentvalue.commandargument.human_name }}
                                 </label>
                                 <div class="col-xs-12 col-lg-8">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        [name]="'hostcommandargumentvalue_'+i"
-                                        [(ngModel)]="hostcommandargumentvalue.value">
+                                    <c-input-group>
+                                        <input
+                                            class="form-control"
+                                            type="text"
+                                            [name]="'hostcommandargumentvalue_'+i"
+                                            [(ngModel)]="hostcommandargumentvalue.value">
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.hosttemplatecommandargumentvalues[i].value"
+                                                            [(value)]="hostcommandargumentvalue.value"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    </c-input-group>
                                     <div class="help-block">
                                         {{ hostcommandargumentvalue.commandargument.name }}
                                     </div>
@@ -583,6 +606,11 @@
                                     <label cFormCheckLabel for="notifications_enabled">
                                         {{ t('Enable notifications') }}
                                     </label>
+                                    <oitc-template-diff-btn
+                                        *ngIf="hosttemplate"
+                                        [templateValue]="hosttemplate.notifications_enabled"
+                                        [(value)]="post.notifications_enabled"></oitc-template-diff-btn>
+
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notifications_enabled"></oitc-form-feedback>
@@ -718,6 +746,11 @@
                                             {{ t('Recovery') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_on_recovery"
+                                                        [(value)]="post.notify_on_recovery"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -738,6 +771,11 @@
                                             {{ t('Down') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_on_down"
+                                                        [(value)]="post.notify_on_down"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -758,6 +796,11 @@
                                             {{ t('Unreachable') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_on_unreachable"
+                                                        [(value)]="post.notify_on_unreachable"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -777,6 +820,11 @@
                                             {{ t('Flapping') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_on_flapping"
+                                                        [(value)]="post.notify_on_flapping"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -796,6 +844,11 @@
                                             {{ t('Downtime') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notify_on_downtime"
+                                                        [(value)]="post.notify_on_downtime"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
                             </div>
                             <div>
@@ -875,6 +928,10 @@
                                     <label cFormCheckLabel for="flapDetectionEnabled">
                                         {{ t('Flap detection options') }}
                                     </label>
+                                    <oitc-template-diff-btn
+                                        *ngIf="hosttemplate"
+                                        [templateValue]="hosttemplate.flap_detection_enabled"
+                                        [(value)]="post.flap_detection_enabled"></oitc-template-diff-btn>
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="flap_detection_enabled"></oitc-form-feedback>
@@ -899,6 +956,11 @@
                                             {{ t('Recovery') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.flap_detection_on_up"
+                                                        [(value)]="post.flap_detection_on_up"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -919,6 +981,11 @@
                                             {{ t('Down') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.flap_detection_on_down"
+                                                        [(value)]="post.flap_detection_on_down"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
 
                                 <div class="input-group mx-1">
@@ -939,6 +1006,11 @@
                                             {{ t('Unreachable') }}
                                         </label>
                                     </div>
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.flap_detection_on_unreachable"
+                                                        [(value)]="post.flap_detection_on_unreachable"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </div>
                             </div>
 

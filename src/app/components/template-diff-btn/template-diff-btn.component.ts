@@ -1,23 +1,23 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass } from '@angular/common';
 import _ from 'lodash';
-import { PopoverDirective } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { NgClass } from '@angular/common';
+import { PopoverDirective } from '@coreui/angular';
 
 @Component({
-    selector: 'oitc-template-diff',
+    selector: 'oitc-template-diff-btn',
     standalone: true,
     imports: [
         FaIconComponent,
+        TranslocoDirective,
         NgClass,
-        PopoverDirective,
-        TranslocoDirective
+        PopoverDirective
     ],
-    templateUrl: './template-diff.component.html',
-    styleUrl: './template-diff.component.css'
+    templateUrl: './template-diff-btn.component.html',
+    styleUrl: './template-diff-btn.component.css'
 })
-export class TemplateDiffComponent implements OnChanges {
+export class TemplateDiffBtnComponent implements OnChanges {
 
     public hasDiff: boolean = false;
 
@@ -25,8 +25,7 @@ export class TemplateDiffComponent implements OnChanges {
     @Output() public valueChange = new EventEmitter<any>();
 
     @Input() public templateValue: any;
-
-
+    
     private readonly TranslocoService = inject(TranslocoService);
 
     ngOnChanges(changes: SimpleChanges) {

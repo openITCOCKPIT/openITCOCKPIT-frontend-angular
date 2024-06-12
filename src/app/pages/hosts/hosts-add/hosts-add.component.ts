@@ -55,6 +55,7 @@ import { LocalStorageService } from '../../../services/local-storage.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
+import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -101,7 +102,8 @@ import { TemplateDiffComponent } from '../../../components/template-diff/templat
         AlertHeadingDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        TemplateDiffComponent
+        TemplateDiffComponent,
+        TemplateDiffBtnComponent
     ],
     templateUrl: './hosts-add.component.html',
     styleUrl: './hosts-add.component.css'
