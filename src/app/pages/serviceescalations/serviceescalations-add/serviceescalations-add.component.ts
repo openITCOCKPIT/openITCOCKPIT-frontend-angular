@@ -217,8 +217,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 this.post.services._ids = this.post.services._ids.filter(
                     id => currentServicesIds.includes(id)
                 );
-                console.log(JSON.parse(JSON.stringify(this.services)));
-
                 this.processChosenServices();
             })
         );
@@ -292,22 +290,16 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         if (this.services.length === 0) {
             return;
         }
-        //console.log('Check for enable/disable');
-        //console.log(this.disabled_services);
-        console.log(JSON.parse(JSON.stringify(this.services)));
         for (let key in this.services) {
             for (let itemKey in this.services[key]['items']) {
                 if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
                     continue;
                 }
-                //console.log(this.services[key]['items'][itemKey].value + ' --> ' + this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value));
                 this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
 
             }
         }
-        console.log(JSON.parse(JSON.stringify(this.services)));
         this.cdr.detectChanges();
-
     }
 
     public processChosenExcludedServices() {
@@ -357,6 +349,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost();
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+                    this.router.navigate(['/serviceescalations/index']);
                     return;
                 }
 
