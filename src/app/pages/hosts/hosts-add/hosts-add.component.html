@@ -124,7 +124,7 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.hosttemplate_id"
                                     [options]="hosttemplates"
-                                    (onChange)="onContainerChange()"
+                                    (onChange)="onHosttemplateChange()"
                                     oitcFormError [errors]="errors" errorField="hosttemplate_id">
                                 </oitc-select>
 
@@ -222,6 +222,25 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label cLabel for="ParentHostsSelect">
+                                        {{ t('Parent hosts') }}
+                                    </label>
+
+                                    <oitc-multi-select
+                                        name="ParentHostsSelect"
+                                        id="ParentHostsSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [searchCallback]="loadParentHosts"
+                                        [(ngModel)]="post.parenthosts._ids"
+                                        [options]="parenthosts"
+                                        oitcFormError [errors]="errors" errorField="parenthosts">
+                                    </oitc-multi-select>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="parenthosts"></oitc-form-feedback>
+                                </div>
+
+                                <div class="mb-3">
                                     <label cLabel for="HostTags">
                                         {{ t('Tags') }}
                                     </label>
@@ -259,6 +278,33 @@
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="priority"></oitc-form-feedback>
                                 </div>
+
+                                @if (PermissionsService.hasModule('DistributeModule')) {
+                                    <div class="mb-3">
+                                        <label cLabel for="SatellitesSelect">
+                                            <oitc-label-link
+                                                [objectId]="post.hosttemplate_id"
+                                                [route]="'/distribute_module/satellites/edit'"
+                                                [permissions]="'DistributeModule.satellites.edit'"
+                                            >
+                                                {{ t('Satellite') }}
+                                            </oitc-label-link>
+                                        </label>
+
+                                        <oitc-select
+                                            name="SatellitesSelect"
+                                            id="SatellitesSelect"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.satellite_id"
+                                            [options]="satellites"
+                                            oitcFormError [errors]="errors" errorField="satellite_id">
+                                        </oitc-select>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="satellite_id"></oitc-form-feedback>
+                                    </div>
+                                }
+
                             </div>
 
                         </c-card-body>
@@ -888,6 +934,8 @@
                                                     errorField="prometheus_exporters"></oitc-form-feedback>
                                 <div class="help-block">
                                     {{ t('To monitor this host using Prometheus please select the exporters that are installed on the host.') }}
+                                    <br/>
+                                    {{ t('Before you could query the host through Prometheus, you need to refresh the monitoring configuration.') }}
                                 </div>
                             </div>
 
@@ -930,7 +978,7 @@
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="sla_id"></oitc-form-feedback>
                                 <div class="help-block">
-                                    {{ t('You can define service levels for all hosts using this host template.') }}
+                                    {{ t('You can define service levels for this host.') }}
                                 </div>
                             </div>
 

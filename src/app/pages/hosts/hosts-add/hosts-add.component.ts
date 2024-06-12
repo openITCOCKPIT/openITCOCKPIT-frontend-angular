@@ -51,6 +51,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostDnsLookup, HostPost } from '../hosts.interface';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
+import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -126,11 +127,14 @@ export class HostsAddComponent implements OnInit, OnDestroy {
     public sharingContainers: SelectKeyValue[] = [];
     public exporters: SelectKeyValue[] = [];
     public slas: SelectKeyValue[] = [];
+    public parenthosts: SelectKeyValue[] = [];
 
     public errors: GenericValidationError | null = null;
     public hasMacroErrors: boolean = false;
 
     public createAnother: boolean = false;
+
+    private hosttemplate?: HosttemplatePost;
 
     private readonly HostsService = inject(HostsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -154,7 +158,6 @@ export class HostsAddComponent implements OnInit, OnDestroy {
             this.post = this.getDefaultPost();
         });
 
-        console.log(this.LocalStorageService.getItemWithDefault('HostsDnsLookUpEnabled', 'false'));
         this.data.dnsLookUp = this.LocalStorageService.getItemWithDefault('HostsDnsLookUpEnabled', 'false') === 'true';
     }
 
@@ -267,8 +270,19 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                 this.slas = result.slas;
             })
         );
-
     }
+
+    public loadParentHosts = (searchString: string) => {
+        if (!this.post.container_id) {
+            return;
+        }
+
+        this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
+            .subscribe((result) => {
+                this.parenthosts = result;
+            })
+        );
+    };
 
     private loadCommandArguments() {
         const commandId = this.post.command_id;
@@ -286,11 +300,27 @@ export class HostsAddComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+        this.loadParentHosts('');
         this.showRootAlert = this.post.container_id === ROOT_CONTAINER;
     }
 
     public onCommandChange() {
         this.loadCommandArguments();
+    }
+
+    public onHosttemplateChange() {
+        const hosttemplateId = this.post.hosttemplate_id;
+        if (!hosttemplateId) {
+            return;
+        }
+
+        this.subscriptions.add(this.HostsService.loadHosttemplate(hosttemplateId)
+            .subscribe((result) => {
+                this.hosttemplate = result;
+                this.setValuesFromHosttemplate();
+            })
+        );
+
     }
 
     public onDnsLookupChange() {
@@ -358,6 +388,60 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                 this.data.isHostnameInUse = result;
             })
         );
+    }
+
+    private setValuesFromHosttemplate() {
+        if (!this.hosttemplate) {
+            return;
+        }
+
+        const fields = [
+            'description',
+            'hosttemplate_id',
+            'address',
+            'command_id',
+            'eventhandler_command_id',
+            'check_interval',
+            'retry_interval',
+            'max_check_attempts',
+            'first_notification_delay',
+            'notification_interval',
+            'notify_on_down',
+            'notify_on_unreachable',
+            'notify_on_recovery',
+            'notify_on_flapping',
+            'notify_on_downtime',
+            'flap_detection_enabled',
+            'flap_detection_on_up',
+            'flap_detection_on_down',
+            'flap_detection_on_unreachable',
+            'low_flap_threshold',
+            'high_flap_threshold',
+            'process_performance_data',
+            'freshness_checks_enabled',
+            'freshness_threshold',
+            'passive_checks_enabled',
+            'event_handler_enabled',
+            'active_checks_enabled',
+            'retain_status_information',
+            'retain_nonstatus_information',
+            'notifications_enabled',
+            'notes',
+            'priority',
+            'check_period_id',
+            'notify_period_id',
+            'tags',
+            'host_url',
+            'sla_id'
+        ];
+
+        for (let index in fields) {
+            let field = fields[index];
+            if (this.hosttemplate.hasOwnProperty(field)) {
+                this.post[field] = this.hosttemplate[field];
+            }
+        }
+
     }
 
     /*******************

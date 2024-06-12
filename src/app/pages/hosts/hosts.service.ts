@@ -17,6 +17,7 @@ import {
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 
 
 @Injectable({
@@ -223,6 +224,47 @@ export class HostsService {
         }).pipe(
             map(data => {
                 return data.result;
+            })
+        );
+    }
+
+    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number | string = ''): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        if (!containerId) {
+            return of([]); // No container selected
+        }
+
+        return this.http.get<{
+            hosts: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/loadParentHostsByString.json`, {
+            params: {
+                'angular': true,
+                'filter[Hosts.name]': searchString,
+                'selected[]': selected,
+                'containerId': containerId,
+                'satellite_id': satellite_id
+            }
+        }).pipe(
+            map(data => {
+                return data.hosts;
+            })
+        );
+    }
+
+    public loadHosttemplate(hosttemplateId: number): Observable<HosttemplatePost> {
+        const proxyPath = this.proxyPath;
+
+
+        return this.http.get<{
+            hosttemplate: { Hosttemplate: HosttemplatePost }
+        }>(`${proxyPath}/hosts/loadHosttemplate/${hosttemplateId}.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data.hosttemplate.Hosttemplate;
             })
         );
     }
