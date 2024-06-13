@@ -5,6 +5,7 @@ import { HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 
 export interface HostObject {
     id?: number
@@ -271,6 +272,7 @@ export interface HostSharing {
 export interface HostPost {
     id?: null | number
     name: string
+    uuid?: string
     description: string
     hosttemplate_id: number
     address: string
@@ -330,6 +332,7 @@ export interface HostPost {
     prometheus_exporters: {
         _ids: number[]
     }
+    host_type?: number
     created?: string
     modified?: string
 }
@@ -381,4 +384,23 @@ export interface HostAddEditSuccessResponse {
     disabled_errors: any[]
     servicetemplategroups_removed_count?: number
     services_disabled_count?: number
+}
+
+/**********************
+ *     Edit action    *
+ **********************/
+export interface HostEditApiResult {
+    host: {
+        Host: HostPost
+    }
+    commands: SelectKeyValue[]
+    hosttemplate: {
+        Hosttemplate: HosttemplatePost
+    },
+    isPrimaryContainerChangeable: boolean
+    allowSharing: boolean
+    isHostOnlyEditableDueToHostSharing: boolean
+    fakeDisplayContainers: SelectKeyValue[]
+    areContactsInheritedFromHosttemplate: boolean
+    hostType: HostOrServiceType
 }

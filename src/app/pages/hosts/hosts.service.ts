@@ -10,6 +10,7 @@ import {
     HostAddEditSuccessResponse,
     HostCommandArgument,
     HostDnsLookup,
+    HostEditApiResult,
     HostElements,
     HostPost,
     HostSharing,
@@ -174,9 +175,15 @@ export class HostsService {
         )
     }
 
-    public loadElements(containerId: number): Observable<HostElements> {
+    public loadElements(containerId: number, hostId: number = 0): Observable<HostElements> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostElements>(`${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`, {
+        let url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`;
+
+        if (hostId) {
+            url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}/${hostId}.json`
+        }
+
+        return this.http.get<HostElements>(url, {
             params: {
                 angular: true
             }
@@ -187,11 +194,17 @@ export class HostsService {
         )
     }
 
-    public loadCommandArguments(commandId: number): Observable<HostCommandArgument[]> {
+    public loadCommandArguments(commandId: number, hostId: number = 0): Observable<HostCommandArgument[]> {
         const proxyPath = this.proxyPath;
+
+        let url = `${proxyPath}/hosts/loadCommandArguments/${commandId}.json`;
+        if (hostId > 0) {
+            url = `${proxyPath}/hosts/loadCommandArguments/${commandId}/${hostId}.json`
+        }
+
         return this.http.get<{
             hostcommandargumentvalues: HostCommandArgument[]
-        }>(`${proxyPath}/hosts/loadCommandArguments/${commandId}.json`, {
+        }>(url, {
             params: {
                 angular: true
             }
@@ -202,12 +215,13 @@ export class HostsService {
         );
     }
 
-    public checkForDuplicateHostname(hostname: string): Observable<boolean> {
+    public checkForDuplicateHostname(hostname: string, excludedHostIds: number[] = []): Observable<boolean> {
         const proxyPath = this.proxyPath;
         return this.http.post<{
             isHostnameInUse: boolean
         }>(`${proxyPath}/hosts/checkForDuplicateHostname.json?angular=true`, {
-            hostname: hostname
+            hostname: hostname,
+            excludedHostIds: excludedHostIds
         }).pipe(
             map(data => {
                 return data.isHostnameInUse;
@@ -230,7 +244,7 @@ export class HostsService {
         );
     }
 
-    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number | string = ''): Observable<SelectKeyValue[]> {
+    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
 
         if (!containerId) {
@@ -245,7 +259,7 @@ export class HostsService {
                 'filter[Hosts.name]': searchString,
                 'selected[]': selected,
                 'containerId': containerId,
-                'satellite_id': satellite_id
+                'satellite_id': (satellite_id > 0) ? satellite_id : ''
             }
         }).pipe(
             map(data => {
@@ -298,6 +312,47 @@ export class HostsService {
                     });
                 })
             );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+
+
+    public edit(host: HostPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosts/edit/${host.id}.json?angular=true`, {
+            Host: host
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HostEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostEditApiResult>(`${proxyPath}/hosts/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 
 }

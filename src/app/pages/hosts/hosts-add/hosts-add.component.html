@@ -275,7 +275,7 @@
                                         </ng-select>
                                         <oitc-template-diff cInputGroupText
                                                             *ngIf="hosttemplate"
-                                                            [templateValue]="hosttemplate.tags.split(',')"
+                                                            [templateValue]="(hosttemplate.tags !== '')?hosttemplate.tags.split(','):[]"
                                                             [(value)]="tagsForSelect"
                                                             class="bg-transparent p-0"></oitc-template-diff>
                                     </c-input-group>
@@ -325,6 +325,7 @@
                                             optionValue="key"
                                             optionLabel="value"
                                             [(ngModel)]="post.satellite_id"
+                                            (onChange)="onSatelliteChange()"
                                             [options]="satellites"
                                             oitcFormError [errors]="errors" errorField="satellite_id">
                                         </oitc-select>

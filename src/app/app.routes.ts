@@ -161,6 +161,9 @@ export const routes: Routes = [{
     path: 'hosts/add',
     loadComponent: () => import('./pages/hosts/hosts-add/hosts-add.component').then(m => m.HostsAddComponent)
 }, {
+    path: 'hosts/edit/:id',
+    loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
