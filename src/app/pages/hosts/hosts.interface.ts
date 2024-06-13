@@ -368,3 +368,17 @@ export interface HostDnsLookup {
     hostname: string | null
     address: string | null
 }
+
+export interface HostAddEditSuccessResponse {
+    id: number
+    services?: {
+        _ids: number[]
+    }
+    disabled_services?: {
+        _ids: number[]
+    }
+    errors: any[]
+    disabled_errors: any[]
+    servicetemplategroups_removed_count?: number
+    services_disabled_count?: number
+}

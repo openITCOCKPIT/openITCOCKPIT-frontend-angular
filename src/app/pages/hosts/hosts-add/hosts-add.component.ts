@@ -54,12 +54,15 @@ import { Subscription } from 'rxjs';
 import { ObjectTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { HostsService } from '../hosts.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { HostDnsLookup, HostPost } from '../hosts.interface';
+import { HostAddEditSuccessResponse, HostDnsLookup, HostPost } from '../hosts.interface';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
+import { HostSubmitType } from '../hosts.enum';
+import _ from 'lodash';
+import { sprintf } from "sprintf-js";
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -524,47 +527,101 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 
-    public submit() {
+    public submit(submitType: HostSubmitType) {
         this.post.tags = this.tagsForSelect.join(',');
-        /*
-                this.subscriptions.add(this.HostsService.add(this.post)
-                    .subscribe((result) => {
-                        if (result.success) {
-                            const response = result.data as GenericIdResponse;
-                            const title = this.TranslocoService.translate('Host template');
-                            const msg = this.TranslocoService.translate('created successfully');
-                            const url = ['hosts', 'edit', response.id];
 
-                            this.notyService.genericSuccess(msg, title, url);
+        //clean up parent host  -> remove not visible ids
+        this.post.parenthosts._ids = _.intersection(
+            _.map(this.parenthosts, 'key'),
+            this.post.parenthosts._ids
+        );
 
-                            if (!this.createAnother) {
+        //clean up host and host templates -> remove not visible ids
+        this.post.hostgroups._ids = _.intersection(
+            _.map(this.hostgroups, 'key'),
+            this.post.hostgroups._ids
+        );
+
+        let save_host_and_assign_matching_servicetemplate_groups = false;
+        if (submitType === HostSubmitType.AssignMatchingServicetemplateGroups) {
+            save_host_and_assign_matching_servicetemplate_groups = true;
+        }
+
+        this.subscriptions.add(this.HostsService.add(this.post, save_host_and_assign_matching_servicetemplate_groups)
+            .subscribe((result) => {
+                if (result.success) {
+
+                    const response = result.data as HostAddEditSuccessResponse;
+
+                    const title = this.TranslocoService.translate('Host');
+                    const genericMsg = this.TranslocoService.translate('created successfully');
+                    const url = ['hosts', 'edit', response.id];
+                    let showWarning: boolean = false;
+
+                    let msg = genericMsg + ' ';
+                    let allocate_message = this.TranslocoService.translate('+ %s Services created successfully');
+                    let allocate_warning_message = this.TranslocoService.translate('. %s service template groups has been removed due to insufficient permissions');
+
+                    if (submitType === HostSubmitType.AssignMatchingServicetemplateGroups && response.services?._ids) {
+                        msg += sprintf(allocate_message, response.services?._ids.length);
+                        if (response.servicetemplategroups_removed_count) {
+                            showWarning = true;
+                            msg += sprintf(allocate_warning_message, response.servicetemplategroups_removed_count);
+                        }
+                    }
+
+                    if (showWarning) {
+                        this.notyService.genericWarning(msg, title, url);
+                    } else {
+                        this.notyService.genericSuccess(msg, title, url);
+                    }
+
+                    if (!this.createAnother && submitType) {
+                        switch (submitType) {
+                            case HostSubmitType.ServiceAdd:
+                                this.router.navigate(['/services/add/' + response.id]);
+                                break;
+
+                            case HostSubmitType.AgentDiscovery:
+                                this.router.navigate(['/agentconnector/wizard/' + response.id]);
+                                break;
+
+                            case HostSubmitType.CheckmkDiscovery:
+                                this.router.navigate(['/checkmk_module/scans/index/' + response.id]);
+                                break;
+
+                            default:
                                 this.router.navigate(['/hosts/index']);
-                                return;
-                            }
-                            this.post = this.getDefaultPost();
-                            this.ngOnInit();
-                            this.notyService.scrollContentDivToTop();
-                            this.errors = null;
-                            this.hasMacroErrors = false;
-                            return;
+                                break;
                         }
+                        return;
+                    }
 
-                        // Error
-                        const errorResponse = result.data as GenericValidationError;
-                        this.notyService.genericError();
-                        if (result) {
-                            this.errors = errorResponse;
+                    this.post = this.getDefaultPost();
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+                    this.errors = null;
+                    this.hasMacroErrors = false;
+                    return;
+                }
 
-                            this.hasMacroErrors = false;
-                            if (this.errors.hasOwnProperty('customvariables')) {
-                                if (typeof (this.errors['customvariables']['custom']) === "string") {
-                                    this.hasMacroErrors = true;
-                                }
-                            }
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+
+                    this.hasMacroErrors = false;
+                    if (this.errors.hasOwnProperty('customvariables')) {
+                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                            this.hasMacroErrors = true;
                         }
-                    }));*/
+                    }
+                }
+            }));
 
     }
 
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
+    protected readonly HostSubmitType = HostSubmitType;
 }

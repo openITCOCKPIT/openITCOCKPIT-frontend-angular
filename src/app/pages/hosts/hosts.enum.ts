@@ -5,3 +5,11 @@ export enum HostTypesEnum {
     EVK_HOST = 1 << 1,     // 2
     SLA_HOST = 1 << 2      // 4
 }
+
+export enum HostSubmitType {
+    HostsIndex = 'HostsIndex',
+    AgentDiscovery = 'AgentDiscovery',
+    CheckmkDiscovery = 'CheckmkDiscovery',
+    ServiceAdd = 'ServiceAdd',
+    AssignMatchingServicetemplateGroups = 'AssignMatchingServicetemplateGroups',
+}

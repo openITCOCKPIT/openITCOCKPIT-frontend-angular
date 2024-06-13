@@ -7,9 +7,11 @@ import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
+    HostAddEditSuccessResponse,
     HostCommandArgument,
     HostDnsLookup,
     HostElements,
+    HostPost,
     HostSharing,
     HostsIndexFilter,
     HostsIndexParams,
@@ -267,6 +269,35 @@ export class HostsService {
                 return data.hosttemplate.Hosttemplate;
             })
         );
+    }
+
+    public add(host: HostPost, save_host_and_assign_matching_servicetemplate_groups = false): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        let body: any = {
+            Host: host
+        };
+        if (save_host_and_assign_matching_servicetemplate_groups) {
+            body['save_host_and_assign_matching_servicetemplate_groups'] = true;
+        }
+
+        return this.http.post<any>(`${proxyPath}/hosts/add.json?angular=true`, body)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as HostAddEditSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }

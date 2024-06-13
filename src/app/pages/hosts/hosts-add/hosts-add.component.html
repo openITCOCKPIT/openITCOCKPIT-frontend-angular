@@ -28,7 +28,7 @@
             <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
         </c-alert>
 
-        <form cForm (ngSubmit)="submit()">
+        <form cForm (ngSubmit)="submit(HostSubmitType.HostsIndex)">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new host') }}</h5>
@@ -518,7 +518,7 @@
                                             [name]="'hostcommandargumentvalue_'+i"
                                             [(ngModel)]="hostcommandargumentvalue.value">
                                         <oitc-template-diff cInputGroupText
-                                                            *ngIf="hosttemplate"
+                                                            *ngIf="hosttemplate && hosttemplate.hosttemplatecommandargumentvalues[i]"
                                                             [templateValue]="hosttemplate.hosttemplatecommandargumentvalues[i].value"
                                                             [(value)]="hostcommandargumentvalue.value"
                                                             class="bg-transparent p-0"></oitc-template-diff>
@@ -1198,7 +1198,9 @@
                         {{ t('Create another') }}
                     </label>
 
-                    <button cButton class="ripple" color="primary" type="button" [disabled]="createAnother">
+                    <button cButton class="ripple" color="primary" type="button"
+                            (click)="submit(HostSubmitType.AgentDiscovery)"
+                            [disabled]="createAnother">
                         {{ t('Create host and setup agent') }}
                     </button>
 
@@ -1212,7 +1214,8 @@
                         <ul cDropdownMenu>
                             @if (this.PermissionsService.hasPermission(['services', 'add'])) {
                                 <li>
-                                    <button cDropdownItem type="button">
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.ServiceAdd)">
                                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                         {{ t('Save and create service') }}
                                     </button>
@@ -1221,7 +1224,8 @@
 
                             @if (this.PermissionsService.hasPermission(['agentconnector', 'config'])) {
                                 <li>
-                                    <button cDropdownItem type="button">
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.AgentDiscovery)">
                                         <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
                                         {{ t('Save and setup agent') }}
                                     </button>
@@ -1230,7 +1234,8 @@
 
                             @if (this.PermissionsService.hasPermission(['services', 'add'])) {
                                 <li>
-                                    <button cDropdownItem type="button">
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.AssignMatchingServicetemplateGroups)">
                                         <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                                         {{ t('Save host and assign matching service template groups') }}
                                     </button>
@@ -1239,7 +1244,8 @@
 
                             @if (this.PermissionsService.hasModule('CheckmkModule') && this.PermissionsService.hasPermission(['CheckmkModule', 'scans', 'index'])) {
                                 <li>
-                                    <button cDropdownItem type="button">
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.CheckmkDiscovery)">
                                         <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
                                         {{ t('Save and run Checkmk discovery') }}
                                     </button>
