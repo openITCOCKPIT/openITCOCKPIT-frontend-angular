@@ -8,6 +8,10 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -103,7 +107,11 @@ import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/
         InputGroupComponent,
         InputGroupTextDirective,
         TemplateDiffComponent,
-        TemplateDiffBtnComponent
+        TemplateDiffBtnComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective
     ],
     templateUrl: './hosts-add.component.html',
     styleUrl: './hosts-add.component.css'
@@ -518,7 +526,6 @@ export class HostsAddComponent implements OnInit, OnDestroy {
 
     public submit() {
         this.post.tags = this.tagsForSelect.join(',');
-
         /*
                 this.subscriptions.add(this.HostsService.add(this.post)
                     .subscribe((result) => {
@@ -555,9 +562,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                                 }
                             }
                         }
-                    }))
-
-         */
+                    }));*/
 
     }
 

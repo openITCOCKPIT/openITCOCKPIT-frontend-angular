@@ -1198,9 +1198,56 @@
                         {{ t('Create another') }}
                     </label>
 
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create host template') }}
+                    <button cButton class="ripple" color="primary" type="button" [disabled]="createAnother">
+                        {{ t('Create host and setup agent') }}
                     </button>
+
+                    <c-dropdown direction="center" variant="btn-group" class="ms-1">
+                        <button cButton color="primary" type="submit" class="ripple">
+                            {{ t('Create host') }}
+                        </button>
+                        <button [split]="true" cButton cDropdownToggle color="primary" [disabled]="createAnother">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul cDropdownMenu>
+                            @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                                <li>
+                                    <button cDropdownItem type="button">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        {{ t('Save and create service') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasPermission(['agentconnector', 'config'])) {
+                                <li>
+                                    <button cDropdownItem type="button">
+                                        <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                        {{ t('Save and setup agent') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                                <li>
+                                    <button cDropdownItem type="button">
+                                        <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                                        {{ t('Save host and assign matching service template groups') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasModule('CheckmkModule') && this.PermissionsService.hasPermission(['CheckmkModule', 'scans', 'index'])) {
+                                <li>
+                                    <button cDropdownItem type="button">
+                                        <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                        {{ t('Save and run Checkmk discovery') }}
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    </c-dropdown>
+
                     <button [fallbackUrl]="['hosts', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">
