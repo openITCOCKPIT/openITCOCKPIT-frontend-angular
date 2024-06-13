@@ -402,7 +402,7 @@
                         <td>
                             <ul class="list-unstyled">
                                 <li *ngFor="let host of hostdependency.hosts_dependent">
-                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
                                              class="badge bg-primary"></fa-icon>
                                     <a *oitcPermission="['hosts', 'edit']"
                                        [routerLink]="['/', 'hosts', 'edit', host.id]">
@@ -419,7 +419,8 @@
                         <td>
                             <ul class="list-unstyled">
                                 <li *ngFor="let hostgroup of hostdependency.hostgroups">
-                                    <fa-icon [icon]="['fas', 'minus']" class="badge bg-secondary"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                             class="badge bg-secondary"></fa-icon>
                                     <a *oitcPermission="['hostgroups', 'edit']"
                                        [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
                                         {{ hostgroup.container.name }}
@@ -433,7 +434,8 @@
                         <td>
                             <ul class="list-unstyled">
                                 <li *ngFor="let hostgroup of hostdependency.hostgroups_dependent">
-                                    <fa-icon [icon]="['fas', 'minus']" class="badge bg-primary"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                             class="badge bg-secondary"></fa-icon>
                                     <a *oitcPermission="['hostgroups', 'edit']"
                                        [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
                                         {{ hostgroup.container.name }}
