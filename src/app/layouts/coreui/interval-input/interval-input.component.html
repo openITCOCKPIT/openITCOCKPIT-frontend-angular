@@ -14,12 +14,15 @@
         </c-button-group>
     </c-col>
     <c-col [xs]="12" [lg]="6">
-        <input cFormControl type="number"
-               [id]="id"
-               [name]="name"
-               [placeholder]="'Interval in seconds' | transloco"
-               [(ngModel)]="selectedInterval"
-               (ngModelChange)="updateInterval()">
+        <c-input-group>
+            <input cFormControl type="number"
+                   [id]="id"
+                   [name]="name"
+                   [placeholder]="'Interval in seconds' | transloco"
+                   [(ngModel)]="selectedInterval"
+                   (ngModelChange)="updateInterval()">
+            <ng-content></ng-content>
+        </c-input-group>
         <div class="help-block">
             <oitc-human-time [seconds]="selectedInterval"></oitc-human-time>
         </div>

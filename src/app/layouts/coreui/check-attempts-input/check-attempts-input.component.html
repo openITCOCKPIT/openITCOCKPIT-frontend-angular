@@ -13,12 +13,15 @@
         </c-button-group>
     </c-col>
     <c-col [xs]="12" [lg]="3">
-        <input cFormControl type="number"
-               min="0"
-               [id]="id"
-               [name]="name"
-               [placeholder]="'Interval in seconds' | transloco"
-               [(ngModel)]="selectedAttempts">
+        <c-input-group>
+            <input cFormControl type="number"
+                   min="0"
+                   [id]="id"
+                   [name]="name"
+                   [placeholder]="'Interval in seconds' | transloco"
+                   [(ngModel)]="selectedAttempts">
+            <ng-content></ng-content>
+        </c-input-group>
     </c-col>
 </c-row>
 

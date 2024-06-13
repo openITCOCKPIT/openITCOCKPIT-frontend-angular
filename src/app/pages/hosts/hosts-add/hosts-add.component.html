@@ -446,9 +446,16 @@
                                     name="freshness_threshold"
                                     [selectedInterval]="post.freshness_threshold"
                                     (selectedIntervalChange)="post.freshness_threshold = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.freshness_threshold"
+                                                        [(value)]="post.freshness_threshold"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="freshness_threshold"></oitc-form-feedback>
+                                                    errorField="freshness_threshold">
+                                </oitc-form-feedback>
                             </div>
 
 
@@ -532,7 +539,13 @@
                                     name="check_interval"
                                     [selectedInterval]="post.check_interval"
                                     (selectedIntervalChange)="post.check_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.check_interval"
+                                                        [(value)]="post.check_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="check_interval"></oitc-form-feedback>
                             </div>
@@ -547,9 +560,16 @@
                                     name="retry_interval"
                                     [selectedInterval]="post.retry_interval"
                                     (selectedIntervalChange)="post.retry_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.retry_interval"
+                                                        [(value)]="post.retry_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="retry_interval"></oitc-form-feedback>
+                                                    errorField="retry_interval">
+                                </oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
@@ -562,9 +582,15 @@
                                     name="max_check_attempts"
                                     [selectedAttempts]="post.max_check_attempts"
                                     (selectedAttemptsChange)="post.max_check_attempts = $event">
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.max_check_attempts"
+                                                        [(value)]="post.max_check_attempts"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </oitc-check-attempts-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="max_check_attempts"></oitc-form-feedback>
+                                                    errorField="max_check_attempts">
+                                </oitc-form-feedback>
                             </div>
 
                             <c-alert color="light">
