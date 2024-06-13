@@ -209,6 +209,9 @@ export const routes: Routes = [{
     path: 'serviceescalations/add',
     loadComponent: () => import('./pages/serviceescalations/serviceescalations-add/serviceescalations-add.component').then(m => m.ServiceescalationsAddComponent)
 }, {
+    path: 'serviceescalations/edit/:id',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-edit/serviceescalations-edit.component').then(m => m.ServiceescalationsEditComponent)
+}, {
     path: 'hostdependencies/index',
     loadComponent: () => import('./pages/hostdependencies/hostdependencies-index/hostdependencies-index.component').then(m => m.HostdependenciesIndexComponent)
 }, {
