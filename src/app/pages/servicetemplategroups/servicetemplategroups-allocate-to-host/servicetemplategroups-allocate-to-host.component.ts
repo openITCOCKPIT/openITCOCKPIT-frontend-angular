@@ -122,11 +122,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
 
     protected percentage: number = 42;
 
-    public constructor() {
-        this.loadServicetemplategroups = this.loadServicetemplategroups.bind(this);
-        this.loadHosts = this.loadHosts.bind(this);
-    }
-
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadServicetemplategroups('');
@@ -151,20 +146,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
 
     protected hostIdChanged(): void {
         this.loadServices();
-    }
-
-    protected loadServicetemplategroups(containerName: string): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
-            .subscribe((result: LoadServicetemplategroupsByString): void => {
-                this.servicetemplategroups = result.servicetemplategroups;
-            }))
-    }
-
-    protected loadHosts(containerName: string): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadHostsByString(this.hostId as number, containerName)
-            .subscribe((result: LoadHostsByStringResponse): void => {
-                this.hosts = result.hosts;
-            }))
     }
 
     protected selectAll(): void {
@@ -231,6 +212,23 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
                 }
             })
         );
+    }
+
+    /*******************
+     * ARROW functions *
+     *******************/
+    protected loadServicetemplategroups = (containerName: string): void => {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
+            .subscribe((result: LoadServicetemplategroupsByString): void => {
+                this.servicetemplategroups = result.servicetemplategroups;
+            }))
+    }
+
+    protected loadHosts = (containerName: string): void => {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadHostsByString(this.hostId as number, containerName)
+            .subscribe((result: LoadHostsByStringResponse): void => {
+                this.hosts = result.hosts;
+            }))
     }
 
 }
