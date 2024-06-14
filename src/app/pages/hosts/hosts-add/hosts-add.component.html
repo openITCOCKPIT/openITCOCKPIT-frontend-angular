@@ -689,7 +689,13 @@
                                     name="notification_interval"
                                     [selectedInterval]="post.notification_interval"
                                     (selectedIntervalChange)="post.notification_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notification_interval"
+                                                        [(value)]="post.notification_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notification_interval"></oitc-form-feedback>
                             </div>

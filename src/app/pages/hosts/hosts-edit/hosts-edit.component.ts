@@ -65,6 +65,7 @@ import _ from 'lodash';
 import { sprintf } from "sprintf-js";
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 
 @Component({
     selector: 'oitc-hosts-edit',
@@ -120,7 +121,8 @@ import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-se
         RouterLink,
         ObjectUuidComponent,
         NgClass,
-        FakeSelectComponent
+        FakeSelectComponent,
+        UiBlockerComponent
     ],
     templateUrl: './hosts-edit.component.html',
     styleUrl: './hosts-edit.component.css'
@@ -217,6 +219,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                 this.data.allowSharing = result.allowSharing;
                 this.data.isHostOnlyEditableDueToHostSharing = result.isHostOnlyEditableDueToHostSharing;
                 this.data.areContactsInheritedFromHosttemplate = result.areContactsInheritedFromHosttemplate;
+                this.data.disableInheritance = !this.data.areContactsInheritedFromHosttemplate
 
                 // Remove primary container from sharing containers list as it would break the gui (empty select option)
                 this.post.hosts_to_containers_sharing._ids = this.post.hosts_to_containers_sharing._ids.filter(id => id !== this.post.container_id);
@@ -480,6 +483,20 @@ export class HostsEditComponent implements OnInit, OnDestroy {
 
         // "".split() returns [''] instead of [] like in php
         this.tagsForSelect = (this.post.tags !== '') ? this.post.tags.split(',') : [];
+    }
+
+    public onDisableInheritanceChange() {
+        if (this.data.areContactsInheritedFromHosttemplate === false) {
+            return;
+        }
+
+        if (!this.data.disableInheritance) {
+            // Restore contacts from the template
+            if (this.hosttemplate) {
+                this.post.contacts._ids = this.hosttemplate.contacts._ids;
+                this.post.contactgroups._ids = this.hosttemplate.contactgroups._ids;
+            }
+        }
     }
 
     /*******************
