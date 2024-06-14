@@ -104,9 +104,6 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     constructor(private route: ActivatedRoute) {
-        // IMPORTANT for the searchCallback the use the same "this" context
-        this.loadHosts = this.loadHosts.bind(this);
-        this.loadExcludedHosts = this.loadExcludedHosts.bind(this);
     }
 
 
@@ -211,7 +208,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadHosts(searchString: string) {
+    public loadHosts = (searchString: string) => {
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -234,7 +231,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadExcludedHosts(searchString: string) {
+    public loadExcludedHosts = (searchString: string) => {
         const containerId = this.post.container_id;
         if (!containerId) {
             return;

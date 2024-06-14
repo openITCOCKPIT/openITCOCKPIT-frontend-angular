@@ -1843,7 +1843,7 @@
     "Shared containers": "Спільні контейнери",
     "Please select a host template.": "Виберіть шаблон хосту.",
     "Could not resolve hostname.": "Не вдалося вирішити ім'я хоста.",
-    "A host with the name <strong>{0}<\/strong> already exists. Duplicate host names could lead to confusion.": "Хост із назвою <strong> {{0}} <\/strong> уже існує. Повторювані імена хостів можуть призвести до плутанини.",
+    "A host with the name {0} already exists. Duplicate host names could lead to confusion.": "Хост із назвою <strong> {{0}} <\/strong> уже існує. Повторювані імена хостів можуть призвести до плутанини.",
     "DNS Lookup": "Пошук DNS",
     "Host address": "Адреса вузла",
     "IPv4\/IPv6 address or FQDN": "Адреса IPv4\/IPv6 або повне доменне ім'я",

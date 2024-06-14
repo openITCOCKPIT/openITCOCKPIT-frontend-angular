@@ -1,12 +1,26 @@
 import { inject, Injectable } from '@angular/core';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HostTypesEnum } from './hosts.enum';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { HostsIndexFilter, HostsIndexParams, HostsIndexRoot } from './hosts.interface';
+import {
+    HostAddEditSuccessResponse,
+    HostCommandArgument,
+    HostDnsLookup,
+    HostEditApiResult,
+    HostElements,
+    HostPost,
+    HostSharing,
+    HostsIndexFilter,
+    HostsIndexParams,
+    HostsIndexRoot
+} from './hosts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 
 
 @Injectable({
@@ -64,6 +78,287 @@ export class HostsService {
             map(data => {
                 return data;
             })
+        );
+    }
+
+    public getSatellites(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ satellites: SelectKeyValue[] }>(`${proxyPath}/angular/getSatellites.json`).pipe(
+            map(data => {
+                return data.satellites
+            })
+        );
+    }
+
+    /**********************
+     *    Sharing action    *
+     **********************/
+    public getSharing(id: number): Observable<{
+        host: HostSharing,
+        primaryContainerPathSelect: SelectKeyValue[],
+        sharingContainers: SelectKeyValue[]
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            host: HostSharing,
+            primaryContainerPathSelect: SelectKeyValue[],
+            sharingContainers: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/sharing/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return {
+                    host: data.host,
+                    primaryContainerPathSelect: data.primaryContainerPathSelect,
+                    sharingContainers: data.sharingContainers
+                };
+            })
+        );
+    }
+
+    public updateSharing(host: HostSharing): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosts/sharing/${host.Host.id}.json?angular=true`, {
+            Host: {
+                id: host.Host.id,
+                hosts_to_containers_sharing: {
+                    _ids: host.Host.hosts_to_containers_sharing._ids
+                }
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public loadCommands(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ commands: SelectKeyValue[] }>(`${proxyPath}/hosts/loadCommands.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.commands
+            })
         )
     }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/hosts/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers
+            })
+        )
+    }
+
+    public loadElements(containerId: number, hostId: number = 0): Observable<HostElements> {
+        const proxyPath = this.proxyPath;
+        let url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`;
+
+        if (hostId) {
+            url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}/${hostId}.json`
+        }
+
+        return this.http.get<HostElements>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data
+            })
+        )
+    }
+
+    public loadCommandArguments(commandId: number, hostId: number = 0): Observable<HostCommandArgument[]> {
+        const proxyPath = this.proxyPath;
+
+        let url = `${proxyPath}/hosts/loadCommandArguments/${commandId}.json`;
+        if (hostId > 0) {
+            url = `${proxyPath}/hosts/loadCommandArguments/${commandId}/${hostId}.json`
+        }
+
+        return this.http.get<{
+            hostcommandargumentvalues: HostCommandArgument[]
+        }>(url, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.hostcommandargumentvalues;
+            })
+        );
+    }
+
+    public checkForDuplicateHostname(hostname: string, excludedHostIds: number[] = []): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            isHostnameInUse: boolean
+        }>(`${proxyPath}/hosts/checkForDuplicateHostname.json?angular=true`, {
+            hostname: hostname,
+            excludedHostIds: excludedHostIds
+        }).pipe(
+            map(data => {
+                return data.isHostnameInUse;
+            })
+        );
+    }
+
+    public runDnsLookup(data: HostDnsLookup): Observable<HostDnsLookup> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            result: HostDnsLookup
+        }>(`${proxyPath}/hosts/runDnsLookup.json?angular=true`, {
+            address: data.address,
+            hostname: data.hostname
+
+        }).pipe(
+            map(data => {
+                return data.result;
+            })
+        );
+    }
+
+    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        if (!containerId) {
+            return of([]); // No container selected
+        }
+
+        return this.http.get<{
+            hosts: SelectKeyValue[]
+        }>(`${proxyPath}/hosts/loadParentHostsByString.json`, {
+            params: {
+                'angular': true,
+                'filter[Hosts.name]': searchString,
+                'selected[]': selected,
+                'containerId': containerId,
+                'satellite_id': (satellite_id > 0) ? satellite_id : ''
+            }
+        }).pipe(
+            map(data => {
+                return data.hosts;
+            })
+        );
+    }
+
+    public loadHosttemplate(hosttemplateId: number): Observable<HosttemplatePost> {
+        const proxyPath = this.proxyPath;
+
+
+        return this.http.get<{
+            hosttemplate: { Hosttemplate: HosttemplatePost }
+        }>(`${proxyPath}/hosts/loadHosttemplate/${hosttemplateId}.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data.hosttemplate.Hosttemplate;
+            })
+        );
+    }
+
+    public add(host: HostPost, save_host_and_assign_matching_servicetemplate_groups = false): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        let body: any = {
+            Host: host
+        };
+        if (save_host_and_assign_matching_servicetemplate_groups) {
+            body['save_host_and_assign_matching_servicetemplate_groups'] = true;
+        }
+
+        return this.http.post<any>(`${proxyPath}/hosts/add.json?angular=true`, body)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as HostAddEditSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+
+
+    public edit(host: HostPost, save_host_and_assign_matching_servicetemplate_groups = false): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        let body: any = {
+            Host: host
+        };
+        if (save_host_and_assign_matching_servicetemplate_groups) {
+            body['save_host_and_assign_matching_servicetemplate_groups'] = true;
+        }
+        
+        return this.http.post<any>(`${proxyPath}/hosts/edit/${host.id}.json?angular=true`, body)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HostEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostEditApiResult>(`${proxyPath}/hosts/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
 }

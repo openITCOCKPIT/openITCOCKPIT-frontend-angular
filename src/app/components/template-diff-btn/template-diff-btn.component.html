@@ -1,0 +1,25 @@
+<ng-container *transloco="let t">
+    <button
+        class="btn btn-xs cursor-pointer ripple ms-2"
+        type="button"
+        [ngClass]="{'btn-danger': hasDiff, 'btn-success': !hasDiff}"
+        [cPopoverTrigger]="'hover'"
+        [cPopover]="popoverHtml"
+        (click)="restoreDefault()"
+    >
+        @if (hasDiff) {
+            <fa-icon [icon]="['fas', 'chain-broken']"></fa-icon>
+        } @else {
+            <fa-icon [icon]="['fas', 'link']"></fa-icon>
+        }
+    </button>
+
+    <ng-template #popoverHtml>
+        <h3 class="popover-header">
+            {{ t('Template inheritance') }}
+        </h3>
+        <div class="popover-body">
+            {{ getPopoverContent() }}
+        </div>
+    </ng-template>
+</ng-container>
