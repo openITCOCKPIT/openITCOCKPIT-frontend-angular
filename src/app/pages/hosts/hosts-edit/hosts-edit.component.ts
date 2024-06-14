@@ -539,7 +539,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             save_host_and_assign_matching_servicetemplate_groups = true;
         }
 
-        this.subscriptions.add(this.HostsService.add(this.post, save_host_and_assign_matching_servicetemplate_groups)
+        this.subscriptions.add(this.HostsService.edit(this.post, save_host_and_assign_matching_servicetemplate_groups)
             .subscribe((result) => {
                 if (result.success) {
 

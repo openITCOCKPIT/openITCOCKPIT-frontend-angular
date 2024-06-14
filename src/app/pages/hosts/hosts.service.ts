@@ -319,11 +319,17 @@ export class HostsService {
      **********************/
 
 
-    public edit(host: HostPost): Observable<GenericResponseWrapper> {
+    public edit(host: HostPost, save_host_and_assign_matching_servicetemplate_groups = false): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/hosts/edit/${host.id}.json?angular=true`, {
+
+        let body: any = {
             Host: host
-        })
+        };
+        if (save_host_and_assign_matching_servicetemplate_groups) {
+            body['save_host_and_assign_matching_servicetemplate_groups'] = true;
+        }
+        
+        return this.http.post<any>(`${proxyPath}/hosts/edit/${host.id}.json?angular=true`, body)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
