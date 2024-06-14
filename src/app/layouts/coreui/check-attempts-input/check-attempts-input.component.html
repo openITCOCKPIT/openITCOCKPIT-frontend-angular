@@ -19,7 +19,8 @@
                    [id]="id"
                    [name]="name"
                    [placeholder]="'Interval in seconds' | transloco"
-                   [(ngModel)]="selectedAttempts">
+                   [(ngModel)]="selectedAttempts"
+                   (ngModelChange)="updateAttempts()">
             <ng-content></ng-content>
         </c-input-group>
     </c-col>
