@@ -95,6 +95,18 @@ export const routes: Routes = [{
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
+    path: 'hostgroups/add',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-add/hostgroups-add.component').then(m => m.HostgroupsAddComponent)
+}, {
+    path: 'hostgroups/copy/:ids',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-copy/hostgroups-copy.component').then(m => m.HostgroupsCopyComponent)
+}, {
+    path: 'hostgroups/edit/:id',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-edit/hostgroups-edit.component').then(m => m.HostgroupsEditComponent)
+}, {
+    path: 'hostgroups/index',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
+}, {
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
