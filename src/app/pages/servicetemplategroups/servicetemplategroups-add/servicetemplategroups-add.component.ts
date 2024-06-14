@@ -10,7 +10,12 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -22,7 +27,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -31,13 +36,14 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import {
-    LoadContainersContainer,
     LoadContainersRoot,
-    LoadServiceTemplatesRoot, LoadServiceTemplatesServicetemplate,
+    LoadServiceTemplatesRoot,
     ServiceTemplateGroupsAddPostServicetemplategroup
 } from '../servicetemplategroups.interface';
-import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
-import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import _ from 'lodash';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-add',
@@ -86,14 +92,14 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     private ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
     private router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService:NotyService = inject(NotyService);
+    private readonly notyService: NotyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
     public createAnother: boolean = false;
 
-    protected servicetemplates: LoadServiceTemplatesServicetemplate[] = [];
+    protected servicetemplates: SelectKeyValue[] = [];
 
     public post: ServiceTemplateGroupsAddPostServicetemplategroup = {} as ServiceTemplateGroupsAddPostServicetemplategroup;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
 
     constructor() {
@@ -122,13 +128,16 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
                     const msg: string = this.TranslocoService.translate('added successfully');
                     const url: (string | number)[] = ['servicetemplategroups', 'edit', response.id];
 
-                    if (this.createAnother) {
-                        this.post = this.getDefaultPost();
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/servicetemplategroups/index']);
                         return;
                     }
-                    this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/servicetemplategroups/index']);
-
+                    this.post = this.getDefaultPost();
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+                    this.errors = {} as GenericValidationError;
                     return;
                 }
 
@@ -175,6 +184,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
+                this.cleanupServicetemplate();
             }))
     }
 
@@ -185,5 +195,13 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             return;
         }
         this.loadServicetemplates('');
+    }
+
+    private cleanupServicetemplate() {
+        //clean up service templates  -> remove not visible ids
+        this.post.servicetemplates._ids = _.intersection(
+            _.map(this.servicetemplates, 'key'),
+            this.post.servicetemplates._ids
+        );
     }
 }

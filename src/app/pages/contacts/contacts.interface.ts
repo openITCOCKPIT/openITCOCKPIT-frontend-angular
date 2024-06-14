@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { HostsToContainersSharing } from '../hosts/hosts.interface';
+import { Container } from '../containers/container.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -91,21 +92,6 @@ export interface Contact {
     user_id: number | null
     uuid: string
     allow_edit: boolean
-}
-
-/*********************************
- *    Definition of Container    *
- ********************************/
-// Maybe this can be done from Container Management (%hostname%/containers/index) ?
-export interface Container {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-///    _joinData: JoinData Brauchen wir nicht wirklich im Front-End, oder?
-    // Wird das Fehler werfen,wenn wir das nicht definieren, es aber übertragen wird?
 }
 
 
@@ -484,16 +470,7 @@ export interface ContactUsedByHostescalation {
     escalate_on_unreachable: number
     created: string
     modified: string
-    container: Container2
-}
-
-export interface Container2 {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
+    container: Container
 }
 
 export interface ContactUsedByServiceescalation {
@@ -510,16 +487,7 @@ export interface ContactUsedByServiceescalation {
     escalate_on_critical: number
     created: string
     modified: string
-    container: Container3
-}
-
-export interface Container3 {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
+    container: Container
 }
 
 export interface LoadLdapUserByStringRoot {

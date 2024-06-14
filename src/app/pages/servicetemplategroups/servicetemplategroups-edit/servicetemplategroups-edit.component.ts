@@ -1,5 +1,5 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {BackButtonDirective} from '../../../directives/back-button.directive';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -10,36 +10,41 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormsModule} from '@angular/forms';
-import {MacrosComponent} from '../../../components/macros/macros.component';
-import {NgForOf, NgIf} from '@angular/common';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
-import {Subscription} from 'rxjs';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uuid.component';
-import {ServicetemplategroupsService} from '../servicetemplategroups.service';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { MacrosComponent } from '../../../components/macros/macros.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import {
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadServiceTemplatesRoot,
-    LoadServiceTemplatesServicetemplate,
-    ServiceTemplateGroupssGetEditPostServicetemplategroup,
     ServiceTemplateGroupsGetEditRoot,
+    ServiceTemplateGroupssGetEditPostServicetemplategroup,
 } from '../servicetemplategroups.interface';
-import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
-import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import _ from 'lodash';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-edit',
@@ -86,7 +91,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private ServicetemplateGroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
-    protected servicetemplates: LoadServiceTemplatesServicetemplate[] = [];
+    protected servicetemplates: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
@@ -111,7 +116,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
         },
         uuid: ''
     }
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route: ActivatedRoute = inject(ActivatedRoute)
 
     public constructor() {
@@ -184,6 +189,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplateGroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
+                this.cleanupServicetemplate();
             }))
     }
 
@@ -193,5 +199,13 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
             return;
         }
         this.loadServicetemplates('');
+    }
+
+    private cleanupServicetemplate() {
+        //clean up service templates  -> remove not visible ids
+        this.post.servicetemplates._ids = _.intersection(
+            _.map(this.servicetemplates, 'key'),
+            this.post.servicetemplates._ids
+        );
     }
 }

@@ -26,10 +26,8 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-    ServiceTemplateGroupsGetCopyGetServicetemplategroup, ServiceTemplateGroupsGetCopyPostContainer,
+    ServiceTemplateGroupsGetCopyGetServicetemplategroup,
     ServiceTemplateGroupsGetCopyPostData,
-    ServiceTemplateGroupsGetCopyPostServicetemplategroup,
-    ServiceTemplateGroupsGetCopyPostSource
 } from '../servicetemplategroups.interface';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 

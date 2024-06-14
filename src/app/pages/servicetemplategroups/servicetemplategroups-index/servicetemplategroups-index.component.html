@@ -88,7 +88,7 @@
                             <c-col md="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Servicetemplategroups.description]']"
@@ -158,8 +158,9 @@
                                     <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                                     {{ t('Allocate to host group') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToMatchingHostgroup'"
-                                (click)="allocateToMatchingHostgroup(servicetemplategroup.id)">
+                                <oitc-actions-button-element
+                                    [permission]="'servicetemplategroups.allocateToMatchingHostgroup'"
+                                    (click)="allocateToMatchingHostgroup(servicetemplategroup.id)">
                                     <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                                     {{ t('Allocate to matching host group') }}
                                 </oitc-actions-button-element>
