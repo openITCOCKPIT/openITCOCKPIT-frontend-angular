@@ -98,6 +98,24 @@ export const routes: Routes = [{
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
+    path: 'servicetemplategroups/add',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
+}, {
+    path: 'servicetemplategroups/allocateToHost/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-host/servicetemplategroups-allocate-to-host.component').then(m => m.ServicetemplategroupsAllocateToHostComponent)
+}, {
+    path: 'servicetemplategroups/allocateToHostgroup/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-hostgroup/servicetemplategroups-allocate-to-hostgroup.component').then(m => m.ServicetemplategroupsAllocateToHostgroupComponent)
+}, {
+    path: 'servicetemplategroups/copy/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-copy/servicetemplategroups-copy.component').then(m => m.ServicetemplategroupsCopyComponent)
+}, {
+    path: 'servicetemplategroups/edit/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-edit/servicetemplategroups-edit.component').then(m => m.ServicetemplategroupsEditComponent)
+}, {
+    path: 'servicetemplategroups/index',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-index/servicetemplategroups-index.component').then(m => m.ServicetemplategroupsIndexComponent)
+}, {
     path: 'systemsettings/index',
     loadComponent: () => import('./pages/systemsettings/systemsettings-index/systemsettings-index.component').then(m => m.SystemsettingsIndexComponent)
 }, {

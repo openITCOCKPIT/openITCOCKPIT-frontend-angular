@@ -717,64 +717,100 @@
                                     name="notification_interval"
                                     [selectedInterval]="post.notification_interval"
                                     (selectedIntervalChange)="post.notification_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.notification_interval"
+                                                        [(value)]="post.notification_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notification_interval"></oitc-form-feedback>
                             </div>
 
-                            <div class="mb-3">
-                                <label cLabel for="ContactsPeriodSelect" class="hintmark">
-                                    {{ t('Contacts') }}
-                                </label>
-
-                                <c-input-group>
-                                    <oitc-multi-select
-                                        name="ContactsPeriodSelect"
-                                        id="ContactsPeriodSelect"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        class="flex-1"
-                                        [(ngModel)]="post.contacts._ids"
-                                        [options]="contacts"
-                                        oitcFormError [errors]="errors" errorField="contacts">
-                                    </oitc-multi-select>
-                                    <oitc-template-diff cInputGroupText
-                                                        *ngIf="hosttemplate"
-                                                        [templateValue]="hosttemplate.contacts._ids"
-                                                        [(value)]="post.contacts._ids"
-                                                        class="bg-transparent p-0"></oitc-template-diff>
-                                </c-input-group>
-
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="contacts"></oitc-form-feedback>
+                            <div class="mb-3" [hidden]="!data.areContactsInheritedFromHosttemplate">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="disableInheritance"
+                                           id="disableInheritance"
+                                           type="checkbox"
+                                           [(ngModel)]="data.disableInheritance"
+                                           (change)="onDisableInheritanceChange()"/>
+                                    <label cFormCheckLabel for="disableInheritance">
+                                        {{ t('Disable inheritance') }}
+                                    </label>
+                                </c-form-check>
+                                <div class="col col-xs-12 help-block ps-3"
+                                     [ngClass]="{'text-decoration-line-through': data.disableInheritance}">
+                                    {{ t('Contacts and contact groups got inherited from') }}
+                                    <span class="fw-bold">
+                                        @if (this.PermissionsService.hasPermission(['hosttemplates', 'edit'])) {
+                                            <a [routerLink]="['/hosttemplates/edit', post.hosttemplate_id]">
+                                                {{ t('host template') }}
+                                            </a>
+                                        } @else {
+                                            {{ t('host template') }}
+                                        }
+                                    </span>
+                                    .
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label cLabel for="ContactgroupsSelect" class="hintmark">
-                                    {{ t('Contact groups') }}
-                                </label>
+                            <oitc-ui-blocker [blocked]="!data.disableInheritance">
+                                <div class="mb-3">
+                                    <label cLabel for="ContactsPeriodSelect" class="hintmark">
+                                        {{ t('Contacts') }}
+                                    </label>
 
-                                <c-input-group>
-                                    <oitc-multi-select
-                                        name="ContactgroupsSelect"
-                                        id="ContactgroupsSelect"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        class="flex-1"
-                                        [(ngModel)]="post.contactgroups._ids"
-                                        [options]="contactgroups"
-                                        oitcFormError [errors]="errors" errorField="contactgroups">
-                                    </oitc-multi-select>
-                                    <oitc-template-diff cInputGroupText
-                                                        *ngIf="hosttemplate"
-                                                        [templateValue]="hosttemplate.contactgroups._ids"
-                                                        [(value)]="post.contactgroups._ids"
-                                                        class="bg-transparent p-0"></oitc-template-diff>
-                                </c-input-group>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                            name="ContactsPeriodSelect"
+                                            id="ContactsPeriodSelect"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            class="flex-1"
+                                            [(ngModel)]="post.contacts._ids"
+                                            [options]="contacts"
+                                            oitcFormError [errors]="errors" errorField="contacts">
+                                        </oitc-multi-select>
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.contacts._ids"
+                                                            [(value)]="post.contacts._ids"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    </c-input-group>
 
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="contactgroups"></oitc-form-feedback>
-                            </div>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="contacts"></oitc-form-feedback>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label cLabel for="ContactgroupsSelect" class="hintmark">
+                                        {{ t('Contact groups') }}
+                                    </label>
+
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                            name="ContactgroupsSelect"
+                                            id="ContactgroupsSelect"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            class="flex-1"
+                                            [(ngModel)]="post.contactgroups._ids"
+                                            [options]="contactgroups"
+                                            oitcFormError [errors]="errors" errorField="contactgroups">
+                                        </oitc-multi-select>
+                                        <oitc-template-diff cInputGroupText
+                                                            *ngIf="hosttemplate"
+                                                            [templateValue]="hosttemplate.contactgroups._ids"
+                                                            [(value)]="post.contactgroups._ids"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    </c-input-group>
+
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="contactgroups"></oitc-form-feedback>
+                                </div>
+                            </oitc-ui-blocker>
 
                             <div>
                                 <label cLabel>
