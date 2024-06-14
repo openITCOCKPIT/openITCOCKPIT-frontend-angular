@@ -662,23 +662,10 @@
                 </c-card-body>
                 <c-card-footer *ngIf="ldapUser !== null" class="text-end">
 
-                    <label for="createAnother">
-
-                        <c-form-check>
-                            <input
-                                cFormCheckInput
-                                type="checkbox"
-                                id="createAnother"
-                                [(ngModel)]="createAnother"
-                                (ngModelChange)="createAnother = $event ? true : false"
-                                name="createAnother"
-                            />
-                            <label
-                                cFormCheckLabel
-                                for="createAnother">
-                                {{ t('Create another') }}
-                            </label>
-                        </c-form-check>
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">
