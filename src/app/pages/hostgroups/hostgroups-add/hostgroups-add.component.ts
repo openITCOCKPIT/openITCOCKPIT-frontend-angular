@@ -1,0 +1,213 @@
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {BackButtonDirective} from '../../../directives/back-button.directive';
+import {
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+} from '@coreui/angular';
+import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
+import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {FormsModule} from '@angular/forms';
+import {MacrosComponent} from '../../../components/macros/macros.component';
+import {NgForOf, NgIf} from '@angular/common';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {PermissionDirective} from '../../../permissions/permission.directive';
+import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
+import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {NotyService} from '../../../layouts/coreui/noty.service';
+import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import {HostgroupsService} from '../hostgroups.service';
+import {
+    AddHostgroupsPost,
+    AddHostgroupsPostHostgroup, LoadContainersContainer,
+    LoadContainersRoot, LoadHostsResponse,
+    LoadHostsResponseHost, LoadHosttemplates, LoadHosttemplatesHosttemplate
+} from "../hostgroups.interface";
+import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
+import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+
+@Component({
+    selector: 'oitc-hostgroups-add',
+    standalone: true,
+    imports: [
+        BackButtonDirective,
+        BadgeComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MacrosComponent,
+        NavComponent,
+        NavItemComponent,
+        NgForOf,
+        NgIf,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TooltipDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ObjectUuidComponent,
+        SelectComponent,
+        MultiSelectComponent
+    ],
+    templateUrl: './hostgroups-add.component.html',
+    styleUrl: './hostgroups-add.component.css'
+})
+export class HostgroupsAddComponent implements OnInit, OnDestroy {
+
+    private subscriptions: Subscription = new Subscription();
+    private HostgroupsService: HostgroupsService = inject(HostgroupsService);
+    protected hosts: LoadHostsResponseHost[] = [];
+    private router: Router = inject(Router);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    public errors: GenericValidationError | null = null;
+    public createAnother: boolean = false;
+
+    public post: AddHostgroupsPostHostgroup = {} as AddHostgroupsPostHostgroup;
+    protected containers: LoadContainersContainer[] = [];
+    protected hosttemplates: LoadHosttemplatesHosttemplate[] = [];
+    private route = inject(ActivatedRoute)
+
+    constructor() {
+        this.post = this.getDefaultPost();
+    }
+
+    public ngOnInit() {
+        // Load containers for dropdown.
+        this.loadContainers();
+
+        // Force hosts and hosttemplates empty if you "create another".
+        this.loadHosts('');
+        this.loadHosttemplates('');
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    public addHostgroup(): void {
+
+        this.subscriptions.add(this.HostgroupsService.addHostgroup(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                if (result.success) {
+                    const response: GenericIdResponse = result.data as GenericIdResponse;
+
+                    const title: string = this.TranslocoService.translate('Contactgroup');
+                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const url: (string | number)[] = ['contactgroups', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/contactgroups/index']);
+                        return;
+                    }
+                    this.post = this.getDefaultPost();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
+                    if (typeof this.errors['container']['name'] !== 'undefined') {
+                        this.errors['name'] = <any>this.errors['container']['name'];
+                    }
+                }
+            })
+        );
+    }
+
+    private loadContainers(): void {
+        this.subscriptions.add(this.HostgroupsService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
+                this.containers = result.containers;
+            }))
+    }
+
+    private getDefaultPost(): AddHostgroupsPostHostgroup {
+        return {
+            container: {
+                name: '',
+                parent_id: null
+            },
+            description: "",
+            hostgroup_url: "",
+            hosts: {
+                _ids: []
+            },
+            hosttemplates: {
+                _ids: []
+            }
+        }
+    }
+
+
+    public onContainerChange(): void {
+        if (!this.post.container.parent_id) {
+            this.hosts = [];
+            return;
+        }
+        this.loadHosts('');
+        this.loadHosttemplates('');
+    }
+
+    // ARROW FUNCTIONS
+    protected loadHosts = (search: string) => {
+        if (!this.post.container.parent_id) {
+            this.hosts = [];
+            return;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHosts(this.post.container.parent_id, search, this.post.hosts._ids)
+            .subscribe((result: LoadHostsResponse) => {
+                this.hosts = result.hosts;
+            }))
+    }
+
+
+    protected loadHosttemplates = (search: string) => {
+        if (!this.post.container.parent_id) {
+            this.hosttemplates = [];
+            return;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHosttemplates(this.post.container.parent_id, search, this.post.hosttemplates._ids)
+            .subscribe((result: LoadHosttemplates) => {
+                this.hosttemplates = result.hosttemplates;
+            }))
+    }
+}
