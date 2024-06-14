@@ -114,11 +114,6 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
 
     protected percentage: number = 42;
 
-    public constructor() {
-        this.loadServicetemplategroups = this.loadServicetemplategroups.bind(this);
-        this.loadHostgroups = this.loadHostgroups.bind(this);
-    }
-
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadServicetemplategroups('');
@@ -143,20 +138,6 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
 
     protected hostGroupIdChanged(): void {
         this.loadServices();
-    }
-
-    protected loadServicetemplategroups(containerName: string): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
-            .subscribe((result: LoadServicetemplategroupsByString): void => {
-                this.servicetemplategroups = result.servicetemplategroups;
-            }))
-    }
-
-    protected loadHostgroups(containerName: string): void {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadHostgroupsByString(containerName)
-            .subscribe((result: LoadHostgroupsByString): void => {
-                this.hostgroups = result.hostgroups;
-            }))
     }
 
     protected handleHostSelect(hostIndex: number, areAllCreateServiceOnTargetHostTrue: boolean, services: AllocateToHostGroupGetService[]): void {
@@ -271,6 +252,23 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         }
 
         host.areAllCreateServiceOnTargetHostTrue = isAllChecked;
+    }
+
+    /*******************
+     * ARROW functions *
+     *******************/
+    protected loadServicetemplategroups = (containerName: string): void => {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
+            .subscribe((result: LoadServicetemplategroupsByString): void => {
+                this.servicetemplategroups = result.servicetemplategroups;
+            }))
+    }
+
+    protected loadHostgroups = (containerName: string): void => {
+        this.subscriptions.add(this.ServicetemplategroupsService.loadHostgroupsByString(containerName)
+            .subscribe((result: LoadHostgroupsByString): void => {
+                this.hostgroups = result.hostgroups;
+            }))
     }
 
 }
