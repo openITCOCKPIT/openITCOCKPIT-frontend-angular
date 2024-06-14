@@ -24,7 +24,7 @@
     box-shadow: 0 2px 6px 0 rgba(245, 245, 245, 0.5);
 }
 
-.btn-default .btn:disabled, .btn.disabled, fieldset:disabled {
+.btn-default .btn-default:disabled, .btn.btn-default.disabled, fieldset:disabled {
     border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: #f5f5f5;
 }
@@ -70,6 +70,11 @@ body.dark-theme .btn-outline-default:hover, body.dark-theme .btn-outline-default
     background-color: #828282;
     border: var(--cui-btn-border-width) solid rgba(var(--cui-border-color), 1);
     color: #333;
+}
+
+body.dark-theme .btn-default .btn-default:disabled, body.dark-theme .btn.btn-default.disabled {
+    border: 1px solid rgba(var(--cui-border-color), 0.1);
+    background-color: #0c0e12;
 }
 
 .btn-lower-padding {

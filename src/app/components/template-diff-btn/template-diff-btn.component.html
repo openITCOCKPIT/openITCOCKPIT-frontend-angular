@@ -1,6 +1,7 @@
 <ng-container *transloco="let t">
     <button
         class="btn btn-xs cursor-pointer ripple ms-2"
+        type="button"
         [ngClass]="{'btn-danger': hasDiff, 'btn-success': !hasDiff}"
         [cPopoverTrigger]="'hover'"
         [cPopover]="popoverHtml"

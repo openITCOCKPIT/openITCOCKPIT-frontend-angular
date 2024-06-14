@@ -28,7 +28,7 @@
             <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
         </c-alert>
 
-        <form cForm (ngSubmit)="submit()">
+        <form cForm (ngSubmit)="submit(HostSubmitType.HostsIndex)">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new host') }}</h5>
@@ -275,7 +275,7 @@
                                         </ng-select>
                                         <oitc-template-diff cInputGroupText
                                                             *ngIf="hosttemplate"
-                                                            [templateValue]="hosttemplate.tags.split(',')"
+                                                            [templateValue]="(hosttemplate.tags !== '')?hosttemplate.tags.split(','):[]"
                                                             [(value)]="tagsForSelect"
                                                             class="bg-transparent p-0"></oitc-template-diff>
                                     </c-input-group>
@@ -325,6 +325,7 @@
                                             optionValue="key"
                                             optionLabel="value"
                                             [(ngModel)]="post.satellite_id"
+                                            (onChange)="onSatelliteChange()"
                                             [options]="satellites"
                                             oitcFormError [errors]="errors" errorField="satellite_id">
                                         </oitc-select>
@@ -446,9 +447,16 @@
                                     name="freshness_threshold"
                                     [selectedInterval]="post.freshness_threshold"
                                     (selectedIntervalChange)="post.freshness_threshold = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.freshness_threshold"
+                                                        [(value)]="post.freshness_threshold"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="freshness_threshold"></oitc-form-feedback>
+                                                    errorField="freshness_threshold">
+                                </oitc-form-feedback>
                             </div>
 
 
@@ -511,7 +519,7 @@
                                             [name]="'hostcommandargumentvalue_'+i"
                                             [(ngModel)]="hostcommandargumentvalue.value">
                                         <oitc-template-diff cInputGroupText
-                                                            *ngIf="hosttemplate"
+                                                            *ngIf="hosttemplate && hosttemplate.hosttemplatecommandargumentvalues[i]"
                                                             [templateValue]="hosttemplate.hosttemplatecommandargumentvalues[i].value"
                                                             [(value)]="hostcommandargumentvalue.value"
                                                             class="bg-transparent p-0"></oitc-template-diff>
@@ -532,7 +540,13 @@
                                     name="check_interval"
                                     [selectedInterval]="post.check_interval"
                                     (selectedIntervalChange)="post.check_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.check_interval"
+                                                        [(value)]="post.check_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="check_interval"></oitc-form-feedback>
                             </div>
@@ -547,9 +561,16 @@
                                     name="retry_interval"
                                     [selectedInterval]="post.retry_interval"
                                     (selectedIntervalChange)="post.retry_interval = $event"
-                                ></oitc-interval-input>
+                                >
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.retry_interval"
+                                                        [(value)]="post.retry_interval"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="retry_interval"></oitc-form-feedback>
+                                                    errorField="retry_interval">
+                                </oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
@@ -562,9 +583,15 @@
                                     name="max_check_attempts"
                                     [selectedAttempts]="post.max_check_attempts"
                                     (selectedAttemptsChange)="post.max_check_attempts = $event">
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="hosttemplate"
+                                                        [templateValue]="hosttemplate.max_check_attempts"
+                                                        [(value)]="post.max_check_attempts"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
                                 </oitc-check-attempts-input>
                                 <oitc-form-feedback [errors]="errors"
-                                                    errorField="max_check_attempts"></oitc-form-feedback>
+                                                    errorField="max_check_attempts">
+                                </oitc-form-feedback>
                             </div>
 
                             <c-alert color="light">
@@ -1172,9 +1199,62 @@
                         {{ t('Create another') }}
                     </label>
 
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create host template') }}
+                    <button cButton class="ripple" color="primary" type="button"
+                            (click)="submit(HostSubmitType.AgentDiscovery)"
+                            [disabled]="createAnother">
+                        {{ t('Create host and setup agent') }}
                     </button>
+
+                    <c-dropdown direction="center" variant="btn-group" class="ms-1">
+                        <button cButton color="primary" type="submit" class="ripple">
+                            {{ t('Create host') }}
+                        </button>
+                        <button [split]="true" cButton cDropdownToggle color="primary" [disabled]="createAnother">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul cDropdownMenu>
+                            @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                                <li>
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.ServiceAdd)">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        {{ t('Save and create service') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasPermission(['agentconnector', 'config'])) {
+                                <li>
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.AgentDiscovery)">
+                                        <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                        {{ t('Save and setup agent') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                                <li>
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.AssignMatchingServicetemplateGroups)">
+                                        <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                                        {{ t('Save host and assign matching service template groups') }}
+                                    </button>
+                                </li>
+                            }
+
+                            @if (this.PermissionsService.hasModule('CheckmkModule') && this.PermissionsService.hasPermission(['CheckmkModule', 'scans', 'index'])) {
+                                <li>
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(HostSubmitType.CheckmkDiscovery)">
+                                        <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                        {{ t('Save and run Checkmk discovery') }}
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    </c-dropdown>
+
                     <button [fallbackUrl]="['hosts', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">

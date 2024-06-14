@@ -26,6 +26,8 @@ export class TemplateDiffComponent implements OnChanges {
 
     @Input() public templateValue: any;
 
+    @Output() public valueResetted = new EventEmitter<any>();
+
 
     private readonly TranslocoService = inject(TranslocoService);
 
@@ -38,6 +40,7 @@ export class TemplateDiffComponent implements OnChanges {
     restoreDefault() {
         this.value = this.templateValue;
         this.valueChange.emit(this.value);
+        this.valueResetted.emit(this.value);
     }
 
     public getPopoverContent(): string {

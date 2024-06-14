@@ -1,6 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonGroupComponent, ColComponent, FormControlDirective, RowComponent } from '@coreui/angular';
+import {
+    ButtonGroupComponent,
+    ColComponent,
+    FormControlDirective,
+    InputGroupComponent,
+    RowComponent
+} from '@coreui/angular';
 import { NgClass, NgForOf } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
@@ -17,7 +23,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         FormControlDirective,
         TranslocoPipe,
         XsButtonDirective,
-        NgForOf
+        NgForOf,
+        InputGroupComponent
     ],
     templateUrl: './check-attempts-input.component.html',
     styleUrl: './check-attempts-input.component.css'

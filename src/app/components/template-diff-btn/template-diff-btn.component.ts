@@ -25,7 +25,9 @@ export class TemplateDiffBtnComponent implements OnChanges {
     @Output() public valueChange = new EventEmitter<any>();
 
     @Input() public templateValue: any;
-    
+
+    @Output() public valueResetted = new EventEmitter<any>();
+
     private readonly TranslocoService = inject(TranslocoService);
 
     ngOnChanges(changes: SimpleChanges) {
@@ -37,6 +39,7 @@ export class TemplateDiffBtnComponent implements OnChanges {
     restoreDefault() {
         this.value = this.templateValue;
         this.valueChange.emit(this.value);
+        this.valueResetted.emit(this.value);
     }
 
     public getPopoverContent(): string {

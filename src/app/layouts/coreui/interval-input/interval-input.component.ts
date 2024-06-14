@@ -1,6 +1,12 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { ButtonGroupComponent, ColComponent, FormControlDirective, RowComponent } from '@coreui/angular';
+import {
+    ButtonGroupComponent,
+    ColComponent,
+    FormControlDirective,
+    InputGroupComponent,
+    RowComponent
+} from '@coreui/angular';
 import { IntervalInput } from './interval-input.interface';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { NgClass, NgForOf } from '@angular/common';
@@ -23,7 +29,8 @@ import { HumanTimeComponent } from './human-time/human-time.component';
         FormErrorDirective,
         PaginatorModule,
         HumanTimeComponent,
-        NgForOf
+        NgForOf,
+        InputGroupComponent
     ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css'
