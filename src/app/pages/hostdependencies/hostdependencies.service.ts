@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    HostdependenciesIndexParams,
     HostdependencyContainerResult,
+    HostdependencyDependentHostgroups,
+    HostdependencyDependentHosts,
     HostdependencyEditApiResult,
     HostdependencyElements,
     HostdependencyHosts,
     HostdependencyIndexRoot,
-    HostdependencyPost,
-    HostdependenciesIndexParams, HostdependencyDependentHosts, HostdependencyDependentHostgroups
+    HostdependencyPost
 } from './hostdependencies.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -28,8 +30,16 @@ export class HostdependenciesService {
 
     public getIndex(params: HostdependenciesIndexParams): Observable<HostdependencyIndexRoot> {
         const proxyPath = this.proxyPath;
+        let cleanParams = params as any;
+        // Use cleanParams as temp variable to remove empty filter values from the  params['filter[Hostdependencies.inherits_parent]
+        if (params['filter[Hostdependencies.inherits_parent][0]'] === '') {
+            delete cleanParams['filter[Hostdependencies.inherits_parent][0]'];
+        }
+        if (params['filter[Hostdependencies.inherits_parent][1]'] === '') {
+            delete cleanParams['filter[Hostdependencies.inherits_parent][1]'];
+        }
         return this.http.get<HostdependencyIndexRoot>(`${proxyPath}/hostdependencies/index.json`, {
-            params: params as {} // cast HostdependenciesIndexParams into object
+            params: cleanParams as {} // cast HostdependenciesIndexParams into object
         }).pipe(
             map(data => {
                 return data;

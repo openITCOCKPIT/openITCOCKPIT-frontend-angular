@@ -239,7 +239,7 @@
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-                            <c-col md="9">
+                            <c-col md="3">
                                 <fieldset>
                                     <h5>
                                         {{ t('Notification fail on ...') }}
@@ -324,6 +324,45 @@
                                             [(ngModel)]="params['filter[Hostdependencies.notification_none]']"/>
                                         <label cFormCheckLabel
                                                for="Hostdependencies.notification_none">{{ t('Notification none') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Options') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-primary"
+                                            name="Hostdependencies.inherits_parent"
+                                            id="Hostdependencies.inherits_parent"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="1"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[Hostdependencies.inherits_parent][0]']"/>
+                                        <label cFormCheckLabel
+                                               for="Hostdependencies.inherits_parent">{{ t('Inherits parent') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-primary"
+                                            name="Hostdependencies.not_inherits_parent"
+                                            id="Hostdependencies.not_inherits_parent"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="0"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[Hostdependencies.inherits_parent][1]']"/>
+                                        <label cFormCheckLabel
+                                               for="Hostdependencies.not_inherits_parent">{{ t('Not inherits parent') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
