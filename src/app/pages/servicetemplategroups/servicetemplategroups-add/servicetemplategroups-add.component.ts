@@ -42,7 +42,6 @@ import {
 } from '../servicetemplategroups.interface';
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
-import _ from 'lodash';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
@@ -184,7 +183,6 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
-                this.cleanupServicetemplate();
             }))
     }
 
@@ -195,13 +193,5 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             return;
         }
         this.loadServicetemplates('');
-    }
-
-    private cleanupServicetemplate() {
-        //clean up service templates  -> remove not visible ids
-        this.post.servicetemplates._ids = _.intersection(
-            _.map(this.servicetemplates, 'key'),
-            this.post.servicetemplates._ids
-        );
     }
 }

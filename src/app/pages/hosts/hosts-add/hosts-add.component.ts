@@ -61,7 +61,6 @@ import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { HostSubmitType } from '../hosts.enum';
-import _ from 'lodash';
 import { sprintf } from "sprintf-js";
 
 @Component({
@@ -287,8 +286,6 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                 this.sharingContainers = result.sharingContainers;
                 this.exporters = result.exporters;
                 this.slas = result.slas;
-
-                this.cleanupHostgroups();
             })
         );
     }
@@ -301,7 +298,6 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
             .subscribe((result) => {
                 this.parenthosts = result;
-                this.cleanupParentHosts();
             })
         );
     };
@@ -535,27 +531,8 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 
-    private cleanupParentHosts() {
-        //clean up parent host  -> remove not visible ids
-        this.post.parenthosts._ids = _.intersection(
-            _.map(this.parenthosts, 'key'),
-            this.post.parenthosts._ids
-        );
-    }
-
-    private cleanupHostgroups() {
-        //clean up host and host templates -> remove not visible ids
-        this.post.hostgroups._ids = _.intersection(
-            _.map(this.hostgroups, 'key'),
-            this.post.hostgroups._ids
-        );
-    }
-
     public submit(submitType: HostSubmitType) {
         this.post.tags = this.tagsForSelect.join(',');
-
-        this.cleanupParentHosts();
-        this.cleanupHostgroups();
 
 
         let save_host_and_assign_matching_servicetemplate_groups = false;
