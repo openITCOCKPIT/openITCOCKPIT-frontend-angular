@@ -122,6 +122,8 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
                     if (this.createAnother) {
                         this.post = this.getDefaultPost();
+                        this.servicetemplates= [];
+
                         return;
                     }
                     this.notyService.genericSuccess(msg, title, url);
