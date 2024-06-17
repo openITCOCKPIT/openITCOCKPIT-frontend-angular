@@ -488,6 +488,7 @@
                                                         *ngIf="hosttemplate"
                                                         [templateValue]="hosttemplate.command_id"
                                                         [(value)]="post.command_id"
+                                                        (valueResetted)="onCommandChange()"
                                                         class="bg-transparent p-0"></oitc-template-diff>
                                 </c-input-group>
 
