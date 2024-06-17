@@ -94,15 +94,14 @@ export class HostdependenciesService {
         )
     }
 
-    public loadDependentHosts(containerId: number, searchString: string, dependentHostsIds: number [], hostgroupIds: number []): Observable<HostdependencyDependentHosts> {
+    public loadDependentHosts(containerId: number, searchString: string, dependentHostsIds: number []): Observable<HostdependencyDependentHosts> {
         const proxyPath = this.proxyPath;
         return this.http.get<HostdependencyDependentHosts>(`${proxyPath}/hostdependencies/loadDependentHostsByContainerIdAndHostgroupIds.json`, {
             params: {
                 angular: true,
                 'containerId': containerId,
                 'filter[Hosts.name]': searchString,
-                'selected[]': dependentHostsIds,
-                'hostgroupIds[]': hostgroupIds
+                'selected[]': dependentHostsIds
             }
         }).pipe(
             map(data => {
