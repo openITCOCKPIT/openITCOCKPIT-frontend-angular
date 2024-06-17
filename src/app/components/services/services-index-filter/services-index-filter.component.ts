@@ -27,7 +27,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
-import { filter } from '../../../pages/services/services-index/services.interface';
+import { filter } from '../../../pages/services/services.interface';
 
 
 type states = {

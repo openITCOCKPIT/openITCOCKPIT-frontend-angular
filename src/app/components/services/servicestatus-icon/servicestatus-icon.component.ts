@@ -1,43 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
-import {TooltipDirective} from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {timer, Subject, takeUntil, Subscription} from "rxjs";
-
-type  Servicestatus = {
-    currentState: number
-    lastHardState: any
-    isFlapping: boolean
-    problemHasBeenAcknowledged: boolean
-    scheduledDowntimeDepth: number
-    lastCheck: string
-    nextCheck: string
-    activeChecksEnabled: number
-    lastHardStateChange: string
-    last_state_change: string
-    processPerformanceData: any
-    state_type: number
-    acknowledgement_type: number
-    flap_detection_enabled: any
-    notifications_enabled: boolean
-    current_check_attempt: any
-    output: string
-    long_output: any
-    perfdata: string
-    latency: any
-    max_check_attempts: any
-    last_time_ok: string
-    lastHardStateChangeInWords: string
-    last_state_change_in_words: string
-    lastCheckInWords: string
-    nextCheckInWords: string
-    isHardstate: boolean
-    isInMonitoring: boolean
-    humanState: string
-    cssClass: string
-    textClass: string
-    outputHtml: string
-}
+import { TooltipDirective } from '@coreui/angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { timer, Subject, takeUntil, Subscription } from "rxjs";
+import { Servicestatus } from '../../../pages/services/services.interface';
 
 @Component({
   selector: 'oitc-servicestatus-icon',

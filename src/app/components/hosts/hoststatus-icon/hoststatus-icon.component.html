@@ -1,7 +1,0 @@
-<a href="javascript:void(0);" class="btn btn-{{btnColor}} {{opacity}} status-circle" *ngIf="!isFlapping" cTooltip="{{title}}"></a>
-<span *ngIf="isFlapping">
-    <fa-icon *ngIf="flappingState" [icon]="['fas', 'circle']" class="{{flappingColor}}"></fa-icon>
-    <fa-icon *ngIf="!flappingState" [icon]="['far', 'circle']" class="{{flappingColor}}"></fa-icon>
-    <fa-icon *ngIf="flappingState" [icon]="['far', 'circle']" class="{{flappingColor}}"></fa-icon>
-    <fa-icon *ngIf="!flappingState" [icon]="['fas', 'circle']" class="{{flappingColor}}"></fa-icon>
-</span>

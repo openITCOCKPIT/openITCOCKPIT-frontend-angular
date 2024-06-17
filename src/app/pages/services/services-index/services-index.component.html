@@ -38,7 +38,7 @@
                         <a href="javascript:void(0);" (click)="setTab(1)" class="nav-link"
                            [ngClass]="{'active' : tab === 1}">
                             <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                            {{ t('Unmonitored') }}
+                            {{ t('Not monitored') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
@@ -75,7 +75,7 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <ng-container *ngIf="tab === 0">
+                <ng-container>
                     <c-container>
                     <oitc-services-index-filter [show]="showFilter"
                                                 (filterChange)="getFilter($event)"></oitc-services-index-filter>
@@ -124,7 +124,7 @@
                         <ng-container *ngFor="let service of services.all_services;  index as i;">
                             <tr *ngIf="i === 0 || (i > 0 && services.all_services[i -1].Host.uuid !== service.Host.uuid)">
                                 <td colspan="16">
-                                    <oitc-hoststatus-icon [host]="service.Hoststatus"/>
+                                    <oitc-hoststatus-icon [hoststatus]="service.Hoststatus"/>
                                     <span class="ms-1">{{ service.Service.hostname }}({{ service.Host.address }}
                                         ) </span>
                                     <div class="badge border border-info text-info">
@@ -156,9 +156,14 @@
                                 <td class="width-50">
                                     <span *oitcPermission="['services', 'browser']">
                                         <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
-                                            <oitc-ack-tooltip [type]="'services'"
+                                            <!--<oitc-ack-tooltip [type]="'services'"
                                                               [subtype]="service.Servicestatus.acknowledgement_type"
-                                                              [id]="service.Service.id"></oitc-ack-tooltip>
+                                                              [id]="service.Service.id"></oitc-ack-tooltip>-->
+                                            <oitc-acknowledgement-icon
+                                                    *ngIf="service.Servicestatus.problemHasBeenAcknowledged"
+                                                    type="services"
+                                                    [objectId]="service.Service.id"
+                                                    [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
                                         </div>
                                     </span>
                                     <span *oitcPermission="['services', 'browser'];negate:true">
@@ -170,17 +175,22 @@
                                     </span>
                                 </td>
                                 <td class="width-50">
-                                    <div *ngIf="service.Servicestatus.scheduledDowntimeDepth > 0">
-                                        <oitc-downtime-tooltip *oitcPermission="['services', 'browser']"
+                                    <div *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0">
+                                       <!-- <oitc-downtime-tooltip *oitcPermission="['services', 'browser']"
                                                                [type]="'services'"
-                                                               [id]="service.Service.id"></oitc-downtime-tooltip>
+                                                               [id]="service.Service.id"></oitc-downtime-tooltip>-->
+                                        <oitc-downtime-icon
+                                                *oitcPermission="['services', 'browser']"
+                                                type="services"
+                                                [objectId]="service.Service.id">
+                                        </oitc-downtime-icon>
                                         <fa-icon [icon]="['fas', 'power-off']" size="lg"
                                                  *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
                                     </div>
                                 </td>
                                 <td class="width-50">
                                     <div *ngIf="service.Servicestatus.notifications_enabled"
-                                         cTooltip="{{t('Notifications enabled')}}">
+                                         [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
                                         <fa-stack>
                                             <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
                                                      pull="right"></fa-icon>
@@ -189,7 +199,7 @@
                                         </fa-stack>
                                     </div>
                                     <div *ngIf="!service.Servicestatus.notifications_enabled"
-                                         cTooltip="{{t('Notifications disabled')}}">
+                                         [cTooltip]="'Notifications disabled' | transloco" cTooltipPlacement="right">
                                         <fa-stack>
                                             <fa-icon [icon]="['fas', 'envelope']" stackItemSize="1x"
                                                      pull="right"></fa-icon>
@@ -206,7 +216,7 @@
                                     </div>
                                 </td>
                                 <td class="width-50">
-                                    <strong cTooltip="{{t('Passively transferred service')}}"
+                                    <strong [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right"
                                             *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
                                         P
                                     </strong>
@@ -217,8 +227,9 @@
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
                                 </td>
                                 <td>
-                                    <span *oitcPermission="['services', 'browser']"> <a
-                                            [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a></span>
+                                    <span *oitcPermission="['services', 'browser']">
+                                        <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
+                                    </span>
                                     <span *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
                                 </td>
                                 <td>{{ service.Hoststatus.last_state_change }}</td>

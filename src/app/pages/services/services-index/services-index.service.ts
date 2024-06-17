@@ -1,12 +1,12 @@
-import {inject, Injectable} from "@angular/core";
-import {DOCUMENT} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {catchError, map, Observable, of} from "rxjs";
+import { inject, Injectable } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { catchError, map, Observable, of } from "rxjs";
 import {PROXY_PATH} from "../../../tokens/proxy-path.token";
-import {ServicesIndexRoot, ServiceParams, Usertimezone} from "./services.interface";
-import {DisableItem, DisableModalService} from '../../../layouts/coreui/disable-modal/disable.interface';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
-import {DeleteAllItem, DeleteAllModalService} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { ServicesIndexRoot, ServiceParams, Usertimezone } from "../services.interface";
+import { DisableItem, DisableModalService } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { DeleteAllItem, DeleteAllModalService } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { MaintenanceModal } from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
 
 

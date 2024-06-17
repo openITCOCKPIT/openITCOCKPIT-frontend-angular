@@ -35,14 +35,14 @@ import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
 import { ProfileService} from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "./services.interface";
+import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "../services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { ServiceAcknowledgeModalComponent} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
 import {
     ServicesIndexFilterComponent
 } from '../../../components/services/services-index-filter/services-index-filter.component';
-import { HoststatusIconComponent } from '../../../components/hosts/hoststatus-icon/hoststatus-icon.component';
+import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 
 import {
     CardBodyComponent,
@@ -78,8 +78,10 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import { AckTooltipComponent } from '../../../components/ack-tooltip/ack-tooltip.component';
-import { DowntimeTooltipComponent } from '../../../components/downtime-tooltip/downtime-tooltip.component';
+import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
+import {
+    AcknowledgementIconComponent
+} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
@@ -94,6 +96,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { MaintenanceItem } from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
 import { AcknowledgeItem } from '../../../components/services/service-acknowledge-modal/service-acknowledge.interface';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
+
 
 @Component({
   selector: 'oitc-services-index',
@@ -141,13 +144,14 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
         DropdownToggleDirective,
         DropdownMenuDirective,
         ServicesIndexFilterComponent,
-        AckTooltipComponent,
         PopoverGraphComponent,
-        DowntimeTooltipComponent,
         UplotGraphComponent,
         DeleteAllModalComponent,
         ServiceMaintenanceModalComponent,
         ServiceAcknowledgeModalComponent,
+        TranslocoPipe,
+        DowntimeIconComponent,
+        AcknowledgementIconComponent,
 
     ],
   templateUrl: './services-index.component.html',
@@ -262,6 +266,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public setTab(tab: number){
+        //will be replaced by routers later
         this.tab = tab;
     }
 

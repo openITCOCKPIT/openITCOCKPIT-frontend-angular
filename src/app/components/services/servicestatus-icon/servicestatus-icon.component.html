@@ -1,8 +1,5 @@
-<a href="javascript:void(0);" class="btn btn-{{btnColor}} {{opacity}} status-circle" *ngIf="!isFlapping" cTooltip="{{title}}"></a>
-<!--<span class="flapping_airport stateClass" *ngIf="isFlapping">
-    <i class="{{flappingColor}}" ng-class="flappingState === 1 ? ' fa fa-circle' : 'far fa-circle'"></i>
-    <i class="{{flappingColor}}" ng-class="flappingState === 0 ? 'fa fa-circle' : 'far fa-circle'"></i>
-</span>-->
+<a href="javascript:void(0);" class="btn btn-{{btnColor}} {{opacity}} status-circle"
+   *ngIf="!isFlapping" [cTooltip]="title" cTooltipPlacement="right"></a>
 <span *ngIf="isFlapping">
     <fa-icon *ngIf="flappingState" [icon]="['fas', 'circle']" class="{{flappingColor}}"></fa-icon>
     <fa-icon *ngIf="!flappingState" [icon]="['far', 'circle']" class="{{flappingColor}}"></fa-icon>

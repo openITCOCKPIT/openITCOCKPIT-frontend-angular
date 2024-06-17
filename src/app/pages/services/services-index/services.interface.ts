@@ -1,3 +1,6 @@
+import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
+import { HoststatusObject } from '../../hosts/hosts.interface';
+
 export interface ServiceParams {
     angular: true,
     scroll: boolean,
@@ -70,7 +73,7 @@ export interface ServicesIndexRoot {
 export interface AllService {
     Service: Service
     Host: Host
-    Hoststatus: Hoststatus
+    Hoststatus: HoststatusObject
     Servicestatus: Servicestatus
     ServiceType: ServiceType
     Downtime: any[]
@@ -115,39 +118,6 @@ export interface Host {
     satelliteName: string
 }
 
-export interface Hoststatus {
-    currentState: number
-    isFlapping: boolean
-    problemHasBeenAcknowledged: boolean
-    scheduledDowntimeDepth: any
-    lastCheck: string
-    nextCheck: string
-    activeChecksEnabled: any
-    lastHardState: any
-    lastHardStateChange: string
-    last_state_change: string
-    output: any
-    long_output: any
-    acknowledgement_type: any
-    state_type: boolean
-    flap_detection_enabled: any
-    notifications_enabled: any
-    current_check_attempt: any
-    max_check_attempts: any
-    latency: any
-    last_time_up: string
-    lastHardStateChangeInWords: string
-    last_state_change_in_words: string
-    lastCheckInWords: string
-    nextCheckInWords: string
-    isHardstate: boolean
-    isInMonitoring: boolean
-    humanState: string
-    cssClass: string
-    textClass: string
-    outputHtml: string
-}
-
 export interface Servicestatus {
     currentState: number
     lastHardState: any
@@ -165,10 +135,10 @@ export interface Servicestatus {
     flap_detection_enabled: any
     notifications_enabled: boolean
     current_check_attempt: any
-    output: string
+    output: any
     long_output: any
     perfdata: string
-    latency: any
+    latency: number
     max_check_attempts: any
     last_time_ok: string
     lastHardStateChangeInWords: string

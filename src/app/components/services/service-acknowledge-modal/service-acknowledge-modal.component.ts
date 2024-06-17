@@ -24,17 +24,14 @@ import {
     ModalTitleDirective,
     RowComponent
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {
-    AcknowledgeItem
-} from './service-acknowledge.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AcknowledgeItem } from './service-acknowledge.interface';
 import { ACKNOWLEDGE_SERVICE_TOKEN } from '../../../tokens/acknowledge-injection.token';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {Subscription} from 'rxjs';
-import {MaintenanceItem} from '../service-maintenance-modal/service-maintenance.interface';
-import {NgForOf, NgIf} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DebounceDirective} from '../../../directives/debounce.directive';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
   selector: 'oitc-service-acknowledge-modal',
@@ -107,7 +104,7 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
             element.comment = this.ackModal.comment;
         });
 
-        this.AcknowledgeService.setExternalCommands(this.items).subscribe((result: { message: any; }) => {
+        this.subscriptions.add(this.AcknowledgeService.setExternalCommands(this.items).subscribe((result: { message: any; }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
                 const title = this.TranslocoService.translate('Acknowledges added');
@@ -120,7 +117,7 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
                 this.notyService.genericError();
                 this.hideModal();
             }
-        });
+        }));
     }
 
     ngOnDestroy () {
