@@ -17,6 +17,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CheckboxModule } from 'primeng/checkbox';
+import _ from 'lodash';
 
 
 @Component({
@@ -41,6 +42,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     styleUrl: './multi-select-optgroup.component.css'
 })
 export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    private init: boolean = false;
     @Input() id: string | undefined;
     @Input() name: string | undefined;
 
@@ -61,6 +63,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
         this.cdr.detectChanges();
 
         this._options = options;
+        this.onOptionsChanged();
     }
 
     get options() {
@@ -161,7 +164,7 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
                     this.searchCallback!(this.searchText);
                 }));
         }
-
+        this.init = true;
     }
 
     public ngOnDestroy(): void {
@@ -224,5 +227,34 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
 
     public resetSearchString() {
         this.searchText = '';
+    }
+
+    public onOptionsChanged() {
+        // Remove selected values that are not in the options anymore.
+        // This can happen, if a user change the selected container
+
+        if (!this.init) {
+            // Fix Expression has changed after it was checked
+            return;
+        }
+
+        if (this.ngModel && this._options) {
+            let optionGroupValues:(string|number)[] = [];
+
+            this._options.map(obj => {
+                obj.items.map((option: { value: number; }) => {
+                    optionGroupValues.push(option.value);
+                })
+            });
+            this.ngModel = _.intersection(
+                optionGroupValues,
+                this.ngModel
+            );
+
+            setTimeout(() => {
+                // Fix Expression has changed after it was checked 🧻
+                this.ngModelChange.emit(this.ngModel);
+            }, 0);
+        }
     }
 }

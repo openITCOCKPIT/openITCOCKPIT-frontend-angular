@@ -213,22 +213,15 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
-                let currentServicesIds: number[] = [];
-
                 this.services = result.services;
                 this.services.map(obj => {
-                    //currentServicesExcludedIds.push(obj.key);
                     obj.items.map(service => {
-                        currentServicesIds.push(service.value);
                         if (service.disabled === true) {
                             this.disabled_services.push(service.value);
                         }
                     })
                 });
 
-                this.post.services._ids = this.post.services._ids.filter(
-                    id => currentServicesIds.includes(id)
-                );
                 this.processChosenServices();
             })
         );
@@ -246,21 +239,16 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServiceescalationsService.loadExcludedServices(containerId, searchString, this.post.services_excluded._ids, this.post.servicegroups._ids)
             .subscribe((result) => {
-                let currentServicesExcludedIds: number[] = [];
                 this.services_excluded = result.excludedServices;
                 this.services_excluded.map(obj => {
                     //currentServicesExcludedIds.push(obj.key);
                     obj.items.map(service => {
-                        currentServicesExcludedIds.push(service.value);
                         if (service.disabled === true) {
                             this.disabled_excluded_services.push(service.value);
                         }
                     })
 
                 });
-                this.post.services_excluded._ids = this.post.services_excluded._ids.filter(
-                    id => currentServicesExcludedIds.includes(id)
-                );
                 this.processChosenExcludedServices();
             }));
 
@@ -278,18 +266,13 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServiceescalationsService.loadExcludedServicegroups(containerId, searchString, this.post.services._ids, this.post.servicegroups_excluded._ids)
             .subscribe((result) => {
-                let currentServiceGroupsExcludedIds: number[] = [];
                 this.servicegroups_excluded = result.excludedServicegroups;
                 this.servicegroups_excluded = this.servicegroups_excluded.map(obj => {
-                    currentServiceGroupsExcludedIds.push(obj.key);
                     return {
                         ...obj,
                         disabled: this.post.servicegroups._ids.includes(obj.key)
                     }
                 });
-                this.post.servicegroups_excluded._ids = this.post.servicegroups_excluded._ids.filter(
-                    id => currentServiceGroupsExcludedIds.includes(id)
-                );
             }));
     }
 
