@@ -4,12 +4,12 @@ import {
     OnInit,
     OnDestroy
 } from '@angular/core';
-import {Subscription} from 'rxjs';
-import {ServicesbrowserService} from './servicesbrowser.service';
-import {ServicesBrowser} from './services.interface';
+import { Subscription } from 'rxjs';
+import { ServicesbrowserService } from './servicesbrowser.service';
+import { ServicesBrowser } from './services.interface';
 import { TimezoneObject } from "./timezone.interface";
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {NgIf, NgForOf, JsonPipe} from '@angular/common';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { NgIf, NgForOf, JsonPipe } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent, CardHeaderComponent, CardTitleDirective,
@@ -17,16 +17,19 @@ import {
     NavComponent,
     NavItemComponent,
 } from '@coreui/angular'
-import {UplotGraphComponent} from '../../components/uplot-graph/uplot-graph.component';
+import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../permissions/permission.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import {UserMacrosModalComponent} from '../../commands/user-macros-modal/user-macros-modal.component';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
-  selector: 'oitc-services-browser-page',
-  standalone: true,
+    selector: 'oitc-services-browser-page',
+    standalone: true,
     imports: [
         NgIf,
         NgForOf,
@@ -44,24 +47,28 @@ import {PermissionDirective} from '../../permissions/permission.directive';
         CardHeaderComponent,
         CardBodyComponent,
         CardTitleDirective,
+        BackButtonDirective,
+        UserMacrosModalComponent,
+        XsButtonDirective,
     ],
-  templateUrl: './services-browser-page.component.html',
-  styleUrl: './services-browser-page.component.css'
+    templateUrl: './services-browser-page.component.html',
+    styleUrl: './services-browser-page.component.css'
 })
 export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
-    private subscriptions: Subscription = new Subscription();
-    private ServicesBrowserService = inject(ServicesbrowserService);
     public service!: ServicesBrowser;
     public serviceName: string = '';
     public hostName: string = '';
     public timezone!: TimezoneObject;
     public dataSources: { key: string, displayName: string }[] = [];
+    private subscriptions: Subscription = new Subscription();
+    private ServicesBrowserService = inject(ServicesbrowserService);
     private router = inject(Router);
     private route = inject(ActivatedRoute)
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
 
     }
+
     ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.load(id);
@@ -69,19 +76,22 @@ export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
 
     public load(id: number) {
         this.subscriptions.add(this.ServicesBrowserService.getServicesbrowser(id)
-        .subscribe((service) => {
-            this.service = service;
-            this.serviceName = service.mergedService.name;
-            this.hostName = service.host.Host.hostname;
-           // console.log(this.service.mergedService.Perfdata)
-            this.getDataSources();
-            this.getUserTimezone();
+            .subscribe((service) => {
+                this.service = service;
+                this.serviceName = service.mergedService.name;
+                this.hostName = service.host.Host.hostname;
+                this.getDataSources();
+                this.getUserTimezone();
             })
         );
     }
 
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
     private getDataSources() {
-        for(var dsKey in this.service.mergedService.Perfdata){
+        for (var dsKey in this.service.mergedService.Perfdata) {
             var dsDisplayName = this.service.mergedService.Perfdata[dsKey].metric
             this.dataSources.push({
                 key: dsKey, // load this datasource - this is important for Prometheus metrics which have no __name__ like rate() or sum(). We can than load metric 0, 1 or 2...
@@ -97,10 +107,6 @@ export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
                 // console.log(this.service.mergedService.Perfdata)
             })
         );
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
     }
 
 }

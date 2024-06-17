@@ -95,8 +95,11 @@ export const routes: Routes = [{
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
+    path: 'services/index',
+    loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
+}, {
     path: 'services/browser/:id',
-    loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+    loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
@@ -181,6 +184,9 @@ export const routes: Routes = [{
 }, {
     path: 'hosts/edit/:id',
     loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
+}, {
+    path: 'deletedHosts/index',
+    loadComponent: () => import('./pages/deletedHosts/deleted-hosts-index/deleted-hosts-index.component').then(m => m.DeletedHostsIndexComponent)
 }, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)

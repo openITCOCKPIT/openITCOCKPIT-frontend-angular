@@ -1,0 +1,57 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="serviceAcknowledgeModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                {{ t('Acknowledge service status') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+                    <div class="mb-2">
+                        <label cLabel for="inputcomment">{{ t('Comment') }}</label>
+                        <input cFormControl id="inputcomment"
+                               [(ngModel)]="ackModal.comment">
+                        <div *ngIf="error" cFormText>
+                            <div class="help-block text-danger">
+                                {{  t('Comment can not be empty') }}
+                            </div>
+                        </div>
+                    </div>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="acksticky" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="ackModal.sticky"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="acksticky">{{ t('Sticky') }}</label>
+                    </c-form-check>
+                    <div class="helptext help-block">
+                        {{ t('Sticky acknowledgements will be stay until the service is back in state Ok') }}
+                    </div>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="acknotify" type="checkbox" class="checkbox-lg custom-check-default"
+                               [(ngModel)]="ackModal.notify"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="acknotify">{{ t('Notify') }}</label>
+                    </c-form-check>
+                    <div class="helptext help-block">
+                        {{ t('The system will send a notification to inform contacts that the current service problem has been acknowledged.') }}
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
