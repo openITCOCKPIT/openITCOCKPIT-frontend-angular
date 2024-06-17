@@ -1,5 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostsToContainersSharing } from '../hosts/hosts.interface';
+import { Container } from '../containers/container.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -89,21 +91,7 @@ export interface Contact {
     service_timeperiod_id: number | null
     user_id: number | null
     uuid: string
-}
-
-/*********************************
- *    Definition of Container    *
- ********************************/
-// Maybe this can be done from Container Management (%hostname%/containers/index) ?
-export interface Container {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-///    _joinData: JoinData Brauchen wir nicht wirklich im Front-End, oder?
-    // Wird das Fehler werfen,wenn wir das nicht definieren, es aber übertragen wird?
+    allow_edit: boolean
 }
 
 
@@ -156,10 +144,14 @@ export interface ServiceCommandIds extends GenericIds {
 
 
 export interface Customvariable {
-    name: string
+    id?: number
+    object_id?: number
     objecttype_id: number
-    password: number
+    name: string
     value: string
+    password: number
+    created?: string
+    modified?: string
 }
 
 // Copy action machen wir später.
@@ -435,21 +427,6 @@ export interface ContactUsedByHost {
     hosts_to_containers_sharing: HostsToContainersSharing[]
 }
 
-export interface HostsToContainersSharing {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
-    _joinData: JoinData
-}
-
-export interface JoinData {
-    id: number
-    host_id: number
-    container_id: number
-}
 
 export interface ContactUsedByService {
     id: number
@@ -457,11 +434,11 @@ export interface ContactUsedByService {
     name: string
     host_id: number
     servicename: string
-    servicetemplate: Servicetemplate2
+    servicetemplate: ServicetemplateContactsUsedBy
     _matchingData: MatchingData
 }
 
-export interface Servicetemplate2 {
+export interface ServicetemplateContactsUsedBy {
     id: number
     uuid: string
     name: string
@@ -493,16 +470,7 @@ export interface ContactUsedByHostescalation {
     escalate_on_unreachable: number
     created: string
     modified: string
-    container: Container2
-}
-
-export interface Container2 {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
+    container: Container
 }
 
 export interface ContactUsedByServiceescalation {
@@ -519,16 +487,7 @@ export interface ContactUsedByServiceescalation {
     escalate_on_critical: number
     created: string
     modified: string
-    container: Container3
-}
-
-export interface Container3 {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: any
-    lft: number
-    rght: number
+    container: Container
 }
 
 export interface LoadLdapUserByStringRoot {

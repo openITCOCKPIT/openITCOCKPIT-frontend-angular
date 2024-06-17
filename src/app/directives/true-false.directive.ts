@@ -21,6 +21,8 @@ export class TrueFalseDirective {
 
     @Input() trueValue: any = true;
     @Input() falseValue: any = false;
+    @Input() disabled: boolean = false;
+
 
     constructor(private elementRef: ElementRef, private renderer: Renderer2) {
     }
@@ -51,6 +53,7 @@ export class TrueFalseDirective {
 
     // The setDisabledState method is optional and can be used to react when the form control is enabled or disabled.
     public setDisabledState?(isDisabled: boolean): void {
+        this.renderer.setProperty(this.elementRef.nativeElement, 'disabled', isDisabled);
     }
 
     // The propagateChange method is a custom method used to update the form control's value.

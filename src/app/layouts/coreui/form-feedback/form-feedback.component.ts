@@ -34,7 +34,14 @@ export class FormFeedbackComponent {
 
         const errors: string[] = [];
         for (let key in this.errors[this.errorField]) {
-            errors.push(this.errors[this.errorField][key]);
+            if (typeof (this.errors[this.errorField][key]) === 'string') {
+                errors.push(this.errors[this.errorField][key]);
+            } else if (typeof (this.errors[this.errorField][key]) === 'object') {
+                // @ts-ignore
+                for (let subKey in this.errors[this.errorField][key]) {
+                    errors.push(this.errors[this.errorField][key][subKey]);
+                }
+            }
         }
 
         return errors;

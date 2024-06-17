@@ -81,7 +81,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError = {} as GenericValidationError;
+    public errors: GenericValidationError | null = null;
     public createAnother: boolean = false;
 
     public post: ContactgroupAddPostContactgroup = {} as ContactgroupAddPostContactgroup;
@@ -112,12 +112,16 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
                     const msg: string = this.TranslocoService.translate('added successfully');
                     const url: (string | number)[] = ['contactgroups', 'edit', response.id];
 
-                    if (this.createAnother) {
-                        this.post = this.getDefaultPost();
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (! this.createAnother) {
+                        this.router.navigate(['/contactgroups/index']);
                         return;
                     }
-                    this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/contactgroups/index']);
+                    this.post = this.getDefaultPost();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
 
                     return;
                 }

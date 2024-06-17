@@ -1,1 +1,895 @@
-<p>hosttemplates-edit works!</p>
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hosttemplates', 'index']" [routerLink]="['/', 'hosttemplates', 'index']">
+                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                        {{ t('Host templates') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                    {{ t('Edit') }}
+                </li>
+            </ol>
+        </nav>
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3" *ngIf="post">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit host template:') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <span *ngIf="typeDetails"
+                                  class="badge border margin-right-10"
+                                  [ngClass]="[typeDetails.class, typeDetails.color]">
+                                <fa-icon [icon]="typeDetails.icon"
+                                         [rotate]="typeDetails.rotate"></fa-icon>
+                                {{ typeDetails.title }}
+                            </span>
+                        </c-nav-item>
+
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['hosttemplates', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+
+                </c-card-header>
+                <c-card-body>
+
+                    <!-- BASIC CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Basic configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="container">
+                                    {{ t('Container') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+
+                                <oitc-select
+                                    name="container"
+                                    id="container"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.container_id"
+                                    [options]="containers?.containers"
+                                    (onChange)="onContainerChange()"
+                                    oitcFormError [errors]="errors" errorField="container_id">
+                                </oitc-select>
+                                <div *ngIf="containers?.areContainersRestricted" class="help-block text-info">
+                                    {{ t('There are Hosts using this Host Template. Therefore the number of Containers is decreased.') }}
+                                </div>
+
+                                <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                                <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateName">
+                                    {{ t('Template name') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl id="HosttemplateName" required type="text"
+                                       name="HosttemplateName"
+                                       oitcFormError [errors]="errors" errorField="name"
+                                       [(ngModel)]="post.name">
+                                <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HostHosttemplateSelect">
+                                    {{ t('Template Type') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+
+                                <oitc-select
+                                    name="HostHosttemplateSelect"
+                                    id="HostHosttemplateSelect"
+                                    optionValue="key"
+                                    optionLabel="value.title"
+                                    [(ngModel)]="post.hosttemplatetype_id"
+                                    [options]="hosttemplateTypes"
+                                    (onChange)="onTypeChange()"
+                                    oitcFormError [errors]="errors" errorField="hosttemplatetype_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="hosttemplatetype_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Defines the type of the template. Use "Generic template" if you are not sure.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="description">
+                                    {{ t('Description') }}
+                                </label>
+                                <input cFormControl id="description" type="text"
+                                       name="description"
+                                       oitcFormError [errors]="errors" errorField="description"
+                                       [(ngModel)]="post.description">
+                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateHostgroups">
+                                    {{ t('Host groups') }}
+                                </label>
+
+                                <oitc-multi-select
+                                    name="HosttemplateHostgroups"
+                                    id="HosttemplateHostgroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hostgroups._ids"
+                                    [options]="hostgroups"
+                                    oitcFormError [errors]="errors" errorField="hostgroups">
+                                </oitc-multi-select>
+                                {{ post.hostgroups._ids }}
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="hostgroups"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateTags">
+                                    {{ t('Tags') }}
+                                </label>
+
+                                <ng-select
+                                    id="HosttemplateTags"
+                                    name="HosttemplateTags"
+                                    [items]="[]"
+                                    [(ngModel)]="tagsForSelect"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="t('Add tags')"
+                                    [isOpen]="false"
+                                    oitcFormError [errors]="errors" errorField="tags">
+                                </ng-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="tags"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Press return to separate tags') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel>
+                                    {{ t('Priority') }}
+                                </label>
+
+                                <div>
+                                    <oitc-priority
+                                        [priority]="post.priority"
+                                        (onChange)="post.priority = $event"
+                                    ></oitc-priority>
+                                </div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="priority"></oitc-form-feedback>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- BASIC CONFIGURATION END -->
+
+                    <!-- CHECK CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Check configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="CheckPeriodSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.check_period_id"
+                                        [route]="'/timeperiods/edit'"
+                                        [permissions]="'timeperiods.edit'"
+                                    >
+                                        {{ t('Check period') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="CheckPeriodSelect"
+                                    id="CheckPeriodSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.check_period_id"
+                                    [options]="checkperiods"
+                                    oitcFormError [errors]="errors" errorField="check_period_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="check_period_id"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="activeChecksEnabled"
+                                           id="activeChecksEnabled"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.active_checks_enabled"/>
+                                    <label cFormCheckLabel for="activeChecksEnabled">
+                                        {{ t('Enable active checks') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="active_checks_enabled"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('If disabled the check command won\'t be executed.This is useful if an external program sends state data to openITCOCKPIT.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="freshness_checks_enabled"
+                                           id="freshness_checks_enabled"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [disabled]="post.active_checks_enabled == 1"
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.freshness_checks_enabled"/>
+                                    <label cFormCheckLabel for="freshness_checks_enabled">
+                                        {{ t('Enable freshness check') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="freshness_checks_enabled"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('If enabled the system will check that passive checks for this service will be received as frequently as defined.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3"
+                                 *ngIf="post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1">
+                                <label cFormCheckLabel for="freshness_threshold">
+                                    {{ t('Freshness threshold') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="freshness_threshold"
+                                    name="freshness_threshold"
+                                    [selectedInterval]="post.freshness_threshold"
+                                    (selectedIntervalChange)="post.freshness_threshold = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="freshness_threshold"></oitc-form-feedback>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label cLabel for="HostCheckCommandSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.command_id"
+                                        [route]="'/commands/edit'"
+                                        [permissions]="'commands.edit'"
+                                    >
+                                        {{ t('Check command') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="HostCheckCommandSelect"
+                                    id="HostCheckCommandSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.command_id"
+                                    [options]="commands"
+                                    (onChange)="onCommandChange()"
+                                    oitcFormError [errors]="errors" errorField="command_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="command_id"></oitc-form-feedback>
+                                <div class="help-block" [hidden]="post.active_checks_enabled">
+                                    {{ t('Due to active checking is disabled, this command will only be used as freshness check command.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3"
+                                 [hidden]="!(post.command_id && post.hosttemplatecommandargumentvalues.length == 0)">
+                                <c-alert color="info">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{ t('This command does not have any parameters.') }}
+                                </c-alert>
+                            </div>
+
+                            <div class="mb-3 ms-4"
+                                 *ngFor="let hosttemplatecommandargumentvalue of post.hosttemplatecommandargumentvalues; index as i">
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ hosttemplatecommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'hosttemplatecommandargumentvalue_'+i"
+                                        [(ngModel)]="hosttemplatecommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ hosttemplatecommandargumentvalue.commandargument.name }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="check_interval">
+                                    {{ t('Check interval') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="check_interval"
+                                    name="check_interval"
+                                    [selectedInterval]="post.check_interval"
+                                    (selectedIntervalChange)="post.check_interval = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="check_interval"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="retry_interval">
+                                    {{ t('Retry interval') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="retry_interval"
+                                    name="retry_interval"
+                                    [selectedInterval]="post.retry_interval"
+                                    (selectedIntervalChange)="post.retry_interval = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="retry_interval"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="max_check_attempts">
+                                    {{ t('Max. number of check attempts') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-check-attempts-input
+                                    id="max_check_attempts"
+                                    name="max_check_attempts"
+                                    [selectedAttempts]="post.max_check_attempts"
+                                    (selectedAttemptsChange)="post.max_check_attempts = $event">
+                                </oitc-check-attempts-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="max_check_attempts"></oitc-form-feedback>
+                            </div>
+
+                            <c-alert color="light">
+                                <div>
+                                    {{ t('Number of failed attempts before the host will switch into hard state.') }}
+                                </div>
+                                <div>
+                                    {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
+                                    <oitc-human-time
+                                        [seconds]="(post.check_interval + (post.max_check_attempts -1) * post.retry_interval)"></oitc-human-time>
+                                </div>
+                            </c-alert>
+
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- CHECK CONFIGURATION END -->
+
+                    <!-- NOTIFICATION CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'envelope-open']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Notification configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="notifications_enabled"
+                                           id="notifications_enabled"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.notifications_enabled"/>
+                                    <label cFormCheckLabel for="notifications_enabled">
+                                        {{ t('Enable notifications') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notifications_enabled"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('This option is used to determine whether or not notifications are enabled for this host.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="NotifyPeriodSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.notify_period_id"
+                                        [route]="'/timeperiods/edit'"
+                                        [permissions]="'timeperiods.edit'"
+                                    >
+                                        {{ t('Notification period') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="NotifyPeriodSelect"
+                                    id="NotifyPeriodSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.notify_period_id"
+                                    [options]="timeperiods"
+                                    oitcFormError [errors]="errors" errorField="notify_period_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notify_period_id"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cFormCheckLabel for="notification_interval">
+                                    {{ t('Notification interval') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="notification_interval"
+                                    name="notification_interval"
+                                    [selectedInterval]="post.notification_interval"
+                                    (selectedIntervalChange)="post.notification_interval = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notification_interval"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="ContactsPeriodSelect" class="hintmark">
+                                    {{ t('Contacts') }}
+                                </label>
+
+                                <oitc-multi-select
+                                    name="ContactsPeriodSelect"
+                                    id="ContactsPeriodSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.contacts._ids"
+                                    [options]="contacts"
+                                    oitcFormError [errors]="errors" errorField="contacts">
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="contacts"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="ContactgroupsSelect" class="hintmark">
+                                    {{ t('Contact groups') }}
+                                </label>
+
+                                <oitc-multi-select
+                                    name="ContactgroupsSelect"
+                                    id="ContactgroupsSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.contactgroups._ids"
+                                    [options]="contactgroups"
+                                    oitcFormError [errors]="errors" errorField="contactgroups">
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="contactgroups"></oitc-form-feedback>
+                            </div>
+
+                            <div>
+                                <label cLabel>
+                                    {{ t('Host notification options') }}
+                                </label>
+                            </div>
+
+                            <div class="mb-3 d-inline-flex w-100">
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="notify_on_recovery"
+                                            id="notify_on_recovery"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.notify_on_recovery"/>
+                                    </span>
+                                    <div class="form-control bg-success text-white text-center">
+                                        <label for="notify_on_recovery">
+                                            {{ t('Recovery') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-danger"
+                                            name="notify_on_down"
+                                            id="notify_on_down"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.notify_on_down"/>
+                                    </span>
+                                    <div class="form-control bg-danger text-white text-center">
+                                        <label for="notify_on_down">
+                                            {{ t('Down') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-secondary"
+                                            name="notify_on_unreachable"
+                                            id="notify_on_unreachable"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.notify_on_unreachable"/>
+                                    </span>
+                                    <div class="form-control bg-unknown text-white text-center">
+                                        <label for="notify_on_unreachable">
+                                            {{ t('Unreachable') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            name="notify_on_flapping"
+                                            id="notify_on_flapping"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.notify_on_flapping"/>
+                                    </span>
+                                    <div class="form-control bg-primary text-white text-center">
+                                        <label for="notify_on_flapping">
+                                            {{ t('Flapping') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            name="notify_on_downtime"
+                                            id="notify_on_downtime"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.notify_on_downtime"/>
+                                    </span>
+                                    <div class="form-control bg-primary text-white text-center">
+                                        <label for="notify_on_downtime">
+                                            {{ t('Downtime') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="notify_on_recovery"></oitc-form-feedback>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- NOTIFICATION CONFIGURATION END -->
+
+                    <!-- MISC CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Misc. configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateURL">
+                                    {{ t('Host URL') }}
+                                </label>
+                                <input cFormControl id="HosttemplateURL" type="text"
+                                       name="HosttemplateURL"
+                                       placeholder="https://issues.example.org?host=$HOSTNAME$"
+                                       oitcFormError [errors]="errors" errorField="host_url"
+                                       [(ngModel)]="post.host_url">
+                                <oitc-form-feedback [errors]="errors" errorField="host_url"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('The macros $HOSTID$, $HOSTNAME$, $HOSTDISPLAYNAME$ and $HOSTADDRESS$ will be replaced') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="HosttemplateURL">
+                                    {{ t('Notes') }}
+                                </label>
+                                <input cFormControl id="HosttemplateNotes" type="text"
+                                       name="HosttemplateNotes"
+                                       oitcFormError [errors]="errors" errorField="notes"
+                                       [(ngModel)]="post.notes">
+                                <oitc-form-feedback [errors]="errors" errorField="notes"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="flapDetectionEnabled"
+                                           id="flapDetectionEnabled"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.flap_detection_enabled"/>
+                                    <label cFormCheckLabel for="flapDetectionEnabled">
+                                        {{ t('Flap detection options') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="flap_detection_enabled"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3 d-inline-flex w-100" *ngIf="post.flap_detection_enabled">
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="flap_detection_on_up"
+                                            id="flap_detection_on_up"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_up"/>
+                                    </span>
+                                    <div class="form-control bg-success text-white text-center">
+                                        <label for="flap_detection_on_up">
+                                            {{ t('Recovery') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-danger"
+                                            name="flap_detection_on_down"
+                                            id="flap_detection_on_down"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_down"/>
+                                    </span>
+                                    <div class="form-control bg-danger text-white text-center">
+                                        <label for="flap_detection_on_down">
+                                            {{ t('Down') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-secondary"
+                                            name="flap_detection_on_unreachable"
+                                            id="flap_detection_on_unreachable"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_unreachable"/>
+                                    </span>
+                                    <div class="form-control bg-unknown text-white text-center">
+                                        <label for="flap_detection_on_unreachable">
+                                            {{ t('Unreachable') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- MISC CONFIGURATION END -->
+
+                    <!-- HOST MACRO CONFIGURATION START -->
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Host macro configuration') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                                        *ngIf="hasMacroErrors"></oitc-form-feedback>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 *ngFor="let customVariable of post.customvariables;let i = index;">
+                                <oitc-macros
+                                    [macro]="customVariable"
+                                    [macroName]="'HOST'"
+                                    [index]="i"
+                                    [deleteMacroCallback]="deleteMacro"
+                                    [errors]="getMacroErrors"
+                                    class="col-lg-12"
+                                />
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12 text-end">
+                                    <button cButton class="ripple" color="success" type="button"
+                                            (click)="addMacro()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add new macro') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- HOST MACRO CONFIGURATION END -->
+
+                    <!-- PROMETHEUS CONFIGURATION START -->
+                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('PrometheusModule')">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Prometheus Exporters') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="ExportersSelect">
+                                    {{ t('Exporters') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="ExportersSelect"
+                                    id="ExportersSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.prometheus_exporters._ids"
+                                    [options]="exporters"
+                                    oitcFormError [errors]="errors" errorField="prometheus_exporters">
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="prometheus_exporters"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('To monitor this host using Prometheus please select the exporters that are installed on the host.') }}
+                                </div>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- PROMETHEUS CONFIGURATION END -->
+
+                    <!-- SLA CONFIGURATION START -->
+                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Service Level Agreement') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+
+                            <div class="mb-3">
+                                <label cLabel for="SlasSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.sla_id"
+                                        [route]="'/sla_module/slas/edit'"
+                                        [permissions]="'SLAModule.slas.edit'"
+                                    >
+                                        {{ t('Service class') }}
+                                    </oitc-label-link>
+                                </label>
+
+                                <oitc-select
+                                    name="SlasSelect"
+                                    id="SlasSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.sla_id"
+                                    [options]="slas"
+                                    [showClear]="true"
+                                    oitcFormError [errors]="errors" errorField="sla_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="sla_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('You can define service levels for all hosts using this host template.') }}
+                                </div>
+                            </div>
+
+                        </c-card-body>
+                    </c-card>
+                    <!-- SLA CONFIGURATION END -->
+
+
+                </c-card-body>
+
+                <c-card-footer class="text-end">
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update host template') }}
+                    </button>
+                    <button [fallbackUrl]="['hosttemplates', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+
+
+                </c-card-footer>
+
+            </c-card>
+        </form>
+    </ng-container>
+</oitc-coreui>

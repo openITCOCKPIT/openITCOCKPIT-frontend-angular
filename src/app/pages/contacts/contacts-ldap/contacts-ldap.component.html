@@ -41,22 +41,21 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="containers">
+                        <label cLabel for="container">
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="name"
-                                   id="containers"
-                                   #containerIdsRef="ngModel"
-                                   [multiple]="true"
-                                   [(ngModel)]="post.containers._ids"
-                                   (ngModelChange)="onContainerChange()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="containers">
-                            <ng-option *ngFor="let container of this.containers" [value]="container.key">
-                                {{ container.value }}
-                            </ng-option>
-                        </ng-select>
+                        <oitc-multi-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.containers._ids"
+                            [options]="containers"
+                            [debounce]="true"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="containers">
+                        </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                     </div>
 
@@ -65,18 +64,17 @@
                             {{ t('SAM-Account-Name') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <ng-select name="ldapUser"
-                                   id="ldapUser"
-                                   [multiple]="false"
-                                   [(ngModel)]="ldapUser"
-                                   (ngModelChange)="onLdapUserChange()"
-                                   oitcFormError
-                                   [errors]="errors" errorField="containers">
-                            <ng-option *ngFor="let ldapUser of this.ldapUsers" [value]="ldapUser">
-                                {{ ldapUser.display_name }}
-                            </ng-option>
-                        </ng-select>
-                        <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                        <oitc-select
+                            name="ldapUser"
+                            id="ldapUser"
+                            [(ngModel)]="ldapUser"
+                            optionLabel="display_name"
+                            [options]="ldapUsers"
+                            (onChange)="onLdapUserChange()"
+                            [searchCallback]="loadLdapUsers"
+                            oitcFormError [errors]="errors" errorField="name">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
 
                     <div class="text-info display-inline-block margin-left-20">
@@ -193,25 +191,13 @@
                                 <c-card-body>
 
                                     <div class="mb-3">
-
                                         <label cLabel for="host_timeperiod_id">
-
-                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                            <oitc-label-link [objectId]="post.host_timeperiod_id"
+                                                             [route]="'/timeperiods/edit'"
+                                                             [permissions]="'timeperiods.edit'">
                                                 {{ t('Host time period') }}
-                                            </span>
-                                            <span *oitcPermission="['timeperiods', 'edit']">
-                                                <span
-                                                    *ngIf="post.host_timeperiod_id"
-                                                    [routerLink]="['/', 'timeperiods', 'edit', post.host_timeperiod_id]">
-                                                    {{ t('Host time period') }}
-                                                </span>
-                                                <span
-                                                    *ngIf="!post.host_timeperiod_id">
-                                                    {{ t('Host time period') }}
-                                                </span>
-                                            </span>
-                                            <oitc-required-icon></oitc-required-icon>
-
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </oitc-label-link>
                                         </label>
                                         <ng-select name="host_timeperiod_id"
                                                    id="host_timeperiod_id"
@@ -275,7 +261,7 @@
                                                 cFormCheckInput
                                                 type="checkbox"
                                                 id="host_push_notifications_enabled"
-                                                [ngModel]="post.host_push_notifications_enabled"
+                                                [(ngModel)]="post.host_push_notifications_enabled"
                                                 (ngModelChange)="post.host_push_notifications_enabled = $event ? 1 : 0"
                                                 (click)="toggleHostBrowserCheckbox()"
                                                 name="host_push_notifications_enabled"
@@ -414,23 +400,12 @@
 
                                     <div class="mb-3">
                                         <label cLabel for="service_timeperiod_id">
-
-                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                            <oitc-label-link [objectId]="post.service_timeperiod_id"
+                                                             [route]="'/timeperiods/edit'"
+                                                             [permissions]="'timeperiods.edit'">
                                                 {{ t('Service time period') }}
-                                            </span>
-                                            <span *oitcPermission="['timeperiods', 'edit']">
-                                                <span
-                                                    *ngIf="post.service_timeperiod_id"
-                                                    [routerLink]="['/', 'timeperiods', 'edit', post.service_timeperiod_id]">
-                                                    {{ t('Service time period') }}
-                                                </span>
-                                                <span
-                                                    *ngIf="!post.service_timeperiod_id">
-                                                    {{ t('Service time period') }}
-                                                </span>
-                                            </span>
-                                            <oitc-required-icon></oitc-required-icon>
-
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </oitc-label-link>
                                         </label>
                                         <ng-select name="service_timeperiod_id"
                                                    id="service_timeperiod_id"
@@ -655,6 +630,8 @@
 
                     <c-form-check *ngIf="ldapUser !== null" class="mb-3">
                         <h5>{{ t('Define contact macros') }}:</h5>
+                        <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                            *ngIf="hasMacroErrors"></oitc-form-feedback>
                     </c-form-check>
 
                     <ng-container *ngIf="ldapUser !== null">
@@ -665,6 +642,7 @@
                                 [macroName]="'CONTACT'"
                                 [index]="i"
                                 [deleteMacroCallback]="deleteMacro"
+                                [errors]="getMacroErrors"
                                 class="col-lg-12"
                             />
 
@@ -684,23 +662,10 @@
                 </c-card-body>
                 <c-card-footer *ngIf="ldapUser !== null" class="text-end">
 
-                    <label for="createAnother">
-
-                        <c-form-check>
-                            <input
-                                cFormCheckInput
-                                type="checkbox"
-                                id="createAnother"
-                                [ngModel]="createAnother"
-                                (ngModelChange)="createAnother = $event ? true : false"
-                                name="createAnother"
-                            />
-                            <label
-                                cFormCheckLabel
-                                for="createAnother">
-                                {{ t('Create another') }}
-                            </label>
-                        </c-form-check>
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">

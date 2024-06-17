@@ -101,6 +101,24 @@ export const routes: Routes = [{
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
+    path: 'servicetemplategroups/add',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
+}, {
+    path: 'servicetemplategroups/allocateToHost/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-host/servicetemplategroups-allocate-to-host.component').then(m => m.ServicetemplategroupsAllocateToHostComponent)
+}, {
+    path: 'servicetemplategroups/allocateToHostgroup/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-allocate-to-hostgroup/servicetemplategroups-allocate-to-hostgroup.component').then(m => m.ServicetemplategroupsAllocateToHostgroupComponent)
+}, {
+    path: 'servicetemplategroups/copy/:ids',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-copy/servicetemplategroups-copy.component').then(m => m.ServicetemplategroupsCopyComponent)
+}, {
+    path: 'servicetemplategroups/edit/:id',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-edit/servicetemplategroups-edit.component').then(m => m.ServicetemplategroupsEditComponent)
+}, {
+    path: 'servicetemplategroups/index',
+    loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-index/servicetemplategroups-index.component').then(m => m.ServicetemplategroupsIndexComponent)
+}, {
     path: 'systemsettings/index',
     loadComponent: () => import('./pages/systemsettings/systemsettings-index/systemsettings-index.component').then(m => m.SystemsettingsIndexComponent)
 }, {
@@ -130,6 +148,42 @@ export const routes: Routes = [{
 }, {
     path: 'hosttemplates/add',
     loadComponent: () => import('./pages/hosttemplates/hosttemplates-add/hosttemplates-add.component').then(m => m.HosttemplatesAddComponent)
+}, {
+    path: 'hosttemplates/edit/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-edit/hosttemplates-edit.component').then(m => m.HosttemplatesEditComponent)
+}, {
+    path: 'hosttemplates/copy/:ids',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-copy/hosttemplates-copy.component').then(m => m.HosttemplatesCopyComponent)
+}, {
+    path: 'hosttemplates/usedBy/:id',
+    loadComponent: () => import('./pages/hosttemplates/hosttemplates-used-by/hosttemplates-used-by.component').then(m => m.HosttemplatesUsedByComponent)
+}, {
+    path: 'servicetemplates/index',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-index/servicetemplates-index.component').then(m => m.ServicetemplatesIndexComponent)
+}, {
+    path: 'servicetemplates/add',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-add/servicetemplates-add.component').then(m => m.ServicetemplatesAddComponent)
+}, {
+    path: 'servicetemplates/edit/:id',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-edit/servicetemplates-edit.component').then(m => m.ServicetemplatesEditComponent)
+}, {
+    path: 'servicetemplates/copy/:ids',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-copy/servicetemplates-copy.component').then(m => m.ServicetemplatesCopyComponent)
+}, {
+    path: 'servicetemplates/usedBy/:id',
+    loadComponent: () => import('./pages/servicetemplates/servicetemplates-used-by/servicetemplates-used-by.component').then(m => m.ServicetemplatesUsedByComponent)
+}, {
+    path: 'hosts/index',
+    loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
+}, {
+    path: 'hosts/sharing/:id',
+    loadComponent: () => import('./pages/hosts/hosts-sharing/hosts-sharing.component').then(m => m.HostsSharingComponent)
+}, {
+    path: 'hosts/add',
+    loadComponent: () => import('./pages/hosts/hosts-add/hosts-add.component').then(m => m.HostsAddComponent)
+}, {
+    path: 'hosts/edit/:id',
+    loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
 }, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
@@ -163,6 +217,27 @@ export const routes: Routes = [{
 }, {
     path: 'timeperiods/viewDetails/:id',
     loadComponent: () => import('./pages/timeperiods/timeperiods-view-details/timeperiods-view-details.component').then(m => m.TimeperiodsViewDetailsComponent)
+}, {
+    path: 'hostescalations/index',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-index/hostescalations-index.component').then(m => m.HostescalationsIndexComponent)
+}, {
+    path: 'hostescalations/add',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-add/hostescalations-add.component').then(m => m.HostescalationsAddComponent)
+}, {
+    path: 'hostescalations/edit/:id',
+    loadComponent: () => import('./pages/hostescalations/hostescalations-edit/hostescalations-edit.component').then(m => m.HostescalationsEditComponent)
+}, {
+    path: 'serviceescalations/index',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-index/serviceescalations-index.component').then(m => m.ServiceescalationsIndexComponent)
+}, {
+    path: 'serviceescalations/add',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-add/serviceescalations-add.component').then(m => m.ServiceescalationsAddComponent)
+}, {
+    path: 'serviceescalations/edit/:id',
+    loadComponent: () => import('./pages/serviceescalations/serviceescalations-edit/serviceescalations-edit.component').then(m => m.ServiceescalationsEditComponent)
+}, {
+    path: 'hostdependencies/index',
+    loadComponent: () => import('./pages/hostdependencies/hostdependencies-index/hostdependencies-index.component').then(m => m.HostdependenciesIndexComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

@@ -114,6 +114,17 @@ export class NavbarSearchComponent {
                         });
                     }
                 }
+
+                if (typeof link.items === "undefined") {
+                    // Direct link without children
+                    if (link.isAngular) {
+                        // Single link, add to result set if matching
+                        if (this.doesMatch(link, this.searchString)) {
+                            result.push(link);
+                        }
+                    }
+                }
+
             });
         }));
 

@@ -105,10 +105,13 @@ export class NotyService {
     }
 
     scrollContentDivToTop() {
-        const element = this.document.getElementById("mainContentContainer");
-        if (element) {
-            element.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
+        // The setTimeout fix the issue with the scrollIntoView not working properly ¯\_(ツ)_/¯
+        setTimeout(() => {
+            const element = this.document.getElementById("mainContentContainer");
+            if (element) {
+                element.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+        }, 15);
     }
 
     scrollTop() {

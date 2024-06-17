@@ -1,0 +1,10 @@
+<ng-container *transloco="let t">
+    <span (click)="copyToClipboard()" [cTooltip]="toolTipContent" cTooltipPlacement="top">
+        <ng-content></ng-content>
+    </span>
+
+    <ng-template #toolTipContent>
+        {{ tooltipText }}
+    </ng-template>
+</ng-container>
+

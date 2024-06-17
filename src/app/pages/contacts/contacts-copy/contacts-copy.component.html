@@ -114,11 +114,10 @@
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="button" (click)="copyContacts()">
-                    {{ t('Copy') }}
+                    {{ t('Copy contacts') }}
                 </button>
                 <button [fallbackUrl]="['contacts', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="submit">
+                        oitcBackButton>
                     {{ t('Cancel') }}
                 </button>
             </c-card-footer>

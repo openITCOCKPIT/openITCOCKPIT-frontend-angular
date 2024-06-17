@@ -128,7 +128,6 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
     public loadCalendars(searchString: string) {
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
-                console.error(result);
                 this.calendars = result;
             })
         );

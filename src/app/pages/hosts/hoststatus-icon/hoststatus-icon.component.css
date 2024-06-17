@@ -1,0 +1,9 @@
+.status-circle {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+
+.flapping-padding {
+    padding-right: 3px;
+}

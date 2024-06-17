@@ -80,55 +80,28 @@
                                 </c-input-group>
                             </c-col>
 
-                            <c-col md="6" class="mb-1">
+                            <c-col md="6" class="mb-1 ui-fluid">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
 
-                                    <ng-select
+                                    <oitc-multi-select
                                         name="hosttemplatetype_id"
+                                        id="hosttemplatetype_id"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']"
+                                        [options]="hosttemplateTypes"
+                                        [debounce]="true"
                                         [placeholder]="'Filter by host template types' | transloco"
-                                        [clearable]="true"
-                                        [items]="hosttemplateTypes"
-                                        [multiple]="true"
-                                        [closeOnSelect]="false"
-                                        bindValue="id"
-                                        bindLabel="name"
-                                        groupBy="group"
-                                        [selectableGroup]="true"
-                                        [selectableGroupAsModel]="false"
-                                        oitcDebounce
-                                        (debouncedValue)="onFilterChange($event)"
-                                        [(ngModel)]="params['filter[Hosttemplates.hosttemplatetype_id][]']">
-
-                                        <ng-template
-                                            ng-optgroup-tmp
-                                            let-item="item"
-                                            let-item$="item$"
-                                            let-index="index">
-                                            <oitc-ng-select-select-all [item]="item" [item$]="item$"
-                                                                       [index]="index"></oitc-ng-select-select-all>
-                                        </ng-template>
-
-                                        <ng-template
-                                            ng-option-tmp
-                                            let-item="item"
-                                            let-item$="item$"
-                                            let-index="index"
-                                            let-search="searchTerm"
-                                        >
-                                            <oitc-ng-select-option-checkbox [item]="item" [item$]="item$"
-                                                                            [index]="index"
-                                                                            [search]="search"></oitc-ng-select-option-checkbox>
-                                        </ng-template>
-
-                                    </ng-select>
-
+                                        (onChange)="onFilterChange(null)">
+                                    </oitc-multi-select>
                                 </c-input-group>
                             </c-col>
 
                         </c-row>
+
                         <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
