@@ -1,6 +1,9 @@
-import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
-import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
+/**********************
+ *    Index action    *
+ **********************/
 export interface ServiceParams {
     angular: true,
     scroll: boolean,
@@ -22,7 +25,7 @@ export interface ServiceParams {
     'filter[not_keywords][]': string[],
     'filter[Servicestatus.problem_has_been_acknowledged]': boolean | string,
     'filter[Servicestatus.scheduled_downtime_depth]': boolean | string,
-    'filter[Servicestatus.active_checks_enabled]': boolean |string,
+    'filter[Servicestatus.active_checks_enabled]': boolean | string,
     'filter[Servicestatus.notifications_enabled]': boolean | string,
     'filter[servicepriority][]': number[]
 }
@@ -34,9 +37,9 @@ export interface filter {
         not_acknowledged: boolean,
         in_downtime: boolean,
         not_in_downtime: boolean,
-        passive: boolean ,
-        active: boolean ,
-        notifications_enabled: boolean ,
+        passive: boolean,
+        active: boolean,
+        notifications_enabled: boolean,
         notifications_not_enabled: boolean,
         output: string,
     },
@@ -44,7 +47,7 @@ export interface filter {
         id: number[],
         name: string,
         name_regex: boolean | string,
-        keywords:string[],
+        keywords: string[],
         not_keywords: string[],
         servicedescription: string,
         priority: {
@@ -64,10 +67,8 @@ export interface filter {
     }
 }
 
-export interface ServicesIndexRoot {
+export interface ServicesIndexRoot extends PaginateOrScroll {
     all_services: AllService[]
-    _csrfToken: string
-    scroll: Scroll
 }
 
 export interface AllService {
@@ -75,7 +76,7 @@ export interface AllService {
     Host: Host
     Hoststatus: HoststatusObject
     Servicestatus: Servicestatus
-    ServiceType: ServiceType
+    ServiceType: HostOrServiceType
     Downtime: any[]
     Acknowledgement: any[]
 }
@@ -153,23 +154,6 @@ export interface Servicestatus {
     outputHtml: string
 }
 
-export interface ServiceType {
-    title: string
-    color: string
-    class: string
-    icon: string
-}
-
-export interface Scroll {
-    page: number
-    limit: number
-    offset: number
-    hasPrevPage: boolean
-    prevPage: number
-    nextPage: number
-    current: number
-    hasNextPage: boolean
-}
 
 export interface Usertimezone {
     timezone: TimezoneObject
@@ -186,3 +170,11 @@ export interface TimezoneObject {
     server_time_iso: string
     server_timezone: string
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+
+/**********************
+ *    Edit action    *
+ **********************/
