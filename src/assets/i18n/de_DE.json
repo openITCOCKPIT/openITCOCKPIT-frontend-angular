@@ -4888,5 +4888,8 @@
     "VMware services": "VMware Services",
     "Configuration Wizard: VMware Snapshot": "Konfigurationsassistent: VMware Snapshot",
     "VMware Host": "VMware Host",
-    "VMware Snapshot services": "VMware Snapshot Services"
+    "VMware Snapshot services": "VMware Snapshot Services",
+    "No items selected!": "Keine Elemente ausgewählt",
+    "Downtimes added": "Wartugszeiten hinzugefügt"
+
 }

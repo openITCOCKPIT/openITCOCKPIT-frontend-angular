@@ -18,9 +18,12 @@
                 <c-col>
                     <div class="mb-3">
                         <label cLabel for="inputcomment">{{ t('Comment') }}</label>
-                        <input cFormControl id="inputcomment">
-                        <div cFormText>
-                            <small class="text-danger">*required</small>
+                        <input cFormControl id="inputcomment"
+                               [(ngModel)]="downtimeModal.comment">
+                        <div *ngIf="errors && errors.comment" cFormText>
+                            <ng-container *ngFor="let error of errors.comment">
+                            <div class="text-danger">{{  t(error) }}</div>
+                            </ng-container>
                         </div>
                     </div>
                 </c-col>
@@ -28,26 +31,43 @@
             <c-row>
                 <c-col>
                     <label>{{ t('From') }}:</label>
+                    <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date" class="form-control">
+                    <input id="downtimeModal.from_time" class="form-control"
+                           [(ngModel)]="downtimeModal.from_time"
+                           type="time">
+                    <div *ngIf="errors && errors.from_date" cFormText>
+                        <ng-container *ngFor="let error of errors.from_date">
+                            <div class="text-danger">{{  t(error) }}</div>
+                        </ng-container>
+                    </div>
+                    <div *ngIf="errors && errors.from_time" cFormText>
+                        <ng-container *ngFor="let error of errors.from_time">
+                            <div class="text-danger">{{  t(error) }}</div>
+                        </ng-container>
+                    </div>
                 </c-col>
                 <c-col>
                     <label>{{ t('To') }}:</label>
+                    <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date" class="form-control">
+                    <input id="downtimeModal.to_time" class="form-control"
+                           [(ngModel)]="downtimeModal.to_time"
+                           type="time">
+                    <div *ngIf="errors && errors.to_date" cFormText>
+                        <ng-container *ngFor="let error of errors.to_date">
+                            <div class="text-danger">{{  t(error) }}</div>
+                        </ng-container>
+                    </div>
+                    <div *ngIf="errors && errors.to_time" cFormText>
+                        <ng-container *ngFor="let error of errors.to_time">
+                            <div class="text-danger">{{  t(error) }}</div>
+                        </ng-container>
+                    </div>
                 </c-col>
             </c-row>
-
-
-            <c-row [hidden]="!isSend" class="pt-4 pb-2">
-                <c-col sm="12">
-                    <h4>{{ t('Deleting...') }}</h4>
-                </c-col>
-                <c-col sm="12">
-                    <c-progress [animated]="true" [value]="percentage" color="warning" variant="striped"/>
-                </c-col>
-            </c-row>
-
 
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="send()" [disabled]="isSend" cButton class="ripple" color="success">
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
                 <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Save') }}
             </button>

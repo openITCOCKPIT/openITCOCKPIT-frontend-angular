@@ -1,3 +1,28 @@
+/*
+ * Copyright (C) <2015-present>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -8,10 +33,12 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesIndexService } from './services-index.service';
+import { ProfileService} from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "./services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component'
+import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import { ServiceAcknowledgeModalComponent} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
 import {
     ServicesIndexFilterComponent
 } from '../../../components/services/services-index-filter/services-index-filter.component';
@@ -59,10 +86,14 @@ import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { MAINTENANCE_SERVICE_TOKEN } from '../../../tokens/maintenance-injection.token';
+import { ACKNOWLEDGE_SERVICE_TOKEN } from '../../../tokens/acknowledge-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import {MaintenanceItem} from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
+import { MaintenanceItem } from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
+import { AcknowledgeItem } from '../../../components/services/service-acknowledge-modal/service-acknowledge.interface';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
 
 @Component({
   selector: 'oitc-services-index',
@@ -115,12 +146,16 @@ import {MaintenanceItem} from '../../../components/services/service-maintenance-
         DowntimeTooltipComponent,
         UplotGraphComponent,
         DeleteAllModalComponent,
-        ServiceMaintenanceModalComponent
+        ServiceMaintenanceModalComponent,
+        ServiceAcknowledgeModalComponent,
+
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesIndexService} // Inject the CommandsService into the DeleteAllModalComponent
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesIndexService} ,
+        {provide:MAINTENANCE_SERVICE_TOKEN, useClass: ServicesIndexService},// Inject the CommandsService into the MaintenanceModalComponent
+        {provide:ACKNOWLEDGE_SERVICE_TOKEN, useClass: ServicesIndexService}
     ]
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy  {
@@ -130,6 +165,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public readonly router = inject(Router);
     private ServicesIndexService: ServicesIndexService = inject(ServicesIndexService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private ProfileService: ProfileService = inject(ProfileService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
@@ -170,11 +206,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         }
     };
     public params: ServiceParams = {
-        'angular': true,
-        'scroll': true,
-        'sort': 'Servicestatus.current_state',
-        'page': 1,
-        'direction': 'desc',
+        angular: true,
+        scroll: true,
+        sort: 'Servicestatus.current_state',
+        page: 1,
+        direction: 'desc',
         'filter[Hosts.id]': [],
         'filter[Hosts.name]': '',
         'filter[Hosts.name_regex]': '',
@@ -199,10 +235,16 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public tab: number = 0;
     public timezone!: TimezoneObject;
     public selectedItems: any[] = [];
+    public userFullname: string = '';
+
+    constructor(private _liveAnnouncer: LiveAnnouncer) {
+
+    }
 
 
     ngOnInit() {
         this.getUserTimezone();
+        this.getUsername();
         this.load();
     }
 
@@ -211,6 +253,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     load () {
+        this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.ServicesIndexService.getServicesIndex(this.params)
             .subscribe((services) => {
                 this.services = services;
@@ -223,6 +266,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public onSortChange(sort: Sort) {
+        console.log('sort');
+        console.log(sort.direction)
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
@@ -251,9 +296,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
 
         let urlParams = {
             'angular': true,
-            'sort': this.params['sort'],
-            'page': this.params['page'],
-            'direction': this.params['direction'],
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
             'filter[Hosts.id]': this.params['filter[Hosts.id]'],
             'filter[Hosts.name]': this.params['filter[Hosts.name]'],
             'filter[Hosts.name_regex]': this.params['filter[Hosts.name_regex]'],
@@ -283,8 +328,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public resetChecktime() {
-        let commands = [];
-        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+        //let commands = [];
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
             return {
                 command: 'rescheduleService',
                 hostUuid: item.Host.uuid,
@@ -310,8 +355,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public disableNotifications() {
-        let commands = [];
-        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+       // let commands = [];
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
             return {
                 command: 'submitDisableServiceNotifications',
                 hostUuid: item.Host.uuid,
@@ -329,8 +374,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
                 const title = this.TranslocoService.translate('Disable Notifications');
 
                 this.notyService.genericSuccess(result.message, title, [], 7000);
-                this.notyService.scrollContentDivToTop();
-                this.SelectionServiceService.deselectAll()
+               // this.notyService.scrollContentDivToTop();
+               // this.SelectionServiceService.deselectAll()
             } else {
                 this.notyService.genericError();
             }
@@ -340,8 +385,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public enableNotifications() {
-        let commands = [];
-        commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
             return {
                 command: 'submitEnableServiceNotifications',
                 hostUuid: item.Host.uuid,
@@ -359,8 +403,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
                 const title = this.TranslocoService.translate('enable Notifications');
 
                 this.notyService.genericSuccess(result.message, title, [],7000);
-                this.notyService.scrollContentDivToTop();
-                this.SelectionServiceService.deselectAll()
+                //this.notyService.scrollContentDivToTop();
+               // this.SelectionServiceService.deselectAll()
             } else {
                 this.notyService.genericError();
             }
@@ -376,14 +420,19 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
                 command: 'submitServiceDowntime',
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid,
-                start: '',
-                end: '',
-                author: '',
+                start: 0,
+                end: 0,
+                author: this.userFullname,
                 comment: '',
             };
         });
 
-    this.selectedItems = items;
+        this.selectedItems = items;
+        if(items.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
         this.modalService.toggle({
             show: true,
             id: 'serviceMaintenanceModal',
@@ -420,7 +469,35 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         });
     }
 
+    public acknowledgeStatus() {
+        let items: AcknowledgeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): AcknowledgeItem => {
+            return {
+                command: 'submitServicestateAck',
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid,
+                sticky: 0,
+                notify: false,
+                author: this.userFullname,
+                comment: '',
+            };
+        });
+        this.selectedItems = items;
+        if(items.length === 0){
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        console.log(this.selectedItems)
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceAcknowledgeModal',
+        });
+
+    }
+
     public onMassActionComplete(success: boolean) {
+
         if (success) {
             this.load();
         }
@@ -474,6 +551,16 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.subscriptions.add(this.ServicesIndexService.getUserTimezone()
             .subscribe((timezone) => {
                 this.timezone = timezone.timezone;
+            })
+        );
+    }
+
+    private getUsername() {
+        this.subscriptions.add(this.ProfileService.getProfile()
+            .subscribe((profile) => {
+                let firstname = profile.user.firstname ?? ''
+                let lastname = profile.user.lastname ?? '';
+                this.userFullname = firstname + ' ' + lastname
             })
         );
     }

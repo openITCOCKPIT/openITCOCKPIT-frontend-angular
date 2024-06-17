@@ -4,32 +4,33 @@ export interface MaintenanceItem {
     command: string,
     hostUuid: string,
     serviceUuid: string,
-    start: string,
-    end: string
+    start: number,
+    end: number,
     author: string,
     comment: string,
 }
 
-export interface maintenanceModalService {
-    setExternalCommands(item: MaintenanceItem): Observable<any>;
+
+export interface MaintenanceModal {
+    setExternalCommands(item: MaintenanceItem): Observable<any>,
+    geDowntimeDefaults(): Observable<any>
+
 }
 
-export interface maintenanceResponse {
-    success: boolean
-    id?: string | number        // Only on error
-    message?: string            // Only on error
-    usedBy?: MaintenanceUsedBy[]  // Only on error
-    _csrfToken: string
+export interface ValidationResponse {
+    success: boolean,
+    data: Object
 }
 
-export interface MaintenanceUsedBy {
-    baseUrl: string
-    state: string
-    message: string
-    module: string
+export interface ValidationErrors {
+   comment?: string[],
+    from_date?: string[],
+    from_time?: string[],
+    to_date?: string[],
+    to_time?: string[]
 }
 
-export interface DisableResponse {
+export interface Response {
     success: boolean
     id?: string | number        // Only on error
     message?: string            // Only on error

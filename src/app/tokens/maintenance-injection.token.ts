@@ -5,4 +5,4 @@
 
 import { InjectionToken } from '@angular/core';
 
-export const DISABLE_SERVICE_TOKEN = new InjectionToken('disableService');
+export const MAINTENANCE_SERVICE_TOKEN = new InjectionToken('maintenanceService');

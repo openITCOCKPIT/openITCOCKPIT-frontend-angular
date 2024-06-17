@@ -76,8 +76,10 @@
             </c-card-header>
             <c-card-body>
                 <ng-container *ngIf="tab === 0">
+                    <c-container>
                     <oitc-services-index-filter [show]="showFilter"
                                                 (filterChange)="getFilter($event)"></oitc-services-index-filter>
+                    </c-container>
                     <table bordered cTable class="mt-2 mb-0" hover striped matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -303,8 +305,8 @@
                                             <li><a href="javascript:void(0);" cDropdownItem (click)="toggleDowntimeModal()">
                                                 <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                                 {{ t('Set planned maintenance times') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem>
-                                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            <li><a href="javascript:void(0);" cDropdownItem (click)="acknowledgeStatus()">
+                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                                 {{ t('Acknowledge status') }}</a></li>
                                         </ul>
                                     </c-dropdown>
@@ -331,3 +333,4 @@
 
 <oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
 <oitc-service-maintenance-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-service-maintenance-modal>
+<oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-service-acknowledge-modal>

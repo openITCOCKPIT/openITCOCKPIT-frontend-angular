@@ -1,19 +1,30 @@
-import {Component, EventEmitter, Inject, inject, Input, Output, ViewChild} from '@angular/core';
+import { Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit, Output,
+    ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ButtonDirective,
     ColComponent,
     ModalBodyComponent,
     ModalComponent,
-    ModalFooterComponent, ModalHeaderComponent, ModalService, ModalTitleDirective, ProgressComponent, RowComponent
-} from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {NgForOf, NgIf} from '@angular/common';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {DisableItem, DisableResponse} from './disable.interface';
-import {Subscription} from 'rxjs';
-import {DISABLE_SERVICE_TOKEN} from '../../../tokens/disable-injection.token';
-import {HttpErrorResponse} from '@angular/common/http';
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService, ModalTitleDirective,
+    ProgressComponent,
+    RowComponent } from '@coreui/angular';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgForOf, NgIf } from '@angular/common';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { DisableItem,
+    DisableResponse } from './disable.interface';
+import { Subscription } from 'rxjs';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'oitc-disable-modal',
@@ -37,7 +48,7 @@ import {HttpErrorResponse} from '@angular/common/http';
   templateUrl: './disable-modal.component.html',
   styleUrl: './disable-modal.component.css'
 })
-export class DisableModalComponent {
+export class DisableModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: DisableItem[] = [];
     @Input({required: false}) public disableMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';

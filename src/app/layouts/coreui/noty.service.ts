@@ -29,7 +29,7 @@ export class NotyService {
             enableHtml: true
         });
 
-        if (url) {
+        if (url && url.length > 0) {
             toast
                 .onTap
                 .pipe(take(1)) // auto unsubscribe
