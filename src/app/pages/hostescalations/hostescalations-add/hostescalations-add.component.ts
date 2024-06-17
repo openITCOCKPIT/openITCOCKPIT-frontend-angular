@@ -216,18 +216,13 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
             .subscribe((result) => {
-                let currentHostsExcludedIds: number[] = [];
                 this.hosts_excluded = result.excludedHosts;
                 this.hosts_excluded = this.hosts_excluded.map(obj => {
-                    currentHostsExcludedIds.push(obj.key);
                     return {
                         ...obj,
                         disabled: this.post.hosts._ids.includes(obj.key)
                     }
                 });
-                this.post.hosts_excluded._ids = this.post.hosts_excluded._ids.filter(
-                    id => currentHostsExcludedIds.includes(id)
-                );
             }));
     }
 
@@ -243,18 +238,13 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
             .subscribe((result) => {
-                let currentHostGroupsExcludedIds: number[] = [];
                 this.hostgroups_excluded = result.excludedHostgroups;
                 this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
-                    currentHostGroupsExcludedIds.push(obj.key);
                     return {
                         ...obj,
                         disabled: this.post.hostgroups._ids.includes(obj.key)
                     }
                 });
-                this.post.hostgroups_excluded._ids = this.post.hostgroups_excluded._ids.filter(
-                    id => currentHostGroupsExcludedIds.includes(id)
-                );
             }));
     }
 
