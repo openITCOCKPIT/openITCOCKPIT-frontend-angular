@@ -11,7 +11,8 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormCheckComponent,
+    CardTitleDirective,
+    FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
@@ -37,7 +38,7 @@ import { HostdependencyContainerResult, HostdependencyPost } from '../../hostdep
 import { HostdependenciesService } from '../hostdependencies.service';
 
 import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -251,7 +252,30 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
+        this.subscriptions.add(this.HostdependenciesService.add(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('Host hostdependency');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['hostdependencies', 'edit', response.id];
 
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    this.post = this.getDefaultPost();
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
     }
 
     public ngOnDestroy(): void {
