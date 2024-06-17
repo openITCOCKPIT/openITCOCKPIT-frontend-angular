@@ -1,4 +1,14 @@
-import { Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    forwardRef,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
@@ -29,6 +39,8 @@ import { JsonPipe } from '@angular/common';
     styleUrl: './select.component.css'
 })
 export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    private init: boolean = false;
+
     @Input() id: string | undefined;
     @Input() name: string | undefined;
 
@@ -36,7 +48,16 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      * Array of the options for the select box
      * @group Props
      */
-    @Input() options: any[] | undefined;
+    private _options: any[] | undefined;
+    @Input()
+    set options(value: any[] | undefined) {
+        this._options = value;
+        this.onOptionsChanged();
+    }
+
+    get options(): any[] | undefined {
+        return this._options;
+    }
 
     /**
      * ngModel for the form
@@ -97,7 +118,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
 
     private Subscriptions: Subscription = new Subscription();
 
-    public constructor() {
+    public constructor(private cdr: ChangeDetectorRef) {
         if (this.placeholder == undefined) {
             this.placeholder = this.TranslocoService.translate('Please choose');
         }
@@ -123,6 +144,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                     this.searchCallback!(this.searchText);
                 }));
         }
+
+        this.init = true;
     }
 
     public ngOnDestroy(): void {
@@ -169,6 +192,39 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
 
     public setDisabledState?(isDisabled: boolean): void {
         this.disabled = isDisabled;
+    }
+
+    public onOptionsChanged() {
+        // Remove selected values that are not in the options anymore.
+        // This can happen, if a user change the selected container
+
+        if (!this.init) {
+            // Fix Expression has changed after it was checked
+            return;
+        }
+
+
+        if (this.ngModel && this._options) {
+            // Check if the selected values are still in the options
+            let valueStillInOptions = false;
+            let key = this.optionValue || 'key';
+            this._options.filter((option) => {
+                if (option[key] === this.ngModel) {
+                    valueStillInOptions = true;
+                }
+            });
+
+            if (valueStillInOptions === false) {
+                // We need to reset to 0 for hosts edit and services edit because "null" means inherit from template
+                // In case you need some other value, make this configurable and set the default to zero to avoid breaking changes
+                this.ngModel = 0;
+            }
+
+            setTimeout(() => {
+                // Fix Expression has changed after it was checked 🧻
+                this.ngModelChange.emit(this.ngModel);
+            }, 0);
+        }
     }
 
     protected readonly String = String;
