@@ -1,5 +1,8 @@
 import { HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { Customvariable } from '../contacts/contacts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 
 /**********************
  *    Index action    *
@@ -174,6 +177,142 @@ export interface TimezoneObject {
 /**********************
  *    Add action    *
  **********************/
+
+export interface ServicePost {
+    id?: null | number
+    host_id: number
+    uuid?: string
+    servicetemplate_id: number
+    name: string
+    description: string
+    command_id: number
+    eventhandler_command_id: number
+    check_interval: number
+    retry_interval: number
+    max_check_attempts: number
+    first_notification_delay: number
+    notification_interval: number
+    notify_on_recovery: number
+    notify_on_warning: number
+    notify_on_critical: number
+    notify_on_unknown: number
+    notify_on_flapping: number
+    notify_on_downtime: number
+    flap_detection_enabled: number
+    flap_detection_on_ok: number
+    flap_detection_on_warning: number
+    flap_detection_on_critical: number
+    flap_detection_on_unknown: number
+    low_flap_threshold: number
+    high_flap_threshold: number
+    process_performance_data: number
+    freshness_threshold: number
+    passive_checks_enabled: number
+    event_handler_enabled: number
+    active_checks_enabled: number
+    retain_status_information: number
+    retain_nonstatus_information: number
+    notifications_enabled: number
+    notes: string
+    priority: number
+    check_period_id: number
+    notify_period_id: number
+    tags: string
+    container_id: number
+    service_url: string
+    is_volatile: number
+    freshness_checks_enabled: number
+    contacts: {
+        _ids: number[]
+    },
+    contactgroups: {
+        _ids: number[]
+    },
+    servicegroups: {
+        _ids: number[]
+    },
+    customvariables: Customvariable[],
+    servicecommandargumentvalues: ServiceCommandArgument[],
+    serviceeventcommandargumentvalues: ServiceCommandArgument[],
+    sla_relevant: number
+    created?: string
+    modified?: string
+}
+
+export interface ServiceCommandArgument {
+    id?: number
+    commandargument_id: number
+    service_id?: number
+    value: string
+    created?: string
+    modified?: string
+    commandargument: {
+        id?: number
+        name: string
+        human_name: string
+        command_id: number
+        created?: string
+        modified?: string
+    }
+}
+
+export interface ServiceElements {
+    servicetemplates: SelectKeyValue[]
+    servicegroups: SelectKeyValue[]
+    timeperiods: SelectKeyValue[]
+    checkperiods: SelectKeyValue[]
+    contacts: SelectKeyValue[]
+    contactgroups: SelectKeyValue[]
+    existingServices: {
+        [key: string | number]: string
+    }
+    isSlaHost: boolean
+}
+
+export interface ServiceLoadServicetemplateApiResult {
+    servicetemplate: {
+        Servicetemplate: ServicetemplatePost
+    }
+    contactsAndContactgroups: {
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    }
+    hostContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    hosttemplateContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    servicetemplateContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    areContactsInheritedFromHosttemplate: boolean,
+    areContactsInheritedFromHost: boolean,
+    areContactsInheritedFromServicetemplate: boolean,
+
+}
 
 /**********************
  *    Edit action    *
