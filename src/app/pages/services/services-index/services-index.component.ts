@@ -266,8 +266,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public onSortChange(sort: Sort) {
-        console.log('sort');
-        console.log(sort.direction)
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
@@ -488,7 +486,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.notyService.genericError(message);
             return;
         }
-        console.log(this.selectedItems)
         this.modalService.toggle({
             show: true,
             id: 'serviceAcknowledgeModal',

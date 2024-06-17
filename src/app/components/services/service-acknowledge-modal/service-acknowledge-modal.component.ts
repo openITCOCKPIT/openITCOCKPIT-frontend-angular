@@ -107,8 +107,6 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
             element.comment = this.ackModal.comment;
         });
 
-        console.log(this.items);
-
         this.AcknowledgeService.setExternalCommands(this.items).subscribe((result: { message: any; }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
