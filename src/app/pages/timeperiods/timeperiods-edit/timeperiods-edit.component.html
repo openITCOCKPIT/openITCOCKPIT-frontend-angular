@@ -136,11 +136,11 @@
 
                     <div class="margin-top-30">
                         <div>
-                            <h5 [ngClass]="{'text-danger': errors?.['validate_timeranges']}">
+                            <h5 [ngClass]="{'text-danger': errors['validate_timeranges']}">
                                 {{ t('Time ranges:') }}
                             </h5>
                         </div>
-                        <div class="text-danger" *ngIf="errors?.['validate_timeranges']">
+                        <div class="text-danger" *ngIf="errors['validate_timeranges']">
                             {{ t('Do not enter overlapping timeframes') }}
                         </div>
                     </div>
