@@ -25,7 +25,7 @@ export class UPlotConfigBuilder {
     };
 
     public can = document.createElement("canvas");
-    public ctx:CanvasRenderingContext2D | null = this.can.getContext("2d");
+    public ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>this.can.getContext('2d');
 
     constructor() { }
 
@@ -43,15 +43,16 @@ export class UPlotConfigBuilder {
 
         for (let i = 0; i < scaleStops.length; i++) {
             let stopVal: number = scaleStops[i][0];
-            // @ts-ignore
+           if(scale.min){
             if (stopVal <= scale.min || minStopIdx == null)
                 minStopIdx = i;
-
+           }
             maxStopIdx = i;
 
-            // @ts-ignore
-            if (stopVal >= scale.max)
-                break;
+           if(scale.max) {
+               if (stopVal >= scale.max)
+                   break;
+           }
         }
 
         if (minStopIdx == maxStopIdx) {
@@ -83,9 +84,7 @@ export class UPlotConfigBuilder {
             x0 = minStopPos;
             x1 = maxStopPos;
         }
-
-        // @ts-ignore
-        let grd = this.ctx.createLinearGradient(x0, y0, x1, y1);
+        let grd = this.ctx.createLinearGradient(x0, y0, x1, y1)  || new CanvasGradient();
 
         let prevColor;
 

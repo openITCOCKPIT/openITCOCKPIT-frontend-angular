@@ -1,5 +1,6 @@
 @import "variables";
 @import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+@import '@angular/cdk/overlay-prebuilt.css';
 
 @import "@coreui/coreui/scss/coreui";
 @import "@ng-select/ng-select/themes/default.theme.css";
@@ -31,6 +32,7 @@
 @import "highlighting";
 @import "icon-colors";
 @import "status-colors";
+@import "popover";
 
 @import "object_types";
 

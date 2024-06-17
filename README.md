@@ -71,7 +71,7 @@ chown www-data:www-data /opt/openitc/frontend-angular -R
 sudo -u www-data -g www-data /bin/bash
 ng serve
 ```
-
+cd ..
 ## Netzwerkzugriff
 
 ### NFS Share
