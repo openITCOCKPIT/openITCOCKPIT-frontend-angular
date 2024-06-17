@@ -108,7 +108,7 @@ export interface Commandargument {
     modified: string
 }
 
-export interface Customvariable {
+interface Customvariable {
     id: number
     object_id: number
     objecttype_id: number
@@ -191,43 +191,6 @@ export interface Gauges {
     displayName: string
 }
 
-/*
-export interface Perfdata {
-    thread_cache_hitrate: ThreadCacheHitrate
-    thread_cache_hitrate_now: ThreadCacheHitrateNow
-    connections_per_sec: ConnectionsPerSec
-}
-
-export interface ThreadCacheHitrate {
-    current: string
-    unit: string
-    warning: string
-    critical: string
-    min: any
-    max: any
-    metric: string
-}
-
-export interface ThreadCacheHitrateNow {
-    current: string
-    unit: string
-    warning: any
-    critical: any
-    min: any
-    max: any
-    metric: string
-}
-
-export interface ConnectionsPerSec {
-    current: string
-    unit: any
-    warning: any
-    critical: any
-    min: any
-    max: any
-    metric: string
-}
- */
 
 export interface ServiceType {
     title: string

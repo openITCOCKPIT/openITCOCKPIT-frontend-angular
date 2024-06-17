@@ -45,6 +45,7 @@ export const appConfig: ApplicationConfig = {
     providers: [
         {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
         {provide: PROXY_PATH, useValue: ''},
+        { provide: Window, useValue: window },
         {provide: AuthService, useClass: AuthService},
         provideHttpClient(
             withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),

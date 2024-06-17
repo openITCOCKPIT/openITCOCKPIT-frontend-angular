@@ -1,0 +1,10 @@
+.math-input {
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ng-value-label {
+    background-color: #4285F4;
+    color: white;
+}
