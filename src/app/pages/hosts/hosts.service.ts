@@ -16,7 +16,8 @@ import {
     HostSharing,
     HostsIndexFilter,
     HostsIndexParams,
-    HostsIndexRoot
+    HostsIndexRoot,
+    HostsLoadHostsByStringParams
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -328,7 +329,7 @@ export class HostsService {
         if (save_host_and_assign_matching_servicetemplate_groups) {
             body['save_host_and_assign_matching_servicetemplate_groups'] = true;
         }
-        
+
         return this.http.post<any>(`${proxyPath}/hosts/edit/${host.id}.json?angular=true`, body)
             .pipe(
                 map(data => {
@@ -357,6 +358,27 @@ export class HostsService {
         }).pipe(
             map(data => {
                 return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Global action    *
+     **********************/
+
+    public loadHostsByString(params: HostsLoadHostsByStringParams, onlyHostsWithWritePermission: boolean = false): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        let url = `${proxyPath}/hosts/loadHostsByString.json`;
+        if (onlyHostsWithWritePermission) {
+            url = `${proxyPath}/hosts/loadHostsByString/1.json`;
+        }
+
+        return this.http.get<{ hosts: SelectKeyValue[] }>(url, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.hosts;
             })
         );
     }

@@ -8,10 +8,10 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['servicetemplates', 'index']"
-                       [routerLink]="['/', 'servicetemplates', 'index']">
-                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                        {{ t('Service templates') }}
+                    <a *oitcPermission="['services', 'index']"
+                       [routerLink]="['/', 'services', 'index']">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Services') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -23,21 +23,12 @@
         <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new service template') }}</h5>
+                    <h5 cCardTitle>{{ t('Create new service') }}</h5>
 
                     <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
-                            <span *ngIf="typeDetails"
-                                  class="badge border margin-right-10"
-                                  [ngClass]="[typeDetails.class, typeDetails.color]">
-                                <fa-icon [icon]="typeDetails.icon"
-                                         [rotate]="typeDetails.rotate"></fa-icon>
-                                {{ typeDetails.title }}
-                            </span>
-                        </c-nav-item>
 
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['servicetemplates', 'index']" cButton class="ripple" color="default"
+                            <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -60,147 +51,140 @@
                         <c-card-body>
 
                             <div class="mb-3">
-                                <label cLabel for="container">
-                                    {{ t('Container') }}
-                                    <oitc-required-icon></oitc-required-icon>
+                                <label cLabel for="host">
+                                    <oitc-label-link
+                                        [objectId]="post.host_id"
+                                        [route]="'/hosts/edit'"
+                                        [permissions]="'hosts.edit'"
+                                    >
+                                        {{ t('Host') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
                                 </label>
 
                                 <oitc-select
-                                    name="container"
-                                    id="container"
+                                    name="host"
+                                    id="host"
                                     optionValue="key"
                                     optionLabel="value"
-                                    [(ngModel)]="post.container_id"
-                                    [options]="containers?.containers"
-                                    (onChange)="onContainerChange()"
-                                    oitcFormError [errors]="errors" errorField="container_id">
+                                    [(ngModel)]="post.host_id"
+                                    [options]="hosts"
+                                    (onChange)="onHostChange()"
+                                    [searchCallback]="loadHosts"
+                                    oitcFormError [errors]="errors" errorField="host_id">
                                 </oitc-select>
-
-                                <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                                    {{ t('Please select a container.') }}
-                                </div>
-                                <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                                <oitc-form-feedback [errors]="errors" errorField="host_id"></oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="ServicetemplateTemplateName">
-                                    {{ t('Template name') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <input cFormControl id="ServicetemplateTemplateName" required type="text"
-                                       name="ServicetemplateTemplateName"
-                                       oitcFormError [errors]="errors" errorField="template_name"
-                                       [(ngModel)]="post.template_name">
-                                <oitc-form-feedback [errors]="errors" errorField="template_name"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Name of the service template.') }}
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="ServicetemplateSelect">
-                                    {{ t('Template Type') }}
-                                    <oitc-required-icon></oitc-required-icon>
+                                <label cLabel for="servicetemplate">
+                                    <oitc-label-link
+                                        [objectId]="post.servicetemplate_id"
+                                        [route]="'/servicetemplates/edit'"
+                                        [permissions]="'servicetemplates.edit'"
+                                    >
+                                        {{ t('Service template') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </oitc-label-link>
                                 </label>
 
                                 <oitc-select
-                                    name="ServicetemplateSelect"
-                                    id="ServicetemplateSelect"
+                                    name="servicetemplate"
+                                    id="servicetemplate"
                                     optionValue="key"
-                                    optionLabel="value.title"
-                                    [(ngModel)]="post.servicetemplatetype_id"
-                                    [options]="servicetemplateTypes"
-                                    (onChange)="onTypeChange()"
-                                    oitcFormError [errors]="errors" errorField="servicetemplatetype_id">
+                                    optionLabel="value"
+                                    [(ngModel)]="post.servicetemplate_id"
+                                    [options]="servicetemplates"
+                                    (onChange)="onServicetemplateChange()"
+                                    oitcFormError [errors]="errors" errorField="servicetemplate_id">
                                 </oitc-select>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="servicetemplatetype_id"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Defines the type of the template. Use "Generic template" if you are not sure.') }}
+                                <div *ngIf="post.host_id && !post.servicetemplate_id" class="text-warning-glow pt-1">
+                                    {{ t('Please select a service template.') }}
                                 </div>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="servicetemplate_id"></oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="ServicetemplateName">
+                                <label cLabel for="ServiceName">
                                     {{ t('Service name') }}
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
-                                <input cFormControl id="ServicetemplateName" required type="text"
-                                       name="ServicetemplateName"
+                                <input cFormControl id="ServiceName" required type="text"
+                                       name="ServiceName"
                                        oitcFormError [errors]="errors" errorField="name"
                                        [(ngModel)]="post.name">
                                 <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Default name of services using this service template.') }}
+                            </div>
+
+                            <div [hidden]="!post.servicetemplate_id">
+                                <div class="mb-3">
+                                    <label cLabel for="description">
+                                        {{ t('Description') }}
+                                    </label>
+                                    <input cFormControl id="description" type="text"
+                                           name="description"
+                                           oitcFormError [errors]="errors" errorField="description"
+                                           [(ngModel)]="post.description">
+                                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                                 </div>
-                            </div>
 
-                            <div class="mb-3">
-                                <label cLabel for="description">
-                                    {{ t('Description') }}
-                                </label>
-                                <input cFormControl id="description" type="text"
-                                       name="description"
-                                       oitcFormError [errors]="errors" errorField="description"
-                                       [(ngModel)]="post.description">
-                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                            </div>
+                                <div class="mb-3">
+                                    <label cLabel for="ServiceServicegroups">
+                                        {{ t('Service groups') }}
+                                    </label>
 
-                            <div class="mb-3">
-                                <label cLabel for="ServicetemplateServicegroups">
-                                    {{ t('Service groups') }}
-                                </label>
-
-                                <oitc-multi-select
-                                    name="ServicetemplateServicegroups"
-                                    id="ServicetemplateServicegroups"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.servicegroups._ids"
-                                    [options]="servicegroups"
-                                    oitcFormError [errors]="errors" errorField="servicegroups">
-                                </oitc-multi-select>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="servicegroups"></oitc-form-feedback>
-                            </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="ServicetemplateTags">
-                                    {{ t('Tags') }}
-                                </label>
-
-                                <ng-select
-                                    id="ServicetemplateTags"
-                                    name="ServicetemplateTags"
-                                    [items]="[]"
-                                    [(ngModel)]="tagsForSelect"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="t('Add tags')"
-                                    [isOpen]="false"
-                                    oitcFormError [errors]="errors" errorField="tags">
-                                </ng-select>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="tags"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('Press return to separate tags') }}
+                                    <oitc-multi-select
+                                        name="ServiceServicegroups"
+                                        id="ServiceServicegroups"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.servicegroups._ids"
+                                        [options]="servicegroups"
+                                        oitcFormError [errors]="errors" errorField="servicegroups">
+                                    </oitc-multi-select>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="servicegroups"></oitc-form-feedback>
                                 </div>
-                            </div>
 
-                            <div class="mb-3">
-                                <label cLabel>
-                                    {{ t('Priority') }}
-                                </label>
+                                <div class="mb-3">
+                                    <label cLabel for="ServiceTags">
+                                        {{ t('Tags') }}
+                                    </label>
 
-                                <div>
-                                    <oitc-priority
-                                        [priority]="post.priority"
-                                        (onChange)="post.priority = $event"
-                                    ></oitc-priority>
+                                    <ng-select
+                                        id="ServiceTags"
+                                        name="ServiceTags"
+                                        [items]="[]"
+                                        [(ngModel)]="tagsForSelect"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="t('Add tags')"
+                                        [isOpen]="false"
+                                        oitcFormError [errors]="errors" errorField="tags">
+                                    </ng-select>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="tags"></oitc-form-feedback>
+                                    <div class="help-block">
+                                        {{ t('Press return to separate tags') }}
+                                    </div>
                                 </div>
-                                <oitc-form-feedback [errors]="errors"
-                                                    errorField="priority"></oitc-form-feedback>
+
+                                <div class="mb-3">
+                                    <label cLabel>
+                                        {{ t('Priority') }}
+                                    </label>
+
+                                    <div>
+                                        <oitc-priority
+                                            [priority]="post.priority"
+                                            (onChange)="post.priority = $event"
+                                        ></oitc-priority>
+                                    </div>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="priority"></oitc-form-feedback>
+                                </div>
                             </div>
 
                         </c-card-body>
@@ -208,7 +192,7 @@
                     <!-- BASIC CONFIGURATION END -->
 
                     <!-- CHECK CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
                             <span class="ms-1">
@@ -332,7 +316,7 @@
                             </div>
 
                             <div class="mb-3"
-                                 [hidden]="!(post.command_id && post.servicetemplatecommandargumentvalues.length == 0)">
+                                 [hidden]="!(post.command_id && post.servicecommandargumentvalues.length == 0)">
                                 <c-alert color="info">
                                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                     {{ t('This command does not have any parameters.') }}
@@ -340,18 +324,18 @@
                             </div>
 
                             <div class="mb-3 ms-4"
-                                 *ngFor="let servicetemplatecommandargumentvalue of post.servicetemplatecommandargumentvalues; index as i">
+                                 *ngFor="let servicecommandargumentvalue of post.servicecommandargumentvalues; index as i">
                                 <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                                    {{ servicetemplatecommandargumentvalue.commandargument.human_name }}
+                                    {{ servicecommandargumentvalue.commandargument.human_name }}
                                 </label>
                                 <div class="col-xs-12 col-lg-8">
                                     <input
                                         class="form-control"
                                         type="text"
-                                        [name]="'servicetemplatecommandargumentvalue_'+i"
-                                        [(ngModel)]="servicetemplatecommandargumentvalue.value">
+                                        [name]="'servicecommandargumentvalue_'+i"
+                                        [(ngModel)]="servicecommandargumentvalue.value">
                                     <div class="help-block">
-                                        {{ servicetemplatecommandargumentvalue.commandargument.name }}
+                                        {{ servicecommandargumentvalue.commandargument.name }}
                                     </div>
                                 </div>
                             </div>
@@ -418,7 +402,7 @@
                     <!-- CHECK CONFIGURATION END -->
 
                     <!-- NOTIFICATION CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'envelope-open']"></fa-icon>
                             <span class="ms-1">
@@ -659,7 +643,7 @@
                     <!-- NOTIFICATION CONFIGURATION END -->
 
                     <!-- MISC CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
                             <span class="ms-1">
@@ -669,11 +653,11 @@
                         <c-card-body>
 
                             <div class="mb-3">
-                                <label cLabel for="ServicetemplateURL">
+                                <label cLabel for="ServiceURL">
                                     {{ t('Service URL') }}
                                 </label>
-                                <input cFormControl id="ServicetemplateURL" type="text"
-                                       name="ServicetemplateURL"
+                                <input cFormControl id="ServiceURL" type="text"
+                                       name="ServiceURL"
                                        placeholder="https://issues.example.org?host=$HOSTNAME$&service=$SERVICEDESC$"
                                        oitcFormError [errors]="errors" errorField="service_url"
                                        [(ngModel)]="post.service_url">
@@ -684,11 +668,11 @@
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="ServicetemplateURL">
+                                <label cLabel for="ServiceURL">
                                     {{ t('Notes') }}
                                 </label>
-                                <input cFormControl id="ServicetemplateNotes" type="text"
-                                       name="ServicetemplateNotes"
+                                <input cFormControl id="ServiceNotes" type="text"
+                                       name="ServiceNotes"
                                        oitcFormError [errors]="errors" errorField="notes"
                                        [(ngModel)]="post.notes">
                                 <oitc-form-feedback [errors]="errors" errorField="notes"></oitc-form-feedback>
@@ -825,7 +809,7 @@
                     <!-- MISC CONFIGURATION END -->
 
                     <!-- EVENT HANDLER CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'timeline']"></fa-icon>
                             <span class="ms-1">
@@ -861,7 +845,7 @@
                             </div>
 
                             <div class="mb-3"
-                                 [hidden]="!(post.eventhandler_command_id && post.servicetemplateeventcommandargumentvalues.length == 0)">
+                                 [hidden]="!(post.eventhandler_command_id && post.serviceeventcommandargumentvalues.length == 0)">
                                 <c-alert color="info">
                                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                     {{ t('This Event Handler command does not have any parameters.') }}
@@ -869,18 +853,18 @@
                             </div>
 
                             <div class="mb-3 ms-4"
-                                 *ngFor="let servicetemplateeventcommandargumentvalue of post.servicetemplateeventcommandargumentvalues; index as i">
+                                 *ngFor="let serviceeventcommandargumentvalue of post.serviceeventcommandargumentvalues; index as i">
                                 <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                                    {{ servicetemplateeventcommandargumentvalue.commandargument.human_name }}
+                                    {{ serviceeventcommandargumentvalue.commandargument.human_name }}
                                 </label>
                                 <div class="col-xs-12 col-lg-8">
                                     <input
                                         class="form-control"
                                         type="text"
-                                        [name]="'servicetemplateeventcommandargumentvalue_'+i"
-                                        [(ngModel)]="servicetemplateeventcommandargumentvalue.value">
+                                        [name]="'serviceeventcommandargumentvalue_'+i"
+                                        [(ngModel)]="serviceeventcommandargumentvalue.value">
                                     <div class="help-block">
-                                        {{ servicetemplateeventcommandargumentvalue.commandargument.name }}
+                                        {{ serviceeventcommandargumentvalue.commandargument.name }}
                                     </div>
                                 </div>
                             </div>
@@ -890,7 +874,7 @@
                     <!-- EVENT HANDLER CONFIGURATION END -->
 
                     <!-- SERVICE MACRO CONFIGURATION START -->
-                    <c-card class="mb-3">
+                    <c-card class="mb-3" [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'usd']"></fa-icon>
                             <span class="ms-1">
@@ -934,11 +918,16 @@
                     <!-- SERVICE MACRO CONFIGURATION END -->
 
                     <!-- SLA CONFIGURATION START -->
-                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')">
+                    <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')"
+                            [hidden]="!post.servicetemplate_id">
                         <c-card-header>
                             <fa-icon [icon]="['fas', 'award']"></fa-icon>
                             <span class="ms-1">
                                 {{ t('Service Level Agreement') }}
+                            </span>
+                            <span [hidden]="this.isSlaHost" class="italic ps-2">
+                                <fa-icon [icon]="['fas', 'info-circle']" class="text-primary"></fa-icon>
+                                {{ t('The selected host is not associated with an SLA!') }}
                             </span>
                         </c-card-header>
                         <c-card-body>
@@ -952,6 +941,7 @@
                                            trueFalseValue
                                            [falseValue]="0"
                                            [trueValue]="1"
+                                           [disabled]="!this.isSlaHost"
                                            [(ngModel)]="post.sla_relevant"/>
                                     <label cFormCheckLabel for="isSlaRelevant">
                                         {{ t('SLA relevant') }}
@@ -959,12 +949,10 @@
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="sla_relevant"></oitc-form-feedback>
-                                <div class="help-block text-danger">
-                                    <span class="font-lg">⚠️</span>
-                                    {{
-                                        t('This setting affects all services, which are using this service template. If deactivated, all SLA related data will be removed permanently.\n' +
-                                            'To exclude single services, please edit the service configuration directly instead.')
-                                    }}
+                                <div class="help-block text-warning">
+                                    <span class="font-lg"
+                                          [ngClass]="{'warning-icon-gray': post.sla_relevant}">⚠️</span>
+                                    {{ t('If deactivated, the service will be ignored in the SLA calculation and the related data from the service will be permanently removed.') }}
                                 </div>
                             </div>
 
@@ -984,9 +972,9 @@
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create service template') }}
+                        {{ t('Create service') }}
                     </button>
-                    <button [fallbackUrl]="['servicetemplates', 'index']" cButton class="ms-1 ripple" color="default"
+                    <button [fallbackUrl]="['services', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">
                         {{ t('Cancel') }}

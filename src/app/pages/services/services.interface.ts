@@ -1,6 +1,12 @@
-import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
-import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { Customvariable } from '../contacts/contacts.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 
+/**********************
+ *    Index action    *
+ **********************/
 export interface ServiceParams {
     angular: true,
     scroll: boolean,
@@ -22,7 +28,7 @@ export interface ServiceParams {
     'filter[not_keywords][]': string[],
     'filter[Servicestatus.problem_has_been_acknowledged]': boolean | string,
     'filter[Servicestatus.scheduled_downtime_depth]': boolean | string,
-    'filter[Servicestatus.active_checks_enabled]': boolean |string,
+    'filter[Servicestatus.active_checks_enabled]': boolean | string,
     'filter[Servicestatus.notifications_enabled]': boolean | string,
     'filter[servicepriority][]': number[]
 }
@@ -34,9 +40,9 @@ export interface filter {
         not_acknowledged: boolean,
         in_downtime: boolean,
         not_in_downtime: boolean,
-        passive: boolean ,
-        active: boolean ,
-        notifications_enabled: boolean ,
+        passive: boolean,
+        active: boolean,
+        notifications_enabled: boolean,
         notifications_not_enabled: boolean,
         output: string,
     },
@@ -44,7 +50,7 @@ export interface filter {
         id: number[],
         name: string,
         name_regex: boolean | string,
-        keywords:string[],
+        keywords: string[],
         not_keywords: string[],
         servicedescription: string,
         priority: {
@@ -64,10 +70,8 @@ export interface filter {
     }
 }
 
-export interface ServicesIndexRoot {
+export interface ServicesIndexRoot extends PaginateOrScroll {
     all_services: AllService[]
-    _csrfToken: string
-    scroll: Scroll
 }
 
 export interface AllService {
@@ -75,7 +79,7 @@ export interface AllService {
     Host: Host
     Hoststatus: HoststatusObject
     Servicestatus: Servicestatus
-    ServiceType: ServiceType
+    ServiceType: HostOrServiceType
     Downtime: any[]
     Acknowledgement: any[]
 }
@@ -153,23 +157,6 @@ export interface Servicestatus {
     outputHtml: string
 }
 
-export interface ServiceType {
-    title: string
-    color: string
-    class: string
-    icon: string
-}
-
-export interface Scroll {
-    page: number
-    limit: number
-    offset: number
-    hasPrevPage: boolean
-    prevPage: number
-    nextPage: number
-    current: number
-    hasNextPage: boolean
-}
 
 export interface Usertimezone {
     timezone: TimezoneObject
@@ -186,3 +173,147 @@ export interface TimezoneObject {
     server_time_iso: string
     server_timezone: string
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+
+export interface ServicePost {
+    id?: null | number
+    host_id: number
+    uuid?: string
+    servicetemplate_id: number
+    name: string
+    description: string
+    command_id: number
+    eventhandler_command_id: number
+    check_interval: number
+    retry_interval: number
+    max_check_attempts: number
+    first_notification_delay: number
+    notification_interval: number
+    notify_on_recovery: number
+    notify_on_warning: number
+    notify_on_critical: number
+    notify_on_unknown: number
+    notify_on_flapping: number
+    notify_on_downtime: number
+    flap_detection_enabled: number
+    flap_detection_on_ok: number
+    flap_detection_on_warning: number
+    flap_detection_on_critical: number
+    flap_detection_on_unknown: number
+    low_flap_threshold: number
+    high_flap_threshold: number
+    process_performance_data: number
+    freshness_threshold: number
+    passive_checks_enabled: number
+    event_handler_enabled: number
+    active_checks_enabled: number
+    retain_status_information: number
+    retain_nonstatus_information: number
+    notifications_enabled: number
+    notes: string
+    priority: number
+    check_period_id: number
+    notify_period_id: number
+    tags: string
+    container_id: number
+    service_url: string
+    is_volatile: number
+    freshness_checks_enabled: number
+    contacts: {
+        _ids: number[]
+    },
+    contactgroups: {
+        _ids: number[]
+    },
+    servicegroups: {
+        _ids: number[]
+    },
+    customvariables: Customvariable[],
+    servicecommandargumentvalues: ServiceCommandArgument[],
+    serviceeventcommandargumentvalues: ServiceCommandArgument[],
+    sla_relevant: number
+    created?: string
+    modified?: string
+}
+
+export interface ServiceCommandArgument {
+    id?: number
+    commandargument_id: number
+    service_id?: number
+    value: string
+    created?: string
+    modified?: string
+    commandargument: {
+        id?: number
+        name: string
+        human_name: string
+        command_id: number
+        created?: string
+        modified?: string
+    }
+}
+
+export interface ServiceElements {
+    servicetemplates: SelectKeyValue[]
+    servicegroups: SelectKeyValue[]
+    timeperiods: SelectKeyValue[]
+    checkperiods: SelectKeyValue[]
+    contacts: SelectKeyValue[]
+    contactgroups: SelectKeyValue[]
+    existingServices: {
+        [key: string | number]: string
+    }
+    isSlaHost: boolean
+}
+
+export interface ServiceLoadServicetemplateApiResult {
+    servicetemplate: {
+        Servicetemplate: ServicetemplatePost
+    }
+    contactsAndContactgroups: {
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    }
+    hostContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    hosttemplateContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    servicetemplateContactsAndContactgroups: {
+        id: number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    areContactsInheritedFromHosttemplate: boolean,
+    areContactsInheritedFromHost: boolean,
+    areContactsInheritedFromServicetemplate: boolean,
+
+}
+
+/**********************
+ *    Edit action    *
+ **********************/

@@ -98,6 +98,12 @@ export const routes: Routes = [{
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
 }, {
+    path: 'services/add',
+    loadComponent: () => import('./pages/services/services-add/services-add.component').then(m => m.ServicesAddComponent)
+}, {
+    path: 'services/edit/:id',
+    loadComponent: () => import('./pages/services/services-edit/services-edit.component').then(m => m.ServicesEditComponent)
+}, {
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
