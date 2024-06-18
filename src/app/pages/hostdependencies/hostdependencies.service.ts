@@ -6,7 +6,6 @@ import {
     HostdependenciesIndexParams,
     HostdependencyContainerResult,
     HostdependencyDependentHostgroups,
-    HostdependencyDependentHosts,
     HostdependencyEditApiResult,
     HostdependencyElements,
     HostdependencyHosts,
@@ -81,9 +80,10 @@ export class HostdependenciesService {
 
     public loadHosts(containerId: number, searchString: string, hostsIds: number []): Observable<HostdependencyHosts> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyHosts>(`${proxyPath}/hostdependencies/loadElementsByContainerId/${containerId}.json`, {
+        return this.http.get<HostdependencyHosts>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
             params: {
-                angular: true,
+                'angular': true,
+                'containerId': containerId,
                 'filter[Hosts.name]': searchString,
                 'selected[]': hostsIds
             }
@@ -94,11 +94,11 @@ export class HostdependenciesService {
         )
     }
 
-    public loadDependentHosts(containerId: number, searchString: string, dependentHostsIds: number []): Observable<HostdependencyDependentHosts> {
+    public loadDependentHosts(containerId: number, searchString: string, dependentHostsIds: number []): Observable<HostdependencyHosts> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyDependentHosts>(`${proxyPath}/hostdependencies/loadDependentHostsByContainerIdAndHostgroupIds.json`, {
+        return this.http.get<HostdependencyHosts>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
             params: {
-                angular: true,
+                'angular': true,
                 'containerId': containerId,
                 'filter[Hosts.name]': searchString,
                 'selected[]': dependentHostsIds

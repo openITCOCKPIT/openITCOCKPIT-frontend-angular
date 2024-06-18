@@ -170,7 +170,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostdependenciesService.loadDependentHosts(containerId, searchString, this.post.hosts_dependent._ids)
             .subscribe((result) => {
-                this.hosts_dependent = result.dependentHosts;
+                this.hosts_dependent = result.hosts;
                 this.hosts_dependent = this.hosts_dependent.map(obj => {
                     return {
                         ...obj,
@@ -281,5 +281,41 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
     }
 
+    public checkExecutionFailureCriteria() {
+        this.post.execution_none = (this.post.execution_fail_on_up | this.post.execution_fail_on_down | this.post.execution_fail_on_unreachable |
+            this.post.execution_fail_on_pending) ? 0 : 1;
+    }
 
+    public resetExecutionOnFailureCriteria() {
+        if (this.post.execution_none === 1) {
+            this.post.execution_fail_on_up = 0;
+            this.post.execution_fail_on_down = 0;
+            this.post.execution_fail_on_unreachable = 0;
+            this.post.execution_fail_on_pending = 0;
+        } else {
+            this.post.execution_fail_on_up = 1;
+            this.post.execution_fail_on_down = 1;
+            this.post.execution_fail_on_unreachable = 1;
+            this.post.execution_fail_on_pending = 1;
+        }
+    }
+
+    public checkNotificationFailureCriteria() {
+        this.post.notification_none = (this.post.notification_fail_on_up | this.post.notification_fail_on_down | this.post.notification_fail_on_unreachable |
+            this.post.notification_fail_on_pending) ? 0 : 1;
+    }
+
+    public resetNotificationOnFailureCriteria() {
+        if (this.post.notification_none === 1) {
+            this.post.notification_fail_on_up = 0;
+            this.post.notification_fail_on_down = 0;
+            this.post.notification_fail_on_unreachable = 0;
+            this.post.notification_fail_on_pending = 0;
+        } else {
+            this.post.notification_fail_on_up = 1;
+            this.post.notification_fail_on_down = 1;
+            this.post.notification_fail_on_unreachable = 1;
+            this.post.notification_fail_on_pending = 1;
+        }
+    }
 }

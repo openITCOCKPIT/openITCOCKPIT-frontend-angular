@@ -108,10 +108,6 @@ export interface HostdependencyHosts {
     hosts: SelectKeyValueWithDisabled[]
 }
 
-export interface HostdependencyDependentHosts {
-    dependentHosts: SelectKeyValueWithDisabled[]
-}
-
 export interface HostdependencyDependentHostgroups {
     dependentHostgroups: SelectKeyValueWithDisabled[]
 }

@@ -79,6 +79,7 @@
                                     [(ngModel)]="post.hosts._ids"
                                     [options]="hosts"
                                     [searchCallback]="loadHosts"
+                                    (ngModelChange)="processChosenDependentHosts()"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hosts">
                                 </oitc-multi-select>
@@ -101,6 +102,7 @@
                                     [(ngModel)]="post.hosts_dependent._ids"
                                     [options]="hosts_dependent"
                                     [searchCallback]="loadDependentHosts"
+                                    (ngModelChange)="processChosenHosts()"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hosts_dependent">
                                 </oitc-multi-select>
@@ -123,6 +125,7 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.hostgroups._ids"
                                     [options]="hostgroups"
+                                    (ngModelChange)="processChosenDependentHostgroups()"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hostgroups">
                                 </oitc-multi-select>
@@ -142,6 +145,7 @@
                                     optionLabel="value"
                                     [(ngModel)]="post.hostgroups_dependent._ids"
                                     [options]="hostgroups_dependent"
+                                    (ngModelChange)="processChosenHostgroups()"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="hostgroups_dependent">
                                 </oitc-multi-select>
@@ -163,6 +167,7 @@
                             id="HostedependenciesTimeperiod"
                             optionValue="key"
                             optionLabel="value"
+                            [showClear]="true"
                             [(ngModel)]="post.timeperiod_id"
                             [options]="timeperiods"
                             oitcFormError [errors]="errors" errorField="timeperiod_id">
@@ -212,7 +217,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.execution_fail_on_up"/>
+                                    [(ngModel)]="post.execution_fail_on_up"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-success text-white text-center">
                                 <label for="execution_fail_on_up">
@@ -232,7 +238,9 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.execution_fail_on_down"/>
+                                    [(ngModel)]="post.execution_fail_on_down"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
+
                             </span>
                             <div class="form-control bg-danger text-white text-center">
                                 <label for="execution_fail_on_down">
@@ -252,7 +260,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.execution_fail_on_unreachable"/>
+                                    [(ngModel)]="post.execution_fail_on_unreachable"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-unknown text-white text-center">
                                 <label for="execution_fail_on_unreachable">
@@ -272,7 +281,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.execution_fail_on_pending"/>
+                                    [(ngModel)]="post.execution_fail_on_pending"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-primary text-white text-center">
                                 <label for="execution_fail_on_pending">
@@ -292,7 +302,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.execution_none"/>
+                                    [(ngModel)]="post.execution_none"
+                                    (ngModelChange)="resetExecutionOnFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-primary text-white text-center">
                                 <label for="execution_none">
@@ -324,7 +335,9 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.notification_fail_on_up"/>
+                                    [(ngModel)]="post.notification_fail_on_up"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
+
                             </span>
                             <div class="form-control bg-success text-white text-center">
                                 <label for="notification_fail_on_up">
@@ -344,7 +357,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.notification_fail_on_down"/>
+                                    [(ngModel)]="post.notification_fail_on_down"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-danger text-white text-center">
                                 <label for="notification_fail_on_down">
@@ -364,7 +378,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.notification_fail_on_unreachable"/>
+                                    [(ngModel)]="post.notification_fail_on_unreachable"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-unknown text-white text-center">
                                 <label for="notification_fail_on_unreachable">
@@ -384,7 +399,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.notification_fail_on_pending"/>
+                                    [(ngModel)]="post.notification_fail_on_pending"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-primary text-white text-center">
                                 <label for="notification_fail_on_pending">
@@ -404,7 +420,8 @@
                                     trueFalseValue
                                     [falseValue]="0"
                                     [trueValue]="1"
-                                    [(ngModel)]="post.notification_none"/>
+                                    [(ngModel)]="post.notification_none"
+                                    (ngModelChange)="resetNotificationOnFailureCriteria()"/>
                             </span>
                             <div class="form-control bg-primary text-white text-center">
                                 <label for="notification_none">
