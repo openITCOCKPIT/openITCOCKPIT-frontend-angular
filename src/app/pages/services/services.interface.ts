@@ -273,45 +273,33 @@ export interface ServiceLoadServicetemplateApiResult {
     servicetemplate: {
         Servicetemplate: ServicetemplatePost
     }
-    contactsAndContactgroups: {
-        contacts: {
-            _ids: number[]
-        },
-        contactgroups: {
-            _ids: number[]
-        }
-    }
-    hostContactsAndContactgroups: {
-        id: number,
-        contacts: {
-            _ids: number[]
-        },
-        contactgroups: {
-            _ids: number[]
-        }
-    },
-    hosttemplateContactsAndContactgroups: {
-        id: number,
-        contacts: {
-            _ids: number[]
-        },
-        contactgroups: {
-            _ids: number[]
-        }
-    },
-    servicetemplateContactsAndContactgroups: {
-        id: number,
-        contacts: {
-            _ids: number[]
-        },
-        contactgroups: {
-            _ids: number[]
-        }
-    },
+    contactsAndContactgroups: ServiceInheritedContactsAndContactgroups,
+    hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId,
+    hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId,
+    servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId,
     areContactsInheritedFromHosttemplate: boolean,
     areContactsInheritedFromHost: boolean,
     areContactsInheritedFromServicetemplate: boolean,
 
+}
+
+export interface ServiceInheritedContactsAndContactgroups {
+    contacts: {
+        _ids: number[]
+    },
+    contactgroups: {
+        _ids: number[]
+    }
+}
+
+export interface ServiceInheritedContactsAndContactgroupsWithId {
+    id: number,
+    contacts: {
+        _ids: number[]
+    },
+    contactgroups: {
+        _ids: number[]
+    }
 }
 
 /**********************
