@@ -474,7 +474,7 @@
                             <ul class="list-unstyled">
                                 <li *ngFor="let hostgroup of hostdependency.hostgroups_dependent">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                             class="badge bg-secondary"></fa-icon>
+                                             class="badge bg-primary"></fa-icon>
                                     <a *oitcPermission="['hostgroups', 'edit']"
                                        [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
                                         {{ hostgroup.container.name }}
@@ -496,7 +496,7 @@
                                 </span>
                             </div>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
                                   *ngIf="hostdependency.inherits_parent">
                                 {{ t('Yes') }}
@@ -506,8 +506,8 @@
                                 {{ t('No') }}
                             </span>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
+                        <td>
+                            <span class="badge bg-success mx-1" title="{{ t('Up') }}"
                                   *ngIf="hostdependency.execution_fail_on_up">
                                 {{ t('O') }}
                             </span>
@@ -519,9 +519,13 @@
                                   *ngIf="hostdependency.execution_fail_on_unreachable">
                                 {{ t('U') }}
                             </span>
-                            <span class="badge bg-primary mx-1" title="{{ t('Unreachable') }}"
-                                  *ngIf="hostdependency.execution_fail_on_unreachable">
+                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
+                                  *ngIf="hostdependency.execution_fail_on_pending">
                                 {{ t('P') }}
+                            </span>
+                            <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
+                                  *ngIf="hostdependency.execution_none">
+                                {{ t('N') }}
                             </span>
                         </td>
                         <td>
@@ -537,9 +541,13 @@
                                   *ngIf="hostdependency.notification_fail_on_unreachable">
                                 {{ t('U') }}
                             </span>
-                            <span class="badge bg-primary mx-1" title="{{ t('Unreachable') }}"
+                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
                                   *ngIf="hostdependency.notification_fail_on_pending">
                                 {{ t('P') }}
+                            </span>
+                            <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
+                                  *ngIf="hostdependency.notification_none">
+                                {{ t('N') }}
                             </span>
                         </td>
 
