@@ -87,6 +87,7 @@ export interface HostdependencyEditApiResult {
 export interface HostdependencyGet {
     id?: null | number
     container_id?: null | number
+    inherits_parent: number
     timeperiod_id?: null | number
     execution_fail_on_up: number
     execution_fail_on_down: number
