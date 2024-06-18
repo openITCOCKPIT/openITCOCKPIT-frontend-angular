@@ -1,4 +1,4 @@
-import { HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import { HostEntity, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -234,6 +234,8 @@ export interface ServicePost {
     customvariables: Customvariable[],
     servicecommandargumentvalues: ServiceCommandArgument[],
     serviceeventcommandargumentvalues: ServiceCommandArgument[],
+    service_type?: number
+    usage_flag?: number
     sla_relevant: number
     created?: string
     modified?: string
@@ -305,3 +307,22 @@ export interface ServiceInheritedContactsAndContactgroupsWithId {
 /**********************
  *    Edit action    *
  **********************/
+
+export interface ServiceEditApiResult {
+    service: {
+        Service: ServicePost
+    },
+    host: {
+        Host: HostEntity
+    }
+    servicetemplate: {
+        Servicetemplate: ServicetemplatePost,
+    },
+    hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId,
+    hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId,
+    areContactsInheritedFromHosttemplate: boolean,
+    areContactsInheritedFromHost: boolean,
+    areContactsInheritedFromServicetemplate: boolean,
+    serviceType: HostOrServiceType,
+    isSlaHost: boolean
+}

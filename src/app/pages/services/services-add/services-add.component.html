@@ -113,11 +113,18 @@
                                     {{ t('Service name') }}
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
-                                <input cFormControl id="ServiceName" required type="text"
-                                       name="ServiceName"
-                                       oitcFormError [errors]="errors" errorField="name"
-                                       [(ngModel)]="post.name"
-                                       (blur)="checkForDuplicateServicename()">
+                                <c-input-group>
+                                    <input cFormControl id="ServiceName" required type="text"
+                                           name="ServiceName"
+                                           oitcFormError [errors]="errors" errorField="name"
+                                           [(ngModel)]="post.name"
+                                           (blur)="checkForDuplicateServicename()">
+                                    <oitc-template-diff cInputGroupText
+                                                        *ngIf="servicetemplate"
+                                                        [templateValue]="servicetemplate.name"
+                                                        [(value)]="post.name"
+                                                        class="bg-transparent p-0"></oitc-template-diff>
+                                </c-input-group>
                                 <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                             </div>
 

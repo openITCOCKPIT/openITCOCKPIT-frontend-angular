@@ -6,6 +6,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceCommandArgument,
+    ServiceEditApiResult,
     ServiceElements,
     ServiceLoadServicetemplateApiResult,
     ServicePost
@@ -50,9 +51,14 @@ export class ServicesService {
         )
     }
 
-    public loadElements(hostId: number): Observable<ServiceElements> {
+    public loadElements(hostId: number, serviceId?: number): Observable<ServiceElements> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServiceElements>(`${proxyPath}/services/loadElementsByHostId/${hostId}.json`, {
+        let url = `${proxyPath}/services/loadElementsByHostId/${hostId}.json`;
+        if (serviceId) {
+            url = `${proxyPath}/services/loadElementsByHostId/${hostId}/${serviceId}.json`
+        }
+
+        return this.http.get<ServiceElements>(url, {
             params: {
                 angular: true
             }
@@ -137,6 +143,23 @@ export class ServicesService {
         return this.http.get<ServiceLoadServicetemplateApiResult>(`${proxyPath}/services/loadServicetemplate/${servicetemplateId}/${hostId}.json`, {
             params: {
                 'angular': true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+
+    public getEdit(id: number): Observable<ServiceEditApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServiceEditApiResult>(`${proxyPath}/services/edit/${id}.json`, {
+            params: {
+                angular: true
             }
         }).pipe(
             map(data => {
