@@ -113,7 +113,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     public params: HostdependenciesIndexParams = getDefaultHostdependenciesIndexParams();
     public hostdependencies?: HostdependencyIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
 
     public hostFocus: boolean = true;
     public hostExcludeFocus: boolean = false;
