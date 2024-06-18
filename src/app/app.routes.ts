@@ -248,6 +248,9 @@ export const routes: Routes = [{
     path: 'hostdependencies/index',
     loadComponent: () => import('./pages/hostdependencies/hostdependencies-index/hostdependencies-index.component').then(m => m.HostdependenciesIndexComponent)
 }, {
+    path: 'hostdependencies/add',
+    loadComponent: () => import('./pages/hostdependencies/hostdependencies-add/hostdependencies-add.component').then(m => m.HostdependenciesAddComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
