@@ -13,8 +13,6 @@ export interface MaintenanceItem {
 
 export interface MaintenanceModal {
     setExternalCommands(item: MaintenanceItem): Observable<any>,
-    geDowntimeDefaults(): Observable<any>
-
 }
 
 export interface ValidationResponse {

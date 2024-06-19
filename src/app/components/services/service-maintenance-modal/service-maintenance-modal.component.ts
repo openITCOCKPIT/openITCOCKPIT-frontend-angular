@@ -35,6 +35,7 @@ import { TranslocoDirective,
     TranslocoService } from '@jsverse/transloco';
 import { MAINTENANCE_SERVICE_TOKEN } from '../../../tokens/maintenance-injection.token';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { DowntimesDefaultsService, ValidateTimes } from '../../../services/downtimes-defaults.service';
 
 
 
@@ -82,6 +83,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         to_time: ''
     };
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly DowntimesDefaultsService = inject(DowntimesDefaultsService);
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
     private subscriptions: Subscription = new Subscription();
@@ -145,21 +147,25 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
 
     ngOnInit () {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-        this.downtimeModal.comment = this.TranslocoService.translate('In progress');
-        this.subscriptions.add(this.MaintenanceService.geDowntimeDefaults()
-            .subscribe((result: { defaultValues: any; }) => {
-                const defaults = result.defaultValues
-                this.downtimeModal.from_date = this.createDateString(defaults.js_from);
-                this.downtimeModal.from_time = defaults.from_time;
-                this.downtimeModal.to_date = this.createDateString(defaults.js_to);
-                this.downtimeModal.to_time = defaults.to_time;
-            })
-        );
+            if(state.id === 'serviceMaintenanceModal' && state.show === true) {
+                this.getDefaults();
+            }
         }));
+        this.downtimeModal.comment = this.TranslocoService.translate('In progress');
     }
 
     ngOnDestroy () {
         this.subscriptions.unsubscribe();
+    }
+
+    getDefaults() {
+        this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
+            this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
+            this.downtimeModal.from_time = downtimeDefaults.from_time;
+            this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
+            this.downtimeModal.to_time = downtimeDefaults.to_time;
+            this.downtimeModal.comment = this.TranslocoService.translate(downtimeDefaults.comment);
+        }));
     }
 
 

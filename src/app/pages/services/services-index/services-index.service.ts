@@ -44,22 +44,6 @@ export class ServicesIndexService implements DisableModalService, DeleteAllModal
             )
     }
 
-    public geDowntimeDefaults (): Observable<any> {
-        const proxyPath = this.proxyPath;
-
-        return this.http.get<any>(`${proxyPath}/angular/getDowntimeData.json`,
-            {
-                params:  {angular: true}
-            })
-            .pipe(map(result => {
-                    return result
-                }),
-                catchError((error: any) => {
-                    return 'e';
-                })
-            )
-    }
-
     public validateDowntimeInput(forminput: any): Observable<GenericResponseWrapper>{
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/downtimes/validateDowntimeInputFromAngular.json?angular=true`, forminput).pipe(
