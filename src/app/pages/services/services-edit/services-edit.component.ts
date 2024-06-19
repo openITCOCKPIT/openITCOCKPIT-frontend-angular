@@ -151,8 +151,6 @@ export class ServicesEditComponent {
     public errors: GenericValidationError | null = null;
     public hasMacroErrors: boolean = false;
 
-    public createAnother: boolean = false;
-
     protected servicetemplate?: ServicetemplatePost;
 
     private readonly HostsService = inject(HostsService);
@@ -186,6 +184,7 @@ export class ServicesEditComponent {
                     this.serviceType = result.serviceType;
                     this.isSlaHost = result.isSlaHost;
 
+                    this.data.disableInheritance = true;
                     if (
                         this.data.areContactsInheritedFromHosttemplate ||
                         this.data.areContactsInheritedFromHost ||
@@ -495,7 +494,7 @@ export class ServicesEditComponent {
         this.post.tags = this.tagsForSelect.join(',');
 
 
-        this.subscriptions.add(this.ServicesService.add(this.post)
+        this.subscriptions.add(this.ServicesService.edit(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
