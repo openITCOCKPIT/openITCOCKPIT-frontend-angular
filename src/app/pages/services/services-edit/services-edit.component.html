@@ -23,10 +23,12 @@
         <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
-                    {{ t('Edit service:') }}
-                    <small class="fw-300">
-                        {{ post.name }}
-                    </small>
+                    <h5 cCardTitle>
+                        {{ t('Edit service:') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
@@ -44,7 +46,7 @@
                         </c-nav-item>
 
                         <c-nav-item class="px-1" *oitcPermission="['services', 'browser']">
-                            <a cButton class="ripple" color="default"
+                            <a cButton class="ripple" color="primary"
                                [routerLink]="['/services/browser/', post.id]"
                                size="xs">
                                 <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
@@ -653,7 +655,7 @@
                             </div>
 
                             <div class="mb-3"
-                                 [hidden]="!(data.areContactsInheritedFromHosttemplate || data.areContactsInheritedFromHost || data.areContactsInheritedFromServicetemplate)">
+                                 *ngIf="data.areContactsInheritedFromHosttemplate || data.areContactsInheritedFromHost || data.areContactsInheritedFromServicetemplate">
                                 <c-form-check>
                                     <input cFormCheckInput
                                            name="disableInheritance"
@@ -1319,14 +1321,8 @@
 
                 <c-card-footer class="text-end">
 
-                    <label class="me-2">
-                        <input cFormCheckInput type="checkbox" name="createAnother"
-                               [(ngModel)]="createAnother">
-                        {{ t('Create another') }}
-                    </label>
-
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create service') }}
+                        {{ t('Update service') }}
                     </button>
                     <button [fallbackUrl]="['services', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
