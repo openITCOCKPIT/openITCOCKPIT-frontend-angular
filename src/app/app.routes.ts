@@ -259,7 +259,10 @@ export const routes: Routes = [{
 }, {
     path: 'servicedependencies/add',
     loadComponent: () => import('./pages/servicedependencies/servicedependencies-add/servicedependencies-add.component').then(m => m.ServicedependenciesAddComponent)
-}, {
+},  {
+    path: 'servicedependencies/edit/:id',
+    loadComponent: () => import('./pages/servicedependencies/servicedependencies-edit/servicedependencies-edit.component').then(m => m.ServicedependenciesEditComponent)
+},{
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

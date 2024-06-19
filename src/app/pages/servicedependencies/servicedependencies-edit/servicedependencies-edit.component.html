@@ -15,15 +15,15 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add') }}
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    {{ t('Edit') }}
                 </li>
             </ol>
         </nav>
-        <form cForm (ngSubmit)="submit()">
+        <form cForm (ngSubmit)="submit()" *ngIf="post">
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new service dependency') }}</h5>
+                    <h5 cCardTitle>{{ t('Edit service dependency') }}</h5>
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ripple"
@@ -436,7 +436,7 @@
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create service dependency') }}
+                        {{ t('Update service dependency') }}
                     </button>
                     <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
