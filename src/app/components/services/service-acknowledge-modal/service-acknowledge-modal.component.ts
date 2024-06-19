@@ -25,13 +25,12 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AcknowledgeItem } from './service-acknowledge.interface';
-import { ACKNOWLEDGE_SERVICE_TOKEN } from '../../../tokens/acknowledge-injection.token';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { ServiceAcknowledgeItem, ExternalCommandsService } from '../../../services/external-commands.service';
 
 @Component({
   selector: 'oitc-service-acknowledge-modal',
@@ -63,15 +62,17 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
   styleUrl: './service-acknowledge-modal.component.css'
 })
 export class ServiceAcknowledgeModalComponent implements OnDestroy {
-    @Input({required: true}) public items: AcknowledgeItem[] = [];
+    @Input({required: true}) public items: ServiceAcknowledgeItem[] = [];
     @Input({required: false}) public mAcknowledgeMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed = new EventEmitter<boolean>();
     public isSend: boolean = false;
     public error:boolean = false;
+
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
+    private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
     public ackModal = {
@@ -79,9 +80,6 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
         sticky: false,
         notify: false,
     };
-    constructor (@Inject(ACKNOWLEDGE_SERVICE_TOKEN) private AcknowledgeService: any) {
-    }
-
 
     hideModal () {
         this.isSend = false;
@@ -98,13 +96,13 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
             this.error = true;
             return;
         }
-        this.items.forEach((element: AcknowledgeItem) => {
+        this.items.forEach((element: ServiceAcknowledgeItem) => {
             element.sticky = (this.ackModal.sticky) ? 2 : 0 ;
             element.notify = this.ackModal.notify;
             element.comment = this.ackModal.comment;
         });
 
-        this.subscriptions.add(this.AcknowledgeService.setExternalCommands(this.items).subscribe((result: { message: any; }) => {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: { message: any; }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
                 const title = this.TranslocoService.translate('Acknowledges added');

@@ -123,9 +123,28 @@
                     </c-input-group>
                 </c-col>
             </c-row>
-            <c-row>
-                <c-col></c-col>
-                <c-col></c-col>
+            <c-row class="mb-3">
+                <c-col  [xs]="12" [lg]="6" class="ui-fluid">
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        </span>
+
+                        <oitc-multi-select
+                                name="servicetemplatetype_id"
+                                id="servicetemplatetype_id"
+                                optionValue="id"
+                                optionLabel="name"
+                                [(ngModel)]="filter.Services.service_type"
+                                [options]="serviceTypes"
+                                [debounce]="true"
+                                [placeholder]="'Filter by service types' | transloco"
+                                (onChange)="onFilterChange(null)"
+                                >
+                        </oitc-multi-select>
+                    </c-input-group>
+                </c-col>
+
             </c-row>
             <c-row>
                 <c-col>

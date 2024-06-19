@@ -8,10 +8,14 @@ import {
     ServiceCommandArgument,
     ServiceEditApiResult,
     ServiceElements,
-    ServiceLoadServicetemplateApiResult,
-    ServicePost
+    ServiceLoadServicetemplateApiResult, ServiceParams,
+    ServicePost, ServicesIndexRoot
 } from './services.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {ServiceTypesEnum} from './services.enum';
+import { TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../permissions/permissions.service';
+import {DisableItem} from '../../layouts/coreui/disable-modal/disable.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +24,9 @@ export class ServicesService {
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
+
+    private TranslocoService = inject(TranslocoService);
+    private PermissionsService = inject(PermissionsService);
 
     constructor() {
     }
@@ -166,5 +173,80 @@ export class ServicesService {
                 return data;
             })
         );
+    }
+
+    /**********************
+     *    Service Index   *
+     **********************/
+
+    public getServicesIndex (params: ServiceParams): Observable<ServicesIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicesIndexRoot>(`${proxyPath}/services/index.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public disable(item: DisableItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/services/deactivate/${item.id}.json?angular=true`, {});
+    }
+
+    /**********************
+     *    Service Types   *
+     **********************/
+
+    public getServiceTypes(): { id: number, name: string }[] {
+        let types = [
+            {
+                id: ServiceTypesEnum.GENERIC_SERVICE,
+                name: this.TranslocoService.translate('Generic service'),
+            }
+        ];
+
+        this.PermissionsService.hasModuleObservable('EventcorrelationModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: ServiceTypesEnum.EVK_SERVICE,
+                    name: this.TranslocoService.translate('EVC service'),
+                });
+            }
+        });
+
+        this.PermissionsService.hasModuleObservable('CheckmkModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: ServiceTypesEnum.MK_SERVICE,
+                    name: this.TranslocoService.translate('Checkmk service'),
+                });
+            }
+        });
+
+        this.PermissionsService.hasModuleObservable('PrometheusModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: ServiceTypesEnum.PROMETHEUS_SERVICE,
+                    name: this.TranslocoService.translate('Prometheus service'),
+                });
+            }
+        });
+
+        types.push({
+            id: ServiceTypesEnum.OITC_AGENT_SERVICE,
+            name: this.TranslocoService.translate('Agent service'),
+        });
+
+        this.PermissionsService.hasModuleObservable('ImportModule').subscribe(hasModule => {
+            if (hasModule) {
+                types.push({
+                    id: ServiceTypesEnum.EXTERNAL_SERVICE,
+                    name: this.TranslocoService.translate('External service'),
+                });
+            }
+        });
+        return types;
     }
 }

@@ -3,6 +3,9 @@ import {
     Input,
     Output,
     EventEmitter,
+    inject,
+    OnDestroy,
+    OnInit
 } from '@angular/core';
 import {
     CardBodyComponent,
@@ -18,7 +21,7 @@ import {
     PopoverDirective,
     RowComponent,
 } from '@coreui/angular';
-import { TranslocoDirective } from '@jsverse/transloco';
+import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FilterBookmarkComponent } from '../filter-bookmark/filter-bookmark.component';
 import { TagsInputComponent } from '../../tags-input/tags-input.component';
@@ -27,7 +30,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
-import { filter } from '../../../pages/services/services.interface';
+import { ServiceIndexFilter } from '../../../pages/services/services.interface';
+import { ServicesService } from '../../../pages/services/services.service';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 
 type states = {
@@ -61,19 +66,25 @@ type states = {
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PopoverDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        MultiSelectComponent,
+        TranslocoPipe
     ],
     templateUrl: './services-index-filter.component.html',
     styleUrl: './services-index-filter.component.css'
 })
-export class ServicesIndexFilterComponent {
+export class ServicesIndexFilterComponent implements OnInit, OnDestroy {
     @Input() set show (show: boolean) {
         this.showFilter = show;
     }
-    @Output() filterChange = new EventEmitter<filter>();
-    public showFilter: boolean = false;
+    @Output() filterChange = new EventEmitter<ServiceIndexFilter>();
 
-    public filter: filter = {
+    private ServicesService: ServicesService = inject(ServicesService);
+
+    public showFilter: boolean = false;
+    public serviceTypes: any[] = [];
+
+    public filter: ServiceIndexFilter = {
         Servicestatus: {
             current_state: [],
             acknowledged: false,
@@ -117,8 +128,16 @@ export class ServicesIndexFilterComponent {
         unknown: false
     }
 
+ngOnInit() {
+    this.serviceTypes = this.ServicesService.getServiceTypes();
+}
 
-    public onFilterChange(event: Event) {
+ngOnDestroy() {
+
+}
+
+
+public onFilterChange(event: Event | null) {
         this.filterChange.emit(this.filter);
     }
     public onStateChange(event: Event) {

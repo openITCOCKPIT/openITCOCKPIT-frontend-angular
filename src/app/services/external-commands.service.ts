@@ -3,7 +3,40 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../tokens/proxy-path.token';
 import {catchError, map, Observable} from 'rxjs';
 
+export interface ServiceDowntimeItem  {
+    command: string,
+    hostUuid: string,
+    serviceUuid: string,
+    start: number,
+    end: number,
+    author: string,
+    comment: string,
+}
+export interface ServiceAcknowledgeItem {
+    command: string,
+    hostUuid: string,
+    serviceUuid: string,
+    sticky: number,
+    notify: boolean,
+    author: string,
+    comment: string,
+}
 
+export interface ServiceResetItem {
+    command: string
+    hostUuid: string
+    serviceUuid: string
+    satelliteId: number
+}
+
+export interface ServiceNotifcationItem {
+    command: string
+    hostUuid: string
+    serviceUuid: string
+}
+
+type Commands =  ServiceDowntimeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
+    | ServiceNotifcationItem[];
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +49,7 @@ export class ExternalCommandsService {
     constructor() {
     }
 
-    public setExternalCommands(params: any[]): Observable<any> {
+    public setExternalCommands(params: Commands): Observable<any> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/nagios_module/cmd/submit_bulk_naemon.json`,
             params)

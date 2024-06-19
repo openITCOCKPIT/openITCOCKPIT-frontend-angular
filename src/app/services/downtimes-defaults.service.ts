@@ -15,11 +15,20 @@ export interface DowntimesDefaultsConfiguration {
     comment: string
 }
 
-export interface ValidateTimes {
+export interface ValidateInput{
+    comment: string,
     from_date: string
     from_time: string
     to_date: string
     to_time: string
+}
+
+export interface ValidationErrors {
+    comment?: string[],
+    from_date?: string[],
+    from_time?: string[],
+    to_date?: string[],
+    to_time?: string[]
 }
 
 @Injectable({
@@ -46,7 +55,7 @@ export class DowntimesDefaultsService {
         );
     }
 
-    public validateDowntimesInput(params: ValidateTimes): Observable<any>{
+    public validateDowntimesInput(params: ValidateInput): Observable<any>{
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/downtimes/validateDowntimeInputFromAngular.json?angular=true`, params).pipe(
             map(data => {
@@ -57,6 +66,7 @@ export class DowntimesDefaultsService {
                 };
             }),
             catchError((error: any) => {
+                console.log(error.error.error);
                 const err = error.error.error as GenericValidationError;
                 return of({
                     success: false,
