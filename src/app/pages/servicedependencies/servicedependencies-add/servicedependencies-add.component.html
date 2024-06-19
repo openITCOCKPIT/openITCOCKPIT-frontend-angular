@@ -26,7 +26,8 @@
                     <h5 cCardTitle>{{ t('Create new service dependency') }}</h5>
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ripple" color="default"
+                            <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ripple"
+                                    color="default"
                                     oitcBackButton
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -95,18 +96,19 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <c-input-group>
-                                <oitc-multi-select
+                                <oitc-multi-select-optgroup
                                     name="ServicedependenciesDependentServices"
                                     id="ServicedependenciesDependentServices"
-                                    optionValue="key"
-                                    optionLabel="value"
+                                    optionLabel="label"
+                                    optionValue="value"
                                     [(ngModel)]="post.services_dependent._ids"
                                     [options]="services_dependent"
                                     [searchCallback]="loadDependentServices"
                                     (ngModelChange)="processChosenServices()"
+                                    [group]="true"
                                     class="flex-1"
                                     oitcFormError [errors]="errors" errorField="services_dependent">
-                                </oitc-multi-select>
+                                </oitc-multi-select-optgroup>
                             </c-input-group>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="services_dependent"></oitc-form-feedback>

@@ -296,6 +296,7 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     this.post = this.getDefaultPost();
+                    this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
                     return;
