@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
-    HostdependenciesIndexParams,
-    HostdependencyContainerResult,
-    HostdependencyDependentHostgroups,
-    HostdependencyEditApiResult,
-    HostdependencyElements,
-    HostdependencyHosts,
-    HostdependencyIndexRoot,
-    HostdependencyPost
-} from './hostdependencies.interface';
+    ServicedependenciesIndexParams,
+    ServicedependencyContainerResult,
+    ServicedependencyDependentServicegroups,
+    ServicedependencyEditApiResult,
+    ServicedependencyElements,
+    ServicedependencyServices,
+    ServicedependencyIndexRoot,
+    ServicedependencyPost
+} from './servicedependencies.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
@@ -19,7 +19,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 @Injectable({
     providedIn: 'root'
 })
-export class HostdependenciesService {
+export class ServicedependenciesService {
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
@@ -27,18 +27,18 @@ export class HostdependenciesService {
     constructor() {
     }
 
-    public getIndex(params: HostdependenciesIndexParams): Observable<HostdependencyIndexRoot> {
+    public getIndex(params: ServicedependenciesIndexParams): Observable<ServicedependencyIndexRoot> {
         const proxyPath = this.proxyPath;
         let cleanParams = params as any;
-        // Use cleanParams as temp variable to remove empty filter values from the  params['filter[Hostdependencies.inherits_parent]
-        if (params['filter[Hostdependencies.inherits_parent][0]'] === '') {
-            delete cleanParams['filter[Hostdependencies.inherits_parent][0]'];
+        // Use cleanParams as temp variable to remove empty filter values from the  params['filter[Servicedependencies.inherits_parent]
+        if (params['filter[Servicedependencies.inherits_parent][0]'] === '') {
+            delete cleanParams['filter[Servicedependencies.inherits_parent][0]'];
         }
-        if (params['filter[Hostdependencies.inherits_parent][1]'] === '') {
-            delete cleanParams['filter[Hostdependencies.inherits_parent][1]'];
+        if (params['filter[Servicedependencies.inherits_parent][1]'] === '') {
+            delete cleanParams['filter[Servicedependencies.inherits_parent][1]'];
         }
-        return this.http.get<HostdependencyIndexRoot>(`${proxyPath}/hostdependencies/index.json`, {
-            params: cleanParams as {} // cast HostdependenciesIndexParams into object
+        return this.http.get<ServicedependencyIndexRoot>(`${proxyPath}/servicedependencies/index.json`, {
+            params: cleanParams as {} // cast ServicedependenciesIndexParams into object
         }).pipe(
             map(data => {
                 return data;
@@ -49,12 +49,12 @@ export class HostdependenciesService {
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
-        return this.http.post(`${proxyPath}/hostdependencies/delete/${item.id}.json?angular=true`, {});
+        return this.http.post(`${proxyPath}/servicedependencies/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadContainers(): Observable<HostdependencyContainerResult> {
+    public loadContainers(): Observable<ServicedependencyContainerResult> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyContainerResult>(`${proxyPath}/hostdependencies/loadContainers.json`, {
+        return this.http.get<ServicedependencyContainerResult>(`${proxyPath}/servicedependencies/loadContainers.json`, {
             params: {
                 angular: true
             }
@@ -65,9 +65,9 @@ export class HostdependenciesService {
         )
     }
 
-    public loadElements(containerId: number): Observable<HostdependencyElements> {
+    public loadElements(containerId: number): Observable<ServicedependencyElements> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyElements>(`${proxyPath}/hostdependencies/loadElementsByContainerId/${containerId}.json`, {
+        return this.http.get<ServicedependencyElements>(`${proxyPath}/servicedependencies/loadElementsByContainerId/${containerId}.json`, {
             params: {
                 angular: true
             }
@@ -78,14 +78,14 @@ export class HostdependenciesService {
         )
     }
 
-    public loadHosts(containerId: number, searchString: string, hostsIds: number []): Observable<HostdependencyHosts> {
+    public loadServices(containerId: number, searchString: string, servicesIds: number []): Observable<ServicedependencyServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyHosts>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
+        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByContainerId.json`, {
             params: {
                 'angular': true,
                 'containerId': containerId,
-                'filter[Hosts.name]': searchString,
-                'selected[]': hostsIds
+                'filter[Services.servicename]': searchString,
+                'selected[]': servicesIds
             }
         }).pipe(
             map(data => {
@@ -94,14 +94,14 @@ export class HostdependenciesService {
         )
     }
 
-    public loadDependentHosts(containerId: number, searchString: string, dependentHostsIds: number []): Observable<HostdependencyHosts> {
+    public loadDependentServices(containerId: number, searchString: string, dependentServicesIds: number []): Observable<ServicedependencyServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyHosts>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
+        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByContainerId.json`, {
             params: {
                 'angular': true,
                 'containerId': containerId,
-                'filter[Hosts.name]': searchString,
-                'selected[]': dependentHostsIds
+                'filter[Services.servicename]': searchString,
+                'selected[]': dependentServicesIds
             }
         }).pipe(
             map(data => {
@@ -110,15 +110,15 @@ export class HostdependenciesService {
         )
     }
 
-    public loadDependentHostgroups(containerId: number, searchString: string, hostsIds: number [], dependentHostgroupIds: number []): Observable<HostdependencyDependentHostgroups> {
+    public loadDependentServicegroups(containerId: number, searchString: string, servicesIds: number [], dependentServicegroupIds: number []): Observable<ServicedependencyDependentServicegroups> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyDependentHostgroups>(`${proxyPath}/hostdependencies/loadDependentHostgroupsByContainerIdAndHostIds.json`, {
+        return this.http.get<ServicedependencyDependentServicegroups>(`${proxyPath}/servicedependencies/loadDependentServicegroupsByContainerIdAndServiceIds.json`, {
             params: {
                 angular: true,
                 'containerId': containerId,
                 'filter[Containers.name]': searchString,
-                'selected[]': dependentHostgroupIds,
-                'hostIds[]': hostsIds
+                'selected[]': dependentServicegroupIds,
+                'serviceIds[]': servicesIds
             }
         }).pipe(
             map(data => {
@@ -127,10 +127,10 @@ export class HostdependenciesService {
         )
     }
 
-    public add(hostdependency: HostdependencyPost): Observable<GenericResponseWrapper> {
+    public add(servicedependency: ServicedependencyPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/hostdependencies/add.json?angular=true`, {
-            Hostdependency: hostdependency
+        return this.http.post<any>(`${proxyPath}/servicedependencies/add.json?angular=true`, {
+            Servicedependency: servicedependency
         })
             .pipe(
                 map(data => {
@@ -153,10 +153,10 @@ export class HostdependenciesService {
     /**********************
      *    Edit action    *
      **********************/
-    public edit(hostdependency: HostdependencyPost): Observable<GenericResponseWrapper> {
+    public edit(servicedependency: ServicedependencyPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/hostdependencies/edit/${hostdependency.id}.json?angular=true`, {
-            Hostdependency: hostdependency
+        return this.http.post<any>(`${proxyPath}/servicedependencies/edit/${servicedependency.id}.json?angular=true`, {
+            Servicedependency: servicedependency
         })
             .pipe(
                 map(data => {
@@ -176,9 +176,9 @@ export class HostdependenciesService {
             );
     }
 
-    public getEdit(id: number): Observable<HostdependencyEditApiResult> {
+    public getEdit(id: number): Observable<ServicedependencyEditApiResult> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostdependencyEditApiResult>(`${proxyPath}/hostdependencies/edit/${id}.json`, {
+        return this.http.get<ServicedependencyEditApiResult>(`${proxyPath}/servicedependencies/edit/${id}.json`, {
             params: {
                 angular: true
             }

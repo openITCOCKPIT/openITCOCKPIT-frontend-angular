@@ -87,6 +87,7 @@ export interface HostdependencyEditApiResult {
 export interface HostdependencyGet {
     id?: null | number
     container_id?: null | number
+    inherits_parent: number
     timeperiod_id?: null | number
     execution_fail_on_up: number
     execution_fail_on_down: number
@@ -99,21 +100,17 @@ export interface HostdependencyGet {
     notification_fail_on_pending: number
     notification_none: number
     hosts: HostdependencyHost[]
-    hosts_excluded: HostdependencyHost[]
+    hosts_dependent: HostdependencyHost[]
     hostgroups: HostdependencyHostgroup[]
-    hostgroups_excluded: HostdependencyHostgroup[]
+    hostgroups_dependent: HostdependencyHostgroup[]
 }
 
 export interface HostdependencyHosts {
     hosts: SelectKeyValueWithDisabled[]
 }
 
-export interface HostdependencyDependentHosts {
-    excludedHosts: SelectKeyValueWithDisabled[]
-}
-
 export interface HostdependencyDependentHostgroups {
-    excludedHostgroups: SelectKeyValueWithDisabled[]
+    dependentHostgroups: SelectKeyValueWithDisabled[]
 }
 
 export interface HostdependencyEditApiResult {
@@ -125,8 +122,8 @@ export interface HostdependenciesIndexParams {
     scroll: boolean,
     page: number,
     'filter[Hostdependencies.id][]': number[],
-    'filter[Hostdependencies.inherits_parent][0]': string|null,
-    'filter[Hostdependencies.inherits_parent][1]': string|null,
+    'filter[Hostdependencies.inherits_parent][0]': string | null,
+    'filter[Hostdependencies.inherits_parent][1]': string | null,
     'filter[Hostdependencies.execution_fail_on_up]': string,
     'filter[Hostdependencies.execution_fail_on_down]': string,
     'filter[Hostdependencies.execution_fail_on_unreachable]': string,
@@ -152,6 +149,7 @@ export interface HostdependencyPost {
     execution_fail_on_down: number
     execution_fail_on_unreachable: number
     execution_fail_on_pending: number
+    execution_none: number
     notification_fail_on_up: number
     notification_fail_on_down: number
     notification_fail_on_unreachable: number
@@ -173,7 +171,10 @@ export interface HostdependencyPost {
 
 export interface HostdependencyElements {
     hosts: SelectKeyValueWithDisabled[]
+    hostsDependent: SelectKeyValueWithDisabled[]
     hostgroups: SelectKeyValueWithDisabled[]
+    hostgroupsDependent: SelectKeyValueWithDisabled[]
+    timeperiods: SelectKeyValue[]
 }
 
 export function getDefaultHostdependenciesIndexParams(): HostdependenciesIndexParams {

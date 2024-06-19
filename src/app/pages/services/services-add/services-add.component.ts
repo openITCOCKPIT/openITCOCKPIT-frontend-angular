@@ -12,6 +12,8 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -40,7 +42,11 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ServicePost } from '../../services/services.interface';
+import {
+    ServiceInheritedContactsAndContactgroups,
+    ServiceInheritedContactsAndContactgroupsWithId,
+    ServicePost
+} from '../../services/services.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -51,6 +57,9 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostsService } from '../../hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { ServicetemplatePost } from '../../servicetemplates/servicetemplates.interface';
+import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
+import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
+import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 
 
 @Component({
@@ -95,7 +104,12 @@ import { ServicetemplatePost } from '../../servicetemplates/servicetemplates.int
         TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TemplateDiffComponent,
+        TemplateDiffBtnComponent,
+        UiBlockerComponent
     ],
     templateUrl: './services-add.component.html',
     styleUrl: './services-add.component.css'
@@ -107,12 +121,13 @@ export class ServicesAddComponent {
     public tagsForSelect: string[] = [];
     public post: ServicePost = {} as ServicePost;
 
-    public inheritedContactsAndContactgroups: {
-        contacts: { _ids: number[] },
-        contactgroups: { _ids: number[] }
-    } = {contacts: {_ids: []}, contactgroups: {_ids: []}};
+    public inheritedContactsAndContactgroups: ServiceInheritedContactsAndContactgroups = {} as ServiceInheritedContactsAndContactgroups;
+    public servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
 
     public data = {
+        isServicenameInUse: false,
         disableInheritance: false,
         areContactsInheritedFromHosttemplate: false,
         areContactsInheritedFromHost: false,
@@ -156,11 +171,16 @@ export class ServicesAddComponent {
             }
             this.hostId = Number(hostId);
 
+            this.post = this.getDefaultPost(this.hostId);
+
             //Fire on page load
             this.loadHosts('');
             this.loadCommands();
 
-            this.post = this.getDefaultPost(this.hostId);
+            if (this.hostId > 0) {
+                this.loadElements();
+            }
+
         });
 
     }
@@ -231,7 +251,6 @@ export class ServicesAddComponent {
     }
 
     public loadHosts = (searchString: string) => {
-
         var selected = [];
         if (this.post.host_id) {
             selected.push(this.post.host_id);
@@ -336,11 +355,21 @@ export class ServicesAddComponent {
                 this.data.areContactsInheritedFromServicetemplate = result.areContactsInheritedFromServicetemplate;
 
                 this.inheritedContactsAndContactgroups = result.contactsAndContactgroups;
+                this.servicetemplateContactsAndContactgroups = result.servicetemplateContactsAndContactgroups;
+                this.hostContactsAndContactgroups = result.hostContactsAndContactgroups;
+                this.hosttemplateContactsAndContactgroups = result.hosttemplateContactsAndContactgroups;
+
                 this.post.contacts._ids = result.contactsAndContactgroups.contacts._ids;
                 this.post.contactgroups._ids = result.contactsAndContactgroups.contactgroups._ids;
 
+                this.checkForDuplicateServicename();
             })
         );
+    }
+
+    public checkForDuplicateServicename() {
+        const existingServicesNames: string[] = Object.values(this.existingServices);
+        this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
     }
 
     public onCommandChange() {
@@ -349,6 +378,23 @@ export class ServicesAddComponent {
 
     public onEventHandlerChange() {
         this.loadEventHandlerCommandArguments();
+    }
+
+    public onDisableInheritanceChange() {
+        if (
+            this.data.areContactsInheritedFromHosttemplate === false &&
+            this.data.areContactsInheritedFromHost === false &&
+            this.data.areContactsInheritedFromServicetemplate === false) {
+            return;
+        }
+
+        if (!this.data.disableInheritance) {
+            // Restore contacts from the template
+            if (this.servicetemplate) {
+                this.post.contacts._ids = this.inheritedContactsAndContactgroups.contacts._ids;
+                this.post.contactgroups._ids = this.inheritedContactsAndContactgroups.contactgroups._ids;
+            }
+        }
     }
 
     private setValuesFromServicetemplate() {

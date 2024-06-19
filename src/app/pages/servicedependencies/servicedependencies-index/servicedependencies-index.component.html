@@ -8,10 +8,10 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['hostdependencies', 'index']"
-                       [routerLink]="['/', 'hostdependencies', 'index']">
+                    <a *oitcPermission="['servicedependencies', 'index']"
+                       [routerLink]="['/', 'servicedependencies', 'index']">
                         <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                        {{ t('Host dependencies') }}
+                        {{ t('Service dependencies') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -22,21 +22,21 @@
         </nav>
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host dependencies') }}
+                <h5 cCardTitle>{{ t('Service dependencies') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadHostdependencies()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadServicedependencies()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['hostdependencies', 'add']"
-                                [routerLink]="['/', 'hostdependencies', 'add']"
+                        <button *oitcPermission="['servicedependencies', 'add']"
+                                [routerLink]="['/', 'servicedependencies', 'add']"
                                 cButton
                                 class="ripple"
                                 color="success"
@@ -71,19 +71,19 @@
                                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Hosts.name]']"
-                                           [placeholder]="'Filter by host name' | transloco"
+                                           [(ngModel)]="params['filter[Services.servicename]']"
+                                           [placeholder]="'Filter by service name' | transloco"
                                            cFormControl
-                                           name="Hosts.name"
+                                           name="Services.servicename"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostFocus=true;params['filter[HostsDependent.name]']='';hostExcludeFocus=false;onFilterChange(true);"
+                                           (focus)="serviceFocus=true;params['filter[ServicesDependent.servicename]']='';serviceExcludeFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                                 <c-row class="my-1">
                                     <c-col class="text-info small">
                                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                                        {{ t('You can either search for "host" OR "dependent host". Opposing Field will be reset automatically') }}
+                                        {{ t('You can either search for "service" OR "dependent service". Opposing Field will be reset automatically') }}
                                     </c-col>
                                 </c-row>
                                 <c-input-group>
@@ -97,13 +97,13 @@
                                         </fa-stack>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[HostsDependent.name]']"
-                                           [placeholder]="'Filter by dependent host' | transloco"
+                                           [(ngModel)]="params['filter[ServicesDependent.servicename]']"
+                                           [placeholder]="'Filter by dependent service' | transloco"
                                            cFormControl
-                                           name="HostsDependent.name"
+                                           name="ServicesDependent.servicename"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostExcludeFocus=true;params['filter[Hosts.name]']='';hostFocus=false;onFilterChange(true);"
+                                           (focus)="serviceExcludeFocus=true;params['filter[Services.servicename]']='';serviceFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                             </c-col>
@@ -113,19 +113,19 @@
                                         <fa-icon [icon]="['fas', 'server']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Hostgroups.name]']"
-                                           [placeholder]="'Filter by host group' | transloco"
+                                           [(ngModel)]="params['filter[Servicegroups.name]']"
+                                           [placeholder]="'Filter by service group' | transloco"
                                            cFormControl
-                                           name="Hostgroups.name"
+                                           name="Servicegroups.name"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostgroupFocus=true;params['filter[HostgroupsDependent.name]']='';hostgroupExcludeFocus=false;onFilterChange(true);"
+                                           (focus)="servicegroupFocus=true;params['filter[ServicegroupsDependent.name]']='';servicegroupExcludeFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                                 <c-row class="my-1">
                                     <c-col class="text-info small">
                                         <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                                        {{ t('You can either search for "host group" OR "dependent host group". Opposing Field will be reset automatically') }}
+                                        {{ t('You can either search for "service group" OR "dependent service group". Opposing Field will be reset automatically') }}
                                     </c-col>
                                 </c-row>
                                 <c-input-group>
@@ -139,13 +139,13 @@
                                         </fa-stack>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[HostgroupsDependent.name]']"
-                                           [placeholder]="'Filter by dependent host group' | transloco"
+                                           [(ngModel)]="params['filter[ServicegroupsDependent.name]']"
+                                           [placeholder]="'Filter by dependent service group' | transloco"
                                            cFormControl
-                                           name="Hostgroupsdependent.name"
+                                           name="Servicegroupsdependent.name"
                                            oitcDebounce
                                            type="text"
-                                           (focus)="hostgroupExcludeFocus=true;params['filter[Hostgroups.name]']='';hostgroupFocus=false;onFilterChange(true);"
+                                           (focus)="servicegroupExcludeFocus=true;params['filter[Servicegroups.name]']='';servicegroupFocus=false;onFilterChange(true);"
                                     />
                                 </c-input-group>
                             </c-col>
@@ -161,81 +161,81 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-success"
-                                            name="Hostdependencies.execution_fail_on_up"
-                                            id="Hostdependencies.execution_fail_on_up"
+                                            name="Servicedependencies.execution_fail_on_ok"
+                                            id="Servicedependencies.execution_fail_on_ok"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_up]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.execution_fail_on_ok]']"/>
 
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.execution_fail_on_up">{{ t('Up') }}</label>
+                                               for="Servicedependencies.execution_fail_on_ok">{{ t('Ok') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-danger"
-                                            name="Hostdependencies.execution_fail_on_down"
-                                            id="Hostdependencies.execution_fail_on_down"
+                                            name="Servicedependencies.execution_fail_on_critical"
+                                            id="Servicedependencies.execution_fail_on_critical"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_down]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.execution_fail_on_critical]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.execution_fail_on_down">{{ t('Down') }}</label>
+                                               for="Servicedependencies.execution_fail_on_critical">{{ t('Critical') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-secondary"
-                                            name="Hostdependencies.execution_fail_on_unreachable"
-                                            id="Hostdependencies.execution_fail_on_unreachable"
+                                            name="Servicedependencies.execution_fail_on_unknown"
+                                            id="Servicedependencies.execution_fail_on_unknown"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_unreachable]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.execution_fail_on_unknown]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.execution_fail_on_unreachable">{{ t('Unreachable') }}</label>
+                                               for="Servicedependencies.execution_fail_on_unknown">{{ t('Unknown') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.execution_fail_on_pending"
-                                            id="Hostdependencies.execution_fail_on_pending"
+                                            name="Servicedependencies.execution_fail_on_pending"
+                                            id="Servicedependencies.execution_fail_on_pending"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_pending]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.execution_fail_on_pending]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.execution_fail_on_pending">{{ t('Pending') }}</label>
+                                               for="Servicedependencies.execution_fail_on_pending">{{ t('Pending') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.execution_none"
-                                            id="Hostdependencies.execution_none"
+                                            name="Servicedependencies.execution_none"
+                                            id="Servicedependencies.execution_none"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.execution_none]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.execution_none]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.execution_none">{{ t('Execution none') }}</label>
+                                               for="Servicedependencies.execution_none">{{ t('Execution none') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
@@ -249,81 +249,81 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-success"
-                                            name="Hostdependencies.notification_fail_on_up"
-                                            id="Hostdependencies.notification_fail_on_up"
+                                            name="Servicedependencies.notification_fail_on_ok"
+                                            id="Servicedependencies.notification_fail_on_ok"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_up]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.notification_fail_on_ok]']"/>
 
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.notification_fail_on_up">{{ t('Up') }}</label>
+                                               for="Servicedependencies.notification_fail_on_ok">{{ t('Ok') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-danger"
-                                            name="Hostdependencies.notification_fail_on_down"
-                                            id="Hostdependencies.notification_fail_on_down"
+                                            name="Servicedependencies.notification_fail_on_critical"
+                                            id="Servicedependencies.notification_fail_on_critical"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_down]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.notification_fail_on_critical]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.notification_fail_on_down">{{ t('Down') }}</label>
+                                               for="Servicedependencies.notification_fail_on_critical">{{ t('Critical') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-secondary"
-                                            name="Hostdependencies.notification_fail_on_unreachable"
-                                            id="Hostdependencies.notification_fail_on_unreachable"
+                                            name="Servicedependencies.notification_fail_on_unknown"
+                                            id="Servicedependencies.notification_fail_on_unknown"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_unreachable]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.notification_fail_on_unknown]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.notification_fail_on_unreachable">{{ t('Unreachable') }}</label>
+                                               for="Servicedependencies.notification_fail_on_unknown">{{ t('Unknown') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.notification_fail_on_pending"
-                                            id="Hostdependencies.notification_fail_on_pending"
+                                            name="Servicedependencies.notification_fail_on_pending"
+                                            id="Servicedependencies.notification_fail_on_pending"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_pending]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.notification_fail_on_pending]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.notification_fail_on_pending">{{ t('Pending') }}</label>
+                                               for="Servicedependencies.notification_fail_on_pending">{{ t('Pending') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.notification_none"
-                                            id="Hostdependencies.notification_none"
+                                            name="Servicedependencies.notification_none"
+                                            id="Servicedependencies.notification_none"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [falseValue]="''"
                                             [trueValue]="'1'"
-                                            [(ngModel)]="params['filter[Hostdependencies.notification_none]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.notification_none]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.notification_none">{{ t('Notification none') }}</label>
+                                               for="Servicedependencies.notification_none">{{ t('Notification none') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
@@ -337,32 +337,32 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.inherits_parent"
-                                            id="Hostdependencies.inherits_parent"
+                                            name="Servicedependencies.inherits_parent"
+                                            id="Servicedependencies.inherits_parent"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [trueValue]="1"
                                             [falseValue]="''"
-                                            [(ngModel)]="params['filter[Hostdependencies.inherits_parent][0]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.inherits_parent][0]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.inherits_parent">{{ t('Inherits parent') }}</label>
+                                               for="Servicedependencies.inherits_parent">{{ t('Inherits parent') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="Hostdependencies.not_inherits_parent"
-                                            id="Hostdependencies.not_inherits_parent"
+                                            name="Servicedependencies.not_inherits_parent"
+                                            id="Servicedependencies.not_inherits_parent"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [trueValue]="0"
                                             [falseValue]="''"
-                                            [(ngModel)]="params['filter[Hostdependencies.inherits_parent][1]']"/>
+                                            [(ngModel)]="params['filter[Servicedependencies.inherits_parent][1]']"/>
                                         <label cFormCheckLabel
-                                               for="Hostdependencies.not_inherits_parent">{{ t('Not inherits parent') }}</label>
+                                               for="Servicedependencies.not_inherits_parent">{{ t('Not inherits parent') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
@@ -385,16 +385,16 @@
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
                         <th scope="col">
-                            {{ t('Hosts') }}
+                            {{ t('Services') }}
                         </th>
                         <th scope="col">
-                            {{ t('Dependent hosts') }}
+                            {{ t('Dependent services') }}
                         </th>
                         <th scope="col">
-                            {{ t('Host groups') }}
+                            {{ t('Service groups') }}
                         </th>
                         <th scope="col">
-                            {{ t('Dependent host groups') }}
+                            {{ t('Dependent service groups') }}
                         </th>
                         <th scope="col">
                             {{ t('Timeperiod') }}
@@ -413,156 +413,164 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="hostdependencies">
-                    <tr *ngFor="let hostdependency of hostdependencies.all_hostdependencies">
+                    <tbody *ngIf="servicedependencies">
+                    <tr *ngFor="let servicedependency of servicedependencies.all_servicedependencies">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['hostdependencies', 'delete']"
-                                [disabled]="!hostdependency.allowEdit"
-                                [item]="hostdependency"></oitc-item-select>
+                                *oitcPermission="['servicedependencies', 'delete']"
+                                [disabled]="!servicedependency.allowEdit"
+                                [item]="servicedependency"></oitc-item-select>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let host of hostdependency.hosts">
+                                <li *ngFor="let service of servicedependency.services">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
                                              class="badge bg-secondary"></fa-icon>
-                                    <a *oitcPermission="['hosts', 'edit']"
-                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                        {{ host.name }}
+                                    <a *oitcPermission="['services', 'edit']"
+                                       [routerLink]="['/', 'services', 'edit', service.id]">
+                                        {{ service.servicename }}
                                     </a>
-                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                        {{ host.name }}
+                                    <span *oitcPermission="['services', 'edit']; negate: true">
+                                        {{ service.servicename }}
                                     </span>
-                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                    <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
                                              class="text-danger"></fa-icon>
                                 </li>
                             </ul>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let host of hostdependency.hosts_dependent">
+                                <li *ngFor="let service of servicedependency.services_dependent">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
                                              class="badge bg-primary"></fa-icon>
-                                    <a *oitcPermission="['hosts', 'edit']"
-                                       [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                        {{ host.name }}
+                                    <a *oitcPermission="['services', 'edit']"
+                                       [routerLink]="['/', 'services', 'edit', service.id]">
+                                        {{ service.servicename }}
                                     </a>
-                                    <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                        {{ host.name }}
+                                    <span *oitcPermission="['services', 'edit']; negate: true">
+                                        {{ service.servicename }}
                                     </span>
-                                    <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
+                                    <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
                                              class="text-danger"></fa-icon>
                                 </li>
                             </ul>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let hostgroup of hostdependency.hostgroups">
+                                <li *ngFor="let servicegroup of servicedependency.servicegroups">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
                                              class="badge bg-secondary"></fa-icon>
-                                    <a *oitcPermission="['hostgroups', 'edit']"
-                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                        {{ hostgroup.container.name }}
+                                    <a *oitcPermission="['servicegroups', 'edit']"
+                                       [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                        {{ servicegroup.container.name }}
                                     </a>
-                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                        {{ hostgroup.container.name }}
+                                    <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                        {{ servicegroup.container.name }}
                                     </span>
                                 </li>
                             </ul>
                         </td>
                         <td>
                             <ul class="list-unstyled">
-                                <li *ngFor="let hostgroup of hostdependency.hostgroups_dependent">
+                                <li *ngFor="let servicegroup of servicedependency.servicegroups_dependent">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
                                              class="badge bg-primary"></fa-icon>
-                                    <a *oitcPermission="['hostgroups', 'edit']"
-                                       [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                        {{ hostgroup.container.name }}
+                                    <a *oitcPermission="['servicegroups', 'edit']"
+                                       [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                        {{ servicegroup.container.name }}
                                     </a>
-                                    <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                        {{ hostgroup.container.name }}
+                                    <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                        {{ servicegroup.container.name }}
                                     </span>
                                 </li>
                             </ul>
                         </td>
                         <td>
-                            <div *ngIf="hostdependency.timeperiod">
+                            <div *ngIf="servicedependency.timeperiod">
                                 <a *oitcPermission="['timeperiods', 'edit']"
-                                   [routerLink]="['/', 'timeperiods', 'edit', hostdependency.timeperiod.id]">
-                                    {{ hostdependency.timeperiod.name }}
+                                   [routerLink]="['/', 'timeperiods', 'edit', servicedependency.timeperiod.id]">
+                                    {{ servicedependency.timeperiod.name }}
                                 </a>
                                 <span *oitcPermission="['timeperiods', 'edit']; negate: true">
-                                    {{ hostdependency.timeperiod.name }}
+                                    {{ servicedependency.timeperiod.name }}
                                 </span>
                             </div>
                         </td>
                         <td class="text-center">
                             <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
-                                  *ngIf="hostdependency.inherits_parent">
+                                  *ngIf="servicedependency.inherits_parent">
                                 {{ t('Yes') }}
                             </span>
                             <span class="badge bg-danger mx-1" title="{{ t('No') }}"
-                                  *ngIf="!hostdependency.inherits_parent">
+                                  *ngIf="!servicedependency.inherits_parent">
                                 {{ t('No') }}
                             </span>
                         </td>
                         <td>
-                            <span class="badge bg-success mx-1" title="{{ t('Up') }}"
-                                  *ngIf="hostdependency.execution_fail_on_up">
+                            <span class="badge bg-success mx-1" title="{{ t('Ok') }}"
+                                  *ngIf="servicedependency.execution_fail_on_ok">
                                 {{ t('O') }}
                             </span>
-                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                                  *ngIf="hostdependency.execution_fail_on_down">
-                                {{ t('D') }}
+                            <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
+                                  *ngIf="servicedependency.execution_fail_on_warning">
+                                {{ t('W') }}
                             </span>
-                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                                  *ngIf="hostdependency.execution_fail_on_unreachable">
+                            <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
+                                  *ngIf="servicedependency.execution_fail_on_critical">
+                                {{ t('C') }}
+                            </span>
+                            <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
+                                  *ngIf="servicedependency.execution_fail_on_unknown">
                                 {{ t('U') }}
                             </span>
                             <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                                  *ngIf="hostdependency.execution_fail_on_pending">
+                                  *ngIf="servicedependency.execution_fail_on_pending">
                                 {{ t('P') }}
                             </span>
                             <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
-                                  *ngIf="hostdependency.execution_none">
+                                  *ngIf="servicedependency.execution_none">
                                 {{ t('N') }}
                             </span>
                         </td>
                         <td>
                             <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
-                                  *ngIf="hostdependency.notification_fail_on_up">
+                                  *ngIf="servicedependency.notification_fail_on_ok">
                                 {{ t('O') }}
                             </span>
-                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                                  *ngIf="hostdependency.notification_fail_on_down">
-                                {{ t('D') }}
+                            <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
+                                  *ngIf="servicedependency.notification_fail_on_warning">
+                                {{ t('W') }}
                             </span>
-                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                                  *ngIf="hostdependency.notification_fail_on_unreachable">
+                            <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
+                                  *ngIf="servicedependency.notification_fail_on_critical">
+                                {{ t('C') }}
+                            </span>
+                            <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
+                                  *ngIf="servicedependency.notification_fail_on_unknown">
                                 {{ t('U') }}
                             </span>
                             <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                                  *ngIf="hostdependency.notification_fail_on_pending">
+                                  *ngIf="servicedependency.notification_fail_on_pending">
                                 {{ t('P') }}
                             </span>
                             <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
-                                  *ngIf="hostdependency.notification_none">
+                                  *ngIf="servicedependency.notification_none">
                                 {{ t('N') }}
                             </span>
                         </td>
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'hostdependencies.edit'"
-                                                 [url]="'/hostdependencies/edit/' + hostdependency.id"
-                                                 [allowEdit]="hostdependency.allowEdit">
-                                <oitc-actions-button-element [permission]="'hostdependencies.edit'"
-                                                             [url]="'/hostdependencies/edit/' + hostdependency.id">
+                            <oitc-actions-button [permission]="'servicedependencies.edit'"
+                                                 [url]="'/servicedependencies/edit/' + servicedependency.id"
+                                                 [allowEdit]="servicedependency.allowEdit">
+                                <oitc-actions-button-element [permission]="'servicedependencies.edit'"
+                                                             [url]="'/servicedependencies/edit/' + servicedependency.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hostdependency)"
-                                                             [permission]="'hostdependencies.delete'">
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(servicedependency)"
+                                                             [permission]="'servicedependencies.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
@@ -575,13 +583,13 @@
                 </table>
 
                 <oitc-no-records
-                    *ngIf="hostdependencies && hostdependencies.all_hostdependencies.length === 0"></oitc-no-records>
-                <ng-container *ngIf="hostdependencies && hostdependencies.all_hostdependencies">
+                    *ngIf="servicedependencies && servicedependencies.all_servicedependencies.length === 0"></oitc-no-records>
+                <ng-container *ngIf="servicedependencies && servicedependencies.all_servicedependencies">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="hostdependencies.all_hostdependencies.length"></oitc-select-all>
+                                    [itemsCount]="servicedependencies.all_servicedependencies.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group btn-group-xs d-flex flex-row" role="group">
@@ -602,8 +610,8 @@
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="hostdependencies"
-                                [paginateOrScroll]="hostdependencies"></oitc-paginate-or-scroll>
+                                *ngIf="servicedependencies"
+                                [paginateOrScroll]="servicedependencies"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

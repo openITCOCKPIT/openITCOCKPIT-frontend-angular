@@ -30,12 +30,12 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
 import {
-    getDefaultHostdependenciesIndexParams,
-    HostdependencyIndex,
-    HostdependencyIndexRoot,
-    HostdependenciesIndexParams
-} from '../hostdependencies.interface';
-import { HostdependenciesService } from '../hostdependencies.service';
+    getDefaultServicedependenciesIndexParams,
+    ServicedependencyIndex,
+    ServicedependencyIndexRoot,
+    ServicedependenciesIndexParams
+} from '../servicedependencies.interface';
+import { ServicedependenciesService } from '../servicedependencies.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
@@ -57,7 +57,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
-    selector: 'oitc-hostdependencies-index',
+    selector: 'oitc-servicedependencies-index',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -103,28 +103,28 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckLabelDirective,
         TrueFalseDirective
     ],
-    templateUrl: './hostdependencies-index.component.html',
-    styleUrl: './hostdependencies-index.component.css',
+    templateUrl: './servicedependencies-index.component.html',
+    styleUrl: './servicedependencies-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostdependenciesService} // Inject the HostdependenciesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicedependenciesService} // Inject the ServicedependenciesService into the DeleteAllModalComponent
     ]
 })
-export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
+export class ServicedependenciesIndexComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
-    public params: HostdependenciesIndexParams = getDefaultHostdependenciesIndexParams();
-    public hostdependencies?: HostdependencyIndexRoot;
+    public params: ServicedependenciesIndexParams = getDefaultServicedependenciesIndexParams();
+    public servicedependencies?: ServicedependencyIndexRoot;
     public hideFilter: boolean = true;
 
-    public hostFocus: boolean = true;
-    public hostExcludeFocus: boolean = false;
+    public serviceFocus: boolean = true;
+    public serviceExcludeFocus: boolean = false;
 
-    public hostgroupFocus: boolean = true;
-    public hostgroupExcludeFocus: boolean = false;
+    public servicegroupFocus: boolean = true;
+    public servicegroupExcludeFocus: boolean = false;
 
 
     public selectedItems: DeleteAllItem[] = [];
 
-    private readonly HostdependenciesService = inject(HostdependenciesService);
+    private readonly ServicedependenciesService = inject(ServicedependenciesService);
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -132,17 +132,17 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     public ngOnInit(): void {
-        this.loadHostdependencies();
+        this.loadServicedependencies();
     }
 
     public ngOnDestroy(): void {
     }
 
-    public loadHostdependencies() {
+    public loadServicedependencies() {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.HostdependenciesService.getIndex(this.params)
+        this.subscriptions.add(this.ServicedependenciesService.getIndex(this.params)
             .subscribe((result) => {
-                this.hostdependencies = result;
+                this.servicedependencies = result;
             })
         );
     }
@@ -155,36 +155,36 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
     // Callback when a filter has changed
     public onFilterChange(event: any) {
         this.params.page = 1;
-        this.loadHostdependencies();
+        this.loadServicedependencies();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadHostdependencies();
+        this.loadServicedependencies();
     }
 
     public resetFilter() {
-        this.params = getDefaultHostdependenciesIndexParams();
-        this.loadHostdependencies();
+        this.params = getDefaultServicedependenciesIndexParams();
+        this.loadServicedependencies();
     }
 
     // Open the Delete All Modal
-    public toggleDeleteAllModal(hostdependency?: HostdependencyIndex) {
+    public toggleDeleteAllModal(servicedependency?: ServicedependencyIndex) {
         let items: DeleteAllItem[] = [];
-        if (hostdependency) {
+        if (servicedependency) {
             // User just want to delete a single command
             items = [{
-                id: hostdependency.id,
-                displayName: this.TranslocoService.translate('Host dependency #{id}', {id: hostdependency.id})
+                id: servicedependency.id,
+                displayName: this.TranslocoService.translate('Service dependency #{id}', {id: servicedependency.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Host dependency #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Service dependency #{id}', {id: item.id})
                 };
             });
         }
@@ -203,7 +203,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
 
     public onMassActionComplete(success: boolean) {
         if (success) {
-            this.loadHostdependencies();
+            this.loadServicedependencies();
         }
     }
 }

@@ -231,6 +231,7 @@
                             id="HostescalationTimeperiod"
                             optionValue="key"
                             optionLabel="value"
+                            [showClear]="true"
                             [(ngModel)]="post.timeperiod_id"
                             [options]="timeperiods"
                             oitcFormError [errors]="errors" errorField="timeperiod_id">
