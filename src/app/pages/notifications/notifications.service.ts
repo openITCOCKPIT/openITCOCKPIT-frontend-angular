@@ -1,10 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandIndexRoot, CommandsIndexParams } from '../commands/commands.interface';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { NotificationIndexParams, NotificationIndexRoot } from './notifications.interface';
+import {
+    NotificationIndexParams,
+    NotificationIndexRoot,
+    NotificationServicesParams,
+    NotificationServicesRoot
+} from './notifications.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +23,17 @@ export class NotificationsService {
     public getIndex(params: NotificationIndexParams): Observable<NotificationIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationIndexRoot>(`${proxyPath}/notifications/index.json`, {
+            params: params as {} // cast CommandsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getServices(params: NotificationServicesParams): Observable<NotificationServicesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<NotificationServicesRoot>(`${proxyPath}/notifications/services.json`, {
             params: params as {} // cast CommandsIndexParams into object
         }).pipe(
             map(data => {

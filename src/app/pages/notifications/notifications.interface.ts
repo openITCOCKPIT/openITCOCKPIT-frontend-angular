@@ -1,20 +1,47 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { HostsCurrentStateFilter, HoststatusObject } from '../hosts/hosts.interface';
-
 
 export interface NotificationIndexRoot extends PaginateOrScroll {
-    all_notifications: HostNotificationIndex[]
+    all_notifications: NotificationIndex[]
     _csrfToken: string
 }
 
-export interface HostNotificationIndex {
-    NotificationHost: NotificationHostStatus
+export interface NotificationServicesRoot extends PaginateOrScroll {
+    all_notifications: NotificationServices[]
+    _csrfToken: string
+}
+
+export interface NotificationIndex {
+    NotificationHost: Notification
     Host: NotificationHost
     Command: NotificationCommand
     Contact: NotificationContact
 }
 
-export interface NotificationHostStatus {
+export interface NotificationServices {
+    NotificationService: Notification
+    Host: NotificationHost
+    Service: NotificationService
+    Command: NotificationCommand
+    Contact: NotificationContact
+}
+
+export interface NotificationService {
+    id: string
+    uuid: string
+    servicename: string
+    hostname: any
+    description: any
+    active_checks_enabled: any
+    tags: any
+    host_id: any
+    allow_edit: boolean
+    disabled: boolean
+    serviceType: number
+    priority: any
+}
+
+
+export interface Notification {
     state: number
     output: string
     start_time: string
@@ -69,6 +96,22 @@ export interface NotificationIndexParams {
     'filter[to]': Date | string,
 }
 
+export interface NotificationServicesParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[NotificationServices.output]': '',
+    'filter[NotificationServices.state][]': string [],
+    'filter[Hosts.name]': string,
+    'filter[servicename]': string,
+    'filter[Contacts.name]': string,
+    'filter[Commands.name]': string,
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
+}
+
 export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
     let now = new Date();
     return {
@@ -80,6 +123,25 @@ export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
         'filter[NotificationHosts.output]': '',
         'filter[NotificationHosts.state][]': [],
         'filter[Hosts.name]': '',
+        'filter[Contacts.name]': '',
+        'filter[Commands.name]': '',
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
+    }
+}
+
+export function getDefaultNotificationsServicesParams(): NotificationServicesParams {
+    let now = new Date();
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'NotificationServices.start_time',
+        page: 1,
+        direction: 'asc',
+        'filter[NotificationServices.output]': '',
+        'filter[NotificationServices.state][]': [],
+        'filter[Hosts.name]': '',
+        'filter[servicename]': '',
         'filter[Contacts.name]': '',
         'filter[Commands.name]': '',
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
@@ -105,5 +167,29 @@ export function getHostNotificationStateForApi(state: HostNotificationsStateFilt
         result.push('unreachable');
     }
 
+    return result;
+}
+
+export interface ServiceNotificationsStateFilter {
+    ok: boolean
+    warning: boolean
+    critical: boolean
+    unknown: boolean
+}
+
+export function getServiceNotificationStateForApi(state: ServiceNotificationsStateFilter): string[] {
+    let result = [];
+    if (state.ok) {
+        result.push('ok');
+    }
+    if (state.warning) {
+        result.push('warning');
+    }
+    if (state.critical) {
+        result.push('critical');
+    }
+    if (state.unknown) {
+        result.push('unknown');
+    }
     return result;
 }
