@@ -33,6 +33,9 @@ import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helpe
 import { ServiceIndexFilter } from '../../../pages/services/services.interface';
 import { ServicesService } from '../../../pages/services/services.service';
 import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ServicesIndexRoot } from "../../../pages/services/services.interface";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 type states = {
@@ -68,7 +71,8 @@ type states = {
         PopoverDirective,
         RegexHelperTooltipComponent,
         MultiSelectComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './services-index-filter.component.html',
     styleUrl: './services-index-filter.component.css'
@@ -77,6 +81,7 @@ export class ServicesIndexFilterComponent implements OnInit, OnDestroy {
     @Input() set show (show: boolean) {
         this.showFilter = show;
     }
+    @Input({required: true}) public satellites: ServicesIndexRoot['satellites'] = [];
     @Output() filterChange = new EventEmitter<ServiceIndexFilter>();
 
     private ServicesService: ServicesService = inject(ServicesService);
@@ -128,18 +133,19 @@ export class ServicesIndexFilterComponent implements OnInit, OnDestroy {
         unknown: false
     }
 
-ngOnInit() {
-    this.serviceTypes = this.ServicesService.getServiceTypes();
-}
-
-ngOnDestroy() {
-
-}
-
-
-public onFilterChange(event: Event | null) {
-        this.filterChange.emit(this.filter);
+    ngOnInit() {
+        this.serviceTypes = this.ServicesService.getServiceTypes();
     }
+
+    ngOnDestroy() {
+
+    }
+
+
+    public onFilterChange(event: Event | null) {
+            this.filterChange.emit(this.filter);
+        }
+
     public onStateChange(event: Event) {
         const statesArray:string[] = [];
         if(this.states.ok) statesArray.push('ok');
@@ -147,6 +153,51 @@ public onFilterChange(event: Event | null) {
         if(this.states.critical) statesArray.push('critical');
         if(this.states.unknown) statesArray.push('unknown');
         this.filter.Servicestatus.current_state = statesArray;
+        this.filterChange.emit(this.filter);
+    }
+    public resetFilter() {
+        this.filter = {
+            Servicestatus: {
+                current_state: [],
+                acknowledged: false,
+                not_acknowledged: false,
+                in_downtime: false,
+                not_in_downtime: false,
+                passive: false,
+                active: false,
+                notifications_enabled: false,
+                notifications_not_enabled: false,
+                output: '',
+            },
+            Services: {
+                id: [],
+                name: '',
+                name_regex: false,
+                keywords:[],
+                not_keywords: [],
+                servicedescription: '',
+                priority: {
+                    1: false,
+                    2: false,
+                    3: false,
+                    4: false,
+                    5: false
+                },
+                service_type: []
+            },
+            Hosts: {
+                id: [],
+                name: '',
+                name_regex: false,
+                satellite_id: []
+            }
+        };
+        this.states =  {
+            ok: false,
+            warning: false,
+            critical: false,
+            unknown: false
+        }
         this.filterChange.emit(this.filter);
     }
 

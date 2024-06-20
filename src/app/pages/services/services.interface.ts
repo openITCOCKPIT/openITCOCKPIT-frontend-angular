@@ -72,8 +72,8 @@ export interface ServiceIndexFilter {
 
 export interface ServicesIndexRoot extends PaginateOrScroll {
     all_services: AllService[]
-    username?: string
-    satellites?: SelectKeyValue[]
+    username: string
+    satellites: SelectKeyValue[]
 }
 
 export interface AllService {
@@ -158,6 +158,7 @@ export interface Servicestatus {
     textClass: string
     outputHtml: string
 }
+
 
 
 /**********************

@@ -163,6 +163,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     private readonly modalService = inject(ModalService);
     private readonly TimezoneService = inject(TimezoneService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
+
+    public satellites : ServicesIndexRoot['satellites'] = [];
     public filter: ServiceIndexFilter = {
         Servicestatus: {
             current_state: [],
@@ -251,6 +253,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
             .subscribe((services) => {
                 this.services = services;
+                if(services.satellites){
+                    this.satellites  = services.satellites;
+                }
+                if(services.username){
+                    this.userFullname  = services.username;
+                }
             })
         );
     }
@@ -495,8 +503,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     getFilter(filter: ServiceIndexFilter) {
+        this.params.page = 1;
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
         this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
+        this.params['filter[Hosts.satellite_id][]']= filter.Hosts.satellite_id;
         this.params['filter[servicename]'] = filter.Services.name;
         this.params['filter[servicename_regex]'] = filter.Services.name_regex;
         this.params['filter[servicedescription]'] = filter.Services.servicedescription;
@@ -504,6 +514,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.params['filter[not_keywords][]'] = filter.Services.not_keywords,
         this.params['filter[Services.service_type][]'] = filter.Services.service_type;
         this.params['filter[Servicestatus.current_state][]'] = filter.Servicestatus.current_state;
+
 
         if(filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged){
             this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = filter.Servicestatus.acknowledged;
