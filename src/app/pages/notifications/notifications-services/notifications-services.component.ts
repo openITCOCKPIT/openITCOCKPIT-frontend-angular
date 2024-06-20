@@ -29,11 +29,11 @@ import { Subscription } from 'rxjs';
 import { NotificationsService } from '../notifications.service';
 
 import {
-    getDefaultNotificationsIndexParams,
-    getHostNotificationStateForApi,
-    HostNotificationsStateFilter,
-    NotificationIndexParams,
-    NotificationIndexRoot
+    getDefaultNotificationsServicesParams,
+    getServiceNotificationStateForApi,
+    NotificationIndexRoot,
+    NotificationServicesParams, NotificationServicesRoot,
+    ServiceNotificationsStateFilter
 } from '../notifications.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
@@ -51,7 +51,9 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import {
+    ServicestatusSimpleIconComponent
+} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -95,22 +97,23 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
         NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        HoststatusSimpleIconComponent
+        ServicestatusSimpleIconComponent
     ],
-    templateUrl: './notifications-index.component.html',
-    styleUrl: './notifications-index.component.css'
+    templateUrl: './notifications-services.component.html',
+    styleUrl: './notifications-services.component.css'
 })
-export class NotificationsIndexComponent implements OnInit, OnDestroy {
+export class NotificationsServicesComponent implements OnInit, OnDestroy {
     private NotificationsService = inject(NotificationsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: NotificationIndexParams = getDefaultNotificationsIndexParams();
-    public stateFilter: HostNotificationsStateFilter = {
-        recovery: false,
-        down: false,
-        unreachable: false
+    public params: NotificationServicesParams = getDefaultNotificationsServicesParams();
+    public stateFilter: ServiceNotificationsStateFilter = {
+        ok: false,
+        warning: false,
+        critical: false,
+        unknown: false
     };
-    public notifications?: NotificationIndexRoot;
+    public notifications?: NotificationServicesRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -129,11 +132,11 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
 
 
     public loadNotifications() {
-        this.params['filter[NotificationHosts.state][]'] = getHostNotificationStateForApi(this.stateFilter);
+        this.params['filter[NotificationServices.state][]'] = getServiceNotificationStateForApi(this.stateFilter);
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        this.subscriptions.add(this.NotificationsService.getIndex(this.params)
+        this.subscriptions.add(this.NotificationsService.getServices(this.params)
             .subscribe((result) => {
                 this.notifications = result;
             })
@@ -146,11 +149,12 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultNotificationsIndexParams();
+        this.params = getDefaultNotificationsServicesParams();
         this.stateFilter = {
-            recovery: false,
-            down: false,
-            unreachable: false
+            ok: false,
+            warning: false,
+            critical: false,
+            unknown: false
         };
         this.loadNotifications();
     }

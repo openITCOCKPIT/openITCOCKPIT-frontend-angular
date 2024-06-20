@@ -15,8 +15,8 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    {{ t('Hosts') }}
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Services') }}
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'list']"></fa-icon>
@@ -28,20 +28,20 @@
             <c-card-header>
                 <h5 cCardTitle>{{ t('Notifications') }}
                     <small class="fw-300">
-                        {{ t('Host') }}
+                        {{ t('Service') }}
                     </small>
                 </h5>
                 <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                     <c-nav-item>
                         <a [routerLink]="['/', 'notifications', 'index']"
-                           *oitcPermission="['notifications', 'index']" class="nav-link active">
+                           *oitcPermission="['notifications', 'index']" class="nav-link">
                             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                             {{ t('Host notifications') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
                         <a [routerLink]="['/', 'notifications', 'services']"
-                           *oitcPermission="['notifications', 'services']" class="nav-link">
+                           *oitcPermission="['notifications', 'services']" class="nav-link active">
                             <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                             {{ t('Service notifications') }}
                         </a>
@@ -113,7 +113,7 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[NotificationHosts.output]']"
+                                           [(ngModel)]="params['filter[NotificationServices.output]']"
                                            [placeholder]="'Filter by output' | transloco"
                                            aria-label="name"
                                            cFormControl
@@ -171,6 +171,22 @@
                                     />
                                 </c-input-group>
                             </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[servicename]']"
+                                           [placeholder]="'Filter by service name' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="servicename"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
                         </c-row>
                         <c-row class="my-3">
                             <c-col [xs]="12" lg="2">
@@ -183,43 +199,57 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-success"
-                                            name="stateFilter.recovery"
-                                            id="stateFilter.recovery"
+                                            name="stateFilter.ok"
+                                            id="stateFilter.ok"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
-                                            [(ngModel)]="stateFilter.recovery"/>
+                                            [(ngModel)]="stateFilter.ok"/>
 
                                         <label cFormCheckLabel
-                                               for="stateFilter.recovery">{{ t('Up') }}</label>
+                                               for="stateFilter.ok">{{ t('Ok') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-warning"
+                                            name="stateFilter.warning"
+                                            id="stateFilter.warning"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="stateFilter.warning"/>
+                                        <label cFormCheckLabel
+                                               for="stateFilter.warning">{{ t('Warning') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-danger"
-                                            name="stateFilter.down"
-                                            id="stateFilter.down"
+                                            name="stateFilter.critical"
+                                            id="stateFilter.critical"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
-                                            [(ngModel)]="stateFilter.down"/>
+                                            [(ngModel)]="stateFilter.critical"/>
                                         <label cFormCheckLabel
-                                               for="stateFilter.down">{{ t('Down') }}</label>
+                                               for="stateFilter.critical">{{ t('Critical') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-secondary"
-                                            name="stateFilter.unreachable"
-                                            id="stateFilter.unreachable"
+                                            name="stateFilter.unknown"
+                                            id="stateFilter.unknown"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
-                                            [(ngModel)]="stateFilter.unreachable"/>
+                                            [(ngModel)]="stateFilter.unknown"/>
                                         <label cFormCheckLabel
-                                               for="stateFilter.unreachable">{{ t('Unreachable') }}</label>
+                                               for="stateFilter.unknown">{{ t('Unknown') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
@@ -239,13 +269,16 @@
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="width-50 text-center" scope="col" mat-sort-header="NotificationHosts.state">
+                        <th class="width-50 text-center" scope="col" mat-sort-header="NotificationServices.state">
                             {{ t('State') }}
                         </th>
                         <th scope="col" mat-sort-header="Hosts.name">
                             {{ t('Host') }}
                         </th>
-                        <th scope="col" mat-sort-header="NotificationHosts.start_time">
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="NotificationServices.start_time">
                             {{ t('Date') }}
                         </th>
                         <th scope="col" mat-sort-header="Contacts.name">
@@ -254,7 +287,7 @@
                         <th scope="col" mat-sort-header="Commands.name">
                             {{ t('Notification Method') }}
                         </th>
-                        <th scope="col" mat-sort-header="NotificationHosts.output">
+                        <th scope="col" mat-sort-header="NotificationServices.output">
                             {{ t('Output') }}
                         </th>
                     </tr>
@@ -262,20 +295,29 @@
                     <tbody *ngIf="notifications">
                     <tr *ngFor="let notification of notifications.all_notifications">
                         <td class="text-center">
-                            <oitc-hoststatus-simple-icon
-                                [hoststatus]="notification.NotificationHost.state"></oitc-hoststatus-simple-icon>
+                            <oitc-servicestatus-simple-icon
+                                [servicestatus]="notification.NotificationService.state"></oitc-servicestatus-simple-icon>
                         </td>
                         <td>
                             <a *oitcPermission="['hosts', 'browser']"
                                [routerLink]="['/', 'hosts', 'browser', notification.Host.id]">
-                                {{ notification.Host.hostname }}
+                                {{ notification.Host.name }}
                             </a>
                             <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                {{ notification.Host.hostname }}
+                                {{ notification.Host.name }}
                             </span>
                         </td>
                         <td>
-                            {{ notification.NotificationHost.start_time }}
+                            <a *oitcPermission="['services', 'browser']"
+                               [routerLink]="['/', 'services', 'browser', notification.Service.id]">
+                                {{ notification.Service.servicename }}
+                            </a>
+                            <span *oitcPermission="['services', 'browser']; negate: true">
+                                {{ notification.Service.servicename }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ notification.NotificationService.start_time }}
                         </td>
                         <td>
                             <a *oitcPermission="['contacts', 'edit']"
@@ -296,7 +338,7 @@
                             </span>
                         </td>
                         <td>
-                            {{ notification.NotificationHost.output }}
+                            {{ notification.NotificationService.output }}
                         </td>
 
                     </tr>
