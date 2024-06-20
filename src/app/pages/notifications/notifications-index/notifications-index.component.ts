@@ -29,7 +29,9 @@ import { Subscription } from 'rxjs';
 import { NotificationsService } from '../notifications.service';
 
 import {
-    getDefaultNotificationsIndexParams, getHostNotificationStateForApi, HostNotificationsStateFilter,
+    getDefaultNotificationsIndexParams,
+    getHostNotificationStateForApi,
+    HostNotificationsStateFilter,
     NotificationIndexParams,
     NotificationIndexRoot
 } from '../notifications.interface';
@@ -129,6 +131,9 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
 
     public loadNotifications() {
         this.params['filter[NotificationHosts.state][]'] = getHostNotificationStateForApi(this.stateFilter);
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+        
         this.subscriptions.add(this.NotificationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.notifications = result;
