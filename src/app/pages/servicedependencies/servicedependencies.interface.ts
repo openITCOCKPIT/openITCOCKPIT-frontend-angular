@@ -1,5 +1,9 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
+import {
+    SelectItemOptionGroup,
+    SelectKeyValue,
+    SelectKeyValueWithDisabled
+} from '../../layouts/primeng/select.interface';
 
 
 export interface ServicedependencyIndexRoot extends PaginateOrScroll {
@@ -110,7 +114,7 @@ export interface ServicedependencyGet {
 }
 
 export interface ServicedependencyServices {
-    services: SelectKeyValueWithDisabled[]
+    services: SelectItemOptionGroup[]
 }
 
 export interface ServicedependencyDependentServicegroups {
@@ -178,8 +182,6 @@ export interface ServicedependencyPost {
 }
 
 export interface ServicedependencyElements {
-    services: SelectKeyValueWithDisabled[]
-    servicesDependent: SelectKeyValueWithDisabled[]
     servicegroups: SelectKeyValueWithDisabled[]
     servicegroupsDependent: SelectKeyValueWithDisabled[]
     timeperiods: SelectKeyValue[]
