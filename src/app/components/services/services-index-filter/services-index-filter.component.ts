@@ -3,6 +3,9 @@ import {
     Input,
     Output,
     EventEmitter,
+    inject,
+    OnDestroy,
+    OnInit
 } from '@angular/core';
 import {
     CardBodyComponent,
@@ -18,7 +21,7 @@ import {
     PopoverDirective,
     RowComponent,
 } from '@coreui/angular';
-import { TranslocoDirective } from '@jsverse/transloco';
+import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FilterBookmarkComponent } from '../filter-bookmark/filter-bookmark.component';
 import { TagsInputComponent } from '../../tags-input/tags-input.component';
@@ -27,7 +30,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
-import { filter } from '../../../pages/services/services.interface';
+import { ServiceIndexFilter } from '../../../pages/services/services.interface';
+import { ServicesService } from '../../../pages/services/services.service';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ServicesIndexRoot } from "../../../pages/services/services.interface";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 type states = {
@@ -61,19 +69,27 @@ type states = {
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PopoverDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        MultiSelectComponent,
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './services-index-filter.component.html',
     styleUrl: './services-index-filter.component.css'
 })
-export class ServicesIndexFilterComponent {
+export class ServicesIndexFilterComponent implements OnInit, OnDestroy {
     @Input() set show (show: boolean) {
         this.showFilter = show;
     }
-    @Output() filterChange = new EventEmitter<filter>();
-    public showFilter: boolean = false;
+    @Input({required: true}) public satellites: ServicesIndexRoot['satellites'] = [];
+    @Output() filterChange = new EventEmitter<ServiceIndexFilter>();
 
-    public filter: filter = {
+    private ServicesService: ServicesService = inject(ServicesService);
+
+    public showFilter: boolean = false;
+    public serviceTypes: any[] = [];
+
+    public filter: ServiceIndexFilter = {
         Servicestatus: {
             current_state: [],
             acknowledged: false,
@@ -117,10 +133,19 @@ export class ServicesIndexFilterComponent {
         unknown: false
     }
 
-
-    public onFilterChange(event: Event) {
-        this.filterChange.emit(this.filter);
+    ngOnInit() {
+        this.serviceTypes = this.ServicesService.getServiceTypes();
     }
+
+    ngOnDestroy() {
+
+    }
+
+
+    public onFilterChange(event: Event | null) {
+            this.filterChange.emit(this.filter);
+        }
+
     public onStateChange(event: Event) {
         const statesArray:string[] = [];
         if(this.states.ok) statesArray.push('ok');
@@ -128,6 +153,51 @@ export class ServicesIndexFilterComponent {
         if(this.states.critical) statesArray.push('critical');
         if(this.states.unknown) statesArray.push('unknown');
         this.filter.Servicestatus.current_state = statesArray;
+        this.filterChange.emit(this.filter);
+    }
+    public resetFilter() {
+        this.filter = {
+            Servicestatus: {
+                current_state: [],
+                acknowledged: false,
+                not_acknowledged: false,
+                in_downtime: false,
+                not_in_downtime: false,
+                passive: false,
+                active: false,
+                notifications_enabled: false,
+                notifications_not_enabled: false,
+                output: '',
+            },
+            Services: {
+                id: [],
+                name: '',
+                name_regex: false,
+                keywords:[],
+                not_keywords: [],
+                servicedescription: '',
+                priority: {
+                    1: false,
+                    2: false,
+                    3: false,
+                    4: false,
+                    5: false
+                },
+                service_type: []
+            },
+            Hosts: {
+                id: [],
+                name: '',
+                name_regex: false,
+                satellite_id: []
+            }
+        };
+        this.states =  {
+            ok: false,
+            warning: false,
+            critical: false,
+            unknown: false
+        }
         this.filterChange.emit(this.filter);
     }
 
