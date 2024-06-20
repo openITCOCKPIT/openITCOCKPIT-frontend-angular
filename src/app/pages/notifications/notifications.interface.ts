@@ -1,5 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { HoststatusObject } from '../hosts/hosts.interface';
+import { HostsCurrentStateFilter, HoststatusObject } from '../hosts/hosts.interface';
 
 
 export interface NotificationIndexRoot extends PaginateOrScroll {
@@ -61,9 +61,7 @@ export interface NotificationIndexParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[NotificationHosts.output]': '',
-    'filter[NotificationHosts.state.recovery': string,
-    'filter[NotificationHosts.state.down': string,
-    'filter[NotificationHosts.state.unreachable': string,
+    'filter[NotificationHosts.state][]': string [],
     'filter[Hosts.name]': string,
     'filter[Contacts.name]': string,
     'filter[Commands.name]': string,
@@ -80,13 +78,32 @@ export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
         page: 1,
         direction: 'asc',
         'filter[NotificationHosts.output]': '',
-        'filter[NotificationHosts.state.recovery': '',
-        'filter[NotificationHosts.state.down': '',
-        'filter[NotificationHosts.state.unreachable': '',
+        'filter[NotificationHosts.state][]': [],
         'filter[Hosts.name]': '',
         'filter[Contacts.name]': '',
         'filter[Commands.name]': '',
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
+}
+
+export interface HostNotificationsStateFilter {
+    recovery: boolean
+    down: boolean
+    unreachable: boolean
+}
+
+export function getHostNotificationStateForApi(state: HostNotificationsStateFilter): string[] {
+    let result = [];
+    if (state.recovery) {
+        result.push('recovery');
+    }
+    if (state.down) {
+        result.push('down');
+    }
+    if (state.unreachable) {
+        result.push('unreachable');
+    }
+
+    return result;
 }

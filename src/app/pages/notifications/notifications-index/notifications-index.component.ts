@@ -5,7 +5,8 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownDividerDirective,
+    ContainerComponent,
+    DropdownDividerDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -15,7 +16,8 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -27,7 +29,7 @@ import { Subscription } from 'rxjs';
 import { NotificationsService } from '../notifications.service';
 
 import {
-    getDefaultNotificationsIndexParams,
+    getDefaultNotificationsIndexParams, getHostNotificationStateForApi, HostNotificationsStateFilter,
     NotificationIndexParams,
     NotificationIndexRoot
 } from '../notifications.interface';
@@ -48,7 +50,6 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -101,7 +102,12 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
     private NotificationsService = inject(NotificationsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: NotificationIndexParams = getDefaultNotificationsIndexParams()
+    public params: NotificationIndexParams = getDefaultNotificationsIndexParams();
+    public stateFilter: HostNotificationsStateFilter = {
+        recovery: false,
+        down: false,
+        unreachable: false
+    };
     public notifications?: NotificationIndexRoot;
     public hideFilter: boolean = false;
     private subscriptions: Subscription = new Subscription();
@@ -122,6 +128,7 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
 
 
     public loadNotifications() {
+        this.params['filter[NotificationHosts.state][]'] = getHostNotificationStateForApi(this.stateFilter);
         this.subscriptions.add(this.NotificationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.notifications = result;
@@ -136,6 +143,11 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
 
     public resetFilter() {
         this.params = getDefaultNotificationsIndexParams();
+        this.stateFilter = {
+            recovery: false,
+            down: false,
+            unreachable: false
+        };
         this.loadNotifications();
     }
 

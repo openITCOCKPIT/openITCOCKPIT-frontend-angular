@@ -78,7 +78,7 @@
                             <c-col md="6" class="mb-2">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'code']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Commands.name]']"
@@ -167,40 +167,43 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-success"
-                                            name="NotificationHosts.currentStateUp"
-                                            id="NotificationHosts.currentStateUp"
+                                            name="stateFilter.recovery"
+                                            id="stateFilter.recovery"
                                             type="checkbox"
                                             trueFalseValue
-                                            oitcDebounce/>
+                                            oitcDebounce
+                                            [(ngModel)]="stateFilter.recovery"/>
 
                                         <label cFormCheckLabel
-                                               for="NotificationHosts.currentStateUp">{{ t('Up') }}</label>
+                                               for="stateFilter.recovery">{{ t('Up') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-danger"
-                                            name="NotificationHosts.currentStateDown"
-                                            id="NotificationHosts.currentStateDown"
+                                            name="stateFilter.down"
+                                            id="stateFilter.down"
                                             type="checkbox"
                                             trueFalseValue
-                                            oitcDebounce/>
+                                            oitcDebounce
+                                            [(ngModel)]="stateFilter.down"/>
                                         <label cFormCheckLabel
-                                               for="NotificationHosts.currentStateDown">{{ t('Down') }}</label>
+                                               for="stateFilter.down">{{ t('Down') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-secondary"
-                                            name="NotificationHosts.currentStateUnreachable"
-                                            id="NotificationHosts.currentStateUnreachable"
+                                            name="stateFilter.unreachable"
+                                            id="stateFilter.unreachable"
                                             type="checkbox"
                                             trueFalseValue
-                                            oitcDebounce/>
+                                            oitcDebounce
+                                            [(ngModel)]="stateFilter.unreachable"/>
                                         <label cFormCheckLabel
-                                               for="NotificationHosts.currentStateUnreachable">{{ t('Unreachable') }}</label>
+                                               for="stateFilter.unreachable">{{ t('Unreachable') }}</label>
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
