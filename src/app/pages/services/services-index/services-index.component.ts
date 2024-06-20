@@ -32,16 +32,14 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
-import { ServicesIndexService } from './services-index.service';
+import { ServicesService } from '../services.service';
 import { ProfileService} from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { filter, Service, ServiceParams, ServicesIndexRoot, TimezoneObject } from "../services.interface";
+import { ServiceIndexFilter, Service, ServiceParams, ServicesIndexRoot } from "../services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { ServiceAcknowledgeModalComponent} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
-import {
-    ServicesIndexFilterComponent
-} from '../../../components/services/services-index-filter/services-index-filter.component';
+import { ServicesIndexFilterComponent } from '../../../components/services/services-index-filter/services-index-filter.component';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 
 import {
@@ -65,37 +63,29 @@ import {
     TooltipDirective,
 } from '@coreui/angular';
 import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { AcknowledgementIconComponent } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
-import { MAINTENANCE_SERVICE_TOKEN } from '../../../tokens/maintenance-injection.token';
-import { ACKNOWLEDGE_SERVICE_TOKEN } from '../../../tokens/acknowledge-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { MaintenanceItem } from '../../../components/services/service-maintenance-modal/service-maintenance.interface';
-import { AcknowledgeItem } from '../../../components/services/service-acknowledge-modal/service-acknowledge.interface';
+import { ServiceDowntimeItem, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
+import { ServiceResetItem, ServiceNotifcationItem, ExternalCommandsService } from '../../../services/external-commands.service';
 
 
 @Component({
@@ -157,9 +147,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesIndexService} ,
-        {provide:MAINTENANCE_SERVICE_TOKEN, useClass: ServicesIndexService},// Inject the CommandsService into the MaintenanceModalComponent
-        {provide:ACKNOWLEDGE_SERVICE_TOKEN, useClass: ServicesIndexService}
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService} ,
     ]
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy  {
@@ -167,13 +155,17 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private ServicesIndexService: ServicesIndexService = inject(ServicesIndexService);
+    private ServicesService: ServicesService = inject(ServicesService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private ProfileService: ProfileService = inject(ProfileService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
-    public filter: filter = {
+    private readonly TimezoneService = inject(TimezoneService);
+    private readonly ExternalCommandsService = inject(ExternalCommandsService);
+
+    public satellites : ServicesIndexRoot['satellites'] = [];
+    public filter: ServiceIndexFilter = {
         Servicestatus: {
             current_state: [],
             acknowledged: false,
@@ -258,9 +250,15 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
 
     load () {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.ServicesIndexService.getServicesIndex(this.params)
+        this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
             .subscribe((services) => {
                 this.services = services;
+                if(services.satellites){
+                    this.satellites  = services.satellites;
+                }
+                if(services.username){
+                    this.userFullname  = services.username;
+                }
             })
         );
     }
@@ -331,8 +329,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public resetChecktime() {
-        //let commands = [];
-       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceResetItem => {
             return {
                 command: 'rescheduleService',
                 hostUuid: item.Host.uuid,
@@ -346,7 +343,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.notyService.genericError(message);
             return;
         }
-        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
            if(result.message){
                const title = this.TranslocoService.translate('Reschedule');
                const url = ['services', 'index'];
@@ -359,7 +356,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
 
     public disableNotifications() {
        // let commands = [];
-       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
                 command: 'submitDisableServiceNotifications',
                 hostUuid: item.Host.uuid,
@@ -372,7 +369,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.notyService.genericError(message);
             return
         }
-        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
             if(result.message){
                 const title = this.TranslocoService.translate('Disable Notifications');
 
@@ -388,7 +385,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public enableNotifications() {
-       const commands = this.SelectionServiceService.getSelectedItems().map((item): any => {
+       const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
                 command: 'submitEnableServiceNotifications',
                 hostUuid: item.Host.uuid,
@@ -401,7 +398,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.notyService.genericError(message);
             return;
         }
-        this.subscriptions.add(this.ServicesIndexService.setExternalCommands(commands).subscribe((result) => {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
             if(result.message){
                 const title = this.TranslocoService.translate('enable Notifications');
 
@@ -417,8 +414,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public toggleDowntimeModal(){
-        let items: MaintenanceItem[] = [];
-        items = this.SelectionServiceService.getSelectedItems().map((item): MaintenanceItem => {
+        let items: ServiceDowntimeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): ServiceDowntimeItem => {
             return {
                 command: 'submitServiceDowntime',
                 hostUuid: item.Host.uuid,
@@ -473,8 +470,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     public acknowledgeStatus() {
-        let items: AcknowledgeItem[] = [];
-        items = this.SelectionServiceService.getSelectedItems().map((item): AcknowledgeItem => {
+        let items: ServiceAcknowledgeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
             return {
                 command: 'submitServicestateAck',
                 hostUuid: item.Host.uuid,
@@ -505,15 +502,19 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         }
     }
 
-    getFilter(filter: filter) {
+    getFilter(filter: ServiceIndexFilter) {
+        this.params.page = 1;
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
         this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
+        this.params['filter[Hosts.satellite_id][]']= filter.Hosts.satellite_id;
         this.params['filter[servicename]'] = filter.Services.name;
         this.params['filter[servicename_regex]'] = filter.Services.name_regex;
         this.params['filter[servicedescription]'] = filter.Services.servicedescription;
         this.params['filter[keywords][]'] = filter.Services.keywords;
         this.params['filter[not_keywords][]'] = filter.Services.not_keywords,
+        this.params['filter[Services.service_type][]'] = filter.Services.service_type;
         this.params['filter[Servicestatus.current_state][]'] = filter.Servicestatus.current_state;
+
 
         if(filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged){
             this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = filter.Servicestatus.acknowledged;
@@ -550,11 +551,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     private getUserTimezone() {
-        this.subscriptions.add(this.ServicesIndexService.getUserTimezone()
-            .subscribe((timezone) => {
-                this.timezone = timezone.timezone;
-            })
-        );
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone= data;
+        }));
     }
 
     private getUsername() {

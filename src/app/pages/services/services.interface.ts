@@ -33,7 +33,7 @@ export interface ServiceParams {
     'filter[servicepriority][]': number[]
 }
 
-export interface filter {
+export interface ServiceIndexFilter {
     Servicestatus: {
         current_state: string[],
         acknowledged: boolean,
@@ -72,6 +72,8 @@ export interface filter {
 
 export interface ServicesIndexRoot extends PaginateOrScroll {
     all_services: AllService[]
+    username: string
+    satellites: SelectKeyValue[]
 }
 
 export interface AllService {
@@ -158,21 +160,6 @@ export interface Servicestatus {
 }
 
 
-export interface Usertimezone {
-    timezone: TimezoneObject
-    _csrfToken: string
-}
-
-export interface TimezoneObject {
-    user_timezone: string
-    user_time_to_server_offset: number
-    user_offset: number
-    server_time_utc: number
-    server_time: string
-    server_timezone_offset: number
-    server_time_iso: string
-    server_timezone: string
-}
 
 /**********************
  *    Add action    *
