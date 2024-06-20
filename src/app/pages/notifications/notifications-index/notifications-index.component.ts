@@ -52,6 +52,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -95,7 +96,8 @@ import {
         NgForOf,
         HoststatusIconComponent,
         NoRecordsComponent,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        HoststatusSimpleIconComponent
     ],
     templateUrl: './notifications-index.component.html',
     styleUrl: './notifications-index.component.css'
@@ -133,7 +135,7 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
         this.params['filter[NotificationHosts.state][]'] = getHostNotificationStateForApi(this.stateFilter);
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
-        
+
         this.subscriptions.add(this.NotificationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.notifications = result;

@@ -246,7 +246,8 @@
                     <tbody *ngIf="notifications">
                     <tr *ngFor="let notification of notifications.all_notifications">
                         <td class="text-center">
-                            TO DO - Add icons for state
+                            <oitc-hoststatus-simple-icon
+                                [hoststatus]="notification.NotificationHost.state"></oitc-hoststatus-simple-icon>
                         </td>
                         <td>
                             <a *oitcPermission="['hosts', 'browser']"
