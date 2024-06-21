@@ -33,6 +33,7 @@ export interface ServiceParams {
     'filter[servicepriority][]': number[]
 }
 
+
 export interface ServiceIndexFilter {
     Servicestatus: {
         current_state: string[],

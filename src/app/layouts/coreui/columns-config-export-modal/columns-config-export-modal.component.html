@@ -1,0 +1,38 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="columnsConfigExportModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-info txt-color-white">
+            <h5 cModalTitle class="text-white">
+                {{ t('Share column configuration') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <label class="bold">
+                    {{ t('Share this column configuration string') }}
+                </label>
+                <c-input-group>
+                <input
+                       cFormControl
+                       readonly="readonly"
+                       [(ngModel)]="configString">
+                    <span cInputGroupText id="copy">
+                        <oitc-copy-to-clipboard [data]="configString">
+                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        </oitc-copy-to-clipboard>
+                    </span>
+                </c-input-group>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
