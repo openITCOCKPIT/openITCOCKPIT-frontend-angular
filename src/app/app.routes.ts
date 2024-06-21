@@ -275,6 +275,9 @@ export const routes: Routes = [{
     path: 'notifications/serviceNotification/:id',
     loadComponent: () => import('./pages/notifications/service-notification/service-notification.component').then(m => m.ServiceNotificationComponent)
 }, {
+    path: 'logentries/index',
+    loadComponent: () => import('./pages/logentries/logentries-index/logentries-index.component').then(m => m.LogentriesIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

@@ -1,0 +1,148 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['logentries', 'index']"
+                       [routerLink]="['/', 'logentries', 'index']">
+                        <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>
+                        {{ t('Log entries') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Log entries') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadLogentries()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Logentries.logentry_data]']"
+                                           [placeholder]="'Filter by output' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="Notifications.output"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Logentries.logentry_type]']"
+                                           [placeholder]="'Filter by entry type' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="Logentries.logentry_type"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="Logentries.entry_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Logentries.logentry_type">
+                            {{ t('Type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Logentries.logentry_data">
+                            {{ t('Record') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="logentries">
+                    <tr *ngFor="let logentry of logentries.logentries">
+                        <td>
+                            {{ logentry.entry_time }}
+                        </td>
+                        <td>
+                            {{ logentry.logentry_type_string }}
+                        </td>
+                        <td>
+                            <div [innerHtml]="logentry.logentry_data_angular_html| trustAsHtml"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <oitc-no-records
+                    *ngIf="logentries && logentries.logentries.length === 0"></oitc-no-records>
+                <c-container fluid class="mb-3 py-3">
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="logentries"
+                                [paginateOrScroll]="logentries"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
