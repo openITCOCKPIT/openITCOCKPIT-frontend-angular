@@ -280,3 +280,11 @@
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item-group {
     padding: 0 0.75rem;
 }
+
+body.dark-theme .p-skeleton {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-theme .p-skeleton::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+}

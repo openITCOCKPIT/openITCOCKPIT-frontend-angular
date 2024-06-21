@@ -49,7 +49,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
-import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -88,7 +89,8 @@ import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.
         XsButtonDirective,
         MultiSelectComponent,
         SelectComponent,
-        LabelLinkComponent
+        LabelLinkComponent,
+        FormLoaderComponent
     ],
     templateUrl: './contacts-edit.component.html',
     styleUrl: './contacts-edit.component.css'
@@ -104,36 +106,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError = {} as GenericValidationError;
     protected areContainersChangeable: boolean = true;
 
-    public post: Contact = {
-        containers: {_ids: []},
-        customvariables: [],
-        description: '',
-        email: '',
-        host_commands: {_ids: []},
-        host_notifications_enabled: 1,
-        host_push_notifications_enabled: 0,
-        host_timeperiod_id: null,
-        name: '',
-        notify_host_down: 1,
-        notify_host_downtime: 0,
-        notify_host_flapping: 0,
-        notify_host_recovery: 1,
-        notify_host_unreachable: 1,
-        notify_service_critical: 1,
-        notify_service_downtime: 0,
-        notify_service_flapping: 0,
-        notify_service_recovery: 1,
-        notify_service_unknown: 1,
-        notify_service_warning: 1,
-        phone: '',
-        service_commands: {_ids: []},
-        service_notifications_enabled: 1,
-        service_push_notifications_enabled: 0,
-        service_timeperiod_id: null,
-        user_id: null,
-        uuid: '',
-        allow_edit: true
-    };
+    public post!: Contact;
+
     protected containers: LoadContainersContainer[] = [];
     private route = inject(ActivatedRoute)
     private hostPushCommandId: number = 0;
