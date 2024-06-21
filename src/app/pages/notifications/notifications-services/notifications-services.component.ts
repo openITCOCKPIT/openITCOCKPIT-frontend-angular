@@ -4,9 +4,7 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
+    ColComponent, ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -72,7 +70,6 @@ import {
         XsButtonDirective,
         RouterLink,
         ColComponent,
-        ContainerComponent,
         DebounceDirective,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -92,12 +89,12 @@ import {
         TableDirective,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        DropdownDividerDirective,
         ItemSelectComponent,
         NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        ServicestatusSimpleIconComponent
+        ServicestatusSimpleIconComponent,
+        ContainerComponent
     ],
     templateUrl: './notifications-services.component.html',
     styleUrl: './notifications-services.component.css'
@@ -150,6 +147,8 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy {
 
     public resetFilter() {
         this.params = getDefaultNotificationsServicesParams();
+        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.stateFilter = {
             ok: false,
             warning: false,

@@ -52,7 +52,7 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 
 @Component({
-    selector: 'oitc-notifications-index',
+    selector: 'oitc-host-notification',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -94,10 +94,11 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
         HoststatusSimpleIconComponent,
         ContainerComponent
     ],
-    templateUrl: './notifications-index.component.html',
-    styleUrl: './notifications-index.component.css'
+    templateUrl: './host-notification.component.html',
+    styleUrl: './host-notification.component.css'
 })
-export class NotificationsIndexComponent implements OnInit, OnDestroy {
+export class HostNotificationComponent implements OnInit, OnDestroy {
+    private hostId: number = 0;
     private NotificationsService = inject(NotificationsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -114,11 +115,8 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            this.loadNotifications();
-        }));
+        this.hostId = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadNotifications();
     }
 
     public ngOnDestroy(): void {
@@ -130,7 +128,7 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        this.subscriptions.add(this.NotificationsService.getIndex(this.params)
+        this.subscriptions.add(this.NotificationsService.getHostNotifications(this.hostId, this.params)
             .subscribe((result) => {
                 this.notifications = result;
             })

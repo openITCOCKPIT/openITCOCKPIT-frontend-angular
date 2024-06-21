@@ -269,6 +269,12 @@ export const routes: Routes = [{
     path: 'notifications/services',
     loadComponent: () => import('./pages/notifications/notifications-services/notifications-services.component').then(m => m.NotificationsServicesComponent)
 }, {
+    path: 'notifications/hostNotification/:id',
+    loadComponent: () => import('./pages/notifications/host-notification/host-notification.component').then(m => m.HostNotificationComponent)
+}, {
+    path: 'notifications/serviceNotification/:id',
+    loadComponent: () => import('./pages/notifications/service-notification/service-notification.component').then(m => m.ServiceNotificationComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
