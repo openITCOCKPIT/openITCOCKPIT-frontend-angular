@@ -76,10 +76,8 @@
             </c-card-header>
             <c-card-body>
                 <ng-container>
-                    <c-container>
-                    <oitc-services-index-filter [show]="showFilter"
-                                                (filterChange)="getFilter($event)"></oitc-services-index-filter>
-                    </c-container>
+                    <oitc-services-index-filter [show]="showFilter" [satellites]="satellites" (filterChange)="getFilter($event)">
+                    </oitc-services-index-filter>
                     <table bordered cTable class="mt-2 mb-0" hover striped matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">

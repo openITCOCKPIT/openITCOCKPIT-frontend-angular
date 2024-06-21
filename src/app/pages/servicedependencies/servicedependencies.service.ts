@@ -80,7 +80,7 @@ export class ServicedependenciesService {
 
     public loadServices(containerId: number, searchString: string, servicesIds: number []): Observable<ServicedependencyServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByContainerId.json`, {
+        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByStringForOptionGroup.json`, {
             params: {
                 'angular': true,
                 'containerId': containerId,
@@ -96,7 +96,7 @@ export class ServicedependenciesService {
 
     public loadDependentServices(containerId: number, searchString: string, dependentServicesIds: number []): Observable<ServicedependencyServices> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByContainerId.json`, {
+        return this.http.get<ServicedependencyServices>(`${proxyPath}/services/loadServicesByStringForOptionGroup.json`, {
             params: {
                 'angular': true,
                 'containerId': containerId,

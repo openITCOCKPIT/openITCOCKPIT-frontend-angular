@@ -123,9 +123,28 @@
                     </c-input-group>
                 </c-col>
             </c-row>
-            <c-row>
-                <c-col></c-col>
-                <c-col></c-col>
+            <c-row class="mb-3">
+                <c-col  [xs]="12" [lg]="6" class="ui-fluid">
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        </span>
+
+                        <oitc-multi-select
+                                name="servicetemplatetype_id"
+                                id="servicetemplatetype_id"
+                                optionValue="id"
+                                optionLabel="name"
+                                [(ngModel)]="filter.Services.service_type"
+                                [options]="serviceTypes"
+                                [debounce]="true"
+                                [placeholder]="'Filter by service types' | transloco"
+                                (onChange)="onFilterChange(null)"
+                                >
+                        </oitc-multi-select>
+                    </c-input-group>
+                </c-col>
+
             </c-row>
             <c-row>
                 <c-col>
@@ -294,6 +313,42 @@
                             <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical ms-1"></fa-icon>
                         </label>
                     </c-form-check>
+                </c-col>
+            </c-row>
+            <c-row class="mb-2">
+                <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                    <fieldset>
+                        <h5>
+                            {{ t('Instance') }}
+                        </h5>
+                        <c-form-check class="d-flex">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                                </span>
+
+                                <oitc-multi-select
+                                        class="flex-1"
+                                        name="satellite_id"
+                                        id="satellite_id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="filter.Hosts.satellite_id"
+                                        [options]="satellites"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by instance' | transloco"
+                                        (onChange)="onFilterChange(null)">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-form-check>
+                    </fieldset>
+                </c-col>
+            </c-row>
+            <c-row class="mt-2">
+                <c-col class="text-end">
+                    <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                        {{ t('Reset filter') }}
+                    </button>
                 </c-col>
             </c-row>
         </c-card-body>
