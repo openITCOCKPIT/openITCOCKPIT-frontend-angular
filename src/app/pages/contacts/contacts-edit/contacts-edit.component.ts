@@ -119,6 +119,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
     protected allContainers: LoadContainersContainer[] = []
+    protected requiredContainersList: LoadContainersContainer[] = []
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
@@ -185,6 +186,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             .subscribe((result: LoadContainersRoot) => {
                 // Fetch all containers.
                 this.allContainers = result.containers;
+                this.requiredContainersList = result.containers;
 
                 // If no containers are required, the selectedContainers can remain where they belong.
                 if (this.requiredContainers.length === 0) {
