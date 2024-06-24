@@ -1,5 +1,6 @@
 import {PaginateOrScroll} from "../../layouts/coreui/paginator/paginator.interface";
 import {GenericValidationError} from "../../generic-responses";
+import {SelectKeyValue} from "../../layouts/primeng/select.interface";
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
@@ -177,13 +178,8 @@ export interface HostgroupsEditPostHosttemplates {
 
 // LOAD CONTAINERS GET
 export interface LoadContainersRoot {
-    containers: LoadContainersContainer[]
+    containers: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadContainersContainer {
-    key: number
-    value: string
 }
 
 // LOAD HOSTS REQUEST
@@ -200,24 +196,14 @@ export interface LoadHostsRequestFilter {
 
 // LOAD HOSTS RESPONSE
 export interface LoadHostsResponse {
-    hosts: LoadHostsResponseHost[]
+    hosts: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadHostsResponseHost {
-    key: number
-    value: string
 }
 
 // LOAD HOSTTEMPLATES RESPONSE
 export interface LoadHosttemplates {
-    hosttemplates: LoadHosttemplatesHosttemplate[]
+    hosttemplates: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadHosttemplatesHosttemplate {
-    key: number
-    value: string
 }
 
 // ADD HOSTGROUP POST

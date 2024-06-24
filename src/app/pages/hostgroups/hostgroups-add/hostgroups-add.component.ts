@@ -31,13 +31,14 @@ import {NotyService} from '../../../layouts/coreui/noty.service';
 import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import {HostgroupsService} from '../hostgroups.service';
 import {
-    AddHostgroupsPost,
-    AddHostgroupsPostHostgroup, LoadContainersContainer,
-    LoadContainersRoot, LoadHostsResponse,
-    LoadHostsResponseHost, LoadHosttemplates, LoadHosttemplatesHosttemplate
+    AddHostgroupsPostHostgroup,
+    LoadContainersRoot,
+    LoadHostsResponse,
+    LoadHosttemplates
 } from "../hostgroups.interface";
 import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
 import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
 
 @Component({
     selector: 'oitc-hostgroups-add',
@@ -84,7 +85,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    protected hosts: LoadHostsResponseHost[] = [];
+    protected hosts: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -92,8 +93,8 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     public post: AddHostgroupsPostHostgroup = {} as AddHostgroupsPostHostgroup;
-    protected containers: LoadContainersContainer[] = [];
-    protected hosttemplates: LoadHosttemplatesHosttemplate[] = [];
+    protected containers: SelectKeyValue[] = [];
+    protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
 
     constructor() {

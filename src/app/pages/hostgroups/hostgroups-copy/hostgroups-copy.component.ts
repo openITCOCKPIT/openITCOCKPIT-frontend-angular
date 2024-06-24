@@ -18,10 +18,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostgroupsService } from '../hostgroups.service';
-import {
-    HostgroupsCopyGetHostgroup, HostgroupsCopyPostHostgroup, HostgroupsCopyPostResult,
-    HostgroupsCopyPostRoot
-} from '../hostgroups.interface';
+import { HostgroupsCopyPostResult } from '../hostgroups.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';

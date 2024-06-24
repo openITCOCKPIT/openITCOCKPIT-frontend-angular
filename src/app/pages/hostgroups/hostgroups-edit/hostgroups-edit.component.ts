@@ -33,12 +33,12 @@ import {HostgroupsService} from '../hostgroups.service';
 import {
     HostgroupsEditGet,
     HostgroupsEditPostHostgroup,
-    LoadContainersContainer,
     LoadContainersRoot, LoadHostsResponse,
-    LoadHostsResponseHost, LoadHosttemplates, LoadHosttemplatesHosttemplate
+    LoadHosttemplates
 } from "../hostgroups.interface";
 import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
 import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
 
 @Component({
     selector: 'oitc-hostgroups-edit',
@@ -85,7 +85,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    protected hosts: LoadHostsResponseHost[] = [];
+    protected hosts: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -113,8 +113,8 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
         id: 0,
         uuid: ''
     }
-    protected containers: LoadContainersContainer[] = [];
-    protected hosttemplates: LoadHosttemplatesHosttemplate[] = [];
+    protected containers: SelectKeyValue[] = [];
+    protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
 
 
