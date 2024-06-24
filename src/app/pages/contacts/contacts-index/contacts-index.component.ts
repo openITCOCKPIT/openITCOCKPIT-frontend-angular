@@ -55,7 +55,7 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { CommandIndex } from '../../commands/commands.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-contacts-index',
@@ -101,7 +101,8 @@ import { CommandIndex } from '../../commands/commands.interface';
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        BadgeComponent
+        BadgeComponent,
+        TableLoaderComponent
     ],
     templateUrl: './contacts-index.component.html',
     styleUrl: './contacts-index.component.css',
@@ -119,7 +120,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
-    public contacts: ContactsIndexRoot = {all_contacts: [], _csrfToken: '', isLdapAuth: false}
+    public contacts?: ContactsIndexRoot;
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
 
