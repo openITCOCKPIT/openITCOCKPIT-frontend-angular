@@ -32,7 +32,7 @@ import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uu
 import {HostgroupsService} from '../hostgroups.service';
 import {
     HostgroupsEditGet,
-    HostgroupsEditPostHostgroup,
+    Hostgroup,
     LoadContainersRoot, LoadHostsResponse,
     LoadHosttemplates
 } from "../hostgroups.interface";
@@ -92,7 +92,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public createAnother: boolean = false;
 
-    public post: HostgroupsEditPostHostgroup = {
+    public post: Hostgroup = {
         container: {
             containertype_id: 0,
             id: 0,

@@ -6,7 +6,7 @@ import {
     HostgroupsCopyGetHostgroup,
     HostgroupsCopyPostResult,
     HostgroupsEditGet,
-    HostgroupsEditPostHostgroup,
+    Hostgroup,
     HostgroupsIndexParams,
     HostgroupsIndexRoot,
     LoadContainersRoot,
@@ -76,7 +76,7 @@ export class HostgroupsService {
         )
     }
 
-    public addHostgroup(hostgroup: HostgroupsEditPostHostgroup): Observable<GenericResponseWrapper> {
+    public addHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         const postObject: AddHostgroupsPost = {Hostgroup: hostgroup}
         return this.http.post<any>(`${proxyPath}/hostgroups/add.json?angular=true`, postObject)
@@ -121,7 +121,7 @@ export class HostgroupsService {
             })
         )
     }
-    public updateHostgroup(hostgroup: HostgroupsEditPostHostgroup): Observable<GenericResponseWrapper> {
+    public updateHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hostgroups/edit/${hostgroup.id}.json?angular=true`, {
             Hostgroup: hostgroup

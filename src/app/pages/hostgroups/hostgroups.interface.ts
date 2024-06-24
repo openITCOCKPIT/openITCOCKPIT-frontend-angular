@@ -77,7 +77,6 @@ export interface HostgroupsCopyGetContainer {
     rght: number
 }
 
-// COPY POST
 
 export interface HostgroupsCopyPostResult {
     Source: {
@@ -98,13 +97,13 @@ export interface HostgroupsCopyPostResult {
 // EDIT GET
 export interface HostgroupsEditGet {
     hostgroup: {
-        Hostgroup: HostgroupsEditPostHostgroup
+        Hostgroup: Hostgroup
     }
     _csrfToken: string
 }
 
 // EDIT POST
-export interface HostgroupsEditPostHostgroup {
+export interface Hostgroup {
     id?: number
     uuid?: string
     container_id?: number
@@ -157,6 +156,6 @@ export interface LoadHosttemplates {
 
 // ADD HOSTGROUP POST
 export interface AddHostgroupsPost {
-    Hostgroup: HostgroupsEditPostHostgroup
+    Hostgroup: Hostgroup
 }
 
