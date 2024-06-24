@@ -46,6 +46,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { DynamicHtmlComponent } from '../../../components/dynamic-html/dynamic-html/dynamic-html.component';
 
 @Component({
     selector: 'oitc-logentries-index',
@@ -89,7 +90,8 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         PaginateOrScrollComponent,
         ContainerComponent,
         HoststatusSimpleIconComponent,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        DynamicHtmlComponent
     ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css'
