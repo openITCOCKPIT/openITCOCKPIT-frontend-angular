@@ -77,6 +77,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -135,12 +136,13 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        RegexHelperTooltipComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
 export class HostsIndexComponent implements OnInit, OnDestroy {
@@ -344,9 +346,10 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                console.log(item)
                 return {
-                    id: item.id,
-                    displayName: item.hostname
+                    id: item.Host.id,
+                    displayName: item.Host.hostname
                 };
             });
         }
