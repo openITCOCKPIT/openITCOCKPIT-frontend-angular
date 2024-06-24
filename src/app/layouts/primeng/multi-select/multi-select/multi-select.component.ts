@@ -228,7 +228,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
 
             this._options?.forEach((element) => {
                 // Check that we actually have a name to add prefix / suffix.
-                if (! element.value) {
+                if (!element.value) {
                     return;
                 }
                 if (this.labelSuffix && !element.value.endsWith(this.labelSuffix)) {
