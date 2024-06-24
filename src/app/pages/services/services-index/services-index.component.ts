@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { ProfileService} from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { ServiceIndexFilter, Service, ServiceParams, ServicesIndexRoot } from "../services.interface";
+import { ServiceIndexFilter, ServiceObject, ServiceParams, ServicesIndexRoot } from "../services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { ServiceAcknowledgeModalComponent} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -50,7 +50,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownComponent,
+    DropdownComponent, DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
@@ -101,6 +101,7 @@ import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-
 import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 type states = {
     ok: boolean,
@@ -177,12 +178,14 @@ type states = {
         RegexHelperTooltipComponent,
         FormsModule,
         ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent
+        ColumnsConfigImportModalComponent,
+        DropdownDividerDirective
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService} ,
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}
     ]
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy  {
@@ -416,9 +419,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             'filter[servicepriority][]': this.params['filter[servicepriority][]']
         };
 
-
         let stringParams:HttpParams = new HttpParams();
-
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
 
@@ -535,7 +536,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         });
     }
 
-    public toggleDisableModal(service?: Service){
+    public toggleDisableModal(service?: ServiceObject){
         let items: DisableItem[] = [];
 
         if (service) {
@@ -588,8 +589,38 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             show: true,
             id: 'serviceAcknowledgeModal',
         });
-
     }
+
+    toggleDeleteAllModal(service?: ServiceObject) {
+        let items: DeleteAllItem[] = [];
+
+        if (service) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(service.id),
+                displayName: String(service.hostname) + '/' + String(service.servicename)
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+
+                return {
+                    id: item.Service.id,
+                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+    navigateCopy() {}
 
     public onMassActionComplete(success: boolean) {
 

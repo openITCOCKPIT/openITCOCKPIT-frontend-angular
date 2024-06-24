@@ -142,7 +142,7 @@ import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
 export class HostsIndexComponent implements OnInit, OnDestroy {

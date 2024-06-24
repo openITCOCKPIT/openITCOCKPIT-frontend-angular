@@ -78,8 +78,8 @@ export interface ServicesIndexRoot extends PaginateOrScroll {
 }
 
 export interface AllService {
-    Service: Service
-    Host: Host
+    Service: ServiceObject
+    Host: ServiceHostObject
     Hoststatus: HoststatusObject
     Servicestatus: Servicestatus
     ServiceType: HostOrServiceType
@@ -87,7 +87,7 @@ export interface AllService {
     Acknowledgement: any[]
 }
 
-export interface Service {
+export interface ServiceObject {
     id: number
     uuid: string
     servicename: string
@@ -103,7 +103,7 @@ export interface Service {
     has_graph: boolean
 }
 
-export interface Host {
+export interface ServiceHostObject {
     id: number
     uuid: string
     hostname: string

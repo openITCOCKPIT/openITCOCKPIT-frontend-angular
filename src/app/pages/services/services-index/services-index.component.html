@@ -90,7 +90,7 @@
 
                         </c-card-header>
                         <c-card-body *ngIf="showFilter">
-                            <c-row  class="mb-3">
+                            <c-row class="mb-3">
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
                                         <span cInputGroupText id="hostname">
@@ -138,7 +138,7 @@
                                     </c-input-group>
                                 </c-col>
                             </c-row>
-                            <c-row  class="mb-3">
+                            <c-row class="mb-3">
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
                                         <span cInputGroupText id="description">
@@ -170,8 +170,8 @@
                                     </c-input-group>
                                 </c-col>
                             </c-row>
-                            <c-row  class="mb-3">
-                                <c-col  [xs]="12" [lg]="6">
+                            <c-row class="mb-3">
+                                <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
                                         <span cInputGroupText>
                                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -187,7 +187,7 @@
                                         </ng-select>
                                     </c-input-group>
                                 </c-col>
-                                <c-col  [xs]="12" [lg]="6">
+                                <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
                                         <span cInputGroupText>
                                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -205,7 +205,7 @@
                                 </c-col>
                             </c-row>
                             <c-row class="mb-3">
-                                <c-col  [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-col [xs]="12" [lg]="6" class="ui-fluid">
                                     <c-input-group>
                                         <span cInputGroupText>
                                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
@@ -236,7 +236,8 @@
                                                [(ngModel)]="states.ok"
                                                (debouncedValue)="onStateChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusok">{{ t('Ok') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="checkstatusok">{{ t('Ok') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusowarning" type="checkbox"
@@ -244,7 +245,8 @@
                                                [(ngModel)]="states.warning"
                                                (debouncedValue)="onStateChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusowarning">{{ t('Warning') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="checkstatusowarning">{{ t('Warning') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatuscritical" type="checkbox"
@@ -252,7 +254,8 @@
                                                [(ngModel)]="states.critical"
                                                (debouncedValue)="onStateChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatuscritical">{{ t('Critical') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="checkstatuscritical">{{ t('Critical') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusunknown" type="checkbox"
@@ -260,42 +263,51 @@
                                                [(ngModel)]="states.unknown"
                                                (debouncedValue)="onStateChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="checkstatusunknown">{{ t('Unknown') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="checkstatusunknown">{{ t('Unknown') }}</label>
                                     </c-form-check>
                                 </c-col>
                                 <c-col [xs]="12" lg="2">
                                     <h5>{{ t('Acknowlegements') }}</h5>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="ack" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="ack" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Servicestatus.acknowledged"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="ack">{{ t('Acknowledge') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="ack">{{ t('Acknowledge') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="acknot" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="acknot" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Servicestatus.not_acknowledged"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="acknot">{{ t('Not acknowledged') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="acknot">{{ t('Not acknowledged') }}</label>
                                     </c-form-check>
                                 </c-col>
 
                                 <c-col [xs]="12" lg="2">
                                     <h5>{{ t('Downtimes') }}</h5>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="downtimes" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="downtimes" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Servicestatus.in_downtime"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="downtimes">{{ t('In downtime') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="downtimes">{{ t('In downtime') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="not_down" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="not_down" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Servicestatus.not_in_downtime"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="not_down">{{ t('Not in downtime') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="not_down">{{ t('Not in downtime') }}</label>
                                     </c-form-check>
                                 </c-col>
 
@@ -307,7 +319,8 @@
                                                [(ngModel)]="filter.Servicestatus.active"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="activeservice">{{ t('Active service') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="activeservice">{{ t('Active service') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="passiveservice" type="checkbox"
@@ -315,7 +328,8 @@
                                                [(ngModel)]="filter.Servicestatus.passive"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="passiveservice">{{ t('Passive service') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="passiveservice">{{ t('Passive service') }}</label>
                                     </c-form-check>
                                 </c-col>
                                 <c-col [xs]="12" lg="2">
@@ -326,7 +340,8 @@
                                                [(ngModel)]="filter.Servicestatus.notifications_enabled"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="notifyenabled">{{ t('Enabled') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="notifyenabled">{{ t('Enabled') }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="notifydisabled" type="checkbox"
@@ -334,13 +349,15 @@
                                                [(ngModel)]="filter.Servicestatus.notifications_not_enabled"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="notifydisabled">{{ t('Not enabled') }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="notifydisabled">{{ t('Not enabled') }}</label>
                                     </c-form-check>
                                 </c-col>
                                 <c-col [xs]="12" lg="2">
                                     <h5>{{ t('Priority') }}</h5>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="prority1" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="prority1" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Services.priority[1]"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
@@ -349,7 +366,8 @@
                                         </label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="prority2" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="prority2" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Services.priority[2]"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
@@ -359,7 +377,8 @@
                                         </label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="prority3" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="prority3" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Services.priority[3]"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
@@ -370,19 +389,25 @@
                                         </label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="prority4" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="prority4" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Services.priority[4]"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1" for="prority4">
-                                            <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']" size="lg" class="critical-soft ms-1"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']" size="lg"
+                                                     class="critical-soft ms-1"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']" size="lg"
+                                                     class="critical-soft ms-1"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']" size="lg"
+                                                     class="critical-soft ms-1"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']" size="lg"
+                                                     class="critical-soft ms-1"></fa-icon>
                                         </label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="prority5" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="prority5" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="filter.Services.priority[5]"
                                                (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
@@ -433,117 +458,162 @@
                                 </c-col>
                             </c-row>
                         </c-card-body>
-                        <c-card-footer  *ngIf="showFilter">
+                        <c-card-footer *ngIf="showFilter">
                             <c-row class="mt-2">
                                 <c-col>
-                                    <fa-icon [icon]="['fas', 'list']" size="lg" class="ms-1"></fa-icon> {{ t('Column configuration') }}
+                                    <fa-icon [icon]="['fas', 'list']" size="lg" class="ms-1"></fa-icon>
+                                    {{ t('Column configuration') }}
                                 </c-col>
                                 <c-col>
                                     <div class="float-end">
                                         <button class="btn btn-xs btn-secondary dropdown-toggle" type="button"
-                                                data-toggle="dropdown" aria-expanded="false" (click)="togglecolumnConfiguration()"><fa-icon [icon]="['fas', 'columns']" size="lg" class="ms-1"></fa-icon> {{ t('Columns') }}</button>
+                                                data-toggle="dropdown" aria-expanded="false"
+                                                (click)="togglecolumnConfiguration()">
+                                            <fa-icon [icon]="['fas', 'columns']" size="lg" class="ms-1"></fa-icon>
+                                            {{ t('Columns') }}
+                                        </button>
                                     </div>
                                 </c-col>
                             </c-row>
                             <c-row class="mt-2" *ngIf="showColumnConfig">
                                 <c-col [xs]="12" lg="3">
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-0" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-0" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[0]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-0">{{ t(fieldNames[0]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-0">{{ t(fieldNames[0]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-1" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-1" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[1]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-1">{{ t(fieldNames[1]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-1">{{ t(fieldNames[1]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-2" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-2" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[2]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-2">{{ t(fieldNames[2]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-2">{{ t(fieldNames[2]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-3" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-3" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[3]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-3">{{ t(fieldNames[3]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-3">{{ t(fieldNames[3]) }}</label>
                                     </c-form-check>
                                 </c-col>
 
                                 <c-col [xs]="12" lg="3">
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-4" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-4" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[4]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-4">{{ t(fieldNames[4]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-4">{{ t(fieldNames[4]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-5" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-5" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[5]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-5">{{ t(fieldNames[5]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-5">{{ t(fieldNames[5]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-6" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-6" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[6]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-6">{{ t(fieldNames[6]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-6">{{ t(fieldNames[6]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-7" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-7" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[7]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-7">{{ t(fieldNames[7]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-7">{{ t(fieldNames[7]) }}</label>
                                     </c-form-check>
                                 </c-col>
 
                                 <c-col [xs]="12" lg="2">
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-8" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-8" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[8]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-8">{{ t(fieldNames[8]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-8">{{ t(fieldNames[8]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-9" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-9" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[9]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-9">{{ t(fieldNames[9]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-9">{{ t(fieldNames[9]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-10" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-10" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[10]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-10">{{ t(fieldNames[10]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-10">{{ t(fieldNames[10]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-11" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-11" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[11]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-11">{{ t(fieldNames[11]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-11">{{ t(fieldNames[11]) }}</label>
                                     </c-form-check>
                                 </c-col>
 
                                 <c-col [xs]="12" lg="2">
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-12" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-12" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[12]">
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-12">{{ t(fieldNames[12]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-12">{{ t(fieldNames[12]) }}</label>
                                     </c-form-check>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput id="field-13" type="checkbox" class="checkbox-lg custom-check-default"
+                                        <input cFormCheckInput id="field-13" type="checkbox"
+                                               class="checkbox-lg custom-check-default"
                                                [(ngModel)]="fields[13]"/>
-                                        <label cFormCheckLabel class="ms-1 mt-1" for="field-13">{{ t(fieldNames[13]) }}</label>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="field-13">{{ t(fieldNames[13]) }}</label>
                                     </c-form-check>
                                 </c-col>
                                 <c-col [xs]="12" lg="2">
                                     <c-row class="mt-2 me-0">
-                                        <button class="btn btn-xs btn-primary float-end" type="button" (click)="toggleColumnsConfigExport()">
-                                            <fa-icon [icon]="['fas', 'share-alt']" size="lg" class="ms-1"></fa-icon> {{ t('Share') }}
+                                        <button class="btn btn-xs btn-primary float-end" type="button"
+                                                (click)="toggleColumnsConfigExport()">
+                                            <fa-icon [icon]="['fas', 'share-alt']" size="lg" class="ms-1"></fa-icon>
+                                            {{ t('Share') }}
                                         </button>
                                     </c-row>
                                     <c-row class="mt-2 me-0">
-                                        <button class="btn btn-secondary btn-xs float-end" type="button" (click)="toggleColumnsConfigImport()"
-                                        ><fa-icon [icon]="['fas', 'file-import']" size="lg" class="ms-1"></fa-icon> {{ t('Import') }}</button>
+                                        <button class="btn btn-secondary btn-xs float-end" type="button"
+                                                (click)="toggleColumnsConfigImport()"
+                                        >
+                                            <fa-icon [icon]="['fas', 'file-import']" size="lg" class="ms-1"></fa-icon>
+                                            {{ t('Import') }}
+                                        </button>
                                     </c-row>
                                     <c-row class="mt-2 me-0">
-                                        <button class="btn btn-default btn-xs float-end" type="button" (click)="getDefaultColumns()"
-                                        ><fa-icon [icon]="['fas', 'recycle']" size="lg" class="ms-1"></fa-icon> {{ t('Reset to default') }}</button>
+                                        <button class="btn btn-default btn-xs float-end" type="button"
+                                                (click)="getDefaultColumns()"
+                                        >
+                                            <fa-icon [icon]="['fas', 'recycle']" size="lg" class="ms-1"></fa-icon>
+                                            {{ t('Reset to default') }}
+                                        </button>
                                     </c-row>
                                     <c-row class="mt-2 me-0">
-                                        <button class="btn btn-success btn-xs float-end" type="button" (click)="saveColumnsConfig()"
-                                        > {{ t('Save') }}</button>
+                                        <button class="btn btn-success btn-xs float-end" type="button"
+                                                (click)="saveColumnsConfig()"
+                                        > {{ t('Save') }}
+                                        </button>
                                     </c-row>
                                 </c-col>
                             </c-row>
@@ -563,14 +633,16 @@
                             <th *ngIf="fields[0]" class="text-center" scope="col"
                                 mat-sort-header="Servicestatus.current_state">{{ t('State') }}
                             </th>
-                            <th *ngIf="fields[1]" class="text-center" scope="col" mat-sort-header="Servicestatus.acknowledgement_type">
+                            <th *ngIf="fields[1]" class="text-center" scope="col"
+                                mat-sort-header="Servicestatus.acknowledgement_type">
                                 <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                             </th>
                             <th *ngIf="fields[2]" class="text-center" scope="col"
                                 mat-sort-header="Servicestatus.scheduled_downtime_depth">
                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                             </th>
-                            <th *ngIf="fields[3]" class="text-center" scope="col" mat-sort-header="Servicestatus.notifications_enabled">
+                            <th *ngIf="fields[3]" class="text-center" scope="col"
+                                mat-sort-header="Servicestatus.notifications_enabled">
                                 <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                             </th>
                             <th *ngIf="fields[4]" class="text-center" scope="col">
@@ -590,8 +662,10 @@
                             <th *ngIf="fields[9]">
                                 {{ t('Service description') }}
                             </th>
-                            <th  *ngIf="fields[10]" mat-sort-header="Servicestatus.last_state_change">{{ t('Last state change') }}</th>
-                            <th  *ngIf="fields[11]" mat-sort-header="Servicestatus.last_check">{{ t('Last check') }}</th>
+                            <th *ngIf="fields[10]"
+                                mat-sort-header="Servicestatus.last_state_change">{{ t('Last state change') }}
+                            </th>
+                            <th *ngIf="fields[11]" mat-sort-header="Servicestatus.last_check">{{ t('Last check') }}</th>
                             <th *ngIf="fields[12]" mat-sort-header="Servicestatus.next_check">{{ t('Next check') }}</th>
                             <th *ngIf="fields[13]" mat-sort-header="Servicestatus.output">{{ t('Service output') }}</th>
                             <th>
@@ -608,17 +682,20 @@
                                         <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
                                             {{ service.Service.hostname }}
                                         </a>
-                                        (<oitc-copy-to-clipboard [data]="service.Host.address">
+                                        (
+                                        <oitc-copy-to-clipboard [data]="service.Host.address">
                                             {{ service.Host.address }}
                                         </oitc-copy-to-clipboard>)
                                     } @else {
                                         {{ service.Service.hostname }}({{ service.Host.address }})
                                     }
-                                    <div *ngIf="!service.Host.is_satellite_host" class="badge border border-info text-info">
+                                    <div *ngIf="!service.Host.is_satellite_host"
+                                         class="badge border border-info text-info">
                                         <fa-icon [icon]="['fas', 'home']"></fa-icon>
                                         {{ service.Host.satelliteName }}
                                     </div>
-                                    <div *ngIf="service.Host.is_satellite_host" class="badge border border-secondary text-secondary">
+                                    <div *ngIf="service.Host.is_satellite_host"
+                                         class="badge border border-secondary text-secondary">
                                         <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
                                         {{ service.Host.satelliteName }}
                                     </div>
@@ -706,7 +783,8 @@
                                     </div>
                                 </td>
                                 <td *ngIf="fields[5]" class="width-50">
-                                    <strong [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right"
+                                    <strong [cTooltip]="'Passively transferred host' | transloco"
+                                            cTooltipPlacement="right"
                                             *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
                                         P
                                     </strong>
@@ -725,7 +803,7 @@
                                 <td *ngIf="fields[8]">
                                     <span
                                             class="badge border margin-right-10 {{service.ServiceType.class}} {{service.ServiceType.color}}">
-                                        {{service.ServiceType.title}}
+                                        {{ service.ServiceType.title }}
                                     </span>
                                 </td>
                                 <td *ngIf="fields[9]">
@@ -735,32 +813,50 @@
                                 <td *ngIf="fields[10]">{{ service.Hoststatus.last_state_change }}</td>
                                 <td *ngIf="fields[11]">{{ service.Servicestatus.lastCheck }}</td>
                                 <td *ngIf="fields[12]">{{ service.Servicestatus.nextCheck }}</td>
-                                <td  *ngIf="fields[13]">
+                                <td *ngIf="fields[13]">
                                     <div [innerHTML]="service.Servicestatus.outputHtml"></div>
                                 </td>
                                 <td>
-                                    <oitc-actions-button [permission]="'services.edit'" [url]="'/services/index'">
+                                    <oitc-actions-button [permission]="'services.edit'"
+                                                         [url]="'/services/edit/' + service.Service.id">
                                         <oitc-actions-button-element [permission]="'services.edit'"
-                                                                     [url]="'/services/index'">
+                                                                     [url]="'/services/edit/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                             {{ t('Edit') }}
                                         </oitc-actions-button-element>
-                                        <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
-                                                                     [permission]="'services.deactivate'">
-                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                                {{ t('Disable') }}
-                                        </oitc-actions-button-element>
                                         <oitc-actions-button-element
-                                                                     [permission]="'changelogs.index'">
+                                                [permission]="'changelogs.index'"
+                                                [url]="'/changelogs/entity/service/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'timeline']"></fa-icon>
                                             {{ t('Changelog') }}
                                         </oitc-actions-button-element>
                                         <oitc-actions-button-element
-                                                [permission]="'services.copy'">
+                                                [permission]="'services.copy'"
+                                                [url]="'/service/copy/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'file']"></fa-icon>
                                             {{ t('Copy') }}
                                         </oitc-actions-button-element>
+                                        <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
+                                                                     [permission]="'services.deactivate'">
+                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                            {{ t('Disable') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'services.usedBy'"
+                                                                     [url]="'/services/usedBy/' + service.Host.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                                                                     [permission]="'services.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
                                     </oitc-actions-button>
+
+
                                 </td>
                             </tr>
                         </ng-container>
@@ -772,55 +868,73 @@
                         <c-container class="bg-secondary bg-opacity-10 mb-3 rounded-bottom border border-top-0"
                                      fluid>
                             <c-row class="p-3">
-                                <c-col xs="6">
+                                <c-col [xs]="12" lg="6">
                                     <oitc-select-all
                                             [itemsCount]="services.all_services.length">
                                     </oitc-select-all>
                                 </c-col>
-                                <c-col>
-                                    <fa-icon [icon]="['fas', 'file']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </c-col>
 
                                 <c-col>
-                                    <fa-icon [icon]="['fas', 'trash']" class="critical"></fa-icon>
-                                    <span class="critical">{{ t('Delete selected') }}</span>
-                                </c-col>
-                                <c-col>
-                                    <c-dropdown>
-                                        <button cButton cDropdownToggle color="default">
-                                            {{ t('More actions') }}
+                                    <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+                                        <button *oitcPermission="['services', 'copy']"
+                                                class="btn btn-outline-primary border-0" type="button"
+                                                (click)="navigateCopy()">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
                                         </button>
-                                        <ul cDropdownMenu>
-                                            <li><a href="{{linkFor('pdf')}}" cDropdownItem>
-                                                <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                                                {{ t('List as pdf') }}</a></li>
-                                            <li><a href="{{linkFor('csv')}}" cDropdownItem>
-                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                                {{ t('List as csv') }}</a></li>
-                                            <li *oitcPermission="['services', 'deactivate']"><a href="javascript:void(0);" cDropdownItem (click)="toggleDisableModal()">
-                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                                {{ t('Disable services') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem>
-                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                {{ t('Add to service group') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem (click)="resetChecktime()">
-                                                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                                {{ t('Reset check time') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem (click)="disableNotifications()">
-                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                {{ t('Disable notification') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem (click)="enableNotifications()">
-                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                {{ t('Enable notification') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem (click)="toggleDowntimeModal()">
-                                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                                {{ t('Set planned maintenance times') }}</a></li>
-                                            <li><a href="javascript:void(0);" cDropdownItem (click)="acknowledgeStatus()">
-                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                {{ t('Acknowledge status') }}</a></li>
-                                        </ul>
-                                    </c-dropdown>
+                                        <!--<fa-icon [icon]="['fas', 'trash']" class="critical"></fa-icon>
+                                        <span class="critical">{{ t('Delete selected') }}</span>-->
+                                        <button *oitcPermission="['services', 'delete']"
+                                                (click)="toggleDeleteAllModal()" class="btn btn-outline-danger border-0"
+                                                type="button">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Delete selected') }}
+                                        </button>
+
+                                        <!--</c-col>
+                                        <c-col>-->
+                                        <c-dropdown>
+                                            <button cButton cDropdownToggle color="default">
+                                                {{ t('More actions') }}
+                                            </button>
+                                            <ul cDropdownMenu>
+                                                <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                                    <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                                    {{ t('List as pdf') }}</a></li>
+                                                <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                                    {{ t('List as csv') }}</a></li>
+                                                <li *oitcPermission="['services', 'deactivate']"><a
+                                                        href="javascript:void(0);" cDropdownItem
+                                                        (click)="toggleDisableModal()">
+                                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                    {{ t('Disable services') }}</a></li>
+                                                <li><a href="javascript:void(0);" cDropdownItem>
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                    {{ t('Add to service group') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="resetChecktime()">
+                                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                        {{ t('Reset check time') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="disableNotifications()">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                        {{ t('Disable notification') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="enableNotifications()">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                        {{ t('Enable notification') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="toggleDowntimeModal()">
+                                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                                        {{ t('Set planned maintenance times') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="acknowledgeStatus()">
+                                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                        {{ t('Acknowledge status') }}</a></li>
+                                            </ul>
+                                        </c-dropdown>
+                                    </div>
                                 </c-col>
                             </c-row>
 
@@ -841,9 +955,12 @@
     </ng-container>
 
 </oitc-coreui>
-
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 <oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
-<oitc-service-maintenance-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-service-maintenance-modal>
-<oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-service-acknowledge-modal>
+<oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-maintenance-modal>
+<oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-acknowledge-modal>
 <oitc-columns-config-export-modal [configString]="configString"></oitc-columns-config-export-modal>
-<oitc-columns-config-import-modal (toImport)="setColumnConfig($event)" [columnsTableKey]="columnsTableKey"></oitc-columns-config-import-modal>
+<oitc-columns-config-import-modal (toImport)="setColumnConfig($event)"
+                                  [columnsTableKey]="columnsTableKey"></oitc-columns-config-import-modal>
