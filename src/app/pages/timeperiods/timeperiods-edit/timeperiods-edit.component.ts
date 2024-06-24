@@ -36,6 +36,7 @@ import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-timeperiods-edit',
@@ -72,22 +73,15 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         InputGroupComponent,
         NgSelectModule,
         NgOptionHighlightModule,
-        DebounceDirective
+        DebounceDirective,
+        FormLoaderComponent
     ],
     templateUrl: './timeperiods-edit.component.html',
     styleUrl: './timeperiods-edit.component.css'
 })
 export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
-    public post: Timeperiod = {
-        id: 0,
-        container_id: null,
-        name: '',
-        calendar_id: null,
-        timeperiod_timeranges: [],
-        validate_timeranges: true,
-        description: '',
-    }
+    public post!: Timeperiod;
 
     public containers: Container[] = [];
 

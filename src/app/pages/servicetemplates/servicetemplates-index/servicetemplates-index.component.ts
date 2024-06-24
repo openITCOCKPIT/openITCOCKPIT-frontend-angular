@@ -52,6 +52,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplates-index',
@@ -94,7 +95,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         TranslocoPipe,
         XsButtonDirective,
         NgClass,
-        RouterLink
+        RouterLink,
+        TableLoaderComponent
     ],
     templateUrl: './servicetemplates-index.component.html',
     styleUrl: './servicetemplates-index.component.css',

@@ -31,9 +31,9 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { Subscription } from 'rxjs';
 import {
     getDefaultServicedependenciesIndexParams,
+    ServicedependenciesIndexParams,
     ServicedependencyIndex,
-    ServicedependencyIndexRoot,
-    ServicedependenciesIndexParams
+    ServicedependencyIndexRoot
 } from '../servicedependencies.interface';
 import { ServicedependenciesService } from '../servicedependencies.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
@@ -55,6 +55,7 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-servicedependencies-index',
@@ -101,7 +102,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        TableLoaderComponent
     ],
     templateUrl: './servicedependencies-index.component.html',
     styleUrl: './servicedependencies-index.component.css',

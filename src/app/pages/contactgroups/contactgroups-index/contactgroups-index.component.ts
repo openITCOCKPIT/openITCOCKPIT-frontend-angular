@@ -55,6 +55,7 @@ import {
     ContactgroupsIndexRoot,
     getDefaultContactgroupsIndexParams
 } from '../contactgroups.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-contactgroups-index',
@@ -100,7 +101,8 @@ import {
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        BadgeComponent
+        BadgeComponent,
+        TableLoaderComponent
     ],
     templateUrl: './contactgroups-index.component.html',
     styleUrl: './contactgroups-index.component.css',
@@ -118,7 +120,7 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
-    public contactgroups: ContactgroupsIndexRoot = {all_contactgroups: [], _csrfToken: ''}
+    public contactgroups?: ContactgroupsIndexRoot;
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
 

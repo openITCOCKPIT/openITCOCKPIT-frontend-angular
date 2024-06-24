@@ -52,6 +52,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-serviceescalations-edit',
@@ -89,7 +90,8 @@ import {
         FormCheckInputDirective,
         TrueFalseDirective,
         CardFooterComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        FormLoaderComponent
     ],
     templateUrl: './serviceescalations-edit.component.html',
     styleUrl: './serviceescalations-edit.component.css'
