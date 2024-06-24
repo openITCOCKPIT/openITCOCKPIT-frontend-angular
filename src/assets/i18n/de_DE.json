@@ -2391,7 +2391,7 @@
     "There are no services defined": "Es sind keine Services definiert",
     "Create new service": "Erstelle neuen Service",
     "Please select a service template.": "Bitte wähle eine Servicevorlage.",
-    "A service with the name <strong>{0}<\/strong> already exists on this host. Duplicate service names could lead to confusion.": "Auf diesem Host ist bereits ein Service mit dem Namen <strong>{{0}}<\/strong> vorhanden. Doppelte Servicenamen können zu Verwirrung führen.",
+    "A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.": "Auf diesem Host ist bereits ein Service mit dem Namen {{0}} vorhanden. Doppelte Servicenamen können zu Verwirrung führen.",
     "Number of failed attempts before the service will switch into hard state.": "Anzahl der fehlgeschlagenen Versuche, bevor der Service in den harten Zustand wechselt.",
     "service template": "Servicevorlage",
     "host": "Host",
@@ -4888,5 +4888,7 @@
     "VMware services": "VMware Services",
     "Configuration Wizard: VMware Snapshot": "Konfigurationsassistent: VMware Snapshot",
     "VMware Host": "VMware Host",
-    "VMware Snapshot services": "VMware Snapshot Services"
+    "VMware Snapshot services": "VMware Snapshot Services",
+    "No items selected!": "Keine Elemente ausgewählt",
+    "Downtimes added": "Wartugszeiten hinzugefügt"
 }

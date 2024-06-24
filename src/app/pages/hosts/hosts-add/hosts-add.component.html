@@ -488,6 +488,7 @@
                                                         *ngIf="hosttemplate"
                                                         [templateValue]="hosttemplate.command_id"
                                                         [(value)]="post.command_id"
+                                                        (valueResetted)="onCommandChange()"
                                                         class="bg-transparent p-0"></oitc-template-diff>
                                 </c-input-group>
 
@@ -929,7 +930,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="HostURL">
+                                <label cLabel for="HostNotes">
                                     {{ t('Notes') }}
                                 </label>
 
@@ -1078,7 +1079,13 @@
                                     [errors]="getMacroErrors"
                                     class="col-lg-12"
                                 />
+                            </div>
 
+                            <div class="row mt-3 text-info" [hidden]="post.customvariables.length == 0">
+                                <div class="col-12">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{ t('Macros in green color are inherited from the host template.') }}
+                                </div>
                             </div>
 
                             <div class="row mt-3">

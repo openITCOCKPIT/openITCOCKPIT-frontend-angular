@@ -1,0 +1,22 @@
+
+<mat-chip-grid #chipGrid aria-label="Enter keywords" class="math-input">
+    @for (keyword of keywords; track keyword) {
+        <mat-chip-row
+
+                (removed)="remove(keyword)"
+                [editable]="true"
+                (edited)="edit(keyword, $event)"
+                [aria-description]="'press enter to edit ' + keyword.name">
+            {{keyword.name}}
+            <button matChipRemove [attr.aria-label]="'remove ' + keyword.name">
+                <fa-icon [icon]="['fas', 'xmark-circle']"></fa-icon>
+            </button>
+        </mat-chip-row>
+    }
+    <input placeholder="New fruit..."
+           [matChipInputFor]="chipGrid"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           [matChipInputAddOnBlur]="addOnBlur"
+           (matChipInputTokenEnd)="add($event)"/>
+</mat-chip-grid>
+

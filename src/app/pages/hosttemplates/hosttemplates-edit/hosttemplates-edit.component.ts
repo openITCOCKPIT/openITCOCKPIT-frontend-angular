@@ -52,6 +52,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosttemplates-edit',
@@ -98,6 +99,7 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
         MacrosComponent,
         CardFooterComponent,
         ObjectUuidComponent,
+        FormLoaderComponent,
     ],
     templateUrl: './hosttemplates-edit.component.html',
     styleUrl: './hosttemplates-edit.component.css'

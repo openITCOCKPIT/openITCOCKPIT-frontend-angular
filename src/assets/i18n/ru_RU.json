@@ -2208,7 +2208,7 @@
     "There are no services defined": "Службы не определены",
     "Create new service": "Создать новую службу",
     "Please select a service template.": "Пожалуйста, выберите шаблон службы.",
-    "A service with the name <strong>{0}<\/strong> already exists on this host. Duplicate service names could lead to confusion.": "Служба с названием <strong> {{0}} <\/strong> уже существует на этом узле. Повторяющиеся названия сервисов могут привести к путанице.",
+    "A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.": "Служба с названием {{0}} уже существует на этом узле. Повторяющиеся названия сервисов могут привести к путанице.",
     "Number of failed attempts before the service will switch into hard state.": "Количество неудачных попыток, прежде чем служба перейдет в твердое состояние.",
     "service template": "шаблон службы",
     "host": "узел",

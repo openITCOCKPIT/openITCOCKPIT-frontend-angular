@@ -18,22 +18,23 @@ import {
     RowComponent,
     ButtonDirective, FormSelectDirective, FormCheckInputDirective, FormCheckLabelDirective
 } from '@coreui/angular';
-import {JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf} from '@angular/common';
+import { JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf } from '@angular/common';
 import * as _uPlot from 'uplot';
-import {from, fromEvent, Observable, Subject, Subscription, takeUntil} from 'rxjs';
-import {UplotGraphService} from './uplot-graph.service';
-import {UplotGraphInterface, PerfParams, Gauges, Datasource} from "./uplot-graph.interface";
-import {TimezoneObject} from "../../pages/services-browser-page/timezone.interface";
-import {UPlotConfigBuilder} from './uplot-config-builder';
-import {FormsModule} from '@angular/forms';
-import { timer, interval } from 'rxjs';
+import { from, fromEvent, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { UplotGraphService } from './uplot-graph.service';
+import { UplotGraphInterface, PerfParams, Gauges, Datasource } from "./uplot-graph.interface";
+import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
+import { UPlotConfigBuilder } from './uplot-config-builder';
+import { FormsModule } from '@angular/forms';
+import { timer } from 'rxjs';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const uPlot: any = (_uPlot as any)?.default;
 
 type availableAggregations = [
-    {type: string, name: string},
-    {type: string, name: string},
-    {type: string, name: string}
+    { type: string, name: string },
+    { type: string, name: string },
+    { type: string, name: string }
 ];
 
 type availableTimeranges =  { hours: number, name: string }[];
@@ -57,6 +58,7 @@ type availableTimeranges =  { hours: number, name: string }[];
         FormCheckLabelDirective,
         TranslocoDirective,
         TranslocoPipe,
+        FaIconComponent,
     ],
     templateUrl: './uplot-graph.component.html',
     styleUrl: './uplot-graph.component.css',
@@ -121,22 +123,22 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     currentSelectedTimerange: number = 3;
     protected availableTimeranges:availableTimeranges = [
-        {hours: 1, name: '1 hour'},
-        {hours: 3, name: '3 hours'},
-        {hours: 8, name: '8 hours'},
-        {hours: 24, name: '1 day'},
-        {hours: 168, name: '7 days'},
-        {hours: 720, name: '30 days'},
-        {hours: 2160, name: '90 days'},
-        {hours: 4320, name: '6 month'},
-        {hours: 8760, name: '1 year'}
+        { hours: 1, name: '1 hour' },
+        { hours: 3, name: '3 hours' },
+        { hours: 8, name: '8 hours' },
+        { hours: 24, name: '1 day' },
+        { hours: 168, name: '7 days' },
+        { hours: 720, name: '30 days' },
+        { hours: 2160, name: '90 days' },
+        { hours: 4320, name: '6 month' },
+        { hours: 8760, name: '1 year' }
     ];
     protected currentAggregation: string = 'avg';
 
     protected availableAggregations: availableAggregations = [
-        {type: 'avg', name: 'Average'},
-        {type: 'min', name: 'Minimum'},
-        {type: 'max', name: 'Maximum'}
+        { type: 'avg', name: 'Average' },
+        { type: 'min', name: 'Minimum' },
+        { type: 'max', name: 'Maximum' }
     ];
 
     private config: UPlotConfigBuilder;
@@ -210,7 +212,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
             x: {
                 time: true,
                 auto: true,
-                min: 0,
+               // min: 0,
                 max: new Date().getTime()
             },
             y: {
@@ -377,9 +379,8 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
         let data: any = [];
         let xData: string[] = [];
-        let yData: number [] = [];
+        let yData: any [] = [];
         xData.push(this.perfParams.start.toString()); //necessary for threshold lines in full graph-width
-        // @ts-ignore
         yData.push(null);
 
         const graphData = this.perfData.performance_data[0].data
@@ -479,13 +480,16 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
 
 
-        // @ts-ignore
-        this.options.scales.x.min = this.perfParams.start;
-        // @ts-ignore
-        this.options.scales.x.max = this.perfParams.end;
-        // @ts-ignore
-        this.options.axes[1].label = this.datasource.unit;
+        if(this.options.scales && this.options.scales['x']) {
+            this.options.scales['x'].min = this.perfParams.start;
+            this.options.scales['x'].max = this.perfParams.end;
+        }
+
+       if(this.options.axes) {
+           this.options.axes[1].label = this.datasource.unit;
+       }
         this.chartUPlot.nativeElement.innerHTML = '';
+        console.log(this.options);
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);
     }
 
@@ -583,6 +587,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
 
     public ngOnDestroy() {
+        this.stopPlay$.next(false);
         this.stopPlay$.complete();
         this.subscriptions.unsubscribe();
     }

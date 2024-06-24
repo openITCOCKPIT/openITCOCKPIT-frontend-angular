@@ -61,11 +61,11 @@ import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { HostSubmitType, HostTypesEnum } from '../hosts.enum';
-import _ from 'lodash';
 import { sprintf } from "sprintf-js";
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosts-edit',
@@ -122,7 +122,8 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
         ObjectUuidComponent,
         NgClass,
         FakeSelectComponent,
-        UiBlockerComponent
+        UiBlockerComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hosts-edit.component.html',
     styleUrl: './hosts-edit.component.css'
@@ -130,6 +131,10 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
 export class HostsEditComponent implements OnInit, OnDestroy {
 
     private id: number = 0;
+
+    // This variable gets used, in case the user changes the primary container.
+    // In this case, the interface will create a shared container automaticaly for parent hosts
+    private oldPrimaryContainerId: number = 0;
 
     public containers: SelectKeyValue[] | undefined;
     public commands: SelectKeyValue[] = [];
@@ -212,6 +217,9 @@ export class HostsEditComponent implements OnInit, OnDestroy {
 
                 this.commands = result.commands;
                 this.post = result.host.Host;
+
+                this.oldPrimaryContainerId = result.host.Host.container_id;
+
                 this.hosttemplate = result.hosttemplate.Hosttemplate;
                 this.typeDetails = result.hostType;
 
@@ -259,7 +267,12 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                 this.exporters = result.exporters;
                 this.slas = result.slas;
 
-                this.cleanupHostgroups();
+                // Do we need to create an automatic shared container for parent hosts?
+                if (this.oldPrimaryContainerId !== containerId && this.oldPrimaryContainerId !== ROOT_CONTAINER) {
+                    if (!this.post.hosts_to_containers_sharing._ids.includes(this.oldPrimaryContainerId)) {
+                        this.post.hosts_to_containers_sharing._ids.push(this.oldPrimaryContainerId);
+                    }
+                }
             })
         );
     }
@@ -272,7 +285,6 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
             .subscribe((result) => {
                 this.parenthosts = result;
-                this.cleanupParentHosts();
             })
         );
     };
@@ -528,27 +540,8 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 
-    private cleanupParentHosts() {
-        //clean up parent host  -> remove not visible ids
-        this.post.parenthosts._ids = _.intersection(
-            _.map(this.parenthosts, 'key'),
-            this.post.parenthosts._ids
-        );
-    }
-
-    private cleanupHostgroups() {
-        //clean up host and host templates -> remove not visible ids
-        this.post.hostgroups._ids = _.intersection(
-            _.map(this.hostgroups, 'key'),
-            this.post.hostgroups._ids
-        );
-    }
-
     public submit(submitType: HostSubmitType) {
         this.post.tags = this.tagsForSelect.join(',');
-
-        this.cleanupParentHosts();
-        this.cleanupHostgroups();
 
 
         let save_host_and_assign_matching_servicetemplate_groups = false;

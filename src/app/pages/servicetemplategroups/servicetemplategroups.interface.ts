@@ -1,5 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { Container } from '../containers/container.interface';
 
 export interface ServiceTemplateGroupsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -39,81 +41,43 @@ export interface ServiceTemplateGroupsIndex {
     description: string
     created: string
     modified: string
-    container: ServiceTemplateGroupsIndexContainer
+    container: Container
     allow_edit: boolean
-}
-
-export interface ServiceTemplateGroupsIndexContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
 }
 
 /* EDIT GET */
 export interface ServiceTemplateGroupsGetEditRoot {
-    servicetemplategroup: ServiceTemplateGroupsGetEditServicetemplategroup
+    servicetemplategroup: {
+        Servicetemplategroup: {
+            id: number
+            uuid: string
+            container_id: number
+            description: string
+            created: string
+            modified: string
+            servicetemplates: {
+                _ids: number[]
+            }
+            container: Container
+        }
+    }
     _csrfToken: string
 }
 
-export interface ServiceTemplateGroupsGetEditServicetemplategroup {
-    Servicetemplategroup: ServiceTemplateGroupsGetEditServicetemplategroup2
-}
-
-export interface ServiceTemplateGroupsGetEditServicetemplategroup2 {
-    id: number
-    uuid: string
-    container_id: number
-    description: string
-    created: string
-    modified: string
-    servicetemplates: ServiceTemplateGroupsGetEditServicetemplates
-    container: ServiceTemplateGroupsGetEditContainer
-}
-
-export interface ServiceTemplateGroupsGetEditServicetemplates {
-    _ids: number[]
-}
-
-export interface ServiceTemplateGroupsGetEditContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-}
-
 /* EDIT POST */
-export interface ServiceTemplateGroupsGetEditPostRoot {
-    Servicetemplategroup: ServiceTemplateGroupssGetEditPostServicetemplategroup
-}
-
 export interface ServiceTemplateGroupssGetEditPostServicetemplategroup {
-    container: ServiceTemplateGroupsGetEditPostContainer
+    container: Container
     container_id: number
     created: string
     description: string
     id: number
     modified: string
-    servicetemplates: ServiceTemplateGroupssGetEditPostServicetemplates
+    servicetemplates: {
+        _ids: number[]
+    }
     uuid: string
 }
 
-export interface ServiceTemplateGroupsGetEditPostContainer {
-    containertype_id: number
-    id: number
-    lft: number
-    name: string
-    parent_id: number
-    rght: number
-}
-
-export interface ServiceTemplateGroupssGetEditPostServicetemplates {
-    _ids: number[]
-}
 
 /* ADD */
 export interface ServiceTemplateGroupsAddPostRoot {
@@ -121,18 +85,14 @@ export interface ServiceTemplateGroupsAddPostRoot {
 }
 
 export interface ServiceTemplateGroupsAddPostServicetemplategroup {
-    container: ServiceTemplateGroupsAddPostContainer
+    container: {
+        name: string
+        parent_id: number | null
+    }
     description: string
-    servicetemplates: ServiceTemplateGroupsAddPostServicetemplates
-}
-
-export interface ServiceTemplateGroupsAddPostContainer {
-    name: string
-    parent_id: number | null
-}
-
-export interface ServiceTemplateGroupsAddPostServicetemplates {
-    _ids: number[]
+    servicetemplates: {
+        _ids: number[]
+    }
 }
 
 /* COPY POST */
@@ -141,23 +101,17 @@ export interface ServiceTemplateGroupsGetCopyPost {
 }
 
 export interface ServiceTemplateGroupsGetCopyPostData {
-    Servicetemplategroup: ServiceTemplateGroupsGetCopyPostServicetemplategroup
-    Source: ServiceTemplateGroupsGetCopyPostSource
+    Servicetemplategroup: {
+        container: {
+            name: string
+        }
+        description: string
+    },
+    Source: {
+        id: number
+        name: string
+    }
     Error: GenericValidationError | null
-}
-
-export interface ServiceTemplateGroupsGetCopyPostServicetemplategroup {
-    container: ServiceTemplateGroupsGetCopyPostContainer
-    description: string
-}
-
-export interface ServiceTemplateGroupsGetCopyPostContainer {
-    name: string
-}
-
-export interface ServiceTemplateGroupsGetCopyPostSource {
-    id: number
-    name: string
 }
 
 /* COPY GET */
@@ -173,50 +127,25 @@ export interface ServiceTemplateGroupsGetCopyGetServicetemplategroup {
     description: string
     created: string
     modified: string
-    container: ServiceTemplateGroupsGetCopyGetContainer
-}
-
-export interface ServiceTemplateGroupsGetCopyGetContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
+    container: Container
 }
 
 /* LOAD CONTAINERS */
 export interface LoadContainersRoot {
-    containers: LoadContainersContainer[]
+    containers: SelectKeyValue[]
     _csrfToken: string
 }
-
-export interface LoadContainersContainer {
-    key: number
-    value: string
-}
-
 
 /* LOAD SERVICE TEMPLATES */
 export interface LoadServiceTemplatesRoot {
-    servicetemplates: LoadServiceTemplatesServicetemplate[]
+    servicetemplates: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadServiceTemplatesServicetemplate {
-    key: number
-    value: string
 }
 
 /** LOAD SERVICE TEMPLATE GROUPS BY STRING */
 export interface LoadServicetemplategroupsByString {
-    servicetemplategroups: LoadServicetemplategroupsByStringServicetemplategroup[]
+    servicetemplategroups: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadServicetemplategroupsByStringServicetemplategroup {
-    key: number
-    value: string
 }
 
 /** LOAD HOST GROUPS BY STRING */
@@ -232,17 +161,14 @@ export interface LoadHostGroupsByStringHostgroup {
 
 /** ALLOCATE TO HOSTGROUP POST **/
 export interface AllocateToHostgroupPost {
-    Host: AllocateToHostgroupHost
-    Servicetemplates: AllocateToHostgroupServicetemplates
+    Host: {
+        id: number | null
+    }
+    Servicetemplates: {
+        _ids: number[]
+    }
 }
 
-export interface AllocateToHostgroupHost {
-    id: number|null
-}
-
-export interface AllocateToHostgroupServicetemplates {
-    _ids: number[]
-}
 
 /** ALLOCATE TO HOSTGROUP GET **/
 export interface AllocateToHostGroupGet {
@@ -314,27 +240,21 @@ export interface AllocateToHostGetServicetemplate {
     id: number
     name: string
     description: string
-    _joinData: AllocateToHostGetJoinData
-}
-
-export interface AllocateToHostGetJoinData {
-    id: number
-    servicetemplate_id: number
-    servicetemplategroup_id: number
+    _joinData: {
+        id: number
+        servicetemplate_id: number
+        servicetemplategroup_id: number
+    }
 }
 
 /** ALLOCATE TO HOST POST **/
 export interface AllocateToHostPost {
-    Host: AllocateToHostPostHost
-    Servicetemplates: AllocateToHostPostServicetemplates
-}
-
-export interface AllocateToHostPostHost {
-    id: number
-}
-
-export interface AllocateToHostPostServicetemplates {
-    _ids: number[]
+    Host: {
+        id: number
+    }
+    Servicetemplates: {
+        _ids: number[]
+    }
 }
 
 /** ALLOCATE TO HOST POST RESPONSE */
@@ -346,11 +266,7 @@ export interface AllocateToMatchingHostgroupResponse {
 
 /** LOAD HOSTS BY STRING RESPONSE **/
 export interface LoadHostsByStringResponse {
-    hosts: LoadHostsByStringResponseHost[]
+    hosts: SelectKeyValue[]
     _csrfToken: string
 }
 
-export interface LoadHostsByStringResponseHost {
-    key: number
-    value: string
-}

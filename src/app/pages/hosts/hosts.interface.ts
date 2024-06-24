@@ -404,3 +404,13 @@ export interface HostEditApiResult {
     areContactsInheritedFromHosttemplate: boolean
     hostType: HostOrServiceType
 }
+
+/**********************
+ *     Global action    *
+ **********************/
+export interface HostsLoadHostsByStringParams {
+    'angular': true,
+    'filter[Hosts.name]': string,
+    'selected[]': number[],
+    'includeDisabled': boolean
+}

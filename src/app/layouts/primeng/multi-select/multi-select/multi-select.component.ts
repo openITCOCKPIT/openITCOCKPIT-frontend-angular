@@ -1,4 +1,14 @@
-import { Component, EventEmitter, forwardRef, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    forwardRef,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
@@ -6,6 +16,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import _ from 'lodash';
 
 
 @Component({
@@ -29,6 +40,8 @@ import { debounceTime } from 'rxjs/operators';
     styleUrl: './multi-select.component.css'
 })
 export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    private init: boolean = false;
+
     @Input() id: string | undefined;
     @Input() name: string | undefined;
 
@@ -36,7 +49,16 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      * Array of the options for the select box
      * @group Props
      */
-    @Input() options: any[] | undefined;
+    private _options: any[] | undefined;
+    @Input()
+    set options(value: any[]) {
+        this._options = value;
+        this.onOptionsChanged();
+    }
+
+    get options(): any[] | undefined {
+        return this._options;
+    }
 
     /**
      * ngModel for the form
@@ -100,7 +122,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
 
     private Subscriptions: Subscription = new Subscription();
 
-    public constructor() {
+    public constructor(private cdr: ChangeDetectorRef) {
         if (this.placeholder == undefined) {
             this.placeholder = this.TranslocoService.translate('Please choose');
         }
@@ -130,6 +152,8 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
                     this.searchCallback!(this.searchText);
                 }));
         }
+
+        this.init = true;
     }
 
     public ngOnDestroy(): void {
@@ -176,6 +200,28 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
 
     public setDisabledState?(isDisabled: boolean): void {
         this.disabled = isDisabled;
+    }
+
+    public onOptionsChanged() {
+        // Remove selected values that are not in the options anymore.
+        // This can happen, if a user change the selected container
+
+        if (!this.init) {
+            // Fix Expression has changed after it was checked
+            return;
+        }
+
+        if (this.ngModel && this._options) {
+            this.ngModel = _.intersection(
+                _.map(this._options, (this.optionValue || 'key')),
+                this.ngModel
+            );
+
+            setTimeout(() => {
+                // Fix Expression has changed after it was checked 🧻
+                this.ngModelChange.emit(this.ngModel);
+            }, 0);
+        }
     }
 
     protected readonly String = String;

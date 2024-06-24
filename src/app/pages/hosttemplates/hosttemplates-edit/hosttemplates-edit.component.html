@@ -19,6 +19,9 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
         <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
@@ -153,6 +156,7 @@
                                     [options]="hostgroups"
                                     oitcFormError [errors]="errors" errorField="hostgroups">
                                 </oitc-multi-select>
+                                {{ post.hostgroups._ids }}
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="hostgroups"></oitc-form-feedback>
                             </div>
@@ -657,7 +661,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="HosttemplateURL">
+                                <label cLabel for="HosttemplateNotes">
                                     {{ t('Notes') }}
                                 </label>
                                 <input cFormControl id="HosttemplateNotes" type="text"

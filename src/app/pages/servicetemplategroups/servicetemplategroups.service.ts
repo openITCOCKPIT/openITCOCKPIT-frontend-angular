@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {PROXY_PATH} from '../../tokens/proxy-path.token';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {
     ServiceTemplateGroupsIndexRoot,
     ServiceTemplateGroupsIndexParams,

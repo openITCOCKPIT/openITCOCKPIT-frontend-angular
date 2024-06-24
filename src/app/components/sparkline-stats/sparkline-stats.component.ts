@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+
 import {
     ApexAxisChartSeries,
     ApexChart,
@@ -50,6 +51,7 @@ declare global {
     styleUrl: './sparkline-stats.component.css'
 })
 export class SparklineStatsComponent implements OnChanges {
+
     @ViewChild("chart") chart!: ChartComponent;
 
     @Input() public value: number | undefined;
@@ -57,6 +59,12 @@ export class SparklineStatsComponent implements OnChanges {
     @Input() public maxValues: number = 35;
 
     public values: number[] = [];
+
+//    ngOnChanges(changes: SimpleChanges) {
+//        // REMOVE ME WHEN APEXCHARTS IS READY FOR ANGULAR !(
+//        return;
+//    }
+
 
     ngOnChanges(changes: SimpleChanges) {
         /* The "value" input is a number that is pushed into the "values" array. The "value" is the last value we want to display

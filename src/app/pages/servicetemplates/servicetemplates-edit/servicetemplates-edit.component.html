@@ -20,6 +20,9 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
         <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
@@ -695,7 +698,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label cLabel for="ServicetemplateURL">
+                                <label cLabel for="ServicetemplateNotes">
                                     {{ t('Notes') }}
                                 </label>
                                 <input cFormControl id="ServicetemplateNotes" type="text"
@@ -825,7 +828,7 @@
                                     {{ t('Will force the monitoring engine to send a notification on each Non-Ok check result that will occur.') }}
                                     <a href="https://www.naemon.org/documentation/usersguide/volatileservices.html"
                                        target="_blank">
-                                        <i class="fa fa-external-link-alt"></i>
+                                        <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                                         {{ t('Online documentation') }}
                                     </a>
                                 </div>

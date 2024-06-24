@@ -1,12 +1,13 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {BackButtonDirective} from '../../../directives/back-button.directive';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -14,37 +15,41 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent, ProgressBarComponent, RowComponent
+    NavItemComponent,
+    ProgressBarComponent,
+    RowComponent
 } from '@coreui/angular';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {FaIconComponent, FaStackComponent, FaStackItemSizeDirective} from '@fortawesome/angular-fontawesome';
-import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormsModule} from '@angular/forms';
-import {JsonPipe, NgForOf, NgIf} from '@angular/common';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {Subscription} from 'rxjs';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { Subscription } from 'rxjs';
 import {
     AllocateToHostGroupGet,
-    AllocateToHostGroupGetHostsWithServicetemplatesForDeploy, AllocateToHostGroupGetService, AllocateToHostgroupPost,
+    AllocateToHostGroupGetHostsWithServicetemplatesForDeploy,
+    AllocateToHostGroupGetService,
+    AllocateToHostgroupPost,
     LoadHostgroupsByString,
     LoadHostGroupsByStringHostgroup,
     LoadServicetemplategroupsByString,
-    LoadServicetemplategroupsByStringServicetemplategroup,
     ServiceTemplateGroupsIndexParams
 } from '../servicetemplategroups.interface';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {ServicetemplategroupsService} from '../servicetemplategroups.service';
-import {MatTooltip} from '@angular/material/tooltip';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
-import {NotyService} from "../../../layouts/coreui/noty.service";
-import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
-import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { ServicetemplategroupsService } from '../servicetemplategroups.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-hostgroup',
@@ -105,7 +110,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected readonly router: Router = inject(Router);
     protected hideFilter: boolean = true;
 
-    protected servicetemplategroups: LoadServicetemplategroupsByStringServicetemplategroup[] = [];
+    protected servicetemplategroups: SelectKeyValue[] = [];
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
 

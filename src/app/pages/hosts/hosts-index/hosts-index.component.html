@@ -128,7 +128,7 @@
                                                    (debouncedValue)="onFilterChange($event)"
                                                    [(ngModel)]="filter['Hosts.name_regex']"
                                             />
-                                            <!-- todo implement regex light bulb -->
+                                            <oitc-regex-helper-tooltip/>
                                         </label>
                                     </span>
                                 </c-input-group>
@@ -174,7 +174,7 @@
                                                    (debouncedValue)="onFilterChange($event)"
                                                    [(ngModel)]="filter['Hosts.address_regex']"
                                             />
-                                            <!-- todo implement regex light bulb -->
+                                            <oitc-regex-helper-tooltip/>
                                         </label>
                                     </span>
                                 </c-input-group>

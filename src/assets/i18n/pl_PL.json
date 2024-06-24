@@ -2378,7 +2378,7 @@
     "There are no services defined": "Nie zdefiniowano żadnych usług",
     "Create new service": "Utwórz nową usługę",
     "Please select a service template.": "Proszę wybrać szablon usługi.",
-    "A service with the name <strong>{0}<\/strong> already exists on this host. Duplicate service names could lead to confusion.": "Usługa o nazwie <strong>{{0}}<\/strong> już istnieje na tym hoście. Powtarzające się nazwy usług mogą prowadzić do zamieszania.",
+    "A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.": "Usługa o nazwie {{0}} już istnieje na tym hoście. Powtarzające się nazwy usług mogą prowadzić do zamieszania.",
     "Number of failed attempts before the service will switch into hard state.": "Liczba nieudanych prób przed przejściem usługi w stan twardy.",
     "service template": "szablon serwisu",
     "host": "host",

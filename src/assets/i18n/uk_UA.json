@@ -2203,7 +2203,7 @@
     "There are no services defined": "Не визначено жодних послуг",
     "Create new service": "Створити новий сервіс",
     "Please select a service template.": "Виберіть шаблон послуги.",
-    "A service with the name <strong>{0}<\/strong> already exists on this host. Duplicate service names could lead to confusion.": "На цьому хості вже існує служба з назвою <strong> {{0}} <\/strong>. Повторювані назви служб можуть призвести до плутанини.",
+    "A service with the name {0} already exists on this host. Duplicate service names could lead to confusion.": "На цьому хості вже існує служба з назвою {{0}}. Повторювані назви служб можуть призвести до плутанини.",
     "Number of failed attempts before the service will switch into hard state.": "Кількість невдалих спроб, перш ніж служба перейде в жорсткий стан.",
     "service template": "шаблон послуги",
     "host": "вузол",
