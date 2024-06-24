@@ -65,6 +65,7 @@ import { sprintf } from "sprintf-js";
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosts-edit',
@@ -121,7 +122,8 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
         ObjectUuidComponent,
         NgClass,
         FakeSelectComponent,
-        UiBlockerComponent
+        UiBlockerComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hosts-edit.component.html',
     styleUrl: './hosts-edit.component.css'

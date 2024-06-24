@@ -20,6 +20,8 @@
             </ol>
         </nav>
 
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
         <form cForm (ngSubmit)="submit(HostSubmitType.HostsIndex)">
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>

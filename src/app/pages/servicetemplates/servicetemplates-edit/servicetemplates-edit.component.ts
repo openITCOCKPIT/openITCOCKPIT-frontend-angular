@@ -55,6 +55,7 @@ import { ServicetemplatesService } from '../servicetemplates.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -100,7 +101,8 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
         XsButtonDirective,
         RouterLink,
         NgClass,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        FormLoaderComponent
     ],
     templateUrl: './servicetemplates-edit.component.html',
     styleUrl: './servicetemplates-edit.component.css'
