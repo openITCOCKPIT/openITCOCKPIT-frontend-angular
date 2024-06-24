@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { GenericValidationError } from '../../generic-responses';
 import { HostsToContainersSharing } from '../hosts/hosts.interface';
 import { Container } from '../containers/container.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -159,23 +160,18 @@ export interface ContactCopyGet {
 
 export interface ContactCopyPost {
 
-    Source: SourceContact
-    Contact: ContactCopy
+    Source: {
+        id: number
+        name: string
+    }
+    Contact: {
+        description: string
+        email: string
+        name: string
+        phone: string
+    }
     Error: GenericValidationError | null
 }
-
-export interface ContactCopy {
-    description: string
-    email: string
-    name: string
-    phone: string
-}
-
-export interface SourceContact {
-    id: number
-    name: string
-}
-
 
 export interface LoadTimeperiodsRoot {
     timeperiods: Timeperiod[]
@@ -193,13 +189,8 @@ export interface LoadTimeperiodsPost {
 export interface LoadCommandsRoot {
     hostPushComamndId: number
     servicePushComamndId: number
-    notificationCommands: LoadCommand[]
+    notificationCommands: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadCommand {
-    key: number
-    value: string
 }
 
 export interface ContactUsedByContact {
@@ -503,10 +494,7 @@ export interface LoadContainersContainer {
 
 // LoadUsersByContainerId
 export interface LoadUsersByContainerId {
-    users: {
-        key: number
-        value: string
-    }[]
+    users: SelectKeyValue[]
 }
 
 
