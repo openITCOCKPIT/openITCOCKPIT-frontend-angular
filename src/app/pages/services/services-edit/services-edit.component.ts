@@ -62,6 +62,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostEntity, HostOrServiceType } from '../../hosts/hosts.interface';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 import { ServiceTypesEnum } from '../services.enum';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -112,7 +113,8 @@ import { ServiceTypesEnum } from '../services.enum';
         RouterLink,
         ObjectUuidComponent,
         NgClass,
-        FakeSelectComponent
+        FakeSelectComponent,
+        FormLoaderComponent
     ],
     templateUrl: './services-edit.component.html',
     styleUrl: './services-edit.component.css'
@@ -122,7 +124,7 @@ export class ServicesEditComponent {
     public commands: SelectKeyValue[] = [];
     public eventhandlerCommands: SelectKeyValue[] = [];
     public tagsForSelect: string[] = [];
-    public post: ServicePost = {} as ServicePost;
+    public post!: ServicePost;
 
     public serviceType?: HostOrServiceType;
 

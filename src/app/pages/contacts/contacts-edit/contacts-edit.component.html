@@ -20,8 +20,9 @@
             </ol>
         </nav>
 
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
 
-        <form cForm (ngSubmit)="updateContact()">
+        <form cForm (ngSubmit)="updateContact()" *ngIf="post">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>
