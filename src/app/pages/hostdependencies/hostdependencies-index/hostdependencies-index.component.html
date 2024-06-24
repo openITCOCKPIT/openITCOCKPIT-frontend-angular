@@ -378,7 +378,8 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                <oitc-table-loader *ngIf="!hostdependencies"></oitc-table-loader>
+                <table *ngIf="hostdependencies" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                     <thead>
                     <tr>
                         <th class="width-50 text-center" scope="col">
@@ -413,7 +414,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="hostdependencies">
+                    <tbody>
                     <tr *ngFor="let hostdependency of hostdependencies.all_hostdependencies">
                         <td class="text-center">
                             <oitc-item-select

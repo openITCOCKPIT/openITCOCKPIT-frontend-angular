@@ -55,6 +55,7 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-hostescalations-index',
@@ -101,7 +102,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        TableLoaderComponent
     ],
     templateUrl: './hostescalations-index.component.html',
     styleUrl: './hostescalations-index.component.css',

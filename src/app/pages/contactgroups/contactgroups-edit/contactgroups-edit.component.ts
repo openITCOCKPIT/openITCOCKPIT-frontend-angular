@@ -10,7 +10,12 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -33,8 +38,11 @@ import { ContactgroupsService } from '../contactgroups.service';
 import {
     ContactgroupEditPostContactgroup,
     ContactgroupsEditRoot,
-    GetContactsByContainerIdRootContact, LoadContainersContainer, LoadContainersRoot
+    GetContactsByContainerIdRootContact,
+    LoadContainersContainer,
+    LoadContainersRoot
 } from '../contactgroups.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contactgroups-edit',
@@ -70,7 +78,8 @@ import {
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        FormLoaderComponent
     ],
     templateUrl: './contactgroups-edit.component.html',
     styleUrl: './contactgroups-edit.component.css'
@@ -85,23 +94,7 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
 
-    public post: ContactgroupEditPostContactgroup = {
-        contacts: {
-            _ids: []
-        },
-        container: {
-            containertype_id: 0,
-            id: 0,
-            lft: 0,
-            name: '',
-            parent_id: 0,
-            rght: 0
-        },
-        container_id: 0,
-        description: '',
-        id: 0,
-        uuid: ''
-    };
+    public post!: ContactgroupEditPostContactgroup;
     protected containers: LoadContainersContainer[] = [];
     private route = inject(ActivatedRoute)
 

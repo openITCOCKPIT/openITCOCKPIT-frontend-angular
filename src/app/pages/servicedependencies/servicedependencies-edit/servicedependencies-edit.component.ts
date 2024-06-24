@@ -35,7 +35,8 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
-    ServicedependencyContainerResult, ServicedependencyGet,
+    ServicedependencyContainerResult,
+    ServicedependencyGet,
     ServicedependencyPost
 } from '../../servicedependencies/servicedependencies.interface';
 import { ServicedependenciesService } from '../servicedependencies.service';
@@ -52,6 +53,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -91,7 +93,8 @@ import {
         XsButtonDirective,
         FormCheckComponent,
         BadgeComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        FormLoaderComponent
     ],
     templateUrl: './servicedependencies-edit.component.html',
     styleUrl: './servicedependencies-edit.component.css'

@@ -66,6 +66,7 @@ import {
 } from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
@@ -119,7 +120,8 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         NgSelectSelectAllComponent,
         NgSelectOptionCheckboxComponent,
         MultiSelectModule,
-        MultiSelectComponent
+        MultiSelectComponent,
+        TableLoaderComponent
     ],
     templateUrl: './hosttemplates-index.component.html',
     styleUrl: './hosttemplates-index.component.css',

@@ -41,6 +41,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -77,7 +78,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         LabelLinkComponent,
         FormCheckInputDirective,
         TrueFalseDirective,
-        CardFooterComponent
+        CardFooterComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hostescalations-edit.component.html',
     styleUrl: './hostescalations-edit.component.css'
