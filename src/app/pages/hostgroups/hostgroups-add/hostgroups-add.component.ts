@@ -31,7 +31,7 @@ import {NotyService} from '../../../layouts/coreui/noty.service';
 import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import {HostgroupsService} from '../hostgroups.service';
 import {
-    AddHostgroupsPostHostgroup,
+    HostgroupsEditPostHostgroup,
     LoadContainersRoot,
     LoadHostsResponse,
     LoadHosttemplates
@@ -92,7 +92,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public createAnother: boolean = false;
 
-    public post: AddHostgroupsPostHostgroup = {} as AddHostgroupsPostHostgroup;
+    public post: HostgroupsEditPostHostgroup = {} as HostgroupsEditPostHostgroup;
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
@@ -161,11 +161,10 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
             }))
     }
 
-    private getDefaultPost(): AddHostgroupsPostHostgroup {
+    private getDefaultPost(): HostgroupsEditPostHostgroup {
         return {
             container: {
                 name: '',
-                parent_id: null
             },
             description: "",
             hostgroup_url: "",

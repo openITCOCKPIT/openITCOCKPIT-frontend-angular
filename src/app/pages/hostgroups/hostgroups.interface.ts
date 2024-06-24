@@ -78,103 +78,54 @@ export interface HostgroupsCopyGetContainer {
 }
 
 // COPY POST
-export interface HostgroupsCopyPostRoot {
-    result: HostgroupsCopyPostResult[]
-    _csrfToken: string
-}
 
 export interface HostgroupsCopyPostResult {
-    Source: HostgroupsCopyPostSource
-    Hostgroup: HostgroupsCopyPostHostgroup
+    Source: {
+        id: number
+        name: string
+    }
+    Hostgroup: {
+        container: {
+            name: string
+        }
+        description: string
+        id: number
+    }
     Error: GenericValidationError | null
 }
 
-export interface HostgroupsCopyPostSource {
-    id: number
-    name: string
-}
-
-export interface HostgroupsCopyPostHostgroup {
-    container: HostgroupsCopyPostContainer
-    description: string
-    id: number
-}
-
-export interface HostgroupsCopyPostContainer {
-    name: string
-}
 
 // EDIT GET
 export interface HostgroupsEditGet {
-    hostgroup: HostgroupsEditGetHostgroups
+    hostgroup: {
+        Hostgroup: HostgroupsEditPostHostgroup
+    }
     _csrfToken: string
 }
 
-export interface HostgroupsEditGetHostgroups {
-    Hostgroup: HostgroupsEditGetHostgroup2
-}
-
-export interface HostgroupsEditGetHostgroup2 {
-    id: number
-    uuid: string
-    container_id: number
-    description: string
-    hostgroup_url: string
-    container: HostgroupsEditGetContainer
-    hosttemplates: HostgroupsEditGetHosttemplates
-    hosts: HostgroupsEditGetHosts
-}
-
-export interface HostgroupsEditGetContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-}
-
-export interface HostgroupsEditGetHosttemplates {
-    _ids: number[]
-}
-
-export interface HostgroupsEditGetHosts {
-    _ids: any[]
-}
-
-
 // EDIT POST
-export interface HostgroupsEditPost {
-    Hostgroup: HostgroupsEditPostHostgroup
-}
-
 export interface HostgroupsEditPostHostgroup {
-    container: HostgroupsEditPostContainer
-    container_id: number
+    id?: number
+    uuid?: string
+    container_id?: number
+    container: {
+        containertype_id?: number
+        id?: number
+        lft?: number
+        parent_id?: number
+        rght?: number
+        name: string
+    }
     description: string
     hostgroup_url: string
-    hosts: HostgroupsEditPostHosts
-    hosttemplates: HostgroupsEditPostHosttemplates
-    id: number
-    uuid: string
+    hosts: {
+        _ids: number[]
+    }
+    hosttemplates: {
+        _ids: number[]
+    }
 }
 
-export interface HostgroupsEditPostContainer {
-    containertype_id: number
-    id: number
-    lft: number
-    name: string
-    parent_id: number
-    rght: number
-}
-
-export interface HostgroupsEditPostHosts {
-    _ids: any[]
-}
-
-export interface HostgroupsEditPostHosttemplates {
-    _ids: number[]
-}
 
 // LOAD CONTAINERS GET
 export interface LoadContainersRoot {
@@ -185,12 +136,10 @@ export interface LoadContainersRoot {
 // LOAD HOSTS REQUEST
 export interface LoadHostsRequest {
     containerId: number
-    filter: LoadHostsRequestFilter
+    filter: {
+        "Hosts.name": string
+    }
     selected: any[]
-}
-
-export interface LoadHostsRequestFilter {
-    "Hosts.name": string
 }
 
 
@@ -208,26 +157,6 @@ export interface LoadHosttemplates {
 
 // ADD HOSTGROUP POST
 export interface AddHostgroupsPost {
-    Hostgroup: AddHostgroupsPostHostgroup
+    Hostgroup: HostgroupsEditPostHostgroup
 }
 
-export interface AddHostgroupsPostHostgroup {
-    container: AddHostgroupsPostContainer
-    description: string
-    hostgroup_url: string
-    hosts: AddHostgroupsPostHosts
-    hosttemplates: AddHostgroupsPostHosttemplates
-}
-
-export interface AddHostgroupsPostContainer {
-    name: string
-    parent_id: number | null
-}
-
-export interface AddHostgroupsPostHosts {
-    _ids: number[]
-}
-
-export interface AddHostgroupsPostHosttemplates {
-    _ids: number[]
-}

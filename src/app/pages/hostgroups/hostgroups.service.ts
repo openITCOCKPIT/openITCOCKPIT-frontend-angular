@@ -2,13 +2,10 @@ import {inject, Injectable} from '@angular/core';
 import {catchError, map, Observable, of} from "rxjs";
 import {
     AddHostgroupsPost,
-    AddHostgroupsPostHostgroup,
     HostgroupsCopyGet,
     HostgroupsCopyGetHostgroup,
-    HostgroupsCopyPostHostgroup, HostgroupsCopyPostResult,
-    HostgroupsCopyPostRoot,
+    HostgroupsCopyPostResult,
     HostgroupsEditGet,
-    HostgroupsEditPost,
     HostgroupsEditPostHostgroup,
     HostgroupsIndexParams,
     HostgroupsIndexRoot,
@@ -79,7 +76,7 @@ export class HostgroupsService {
         )
     }
 
-    public addHostgroup(hostgroup: AddHostgroupsPostHostgroup): Observable<GenericResponseWrapper> {
+    public addHostgroup(hostgroup: HostgroupsEditPostHostgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         const postObject: AddHostgroupsPost = {Hostgroup: hostgroup}
         return this.http.post<any>(`${proxyPath}/hostgroups/add.json?angular=true`, postObject)
