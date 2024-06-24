@@ -346,9 +346,10 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                console.log(item)
                 return {
-                    id: item.id,
-                    displayName: item.hostname
+                    id: item.Host.id,
+                    displayName: item.Host.hostname
                 };
             });
         }
