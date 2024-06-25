@@ -104,6 +104,7 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'hostgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.hostgroups = error.error.result as HostgroupsCopyPostResult[];
                     this.hostgroups.forEach((hostgroup: HostgroupsCopyPostResult) => {
                         if (!hostgroup.Error) {

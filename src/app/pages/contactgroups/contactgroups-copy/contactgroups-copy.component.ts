@@ -107,6 +107,7 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'contactgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.contactgroups = error.error.result as ContactgroupsCopyPost[];
                     this.contactgroups.forEach((copyPostResult: ContactgroupsCopyPost) => {
                         if (!copyPostResult.Error) {
