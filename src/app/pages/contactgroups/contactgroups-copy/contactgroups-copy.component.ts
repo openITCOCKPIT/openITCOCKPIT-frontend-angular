@@ -26,6 +26,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HostgroupsCopyPostResult } from '../../hostgroups/hostgroups.interface';
 
 @Component({
     selector: 'oitc-contactgroups-copy',
@@ -107,6 +108,14 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
                 },
                 error: (error: HttpErrorResponse) => {
                     this.contactgroups = error.error.result as ContactgroupsCopyPost[];
+                    this.contactgroups.forEach((copyPostResult: ContactgroupsCopyPost) => {
+                        if (!copyPostResult.Error) {
+                            return;
+                        }
+                        if (copyPostResult.Error?.['container']['name'] !== 'undefined') {
+                            copyPostResult.Error['name'] = <any>copyPostResult.Error?.['container']['name'];
+                        }
+                    });
                 }
             })
         );
