@@ -46,6 +46,7 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -84,7 +85,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         TrueFalseDirective,
         XsButtonDirective,
         FormCheckComponent,
-        BadgeComponent
+        BadgeComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hostdependencies-edit.component.html',
     styleUrl: './hostdependencies-edit.component.css'

@@ -111,7 +111,9 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <oitc-table-loader *ngIf="!contactgroups"></oitc-table-loader>
+                <table *ngIf="contactgroups" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
@@ -132,7 +134,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="contactgroups">
+                    <tbody>
                     <tr *ngFor="let contactgroup of contactgroups.all_contactgroups">
                         <td class="text-center">
                             <oitc-item-select

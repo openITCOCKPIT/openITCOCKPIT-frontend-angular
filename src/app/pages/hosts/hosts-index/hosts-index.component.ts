@@ -61,7 +61,6 @@ import {
 import { HostsService } from '../hosts.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { ServicesService } from '../../services/services.service';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -77,7 +76,10 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -137,7 +139,8 @@ import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        TableLoaderComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',

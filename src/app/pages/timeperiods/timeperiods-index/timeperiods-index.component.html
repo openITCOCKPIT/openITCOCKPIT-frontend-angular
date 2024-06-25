@@ -106,7 +106,9 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <oitc-table-loader *ngIf="!timeperiods"></oitc-table-loader>
+                <table *ngIf="timeperiods" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
@@ -124,7 +126,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="timeperiods">
+                    <tbody>
                     <tr *ngFor="let timeperiod of timeperiods.all_timeperiods">
                         <td class="text-center">
                             <oitc-item-select

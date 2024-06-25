@@ -46,7 +46,7 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button [routerLink]="['/', 'contacts', 'ldap']" cButton
-                                *ngIf="contacts.isLdapAuth"
+                                *ngIf="contacts && contacts.isLdapAuth"
                                 class="ripple"
                                 color="warning"
                                 size="xs">
@@ -137,7 +137,9 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                <oitc-table-loader *ngIf="!contacts"></oitc-table-loader>
+                <table *ngIf="contacts" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
@@ -167,7 +169,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="contacts">
+                    <tbody>
                     <tr *ngFor="let contact of contacts.all_contacts">
                         <td class="text-center">
                             <oitc-item-select
