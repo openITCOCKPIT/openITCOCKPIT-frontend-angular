@@ -107,8 +107,17 @@ export const routes: Routes = [{
     path: 'hostgroups/index',
     loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
 }, {
+    path: 'services/index',
+    loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
+}, {
+    path: 'services/add',
+    loadComponent: () => import('./pages/services/services-add/services-add.component').then(m => m.ServicesAddComponent)
+}, {
+    path: 'services/edit/:id',
+    loadComponent: () => import('./pages/services/services-edit/services-edit.component').then(m => m.ServicesEditComponent)
+}, {
     path: 'services/browser/:id',
-    loadComponent: () => import('./pages/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+    loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
@@ -194,6 +203,9 @@ export const routes: Routes = [{
     path: 'hosts/edit/:id',
     loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
 }, {
+    path: 'deletedHosts/index',
+    loadComponent: () => import('./pages/deletedHosts/deleted-hosts-index/deleted-hosts-index.component').then(m => m.DeletedHostsIndexComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {
@@ -244,6 +256,36 @@ export const routes: Routes = [{
 }, {
     path: 'serviceescalations/edit/:id',
     loadComponent: () => import('./pages/serviceescalations/serviceescalations-edit/serviceescalations-edit.component').then(m => m.ServiceescalationsEditComponent)
+}, {
+    path: 'hostdependencies/index',
+    loadComponent: () => import('./pages/hostdependencies/hostdependencies-index/hostdependencies-index.component').then(m => m.HostdependenciesIndexComponent)
+}, {
+    path: 'hostdependencies/add',
+    loadComponent: () => import('./pages/hostdependencies/hostdependencies-add/hostdependencies-add.component').then(m => m.HostdependenciesAddComponent)
+}, {
+    path: 'hostdependencies/edit/:id',
+    loadComponent: () => import('./pages/hostdependencies/hostdependencies-edit/hostdependencies-edit.component').then(m => m.HostdependenciesEditComponent)
+}, {
+    path: 'servicedependencies/index',
+    loadComponent: () => import('./pages/servicedependencies/servicedependencies-index/servicedependencies-index.component').then(m => m.ServicedependenciesIndexComponent)
+}, {
+    path: 'servicedependencies/add',
+    loadComponent: () => import('./pages/servicedependencies/servicedependencies-add/servicedependencies-add.component').then(m => m.ServicedependenciesAddComponent)
+}, {
+    path: 'servicedependencies/edit/:id',
+    loadComponent: () => import('./pages/servicedependencies/servicedependencies-edit/servicedependencies-edit.component').then(m => m.ServicedependenciesEditComponent)
+}, {
+    path: 'notifications/index',
+    loadComponent: () => import('./pages/notifications/notifications-index/notifications-index.component').then(m => m.NotificationsIndexComponent)
+}, {
+    path: 'notifications/services',
+    loadComponent: () => import('./pages/notifications/notifications-services/notifications-services.component').then(m => m.NotificationsServicesComponent)
+}, {
+    path: 'notifications/hostNotification/:id',
+    loadComponent: () => import('./pages/notifications/host-notification/host-notification.component').then(m => m.HostNotificationComponent)
+}, {
+    path: 'notifications/serviceNotification/:id',
+    loadComponent: () => import('./pages/notifications/service-notification/service-notification.component').then(m => m.ServiceNotificationComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
