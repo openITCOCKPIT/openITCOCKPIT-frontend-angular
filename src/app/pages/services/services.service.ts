@@ -272,4 +272,11 @@ export class ServicesService {
         });
         return types;
     }
+
+    /**********************
+     *    bookmarks  *
+     **********************/
+   /* public getFilterBookmarks(): (params: any): Observable<BookmarksObject> {
+
+    } */
 }

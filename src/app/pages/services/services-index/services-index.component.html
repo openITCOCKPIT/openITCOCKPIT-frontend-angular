@@ -76,19 +76,10 @@
             </c-card-header>
             <c-card-body>
                 <ng-container>
-                    <!--<oitc-services-index-filter [show]="showFilter" [satellites]="satellites"  [fields]="fields" (filterChange)="getFilter($event)">
-                    </oitc-services-index-filter>-->
-                    <!--filter-->
-
                     <c-card>
-                        <c-card-header>
-                            <h5>
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h5>
-                            <oitc-filter-bookmark class="fa-pull-right"></oitc-filter-bookmark>
-
-                        </c-card-header>
+                        <!--<c-card-header>-->
+                            <oitc-filter-bookmark [plugin]="''" [controller]="'Services'" [action]="'index'" (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                        <!--</c-card-header>-->
                         <c-card-body *ngIf="showFilter">
                             <c-row class="mb-3">
                                 <c-col [xs]="12" [lg]="6">

@@ -1,0 +1,33 @@
+<ng-container *transloco="let t">
+    <c-card-header>
+    <c-row>
+        <c-col [xs]="4" [lg]="4">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+        </c-col>
+        <c-col [xs]="8" [lg]="8" class="ui-fluid">
+
+
+            <oitc-select
+                         name="boookmarkselect"
+                         id="bookmarkselect"
+                         class="flex-1 w-100"
+                         optionValue="key"
+                         optionLabel="value"
+                         [(ngModel)]="selectedBokkmarkId"
+                         [options]="bookmarksSelect"
+                         (onChange)="onBookmarkChange()">
+            </oitc-select>
+        </c-col>
+        <!--<c-col [lg]="3">
+            <button class="btn btn-success btn-xs waves-effect waves-themed"
+                    (click)="showNewBookmarkModel()">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Save as new filter') }}
+            </button>
+        </c-col>-->
+    </c-row>
+    </c-card-header>
+
+
+</ng-container>

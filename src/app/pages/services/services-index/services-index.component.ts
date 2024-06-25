@@ -96,7 +96,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
 import { ServiceResetItem, ServiceNotifcationItem, ExternalCommandsService } from '../../../services/external-commands.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import {FilterBookmarkComponent} from '../../../components/services/filter-bookmark/filter-bookmark.component';
+import {FilterBookmarkComponent} from '../../../components/filter-bookmark/filter-bookmark.component';
 import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -627,6 +627,13 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         if (success) {
             this.load();
         }
+    }
+
+    onSelectedBookmark(filterstring: string) {
+        const bookmarkfilter = JSON.parse(filterstring);
+        console.log(bookmarkfilter);
+        this.filter = bookmarkfilter
+        this.getFilter(this.filter);
     }
 
     getFilter(filter: ServiceIndexFilter) {
