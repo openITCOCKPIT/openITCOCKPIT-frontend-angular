@@ -36,7 +36,6 @@ import { MacrosComponent } from '../../../components/macros/macros.component';
 import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
-    LoadCommand,
     LoadCommandsRoot,
     LoadContainersContainer,
     LoadContainersRoot,
@@ -50,7 +49,8 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
-import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -108,7 +108,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     protected containers: LoadContainersContainer[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
-    protected notificationCommands: LoadCommand[] = [];
+    protected notificationCommands: SelectKeyValue[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     public errors: GenericValidationError = {} as GenericValidationError;
