@@ -26,7 +26,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { HostgroupsCopyPostResult } from '../../hostgroups/hostgroups.interface';
 
 @Component({
     selector: 'oitc-contactgroups-copy',
