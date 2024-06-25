@@ -30,6 +30,7 @@ import {
     ServiceTemplateGroupsGetCopyPostData,
 } from '../servicetemplategroups.interface';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
+import { ContactgroupsCopyPost } from '../../contactgroups/contactgroups.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-copy',
@@ -111,6 +112,14 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
                 },
                 error: (error: HttpErrorResponse) => {
                     this.servicetemplategroups = error.error.result as ServiceTemplateGroupsGetCopyPostData[];
+                    this.servicetemplategroups.forEach((serviceTemplateGroup: ServiceTemplateGroupsGetCopyPostData) => {
+                        if (!serviceTemplateGroup.Error) {
+                            return;
+                        }
+                        if (serviceTemplateGroup.Error?.['container']['name'] !== 'undefined') {
+                            serviceTemplateGroup.Error['name'] = <any>serviceTemplateGroup.Error?.['container']['name'];
+                        }
+                    });
                 }
             })
         );
