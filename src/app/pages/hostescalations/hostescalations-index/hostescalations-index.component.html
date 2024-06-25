@@ -267,7 +267,9 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+
+                <oitc-table-loader *ngIf="!hostescalations"></oitc-table-loader>
+                <table *ngIf="hostescalations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                     <thead>
                     <tr>
                         <th class="width-50 text-center" scope="col">
@@ -321,7 +323,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="hostescalations">
+                    <tbody>
                     <tr *ngFor="let hostescalation of hostescalations.all_hostescalations">
                         <td class="text-center">
                             <oitc-item-select

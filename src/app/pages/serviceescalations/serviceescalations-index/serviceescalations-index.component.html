@@ -285,7 +285,8 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                <oitc-table-loader *ngIf="!serviceescalations"></oitc-table-loader>
+                <table *ngIf="serviceescalations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                     <thead>
                     <tr>
                         <th class="width-50 text-center" scope="col">
@@ -339,7 +340,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="serviceescalations">
+                    <tbody>
                     <tr *ngFor="let serviceescalation of serviceescalations.all_serviceescalations">
                         <td class="text-center">
                             <oitc-item-select

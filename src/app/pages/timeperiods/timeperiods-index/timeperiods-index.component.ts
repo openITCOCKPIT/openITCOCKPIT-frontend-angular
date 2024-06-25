@@ -58,6 +58,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-timeperiods-index',
@@ -104,7 +105,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         ButtonGroupComponent,
         DropdownComponent,
         DropdownMenuDirective,
-        DropdownToggleDirective
+        DropdownToggleDirective,
+        TableLoaderComponent
     ],
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',
