@@ -105,9 +105,17 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
                 },
                 error: (error: HttpErrorResponse) => {
                     this.hostgroups = error.error.result as HostgroupsCopyPostResult[];
-                    console.log(this.hostgroups);
+                    this.hostgroups.forEach((hostgroup: HostgroupsCopyPostResult) => {
+                        if (!hostgroup.Error) {
+                            return;
+                        }
+                        if (hostgroup.Error?.['container']['name'] !== 'undefined') {
+                            hostgroup.Error['name'] = <any>hostgroup.Error?.['container']['name'];
+                        }
+                    });
                 }
             })
         );
     }
 }
+
