@@ -41,7 +41,6 @@ import {
     ContactPost,
     LdapConfig,
     LdapUser,
-    LoadCommand,
     LoadCommandsRoot,
     LoadContainersContainer,
     LoadContainersRoot,
@@ -54,6 +53,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -113,7 +113,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     protected containers: LoadContainersContainer[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
-    protected notificationCommands: LoadCommand[] = [];
+    protected notificationCommands: SelectKeyValue[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     protected hasMacroErrors: boolean = false;

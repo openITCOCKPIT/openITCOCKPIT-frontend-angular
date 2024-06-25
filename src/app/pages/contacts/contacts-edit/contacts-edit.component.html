@@ -52,7 +52,7 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="containers">
+                        <label cLabel for="container">
                             {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
@@ -89,16 +89,17 @@
                                 </sup>
                             </a>
                         </label>
-                        <ng-select name="requiredContainers"
-                                   id="requiredContainers"
-                                   #containerIdsRef="ngModel"
-                                   [multiple]="true"
-                                   [(ngModel)]="requiredContainers"
-                                   [disabled]="true">
-                            <ng-option *ngFor="let container of this.allContainers" [value]="container.key">
-                                <span class="text-primary">{{ container.value }}  🔒</span>
-                            </ng-option>
-                        </ng-select>
+
+                        <oitc-multi-select
+                                name="requiredContainers"
+                                id="requiredContainers"
+                                [(ngModel)]="requiredContainers"
+                                optionValue="key"
+                                optionLabel="value"
+                                [labelSuffix]="'🔐'"
+                                [disabled]="true"
+                                [options]="this.requiredContainersList">
+                        </oitc-multi-select>
                     </div>
 
                     <div class="mb-3">

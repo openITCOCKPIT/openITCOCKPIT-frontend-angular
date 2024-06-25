@@ -31,7 +31,6 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     Contact,
-    LoadCommand,
     LoadCommandsRoot,
     LoadContainersContainer,
     LoadContainersRoot,
@@ -51,6 +50,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -112,13 +112,14 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute)
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
-    protected notificationCommands: LoadCommand[] = [];
+    protected notificationCommands: SelectKeyValue[] = [];
     protected timeperiods: Timeperiod[] = [];
     protected hasMacroErrors: boolean = false;
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
     protected allContainers: LoadContainersContainer[] = []
+    protected requiredContainersList: LoadContainersContainer[] = []
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
@@ -185,6 +186,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             .subscribe((result: LoadContainersRoot) => {
                 // Fetch all containers.
                 this.allContainers = result.containers;
+                this.requiredContainersList = result.containers;
 
                 // If no containers are required, the selectedContainers can remain where they belong.
                 if (this.requiredContainers.length === 0) {
