@@ -1,33 +1,32 @@
 <ng-container *transloco="let t">
     <c-card-header>
-    <c-row>
-        <c-col [xs]="4" [lg]="4">
+        <div class="d-flex bd-highlight">
+        <div class="p-2 bd-highlight">
             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
             {{ t('Filter') }}
-        </c-col>
-        <c-col [xs]="8" [lg]="8" class="ui-fluid">
+        </div>
+
+        <div class="p-2 flex-grow-1 bd-highlight">
 
 
             <oitc-select
                          name="boookmarkselect"
                          id="bookmarkselect"
-                         class="flex-1 w-100"
+                         class="flex-grow-1"
                          optionValue="key"
                          optionLabel="value"
-                         [(ngModel)]="selectedBokkmarkId"
+                         [(ngModel)]="selectedBookmarkId"
                          [options]="bookmarksSelect"
                          (onChange)="onBookmarkChange()">
             </oitc-select>
-        </c-col>
-        <!--<c-col [lg]="3">
-            <button class="btn btn-success btn-xs waves-effect waves-themed"
-                    (click)="showNewBookmarkModel()">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Save as new filter') }}
+        </div>
+        <div class="p-2 bd-highlight">
+            <button cButton class="ripple " color="success" size="xs" (click)="showNewBookmarkModel()">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon> {{ t('Save as new filter') }}
             </button>
-        </c-col>-->
-    </c-row>
+        </div>
+    </div>
     </c-card-header>
 
-
+<oitc-filter-bookmark-save-modal (toSave)="saveNewBookmark($event)"></oitc-filter-bookmark-save-modal>
 </ng-container>

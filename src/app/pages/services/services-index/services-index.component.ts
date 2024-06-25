@@ -36,7 +36,14 @@ import { Subscription } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { ProfileService} from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { ServiceIndexFilter, ServiceObject, ServiceParams, ServicesIndexRoot } from "../services.interface";
+import {
+    ServiceIndexFilter,
+    ServiceObject,
+    ServiceParams,
+    ServicesIndexRoot,
+    ServicesCurrentStateFilter,
+    getServiceCurrentStateForApi,
+} from "../services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { ServiceMaintenanceModalComponent} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { ServiceAcknowledgeModalComponent} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -102,13 +109,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-
-type states = {
-    ok: boolean,
-    warning: boolean,
-    critical: boolean,
-    unknown: boolean
-}
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
   selector: 'oitc-services-index',
@@ -179,7 +180,8 @@ type states = {
         FormsModule,
         ColumnsConfigExportModalComponent,
         ColumnsConfigImportModalComponent,
-        DropdownDividerDirective
+        DropdownDividerDirective,
+        TableLoaderComponent,
     ],
   templateUrl: './services-index.component.html',
   styleUrl: './services-index.component.css',
@@ -227,7 +229,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public serviceTypes: any[] = [];
     public filter: ServiceIndexFilter = {
         Servicestatus: {
-            current_state: [],
+            current_state: {
+                ok: false,
+                warning: false,
+                critical: false,
+                unknown: false
+            },
             acknowledged: false,
             not_acknowledged: false,
             in_downtime: false,
@@ -260,13 +267,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             name_regex: false,
             satellite_id: []
         }
-    };
-
-    public states: states = {
-        ok: false,
-        warning: false,
-        critical: false,
-        unknown: false
     };
 
     //end filter
@@ -409,7 +409,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             'filter[servicename_regex]': this.params['filter[servicename_regex]'],
             'filter[servicedescription]': this.params['filter[servicedescription]'],
             'filter[Servicestatus.output]': this.params['filter[Servicestatus.output]'],
-            'filter[Servicestatus.current_state][]': this.filter.Servicestatus.current_state,
+            'filter[Servicestatus.current_state][]': this.params['filter[Servicestatus.current_state][]'],
             'filter[keywords][]': this.params['filter[keywords][]'],
             'filter[not_keywords][]': this.params['filter[not_keywords][]'],
             'filter[Servicestatus.problem_has_been_acknowledged]': this.params['filter[Servicestatus.problem_has_been_acknowledged]'],
@@ -630,10 +630,34 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     onSelectedBookmark(filterstring: string) {
+
         const bookmarkfilter = JSON.parse(filterstring);
-        console.log(bookmarkfilter);
-        this.filter = bookmarkfilter
-        this.getFilter(this.filter);
+        if(bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex){
+            bookmarkfilter.Hosts.name_regex = false;
+        }
+        if(bookmarkfilter.Services.name === '' && !bookmarkfilter.Services.name_regex){
+            bookmarkfilter.Services.name_regex = false;
+        }
+        if(!bookmarkfilter.Services.service_type){
+            bookmarkfilter.Services.service_type = [];
+        }
+        if(typeof(bookmarkfilter.Services.keywords) === 'string' && bookmarkfilter.Services.keywords.length > 0){
+            bookmarkfilter.Services.keywords = bookmarkfilter.Services.keywords.split(',');
+        }
+        if(typeof(bookmarkfilter.Services.not_keywords) === 'string' && bookmarkfilter.Services.not_keywords.length > 0){
+            bookmarkfilter.Services.not_keywords = bookmarkfilter.Services.not_keywords.split(',');
+        }
+        if(bookmarkfilter.Hosts.satellite_id) {
+            bookmarkfilter.Hosts.satellite_id =  bookmarkfilter.Hosts.satellite_id.map(Number);
+        }
+        if(bookmarkfilter.Services.service_type) {
+            bookmarkfilter.Services.service_type =  bookmarkfilter.Services.service_type.map(Number);
+        }
+        if(bookmarkfilter.Servicestatus.notifications_enabled === false && bookmarkfilter.Servicestatus.notifications_not_enabled === undefined) {
+            bookmarkfilter.Servicestatus.notifications_not_enabled =  false;
+        }
+
+        this.getFilter(bookmarkfilter);
     }
 
     getFilter(filter: ServiceIndexFilter) {
@@ -645,9 +669,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.params['filter[servicename_regex]'] = filter.Services.name_regex;
         this.params['filter[servicedescription]'] = filter.Services.servicedescription;
         this.params['filter[keywords][]'] = filter.Services.keywords;
-        this.params['filter[not_keywords][]'] = filter.Services.not_keywords,
+        this.params['filter[not_keywords][]'] = filter.Services.not_keywords;
         this.params['filter[Services.service_type][]'] = filter.Services.service_type;
-        this.params['filter[Servicestatus.current_state][]'] = filter.Servicestatus.current_state;
+        this.params['filter[Servicestatus.current_state][]'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
 
 
         if(filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged){
@@ -724,7 +748,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     public resetFilter() {
         this.filter = {
             Servicestatus: {
-                current_state: [],
+                current_state: {
+                    ok: false,
+                    warning: false,
+                    critical: false,
+                    unknown: false
+                },
                 acknowledged: false,
                 not_acknowledged: false,
                 in_downtime: false,
@@ -758,12 +787,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
                 satellite_id: []
             }
         };
-        this.states =  {
-            ok: false,
-            warning: false,
-            critical: false,
-            unknown: false
-        }
         this.getFilter(this.filter);
     }
 
@@ -771,15 +794,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.getFilter(this.filter);
     }
 
-    public onStateChange(event: Event) {
-        const statesArray:string[] = [];
-        if(this.states.ok) statesArray.push('ok');
-        if(this.states.warning) statesArray.push('warning');
-        if(this.states.critical) statesArray.push('critical');
-        if(this.states.unknown) statesArray.push('unknown');
-        this.filter.Servicestatus.current_state = statesArray;
-        this.getFilter(this.filter);
-    }
 
 
 }

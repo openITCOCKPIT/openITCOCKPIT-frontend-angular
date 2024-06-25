@@ -78,7 +78,7 @@
                 <ng-container>
                     <c-card>
                         <!--<c-card-header>-->
-                            <oitc-filter-bookmark [plugin]="''" [controller]="'Services'" [action]="'index'" (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                            <oitc-filter-bookmark [plugin]="''" [controller]="'Services'" [action]="'index'" [filter]="filter" (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
                         <!--</c-card-header>-->
                         <c-card-body *ngIf="showFilter">
                             <c-row class="mb-3">
@@ -224,8 +224,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox"
                                                class="checkbox-lg checkbox-success"
-                                               [(ngModel)]="states.ok"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.ok"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusok">{{ t('Ok') }}</label>
@@ -233,8 +233,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusowarning" type="checkbox"
                                                class="checkbox-lg checkbox-warning"
-                                               [(ngModel)]="states.warning"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.warning"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusowarning">{{ t('Warning') }}</label>
@@ -242,8 +242,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatuscritical" type="checkbox"
                                                class="checkbox-lg checkbox-danger"
-                                               [(ngModel)]="states.critical"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.critical"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatuscritical">{{ t('Critical') }}</label>
@@ -251,8 +251,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusunknown" type="checkbox"
                                                class="checkbox-lg checkbox-secondary"
-                                               [(ngModel)]="states.unknown"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.unknown"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusunknown">{{ t('Unknown') }}</label>
@@ -612,8 +612,8 @@
                     </c-card>
 
                     <!--filter end -->
-
-                    <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                    <oitc-table-loader *ngIf="!services"></oitc-table-loader>
+                    <table  *ngIf="services" bordered cTable class="mt-2 mb-0" hover striped matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
                         <thead>
@@ -664,7 +664,7 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody *ngIf="services">
+                        <tbody>
                         <ng-container *ngFor="let service of services.all_services;  index as i;">
                             <tr *ngIf="i === 0 || (i > 0 && services.all_services[i -1].Host.uuid !== service.Host.uuid)">
                                 <td colspan="16">

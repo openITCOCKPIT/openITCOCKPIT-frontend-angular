@@ -1,0 +1,45 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="filterBookmarkSaveModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-success txt-color-white">
+            <h5 cModalTitle class="text-white">
+                {{ t('Edit bookmark') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <div>
+                <label class="bold">
+                    {{ t('Name') }}
+                </label>
+                <input
+                        cFormControl
+                        [(ngModel)]="newBookmark.name">
+            </div>
+            <div *ngIf="error" class="help-block text-danger">{{ t(errorMessage) }}</div>
+            <div class="mt-2">
+                <input type="checkbox"
+                       name="checkbox"
+
+                       [(ngModel)]="newBookmark.favorite"
+                       id="isFavoriteAdd">
+                <label class=" ms-2" for="isFavoriteAdd">
+                    {{t('Add to favorites')}}
+                </label>
+            </div>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="saveNewBookmark()" cButton class="ripple" color="success">
+                {{ t('Create bookmark') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
