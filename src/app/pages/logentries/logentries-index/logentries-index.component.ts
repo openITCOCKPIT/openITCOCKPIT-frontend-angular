@@ -46,10 +46,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
-import {
-    DynamicComponent,
-    DynamicHtmlComponent
-} from '../../../components/dynamic-html/dynamic-html/dynamic-html.component';
+import { ServerLinkComponent } from '../server-link/server-link.component';
 
 @Component({
     selector: 'oitc-logentries-index',
@@ -94,8 +91,7 @@ import {
         ContainerComponent,
         HoststatusSimpleIconComponent,
         TrustAsHtmlPipe,
-        DynamicHtmlComponent,
-        DynamicComponent
+        ServerLinkComponent
     ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css'
@@ -126,7 +122,6 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.LogentriesService.getIndex(this.params)
             .subscribe((result) => {
                 this.logentries = result;
-                console.log(this.logentries);
             })
         );
     }

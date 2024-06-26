@@ -125,8 +125,7 @@
                             {{ logentry.logentry_type_string }}
                         </td>
                         <td>
-                            <dynamic-component></dynamic-component>
-                            <div [innerHtml]="logentry.logentry_data_angular_html| trustAsHtml"></div>
+                            <oitc-server-link [linkHtml]="logentry.logentry_data_angular_html"></oitc-server-link>
                         </td>
                     </tr>
                     </tbody>

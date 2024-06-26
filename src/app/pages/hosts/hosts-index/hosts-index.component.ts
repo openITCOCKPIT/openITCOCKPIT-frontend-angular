@@ -243,6 +243,9 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
         }
 
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Hosts.id')) {
+            this.filter['Hosts.id'] = this.route.snapshot.queryParams['filter.Hosts.id'];
+        }
         this.filter['Hoststatus.problem_has_been_acknowledged'] = hasBeenAcknowledged;
         this.filter['Hoststatus.scheduled_downtime_depth'] = inDowntime;
         this.filter['Hoststatus.notifications_enabled'] = notificationsEnabled;
