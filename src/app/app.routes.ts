@@ -104,6 +104,9 @@ export const routes: Routes = [{
     path: 'hostgroups/edit/:id',
     loadComponent: () => import('./pages/hostgroups/hostgroups-edit/hostgroups-edit.component').then(m => m.HostgroupsEditComponent)
 }, {
+    path: 'hostgroups/extended/:id',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-extended/hostgroups-extended.component').then(m => m.HostgroupsExtendedComponent)
+}, {
     path: 'hostgroups/index',
     loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
 }, {
