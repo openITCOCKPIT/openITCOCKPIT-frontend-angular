@@ -103,8 +103,6 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
-
-        this.loadServicetemplates = this.loadServicetemplates.bind(this);
     }
 
     public ngOnInit() {
@@ -175,7 +173,19 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected loadServicetemplates(servicetemplateName: string): void {
+
+    public onContainerChange(): void {
+        if (!this.post.container.parent_id) {
+            this.servicetemplates = [];
+            return;
+        }
+        this.loadServicetemplates('');
+    }
+
+    /*******************
+     * ARROW functions *
+     *******************/
+    protected loadServicetemplates = (servicetemplateName: string): void => {
         if (!this.post.container.parent_id) {
             this.servicetemplates = [];
             return;
@@ -184,14 +194,5 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
             }))
-    }
-
-
-    public onContainerChange(): void {
-        if (!this.post.container.parent_id) {
-            this.servicetemplates = [];
-            return;
-        }
-        this.loadServicetemplates('');
     }
 }

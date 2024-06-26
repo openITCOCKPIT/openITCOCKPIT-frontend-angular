@@ -9,6 +9,8 @@ import { TranslocoService } from '@jsverse/transloco';
 import {
     HostAddEditSuccessResponse,
     HostCommandArgument,
+    HostCopyGet,
+    HostCopyPost,
     HostDnsLookup,
     HostEditApiResult,
     HostElements,
@@ -360,6 +362,27 @@ export class HostsService {
                 return data;
             })
         );
+    }
+
+    /**********************
+     *    Copy action    *
+     **********************/
+
+    public getHostsCopy(ids: number[]): Observable<HostCopyGet[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ hosts: HostCopyGet[] }>(`${proxyPath}/hosts/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.hosts;
+                })
+            )
+    }
+
+    public saveHostsCopy(hosts: HostCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hosts/copy/.json?angular=true`, {
+            data: hosts
+        });
     }
 
     /**********************

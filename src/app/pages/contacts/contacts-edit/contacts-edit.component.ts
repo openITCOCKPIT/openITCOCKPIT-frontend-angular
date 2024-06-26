@@ -186,7 +186,9 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             .subscribe((result: LoadContainersRoot) => {
                 // Fetch all containers.
                 this.allContainers = result.containers;
-                this.requiredContainersList = result.containers;
+
+                // Unbind the containers list for the required dropdown. Otherwise, a reference will created that adds label suffixes to all dropdowns.
+                this.requiredContainersList = result.containers.splice(0, this.requiredContainers.length);
 
                 // If no containers are required, the selectedContainers can remain where they belong.
                 if (this.requiredContainers.length === 0) {

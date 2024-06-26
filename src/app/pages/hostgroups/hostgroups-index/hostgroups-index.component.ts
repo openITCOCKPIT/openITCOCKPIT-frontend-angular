@@ -1,8 +1,9 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {TranslocoDirective, TranslocoService, TranslocoPipe} from '@jsverse/transloco';
+import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
 import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
 import {Subscription} from 'rxjs';
+import {HostgroupsService} from '../hostgroups.service';
 import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
@@ -48,20 +49,16 @@ import {
 import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
 import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
-import {ServicetemplategroupsService} from '../servicetemplategroups.service';
 import {
-    AllocateToMatchingHostgroupResponse,
-    getDefaultServicetemplategroupsIndexParams,
-    ServiceTemplateGroupsIndex,
-    ServiceTemplateGroupsIndexParams,
-    ServiceTemplateGroupsIndexRoot
-} from '../servicetemplategroups.interface';
-import {GenericResponseWrapper, GenericValidationError} from "../../../generic-responses";
-import {NotyService} from "../../../layouts/coreui/noty.service";
+    HostgroupsIndexHostgroup,
+    HostgroupsIndexParams,
+    HostgroupsIndexRoot,
+    getDefaultHostgroupsIndexParams
+} from '../hostgroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
-    selector: 'oitc-servicetemplategroups-index',
+    selector: 'oitc-hostgroups-index',
     standalone: true,
     imports: [
         CoreuiComponent,
@@ -107,30 +104,25 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         BadgeComponent,
         TableLoaderComponent
     ],
-    templateUrl: './servicetemplategroups-index.component.html',
-    styleUrl: './servicetemplategroups-index.component.css',
+    templateUrl: './hostgroups-index.component.html',
+    styleUrl: './hostgroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService} // Inject the HostgroupsService into the DeleteAllModalComponent
     ]
 })
-export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
-    private readonly modalService: ModalService = inject(ModalService);
-    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private readonly subscriptions: Subscription = new Subscription();
-    private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+export class HostgroupsIndexComponent implements OnInit, OnDestroy {
+    private readonly modalService = inject(ModalService);
+    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private subscriptions: Subscription = new Subscription();
+    private HostgroupsService: HostgroupsService = inject(HostgroupsService);
 
-    public params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
+    public params: HostgroupsIndexParams = getDefaultHostgroupsIndexParams();
 
-    protected readonly route: ActivatedRoute = inject(ActivatedRoute);
-    protected selectedItems: DeleteAllItem[] = [];
-    protected servicetemplategroups: ServiceTemplateGroupsIndexRoot = {
-        all_servicetemplategroups: [],
-        _csrfToken: ''
-    }
-    protected readonly router: Router = inject(Router);
-    protected hideFilter: boolean = true;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
+    public readonly route = inject(ActivatedRoute);
+    public selectedItems: DeleteAllItem[] = [];
+    public hostgroups: HostgroupsIndexRoot = {all_hostgroups: [], _csrfToken: ''}
+    public readonly router = inject(Router);
+    public hideFilter: boolean = true;
 
     // Show or hide the filter
     public toggleFilter() {
@@ -142,7 +134,7 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
-            this.loadServicetemplategroups();
+            this.loadHostgroups();
         }));
     }
 
@@ -151,22 +143,22 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultServicetemplategroupsIndexParams();
-        this.loadServicetemplategroups();
+        this.params = getDefaultHostgroupsIndexParams();
+        this.loadHostgroups();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadServicetemplategroups();
+        this.loadHostgroups();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadServicetemplategroups();
+        this.loadHostgroups();
     }
 
     // Callback when sort has changed
@@ -174,49 +166,38 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadServicetemplategroups();
+            this.loadHostgroups();
         }
     }
 
-    public loadServicetemplategroups() {
+    public loadHostgroups() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.ServicetemplategroupsService.getIndex(this.params)
-            .subscribe((result: ServiceTemplateGroupsIndexRoot) => {
-                this.servicetemplategroups = result;
+        this.subscriptions.add(this.HostgroupsService.getIndex(this.params)
+            .subscribe((result: HostgroupsIndexRoot) => {
+                this.hostgroups = result;
             }));
     }
 
     // Generic callback whenever a mass action (like delete all) has been finished
     public onMassActionComplete(success: boolean) {
         if (success) {
-            this.loadServicetemplategroups();
+            this.loadHostgroups();
         }
     }
 
-    public allocateToMatchingHostgroup(servicetemplategroupId: number): void {
 
-        this.subscriptions.add(this.ServicetemplategroupsService.allocateToMatchingHostgroup(servicetemplategroupId)
-            .subscribe((result: AllocateToMatchingHostgroupResponse) => {
-                if (result.success) {
-                    this.notyService.genericSuccess(result.message);
-                    return;
-                }
+    // Open the Delete All Modal
 
-                this.notyService.genericWarning(result.message);
-            })
-        );
-    }
-
-    public toggleDeleteAllModal(servicetemplategroup?: ServiceTemplateGroupsIndex) {
+    public toggleDeleteAllModal(hostgroup?: HostgroupsIndexHostgroup) {
         let items: DeleteAllItem[] = [];
 
-        if (servicetemplategroup) {
-            // User just want to delete a single Servicetemplate
+        if (hostgroup) {
+            // User just want to delete a single host
             items = [
                 {
-                    id: servicetemplategroup.id as number,
-                    displayName: servicetemplategroup.container.name
+                    id: hostgroup.id as number,
+                    displayName: hostgroup.container.name
                 }
             ];
         } else {
@@ -241,12 +222,9 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => {
-            console.warn(item);
-            return item.id;
-        }).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
-            this.router.navigate(['/', 'servicetemplategroups', 'copy', ids]);
+            this.router.navigate(['/', 'hostgroups', 'copy', ids]);
         }
     }
 }

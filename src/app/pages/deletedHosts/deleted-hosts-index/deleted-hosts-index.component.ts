@@ -47,6 +47,7 @@ import {
     getDefaultDeletedHostsIndexParams
 } from '../deleted-hosts.interface';
 import { DeletedHostsService } from '../deleted-hosts.service';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-deleted-hosts-index',
@@ -89,7 +90,8 @@ import { DeletedHostsService } from '../deleted-hosts.service';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        TableLoaderComponent
     ],
     templateUrl: './deleted-hosts-index.component.html',
     styleUrl: './deleted-hosts-index.component.css'
