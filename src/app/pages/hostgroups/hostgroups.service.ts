@@ -1,5 +1,5 @@
-import {inject, Injectable} from '@angular/core';
-import {catchError, map, Observable, of} from "rxjs";
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, Observable, of } from "rxjs";
 import {
     AddHostgroupsPost,
     HostgroupsCopyGet,
@@ -12,12 +12,12 @@ import {
     LoadContainersRoot,
     LoadHostsRequest,
     LoadHostsResponse,
-    LoadHosttemplates
+    LoadHosttemplates, HostgroupExtended, HostgroupExtendedRoot
 } from "./hostgroups.interface";
-import {HttpClient} from "@angular/common/http";
-import {PROXY_PATH} from "../../tokens/proxy-path.token";
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from "../../generic-responses";
-import {DeleteAllItem} from "../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { HttpClient } from "@angular/common/http";
+import { PROXY_PATH } from "../../tokens/proxy-path.token";
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
+import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
 
 
 @Injectable({
@@ -121,6 +121,7 @@ export class HostgroupsService {
             })
         )
     }
+
     public updateHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hostgroups/edit/${hostgroup.id}.json?angular=true`, {
@@ -160,6 +161,20 @@ export class HostgroupsService {
         return this.http.post<any>(`${proxyPath}/hostgroups/copy/.json?angular=true`, {
             data: items
         });
+
+    }
+
+    public loadHostgroupWithHostsById(id: number): Observable<HostgroupExtended> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<HostgroupExtendedRoot>(`${proxyPath}/hostgroups/loadHostgroupWithHostsById/${id}.json?angular=true`, {
+            params: {
+                'filter["Hosts.name"]': '',
+            }
+        }).pipe(
+            map((data: HostgroupExtendedRoot) => {
+                return data.hostgroup;
+            })
+        )
 
     }
 

@@ -1,0 +1,31 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
+                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                        {{ t('Host groups') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    {{ t('Extended overview') }}
+                </li>
+            </ol>
+        </nav>
+
+
+        <c-card class="mb-3">
+            <c-card-header>
+                ASNAEB
+            </c-card-header>
+        </c-card>
+
+    </ng-container>
+</oitc-coreui>

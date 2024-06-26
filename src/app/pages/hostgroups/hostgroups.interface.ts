@@ -1,6 +1,6 @@
-import {PaginateOrScroll} from "../../layouts/coreui/paginator/paginator.interface";
-import {GenericValidationError} from "../../generic-responses";
-import {SelectKeyValue} from "../../layouts/primeng/select.interface";
+import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
+import { GenericValidationError } from "../../generic-responses";
+import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
@@ -158,4 +158,101 @@ export interface LoadHosttemplates {
 export interface AddHostgroupsPost {
     Hostgroup: Hostgroup
 }
+
+// EXTENDED VIEW
+export interface HostgroupExtendedRoot extends PaginateOrScroll {
+    hostgroup: HostgroupExtended
+    _csrfToken: string
+}
+
+export interface HostgroupExtended {
+    Hostgroup: {
+        id: number
+        uuid: string
+        container_id: number
+        description: string
+        hostgroup_url: string
+        container: {
+            id: number
+            containertype_id: number
+            name: string
+            parent_id: number
+            lft: number
+            rght: number
+        }
+        allowEdit: boolean
+    }
+    Hosts: {
+        Host: {
+            id: number
+            uuid: string
+            hostname: string
+            address: string
+            description: string
+            hosttemplate_id: number
+            active_checks_enabled: boolean
+            satelliteId: number
+            containerId: number
+            containerIds: number[]
+            tags: string
+            usageFlag: any
+            allow_edit: boolean
+            disabled: boolean
+            priority: number
+            notes: string
+            is_satellite_host: boolean
+            name: string
+        }
+        Hoststatus: {
+            currentState: number
+            isFlapping: boolean
+            problemHasBeenAcknowledged: boolean
+            scheduledDowntimeDepth: number
+            lastCheck: string
+            nextCheck: string
+            activeChecksEnabled: boolean
+            lastHardState: any
+            lastHardStateChange: string
+            last_state_change: string
+            output: string
+            long_output: any
+            acknowledgement_type: number
+            state_type: number
+            flap_detection_enabled: any
+            notifications_enabled: boolean
+            current_check_attempt: any
+            max_check_attempts: any
+            latency: any
+            last_time_up: string
+            lastHardStateChangeInWords: string
+            last_state_change_in_words: string
+            lastCheckInWords: string
+            nextCheckInWords: string
+            isHardstate: boolean
+            isInMonitoring: boolean
+            humanState: string
+            cssClass: string
+            textClass: string
+            outputHtml: string
+        }
+
+        ServicestatusSummary: {
+            state: {
+                ok: number
+                warning: number
+                critical: number
+                unknown: number
+            }
+            total: number
+            cumulatedState: number
+        }
+    }[]
+    StatusSummary: {
+        up: number
+        down: any
+        unreachable: any
+    }
+}
+
+
 
