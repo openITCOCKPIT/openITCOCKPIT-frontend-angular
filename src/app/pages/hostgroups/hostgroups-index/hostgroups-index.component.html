@@ -9,10 +9,9 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['servicetemplategroups', 'index']"
-                       [routerLink]="['/', 'servicetemplategroups', 'index']">
-                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        {{ t('Service template groups') }}
+                    <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
+                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                        {{ t('Host groups') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -24,21 +23,20 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Service template groups') }}
+                <h5 cCardTitle>{{ t('Host groups') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadServicetemplategroups()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadHostgroups()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['servicetemplategroups', 'add']"
-                                [routerLink]="['/', 'servicetemplategroups', 'add']"
+                        <button *oitcPermission="['hostgroups', 'add']" [routerLink]="['/', 'hostgroups', 'add']"
                                 cButton
                                 class="ripple"
                                 color="success"
@@ -76,8 +74,8 @@
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Containers.name]']"
-                                           [placeholder]="'Filter by service template group name' | transloco"
-                                           aria-label="service template group name"
+                                           [placeholder]="'Filter by host group name' | transloco"
+                                           aria-label="host group name"
                                            cFormControl
                                            name="filter[Containers.name]"
                                            oitcDebounce
@@ -88,14 +86,14 @@
                             <c-col md="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Servicetemplategroups.description]']"
-                                           [placeholder]="'Filter by service template group description' | transloco"
-                                           aria-label="Service template group description"
+                                           [(ngModel)]="params['filter[Hostgroups.description]']"
+                                           [placeholder]="'Filter by description' | transloco"
+                                           aria-label="Host group description"
                                            cFormControl
-                                           name="filter[Servicetemplategroups.description]"
+                                           name="filter[Hostgroups.description]"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -113,7 +111,7 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="!servicetemplategroups"></oitc-table-loader>
+                <oitc-table-loader *ngIf="!hostgroups"></oitc-table-loader>
 
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -123,9 +121,9 @@
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
                         <th scope="col" mat-sort-header="Containers.name">
-                            {{ t('Service template group name') }}
+                            {{ t('Host group name') }}
                         </th>
-                        <th scope="col" mat-sort-header="Servicetemplategroups.description">
+                        <th scope="col" mat-sort-header="Hostgroups.description">
                             {{ t('Description') }}
                         </th>
                         <th class="text-center col-1 width-50" scope="col">
@@ -133,64 +131,45 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="servicetemplategroups">
-                    <tr *ngFor="let servicetemplategroup of servicetemplategroups.all_servicetemplategroups">
+                    <tbody *ngIf="hostgroups">
+                    <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['servicetemplategroups', 'delete']"
-                                [disabled]="false"
-                                [item]="servicetemplategroup"></oitc-item-select>
+                                    *oitcPermission="['hostgroups', 'delete']"
+                                    [disabled]="false"
+                                    [item]="hostgroup"></oitc-item-select>
 
                         </td>
-                        <td>{{ servicetemplategroup.container.name }}</td>
-                        <td>{{ servicetemplategroup.description }}</td>
+                        <td>{{ hostgroup.container.name }}</td>
+                        <td>{{ hostgroup.description }}</td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="servicetemplategroup.allow_edit"
-                                                 [permission]="'servicetemplategroups.edit'"
-                                                 [url]="'/servicetemplategroups/edit/' + servicetemplategroup.id">
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.edit'"
-                                                             [url]="'/servicetemplategroups/edit/' + servicetemplategroup.id">
+                            <oitc-actions-button *ngIf="hostgroup.allowEdit"
+                                                 [permission]="'hostgroups.edit'"
+                                                 [url]="'/hostgroups/edit/' + hostgroup.id">
+                                <oitc-actions-button-element [permission]="'hostgroups.edit'"
+                                                             [url]="'/hostgroups/edit/' + hostgroup.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
-
-
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHostgroup'"
-                                                             [url]="'/servicetemplategroups/allocateToHostgroup/' + servicetemplategroup.id">
-                                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                                    {{ t('Allocate to host group') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element
-                                    [permission]="'servicetemplategroups.allocateToMatchingHostgroup'"
-                                    (click)="allocateToMatchingHostgroup(servicetemplategroup.id)">
-                                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                                    {{ t('Allocate to matching host group') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHost'"
-                                                             [url]="'/servicetemplategroups/allocateToHost/' + servicetemplategroup.id">
-                                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                                    {{ t('Allocate to host') }}
-                                </oitc-actions-button-element>
-
                                 <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/servicetemplategroup/' + servicetemplategroup.id">
+                                                             [url]="'/changelogs/entity/hostgroup/' + hostgroup.id">
                                     <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                                     {{ t('Changelog') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.usedBy'"
-                                                             [url]="'/servicetemplategroups/usedBy/' + servicetemplategroup.id">
+                                <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
+                                                             [url]="'/hostgroups/usedBy/' + hostgroup.id">
                                     <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
                                     {{ t('Used By') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
-                                <oitc-actions-button-element [permission]="'servicetemplategroups.copy'"
-                                                             [url]="'/servicetemplategroups/copy/' + servicetemplategroup.id">
+                                <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                             [url]="'/hostgroups/copy/' + hostgroup.id">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplategroup)"
-                                                             [permission]="'servicetemplategroups.delete'">
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(hostgroup)"
+                                                             [permission]="'hostgroups.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
@@ -203,13 +182,13 @@
                 </table>
 
                 <oitc-no-records
-                    *ngIf="servicetemplategroups && servicetemplategroups.all_servicetemplategroups.length === 0"></oitc-no-records>
-                <ng-container *ngIf="servicetemplategroups && servicetemplategroups.all_servicetemplategroups">
+                        *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
+                <ng-container *ngIf="hostgroups && hostgroups.all_hostgroups">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="servicetemplategroups.all_servicetemplategroups.length"></oitc-select-all>
+                                        [itemsCount]="hostgroups.all_hostgroups.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group btn-group-xs d-flex flex-row" role="group">
@@ -233,9 +212,9 @@
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="servicetemplategroups"
-                                [paginateOrScroll]="servicetemplategroups"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    *ngIf="hostgroups"
+                                    [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

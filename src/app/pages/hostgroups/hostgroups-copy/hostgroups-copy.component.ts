@@ -17,10 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ContactgroupsService } from '../contactgroups.service';
-import {
-    ContactgroupsCopyPost
-} from '../contactgroups.interface';
+import { HostgroupsService } from '../hostgroups.service';
+import { HostgroupsCopyPostResult } from '../hostgroups.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
@@ -28,7 +26,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-    selector: 'oitc-contactgroups-copy',
+    selector: 'oitc-hostgroups-copy',
     standalone: true,
     imports: [
         BackButtonDirective,
@@ -53,14 +51,14 @@ import { HttpErrorResponse } from '@angular/common/http';
         RouterLink,
         FormsModule
     ],
-    templateUrl: './contactgroups-copy.component.html',
-    styleUrl: './contactgroups-copy.component.css'
+    templateUrl: './hostgroups-copy.component.html',
+    styleUrl: './hostgroups-copy.component.css'
 })
-export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
-    public contactgroups: ContactgroupsCopyPost[] = [];
+export class HostgroupsCopyComponent implements OnInit, OnDestroy {
+    public hostgroups: HostgroupsCopyPostResult[] = [];
     public errors: GenericValidationError | null = null;
     private subscriptions: Subscription = new Subscription();
-    private ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
+    private HostgroupsService: HostgroupsService = inject(HostgroupsService);
     private readonly notyService: NotyService = inject(NotyService);
 
     private router: Router = inject(Router);
@@ -71,25 +69,25 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
 
         if (!ids) {
             // No ids given
-            this.router.navigate(['/', 'contactgroups', 'index']);
+            this.router.navigate(['/', 'hostgroups', 'index']);
             return;
         }
 
-        this.subscriptions.add(this.ContactgroupsService.getContactgroupsCopy(ids).subscribe((contactgroups) => {
-            for (let contactgroup of contactgroups) {
-                this.contactgroups.push({
-                    Contactgroup: {
+        this.subscriptions.add(this.HostgroupsService.getHostgroupsCopy(ids).subscribe((hostgroups) => {
+            for (let hostgroup of hostgroups) {
+                this.hostgroups.push({
+                    Hostgroup: {
                         container: {
-                            name: contactgroup.Container.name,
+                            name: hostgroup.container.name,
                         },
-                        description: contactgroup.Contactgroup.description,
+                        description: hostgroup.description,
                     },
                     Source: {
-                        id: contactgroup.Contactgroup.id,
-                        name: contactgroup.Container.name
+                        id: hostgroup.id,
+                        name: hostgroup.container.name
                     },
                     Error: null
-                });
+                } as HostgroupsCopyPostResult);
             }
         }));
     }
@@ -98,22 +96,22 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public copyContactgroups() {
+    public copyHostgroups() {
         this.subscriptions.add(
-            this.ContactgroupsService.saveContactgroupsCopy(this.contactgroups).subscribe({
+            this.HostgroupsService.saveHostgroupsCopy(this.hostgroups).subscribe({
                 next: (value: any) => {
                     this.notyService.genericSuccess();
-                    this.router.navigate(['/', 'contactgroups', 'index']);
+                    this.router.navigate(['/', 'hostgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.notyService.genericError();
-                    this.contactgroups = error.error.result as ContactgroupsCopyPost[];
-                    this.contactgroups.forEach((copyPostResult: ContactgroupsCopyPost) => {
-                        if (!copyPostResult.Error) {
+                    this.hostgroups = error.error.result as HostgroupsCopyPostResult[];
+                    this.hostgroups.forEach((hostgroup: HostgroupsCopyPostResult) => {
+                        if (!hostgroup.Error) {
                             return;
                         }
-                        if (copyPostResult.Error?.['container']['name'] !== 'undefined') {
-                            copyPostResult.Error['name'] = <any>copyPostResult.Error?.['container']['name'];
+                        if (hostgroup.Error?.['container']['name'] !== 'undefined') {
+                            hostgroup.Error['name'] = <any>hostgroup.Error?.['container']['name'];
                         }
                     });
                 }
@@ -121,3 +119,4 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
         );
     }
 }
+

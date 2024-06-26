@@ -124,8 +124,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
-
-        this.loadLdapUsers = this.loadLdapUsers.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
     public ngOnInit() {
@@ -140,13 +138,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.ldapConfig = result.ldapConfig;
             }))
-    }
-
-    public loadLdapUsers(samaccountname: string): void {
-        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
-            .subscribe((result) => {
-                this.ldapUsers = result.ldapUsers;
-            }));
     }
 
     private getDefaultPost(): ContactPost {
@@ -344,5 +335,12 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             return {} as GenericValidationError;
         }
         return this.errors['customvariables'][index] as unknown as GenericValidationError;
+    }
+
+    public loadLdapUsers = (samaccountname: string): void => {
+        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
+            .subscribe((result) => {
+                this.ldapUsers = result.ldapUsers;
+            }));
     }
 }
