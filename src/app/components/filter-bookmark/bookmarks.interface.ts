@@ -11,6 +11,11 @@ export interface BookmarksObject {
     fav_group: string;
 }
 
+export interface BookmarkResponse {
+    _csrfToken: string
+    bookmark: BookmarksObject
+}
+
 export interface BookmarksParams  {
     angular: boolean
     plugin: string
@@ -21,5 +26,14 @@ export interface BookmarksParams  {
 export interface BookmarksIndexRoot {
     bookmarks: BookmarksObject[],
     bookmark: BookmarksObject | null
+}
+
+export interface BookmarkPost {
+    name: string
+    favorite: boolean
+    filter: string
+    plugin: string
+    controller: string
+    action: string
 
 }

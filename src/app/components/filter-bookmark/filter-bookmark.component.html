@@ -1,32 +1,39 @@
 <ng-container *transloco="let t">
     <c-card-header>
         <div class="d-flex bd-highlight">
-        <div class="p-2 bd-highlight">
-            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-            {{ t('Filter') }}
-        </div>
+            <div class="p-2 bd-highlight">
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                {{ t('Filter') }}
+            </div>
 
-        <div class="p-2 flex-grow-1 bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
 
 
-            <oitc-select
-                         name="boookmarkselect"
-                         id="bookmarkselect"
-                         class="flex-grow-1"
-                         optionValue="key"
-                         optionLabel="value"
-                         [(ngModel)]="selectedBookmarkId"
-                         [options]="bookmarksSelect"
-                         (onChange)="onBookmarkChange()">
-            </oitc-select>
+                <oitc-select
+                        name="boookmarkselect"
+                        id="bookmarkselect"
+                        class="flex-grow-1"
+                        optionValue="id"
+                        optionLabel="name"
+                        [(ngModel)]="selectedBookmarkId"
+                        [options]="bookmarks"
+                        (onChange)="onBookmarkChange()">
+                </oitc-select>
+            </div>
+            <div *ngIf="showEdit" class="p-2 bd-highlight">
+                <button cButton class="ripple " color="success" size="xs" (click)="updateBookmark()">
+                    {{ t('Update filter') }}
+                </button>
+            </div>
+            <div class="p-2 bd-highlight">
+                <button cButton class="ripple " color="success" size="xs" (click)="showNewBookmarkModel()">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Save as new filter') }}
+                </button>
+            </div>
         </div>
-        <div class="p-2 bd-highlight">
-            <button cButton class="ripple " color="success" size="xs" (click)="showNewBookmarkModel()">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon> {{ t('Save as new filter') }}
-            </button>
-        </div>
-    </div>
     </c-card-header>
 
-<oitc-filter-bookmark-save-modal (toSave)="saveNewBookmark($event)"></oitc-filter-bookmark-save-modal>
+    <oitc-filter-bookmark-save-modal (saved)="savedNewBookmark($event)" [plugin]="plugin" [controller]="controller"
+                                     [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
 </ng-container>

@@ -1,5 +1,6 @@
-import {Component, inject, EventEmitter, Output, ViewChild, OnDestroy} from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
+import {Component, inject, EventEmitter, Output, ViewChild, OnDestroy, Input} from '@angular/core';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import { NotyService } from '../../layouts/coreui/noty.service';
 import {
     ButtonCloseDirective,
     ModalComponent,
@@ -16,6 +17,9 @@ import {FormsModule} from '@angular/forms';
 import {NgIf} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {BookmarksService} from '../filter-bookmark/bookmarks.service';
+import {ServiceIndexFilter} from '../../pages/services/services.interface';
+import {BookmarkPost, BookmarksObject, BookmarkResponse} from '../filter-bookmark/bookmarks.interface';
+import {GenericIdResponse, GenericValidationError} from '../../generic-responses';
 
 type NewBookmark = {
     name: string
@@ -51,15 +55,24 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
         favorite: false
     };
     public error: boolean  = false;
-    public errorMessage = ''
+    public errors: GenericValidationError | null = null;
 
-    @Output() toSave = new EventEmitter<string>();
+    @Input({required: true}) public plugin: string = '';
+    @Input({required: false}) public controller: string = '';
+    @Input({required: false}) public action: string = '';
+    @Input({required: false}) public filter!: ServiceIndexFilter;
+    @Output() saved = new EventEmitter<string>();
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
+    private BookmarksService: BookmarksService = inject(BookmarksService);
+    public TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+
+
     public hideModal(){
-        this.error = false;
+        this.errors = null
         this.newBookmark = {
             name: '',
             filter: '',
@@ -73,7 +86,36 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
 
     public saveNewBookmark() {
        // this.toSave.emit(this.name);
-        this.hideModal()
+        let post: BookmarkPost = {
+            name: this.newBookmark.name,
+            favorite: this.newBookmark.favorite,
+            filter: JSON.parse(JSON.stringify(this.filter)), //Get clone not reference
+            plugin: this.plugin,
+            controller: this.controller,
+            action: this.action
+        };
+
+        this.subscriptions.add(this.BookmarksService.add(post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as BookmarkResponse;
+                    const title = this.TranslocoService.translate('Bookmark');
+                    const msg = this.TranslocoService.translate('created successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+                    this.saved.emit(response.bookmark.id.toString());
+                    this.hideModal();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                    this.error = true;
+                }
+            }))
     }
 
     ngOnDestroy () {
