@@ -39,6 +39,7 @@ import {
 import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
 import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hostgroups-edit',
@@ -76,7 +77,8 @@ import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
         RouterLink,
         ObjectUuidComponent,
         SelectComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hostgroups-edit.component.html',
     styleUrl: './hostgroups-edit.component.css'

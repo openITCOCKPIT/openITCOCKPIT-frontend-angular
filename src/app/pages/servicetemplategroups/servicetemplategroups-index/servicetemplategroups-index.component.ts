@@ -58,6 +58,7 @@ import {
 } from '../servicetemplategroups.interface';
 import {GenericResponseWrapper, GenericValidationError} from "../../../generic-responses";
 import {NotyService} from "../../../layouts/coreui/noty.service";
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
@@ -103,7 +104,8 @@ import {NotyService} from "../../../layouts/coreui/noty.service";
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        BadgeComponent
+        BadgeComponent,
+        TableLoaderComponent
     ],
     templateUrl: './servicetemplategroups-index.component.html',
     styleUrl: './servicetemplategroups-index.component.css',

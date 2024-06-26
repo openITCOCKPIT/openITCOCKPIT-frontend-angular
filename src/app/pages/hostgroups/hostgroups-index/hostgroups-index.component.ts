@@ -55,6 +55,7 @@ import {
     HostgroupsIndexRoot,
     getDefaultHostgroupsIndexParams
 } from '../hostgroups.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-hostgroups-index',
@@ -100,7 +101,8 @@ import {
         TableDirective,
         TranslocoPipe,
         XsButtonDirective,
-        BadgeComponent
+        BadgeComponent,
+        TableLoaderComponent
     ],
     templateUrl: './hostgroups-index.component.html',
     styleUrl: './hostgroups-index.component.css',
