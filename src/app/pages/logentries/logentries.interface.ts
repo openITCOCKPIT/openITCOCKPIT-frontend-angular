@@ -24,7 +24,7 @@ export interface LogentryIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Logentries.logentry_data]': '',
     'filter[Logentries.logentry_type]': string [],
-    'filter[Hosts.id][]': number[]
+    'filter[Host.id][]': number[]
 }
 
 export function getDefaultLogentriesParams(): LogentryIndexParams {
@@ -37,6 +37,6 @@ export function getDefaultLogentriesParams(): LogentryIndexParams {
         direction: 'desc',
         'filter[Logentries.logentry_data]': '',
         'filter[Logentries.logentry_type]': [],
-        'filter[Hosts.id][]': []
+        'filter[Host.id][]': []
     }
 }

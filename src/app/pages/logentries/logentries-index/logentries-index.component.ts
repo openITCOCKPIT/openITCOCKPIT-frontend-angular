@@ -21,7 +21,7 @@ import {
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -47,6 +47,12 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { ServerLinkComponent } from '../server-link/server-link.component';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HostsService } from '../../hosts/hosts.service';
+import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-logentries-index',
@@ -91,7 +97,9 @@ import { ServerLinkComponent } from '../server-link/server-link.component';
         ContainerComponent,
         HoststatusSimpleIconComponent,
         TrustAsHtmlPipe,
-        ServerLinkComponent
+        ServerLinkComponent,
+        FormErrorDirective,
+        MultiSelectComponent
     ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css'
@@ -101,22 +109,63 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: LogentryIndexParams = getDefaultLogentriesParams();
+    public hosts: SelectKeyValue[] = [];
 
     public logentries?: LogentriesRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
+
+
+    private readonly HostsService = inject(HostsService);
+    public entryTypesForSelect: any[] = [];
+
+    public entryTypes = {
+        1: this.TranslocoService.translate('Runtime error'),
+        2: this.TranslocoService.translate('Runtime warning'),
+        4: this.TranslocoService.translate('Verification error'),
+        8: this.TranslocoService.translate('Verification warning'),
+        16: this.TranslocoService.translate('Config error'),
+        32: this.TranslocoService.translate('Config warning'),
+        64: this.TranslocoService.translate('Process info'),
+        128: this.TranslocoService.translate('Event handler'),
+        512: this.TranslocoService.translate('External command'),
+        //514 :this.TranslocoService.translate('External command failed'),
+        1024: this.TranslocoService.translate('Host up'),
+        2048: this.TranslocoService.translate('Host down'),
+        4096: this.TranslocoService.translate('Host unreachable'),
+        8192: this.TranslocoService.translate('Service ok'),
+        16384: this.TranslocoService.translate('Service unknown'),
+        32768: this.TranslocoService.translate('Service warning'),
+        65536: this.TranslocoService.translate('Service critical'),
+        131072: this.TranslocoService.translate('Passive check'),
+        262144: this.TranslocoService.translate('Message'),
+        524288: this.TranslocoService.translate('Host notification'),
+        1048576: this.TranslocoService.translate('Service notification')
+    };
 
     public ngOnInit(): void {
+        this.entryTypesForSelect = this.getEntryTypes();
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             this.loadLogentries();
         }));
+        this.loadHosts('');
     }
 
     public ngOnDestroy(): void {
     }
 
+    public getEntryTypes() {
+        let entryTypes = _.map(
+            this.entryTypes,
+            (value, key) => {
+                return {key: parseInt(key), value: value}
+            }
+        );
+        return entryTypes;
+    }
 
     public loadLogentries() {
         this.subscriptions.add(this.LogentriesService.getIndex(this.params)
@@ -159,5 +208,26 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public loadHosts = (searchString: string) => {
+        var selected: number[] = [];
+        if (this.params['filter[Host.id][]'] !== undefined) {
+            selected = this.params['filter[Host.id][]'];
+        }
+
+        let params: HostsLoadHostsByStringParams = {
+            angular: true,
+            'filter[Hosts.name]': searchString,
+            'selected[]': selected,
+            includeDisabled: false
+        }
+
+        this.subscriptions.add(this.HostsService.loadHostsByString(params)
+            .subscribe((result) => {
+                this.hosts = result;
+            })
+        );
+    }
+
     protected readonly String = String;
+
 }

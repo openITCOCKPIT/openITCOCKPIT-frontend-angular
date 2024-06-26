@@ -62,7 +62,7 @@
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Logentries.logentry_data]']"
-                                           [placeholder]="'Filter by output' | transloco"
+                                           [placeholder]="'Filter by record and UUID' | transloco"
                                            aria-label="name"
                                            cFormControl
                                            name="Notifications.output"
@@ -74,22 +74,42 @@
                             <c-col md="6" class="mb-2">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Logentries.logentry_type]']"
-                                           [placeholder]="'Filter by entry type' | transloco"
-                                           aria-label="name"
-                                           cFormControl
-                                           name="Logentries.logentry_type"
-                                           oitcDebounce
-                                           type="text"
-                                    />
+                                    <oitc-multi-select
+                                        name="hosts"
+                                        id="hosts"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [placeholder]="'Filter by host' | transloco"
+                                        [options]="hosts"
+                                        [(ngModel)]="params['filter[Host.id][]']"
+                                        [searchCallback]="loadHosts"
+                                        (ngModelChange)="loadLogentries()"
+                                        class="flex-1">
+                                    </oitc-multi-select>
                                 </c-input-group>
                             </c-col>
-
+                            <c-col md="12" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'file-alt']"></fa-icon>
+                                    </span>
+                                    <oitc-multi-select
+                                        name="entryTypes"
+                                        id="entryTypes"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        class="flex-1"
+                                        [(ngModel)]="params['filter[Logentries.logentry_type]']"
+                                        [options]="entryTypesForSelect"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by entry type' | transloco"
+                                        (onChange)="loadLogentries()">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </c-col>
                         </c-row>
-
                         <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
