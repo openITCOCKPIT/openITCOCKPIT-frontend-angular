@@ -416,7 +416,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    public linkFor(type: string) {
+    public linkFor(type: 'pdf' | 'csv') {
         let baseUrl: string = '/services/listToPdf.pdf?';
         if (type === 'csv') {
             baseUrl = '/services/listToCsv?';

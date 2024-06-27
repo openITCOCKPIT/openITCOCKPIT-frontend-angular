@@ -999,6 +999,72 @@
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete selected') }}
                                     </button>
+
+                                    <c-dropdown>
+                                        <button cButton cDropdownToggle color="default">
+                                            {{ t('More actions') }}
+                                        </button>
+                                        <ul cDropdownMenu>
+                                            <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                                {{ t('List as pdf') }}</a></li>
+                                            <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                                {{ t('List as csv') }}</a></li>
+                                            <li *oitcPermission="['services', 'deactivate']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="toggleDisableModal()">
+                                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                    {{ t('Disable') }}
+                                                </a>
+                                            </li>
+                                            <li><a href="javascript:void(0);" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                {{ t('Add to service group') }}</a></li>
+                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="resetChecktime()">
+                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                    {{ t('Reset check time') }}
+                                                </a>
+                                            </li>
+                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="disableNotifications()">
+                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                    {{ t('Disable notification') }}
+                                                </a>
+                                            </li>
+                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="enableNotifications()">
+                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                    {{ t('Enable notification') }}
+                                                </a>
+                                            </li>
+                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="toggleDowntimeModal()">
+                                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                                    {{ t('Set planned maintenance times') }}
+                                                </a>
+                                            </li>
+                                            <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                                <a
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="acknowledgeStatus()">
+                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                    {{ t('Acknowledge status') }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </c-dropdown>
+
                                 </div>
                             </c-col>
                         </c-row>
