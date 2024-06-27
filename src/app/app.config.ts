@@ -23,10 +23,11 @@
  *     confirmation.
  */
 
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { snmpTrapModuleRoutes } from '../app/modules/snmp_trap_module/snmp_trap_module.routes';
 import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
 import { AuthService } from "./auth/auth.service";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
@@ -60,7 +61,7 @@ export const appConfig: ApplicationConfig = {
         //importProvidersFrom(BrowserAnimationsModule),
 
         provideRouter(routes),
-        provideAnimations(),
+        //provideRouter(snmpTrapModuleRoutes),
         provideHttpClient(),
         provideToastr(),
         provideTransloco({
