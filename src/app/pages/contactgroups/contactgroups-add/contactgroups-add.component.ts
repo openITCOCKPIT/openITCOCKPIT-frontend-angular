@@ -31,8 +31,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ContactgroupsService } from '../contactgroups.service';
 import {
-    GetContactsByContainerIdRootContact, ContactgroupAddPostContactgroup, LoadContainersContainer, LoadContainersRoot
+    ContactgroupAddPostContactgroup, LoadContainersRoot
 } from '../contactgroups.interface';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-contactgroups-add',
@@ -77,7 +78,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
-    protected contacts: GetContactsByContainerIdRootContact[] = [];
+    protected contacts: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -85,7 +86,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     public post: ContactgroupAddPostContactgroup = {} as ContactgroupAddPostContactgroup;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
 
     constructor() {
@@ -167,7 +168,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
             return;
         }
         this.subscriptions.add(this.ContactgroupsService.getContactsByContainerId(this.post.container.parent_id)
-            .subscribe((result: GetContactsByContainerIdRootContact[]) => {
+            .subscribe((result: SelectKeyValue[]) => {
                 this.contacts = result;
             }))
     }

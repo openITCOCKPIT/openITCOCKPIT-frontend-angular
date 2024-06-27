@@ -483,13 +483,8 @@ export interface LdapConfig {
  *    Definition of Container    *
  *********************************/
 export interface LoadContainersRoot {
-    containers: LoadContainersContainer[]
+    containers: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadContainersContainer {
-    key: number
-    value: string
 }
 
 // LoadUsersByContainerId

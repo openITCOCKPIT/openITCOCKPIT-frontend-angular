@@ -15,9 +15,9 @@ import {
     ContactgroupsIndexRoot,
     ContactgroupsUsedByRoot,
     GetContactsByContainerIdRoot,
-    GetContactsByContainerIdRootContact,
     LoadContainersRoot
 } from './contactgroups.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -112,7 +112,7 @@ export class ContactgroupsService implements DeleteAllModalService {
             )
     }
 
-    public getContactsByContainerId(containerId: number): Observable<GetContactsByContainerIdRootContact[]> {
+    public getContactsByContainerId(containerId: number): Observable<SelectKeyValue[]> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<GetContactsByContainerIdRoot>(`${proxyPath}/contactgroups/loadContacts/${containerId}.json?angular=true`, {})
             .pipe(
