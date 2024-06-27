@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
+import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -27,7 +28,12 @@ class LegacyUrlComponent {
     }
 }
 
-export const routes: Routes = [{
+/***    Routes for modules   ***/
+const moduleRoutes: Routes = [
+    ...snmpTrapModuleRoutes
+];
+/***    Core routes   ***/
+const coreRoutes: Routes = [{
     path: '',
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
@@ -298,7 +304,12 @@ export const routes: Routes = [{
 }, {
     path: '**',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
-}];
+}
+];
+export const routes: Routes = [
+    ...moduleRoutes,
+    ...coreRoutes
+];
 //}, {
 //    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
 //    resolve: {
