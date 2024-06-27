@@ -28,6 +28,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HostsService } from '../hosts.service';
 import { HostCopyPost } from '../hosts.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosts-copy',
@@ -55,7 +56,8 @@ import { HostCopyPost } from '../hosts.interface';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        NgIf
+        NgIf,
+        FormLoaderComponent
     ],
     templateUrl: './hosts-copy.component.html',
     styleUrl: './hosts-copy.component.css'

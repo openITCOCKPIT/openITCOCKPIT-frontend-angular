@@ -5,13 +5,16 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormControlDirective, FormLabelDirective, NavComponent
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    NavComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -24,6 +27,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hostgroups-copy',
@@ -49,7 +53,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './hostgroups-copy.component.html',
     styleUrl: './hostgroups-copy.component.css'

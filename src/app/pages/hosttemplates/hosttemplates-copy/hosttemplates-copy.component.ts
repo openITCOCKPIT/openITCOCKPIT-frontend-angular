@@ -15,7 +15,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -29,6 +29,7 @@ import { HosttemplateCommandArgument, HosttemplateCopyPost } from '../hosttempla
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosttemplates-copy',
@@ -56,7 +57,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         RouterLink,
         FormsModule,
         SelectComponent,
-        AlertComponent
+        AlertComponent,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './hosttemplates-copy.component.html',
     styleUrl: './hosttemplates-copy.component.css'

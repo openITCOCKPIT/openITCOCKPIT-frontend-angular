@@ -22,12 +22,13 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-commands-copy',
@@ -53,7 +54,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         FormLabelDirective,
         FormsModule,
         RequiredIconComponent,
-        CardFooterComponent
+        CardFooterComponent,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './commands-copy.component.html',
     styleUrl: './commands-copy.component.css'
