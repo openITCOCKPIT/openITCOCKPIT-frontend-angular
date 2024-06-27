@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactgroupsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -98,13 +99,16 @@ export interface Container {
 
 
 // EDIT (POST)
-export interface ContactgroupAddPost {
-    Contactgroup: ContactgroupEditPostContactgroup
-}
-
 export interface ContactgroupEditPostContactgroup {
     contacts: ContactgroupPostContactgroupContacts
-    container: ContactgroupEditPostContactgroupContainer
+    container:  {
+        containertype_id: number
+        id: number
+        lft: number
+        name: string
+        parent_id: number
+        rght: number
+    }
     container_id: number
     description: string
     id: number
@@ -113,26 +117,15 @@ export interface ContactgroupEditPostContactgroup {
 
 export interface ContactgroupAddPostContactgroup {
     contacts: ContactgroupPostContactgroupContacts
-    container: ContactgroupAddPostContactgroupContainer
+    container: {
+        name: string
+        parent_id: number | null
+    }
     description: string
-}
-
-export interface ContactgroupAddPostContactgroupContainer {
-    name: string
-    parent_id: number | null
 }
 
 export interface ContactgroupPostContactgroupContacts {
     _ids: number[]
-}
-
-export interface ContactgroupEditPostContactgroupContainer {
-    containertype_id: number
-    id: number
-    lft: number
-    name: string
-    parent_id: number
-    rght: number
 }
 
 // COPY (GET)
@@ -142,42 +135,31 @@ export interface ContactgroupsCopyGet {
 }
 
 export interface ContactgroupsCopyGetContactgroup {
-    Contactgroup: ContactgroupsCopyGetContactgroupSource
-    Container: ContactgroupsCopyGetContainer
+    Contactgroup: {
+        id: number
+        description: string
+        container_id: number
+    }
+    Container:  {
+        id: number
+        name: string
+    }
 }
-
-export interface ContactgroupsCopyGetContactgroupSource {
-    id: number
-    description: string
-    container_id: number
-}
-
-export interface ContactgroupsCopyGetContainer {
-    id: number
-    name: string
-}
-
-// COPY (POST)
 
 export interface ContactgroupsCopyPost {
-    Contactgroup: ContactgroupsCopyPostContactgroup
-    Source: ContactgroupsCopyPostSource
+    Contactgroup: {
+        container: {
+            name: string
+        }
+        description: string
+    }
+    Source: {
+        id: number
+        name: string
+    }
     Error: GenericValidationError | null
 }
 
-export interface ContactgroupsCopyPostContactgroup {
-    container: ContactgroupsCopyPostContainer
-    description: string
-}
-
-export interface ContactgroupsCopyPostContainer {
-    name: string
-}
-
-export interface ContactgroupsCopyPostSource {
-    id: number
-    name: string
-}
 
 
 // USED BY
@@ -192,89 +174,58 @@ export interface ContactgroupUsedByObjects {
     uuid: string
     container_id: number
     description: string
-    serviceescalations: ContactgroupsUsedByRootServiceescalation[]
-    hostescalations: ContactgroupsUsedByRootHostescalation[]
-    services: ContactgroupsUsedByRootService[]
-    servicetemplates: ContactgroupsUsedByRootServicetemplate[]
-    hosts: ContactgroupsUsedByRootHost[]
-    hosttemplates: ContactgroupsUsedByRootHosttemplate[]
+    serviceescalations: {
+        id: number
+        _joinData: {
+            id: number
+            contactgroup_id: number
+            serviceescalation_id: number
+        }
+        ContactgroupsToServiceescalations:  {
+            contactgroup_id: number
+        }
+    }[]
+    hostescalations: {
+        id: number
+        _joinData: {
+            id: number
+            contactgroup_id: number
+            hostescalation_id: number
+        }
+        ContactgroupsToHostescalations: {
+            contactgroup_id: number
+        }
+    }[]
+    services: {
+        id: number
+        name: string
+        ContactgroupsToServices: {
+            contactgroup_id: number
+        }
+    }[]
+    servicetemplates: {
+        id: number
+        name: string
+        ContactgroupsToServicetemplates: {
+            contactgroup_id: number
+        }
+    }[]
+    hosts: {
+        id: number
+        name: string
+        address: string
+        ContactgroupsToHosts: {
+            contactgroup_id: number
+        }
+    }[]
+    hosttemplates: {
+        id: number
+        name: string
+        ContactgroupsToHosttemplates: {
+            contactgroup_id: number
+        }
+    }[]
     container: ContactgroupsUsedByRootContainer
-}
-
-export interface ContactgroupsUsedByRootServiceescalation {
-    id: number
-    _joinData: JoinData
-    ContactgroupsToServiceescalations: ContactgroupsToServiceescalations
-}
-
-export interface JoinData {
-    id: number
-    contactgroup_id: number
-    serviceescalation_id: number
-}
-
-export interface ContactgroupsToServiceescalations {
-    contactgroup_id: number
-}
-
-export interface ContactgroupsUsedByRootHostescalation {
-    id: number
-    _joinData: JoinData2
-    ContactgroupsToHostescalations: ContactgroupsToHostescalations
-}
-
-export interface JoinData2 {
-    id: number
-    contactgroup_id: number
-    hostescalation_id: number
-}
-
-export interface ContactgroupsToHostescalations {
-    contactgroup_id: number
-}
-
-export interface ContactgroupsUsedByRootService {
-    id: number
-    name: string
-    ContactgroupsToServices: ContactgroupsToServices
-}
-
-export interface ContactgroupsToServices {
-    contactgroup_id: number
-}
-
-export interface ContactgroupsUsedByRootServicetemplate {
-    id: number
-    name: string
-    ContactgroupsToServicetemplates: ContactgroupsToServicetemplates
-}
-
-
-export interface ContactgroupsToServicetemplates {
-    contactgroup_id: number
-}
-
-export interface ContactgroupsUsedByRootHost {
-    id: number
-    name: string
-    address: string
-    ContactgroupsToHosts: ContactgroupsToHosts
-}
-
-
-export interface ContactgroupsToHosts {
-    contactgroup_id: number
-}
-
-export interface ContactgroupsUsedByRootHosttemplate {
-    id: number
-    name: string
-    ContactgroupsToHosttemplates: ContactgroupsToHosttemplates
-}
-
-
-export interface ContactgroupsToHosttemplates {
-    contactgroup_id: number
 }
 
 export interface ContactgroupsUsedByRootContainer {
@@ -284,24 +235,14 @@ export interface ContactgroupsUsedByRootContainer {
 
 // GET CONTACTS BY CONTAINER
 export interface GetContactsByContainerIdRoot {
-    contacts: GetContactsByContainerIdRootContact[]
+    contacts: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface GetContactsByContainerIdRootContact {
-    key: number
-    value: string
 }
 
 /*********************************
  *    Definition of Container    *
  *********************************/
 export interface LoadContainersRoot {
-    containers: LoadContainersContainer[]
+    containers: SelectKeyValue[]
     _csrfToken: string
-}
-
-export interface LoadContainersContainer {
-    key: number
-    value: string
 }

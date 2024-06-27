@@ -42,7 +42,6 @@ import {
     LdapConfig,
     LdapUser,
     LoadCommandsRoot,
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -110,7 +109,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError = {} as GenericValidationError;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
     protected notificationCommands: SelectKeyValue[] = [];

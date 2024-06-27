@@ -37,7 +37,6 @@ import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
     LoadCommandsRoot,
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -105,7 +104,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     protected hasMacroErrors: boolean = false;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
     protected notificationCommands: SelectKeyValue[] = [];

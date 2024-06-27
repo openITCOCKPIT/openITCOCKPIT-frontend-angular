@@ -32,7 +32,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import {
     Contact,
     LoadCommandsRoot,
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -108,7 +107,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public post!: Contact;
 
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
@@ -118,8 +117,8 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
-    protected allContainers: LoadContainersContainer[] = []
-    protected requiredContainersList: LoadContainersContainer[] = []
+    protected allContainers: SelectKeyValue[] = []
+    protected requiredContainersList: SelectKeyValue[] = []
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
@@ -197,13 +196,13 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                let newContainers: LoadContainersContainer[] = [];
+                let newContainers: SelectKeyValue[] = [];
                 let newPostIds: number[] = [];
 
                 // Otherwise, we need to only add the selected containers that are not required to the container list.
                 for (var i in this.allContainers) {
                     let index = parseInt(i),
-                        container: LoadContainersContainer = this.allContainers[index];
+                        container: SelectKeyValue = this.allContainers[index];
 
                     // The container is required? Then skip.
                     if (this.requiredContainers.indexOf(container.key) !== -1) {
