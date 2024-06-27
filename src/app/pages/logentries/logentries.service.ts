@@ -1,0 +1,32 @@
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { LogentriesRoot, LogentryIndexParams } from './logentries.interface';
+import { HttpClient } from '@angular/common/http';
+import { PROXY_PATH } from '../../tokens/proxy-path.token';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class LogentriesService {
+    private readonly http = inject(HttpClient);
+    private readonly proxyPath = inject(PROXY_PATH);
+
+    constructor() {
+    }
+
+    public getIndex(params: LogentryIndexParams): Observable<LogentriesRoot> {
+        /*
+          if($scope.filter.Logentries.logentry_type.length > 0){
+                  params['filter[Logentries.logentry_type][]'] = $scope.filter.Logentries.logentry_type;
+              }
+         */
+        const proxyPath = this.proxyPath;
+        return this.http.get<LogentriesRoot>(`${proxyPath}/logentries/index.json`, {
+            params: params as {} // cast CommandsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+}

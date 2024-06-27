@@ -6,6 +6,7 @@ import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface HostObject {
     id?: number
@@ -403,6 +404,33 @@ export interface HostEditApiResult {
     fakeDisplayContainers: SelectKeyValue[]
     areContactsInheritedFromHosttemplate: boolean
     hostType: HostOrServiceType
+}
+
+/**********************
+ *    Copy action    *
+ **********************/
+
+export interface HostCopy {
+    id?: number
+    name: string
+    description: string | null
+    address: string
+    host_url: string | null
+}
+
+export interface HostCopyGet {
+    Host: HostCopy
+}
+
+
+export interface HostCopyPost {
+    Source: {
+        id: number,
+        name: string
+        address: string
+    }
+    Host: HostCopy
+    Error?: GenericValidationError | null
 }
 
 /**********************

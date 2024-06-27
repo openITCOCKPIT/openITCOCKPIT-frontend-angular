@@ -15,7 +15,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -32,6 +32,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ServicetemplatesService } from '../servicetemplates.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplates-copy',
@@ -58,7 +59,9 @@ import { ServicetemplatesService } from '../servicetemplates.service';
         SelectComponent,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './servicetemplates-copy.component.html',
     styleUrl: './servicetemplates-copy.component.css'

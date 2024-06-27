@@ -137,7 +137,8 @@
                 <!-- End Filter -->
 
 
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                <oitc-table-loader *ngIf="!deletedHosts"></oitc-table-loader>
+                <table *ngIf="deletedHosts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
@@ -156,7 +157,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="deletedHosts">
+                    <tbody>
                     <tr *ngFor="let deletedHost of deletedHosts.deletedHosts">
                         <td>{{ deletedHost.DeletedHost.name }}</td>
                         <td>{{ deletedHost.DeletedHost.uuid }}</td>

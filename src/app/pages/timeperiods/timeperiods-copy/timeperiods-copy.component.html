@@ -38,6 +38,8 @@
             </c-card-header>
             <c-card-body>
 
+                <oitc-form-loader *ngIf="timeperiods.length === 0"></oitc-form-loader>
+
                 <c-card class="mb-3" *ngFor="let timeperiod of timeperiods; let i = index">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'clock']"></fa-icon>

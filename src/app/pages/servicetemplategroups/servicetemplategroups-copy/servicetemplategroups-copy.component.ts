@@ -14,7 +14,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -30,7 +30,7 @@ import {
     ServiceTemplateGroupsGetCopyPostData,
 } from '../servicetemplategroups.interface';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
-import { ContactgroupsCopyPost } from '../../contactgroups/contactgroups.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplategroups-copy',
@@ -56,7 +56,9 @@ import { ContactgroupsCopyPost } from '../../contactgroups/contactgroups.interfa
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './servicetemplategroups-copy.component.html',
     styleUrl: './servicetemplategroups-copy.component.css'
