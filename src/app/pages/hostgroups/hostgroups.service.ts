@@ -12,12 +12,14 @@ import {
     LoadContainersRoot,
     LoadHostsRequest,
     LoadHostsResponse,
-    LoadHosttemplates, HostgroupExtended, HostgroupExtendedRoot
+    LoadHosttemplates, HostgroupExtended, HostgroupExtendedRoot, LoadHostgroupsByStringRoot
 } from "./hostgroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
 import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { LoadHostgroupsByString } from '../servicetemplategroups/servicetemplategroups.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -175,7 +177,28 @@ export class HostgroupsService {
                 return data.hostgroup;
             })
         )
+    }
 
+    public loadHostgroupsByString(name: string): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadHostgroupsByStringRoot>(`${proxyPath}/hostgroups/loadHostgroupsByString.json?angular=true`, {
+            params: {
+                'filter["Hosts.name"]': '',
+            }
+        }).pipe(
+            map((data: LoadHostgroupsByStringRoot) => {
+                return data.hostgroups;
+            })
+        )
+    }
+
+    public loadAdditionalInformation(id: number): Observable<any> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/hostgroups/loadAdditionalInformation/.json?id=${id}&angular=true`).pipe(
+            map((data: any) => {
+                return data;
+            })
+        )
     }
 
 }

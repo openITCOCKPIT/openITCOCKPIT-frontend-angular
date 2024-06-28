@@ -1,0 +1,47 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="serviceResetChecktimeModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                {{ t('Executing command') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label for="resetType">
+                            {{t('Select method')}}
+                            <oitc-required-icon />
+                        </label>
+                        <ng-select
+                                name="resetType"
+                                id="resetType"
+                                [(ngModel)]="resetType"
+                                >
+                            <ng-option [value]="1">{{t('Host')}}</ng-option>
+                            <ng-option [value]="2">{{t('Host and services')}}</ng-option>
+                        </ng-select>
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="sendCommands()" [disabled]="isSend" cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Execute') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+
+

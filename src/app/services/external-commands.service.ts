@@ -28,6 +28,12 @@ export interface ServiceResetItem {
     serviceUuid: string
     satelliteId: number
 }
+export interface HostRescheduleItem {
+    command: string
+    hostUuid: string
+    type: string
+    satelliteId: number
+}
 
 export interface ServiceNotifcationItem {
     command: string
@@ -36,7 +42,7 @@ export interface ServiceNotifcationItem {
 }
 
 type Commands =  ServiceDowntimeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
-    | ServiceNotifcationItem[];
+    | ServiceNotifcationItem[] | HostRescheduleItem[];
 
 @Injectable({
     providedIn: 'root'

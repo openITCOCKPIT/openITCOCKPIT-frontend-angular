@@ -23,9 +23,104 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                ASNAEB
+                <h5 cCardTitle>
+                    {{ hostgroupExtended.Hostgroup.container.name }}
+
+                    <small class="fw-300">
+                        UUID: {{ hostgroupExtended.Hostgroup.uuid }}
+                    </small>
+                </h5>
+
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['hostgroups', 'add']" [routerLink]="['/', 'hostgroups', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
             </c-card-header>
         </c-card>
+        <c-card-body>
+
+
+            <oitc-select
+                    name="hostgroupId"
+                    id="hostgroupId"
+                    [(ngModel)]="hostgroupId"
+                    optionValue="key"
+                    optionLabel="value"
+                    [options]="hostgroups"
+                    (onChange)="onHostgroupChange()">
+            </oitc-select>
+
+            <oitc-actions-button *ngIf="this.hostgroupExtended.Hostgroup.allowEdit"
+                                 [permission]="'hostgroups.edit'"
+                                 [url]="'/hostgroups/edit/' + this.hostgroupExtended.Hostgroup.id">
+                <oitc-actions-button-element [permission]="'hostgroups.edit'"
+                                             [url]="'/hostgroups/edit/' + this.hostgroupExtended.Hostgroup.id">
+                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    {{ t('Edit') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                             [url]="'/changelogs/entity/hostgroup/' + this.hostgroupExtended.Hostgroup.id">
+                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                    {{ t('Changelog') }}
+                </oitc-actions-button-element>
+                <li cDropdownDivider></li>
+                <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                             [url]="'/hostgroups/copy/' + this.hostgroupExtended.Hostgroup.id">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                </oitc-actions-button-element>
+                <li cDropdownDivider></li>
+                <oitc-actions-button-element
+                        (click)="toggleResetCheckModal()"
+                        [permission]="'hostgroups.copy'">
+                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                    {{ t('Reset check time') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                    {{ t('Set planned maintenance times') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                    {{ t('Acknowledge host status') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                    <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                    {{ t('Disable notifications') }}
+                </oitc-actions-button-element>
+                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                    {{ t('Enable notifications') }}
+                </oitc-actions-button-element>
+
+            </oitc-actions-button>
+
+        </c-card-body>
 
     </ng-container>
 </oitc-coreui>
+<oitc-service-reset-checktime-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-reset-checktime-modal>

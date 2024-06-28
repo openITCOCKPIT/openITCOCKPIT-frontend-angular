@@ -254,5 +254,9 @@ export interface HostgroupExtended {
     }
 }
 
-
+// LOAD HOST GROUPS BY NAME
+export interface LoadHostgroupsByStringRoot {
+    hostgroups: SelectKeyValue[]
+    _csrfToken: string
+}
 
