@@ -7,6 +7,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownDividerDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -14,9 +15,11 @@ import {
     FormDirective,
     InputGroupComponent,
     InputGroupTextDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -26,6 +29,7 @@ import { Subscription } from 'rxjs';
 import { SnmpttService } from '../../../snmptt.service';
 import {
     getDefaultSnmpttEntryIndexParams,
+    SnmpttEntry,
     SnmpttEntryIndexParams,
     SnmpttEntryIndexRoot
 } from '../../../snmptt.interface';
@@ -44,14 +48,27 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
+import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
+import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 
 
 @Component({
     selector: 'oitc-snmptt-list-index',
     standalone: true,
-    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective],
+    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent],
     templateUrl: './snmptt-list-index.component.html',
-    styleUrl: './snmptt-list-index.component.css'
+    styleUrl: './snmptt-list-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
+    ]
 })
 export class SnmpttListIndexComponent implements OnInit {
     private SnmpttService = inject(SnmpttService)
@@ -61,7 +78,11 @@ export class SnmpttListIndexComponent implements OnInit {
 
     public snmptt_entries?: SnmpttEntryIndexRoot;
     public hideFilter: boolean = true;
+    public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
+    private readonly modalService = inject(ModalService);
+    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -110,6 +131,43 @@ export class SnmpttListIndexComponent implements OnInit {
     public resetFilter() {
         this.params = getDefaultSnmpttEntryIndexParams();
         this.loadSnmpttEntries();
+    }
+
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(snmpttEntry?: SnmpttEntry) {
+        let items: DeleteAllItem[] = [];
+        if (snmpttEntry) {
+            // User just want to delete a single command
+
+            items = [{
+                id: snmpttEntry.Snmptt.id,
+                displayName: snmpttEntry.Snmptt.eventname
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.Snmptt.id,
+                    displayName: item.Snmptt.eventname
+                };
+            });
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+
+    // Generic callback whenever a mass action (like delete all) has been finished
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.loadSnmpttEntries();
+        }
     }
 
 }
