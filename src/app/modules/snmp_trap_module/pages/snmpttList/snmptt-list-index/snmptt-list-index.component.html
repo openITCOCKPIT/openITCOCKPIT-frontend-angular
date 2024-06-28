@@ -213,8 +213,12 @@
                                 [item]="snmpttEntry"></oitc-item-select>
 
                         </td>
-                        <td>
-                            {{ snmpttEntry.Snmptt.severity }} <--- ICON HERE !!!
+                        <td class="text-center pt-1 pb-0 text-info"
+                            [ngClass]="{'text-danger': (snmpttEntry.Snmptt.severity == 'Critical' || Number(snmpttEntry.Snmptt.severity) === 6),
+                            'text-warning': snmpttEntry.Snmptt.severity == 'Warning' || (Number(snmpttEntry.Snmptt.severity) > 0 && Number(snmpttEntry.Snmptt.severity) < 6)}">
+                            <fa-icon [icon]="['fas', 'square']" [size]="'xl'"
+                                     title="{{snmpttEntry.Snmptt.severity}}">
+                            </fa-icon>
                         </td>
                         <td>
                             {{ snmpttEntry.Snmptt.eventname }}

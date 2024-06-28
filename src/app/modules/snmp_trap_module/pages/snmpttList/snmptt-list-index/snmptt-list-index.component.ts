@@ -43,7 +43,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import {
     HoststatusSimpleIconComponent
 } from '../../../../../pages/hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -63,7 +63,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 @Component({
     selector: 'oitc-snmptt-list-index',
     standalone: true,
-    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent],
+    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent, NgClass],
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
@@ -170,4 +170,5 @@ export class SnmpttListIndexComponent implements OnInit {
         }
     }
 
+    protected readonly Number = Number;
 }
