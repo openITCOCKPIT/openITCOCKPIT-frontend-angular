@@ -199,13 +199,26 @@
                         <th scope="col" mat-sort-header="Snmptt.formatline">
                             {{ t('Format line') }}
                         </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
                     </tr>
                     </thead>
                     <tbody *ngIf="snmptt_entries">
                     <tr *ngFor="let snmpttEntry of snmptt_entries.snmptt_entries">
-                        <td class="text-center">CHECKBOX HERE !!!</td>
-                        <td>
-                           {{ snmpttEntry.Snmptt.severity }} <--- ICON HERE !!!
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
+                                [disabled]="false"
+                                [item]="snmpttEntry"></oitc-item-select>
+
+                        </td>
+                        <td class="text-center pt-1 pb-0 text-info"
+                            [ngClass]="{'text-danger': (snmpttEntry.Snmptt.severity == 'Critical' || Number(snmpttEntry.Snmptt.severity) === 6),
+                            'text-warning': snmpttEntry.Snmptt.severity == 'Warning' || (Number(snmpttEntry.Snmptt.severity) > 0 && Number(snmpttEntry.Snmptt.severity) < 6)}">
+                            <fa-icon [icon]="['fas', 'square']" [size]="'xl'"
+                                     title="{{snmpttEntry.Snmptt.severity}}">
+                            </fa-icon>
                         </td>
                         <td>
                             {{ snmpttEntry.Snmptt.eventname }}
@@ -225,11 +238,43 @@
                         <td>
                             {{ snmpttEntry.Snmptt.formatline }}
                         </td>
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'commands.edit'"
+                                                 [url]="'/snmp_trap_module/SnmpttList/delete/' + snmpttEntry.Snmptt.id">
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(snmpttEntry)"
+                                                             [permission]="'snmptrapmodule.snmpttlist.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <oitc-no-records
                     *ngIf="snmptt_entries && snmptt_entries.snmptt_entries.length === 0"></oitc-no-records>
+                <ng-container *ngIf="snmptt_entries && snmptt_entries.snmptt_entries">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="snmptt_entries.snmptt_entries.length"></oitc-select-all>
+                            </c-col>
+                            <c-col>
+                                <div class="btn-group btn-group-xs d-flex flex-row" role="group">
+                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
                 <c-container fluid class="mb-3 py-3">
                     <c-row>
                         <c-col>
@@ -244,3 +289,4 @@
         </c-card>
     </ng-container>
 </oitc-coreui>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
