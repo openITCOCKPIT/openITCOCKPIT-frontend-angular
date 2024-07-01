@@ -3,7 +3,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import { BookmarksObject, BookmarksParams, BookmarksIndexRoot, BookmarkPost } from './bookmarks.interface';
-import {ServicePost} from '../../pages/services/services.interface';
+
 import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
 import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 

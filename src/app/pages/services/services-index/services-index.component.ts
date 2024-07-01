@@ -56,7 +56,8 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownComponent, DropdownDividerDirective,
+    DropdownComponent,
+    DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
     DropdownToggleDirective,
@@ -64,7 +65,8 @@ import {
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
-    InputGroupComponent, InputGroupTextDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     ModalService,
     NavComponent,
     NavItemComponent,
@@ -638,9 +640,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         if(filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
+
             if (bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex) {
                 bookmarkfilter.Hosts.name_regex = false;
             }
+
             if (bookmarkfilter.Services.name === '' && !bookmarkfilter.Services.name_regex) {
                 bookmarkfilter.Services.name_regex = false;
             }

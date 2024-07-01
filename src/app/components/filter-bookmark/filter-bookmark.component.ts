@@ -7,10 +7,13 @@ import {
     OnInit,
     Output
 } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {NgIf} from '@angular/common';
+import { HttpParams } from '@angular/common/http';
+import {
+    TranslocoDirective,
+    TranslocoService
+} from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf } from '@angular/common';
 import {
     CardHeaderComponent,
     ColComponent,
@@ -30,26 +33,32 @@ import {
     NavItemComponent,
     ButtonGroupComponent,
 } from '@coreui/angular';
-import {DELETE_SERVICE_TOKEN} from '../../tokens/delete-injection.token';
-import {DeleteBookmarkModalComponent} from '../delete-bookmark-modal/delete-bookmark-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
+import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
 import {
     ServiceIndexFilter,
 } from "../../pages/services/services.interface";
-import {SelectComponent} from '../../layouts/primeng/select/select/select.component';
-import {BookmarksObject, BookmarksParams, BookmarksIndexRoot} from './bookmarks.interface';
-import {Subscription} from 'rxjs';
-import {BookmarksService} from './bookmarks.service';
-import {FormErrorDirective} from '../../layouts/coreui/form-error.directive';
-import {GenericValidationError} from '../../generic-responses';
-import {SelectKeyValue} from '../../layouts/primeng/select.interface';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {FilterBookmarkSaveModalComponent} from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
-import {FilterBookmarkExportModalComponent} from '../filter-bookmark-export-modal/filter-bookmark-export-modal.component';
-import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {NotyService} from '../../layouts/coreui/noty.service';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
+import {
+    BookmarksObject,
+    BookmarksParams
+} from './bookmarks.interface';
+import { Subscription } from 'rxjs';
+import { BookmarksService } from './bookmarks.service';
+import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
+import { GenericValidationError } from '../../generic-responses';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FilterBookmarkSaveModalComponent } from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
+import {
+    FilterBookmarkExportModalComponent
+} from '../filter-bookmark-export-modal/filter-bookmark-export-modal.component';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NotyService } from '../../layouts/coreui/noty.service';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 
 @Component({
@@ -81,7 +90,10 @@ import {Router, ActivatedRoute, Params} from '@angular/router';
         NavItemComponent,
         ButtonGroupComponent,
         DeleteBookmarkModalComponent,
-        FilterBookmarkExportModalComponent
+        FilterBookmarkExportModalComponent,
+        NgSelectModule,
+        FormsModule,
+        NgOptionHighlightModule
     ],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
@@ -95,7 +107,6 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     @Input({required: false}) public action: string = '';
     @Input({required: false}) public filter!: ServiceIndexFilter;
     @Output() selected = new EventEmitter<string>();
-    private init: boolean = false;
     public bookmarks: BookmarksObject[] = [];
     public selectedBookmarkId: Number | null = null;
     public selectedBookmark: BookmarksObject | null = null;
@@ -111,6 +122,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     public actionType: string = '';
     public deleteItems: any[] = [];
     public TranslocoService: TranslocoService = inject(TranslocoService);
+    private init: boolean = false;
     private filterUuid: string | null = null;
     private subscriptions: Subscription = new Subscription();
     private BookmarksService: BookmarksService = inject(BookmarksService);
@@ -128,44 +140,54 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     }
 
     loadBookmarks (id: number | null) {
+        if (this.filterUuid != null) {
+            this.params['queryFilter'] = this.filterUuid;
+        }
         this.subscriptions.add(this.BookmarksService.getBookmarksIndex(this.params)
             .subscribe((result) => {
-                this.bookmarks = result.bookmarks;
-                if(!this.init) {
-                    this.proofFilter(); // check if we have a filter in the url
-                    this.init = true
+                this.bookmarks = result.bookmarks || [];
+                if (result.bookmark !== null && result.bookmark.ownership === true) {
+                    this.selectedBookmark = result.bookmark;
+                    this.selectedBookmarkId = this.selectedBookmark.id;
+
+                    setTimeout(() => {
+                        if (this.selectedBookmark !== null) {
+                            this.selected.emit(this.selectedBookmark.filter);
+                            this.showEdit = true;
+                        }
+                    }, 300);
                 }
-                if(id){
-                    this.selectedBookmarkId = Number(id);
-                    const selectedBookmark = this.bookmarks.find(bookmark => bookmark.id === this.selectedBookmarkId);
-                    if (selectedBookmark) {
-                        this.selectedBookmark = selectedBookmark;
+
+                if (result.bookmark !== null && result.bookmark.ownership === false) {
+                    this.selectedBookmark = null;
+                    this.selectedBookmarkId = null;
+                    this.showEdit = false;
+                    setTimeout(() => {
+                        if (result.bookmark !== null) {
+                            this.selected.emit(result.bookmark.filter);
+                            this.showEdit = false;
+                        }
+                    }, 300);
+
+                }
+
+                if (id) {
+                    if (this.bookmarks.length > 0) {
+                        this.selectedBookmarkId = Number(id);
+                        const selectedBookmark = this.bookmarks.find(bookmark => bookmark.id === this.selectedBookmarkId);
+                        if (selectedBookmark) {
+                            this.selectedBookmark = selectedBookmark;
+                        }
                     }
                 }
             })
         );
-    }
 
-    proofFilter() {
-        if (this.filterUuid != null) {
-            const selectedBookmark = this.bookmarks.find(bookmark => bookmark.uuid === this.filterUuid);
-            if (selectedBookmark) {
-                this.selectedBookmark = selectedBookmark
-                this.selectedBookmarkId = selectedBookmark.id;
-               setTimeout(() => {this.selected.emit(selectedBookmark.filter)},250);
-                this.router.navigate(['services', 'index'], {
-                    queryParams: {filter: this.filterUuid},
-                    queryParamsHandling: 'merge',
-                });
-            }
-            this.showEdit = true;
-        }
     }
 
     computeBookmarkUrl () {
         if (this.selectedBookmark && this.selectedBookmark.uuid != '') {
             const baseUrl = location.href;
-          //  const urlParam = {filter: this.selectedBookmark.uuid};
             let stringParams: HttpParams = new HttpParams();
             stringParams = stringParams.appendAll({filter: this.selectedBookmark.uuid})
             this.computedUrl = baseUrl + '?' + stringParams.toString();
@@ -181,14 +203,24 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     }
 
     onBookmarkChange () {
+        if (this.selectedBookmarkId === null) {
+            this.selected.emit('');
+            this.showEdit = false;
+            this.selectedBookmark = null;
+            this.router.navigate(['services', 'index'], {
+                queryParams: {filter: null},
+                queryParamsHandling: 'merge',
+            });
+            return;
+        }
         const selectedBookmark = this.bookmarks.find(bookmark => bookmark.id === this.selectedBookmarkId);
         if (selectedBookmark) {
             this.selectedBookmark = selectedBookmark
             this.selected.emit(selectedBookmark.filter);
         }
         this.showEdit = true;
-        if(this.filterUuid != null && selectedBookmark != null) {
-        this.router.navigate(['services', 'index'], {
+        if (this.filterUuid != null && selectedBookmark != null) {
+            this.router.navigate(['services', 'index'], {
                 queryParams: {filter: selectedBookmark.uuid},
                 queryParamsHandling: 'merge',
             });
@@ -207,6 +239,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
                             this.notyService.genericSuccess(msg, title);
                             this.loadBookmarks(null);
+                            this.showEdit = true;
                         }
                     } else {
                         this.notyService.genericError();
@@ -239,6 +272,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     savedNewBookmark (id: string) {
         this.loadBookmarks(Number(id));
+        this.showEdit = true;
     }
 
     toggleDeleteAllModal () {
@@ -266,10 +300,13 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     deleted ($result: boolean) {
         if ($result) {
+            this.selectedBookmark = null;
+            this.selectedBookmarkId = null;
             this.loadBookmarks(null);
+            this.showEdit = false
             this.selected.emit('');
         }
-        if(!$result) {
+        if (!$result) {
             this.notyService.genericError();
         }
 

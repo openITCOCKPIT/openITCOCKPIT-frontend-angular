@@ -20,7 +20,7 @@ import {BookmarksService} from '../filter-bookmark/bookmarks.service';
 import {ServiceIndexFilter} from '../../pages/services/services.interface';
 import {BookmarkPost, BookmarksObject, BookmarkResponse} from '../filter-bookmark/bookmarks.interface';
 import {GenericIdResponse, GenericValidationError} from '../../generic-responses';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+
 
 type NewBookmark = {
     name: string
@@ -107,7 +107,6 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
                     const msg = this.TranslocoService.translate('created successfully');
 
                     this.notyService.genericSuccess(msg, title);
-                    console.log(response.bookmark);
                     this.saved.emit(response.bookmark.id.toString());
                     this.hideModal();
                     return;

@@ -9,6 +9,7 @@ export interface BookmarksObject {
     filter: string;
     favorite: boolean;
     fav_group: string;
+    ownership?: boolean
 }
 
 export interface BookmarkResponse {
@@ -21,6 +22,7 @@ export interface BookmarksParams  {
     plugin: string
     controller: string
     action: string
+    queryFilter?: string
 }
 
 export interface BookmarksIndexRoot {
