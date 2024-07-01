@@ -5,27 +5,29 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormControlDirective, FormLabelDirective, NavComponent
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    NavComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ContactgroupsService } from '../contactgroups.service';
-import {
-    ContactgroupsCopyPost
-} from '../contactgroups.interface';
+import { ContactgroupsCopyPost } from '../contactgroups.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contactgroups-copy',
@@ -51,7 +53,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './contactgroups-copy.component.html',
     styleUrl: './contactgroups-copy.component.css'
@@ -106,7 +110,16 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'contactgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.contactgroups = error.error.result as ContactgroupsCopyPost[];
+                    this.contactgroups.forEach((copyPostResult: ContactgroupsCopyPost) => {
+                        if (!copyPostResult.Error) {
+                            return;
+                        }
+                        if (copyPostResult.Error?.['container']['name'] !== 'undefined') {
+                            copyPostResult.Error['name'] = <any>copyPostResult.Error?.['container']['name'];
+                        }
+                    });
                 }
             })
         );

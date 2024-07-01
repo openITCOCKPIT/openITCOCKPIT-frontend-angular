@@ -113,6 +113,8 @@
                 </c-container>
                 <!-- End Filter -->
 
+                <oitc-table-loader *ngIf="!servicetemplategroups"></oitc-table-loader>
+
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>

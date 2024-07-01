@@ -11,7 +11,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -80,6 +84,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -140,7 +145,11 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormCheckLabelDirective,
         TrueFalseDirective,
         RegexHelperTooltipComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -243,6 +252,9 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
         }
 
+        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Hosts.id')) {
+            this.filter['Hosts.id'] = this.route.snapshot.queryParams['filter.Hosts.id'];
+        }
         this.filter['Hoststatus.problem_has_been_acknowledged'] = hasBeenAcknowledged;
         this.filter['Hoststatus.scheduled_downtime_depth'] = inDowntime;
         this.filter['Hoststatus.notifications_enabled'] = notificationsEnabled;
@@ -378,6 +390,87 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         if (ids) {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
         }
+    }
+
+    public linkFor(format: 'pdf' | 'csv') {
+        let baseUrl = '/hosts/listToPdf.pdf?';
+        if (format === 'csv') {
+            baseUrl = '/hosts/listToCsv?';
+        }
+
+        let hasBeenAcknowledged = '';
+        let inDowntime = '';
+        let notificationsEnabled = '';
+        if (this.acknowledgementsFilter.acknowledged !== this.acknowledgementsFilter.not_acknowledged) {
+            hasBeenAcknowledged = String(this.acknowledgementsFilter.acknowledged === true);
+        }
+        if (this.downtimeFilter.in_downtime !== this.downtimeFilter.not_in_downtime) {
+            inDowntime = String(this.downtimeFilter.in_downtime === true);
+        }
+        if (this.notificationsFilter.enabled !== this.notificationsFilter.not_enabled) {
+            notificationsEnabled = String(this.notificationsFilter.enabled === true);
+        }
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+        let state_type: string = '';
+        if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
+            state_type = '0';
+            if (this.state_typesFilter.hard) {
+                state_type = '1';
+            }
+        }
+
+        let urlParams = {
+            'angular': true,
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
+            'filter[Hosts.name]': this.filter['Hosts.name'],
+            'filter[Hosts.description]': this.filter.hostdescription,
+            'filter[Hoststatus.output]': this.filter['Hoststatus.output'],
+            'filter[Hoststatus.current_state][]': getHostCurrentStateForApi(this.currentStateFilter),
+            'filter[Hosts.keywords][]': this.filter['Hosts.keywords'],
+            'filter[Hosts.not_keywords][]': this.filter['Hosts.not_keywords'],
+            'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
+            'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
+            'filter[Hoststatus.is_hardstate]': state_type,
+            'filter[Hosts.address]': this.filter['Hosts.address'],
+            'filter[Hosts.satellite_id][]': this.filter['Hosts.satellite_id'],
+            'filter[Hosts.host_type][]': this.filter['Hosts.host_type'],
+            'filter[hostpriority][]': priorityFilter
+        };
+
+        let stringParams: HttpParams = new HttpParams();
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
+    }
+
+    public toggleDisableModal() {
+        console.log("Todo implement me");
+    }
+
+    public resetChecktime() {
+        console.log("Todo implement me");
+    }
+
+    public disableNotifications() {
+        console.log("Todo implement me");
+    }
+
+    public enableNotifications() {
+        console.log("Todo implement me");
+    }
+
+    public toggleDowntimeModal() {
+        console.log("Todo implement me");
+    }
+
+    public acknowledgeStatus() {
+        console.log("Todo implement me");
     }
 
     protected readonly String = String;

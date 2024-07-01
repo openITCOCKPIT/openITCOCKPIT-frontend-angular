@@ -14,7 +14,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -30,6 +30,7 @@ import {
     ServiceTemplateGroupsGetCopyPostData,
 } from '../servicetemplategroups.interface';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplategroups-copy',
@@ -55,7 +56,9 @@ import { ServicetemplategroupsService } from '../servicetemplategroups.service';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './servicetemplategroups-copy.component.html',
     styleUrl: './servicetemplategroups-copy.component.css'
@@ -110,7 +113,16 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/', 'servicetemplategroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.notyService.genericError();
                     this.servicetemplategroups = error.error.result as ServiceTemplateGroupsGetCopyPostData[];
+                    this.servicetemplategroups.forEach((serviceTemplateGroup: ServiceTemplateGroupsGetCopyPostData) => {
+                        if (!serviceTemplateGroup.Error) {
+                            return;
+                        }
+                        if (serviceTemplateGroup.Error?.['container']['name'] !== 'undefined') {
+                            serviceTemplateGroup.Error['name'] = <any>serviceTemplateGroup.Error?.['container']['name'];
+                        }
+                    });
                 }
             })
         );

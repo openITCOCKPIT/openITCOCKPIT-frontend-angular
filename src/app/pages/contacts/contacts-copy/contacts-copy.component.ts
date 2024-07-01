@@ -14,7 +14,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -27,6 +27,7 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ContactsService } from '../contacts.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contacts-copy',
@@ -52,7 +53,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormsModule
+        FormsModule,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './contacts-copy.component.html',
     styleUrl: './contacts-copy.component.css'

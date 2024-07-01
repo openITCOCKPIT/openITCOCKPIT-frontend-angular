@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
+import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -27,7 +28,12 @@ class LegacyUrlComponent {
     }
 }
 
-export const routes: Routes = [{
+/***    Routes for modules   ***/
+const moduleRoutes: Routes = [
+    ...snmpTrapModuleRoutes
+];
+/***    Core routes   ***/
+const coreRoutes: Routes = [{
     path: '',
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
@@ -94,6 +100,18 @@ export const routes: Routes = [{
 }, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
+}, {
+    path: 'hostgroups/add',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-add/hostgroups-add.component').then(m => m.HostgroupsAddComponent)
+}, {
+    path: 'hostgroups/copy/:ids',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-copy/hostgroups-copy.component').then(m => m.HostgroupsCopyComponent)
+}, {
+    path: 'hostgroups/edit/:id',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-edit/hostgroups-edit.component').then(m => m.HostgroupsEditComponent)
+}, {
+    path: 'hostgroups/index',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
 }, {
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
@@ -191,6 +209,9 @@ export const routes: Routes = [{
     path: 'hosts/edit/:id',
     loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
 }, {
+    path: 'hosts/copy/:ids',
+    loadComponent: () => import('./pages/hosts/hosts-copy/hosts-copy.component').then(m => m.HostsCopyComponent)
+}, {
     path: 'deletedHosts/index',
     loadComponent: () => import('./pages/deletedHosts/deleted-hosts-index/deleted-hosts-index.component').then(m => m.DeletedHostsIndexComponent)
 }, {
@@ -275,12 +296,20 @@ export const routes: Routes = [{
     path: 'notifications/serviceNotification/:id',
     loadComponent: () => import('./pages/notifications/service-notification/service-notification.component').then(m => m.ServiceNotificationComponent)
 }, {
+    path: 'logentries/index',
+    loadComponent: () => import('./pages/logentries/logentries-index/logentries-index.component').then(m => m.LogentriesIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
     path: '**',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
-}];
+}
+];
+export const routes: Routes = [
+    ...moduleRoutes,
+    ...coreRoutes
+];
 //}, {
 //    path: '**', // TBD: wild card, of custom route matcher for angularjs legacy routes.
 //    resolve: {

@@ -22,11 +22,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-timeperiods-copy',
@@ -51,7 +52,9 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         RequiredIconComponent,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        FormLoaderComponent,
+        NgIf
     ],
     templateUrl: './timeperiods-copy.component.html',
     styleUrl: './timeperiods-copy.component.css'

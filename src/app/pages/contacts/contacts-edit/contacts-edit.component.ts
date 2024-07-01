@@ -31,9 +31,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     Contact,
-    LoadCommand,
     LoadCommandsRoot,
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -51,6 +49,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -108,17 +107,18 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public post!: Contact;
 
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
-    protected notificationCommands: LoadCommand[] = [];
+    protected notificationCommands: SelectKeyValue[] = [];
     protected timeperiods: Timeperiod[] = [];
     protected hasMacroErrors: boolean = false;
 
     protected requiredContainers: number[] = [];
     protected requiredContainersString: string = '';
-    protected allContainers: LoadContainersContainer[] = []
+    protected allContainers: SelectKeyValue[] = []
+    protected requiredContainersList: SelectKeyValue[] = []
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
@@ -186,6 +186,9 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 // Fetch all containers.
                 this.allContainers = result.containers;
 
+                // Unbind the containers list for the required dropdown. Otherwise, a reference will created that adds label suffixes to all dropdowns.
+                this.requiredContainersList = result.containers.splice(0, this.requiredContainers.length);
+
                 // If no containers are required, the selectedContainers can remain where they belong.
                 if (this.requiredContainers.length === 0) {
                     this.containersSelection = this.selectedContainers;
@@ -193,13 +196,13 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                let newContainers: LoadContainersContainer[] = [];
+                let newContainers: SelectKeyValue[] = [];
                 let newPostIds: number[] = [];
 
                 // Otherwise, we need to only add the selected containers that are not required to the container list.
                 for (var i in this.allContainers) {
                     let index = parseInt(i),
-                        container: LoadContainersContainer = this.allContainers[index];
+                        container: SelectKeyValue = this.allContainers[index];
 
                     // The container is required? Then skip.
                     if (this.requiredContainers.indexOf(container.key) !== -1) {

@@ -13,6 +13,7 @@ import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { SelectKeyValue } from "../../select.interface";
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -92,6 +93,8 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     @Input() optionLabel: string = 'value';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
+    @Input() labelSuffix: string = '';
+    @Input() labelPrefix: string = '';
     @Input() placeholder: string | undefined;
     @Input() filterPlaceHolder: string | undefined;
     @Input() maxSelectedLabels: number | null | undefined = null;
@@ -221,6 +224,20 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
                 // Fix Expression has changed after it was checked 🧻
                 this.ngModelChange.emit(this.ngModel);
             }, 0);
+
+
+            this._options?.forEach((element) => {
+                // Check that we actually have a name to add prefix / suffix.
+                if (!element.value) {
+                    return;
+                }
+                if (this.labelSuffix && !element.value.endsWith(this.labelSuffix)) {
+                    element.value += this.labelSuffix;
+                }
+                if (this.labelPrefix && !element.value.startsWith(this.labelPrefix)) {
+                    element.value = this.labelPrefix + element.value;
+                }
+            })
         }
     }
 

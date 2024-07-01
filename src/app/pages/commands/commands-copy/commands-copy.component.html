@@ -38,6 +38,8 @@
             </c-card-header>
             <c-card-body>
 
+                <oitc-form-loader *ngIf="commands.length === 0"></oitc-form-loader>
+
                 <c-card class="mb-3" *ngFor="let command of commands; let i = index">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>

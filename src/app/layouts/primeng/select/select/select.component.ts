@@ -91,6 +91,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     @Input() optionLabel: string = 'key';
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
+    @Input() labelSuffix: string = '';
+    @Input() labelPrefix: string = '';
     @Input() placeholder: string | undefined;
     @Input() showClear: boolean = false;
 
@@ -225,6 +227,18 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
                 this.ngModelChange.emit(this.ngModel);
             }, 0);
         }
+        this._options?.forEach((element) => {
+            // Check that we actually have a name to add prefix / suffix.
+            if (!element.value) {
+                return;
+            }
+            if (this.labelSuffix && !element.value.endsWith(this.labelSuffix)) {
+                element.value += this.labelSuffix;
+            }
+            if (this.labelPrefix && !element.value.startsWith(this.labelPrefix)) {
+                element.value = this.labelPrefix + element.value;
+            }
+        })
     }
 
     protected readonly String = String;

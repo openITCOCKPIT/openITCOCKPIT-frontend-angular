@@ -3,7 +3,7 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, map} from "rxjs";
 import { PROXY_PATH } from "../../../tokens/proxy-path.token";
-import { ServicesBrowser } from "./services.interface";
+import { ServicesBrowser } from "./services-browser.interface";
 import { Usertimezone } from "./timezone.interface";
 
 @Injectable({

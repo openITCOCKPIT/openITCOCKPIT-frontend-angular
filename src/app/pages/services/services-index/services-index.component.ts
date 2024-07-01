@@ -41,7 +41,6 @@ import {
     ServiceObject,
     ServiceParams,
     ServicesIndexRoot,
-    ServicesCurrentStateFilter,
     getServiceCurrentStateForApi,
 } from "../services.interface";
 import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
@@ -354,6 +353,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
         this.params.scroll = change.scroll;
         this.load();
     }
+
     public refresh() {
         this.load();
     }
@@ -394,7 +394,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             baseUrl = '/services/listToCsv?';
         }
 
-        let urlParams = {
+        let urlParams= {
             'angular': true,
             'sort': this.params.sort,
             'page': this.params.page,
@@ -419,7 +419,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             'filter[servicepriority][]': this.params['filter[servicepriority][]']
         };
 
+
         let stringParams:HttpParams = new HttpParams();
+
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
 
@@ -620,7 +622,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             id: 'deleteAllModal',
         });
     }
-
     navigateCopy() {}
 
     public onMassActionComplete(success: boolean) {
@@ -635,7 +636,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             this.resetFilter();
         }
         if(filterstring && filterstring.length > 0) {
-            console.log(filterstring)
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
             if (bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex) {

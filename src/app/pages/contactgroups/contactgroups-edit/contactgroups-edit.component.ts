@@ -38,11 +38,10 @@ import { ContactgroupsService } from '../contactgroups.service';
 import {
     ContactgroupEditPostContactgroup,
     ContactgroupsEditRoot,
-    GetContactsByContainerIdRootContact,
-    LoadContainersContainer,
     LoadContainersRoot
 } from '../contactgroups.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-contactgroups-edit',
@@ -88,14 +87,14 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
-    protected contacts: GetContactsByContainerIdRootContact[] = [];
+    protected contacts: SelectKeyValue[] = [];
     private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
 
     public post!: ContactgroupEditPostContactgroup;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute)
 
     public ngOnInit() {
@@ -162,7 +161,7 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
             return;
         }
         this.subscriptions.add(this.ContactgroupsService.getContactsByContainerId(this.post.container.parent_id)
-            .subscribe((result: GetContactsByContainerIdRootContact[]) => {
+            .subscribe((result: SelectKeyValue[]) => {
                 this.contacts = result;
             }))
     }

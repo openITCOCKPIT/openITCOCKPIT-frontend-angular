@@ -41,9 +41,7 @@ import {
     ContactPost,
     LdapConfig,
     LdapUser,
-    LoadCommand,
     LoadCommandsRoot,
-    LoadContainersContainer,
     LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -54,6 +52,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -110,10 +109,10 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError = {} as GenericValidationError;
 
     public post: ContactPost = {} as ContactPost;
-    protected containers: LoadContainersContainer[] = [];
+    protected containers: SelectKeyValue[] = [];
     protected createAnother: boolean = false;
     protected timeperiods: Timeperiod[] = [];
-    protected notificationCommands: LoadCommand[] = [];
+    protected notificationCommands: SelectKeyValue[] = [];
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     protected hasMacroErrors: boolean = false;
@@ -124,8 +123,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
-
-        this.loadLdapUsers = this.loadLdapUsers.bind(this); // IMPORTANT for the searchCallback the use the same "this" context
     }
 
     public ngOnInit() {
@@ -140,13 +137,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.ldapConfig = result.ldapConfig;
             }))
-    }
-
-    public loadLdapUsers(samaccountname: string): void {
-        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
-            .subscribe((result) => {
-                this.ldapUsers = result.ldapUsers;
-            }));
     }
 
     private getDefaultPost(): ContactPost {
@@ -344,5 +334,12 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             return {} as GenericValidationError;
         }
         return this.errors['customvariables'][index] as unknown as GenericValidationError;
+    }
+
+    public loadLdapUsers = (samaccountname: string): void => {
+        this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
+            .subscribe((result) => {
+                this.ldapUsers = result.ldapUsers;
+            }));
     }
 }
