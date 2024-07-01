@@ -1,4 +1,4 @@
-import {Component, inject, EventEmitter, Output, ViewChild, OnDestroy, Input} from '@angular/core';
+import {Component, inject, EventEmitter, Output, ViewChild, OnInit, OnDestroy, Input} from '@angular/core';
 import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
@@ -14,12 +14,13 @@ import {
 } from '@coreui/angular';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {BookmarksService} from '../filter-bookmark/bookmarks.service';
 import {ServiceIndexFilter} from '../../pages/services/services.interface';
 import {BookmarkPost, BookmarksObject, BookmarkResponse} from '../filter-bookmark/bookmarks.interface';
 import {GenericIdResponse, GenericValidationError} from '../../generic-responses';
+import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 type NewBookmark = {
     name: string
@@ -43,12 +44,13 @@ type NewBookmark = {
         RowComponent,
         FormsModule,
         NgIf,
-        FormControlDirective
+        FormControlDirective,
+        NgClass
     ],
   templateUrl: './filter-bookmark-save-modal.component.html',
   styleUrl: './filter-bookmark-save-modal.component.css'
 })
-export class FilterBookmarkSaveModalComponent implements OnDestroy{
+export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
     public newBookmark :  NewBookmark = {
         name: '',
         filter: '',
@@ -57,6 +59,8 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
     public error: boolean  = false;
     public errors: GenericValidationError | null = null;
 
+    @Input({required: true}) public actionType: string = '';
+    @Input({required: true}) public bookmark: BookmarksObject | null = null;
     @Input({required: true}) public plugin: string = '';
     @Input({required: false}) public controller: string = '';
     @Input({required: false}) public action: string = '';
@@ -65,13 +69,14 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
-
+   // private _actionType: string = '';
     private BookmarksService: BookmarksService = inject(BookmarksService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
 
 
     public hideModal(){
+       // this.bookmark = null;
         this.errors = null
         this.newBookmark = {
             name: '',
@@ -85,7 +90,6 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
     }
 
     public saveNewBookmark() {
-       // this.toSave.emit(this.name);
         let post: BookmarkPost = {
             name: this.newBookmark.name,
             favorite: this.newBookmark.favorite,
@@ -103,6 +107,7 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
                     const msg = this.TranslocoService.translate('created successfully');
 
                     this.notyService.genericSuccess(msg, title);
+                    console.log(response.bookmark);
                     this.saved.emit(response.bookmark.id.toString());
                     this.hideModal();
                     return;
@@ -116,6 +121,47 @@ export class FilterBookmarkSaveModalComponent implements OnDestroy{
                     this.error = true;
                 }
             }))
+    }
+
+
+    public updateBookmark() {
+          if (this.bookmark !== null) {
+              this.bookmark.name = this.newBookmark.name
+              this.bookmark.favorite = this.newBookmark.favorite
+              const id = this.bookmark.id.toString();
+
+              this.subscriptions.add(this.BookmarksService.update(this.bookmark, this.bookmark.id)
+                  .subscribe((result) => {
+                      if (result.success) {
+                          const title = this.TranslocoService.translate('Bookmark');
+                          const msg = this.TranslocoService.translate('updated successfully');
+
+                          this.notyService.genericSuccess(msg, title);
+                          this.saved.emit(id);
+                          this.hideModal();
+                          return;
+
+                  } else {
+                  this.notyService.genericError();
+              }
+          })
+    );
+
+          }
+
+    }
+
+    ngOnInit () {
+        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
+            if(state.id === 'filterBookmarkSaveModal' && state.show === true) {
+
+               if(this.actionType === 'edit' && this.bookmark !== null) {
+                   this.newBookmark.name = this.bookmark.name;
+                   this.newBookmark.favorite = this.bookmark.favorite
+               }
+            }
+        }));
+
     }
 
     ngOnDestroy () {

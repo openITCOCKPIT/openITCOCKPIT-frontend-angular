@@ -21,9 +21,23 @@
                 </oitc-select>
             </div>
             <div *ngIf="showEdit" class="p-2 bd-highlight">
-                <button cButton class="ripple " color="success" size="xs" (click)="updateBookmark()">
-                    {{ t('Update filter') }}
-                </button>
+                <c-button-group aria-label="Basic mixed styles example" role="group">
+                    <button cButton class="ripple " color="light" size="xs" (click)="editBookmark()"
+                    title="{{t('Edit bookmark')}}">
+                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    </button>
+                    <button cButton class="ripple " color="info" size="xs"
+                            title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
+                        <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                    </button>
+                    <button cButton class="ripple " color="danger" size="xs"
+                            title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    </button>
+                    <button cButton class="ripple " color="success" size="xs" (click)="updateBookmark()">
+                        {{ t('Update filter') }}
+                    </button>
+                </c-button-group>
             </div>
             <div class="p-2 bd-highlight">
                 <button cButton class="ripple " color="success" size="xs" (click)="showNewBookmarkModel()">
@@ -34,6 +48,8 @@
         </div>
     </c-card-header>
 
-    <oitc-filter-bookmark-save-modal (saved)="savedNewBookmark($event)" [plugin]="plugin" [controller]="controller"
+    <oitc-filter-bookmark-save-modal (saved)="savedNewBookmark($event)" [actionType]="actionType" [plugin]="plugin" [controller]="controller" [bookmark]="selectedBookmark"
                                      [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
+    <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
+    <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
 </ng-container>

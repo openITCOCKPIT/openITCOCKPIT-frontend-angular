@@ -620,6 +620,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
             id: 'deleteAllModal',
         });
     }
+
     navigateCopy() {}
 
     public onMassActionComplete(success: boolean) {
@@ -630,34 +631,40 @@ export class ServicesIndexComponent implements OnInit, OnDestroy  {
     }
 
     onSelectedBookmark(filterstring: string) {
+        if(filterstring === '') {
+            this.resetFilter();
+        }
+        if(filterstring && filterstring.length > 0) {
+            console.log(filterstring)
+            //cnditions to apply old bookmarks
+            const bookmarkfilter = JSON.parse(filterstring);
+            if (bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex) {
+                bookmarkfilter.Hosts.name_regex = false;
+            }
+            if (bookmarkfilter.Services.name === '' && !bookmarkfilter.Services.name_regex) {
+                bookmarkfilter.Services.name_regex = false;
+            }
+            if (!bookmarkfilter.Services.service_type) {
+                bookmarkfilter.Services.service_type = [];
+            }
+            if (typeof (bookmarkfilter.Services.keywords) === 'string' && bookmarkfilter.Services.keywords.length > 0) {
+                bookmarkfilter.Services.keywords = bookmarkfilter.Services.keywords.split(',');
+            }
+            if (typeof (bookmarkfilter.Services.not_keywords) === 'string' && bookmarkfilter.Services.not_keywords.length > 0) {
+                bookmarkfilter.Services.not_keywords = bookmarkfilter.Services.not_keywords.split(','); //in old bookmarks this is a comma separated string
+            }
+            if (bookmarkfilter.Hosts.satellite_id) {
+                bookmarkfilter.Hosts.satellite_id = bookmarkfilter.Hosts.satellite_id.map(Number);
+            }
+            if (bookmarkfilter.Services.service_type) {
+                bookmarkfilter.Services.service_type = bookmarkfilter.Services.service_type.map(Number);
+            }
+            if (bookmarkfilter.Servicestatus.notifications_enabled === false && bookmarkfilter.Servicestatus.notifications_not_enabled === undefined) {
+                bookmarkfilter.Servicestatus.notifications_not_enabled = false;
+            }
 
-        const bookmarkfilter = JSON.parse(filterstring);
-        if(bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex){
-            bookmarkfilter.Hosts.name_regex = false;
+            this.getFilter(bookmarkfilter);
         }
-        if(bookmarkfilter.Services.name === '' && !bookmarkfilter.Services.name_regex){
-            bookmarkfilter.Services.name_regex = false;
-        }
-        if(!bookmarkfilter.Services.service_type){
-            bookmarkfilter.Services.service_type = [];
-        }
-        if(typeof(bookmarkfilter.Services.keywords) === 'string' && bookmarkfilter.Services.keywords.length > 0){
-            bookmarkfilter.Services.keywords = bookmarkfilter.Services.keywords.split(',');
-        }
-        if(typeof(bookmarkfilter.Services.not_keywords) === 'string' && bookmarkfilter.Services.not_keywords.length > 0){
-            bookmarkfilter.Services.not_keywords = bookmarkfilter.Services.not_keywords.split(',');
-        }
-        if(bookmarkfilter.Hosts.satellite_id) {
-            bookmarkfilter.Hosts.satellite_id =  bookmarkfilter.Hosts.satellite_id.map(Number);
-        }
-        if(bookmarkfilter.Services.service_type) {
-            bookmarkfilter.Services.service_type =  bookmarkfilter.Services.service_type.map(Number);
-        }
-        if(bookmarkfilter.Servicestatus.notifications_enabled === false && bookmarkfilter.Servicestatus.notifications_not_enabled === undefined) {
-            bookmarkfilter.Servicestatus.notifications_not_enabled =  false;
-        }
-
-        this.getFilter(bookmarkfilter);
     }
 
     getFilter(filter: ServiceIndexFilter) {
