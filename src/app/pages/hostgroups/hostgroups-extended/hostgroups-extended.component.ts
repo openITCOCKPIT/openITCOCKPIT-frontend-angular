@@ -139,9 +139,14 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     // Generic callback whenever a mass action (like delete all) has been finished
-    public onMassActionComplete(success: boolean) {
-        if (success) {
+    public onResetChecktime(success: boolean) {
+        if (!success) {
+            this.notyService.genericWarning();
+            return;
         }
+        this.notyService.genericSuccess();
+        // Reload page content?
+        this.ngOnInit();
     }
 
     private loadHostgroupExtended(): void {

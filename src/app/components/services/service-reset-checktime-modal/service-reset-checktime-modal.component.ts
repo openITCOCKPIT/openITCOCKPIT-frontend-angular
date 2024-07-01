@@ -136,10 +136,7 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
         }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
-                const title = this.TranslocoService.translate('ASMAEN added');
-                const msg = this.TranslocoService.translate('Commands added successfully to queue');
 
-                this.notyService.genericSuccess(msg, title);
                 this.hideModal();
                 this.completed.emit(true);
             } else {
