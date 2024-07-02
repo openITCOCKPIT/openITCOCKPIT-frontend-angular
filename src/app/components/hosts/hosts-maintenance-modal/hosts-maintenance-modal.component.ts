@@ -175,21 +175,27 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     }
 
     sendCommands() {
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
-            message: any;
-        }) => {
-            //result.message: /nagios_module//cmdController line 256
-            if (result.message) {
-                const title: string = this.TranslocoService.translate('Downtimes added');
-                const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
+        this.currentIndex = 0;
+        this.items.forEach((element: HostDowntimeItem) => {
 
-                this.notyService.genericSuccess(msg, title);
-                this.hideModal();
-                this.completed.emit(true);
-            } else {
-                this.notyService.genericError();
-                this.hideModal();
-            }
-        }));
+            this.subscriptions.add(this.ExternalCommandsService.setExternalCommands([element]).subscribe((result: {
+                message: any;
+            }) => {
+                //result.message: /nagios_module//cmdController line 256
+                if (result.message) {
+                    this.currentIndex++;
+                } else {
+                    this.notyService.genericError();
+                }
+
+                if (this.currentIndex === this.items.length) {
+                    this.hideModal();
+                    this.completed.emit(true);
+                    const title: string = this.TranslocoService.translate('Downtimes added');
+                    const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
+                    this.notyService.genericSuccess(msg, title);
+                }
+            }));
+        });
     }
 }
