@@ -1,8 +1,6 @@
-import { NgFor } from '@angular/common';
 import {
     Component,
     EventEmitter,
-    Inject,
     inject,
     Input,
     OnDestroy,
@@ -30,17 +28,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     ValidationErrors
 } from '../../../services/downtimes-defaults.service';
 import {
     ExternalCommandsService, HostRescheduleItem,
-    ServiceResetItem
 } from '../../../services/external-commands.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 
@@ -85,13 +81,12 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
     public isSend: boolean = false;
     public state?: any
 
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly subscriptions: Subscription = new Subscription();
 
-    protected resetType: number = 1;
+    protected resetType: string = 'hostOnly';
 
     hideModal() {
         this.isSend = false;
@@ -103,11 +98,6 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
             id: 'serviceResetChecktimeModal'
         });
     }
-
-    setExternalCommands() {
-        this.sendCommands();
-    }
-
 
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
@@ -124,12 +114,7 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
         this.error = false;
         this.isSend = true;
         this.items.forEach((item) => {
-            if (this.resetType === 1) {
-                item.type = 'hostOnly';
-            }
-            if (this.resetType === 2) {
-                item.type = 'hostAndServices';
-            }
+            item.type = this.resetType;
         });
         this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
             message: any;
