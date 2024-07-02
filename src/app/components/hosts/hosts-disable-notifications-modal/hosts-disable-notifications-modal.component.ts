@@ -37,14 +37,14 @@ import {
 } from '../../../services/downtimes-defaults.service';
 import {
     ExternalCommandsService,
-    HostDowntimeItem
+    HostDisableNotificationsItem
 } from '../../../services/external-commands.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 
 
 @Component({
-    selector: 'oitc-hosts-maintenance-modal',
+    selector: 'oitc-hosts-disable-notifications-modal',
     standalone: true,
     imports: [
         ButtonCloseDirective,
@@ -68,11 +68,11 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
         NgSelectModule,
         RequiredIconComponent
     ],
-    templateUrl: './hosts-maintenance-modal.component.html',
-    styleUrl: './hosts-maintenance-modal.component.css'
+    templateUrl: './hosts-disable-notifications-modal.component.html',
+    styleUrl: './hosts-disable-notifications-modal.component.css'
 })
-export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
-    @Input({required: true}) public items: HostDowntimeItem[] = [];
+export class HostsDisableNotificationsModalComponent implements OnInit, OnDestroy {
+    @Input({required: true}) public items: HostDisableNotificationsItem[] = [];
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed = new EventEmitter<boolean>();
@@ -97,7 +97,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
 
     private subscriptions: Subscription = new Subscription();
-    public maintenanceType: number = 1;
+    public type: string ='hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
     hideModal() {
@@ -108,7 +108,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: false,
-            id: 'hostMaintenanceModal'
+            id: 'hostDisableNotificationsModal'
         });
     }
 
@@ -116,39 +116,13 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         this.error = false;
         this.isSend = true;
         this.currentIndex = 0;
-        const validate: ValidateInput = {
-            comment: this.downtimeModal.comment,
-            from_date: this.downtimeModal.from_date,
-            from_time: this.downtimeModal.from_time,
-            to_date: this.downtimeModal.to_date,
-            to_time: this.downtimeModal.to_time
-        }
-        this.isSend = true;
-        this.subscriptions.add(this.DowntimesDefaultsService.validateDowntimesInput(validate).subscribe((result: any) => {
-
-            if (!result.success) {
-                this.errors = result.data.Downtime;
-                this.isSend = false;
-                this.currentIndex = 0;
-            }
-            if (result.success) {
-                const start = result.data.js_start;
-                const end = result.data.js_end;
-                this.items.forEach((element: HostDowntimeItem) => {
-                    element.downtimetype = this.maintenanceType;
-                    element.start = start;
-                    element.end = end;
-                    element.comment = this.downtimeModal.comment;
-                });
-                this.sendCommands();
-            }
-        }));
+        this.sendCommands();
     }
 
 
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.id === 'hostMaintenanceModal' && state.show === true) {
+            if (state.id === 'hostDisableNotificationsModal' && state.show === true) {
                 this.getDefaults();
             }
         }));
@@ -177,7 +151,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
 
     sendCommands() {
         this.currentIndex = 0;
-        this.items.forEach((element: HostDowntimeItem) => {
+        this.items.forEach((element: HostDisableNotificationsItem) => {
 
             this.subscriptions.add(this.ExternalCommandsService.setExternalCommands([element]).subscribe((result: {
                 message: any;
