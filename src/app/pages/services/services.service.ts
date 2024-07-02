@@ -272,4 +272,5 @@ export class ServicesService {
         });
         return types;
     }
+
 }

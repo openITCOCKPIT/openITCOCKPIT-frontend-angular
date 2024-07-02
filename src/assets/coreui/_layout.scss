@@ -1,61 +1,90 @@
+/*!
+ * Copyright (C) <2015>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
 /* This file can be used to adjust the global CoreUI layout.
  * For example of you want to add padding or margin classes
  */
 
 .header-sticky {
-    box-shadow: 0 0 28px 0 rgba(11, 81, 197, 0.13);
+  box-shadow: 0 0 28px 0 rgba(11, 81, 197, 0.13);
 }
 
 .width-50 {
-    width: 50px;
+  width: 50px;
 }
 
 .width-90 {
-    width: 90px;
+  width: 90px;
 }
 
 .width-130 {
-    width: 130px;
+  width: 130px;
 }
 
 .width-150 {
-    width: 150px;
+  width: 150px;
 }
 
 .width-160 {
-    width: 160px;
+  width: 160px;
 }
 
 .width-240 {
-    width: 240px;
+  width: 240px;
 }
 
 .tableStatewidth {
-    min-width: 155px;
+  min-width: 155px;
 }
 
 .state-button-small {
-    padding: 0 2px;
-    font-size: 12px;
+  padding: 0 2px;
+  font-size: 12px;
 }
 
 .editItemWidth {
-    min-width: 52px;
-    max-width: 52px;
+  min-width: 52px;
+  max-width: 52px;
 }
 
 .border-dashed {
-    border-style: dashed;
+  border-style: dashed;
 }
 
 
 .input-group .ng-select, input-group .ng-select-multiple {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
 }
 
 .input-group .ng-select.ng-select-single .ng-select-container, .input-group .ng-select-multiple .ng-select-container {
-    margin-left: calc(var(--cui-border-width) * -1);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  margin-left: calc(var(--cui-border-width) * -1);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.ng-option-label {
+  color: dodgerblue;
 }
