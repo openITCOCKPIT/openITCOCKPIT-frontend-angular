@@ -19,6 +19,7 @@ export interface HostDowntimeItem  {
     end: number,
     author: string,
     comment: string,
+    downtimetype: string
 }
 export interface ServiceAcknowledgeItem {
     command: string,
