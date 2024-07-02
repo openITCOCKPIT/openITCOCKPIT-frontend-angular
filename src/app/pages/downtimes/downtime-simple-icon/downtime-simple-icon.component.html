@@ -1,0 +1,11 @@
+<ng-container *transloco="let t">
+    <fa-icon [icon]="['fas', 'power-off']" *ngIf="downtime.DowntimeHost.isRunning"
+             class="text-success" title="{{ t('Downtime currently running') }}"></fa-icon>
+    <fa-icon [icon]="['fas', 'power-off']" *ngIf="downtime.DowntimeHost.isExpired"
+             class="text-danger" title="{{ t('Downtime is expired') }}"></fa-icon>
+    <fa-icon [icon]="['fas', 'power-off']" *ngIf="downtime.DowntimeHost.wasCancelled"
+             class="text-danger" title="{{ t('Downtime was cancelled') }}"></fa-icon>
+    <fa-icon [icon]="['fas', 'power-off']"
+             *ngIf="!downtime.DowntimeHost.wasCancelled && !downtime.DowntimeHost.wasStarted && !downtime.DowntimeHost.isExpired"
+             class="text-primary" title="{{ t('Downtime not started yet') }}"></fa-icon>
+</ng-container>
