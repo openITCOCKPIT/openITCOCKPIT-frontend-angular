@@ -85,6 +85,10 @@ import {
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
+import {
+    ServiceResetChecktimeModalComponent
+} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import { HostRescheduleItem } from '../../../services/external-commands.service';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -149,7 +153,8 @@ import { HttpParams } from '@angular/common/http';
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,
-        DropdownToggleDirective
+        DropdownToggleDirective,
+        ServiceResetChecktimeModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -197,7 +202,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public satellites: SelectKeyValue[] = [];
 
     public hostTypes: any[] = [];
-    public selectedItems: DeleteAllItem[] = [];
+    public selectedItems: any[] = [];
 
     private readonly HostsService = inject(HostsService);
     private subscriptions: Subscription = new Subscription();
@@ -455,7 +460,29 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetChecktime() {
-        console.log("Todo implement me");
+        this.selectedItems = [];
+        let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
+
+        this.hosts?.all_hosts.forEach((item) => {
+            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+                return;
+            }
+            if (!selectedHostIds.includes(item.Host.id)) {
+                return;
+            }
+
+            this.selectedItems.push({
+                command: 'rescheduleHost',
+                hostUuid: item.Host.uuid,
+                type: 'hostOnly',
+                satelliteId: 0
+            });
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceResetChecktimeModal'
+        });
     }
 
     public disableNotifications() {
