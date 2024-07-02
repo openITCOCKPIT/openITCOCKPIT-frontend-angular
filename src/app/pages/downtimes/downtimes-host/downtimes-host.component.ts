@@ -52,11 +52,10 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
+import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.interface';
 
 
 @Component({
@@ -100,7 +99,6 @@ import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/c
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
-        DeleteAllModalComponent,
         AlertComponent,
         TemplateIdDirective,
         ButtonCloseDirective,
@@ -124,7 +122,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     public showFlashSuccess: boolean = false;
     public autoRefreshCounter: number | null = null;
     private interval: any;
-    public selectedItems: DeleteAllItem[] = [];
+    public selectedItems: CancelAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
@@ -148,6 +146,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
 
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
         this.subscriptions.add(this.DowntimesService.getHostDowntimes(this.params)
             .subscribe((result) => {
                 this.hostDowntimes = result;
@@ -189,28 +188,22 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
         }
     }
 
-    public cancelDowntime(internalDowntimeId: any) {
-        console.log(internalDowntimeId);
-    }
-
     // Open the Delete All Modal
     public toggleCancelDowntimeModal(hostDowntime?: DowntimeHost) {
-        let items: DeleteAllItem[] = [];
+        let items: CancelAllItem[] = [];
         if (hostDowntime) {
             // User just want to delete a single command
 
             items = [{
-                id: hostDowntime.internalDowntimeId,
-                displayName: hostDowntime.entryTime
+                id: hostDowntime.internalDowntimeId
             }];
 
 
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+            items = this.SelectionServiceService.getSelectedItems().map((item): CancelAllItem => {
                 return {
-                    id: item.internalDowntimeId,
-                    displayName: item.entryTime
+                    id: item
                 };
             });
         }
@@ -221,7 +214,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: 'cancelAllModal',
         });
     }
 

@@ -52,13 +52,10 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         TrueFalseDirective
     ],
     templateUrl: './cancel-hostdowntime-modal.component.html',
-    styleUrl: './cancel-hostdowntime-modal.component.css',
-    providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    styleUrl: './cancel-hostdowntime-modal.component.css'
+
 })
 export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
-    private DowntimesService = inject(DowntimesService)
 
     @Input({required: true}) public items: CancelAllItem[] = [];
     @Input({required: false}) public deleteMessage: string = '';
@@ -75,7 +72,7 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
-    constructor(@Inject(DELETE_SERVICE_TOKEN) private deleteService: any) {
+    constructor(@Inject(DELETE_SERVICE_TOKEN) private DowntimesService: any) {
     }
 
     ngOnInit() {
@@ -102,12 +99,9 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
     }
 
     public delete() {
-        console.log('HERERERE !!!');
-        console.log(this.items);
         if (this.items.length === 0) {
             return;
         }
-return;
         this.isDeleting = true;
         this.percentage = 0;
         let count = this.items.length;
@@ -120,7 +114,6 @@ return;
 
         for (let i in this.items) {
             const item = this.items[i];
-
             this.DowntimesService.deleteHostdowntime(item, this.includeServices).subscribe({
                 next: (value: any) => {
                     responseCount++
