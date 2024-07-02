@@ -12,6 +12,15 @@ export interface ServiceDowntimeItem  {
     author: string,
     comment: string,
 }
+export interface HostDowntimeItem  {
+    command: string,
+    hostUuid: string,
+    start: number,
+    end: number,
+    author: string,
+    comment: string,
+    downtimetype: string
+}
 export interface ServiceAcknowledgeItem {
     command: string,
     hostUuid: string,
@@ -42,7 +51,7 @@ export interface ServiceNotifcationItem {
 }
 
 type Commands =  ServiceDowntimeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
-    | ServiceNotifcationItem[] | HostRescheduleItem[];
+    | ServiceNotifcationItem[] | HostRescheduleItem[] | HostDowntimeItem[];
 
 @Injectable({
     providedIn: 'root'
