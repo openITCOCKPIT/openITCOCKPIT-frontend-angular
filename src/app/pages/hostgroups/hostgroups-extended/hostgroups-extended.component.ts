@@ -200,6 +200,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 end: 0,
                 author: this.userFullname,
                 comment: '',
+                downtimetype: ''
             };
         });
         if (this.selectedItems.length === 0) {
