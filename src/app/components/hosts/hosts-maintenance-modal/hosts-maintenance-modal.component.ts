@@ -103,6 +103,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+        this.currentIndex = 0;
         this.errors = {};
 
         this.modalService.toggle({
@@ -114,6 +115,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     setExternalCommands() {
         this.error = false;
         this.isSend = true;
+        this.currentIndex = 0;
         const validate: ValidateInput = {
             comment: this.downtimeModal.comment,
             from_date: this.downtimeModal.from_date,
@@ -127,6 +129,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
             if (!result.success) {
                 this.errors = result.data.Downtime;
                 this.isSend = false;
+                this.currentIndex = 0;
             }
             if (result.success) {
                 const start = result.data.js_start;
