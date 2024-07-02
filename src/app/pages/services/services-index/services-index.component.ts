@@ -491,16 +491,15 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (result.message) {
                 const title = this.TranslocoService.translate('Disable Notifications');
 
-                this.notyService.genericSuccess(result.message, title, [], 7000);
+                this.notyService.genericSuccess(result.message, title, []);
                 // this.notyService.scrollContentDivToTop();
                 // this.SelectionServiceService.deselectAll()
             } else {
                 this.notyService.genericError();
             }
-
             setTimeout(() => {
                 this.load()
-            }, 7000);
+            }, 3500);
         }));
     }
 
@@ -522,7 +521,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (result.message) {
                 const title = this.TranslocoService.translate('enable Notifications');
 
-                this.notyService.genericSuccess(result.message, title, [], 7000);
+                this.notyService.genericSuccess(result.message, title, []);
                 //this.notyService.scrollContentDivToTop();
                 // this.SelectionServiceService.deselectAll()
             } else {
@@ -531,7 +530,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.load()
-            }, 7000);
+            }, 3500);
         }));
     }
 
@@ -654,7 +653,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
     public onMassActionComplete (success: boolean) {
-
         if (success) {
             this.load();
         }
