@@ -503,7 +503,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         let items: HostDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {
             return {
-                command: 'submitServiceDowntime',
+                command: 'submitHostDowntime',
                 hostUuid: item.Host.uuid,
                 start: 0,
                 end: 0,
