@@ -1,33 +1,59 @@
+/*
+ * Copyright (C) <2015>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
 import {
     Component,
+    EventEmitter,
     inject,
     Input,
     OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
     ViewChild,
     ViewEncapsulation,
-    OnInit,
-    OnDestroy,
-    EventEmitter,
-    Output,
-
 } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
 import {
+    ButtonDirective,
     ColComponent,
     ContainerComponent,
-    RowComponent,
-    ButtonDirective, FormSelectDirective, FormCheckInputDirective, FormCheckLabelDirective
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormSelectDirective,
+    RowComponent
 } from '@coreui/angular';
-import { JsonPipe, KeyValuePipe, NgStyle, DatePipe, NgIf, NgForOf } from '@angular/common';
+import {JsonPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import * as _uPlot from 'uplot';
-import { from, fromEvent, Observable, Subject, Subscription, takeUntil } from 'rxjs';
-import { UplotGraphService } from './uplot-graph.service';
-import { UplotGraphInterface, PerfParams, Gauges, Datasource } from "./uplot-graph.interface";
-import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
-import { UPlotConfigBuilder } from './uplot-config-builder';
-import { FormsModule } from '@angular/forms';
-import { timer } from 'rxjs';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {fromEvent, Observable, Subject, Subscription, takeUntil, timer} from 'rxjs';
+import {UplotGraphService} from './uplot-graph.service';
+import {Datasource, PerfParams, UplotGraphInterface} from "./uplot-graph.interface";
+import {TimezoneObject} from "../../pages/services/services-browser-page/timezone.interface";
+import {UPlotConfigBuilder} from './uplot-config-builder';
+import {FormsModule} from '@angular/forms';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -37,7 +63,7 @@ type availableAggregations = [
     { type: string, name: string }
 ];
 
-type availableTimeranges =  { hours: number, name: string }[];
+type availableTimeranges = { hours: number, name: string }[];
 
 
 @Component({
@@ -67,14 +93,16 @@ type availableTimeranges =  { hours: number, name: string }[];
 export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     @Input() service: string = '';
     @Input() host: string = '';
+
     @Input()
-    get gauges() {
+    get gauges () {
         return this.availableGauges;
     }
 
-    set gauges(gauges: any) {
+    set gauges (gauges: any) {
         this.availableGauges = gauges;
     }
+
     @Input() timezone: TimezoneObject = {
         user_timezone: '',
         user_time_to_server_offset: 0,
@@ -90,7 +118,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     @Output() showTooltip: EventEmitter<any> = new EventEmitter<any>();
     @Output() hideTooltip: EventEmitter<void> = new EventEmitter<void>();
 
-    @Input() set cursor(val: _uPlot.Cursor) {
+    @Input() set cursor (val: _uPlot.Cursor) {
         this._cursor = val;
         if (this.options.cursor) {
             this.options.cursor = Object.assign(this.options.cursor, val);
@@ -99,7 +127,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    get cursor(): _uPlot.Cursor {
+    get cursor (): _uPlot.Cursor {
         return this._cursor;
     }
 
@@ -107,42 +135,43 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('chartUPlot', {static: true}) chartUPlot: any | HTMLElement;
     protected currentGauge: string = '';
     protected autoReload: boolean = false;
-    protected availableGauges: {key: string, displayName: string}[] =[];
+    protected availableGauges: { key: string, displayName: string }[] = [];
     private subscriptions: Subscription = new Subscription();
     resizeObservable$: Observable<Event> = fromEvent(window, 'resize');
     stopPlay$: Subject<any> = new Subject();
-    ngOnInit() {
+
+    ngOnInit () {
         this.resizeObservable$ = fromEvent(window, 'resize');
         this.subscriptions.add(
             this.resizeObservable$.subscribe(e => {
                 this.uPlotChart.setSize(this.getSize());
             })
         );
-        this.currentGauge= this.availableGauges[0].key
+        this.currentGauge = this.availableGauges[0].key
     }
 
     currentSelectedTimerange: number = 3;
-    protected availableTimeranges:availableTimeranges = [
-        { hours: 1, name: '1 hour' },
-        { hours: 3, name: '3 hours' },
-        { hours: 8, name: '8 hours' },
-        { hours: 24, name: '1 day' },
-        { hours: 168, name: '7 days' },
-        { hours: 720, name: '30 days' },
-        { hours: 2160, name: '90 days' },
-        { hours: 4320, name: '6 month' },
-        { hours: 8760, name: '1 year' }
+    protected availableTimeranges: availableTimeranges = [
+        {hours: 1, name: '1 hour'},
+        {hours: 3, name: '3 hours'},
+        {hours: 8, name: '8 hours'},
+        {hours: 24, name: '1 day'},
+        {hours: 168, name: '7 days'},
+        {hours: 720, name: '30 days'},
+        {hours: 2160, name: '90 days'},
+        {hours: 4320, name: '6 month'},
+        {hours: 8760, name: '1 year'}
     ];
     protected currentAggregation: string = 'avg';
 
     protected availableAggregations: availableAggregations = [
-        { type: 'avg', name: 'Average' },
-        { type: 'min', name: 'Minimum' },
-        { type: 'max', name: 'Maximum' }
+        {type: 'avg', name: 'Average'},
+        {type: 'min', name: 'Minimum'},
+        {type: 'max', name: 'Maximum'}
     ];
 
     private config: UPlotConfigBuilder;
-    protected colors:any;
+    protected colors: any;
     private UplotGraphService = inject(UplotGraphService);
 
     private perfdata!: UplotGraphInterface;
@@ -172,7 +201,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         name: '',
         label: '',
         metric: '',
-        unit:  '',
+        unit: '',
         act: '',
         warn: null,
         crit: null,
@@ -198,7 +227,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     private options: _uPlot.Options = {
         plugins: [this.tooltipPlugin({x: 10, y: 10})],
-        height: 300, width: 900,
+        height: 300, width: window.innerWidth - 500,
         cursor: {
             drag: {
                 x: true,
@@ -212,7 +241,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
             x: {
                 time: true,
                 auto: true,
-               // min: 0,
+                // min: 0,
                 max: new Date().getTime()
             },
             y: {
@@ -253,7 +282,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
             },
             {
                 label: "",
-                values: function(u, vals, space) {
+                values: function (u, vals, space) {
                     return vals.map((v) => {
                         return v;
                     });
@@ -279,12 +308,12 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     private perfData!: UplotGraphInterface;
 
-    constructor() {
-        this.config =  new UPlotConfigBuilder();
+    constructor () {
+        this.config = new UPlotConfigBuilder();
         this.colors = this.config.getColors();
     }
 
-    ngOnChanges() {
+    ngOnChanges () {
         if (this.service) {
 
             this.perfParams.service_uuid = this.service;
@@ -299,45 +328,46 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    protected onTimerangeChange(range: number) {
+    protected onTimerangeChange (range: number) {
         this.prepare();
     }
 
-    protected onAgregationChange(val: string) {
+    protected onAgregationChange (val: string) {
         this.prepare();
     }
 
-    protected onGaugeChange(val: string) {
+    protected onGaugeChange (val: string) {
         this.currentGauge = val;
         this.prepare();
     }
-    protected reload() {
+
+    protected reload () {
         this.prepare();
     }
 
-    protected autoreload() {
-        if(this.autoReload){
+    protected autoreload () {
+        if (this.autoReload) {
             timer(0, 30000).pipe(
                 takeUntil(this.stopPlay$,)
             ).subscribe(t => this.prepare());
-        }else {
+        } else {
             this.stopPlay$.next(true);
         }
     }
 
-    private getSize() {
+    private getSize () {
         return {
-            width: window.innerWidth - 500,
+            width: window.innerWidth - 300,
             height: 300,
         }
     }
 
-    private prepare() {
+    private prepare () {
         this.serverTimeDateObject = new Date(this.timezoneObject.server_time_iso);
         this.perfParams.start = this.serverTimeDateObject.getTime() / 1000 - (this.currentSelectedTimerange * 3600);
         this.perfParams.end = this.serverTimeDateObject.getTime() / 1000;
-        this.perfParams.aggregation= this.currentAggregation;
-        if(this.currentGauge === ''){
+        this.perfParams.aggregation = this.currentAggregation;
+        if (this.currentGauge === '') {
             this.perfParams.gauge = this.availableGauges[0].key;
         } else {
             this.perfParams.gauge = this.currentGauge;
@@ -349,17 +379,17 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         this.getPerfData()
     }
 
-    private setZoom(min: number, max: number) {
+    private setZoom (min: number, max: number) {
         this.perfParams.start = min;
         this.perfParams.end = max;
         this.getPerfData()
     }
 
-    public getPerfData() {
+    public getPerfData () {
         this.subscriptions.add(this.UplotGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
                 this.perfData = perfdata;
-               // this.performance_data = perfdata.performance_data[0].data;
+                // this.performance_data = perfdata.performance_data[0].data;
                 this.datasource = perfdata.performance_data[0].datasource;
                 if (this.datasource.unit == null) {
                     this.datasource.unit = "";
@@ -371,9 +401,9 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
-    public makeGraph() {
+    public makeGraph () {
 
-        if(this.options.series.length > 2){
+        if (this.options.series.length > 2) {
             this.options.series.pop();
             this.options.series.pop();
         }
@@ -473,27 +503,26 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
                 return this.config.scaleGradient(u, 'x', 0, this.htGradFill, true);
             };
             this.options.series[1].label = this.currentGauge;
-        } else{
+        } else {
             this.options.series[1].stroke = this.colors.stroke.default;
             this.options.series[1].fill = this.colors.fill.default;
             this.options.series[1].label = this.currentGauge;
         }
 
 
-        if(this.options.scales && this.options.scales['x']) {
+        if (this.options.scales && this.options.scales['x']) {
             this.options.scales['x'].min = this.perfParams.start;
             this.options.scales['x'].max = this.perfParams.end;
         }
 
-       if(this.options.axes) {
-           this.options.axes[1].label = this.datasource.unit;
-       }
+        if (this.options.axes) {
+            this.options.axes[1].label = this.datasource.unit;
+        }
         this.chartUPlot.nativeElement.innerHTML = '';
-        console.log(this.options);
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);
     }
 
-    tooltipPlugin({shiftX = 10, shiftY = 10}: any) {
+    tooltipPlugin ({shiftX = 10, shiftY = 10}: any) {
         let tooltipLeftOffset: number = 0;
         let tooltipTopOffset: number = 0;
 
@@ -586,7 +615,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
-    public ngOnDestroy() {
+    public ngOnDestroy () {
         this.stopPlay$.next(false);
         this.stopPlay$.complete();
         this.subscriptions.unsubscribe();

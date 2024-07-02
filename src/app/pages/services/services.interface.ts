@@ -36,7 +36,7 @@ export interface ServiceParams {
 
 export interface ServiceIndexFilter {
     Servicestatus: {
-        current_state: string[],
+        current_state: ServicesCurrentStateFilter,
         acknowledged: boolean,
         not_acknowledged: boolean,
         in_downtime: boolean,
@@ -69,6 +69,31 @@ export interface ServiceIndexFilter {
         name_regex: boolean | string,
         satellite_id: number[]
     }
+}
+
+export interface ServicesCurrentStateFilter {
+    ok: boolean,
+    warning: boolean,
+    critical: boolean,
+    unknown: boolean
+}
+
+export function getServiceCurrentStateForApi(currentState: ServicesCurrentStateFilter): string[] {
+    let result = [];
+    if (currentState.ok) {
+        result.push('ok');
+    }
+    if (currentState.warning) {
+        result.push('warning');
+    }
+    if (currentState.critical) {
+        result.push('critical');
+    }
+    if (currentState.unknown) {
+        result.push('unknown');
+    }
+
+    return result;
 }
 
 export interface ServicesIndexRoot extends PaginateOrScroll {

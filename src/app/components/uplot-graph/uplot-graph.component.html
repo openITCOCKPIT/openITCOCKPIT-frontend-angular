@@ -1,3 +1,28 @@
+<!--
+  ~ Copyright (C) <2015>  <it-novum GmbH>
+  ~
+  ~ This file is dual licensed
+  ~
+  ~ 1.
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, version 3 of the License.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ 2.
+  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+  ~     License agreement and license key will be shipped with the order
+  ~     confirmation.
+  -->
+
 <ng-container>
     <c-container fluid>
         <c-row *transloco="let t">
@@ -27,7 +52,9 @@
             </c-col>
             <c-col>
                 <button cButton variant="outline" color="primary" clASS="w-100" (click)="reload()">
-                    <label><fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>{{ t('Refresh') }}</label></button>
+                    <label>
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}</label></button>
             </c-col>
             <c-col>
                 <button color="link" class="w-100" cButton>
@@ -37,9 +64,10 @@
                 </button>
             </c-col>
         </c-row>
-
-        <div
-            #chartUPlot>
-        </div>
+        <c-row>
+            <div class="w-100"
+                 #chartUPlot>
+            </div>
+        </c-row>
     </c-container>
 </ng-container>

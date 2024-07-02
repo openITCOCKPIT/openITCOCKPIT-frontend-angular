@@ -202,6 +202,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
                 this.services = result.services;
+                console.log(this.services);
                 this.services.map(obj => {
                     obj.items.map(service => {
                         if (service.disabled === true) {
