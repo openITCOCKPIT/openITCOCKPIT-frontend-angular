@@ -2,7 +2,10 @@ import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Outp
 import {
     ButtonCloseDirective,
     ButtonDirective,
-    ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -19,7 +22,6 @@ import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DowntimesService } from '../downtimes.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
@@ -94,7 +96,7 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: false,
-            id: 'deleteAllModal'
+            id: 'cancelAllModal'
         });
     }
 
@@ -154,13 +156,5 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
                 }
             });
         }
-    }
-
-    public currentItemHasErrors(item: CancelAllItem): boolean {
-        return this.errors.some((error) => error.id == item.id);
-    }
-
-    public getErrorsForItem(item: CancelAllItem): CancelAllResponse[] {
-        return this.errors.filter((error) => error.id == item.id);
     }
 }
