@@ -46,7 +46,7 @@ import {
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -88,7 +88,11 @@ import { HttpParams } from '@angular/common/http';
 import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
-import { HostRescheduleItem } from '../../../services/external-commands.service';
+import { HostDowntimeItem, HostRescheduleItem, ServiceDowntimeItem } from '../../../services/external-commands.service';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -154,7 +158,8 @@ import { HostRescheduleItem } from '../../../services/external-commands.service'
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        ServiceResetChecktimeModalComponent
+        ServiceResetChecktimeModalComponent,
+        HostsMaintenanceModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -209,6 +214,8 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
@@ -493,7 +500,29 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public toggleDowntimeModal() {
-        console.log("Todo implement me");
+        let items: HostDowntimeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {
+            return {
+                command: 'submitServiceDowntime',
+                hostUuid: item.Host.uuid,
+                start: 0,
+                end: 0,
+                author: 'ASNAEB',
+                comment: '',
+                downtimetype: ''
+            };
+        });
+
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostMaintenanceModal',
+        });
     }
 
     public acknowledgeStatus() {
