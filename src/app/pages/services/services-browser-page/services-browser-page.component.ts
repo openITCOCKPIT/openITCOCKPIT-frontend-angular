@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ServicesbrowserService } from './servicesbrowser.service';
-import { ServicesBrowser } from './services.interface';
+import { ServicesBrowser } from './services-browser.interface';
 import { TimezoneObject } from "./timezone.interface";
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { NgIf, NgForOf, JsonPipe } from '@angular/common';

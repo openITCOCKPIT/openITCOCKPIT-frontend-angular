@@ -1,7 +1,10 @@
+import { Customvariable } from '../../contacts/contacts.interface';
+import { Commandargument } from '../../commands/commands.interface';
+
 export interface ServicesBrowser {
     mergedService: MergedService
-    serviceType: ServiceType
-    host: Host
+    serviceType: ServiceTypeObject
+    host: ServiceHost
     areContactsFromService: boolean
     areContactsInheritedFromHosttemplate: boolean
     areContactsInheritedFromHost: boolean
@@ -76,7 +79,7 @@ export interface MergedService {
     serviceeventcommandargumentvalues: any[]
     servicecommandargumentvalues: Servicecommandargumentvalue[]
     customvariables: Customvariable[]
-    servicegroups: Servicegroup[]
+    servicegroups: ServicegroupObject[]
     contacts: Contact[]
     contactgroups: any[]
     service_url_replaced: string
@@ -99,36 +102,16 @@ export interface Servicecommandargumentvalue {
     commandargument: Commandargument
 }
 
-export interface Commandargument {
-    id: number
-    command_id: number
-    name: string
-    human_name: string
-    created: string
-    modified: string
-}
-
-interface Customvariable {
-    id: number
-    object_id: number
-    objecttype_id: number
-    name: string
-    value: string
-    password: number
-    created: string
-    modified: string
-}
-
-export interface Servicegroup {
+export interface ServicegroupObject {
     id: number
     uuid: string
     container_id: number
     description: string
     servicegroup_url: string
-    _joinData: JoinData
+    _joinData: ServiceGroupJoinData
 }
 
-export interface JoinData {
+export interface ServiceGroupJoinData {
     id: number
     service_id: number
     servicegroup_id: number
@@ -159,12 +142,12 @@ export interface Contact {
     notify_host_downtime: number
     host_push_notifications_enabled: number
     service_push_notifications_enabled: number
-    _joinData: JoinData2
+    _joinData: ContactJoinData
     containers: Container[]
     allowEdit: boolean
 }
 
-export interface JoinData2 {
+export interface ContactJoinData {
     id: number
     contact_id: number
     hosttemplate_id: number
@@ -177,51 +160,44 @@ export interface Container {
     parent_id?: number
     lft: number
     rght: number
-    _joinData: JoinData3
+    _joinData: ContainerJoinData
 }
 
-export interface JoinData3 {
+export interface ContainerJoinData {
     id: number
     contact_id: number
     container_id: number
 }
 
-export interface Gauges {
-    key: string
-    displayName: string
-}
 
-
-export interface ServiceType {
+export interface ServiceTypeObject {
     title: string
     color: string
     class: string
     icon: string
 }
 
-export interface Host {
-    Host: Host2
-}
-
-export interface Host2 {
-    id: number
-    uuid: string
-    hostname: string
-    address: string
-    description: any
-    hosttemplate_id: number
-    active_checks_enabled: any
-    satelliteId: number
-    containerId: number
-    containerIds: number[]
-    tags: string
-    usageFlag: number
-    allow_edit: boolean
-    disabled: boolean
-    priority: any
-    notes: any
-    is_satellite_host: boolean
-    name: string
+export interface ServiceHost {
+    Host: {
+        id: number
+        uuid: string
+        hostname: string
+        address: string
+        description: any
+        hosttemplate_id: number
+        active_checks_enabled: any
+        satelliteId: number
+        containerId: number
+        containerIds: number[]
+        tags: string
+        usageFlag: number
+        allow_edit: boolean
+        disabled: boolean
+        priority: any
+        notes: any
+        is_satellite_host: boolean
+        name: string
+    }
 }
 
 export interface Hoststatus {
@@ -303,7 +279,7 @@ export interface Servicestatus {
 
 export interface CheckCommand {
     Command: Command
-    Commandargument: Commandargument2[]
+    Commandargument: CheckCommandargument[]
 }
 
 export interface Command {
@@ -316,7 +292,7 @@ export interface Command {
     description: string
 }
 
-export interface Commandargument2 {
+export interface CheckCommandargument {
     id: number
     command_id: number
     name: string
@@ -357,7 +333,7 @@ export interface Objects {
     Autoreports: Autoreport[]
     Eventcorrelations: any[]
     Maps: any[]
-    Servicegroups: Servicegroup2[]
+    Servicegroups: ObjectsServicegroup[]
 }
 
 export interface Autoreport {
@@ -365,7 +341,7 @@ export interface Autoreport {
     name: string
 }
 
-export interface Servicegroup2 {
+export interface ObjectsServicegroup {
     name: string
     id: number
 }

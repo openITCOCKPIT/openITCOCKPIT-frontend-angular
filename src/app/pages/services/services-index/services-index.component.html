@@ -76,19 +76,10 @@
             </c-card-header>
             <c-card-body>
                 <ng-container>
-                    <!--<oitc-services-index-filter [show]="showFilter" [satellites]="satellites"  [fields]="fields" (filterChange)="getFilter($event)">
-                    </oitc-services-index-filter>-->
-                    <!--filter-->
-
                     <c-card>
-                        <c-card-header>
-                            <h5>
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h5>
-                            <oitc-filter-bookmark class="fa-pull-right"></oitc-filter-bookmark>
-
-                        </c-card-header>
+                        <!--<c-card-header>-->
+                            <oitc-filter-bookmark [plugin]="''" [controller]="'Services'" [action]="'index'" [filter]="filter" (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                        <!--</c-card-header>-->
                         <c-card-body *ngIf="showFilter">
                             <c-row class="mb-3">
                                 <c-col [xs]="12" [lg]="6">
@@ -212,15 +203,15 @@
                                         </span>
 
                                         <oitc-multi-select
-                                            name="servicetemplatetype_id"
-                                            id="servicetemplatetype_id"
-                                            optionValue="id"
-                                            optionLabel="name"
-                                            [(ngModel)]="filter.Services.service_type"
-                                            [options]="serviceTypes"
-                                            [debounce]="true"
-                                            [placeholder]="'Filter by service types' | transloco"
-                                            (onChange)="onFilterChange(null)"
+                                                name="servicetemplatetype_id"
+                                                id="servicetemplatetype_id"
+                                                optionValue="id"
+                                                optionLabel="name"
+                                                [(ngModel)]="filter.Services.service_type"
+                                                [options]="serviceTypes"
+                                                [debounce]="true"
+                                                [placeholder]="'Filter by service types' | transloco"
+                                                (onChange)="onFilterChange(null)"
                                         >
                                         </oitc-multi-select>
                                     </c-input-group>
@@ -233,8 +224,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox"
                                                class="checkbox-lg checkbox-success"
-                                               [(ngModel)]="states.ok"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.ok"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusok">{{ t('Ok') }}</label>
@@ -242,8 +233,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusowarning" type="checkbox"
                                                class="checkbox-lg checkbox-warning"
-                                               [(ngModel)]="states.warning"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.warning"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusowarning">{{ t('Warning') }}</label>
@@ -251,8 +242,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatuscritical" type="checkbox"
                                                class="checkbox-lg checkbox-danger"
-                                               [(ngModel)]="states.critical"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.critical"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatuscritical">{{ t('Critical') }}</label>
@@ -260,8 +251,8 @@
                                     <c-form-check class="mb-2">
                                         <input cFormCheckInput id="checkstatusunknown" type="checkbox"
                                                class="checkbox-lg checkbox-secondary"
-                                               [(ngModel)]="states.unknown"
-                                               (debouncedValue)="onStateChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.unknown"
+                                               (debouncedValue)="onFilterChange($event)"
                                                oitcDebounce/>
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="checkstatusunknown">{{ t('Unknown') }}</label>
@@ -434,16 +425,16 @@
                                                 </span>
 
                                                 <oitc-multi-select
-                                                    class="flex-1"
-                                                    name="satellite_id"
-                                                    id="satellite_id"
-                                                    optionValue="key"
-                                                    optionLabel="value"
-                                                    [(ngModel)]="filter.Hosts.satellite_id"
-                                                    [options]="satellites"
-                                                    [debounce]="true"
-                                                    [placeholder]="'Filter by instance' | transloco"
-                                                    (onChange)="onFilterChange(null)">
+                                                        class="flex-1"
+                                                        name="satellite_id"
+                                                        id="satellite_id"
+                                                        optionValue="key"
+                                                        optionLabel="value"
+                                                        [(ngModel)]="filter.Hosts.satellite_id"
+                                                        [options]="satellites"
+                                                        [debounce]="true"
+                                                        [placeholder]="'Filter by instance' | transloco"
+                                                        (onChange)="onFilterChange(null)">
                                                 </oitc-multi-select>
                                             </c-input-group>
                                         </c-form-check>
@@ -621,9 +612,8 @@
                     </c-card>
 
                     <!--filter end -->
-
                     <oitc-table-loader *ngIf="!services"></oitc-table-loader>
-                    <table *ngIf="services" bordered cTable class="mt-2 mb-0" hover striped matSort
+                    <table  *ngIf="services" bordered cTable class="mt-2 mb-0" hover striped matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
                         <thead>
@@ -655,7 +645,7 @@
                             </th>
 
                             <th *ngIf="fields[7]"><span mat-sort-header="Hosts.name">{{ t('Host') }}</span><span
-                                mat-sort-header="servicename">{{ t('Service') }}</span>
+                                    mat-sort-header="servicename">{{ t('Service') }}</span>
                             </th>
                             <th *ngIf="fields[8]">
                                 {{ t('Service type') }}
@@ -720,9 +710,9 @@
                             <tr>
                                 <td class="width-50">
                                     <oitc-item-select
-                                        *oitcPermission="['services', 'delete']"
-                                        [disabled]="false"
-                                        [item]="service"></oitc-item-select>
+                                            *oitcPermission="['services', 'delete']"
+                                            [disabled]="false"
+                                            [item]="service"></oitc-item-select>
                                 </td>
                                 <td *ngIf="fields[0]" class="width-50">
                                     <oitc-servicestatus-icon [service]="service.Servicestatus"/>
@@ -731,10 +721,10 @@
                                     <span *oitcPermission="['services', 'browser']">
                                         <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
                                             <oitc-acknowledgement-icon
-                                                *ngIf="service.Servicestatus.problemHasBeenAcknowledged"
-                                                type="services"
-                                                [objectId]="service.Service.id"
-                                                [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
+                                                    *ngIf="service.Servicestatus.problemHasBeenAcknowledged"
+                                                    type="services"
+                                                    [objectId]="service.Service.id"
+                                                    [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
                                         </div>
                                     </span>
                                     <span *oitcPermission="['services', 'browser'];negate:true">
@@ -746,12 +736,11 @@
                                     </span>
                                 </td>
                                 <td *ngIf="fields[2]" class="width-50">
-                                    <div
-                                        *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0">
+                                    <div *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0">
                                         <oitc-downtime-icon
-                                            *oitcPermission="['services', 'browser']"
-                                            type="services"
-                                            [objectId]="service.Service.id">
+                                                *oitcPermission="['services', 'browser']"
+                                                type="services"
+                                                [objectId]="service.Service.id">
                                         </oitc-downtime-icon>
                                         <fa-icon [icon]="['fas', 'power-off']" size="lg"
                                                  *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
@@ -800,12 +789,11 @@
                                     <span *oitcPermission="['services', 'browser']">
                                         <a [routerLink]="['/services', 'browser', service.Service.id]">{{ service.Service.servicename }}</a>
                                     </span>
-                                    <span
-                                        *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
+                                    <span *oitcPermission="['services', 'browser'];negate:true">{{ service.Service.servicename }}</span>
                                 </td>
                                 <td *ngIf="fields[8]">
                                     <span
-                                        class="badge border margin-right-10 {{service.ServiceType.class}} {{service.ServiceType.color}}">
+                                            class="badge border margin-right-10 {{service.ServiceType.class}} {{service.ServiceType.color}}">
                                         {{ service.ServiceType.title }}
                                     </span>
                                 </td>
@@ -828,14 +816,14 @@
                                             {{ t('Edit') }}
                                         </oitc-actions-button-element>
                                         <oitc-actions-button-element
-                                            [permission]="'changelogs.index'"
-                                            [url]="'/changelogs/entity/service/' + service.Service.id">
+                                                [permission]="'changelogs.index'"
+                                                [url]="'/changelogs/entity/service/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'timeline']"></fa-icon>
                                             {{ t('Changelog') }}
                                         </oitc-actions-button-element>
                                         <oitc-actions-button-element
-                                            [permission]="'services.copy'"
-                                            [url]="'/service/copy/' + service.Service.id">
+                                                [permission]="'services.copy'"
+                                                [url]="'/service/copy/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'file']"></fa-icon>
                                             {{ t('Copy') }}
                                         </oitc-actions-button-element>
@@ -873,7 +861,7 @@
                             <c-row class="p-3">
                                 <c-col [xs]="12" lg="6">
                                     <oitc-select-all
-                                        [itemsCount]="services.all_services.length">
+                                            [itemsCount]="services.all_services.length">
                                     </oitc-select-all>
                                 </c-col>
 
@@ -908,38 +896,33 @@
                                                     <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
                                                     {{ t('List as csv') }}</a></li>
                                                 <li *oitcPermission="['services', 'deactivate']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="toggleDisableModal()">
+                                                        href="javascript:void(0);" cDropdownItem
+                                                        (click)="toggleDisableModal()">
                                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                                     {{ t('Disable services') }}</a></li>
                                                 <li><a href="javascript:void(0);" cDropdownItem>
                                                     <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                     {{ t('Add to service group') }}</a></li>
-                                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="resetChecktime()">
-                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                                    {{ t('Reset check time') }}</a></li>
-                                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="disableNotifications()">
-                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                    {{ t('Disable notification') }}</a></li>
-                                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="enableNotifications()">
-                                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                                    {{ t('Enable notification') }}</a></li>
-                                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="toggleDowntimeModal()">
-                                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                                    {{ t('Set planned maintenance times') }}</a></li>
-                                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a
-                                                    href="javascript:void(0);" cDropdownItem
-                                                    (click)="acknowledgeStatus()">
-                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                    {{ t('Acknowledge status') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="resetChecktime()">
+                                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                        {{ t('Reset check time') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="disableNotifications()">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                        {{ t('Disable notification') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="enableNotifications()">
+                                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                        {{ t('Enable notification') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="toggleDowntimeModal()">
+                                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                                        {{ t('Set planned maintenance times') }}</a></li>
+                                                    <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']"><a href="javascript:void(0);" cDropdownItem
+                                                           (click)="acknowledgeStatus()">
+                                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                        {{ t('Acknowledge status') }}</a></li>
                                             </ul>
                                         </c-dropdown>
                                     </div>
@@ -952,9 +935,9 @@
                 <c-row class="pt-2">
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="services"
-                            [paginateOrScroll]="services"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="services"
+                                [paginateOrScroll]="services"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
 
