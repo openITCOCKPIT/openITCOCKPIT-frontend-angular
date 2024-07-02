@@ -1,23 +1,37 @@
+/*
+ * Copyright (C) <2015>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {HttpParams} from '@angular/common/http';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {NgIf} from '@angular/common';
 import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output
-} from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import {
-    TranslocoDirective,
-    TranslocoService
-} from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
-import {
+    ButtonGroupComponent,
     CardHeaderComponent,
     ColComponent,
-    RowComponent,
     DropdownComponent,
     DropdownItemDirective,
     DropdownMenuDirective,
@@ -31,34 +45,29 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    ButtonGroupComponent,
+    RowComponent,
 } from '@coreui/angular';
-import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
-import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
-import {
-    ServiceIndexFilter,
-} from "../../pages/services/services.interface";
-import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
-import {
-    BookmarksObject,
-    BookmarksParams
-} from './bookmarks.interface';
-import { Subscription } from 'rxjs';
-import { BookmarksService } from './bookmarks.service';
-import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
-import { GenericValidationError } from '../../generic-responses';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { FilterBookmarkSaveModalComponent } from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
+import {DELETE_SERVICE_TOKEN} from '../../tokens/delete-injection.token';
+import {DeleteBookmarkModalComponent} from '../delete-bookmark-modal/delete-bookmark-modal.component';
+import {ServiceIndexFilter,} from "../../pages/services/services.interface";
+import {SelectComponent} from '../../layouts/primeng/select/select/select.component';
+import {BookmarksObject, BookmarksParams} from './bookmarks.interface';
+import {Subscription} from 'rxjs';
+import {BookmarksService} from './bookmarks.service';
+import {FormErrorDirective} from '../../layouts/coreui/form-error.directive';
+import {GenericValidationError} from '../../generic-responses';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {FilterBookmarkSaveModalComponent} from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
 import {
     FilterBookmarkExportModalComponent
 } from '../filter-bookmark-export-modal/filter-bookmark-export-modal.component';
-import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NotyService } from '../../layouts/coreui/noty.service';
-import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {NotyService} from '../../layouts/coreui/noty.service';
+import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {FormsModule} from '@angular/forms';
+import {NgOptionHighlightModule} from '@ng-select/ng-option-highlight';
 
 
 @Component({
@@ -302,9 +311,11 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         if ($result) {
             this.selectedBookmark = null;
             this.selectedBookmarkId = null;
+            this.filterUuid = null;
             this.loadBookmarks(null);
             this.showEdit = false
             this.selected.emit('');
+            this.router.navigate(['services', 'index']);
         }
         if (!$result) {
             this.notyService.genericError();
