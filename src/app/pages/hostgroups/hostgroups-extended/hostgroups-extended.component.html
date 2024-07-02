@@ -93,13 +93,11 @@
                     {{ t('Copy') }}
                 </oitc-actions-button-element>
                 <li cDropdownDivider></li>
-                <oitc-actions-button-element
-                        (click)="toggleResetCheckModal()"
-                        [permission]="'hostgroups.copy'">
+                <oitc-actions-button-element [permission]="'hostgroups.copy'" (click)="toggleResetCheckModal()">
                     <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
                     {{ t('Reset check time') }}
                 </oitc-actions-button-element>
-                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                <oitc-actions-button-element [permission]="'hostgroups.copy'" (click)="toggleDowntimeModal()">
                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                     {{ t('Set planned maintenance times') }}
                 </oitc-actions-button-element>
@@ -123,4 +121,6 @@
     </ng-container>
 </oitc-coreui>
 <oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)"
-                                [items]="selectedItems"></oitc-service-reset-checktime-modal>
+                                    [items]="selectedItems"></oitc-service-reset-checktime-modal>
+<oitc-hosts-maintenance-modal (completed)="onResetChecktime($event)"
+                                [items]="selectedItems"></oitc-hosts-maintenance-modal>

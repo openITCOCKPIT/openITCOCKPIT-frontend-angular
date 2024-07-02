@@ -42,9 +42,17 @@ import {
 import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
-import { HostRescheduleItem, ServiceDowntimeItem, ServiceResetItem } from '../../../services/external-commands.service';
+import {
+    ExternalCommandsService, HostDowntimeItem,
+    ServiceDowntimeItem,
+    ServiceNotifcationItem,
+} from '../../../services/external-commands.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -80,7 +88,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         ActionsButtonElementComponent,
         DropdownDividerDirective,
         ServiceMaintenanceModalComponent,
-        ServiceResetChecktimeModalComponent
+        ServiceResetChecktimeModalComponent,
+        DisableModalComponent,
+        HostsMaintenanceModalComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -94,10 +104,13 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
     protected hostgroupExtended: HostgroupExtended = {} as HostgroupExtended;
+
+    private userFullname: string = '';
 
 
     constructor() {
@@ -130,7 +143,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 satelliteId: 0
             };
         });
-        console.log(this.selectedItems);
 
         this.modalService.toggle({
             show: true,
@@ -176,6 +188,29 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
 
+    }
+
+
+    public toggleDowntimeModal() {
+        this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDowntimeItem => {
+            return {
+                command: 'submitHostDowntime',
+                hostUuid: host.Host.uuid,
+                start: 0,
+                end: 0,
+                author: this.userFullname,
+                comment: '',
+            };
+        });
+        if (this.selectedItems.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostMaintenanceModal',
+        });
     }
 
 }
