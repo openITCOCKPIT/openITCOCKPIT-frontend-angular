@@ -32,6 +32,7 @@ import {
     ButtonGroupComponent,
     CardHeaderComponent,
     ColComponent,
+    ContainerComponent,
     DropdownComponent,
     DropdownItemDirective,
     DropdownMenuDirective,
@@ -102,7 +103,8 @@ import {NgOptionHighlightModule} from '@ng-select/ng-option-highlight';
         FilterBookmarkExportModalComponent,
         NgSelectModule,
         FormsModule,
-        NgOptionHighlightModule
+        NgOptionHighlightModule,
+        ContainerComponent
     ],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
