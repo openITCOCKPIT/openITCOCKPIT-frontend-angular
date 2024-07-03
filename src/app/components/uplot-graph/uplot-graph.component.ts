@@ -45,15 +45,15 @@ import {
     FormSelectDirective,
     RowComponent
 } from '@coreui/angular';
-import {JsonPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import { JsonPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import * as _uPlot from 'uplot';
-import {fromEvent, Observable, Subject, Subscription, takeUntil, timer} from 'rxjs';
-import {UplotGraphService} from './uplot-graph.service';
-import {Datasource, PerfParams, UplotGraphInterface} from "./uplot-graph.interface";
-import {TimezoneObject} from "../../pages/services/services-browser-page/timezone.interface";
-import {UPlotConfigBuilder} from './uplot-config-builder';
-import {FormsModule} from '@angular/forms';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import { fromEvent, Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { UplotGraphService } from './uplot-graph.service';
+import { Datasource, PerfParams, UplotGraphInterface } from "./uplot-graph.interface";
+import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
+import { UPlotConfigBuilder } from './uplot-config-builder';
+import { FormsModule } from '@angular/forms';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const uPlot: any = (_uPlot as any)?.default;
 

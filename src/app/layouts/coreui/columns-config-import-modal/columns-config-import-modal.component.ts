@@ -1,23 +1,49 @@
-import {Component, inject, EventEmitter, Output, ViewChild, Input} from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
+/*
+ * Copyright (C) <2015>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalService,
     ButtonDirective,
-    ModalFooterComponent,
+    FormControlDirective,
     ModalBodyComponent,
-    RowComponent, FormControlDirective,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent,
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'oitc-columns-config-import-modal',
-  standalone: true,
+    selector: 'oitc-columns-config-import-modal',
+    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,
@@ -33,20 +59,20 @@ import {NgIf} from '@angular/common';
         NgIf,
         FormControlDirective
     ],
-  templateUrl: './columns-config-import-modal.component.html',
-  styleUrl: './columns-config-import-modal.component.css'
+    templateUrl: './columns-config-import-modal.component.html',
+    styleUrl: './columns-config-import-modal.component.css'
 })
 export class ColumnsConfigImportModalComponent {
     public configString: string = '';
     public configArray: boolean[] = []
-    public error: boolean  = false;
+    public error: boolean = false;
     public errorMessage = 'Column config is not for this table'
-    @Input({required: true}) public columnsTableKey :string = '';
+    @Input({required: true}) public columnsTableKey: string = '';
     @Output() toImport = new EventEmitter<boolean[]>();
     private readonly modalService = inject(ModalService);
     @ViewChild('modal') private modal!: ModalComponent;
 
-    public hideModal(){
+    public hideModal () {
         this.error = false;
         this.configString = '';
         this.modalService.toggle({
@@ -55,7 +81,7 @@ export class ColumnsConfigImportModalComponent {
         });
     }
 
-    public sendConfig() {
+    public sendConfig () {
         try {
             var configObject = JSON.parse(this.configString);
             if (configObject.key == this.columnsTableKey && Array.isArray(configObject.value)) {
@@ -68,7 +94,7 @@ export class ColumnsConfigImportModalComponent {
                 this.error = true;
                 this.errorMessage = 'Unable to import config';
             }
-        } catch(e) {
+        } catch (e) {
             this.error = true;
             this.errorMessage = 'Unable to import config';
         }

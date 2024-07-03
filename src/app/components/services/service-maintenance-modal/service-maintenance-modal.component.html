@@ -1,3 +1,28 @@
+<!--
+  ~ Copyright (C) <2015>  <it-novum GmbH>
+  ~
+  ~ This file is dual licensed
+  ~
+  ~ 1.
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, version 3 of the License.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ 2.
+  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+  ~     License agreement and license key will be shipped with the order
+  ~     confirmation.
+  -->
+
 <ng-container *transloco="let t">
     <c-modal
         #modal='cModal'
@@ -5,7 +30,7 @@
         id="serviceMaintenanceModal"
         size="lg"
     >
-        <c-modal-header class="text-bg-gray">
+        <c-modal-header>
             <h5 cModalTitle>
                 <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                 {{ t('Set planned maintenance times') }}
@@ -22,7 +47,7 @@
                                [(ngModel)]="downtimeModal.comment">
                         <div *ngIf="errors && errors.comment" cFormText>
                             <ng-container *ngFor="let error of errors.comment">
-                            <div class="text-danger">{{  t(error) }}</div>
+                                <div class="text-danger">{{ t(error) }}</div>
                             </ng-container>
                         </div>
                     </div>
@@ -31,35 +56,37 @@
             <c-row>
                 <c-col>
                     <label>{{ t('From') }}:</label>
-                    <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date" class="form-control">
+                    <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date"
+                           class="form-control">
                     <input id="downtimeModal.from_time" class="form-control"
                            [(ngModel)]="downtimeModal.from_time"
                            type="time">
                     <div *ngIf="errors && errors.from_date" cFormText>
                         <ng-container *ngFor="let error of errors.from_date">
-                            <div class="text-danger">{{  t(error) }}</div>
+                            <div class="text-danger">{{ t(error) }}</div>
                         </ng-container>
                     </div>
                     <div *ngIf="errors && errors.from_time" cFormText>
                         <ng-container *ngFor="let error of errors.from_time">
-                            <div class="text-danger">{{  t(error) }}</div>
+                            <div class="text-danger">{{ t(error) }}</div>
                         </ng-container>
                     </div>
                 </c-col>
                 <c-col>
                     <label>{{ t('To') }}:</label>
-                    <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date" class="form-control">
+                    <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date"
+                           class="form-control">
                     <input id="downtimeModal.to_time" class="form-control"
                            [(ngModel)]="downtimeModal.to_time"
                            type="time">
                     <div *ngIf="errors && errors.to_date" cFormText>
                         <ng-container *ngFor="let error of errors.to_date">
-                            <div class="text-danger">{{  t(error) }}</div>
+                            <div class="text-danger">{{ t(error) }}</div>
                         </ng-container>
                     </div>
                     <div *ngIf="errors && errors.to_time" cFormText>
                         <ng-container *ngFor="let error of errors.to_time">
-                            <div class="text-danger">{{  t(error) }}</div>
+                            <div class="text-danger">{{ t(error) }}</div>
                         </ng-container>
                     </div>
                 </c-col>
@@ -71,7 +98,7 @@
                 <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Save') }}
             </button>
-            <button (click)="hideModal()" cButton class="ripple" color="default">
+            <button (click)="hideModal()" cButton class="ripple" color="light">
                 {{ t('Cancel') }}
             </button>
         </c-modal-footer>

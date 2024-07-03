@@ -19,7 +19,18 @@ export interface HostDowntimeItem  {
     end: number,
     author: string,
     comment: string,
-    downtimetype: string
+    downtimetype: string | number
+}
+
+export interface HostEnableNotificationsItem {
+    command: string,
+    hostUuid: string,
+    type: string,
+}
+export interface HostDisableNotificationsItem {
+    command: string,
+    hostUuid: string,
+    type: string,
 }
 export interface ServiceAcknowledgeItem {
     command: string,

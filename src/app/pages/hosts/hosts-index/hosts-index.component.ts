@@ -88,11 +88,23 @@ import { HttpParams } from '@angular/common/http';
 import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
-import { HostDowntimeItem, HostRescheduleItem, ServiceDowntimeItem } from '../../../services/external-commands.service';
+import {
+    HostDisableNotificationsItem,
+    HostDowntimeItem,
+    HostEnableNotificationsItem,
+    HostRescheduleItem,
+    ServiceDowntimeItem
+} from '../../../services/external-commands.service';
 import {
     HostsMaintenanceModalComponent
 } from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import {
+    HostsEnableNotificationsModalComponent
+} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import {
+    HostsDisableNotificationsModalComponent
+} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -159,7 +171,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         DropdownMenuDirective,
         DropdownToggleDirective,
         ServiceResetChecktimeModalComponent,
-        HostsMaintenanceModalComponent
+        HostsMaintenanceModalComponent,
+        HostsEnableNotificationsModalComponent,
+        HostsDisableNotificationsModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -380,9 +394,15 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             });
         }
 
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
         // Pass selection to the modal
         this.selectedItems = items;
-
         // open modal
         this.modalService.toggle({
             show: true,
@@ -485,6 +505,11 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             });
         });
 
+        if (this.selectedItems.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
         this.modalService.toggle({
             show: true,
             id: 'serviceResetChecktimeModal'
@@ -492,12 +517,69 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public disableNotifications() {
-        console.log("Todo implement me");
+        let items: HostDisableNotificationsItem[] = [];
+        this.selectedItems = [];
+        let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
+
+        this.hosts?.all_hosts.forEach((item) => {
+            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+                return;
+            }
+            if (!selectedHostIds.includes(item.Host.id)) {
+                return;
+            }
+
+            items.push({
+                command: 'submitDisableHostNotifications',
+                hostUuid: item.Host.uuid,
+                type: 'hostOnly',
+            });
+        });
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        this.selectedItems = items;
+        this.modalService.toggle({
+            show: true,
+            id: 'hostDisableNotificationsModal',
+        });
     }
 
     public enableNotifications() {
-        console.log("Todo implement me");
+        let items: HostEnableNotificationsItem[] = [];
+        this.selectedItems = [];
+        let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
+
+        this.hosts?.all_hosts.forEach((item) => {
+            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+                return;
+            }
+            if (!selectedHostIds.includes(item.Host.id)) {
+                return;
+            }
+
+            items.push({
+                command: 'submitEnableHostNotifications',
+                hostUuid: item.Host.uuid,
+                type: 'hostOnly',
+            });
+        });
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+        this.modalService.toggle({
+            show: true,
+            id: 'hostEnableNotificationsModal',
+        });
     }
+
 
     public toggleDowntimeModal() {
         let items: HostDowntimeItem[] = [];
