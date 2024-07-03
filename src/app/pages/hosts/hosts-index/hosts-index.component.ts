@@ -46,7 +46,7 @@ import {
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -85,6 +85,14 @@ import {
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
+import {
+    ServiceResetChecktimeModalComponent
+} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import { HostDowntimeItem, HostRescheduleItem, ServiceDowntimeItem } from '../../../services/external-commands.service';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -149,7 +157,9 @@ import { HttpParams } from '@angular/common/http';
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,
-        DropdownToggleDirective
+        DropdownToggleDirective,
+        ServiceResetChecktimeModalComponent,
+        HostsMaintenanceModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -197,13 +207,15 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public satellites: SelectKeyValue[] = [];
 
     public hostTypes: any[] = [];
-    public selectedItems: DeleteAllItem[] = [];
+    public selectedItems: any[] = [];
 
     private readonly HostsService = inject(HostsService);
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
@@ -454,7 +466,29 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetChecktime() {
-        console.log("Todo implement me");
+        this.selectedItems = [];
+        let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
+
+        this.hosts?.all_hosts.forEach((item) => {
+            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+                return;
+            }
+            if (!selectedHostIds.includes(item.Host.id)) {
+                return;
+            }
+
+            this.selectedItems.push({
+                command: 'rescheduleHost',
+                hostUuid: item.Host.uuid,
+                type: 'hostOnly',
+                satelliteId: 0
+            });
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceResetChecktimeModal'
+        });
     }
 
     public disableNotifications() {
@@ -466,7 +500,29 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public toggleDowntimeModal() {
-        console.log("Todo implement me");
+        let items: HostDowntimeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {
+            return {
+                command: 'submitHostDowntime',
+                hostUuid: item.Host.uuid,
+                start: 0,
+                end: 0,
+                author: 'ASNAEB',
+                comment: '',
+                downtimetype: ''
+            };
+        });
+
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostMaintenanceModal',
+        });
     }
 
     public acknowledgeStatus() {

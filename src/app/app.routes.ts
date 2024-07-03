@@ -299,6 +299,9 @@ const coreRoutes: Routes = [{
     path: 'logentries/index',
     loadComponent: () => import('./pages/logentries/logentries-index/logentries-index.component').then(m => m.LogentriesIndexComponent)
 }, {
+    path: 'downtimes/host',
+    loadComponent: () => import('./pages/downtimes/downtimes-host/downtimes-host.component').then(m => m.DowntimesHostComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
