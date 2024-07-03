@@ -1,4 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {NgForOf, NgFor, NgIf} from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -12,7 +13,7 @@ import {
     FormDirective,
     FormLabelDirective, ModalService,
     NavComponent,
-    NavItemComponent
+    NavItemComponent, TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,12 +22,11 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HostgroupsService } from '../hostgroups.service';
@@ -59,6 +59,9 @@ import {
 import {
     HostsEnableNotificationsModalComponent
 } from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { MatSort } from '@angular/material/sort';
+import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -98,7 +101,13 @@ import {
         DisableModalComponent,
         HostsMaintenanceModalComponent,
         HostsDisableNotificationsModalComponent,
-        HostsEnableNotificationsModalComponent
+        HostsEnableNotificationsModalComponent,
+        DebounceDirective,
+        MatSort,
+        TableDirective,
+        NgForOf,
+        HoststatusIconComponent,
+        TranslocoPipe
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -113,6 +122,17 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
+
+    protected filter: any = {
+        Host: {},
+        Hoststatus: {
+            current_state: {
+                up: null,
+                down: null,
+                unreachable: null
+            }
+        }
+    };
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
@@ -195,7 +215,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-
+        this.subscriptions.unsubscribe();
     }
 
 

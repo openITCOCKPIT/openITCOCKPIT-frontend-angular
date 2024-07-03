@@ -116,12 +116,111 @@
 
             </oitc-actions-button>
 
+            <table bordered cTable class="mt-2 mb-0" hover striped>
+
+                <thead>
+                <tr>
+                    <td>
+                        <span class="input-group-text">
+                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                        </span>
+
+                        <input cFormControl
+                               id="filter.Host.name"
+                               type="text"
+                               name="filter.Host.name"
+                               [(ngModel)]="filter.Host.name" />
+                    </td>
+                    <td colspan="6">
+                        <div class="bg-up">
+                            <label for="statusFilterup">
+                                <input type="checkbox"
+                                       name="statusFilterup"
+                                       oitcDebounce
+                                       [(ngModel)]="filter.Hoststatus.current_state['up']"
+                                       id="statusFilterup">
+                                {{ hostgroupExtended.StatusSummary.up }}
+                            </label>
+                        </div>
+                        <div class="bg-down">
+                            <label for="statusFilterdown">
+                                <input type="checkbox"
+                                       name="statusFilterdown"
+                                       oitcDebounce
+                                       [(ngModel)]="filter.Hoststatus.current_state['down']"
+                                       id="statusFilterdown">
+                                {{ hostgroupExtended.StatusSummary.down }}
+                            </label>
+                        </div>
+                        <div class="bg-unreachable">
+                            <label for="statusFilterunreachable">
+                                <input type="checkbox"
+                                       name="statusFilterunreachable"
+                                       oitcDebounce
+                                       [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                       id="statusFilterunreachable">
+                                {{ hostgroupExtended.StatusSummary.unreachable }}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10">
+
+                    </th>
+                    <th width="10">
+                        {{ t('Status') }}</th>
+                    <th width="10">
+
+                    </th>
+                    <th width="10">
+                        <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
+                    </th>
+                    <th width="10">
+                        <fa-icon [icon]="['fas', 'power-off']" [title]="'is in downtime' | transloco"></fa-icon>
+                    </th>
+                    <th width="10">
+                        <span  [title]="'Passively transferred service' | transloco">
+                            P
+                        </span>
+                    </th>
+                    <th>{{ t('Host name') }}</th>
+                    <th>{{ t('State since') }}</th>
+                    <th>{{ t('Last check') }}</th>
+                    <th>{{ t('Next check') }}</th>
+                    <th>{{ t('Service Summary') }}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let host of hostgroupExtended.Hosts">
+                        <td>PLUS</td>
+                        <td>
+                            <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
+                        </td>
+                        <td>GEAR</td>
+                        <td>USER</td>
+                        <td>ON OFF</td>
+                        <td>P</td>
+                        <td>{{host.Host.name}}</td>
+                        <td>{{host.Hoststatus.lastHardStateChange}}</td>
+                        <td>{{ host.Hoststatus.lastCheck }}</td>
+                        <td>{{ host.Hoststatus.nextCheck }}</td>
+                        <td>7 | 13 | 69 | 420</td>
+                        <td>Actions Dropdown</td>
+                    </tr>
+                </tbody>
+            </table>
         </c-card-body>
 
     </ng-container>
 </oitc-coreui>
 
-<oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-service-reset-checktime-modal>
-<oitc-hosts-maintenance-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-maintenance-modal>
-<oitc-hosts-enable-notifications-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-enable-notifications-modal>
-<oitc-hosts-disable-notifications-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-disable-notifications-modal>
+<oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)"
+                                    [items]="selectedItems"></oitc-service-reset-checktime-modal>
+<oitc-hosts-maintenance-modal (completed)="onResetChecktime($event)"
+                              [items]="selectedItems"></oitc-hosts-maintenance-modal>
+<oitc-hosts-enable-notifications-modal (completed)="onResetChecktime($event)"
+                                       [items]="selectedItems"></oitc-hosts-enable-notifications-modal>
+<oitc-hosts-disable-notifications-modal (completed)="onResetChecktime($event)"
+                                        [items]="selectedItems"></oitc-hosts-disable-notifications-modal>

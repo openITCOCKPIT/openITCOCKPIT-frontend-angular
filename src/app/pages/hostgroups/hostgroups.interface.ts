@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
+import { HoststatusObject } from '../hosts/hosts.interface';
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
@@ -203,38 +204,7 @@ export interface HostgroupExtended {
             is_satellite_host: boolean
             name: string
         }
-        Hoststatus: {
-            currentState: number
-            isFlapping: boolean
-            problemHasBeenAcknowledged: boolean
-            scheduledDowntimeDepth: number
-            lastCheck: string
-            nextCheck: string
-            activeChecksEnabled: boolean
-            lastHardState: any
-            lastHardStateChange: string
-            last_state_change: string
-            output: string
-            long_output: any
-            acknowledgement_type: number
-            state_type: number
-            flap_detection_enabled: any
-            notifications_enabled: boolean
-            current_check_attempt: any
-            max_check_attempts: any
-            latency: any
-            last_time_up: string
-            lastHardStateChangeInWords: string
-            last_state_change_in_words: string
-            lastCheckInWords: string
-            nextCheckInWords: string
-            isHardstate: boolean
-            isInMonitoring: boolean
-            humanState: string
-            cssClass: string
-            textClass: string
-            outputHtml: string
-        }
+        Hoststatus: HoststatusObject,
 
         ServicestatusSummary: {
             state: {
