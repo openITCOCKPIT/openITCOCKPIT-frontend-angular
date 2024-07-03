@@ -28,7 +28,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     ExternalCommandsService,
@@ -70,20 +70,19 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     @Input({required: true}) public items: HostDisableNotificationsItem[] = [];
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
-    @Output() completed = new EventEmitter<boolean>();
+    @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public currentIndex: number = 0;
     public error: boolean = false;
     public isSend: boolean = false;
     public state?: any
 
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
 
-    public type: string ='hostOnly';
+    public type: string = 'hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
     hideModal() {

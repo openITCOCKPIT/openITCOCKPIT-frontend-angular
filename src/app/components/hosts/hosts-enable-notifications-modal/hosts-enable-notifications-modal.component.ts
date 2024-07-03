@@ -28,7 +28,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     ExternalCommandsService,
@@ -70,21 +70,13 @@ export class HostsEnableNotificationsModalComponent implements OnInit, OnDestroy
     @Input({required: true}) public items: HostEnableNotificationsItem[] = [];
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
-    @Output() completed = new EventEmitter<boolean>();
+    @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public currentIndex: number = 0;
     public error: boolean = false;
     public isSend: boolean = false;
     public state?: any
-    public downtimeModal = {
-        comment: '',
-        from_date: '',
-        from_time: '',
-        to_date: '',
-        to_time: ''
-    };
 
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
@@ -136,9 +128,6 @@ export class HostsEnableNotificationsModalComponent implements OnInit, OnDestroy
                 if (this.currentIndex === this.items.length) {
                     this.hideModal();
                     this.completed.emit(true);
-                    const title: string = this.TranslocoService.translate('Downtimes added');
-                    const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
-                    this.notyService.genericSuccess(msg, title);
                 }
             }));
         });
