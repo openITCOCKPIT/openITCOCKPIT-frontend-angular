@@ -23,19 +23,19 @@
  *     confirmation.
  */
 
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
-import {FaIconComponent, FaStackComponent, FaStackItemSizeDirective} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {PermissionsService} from '../../../permissions/permissions.service';
-import {ActivatedRoute, Router, RouterLink, RouterModule} from '@angular/router';
-import {DebounceDirective} from '../../../directives/debounce.directive';
-import {Subscription} from 'rxjs';
-import {ServicesService} from '../services.service';
-import {ProfileService} from '../../profile/profile.service';
-import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { Subscription } from 'rxjs';
+import { ServicesService } from '../services.service';
+import { ProfileService } from '../../profile/profile.service';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
@@ -43,7 +43,7 @@ import {
     ServiceParams,
     ServicesIndexRoot,
 } from "../services.interface";
-import {ServicestatusIconComponent} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import {
     ServiceMaintenanceModalComponent
 } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
@@ -80,36 +80,36 @@ import {
     TableDirective,
     TooltipDirective,
 } from '@coreui/angular';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
-import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import {DowntimeIconComponent} from '../../downtimes/downtime-icon/downtime-icon.component';
-import {AcknowledgementIconComponent} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import {PopoverGraphComponent} from '../../../components/popover-graph/popover-graph.component';
-import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
-import {UplotGraphComponent} from '../../../components/uplot-graph/uplot-graph.component';
-import {DisableItem} from '../../../layouts/coreui/disable-modal/disable.interface';
-import {DisableModalComponent} from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import {DISABLE_SERVICE_TOKEN} from '../../../tokens/disable-injection.token';
-import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
-import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
+import { AcknowledgementIconComponent } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
+import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import {
     ColumnsConfigExportModalComponent
 } from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
 import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
-import {NotyService} from '../../../layouts/coreui/noty.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     ExternalCommandsService,
     ServiceAcknowledgeItem,
@@ -117,17 +117,17 @@ import {
     ServiceNotifcationItem,
     ServiceResetItem
 } from '../../../services/external-commands.service';
-import {CopyToClipboardComponent} from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {TimezoneConfiguration as TimezoneObject, TimezoneService} from '../../../services/timezone.service';
-import {LocalStorageService} from '../../../services/local-storage.service';
-import {FilterBookmarkComponent} from '../../../components/filter-bookmark/filter-bookmark.component';
-import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RegexHelperTooltipComponent} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
-import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {TableLoaderComponent} from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-services-index',
@@ -491,16 +491,15 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (result.message) {
                 const title = this.TranslocoService.translate('Disable Notifications');
 
-                this.notyService.genericSuccess(result.message, title, [], 7000);
+                this.notyService.genericSuccess(result.message, title, []);
                 // this.notyService.scrollContentDivToTop();
                 // this.SelectionServiceService.deselectAll()
             } else {
                 this.notyService.genericError();
             }
-
             setTimeout(() => {
                 this.load()
-            }, 7000);
+            }, 3500);
         }));
     }
 
@@ -522,7 +521,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (result.message) {
                 const title = this.TranslocoService.translate('enable Notifications');
 
-                this.notyService.genericSuccess(result.message, title, [], 7000);
+                this.notyService.genericSuccess(result.message, title, []);
                 //this.notyService.scrollContentDivToTop();
                 // this.SelectionServiceService.deselectAll()
             } else {
@@ -531,7 +530,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.load()
-            }, 7000);
+            }, 3500);
         }));
     }
 
@@ -654,7 +653,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
     public onMassActionComplete (success: boolean) {
-
         if (success) {
             this.load();
         }

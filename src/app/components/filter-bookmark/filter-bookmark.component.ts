@@ -23,11 +23,11 @@
  *     confirmation.
  */
 
-import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {HttpParams} from '@angular/common/http';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {NgIf} from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgIf } from '@angular/common';
 import {
     ButtonGroupComponent,
     CardHeaderComponent,
@@ -48,27 +48,27 @@ import {
     NavItemComponent,
     RowComponent,
 } from '@coreui/angular';
-import {DELETE_SERVICE_TOKEN} from '../../tokens/delete-injection.token';
-import {DeleteBookmarkModalComponent} from '../delete-bookmark-modal/delete-bookmark-modal.component';
-import {ServiceIndexFilter,} from "../../pages/services/services.interface";
-import {SelectComponent} from '../../layouts/primeng/select/select/select.component';
-import {BookmarksObject, BookmarksParams} from './bookmarks.interface';
-import {Subscription} from 'rxjs';
-import {BookmarksService} from './bookmarks.service';
-import {FormErrorDirective} from '../../layouts/coreui/form-error.directive';
-import {GenericValidationError} from '../../generic-responses';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {FilterBookmarkSaveModalComponent} from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
+import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
+import { ServiceIndexFilter } from "../../pages/services/services.interface";
+import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
+import { BookmarksObject, BookmarksParams } from './bookmarks.interface';
+import { Subscription } from 'rxjs';
+import { BookmarksService } from './bookmarks.service';
+import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
+import { GenericValidationError } from '../../generic-responses';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FilterBookmarkSaveModalComponent } from '../filter-bookmark-save-modal/filter-bookmark-save-modal.component';
 import {
     FilterBookmarkExportModalComponent
 } from '../filter-bookmark-export-modal/filter-bookmark-export-modal.component';
-import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {NotyService} from '../../layouts/coreui/noty.service';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {FormsModule} from '@angular/forms';
-import {NgOptionHighlightModule} from '@ng-select/ng-option-highlight';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { NotyService } from '../../layouts/coreui/noty.service';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
 
 @Component({

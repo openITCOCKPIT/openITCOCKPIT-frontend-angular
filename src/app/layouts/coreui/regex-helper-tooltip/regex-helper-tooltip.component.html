@@ -1,56 +1,77 @@
-<ng-container  *transloco="let t">
-<fa-icon [icon]="['far', 'lightbulb']"
-         [ngClass]="{'default' : !light, 'warning': light}"
-         [cPopover]="popoverHtml"
-         cPopoverPlacement="left"
-         [cPopoverTrigger]="'hover'"
-         (mouseenter)="lightSwitch()"
-         (mouseleave)="lightSwitch()"
-         class="ms-1">
-<ng-template #popoverHtml>
-    <div class="custom-width">
-        <h3 class="popover-header">
-            {{ t('RegEx Examples') }}
-        </h3>
-        <c-container class="popover-body">
-            <c-row class="mb-1 nav-underline-border">
-            <!--<div class=" row bordered font-xs border-bottom padding-bottom-5">-->
-                <div class="col col-lg-1 bg-primary bold text-white rounded text-nowrap">.*</div>
-                <div class="col col-lg-3 text-nowrap"><span class="bold text-primary">localhost</span></div>
-                <div class="col-md-auto">{{ t('Match anything regex') }}</div>
-            <!--</div>-->
-            </c-row>
-            <c-row class="mb-1 nav-underline-border">
-            <!--<div class="row bordered font-xs border-bottom padding-bottom-5">-->
-                <div class="col col-lg-1 bg-primary bold text-white rounded">.</div>
-                <div class="col col-lg-3 text-nowrap">local<span class="bold text-primary">.</span>ost</div>
-                <div class="col-md-auto">{{ t('Match any character') }}</div>
-            <!--</div>-->
-            </c-row>
-            <c-row class="mb-1 nav-underline-border">
-            <!--<div class="row bordered font-xs border-bottom padding-bottom-5">-->
-                <div class="col col-lg-1 bg-primary bold text-white rounded">^</div>
-                <div class="col col-lg-3 text-nowrap"><span class="bold text-primary">^</span>ocalhost</div>
-                <div class="col-md-auto">{{ t('Match the beginning of a string') }}</div>
-            <!--</div>-->
-            </c-row>
-            <c-row class="mb-1 nav-underline-border">
-            <!--<div class="row bordered font-xs border-bottom padding-bottom-5">-->
-                <div class="col col-lg-1 bg-primary bold text-white rounded">$</div>
-                <div class="col col-lg-3 text-nowrap">localhos<span class="bold text-primary">$</span></div>
-                <div class="col-md-auto">{{ t('Match the end of a string') }}</div>
-            <!--</div>-->
-            </c-row>
-            <c-row class="mb-1 nav-underline-border">
-            <!--<div class="row bordered font-xs padding-bottom-5">-->
-                <div class="col col-lg-1 bg-primary bold text-white rounded">|</div>
-                <div class="col col-lg-3 text-nowrap">wan<span class="bold text-primary">|</span>lan</div>
-                <div class="col-md-auto">{{ t('Match either of the sequences') }}</div>
-            <!--</div>-->
-            </c-row>
-        </c-container>
-    </div>
-</ng-template>
+<!--
+  ~ Copyright (C) <2015>  <it-novum GmbH>
+  ~
+  ~ This file is dual licensed
+  ~
+  ~ 1.
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, version 3 of the License.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ 2.
+  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+  ~     License agreement and license key will be shipped with the order
+  ~     confirmation.
+  -->
 
-</fa-icon>
+<ng-container *transloco="let t">
+    <fa-icon [icon]="['far', 'lightbulb']"
+             [ngClass]="{'light' : !light, 'warning': light}"
+             [cPopover]="popoverHtml"
+             cPopoverPlacement="left"
+             [cPopoverTrigger]="'hover'"
+             (mouseenter)="lightSwitch()"
+             (mouseleave)="lightSwitch()"
+             class="ms-1">
+        <ng-template #popoverHtml>
+            <div class="custom-width">
+                <h3 class="popover-header">
+                    {{ t('RegEx Examples') }}
+                </h3>
+                <c-container class="popover-body">
+                    <c-row class="mb-1 nav-underline-border">
+                        <div class="col col-lg-1 bg-primary fw-bold text-white rounded text-nowrap">.*</div>
+                        <div class="col col-lg-3 text-nowrap"><span class="text-primary fw-bold">localhost</span></div>
+                        <div class="col-md-auto">{{ t('Match anything regex') }}</div>
+                    </c-row>
+                    <c-row class="mb-1 nav-underline-border">
+                        <div class="col col-lg-1 bg-primary fw-bold text-white rounded">.</div>
+                        <div class="col col-lg-3 text-nowrap fw-bold">local<span
+                                class="fw-bold text-primary">.</span><span
+                                class="fw-bold">ost</span></div>
+                        <div class="col-md-auto">{{ t('Match any character') }}</div>
+                    </c-row>
+                    <c-row class="mb-1 nav-underline-border">
+                        <div class="col col-lg-1 bg-primary fw-bold text-white rounded">^</div>
+                        <div class="col col-lg-3 text-nowrap"><span class="fw-bold text-primary">^</span><span
+                                class="fw-bold">ocalhost</span></div>
+                        <div class="col-md-auto">{{ t('Match the beginning of a string') }}</div>
+                    </c-row>
+                    <c-row class="mb-1 nav-underline-border">
+                        <div class="col col-lg-1 bg-primary fw-bold text-white rounded">$</div>
+                        <div class="col col-lg-3 text-nowrap fw-bold">localhos<span
+                                class="text-primary fw-bold">$</span></div>
+                        <div class="col-md-auto">{{ t('Match the end of a string') }}</div>
+                    </c-row>
+                    <c-row class="mb-1 nav-underline-border">
+                        <div class="col col-lg-1 bg-primary fw-bold text-white rounded">|</div>
+                        <div class="col col-lg-3 text-nowrap fw-bold">wan<span
+                                class="fw-bold text-primary">|</span><span class="fw-bold">lan</span>
+                        </div>
+                        <div class="col-md-auto">{{ t('Match either of the sequences') }}</div>
+                    </c-row>
+                </c-container>
+            </div>
+        </ng-template>
+
+    </fa-icon>
 </ng-container>
