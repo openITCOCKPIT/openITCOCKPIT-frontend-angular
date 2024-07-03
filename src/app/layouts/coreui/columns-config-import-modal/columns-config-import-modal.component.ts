@@ -23,8 +23,8 @@
  *     confirmation.
  */
 
-import {Component, EventEmitter, inject, Input, Output, ViewChild} from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
     ButtonDirective,
@@ -37,9 +37,9 @@ import {
     ModalTitleDirective,
     RowComponent,
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-columns-config-import-modal',

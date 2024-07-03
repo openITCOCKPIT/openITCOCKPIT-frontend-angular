@@ -23,8 +23,8 @@
  *     confirmation.
  */
 
-import {Component, inject, Input, ViewChild} from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
+import { Component, inject, Input, ViewChild } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
     ButtonDirective,
@@ -39,9 +39,9 @@ import {
     ModalTitleDirective,
     RowComponent
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormsModule} from '@angular/forms';
-import {CopyToClipboardComponent} from '../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { CopyToClipboardComponent } from '../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 
 @Component({
     selector: 'oitc-filter-bookmark-export-modal',

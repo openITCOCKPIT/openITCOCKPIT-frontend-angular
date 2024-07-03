@@ -23,8 +23,8 @@
  *     confirmation.
  */
 
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild} from '@angular/core';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ButtonDirective,
@@ -43,13 +43,13 @@ import {
     ModalTitleDirective,
     RowComponent
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {Subscription} from 'rxjs';
-import {NgIf} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DebounceDirective} from '../../../directives/debounce.directive';
-import {ExternalCommandsService, ServiceAcknowledgeItem} from '../../../services/external-commands.service';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
 
 @Component({
     selector: 'oitc-service-acknowledge-modal',

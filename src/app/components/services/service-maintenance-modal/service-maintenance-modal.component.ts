@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ButtonDirective,
@@ -40,14 +40,14 @@ import {
     ProgressComponent,
     RowComponent
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {NgForOf, NgIf} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {DowntimesDefaultsService, ValidateInput, ValidationErrors} from '../../../services/downtimes-defaults.service';
-import {ExternalCommandsService, ServiceDowntimeItem} from '../../../services/external-commands.service';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgForOf, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { DowntimesDefaultsService, ValidateInput, ValidationErrors } from '../../../services/downtimes-defaults.service';
+import { ExternalCommandsService, ServiceDowntimeItem } from '../../../services/external-commands.service';
 
 
 @Component({

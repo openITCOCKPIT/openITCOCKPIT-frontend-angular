@@ -23,9 +23,9 @@
  *     confirmation.
  */
 
-import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {NotyService} from '../../layouts/coreui/noty.service';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { NotyService } from '../../layouts/coreui/noty.service';
 import {
     ButtonCloseDirective,
     ButtonDirective,
@@ -38,14 +38,14 @@ import {
     ModalTitleDirective,
     RowComponent,
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormsModule} from '@angular/forms';
-import {NgClass, NgIf} from '@angular/common';
-import {Subscription} from 'rxjs';
-import {BookmarksService} from '../filter-bookmark/bookmarks.service';
-import {ServiceIndexFilter} from '../../pages/services/services.interface';
-import {BookmarkPost, BookmarkResponse, BookmarksObject} from '../filter-bookmark/bookmarks.interface';
-import {GenericValidationError} from '../../generic-responses';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { BookmarksService } from '../filter-bookmark/bookmarks.service';
+import { ServiceIndexFilter } from '../../pages/services/services.interface';
+import { BookmarkPost, BookmarkResponse, BookmarksObject } from '../filter-bookmark/bookmarks.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 
 type NewBookmark = {
