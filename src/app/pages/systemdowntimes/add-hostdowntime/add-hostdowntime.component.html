@@ -53,6 +53,7 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 [options]="hosts"
+                                [(ngModel)]="post.object_id"
                                 [searchCallback]="loadHosts"
                                 class="flex-1"
                                 oitcFormError [errors]="errors" errorField="hosts">
@@ -60,6 +61,83 @@
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
                                             errorField="hosts"></oitc-form-feedback>
+                    </div>
+                    <div>
+                        <label cLabel for="Hosts">
+                            {{ t('Maintenance period for') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check [inline]="true">
+                            <input cFormCheckInput type="radio" value="0" id="downtimetype0"
+                                   [ngModel]="post.downtimetype_id" name="downtimeType"/>
+                            <label cFormCheckLabel for="downtimetype0">
+                                {{ t('Individual host') }}
+                            </label>
+                        </c-form-check>
+                        <c-form-check [inline]="true">
+                            <input cFormCheckInput type="radio" value="1" id="downtimetype1"
+                                   [ngModel]="post.downtimetype_id" name="downtimeType"/>
+                            <label cFormCheckLabel for="downtimetype1">
+                                {{ t('Host including services') }}
+                            </label>
+                        </c-form-check>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="downtimetype_id"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="Comment">
+                            {{ t('Comment') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="Comment" required type="text"
+                               name="comment" placeholder="{{ t('Comment') }}"
+                               oitcFormError [errors]="errors" errorField="comment"
+                               [(ngModel)]="post.comment">
+                        <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="is_recurring"
+                                type="checkbox"
+                                [(ngModel)]="post.is_recurring"
+                                trueFalseValue
+                                [falseValue]="0"
+                                [trueValue]="1"
+                                name="is_recurring"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="is_recurring">{{ t('Recurring downtime') }}</label>
+                        </c-form-check>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="From">
+                            {{ t('From') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                            </span>
+                            <input cFormControl id="From" required type="date"
+                                   name="comment" placeholder="{{ t('DD.MM.YYYY') }}"
+                                   oitcFormError [errors]="errors" errorField="from"
+                                   [(ngModel)]="post.from_date">
+                            <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                            <span class="input-group-text">
+                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                            </span>
+                            <input cFormControl id="from_time" required type="time"
+                                   name="from_time" placeholder="{{ t('hh:mm') }}"
+                                   oitcFormError [errors]="errors" errorField="from_time"
+                                   [(ngModel)]="post.from_time">
+                            <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
+                        </div>
+
                     </div>
                 </c-card-body>
             </c-card>

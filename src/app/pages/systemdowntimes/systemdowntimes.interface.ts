@@ -1,15 +1,33 @@
 export interface SystemdowntimesHostPost {
     id?: null | number
-    is_recurring?: number
+    is_recurring: number
     weekdays: {}
-    day_of_month?: ''
-    from_date: ''
-    to_date: ''
-    duration: 15
-    downtime_type: 'host'
-    downtimetype_id: '0'
-    objecttype_id: 256
+    day_of_month?: string
+    from_date: Date|string
+    from_time: Date|string
+    to_date: Date|string
+    to_time: Date|string
+    duration: number
+    downtime_type: string
+    downtimetype_id: number|string
+    objecttype_id: number
     object_id: number[]
     comment: string
-    is_recursive: 0
+    is_recursive: number
+}
+
+export interface SystemdowntimesHostGet {
+    defaultValues:{
+        js_from: string
+        js_to: string
+        from_date: string
+        from_time: string
+        to_date: string
+        to_time: string
+        duration: number
+        comment: string
+        downtimetype_id: string
+        object_id: number[]
+    }
+
 }
