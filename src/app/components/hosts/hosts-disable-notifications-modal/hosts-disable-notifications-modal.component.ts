@@ -31,11 +31,6 @@ import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
-    DowntimesDefaultsService,
-    ValidateInput,
-    ValidationErrors
-} from '../../../services/downtimes-defaults.service';
-import {
     ExternalCommandsService,
     HostDisableNotificationsItem
 } from '../../../services/external-commands.service';
@@ -78,25 +73,16 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     @Output() completed = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public currentIndex: number = 0;
-    public errors?: ValidationErrors;
     public error: boolean = false;
     public isSend: boolean = false;
     public state?: any
-    public downtimeModal = {
-        comment: '',
-        from_date: '',
-        from_time: '',
-        to_date: '',
-        to_time: ''
-    };
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly DowntimesDefaultsService: DowntimesDefaultsService = inject(DowntimesDefaultsService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly subscriptions: Subscription = new Subscription();
 
-    private subscriptions: Subscription = new Subscription();
     public type: string ='hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
@@ -104,7 +90,6 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
         this.isSend = false;
         this.hasErrors = false;
         this.currentIndex = 0;
-        this.errors = {};
 
         this.modalService.toggle({
             show: false,
@@ -121,32 +106,10 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
 
 
     ngOnInit() {
-        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.id === 'hostDisableNotificationsModal' && state.show === true) {
-                this.getDefaults();
-            }
-        }));
-        this.downtimeModal.comment = this.TranslocoService.translate('In progress');
     }
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
-    }
-
-    getDefaults() {
-        this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
-            this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
-            this.downtimeModal.from_time = downtimeDefaults.from_time;
-            this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
-            this.downtimeModal.to_time = downtimeDefaults.to_time;
-            this.downtimeModal.comment = this.TranslocoService.translate(downtimeDefaults.comment);
-        }));
-    }
-
-
-    createDateString = function (jsStringData: string) {
-        let splitData = jsStringData.split(',');
-        return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim()
     }
 
     sendCommands() {
@@ -166,9 +129,6 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
                 if (this.currentIndex === this.items.length) {
                     this.hideModal();
                     this.completed.emit(true);
-                    const title: string = this.TranslocoService.translate('Downtimes added');
-                    const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
-                    this.notyService.genericSuccess(msg, title);
                 }
             }));
         });

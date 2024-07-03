@@ -580,6 +580,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
+
     public toggleDowntimeModal() {
         let items: HostDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {

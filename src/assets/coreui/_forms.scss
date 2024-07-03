@@ -8,6 +8,11 @@
     content: " *";
     display: inline;
 }
+.hintmark_before:before {
+     color: #4759FF;
+     content: "* ";
+     display: inline;
+ }
 
 .arrowd-vertical-on-left {
     position: relative;

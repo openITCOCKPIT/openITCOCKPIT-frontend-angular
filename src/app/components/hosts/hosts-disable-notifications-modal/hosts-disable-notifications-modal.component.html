@@ -26,16 +26,18 @@
                                 [(ngModel)]="type"
                                 clearable="false"
                         >
-                            <ng-option [value]="'hostOnly'">{{ t('Individual Hosts') }}</ng-option>
+                            <ng-option [value]="'hostOnly'">{{ t('Individual hosts') }}</ng-option>
                             <ng-option [value]="'hostAndServices'">{{ t('Hosts including services') }}</ng-option>
                         </ng-select>
                     </div>
                 </c-col>
             </c-row>
             <c-row>
-                <c-col>
-                    <span>{{t('Yes, I would like to temporarily disable notifications.')}}</span>
-                    <span>{{t('This option is only temporary. It does not affect your configuration. This is an external command and only saved in the memory of your monitoring engine.')}}</span>
+                <c-col class="text-center">
+                    <span class="hintmark">{{t('Yes, I would like to temporarily disable notifications.')}}</span>
+                    <br />
+                    <br />
+                    <span class="hintmark_before">{{t('This option is only temporary. It does not affect your configuration. This is an external command and only saved in the memory of your monitoring engine.')}}</span>
                 </c-col>
             </c-row>
             <c-row>
