@@ -1,36 +1,62 @@
-import {Component, inject, EventEmitter, Output, ViewChild, OnInit, OnDestroy, Input} from '@angular/core';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+/*
+ * Copyright (C) <2015>  <it-novum GmbH>
+ *
+ * This file is dual licensed
+ *
+ * 1.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, version 3 of the License.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 2.
+ *     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+ *     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+ *     License agreement and license key will be shipped with the order
+ *     confirmation.
+ */
+
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
     ButtonCloseDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalService,
     ButtonDirective,
-    ModalFooterComponent,
+    FormControlDirective,
     ModalBodyComponent,
-    RowComponent, FormControlDirective,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent,
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormsModule} from '@angular/forms';
-import {NgClass, NgIf} from '@angular/common';
-import {Subscription} from 'rxjs';
-import {BookmarksService} from '../filter-bookmark/bookmarks.service';
-import {ServiceIndexFilter} from '../../pages/services/services.interface';
-import {BookmarkPost, BookmarksObject, BookmarkResponse} from '../filter-bookmark/bookmarks.interface';
-import {GenericIdResponse, GenericValidationError} from '../../generic-responses';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { BookmarksService } from '../filter-bookmark/bookmarks.service';
+import { ServiceIndexFilter } from '../../pages/services/services.interface';
+import { BookmarkPost, BookmarkResponse, BookmarksObject } from '../filter-bookmark/bookmarks.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 
 type NewBookmark = {
     name: string
     filter: string;
-    favorite:boolean
+    favorite: boolean
 }
 
 @Component({
-  selector: 'oitc-filter-bookmark-save-modal',
-  standalone: true,
+    selector: 'oitc-filter-bookmark-save-modal',
+    standalone: true,
     imports: [
         TranslocoDirective,
         ModalComponent,
@@ -47,16 +73,16 @@ type NewBookmark = {
         FormControlDirective,
         NgClass
     ],
-  templateUrl: './filter-bookmark-save-modal.component.html',
-  styleUrl: './filter-bookmark-save-modal.component.css'
+    templateUrl: './filter-bookmark-save-modal.component.html',
+    styleUrl: './filter-bookmark-save-modal.component.css'
 })
-export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
-    public newBookmark :  NewBookmark = {
+export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
+    public newBookmark: NewBookmark = {
         name: '',
         filter: '',
         favorite: false
     };
-    public error: boolean  = false;
+    public error: boolean = false;
     public errors: GenericValidationError | null = null;
 
     @Input({required: true}) public actionType: string = '';
@@ -69,14 +95,14 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
-   // private _actionType: string = '';
+    // private _actionType: string = '';
     private BookmarksService: BookmarksService = inject(BookmarksService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
 
 
-    public hideModal(){
-       // this.bookmark = null;
+    public hideModal () {
+        // this.bookmark = null;
         this.errors = null
         this.newBookmark = {
             name: '',
@@ -89,7 +115,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
         });
     }
 
-    public saveNewBookmark() {
+    public saveNewBookmark () {
         let post: BookmarkPost = {
             name: this.newBookmark.name,
             favorite: this.newBookmark.favorite,
@@ -123,41 +149,41 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy{
     }
 
 
-    public updateBookmark() {
-          if (this.bookmark !== null) {
-              this.bookmark.name = this.newBookmark.name
-              this.bookmark.favorite = this.newBookmark.favorite
-              const id = this.bookmark.id.toString();
+    public updateBookmark () {
+        if (this.bookmark !== null) {
+            this.bookmark.name = this.newBookmark.name
+            this.bookmark.favorite = this.newBookmark.favorite
+            const id = this.bookmark.id.toString();
 
-              this.subscriptions.add(this.BookmarksService.update(this.bookmark, this.bookmark.id)
-                  .subscribe((result) => {
-                      if (result.success) {
-                          const title = this.TranslocoService.translate('Bookmark');
-                          const msg = this.TranslocoService.translate('updated successfully');
+            this.subscriptions.add(this.BookmarksService.update(this.bookmark, this.bookmark.id)
+                .subscribe((result) => {
+                    if (result.success) {
+                        const title = this.TranslocoService.translate('Bookmark');
+                        const msg = this.TranslocoService.translate('updated successfully');
 
-                          this.notyService.genericSuccess(msg, title);
-                          this.saved.emit(id);
-                          this.hideModal();
-                          return;
+                        this.notyService.genericSuccess(msg, title);
+                        this.saved.emit(id);
+                        this.hideModal();
+                        return;
 
-                  } else {
-                  this.notyService.genericError();
-              }
-          })
-    );
+                    } else {
+                        this.notyService.genericError();
+                    }
+                })
+            );
 
-          }
+        }
 
     }
 
     ngOnInit () {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if(state.id === 'filterBookmarkSaveModal' && state.show === true) {
+            if (state.id === 'filterBookmarkSaveModal' && state.show === true) {
 
-               if(this.actionType === 'edit' && this.bookmark !== null) {
-                   this.newBookmark.name = this.bookmark.name;
-                   this.newBookmark.favorite = this.bookmark.favorite
-               }
+                if (this.actionType === 'edit' && this.bookmark !== null) {
+                    this.newBookmark.name = this.bookmark.name;
+                    this.newBookmark.favorite = this.bookmark.favorite
+                }
             }
         }));
 
