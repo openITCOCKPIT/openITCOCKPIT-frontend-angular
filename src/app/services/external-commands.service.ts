@@ -62,7 +62,7 @@ export interface ServiceNotifcationItem {
 }
 
 type Commands =  ServiceDowntimeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
-    | ServiceNotifcationItem[] | HostRescheduleItem[] | HostDowntimeItem[]
+    | ServiceNotifcationItem[] | HostRescheduleItem[] | HostDowntimeItem[] | HostEnableNotificationsItem[]
 
 @Injectable({
     providedIn: 'root'

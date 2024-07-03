@@ -43,7 +43,7 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
-    ExternalCommandsService, HostDowntimeItem,
+    ExternalCommandsService, HostDisableNotificationsItem, HostDowntimeItem, HostEnableNotificationsItem,
     ServiceDowntimeItem,
     ServiceNotifcationItem,
 } from '../../../services/external-commands.service';
@@ -53,6 +53,12 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 import {
     HostsMaintenanceModalComponent
 } from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
+import {
+    HostsDisableNotificationsModalComponent
+} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import {
+    HostsEnableNotificationsModalComponent
+} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -90,7 +96,9 @@ import {
         ServiceMaintenanceModalComponent,
         ServiceResetChecktimeModalComponent,
         DisableModalComponent,
-        HostsMaintenanceModalComponent
+        HostsMaintenanceModalComponent,
+        HostsDisableNotificationsModalComponent,
+        HostsEnableNotificationsModalComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -211,6 +219,49 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.modalService.toggle({
             show: true,
             id: 'hostMaintenanceModal',
+        });
+    }
+
+
+    public disableNotifications() {
+        this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDisableNotificationsItem => {
+            return {
+                command: 'submitDisableHostNotifications',
+                hostUuid: host.Host.uuid,
+                type: 'hostOnly',
+            };
+        });
+
+        if (this.selectedItems.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostDisableNotificationsModal',
+        });
+    }
+
+    public enableNotifications() {
+        this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostEnableNotificationsItem => {
+            return {
+                command: 'submitEnableHostNotifications',
+                hostUuid: host.Host.uuid,
+                type: 'hostOnly',
+            };
+        });
+
+        if (this.selectedItems.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostEnableNotificationsModal',
         });
     }
 

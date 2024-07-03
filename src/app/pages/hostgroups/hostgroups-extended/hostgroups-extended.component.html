@@ -105,11 +105,11 @@
                     <fa-icon [icon]="['fas', 'user']"></fa-icon>
                     {{ t('Acknowledge host status') }}
                 </oitc-actions-button-element>
-                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                <oitc-actions-button-element [permission]="'hostgroups.copy'" (click)="disableNotifications()">
                     <fa-icon [icon]="['far', 'envelope']"></fa-icon>
                     {{ t('Disable notifications') }}
                 </oitc-actions-button-element>
-                <oitc-actions-button-element [permission]="'hostgroups.copy'">
+                <oitc-actions-button-element [permission]="'hostgroups.copy'" (click)="enableNotifications()">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                     {{ t('Enable notifications') }}
                 </oitc-actions-button-element>
@@ -120,7 +120,8 @@
 
     </ng-container>
 </oitc-coreui>
-<oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)"
-                                    [items]="selectedItems"></oitc-service-reset-checktime-modal>
-<oitc-hosts-maintenance-modal (completed)="onResetChecktime($event)"
-                                [items]="selectedItems"></oitc-hosts-maintenance-modal>
+
+<oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-service-reset-checktime-modal>
+<oitc-hosts-maintenance-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-maintenance-modal>
+<oitc-hosts-enable-notifications-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-enable-notifications-modal>
+<oitc-hosts-disable-notifications-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-hosts-disable-notifications-modal>
