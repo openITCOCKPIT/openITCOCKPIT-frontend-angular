@@ -26,9 +26,9 @@
                                 [(ngModel)]="maintenanceType"
                                 clearable="false"
                         >
-                            <ng-option [value]="1">{{ t('Individual hosts') }}</ng-option>
-                            <ng-option [value]="2">{{ t('Hosts including services') }}</ng-option>
-                            <ng-option [value]="3">{{ t('Hosts and dependent Hosts (triggered)') }}</ng-option>
+                            <ng-option [value]="0">{{ t('Individual hosts') }}</ng-option>
+                            <ng-option [value]="1">{{ t('Hosts including services') }}</ng-option>
+                            <ng-option [value]="2">{{ t('Hosts and dependent Hosts (triggered)') }}</ng-option>
                             <ng-option [value]="3">{{ t('Hosts and dependent Hosts (non-triggered)') }}</ng-option>
                         </ng-select>
                     </div>

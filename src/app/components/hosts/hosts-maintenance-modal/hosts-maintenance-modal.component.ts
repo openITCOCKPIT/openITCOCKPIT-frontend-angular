@@ -135,6 +135,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
                 const start = result.data.js_start;
                 const end = result.data.js_end;
                 this.items.forEach((element: HostDowntimeItem) => {
+                    element.downtimetype = this.maintenanceType;
                     element.start = start;
                     element.end = end;
                     element.comment = this.downtimeModal.comment;
