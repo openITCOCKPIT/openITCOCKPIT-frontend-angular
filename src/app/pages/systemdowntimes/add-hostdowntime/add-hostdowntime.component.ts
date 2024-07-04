@@ -2,8 +2,13 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
     FormDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -24,14 +29,14 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesHostGet, SystemdowntimesHostPost } from '../systemdowntimes.interface';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { HostsService } from '../../hosts/hosts.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgIf } from '@angular/common';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
@@ -67,7 +72,9 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckLabelDirective,
         FormCheckInputDirective,
         FormControlDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        CardFooterComponent,
+        NgIf
     ],
     templateUrl: './add-hostdowntime.component.html',
     styleUrl: './add-hostdowntime.component.css'
@@ -75,22 +82,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public hosts: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
-    public post: SystemdowntimesHostPost = {
-        is_recurring: 0,
-        weekdays: {},
-        day_of_month: '',
-        from_date: '',
-        from_time: '',
-        to_date: '',
-        to_time: '',
-        duration: 15,
-        downtime_type: 'host',
-        downtimetype_id: '0',
-        objecttype_id: ObjectTypesEnum['HOST'],
-        object_id: [],
-        comment: '',
-        is_recursive: 0
-    }
+    public post: SystemdowntimesHostPost = this.getClearForm();
     public get!: SystemdowntimesHostGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -98,22 +90,43 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     private readonly HostsService = inject(HostsService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
+    public createAnother: boolean = false;
 
     public ngOnInit(): void {
         this.subscriptions.add(this.SystemdowntimesService.loadDefaults()
             .subscribe((result) => {
-                let fromDate: Date = this.parseDateTime(result.defaultValues.js_from);
-                let toDate: Date = this.parseDateTime(result.defaultValues.js_to);
+                let fromDate = this.parseDateTime(result.defaultValues.js_from);
+                let toDate = this.parseDateTime(result.defaultValues.js_to);
                 this.post.from_date = fromDate;
-                this.post.from_time = fromDate;
+                this.post.from_time = result.defaultValues.from_time;
                 this.post.to_date = toDate;
-                this.post.to_time = toDate;
+                this.post.to_time = result.defaultValues.to_time;
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
             }));
         this.loadHosts('');
 
+    }
+
+
+    public getClearForm(): SystemdowntimesHostPost {
+        return {
+            is_recurring: 0,
+            weekdays: {},
+            day_of_month: '',
+            from_date: '',
+            from_time: '',
+            to_date: '',
+            to_time: '',
+            duration: 15,
+            downtime_type: 'host',
+            downtimetype_id: '0',
+            objecttype_id: ObjectTypesEnum['HOST'],
+            object_id: [],
+            comment: '',
+            is_recursive: 0
+        };
     }
 
     public ngOnDestroy(): void {
@@ -124,8 +137,6 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
         if (this.post.object_id) {
             selected = this.post.object_id;
         }
-        console.log(this.post);
-
         let params: HostsLoadHostsByStringParams = {
             angular: true,
             'filter[Hosts.name]': searchString,
@@ -140,11 +151,43 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
         );
     }
 
-    private parseDateTime(jsStringData: string): Date {
+    private parseDateTime = function (jsStringData: string) {
         let splitData = jsStringData.split(',');
-        let date: Date = new Date(Number(splitData[0]), Number(splitData[1]) - 1, Number(splitData[2]));
-        date.setHours(Number(splitData[3]), Number(splitData[4]), 0);
-        return date;
+        return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim();
+    }
 
+    public submit() {
+        this.subscriptions.add(this.SystemdowntimesService.createHostdowntime(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Downtime');
+                    const msg = this.TranslocoService.translate('created successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/downtimes/host']);
+                        return;
+                    }
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
     }
 }

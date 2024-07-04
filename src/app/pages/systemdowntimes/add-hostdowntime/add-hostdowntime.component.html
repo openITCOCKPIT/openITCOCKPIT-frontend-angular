@@ -24,7 +24,7 @@
                 </li>
             </ol>
         </nav>
-        <form cForm>
+        <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Create new host downtime') }}</h5>
@@ -56,11 +56,11 @@
                                 [(ngModel)]="post.object_id"
                                 [searchCallback]="loadHosts"
                                 class="flex-1"
-                                oitcFormError [errors]="errors" errorField="hosts">
+                                oitcFormError [errors]="errors" errorField="object_id">
                             </oitc-multi-select>
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
-                                            errorField="hosts"></oitc-form-feedback>
+                                            errorField="object_id"></oitc-form-feedback>
                     </div>
                     <div>
                         <label cLabel for="Hosts">
@@ -71,14 +71,14 @@
                     <div class="mb-3">
                         <c-form-check [inline]="true">
                             <input cFormCheckInput type="radio" value="0" id="downtimetype0"
-                                   [ngModel]="post.downtimetype_id" name="downtimeType"/>
+                                   [(ngModel)]="post.downtimetype_id" name="downtimeType"/>
                             <label cFormCheckLabel for="downtimetype0">
                                 {{ t('Individual host') }}
                             </label>
                         </c-form-check>
                         <c-form-check [inline]="true">
                             <input cFormCheckInput type="radio" value="1" id="downtimetype1"
-                                   [ngModel]="post.downtimetype_id" name="downtimeType"/>
+                                   [(ngModel)]="post.downtimetype_id" name="downtimeType"/>
                             <label cFormCheckLabel for="downtimetype1">
                                 {{ t('Host including services') }}
                             </label>
@@ -115,7 +115,7 @@
                         </c-form-check>
                     </div>
                     <div class="mb-3">
-                        <label cLabel for="From">
+                        <label cLabel for="from_date">
                             {{ t('From') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
@@ -123,8 +123,8 @@
                             <span class="input-group-text">
                                 <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
                             </span>
-                            <input cFormControl id="From" required type="date"
-                                   name="comment" placeholder="{{ t('DD.MM.YYYY') }}"
+                            <input cFormControl id="from_date" required type="date"
+                                   name="from_date" placeholder="{{ t('DD.MM.YYYY') }}"
                                    oitcFormError [errors]="errors" errorField="from"
                                    [(ngModel)]="post.from_date">
                             <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
@@ -137,9 +137,49 @@
                                    [(ngModel)]="post.from_time">
                             <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
                         </div>
-
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="to_date">
+                            {{ t('To') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                            </span>
+                            <input cFormControl id="to_date" required type="date"
+                                   name="to_date" placeholder="{{ t('DD.MM.YYYY') }}"
+                                   oitcFormError [errors]="errors" errorField="to"
+                                   [(ngModel)]="post.to_date">
+                            <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                            <span class="input-group-text">
+                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                            </span>
+                            <input cFormControl id="to_time" required type="time"
+                                   name="to_time" placeholder="{{ t('hh:mm') }}"
+                                   oitcFormError [errors]="errors" errorField="to_time"
+                                   [(ngModel)]="post.to_time">
+                            <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
+                        </div>
                     </div>
                 </c-card-body>
+                <c-card-footer class="text-end">
+
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
+                    </label>
+
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Create host downtime') }}
+                    </button>
+                    <button [fallbackUrl]="['downtimes', 'host']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
             </c-card>
         </form>
     </ng-container>
