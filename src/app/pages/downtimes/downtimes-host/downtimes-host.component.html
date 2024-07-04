@@ -56,6 +56,54 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
+                        <c-dropdown>
+                            <button cButton cDropdownToggle color="success" size="xs">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Create downtime') }}
+                            </button>
+                            <ul cDropdownMenu>
+                                <li>
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
+                                       class="pointer"
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        {{ t('Create host downtime') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        {{ t('Create service downtime') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                        {{ t('Create host group downtime') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                        {{ t('Create container downtime') }}
+                                    </a>
+                                </li>
+                                @if (PermissionsService.hasModule('DistributeModule')) {
+                                <li>
+                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                                        {{ t('Create satellite downtime') }}
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </c-dropdown>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
                         <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
@@ -380,4 +428,5 @@
         </c-card>
     </ng-container>
 </oitc-coreui>
-<oitc-cancel-hostdowntime-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-cancel-hostdowntime-modal>
+<oitc-cancel-hostdowntime-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-cancel-hostdowntime-modal>

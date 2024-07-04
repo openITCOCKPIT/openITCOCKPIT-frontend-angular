@@ -8,7 +8,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent,
+    ContainerComponent, DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -56,6 +56,8 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
 import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.interface';
+import { PermissionsService } from '../../../permissions/permissions.service';
+
 
 
 @Component({
@@ -103,7 +105,11 @@ import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.
         TemplateIdDirective,
         ButtonCloseDirective,
         AlertHeadingDirective,
-        CancelHostdowntimeModalComponent
+        CancelHostdowntimeModalComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        DropdownItemDirective
     ],
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',
@@ -128,6 +134,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public PermissionsService: PermissionsService = inject(PermissionsService);
 
 
     public ngOnInit(): void {
