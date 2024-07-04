@@ -39,6 +39,8 @@ import { SystemdowntimesService } from '../systemdowntimes.service';
 import { JsonPipe, NgIf } from '@angular/common';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
+import _ from 'lodash';
 
 
 @Component({
@@ -74,7 +76,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormControlDirective,
         TrueFalseDirective,
         CardFooterComponent,
-        NgIf
+        NgIf,
+        IntervalInputComponent
     ],
     templateUrl: './add-hostdowntime.component.html',
     styleUrl: './add-hostdowntime.component.css'
@@ -91,8 +94,19 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
     public createAnother: boolean = false;
+    public weekdays = {
+        1: this.TranslocoService.translate('Monday'),
+        2: this.TranslocoService.translate('Tuesday'),
+        3: this.TranslocoService.translate('Wednesday'),
+        4: this.TranslocoService.translate('Thursday'),
+        5: this.TranslocoService.translate('Friday'),
+        6: this.TranslocoService.translate('Saturday'),
+        7: this.TranslocoService.translate('Sunday')
+    };
+    public weekdaysForSelect: any[] = [];
 
     public ngOnInit(): void {
+        this.weekdaysForSelect = this.getWeekdays();
         this.subscriptions.add(this.SystemdowntimesService.loadDefaults()
             .subscribe((result) => {
                 let fromDate = this.parseDateTime(result.defaultValues.js_from);
@@ -109,11 +123,20 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
 
     }
 
+    public getWeekdays() {
+        return _.map(
+            this.weekdays,
+            (value, key) => {
+                return {key: key, value: value}
+            }
+        );
+    }
+
 
     public getClearForm(): SystemdowntimesHostPost {
         return {
             is_recurring: 0,
-            weekdays: {},
+            weekdays: [],
             day_of_month: '',
             from_date: '',
             from_time: '',

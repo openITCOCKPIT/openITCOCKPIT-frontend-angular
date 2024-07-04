@@ -1,7 +1,7 @@
 export interface SystemdowntimesHostPost {
     id?: null | number
     is_recurring: number
-    weekdays: {}
+    weekdays: number[]
     day_of_month?: string
     from_date: Date|string
     from_time: Date|string
