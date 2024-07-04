@@ -3,6 +3,7 @@ import {NgForOf, NgFor, NgIf} from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -30,7 +31,7 @@ import { TranslocoDirective, TranslocoService, TranslocoPipe } from '@jsverse/tr
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HostgroupsService } from '../hostgroups.service';
-import { HostgroupExtended, HostgroupsEditGet } from '../hostgroups.interface';
+import { HostgroupExtended } from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -44,8 +45,6 @@ import {
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
     ExternalCommandsService, HostDisableNotificationsItem, HostDowntimeItem, HostEnableNotificationsItem,
-    ServiceDowntimeItem,
-    ServiceNotifcationItem,
 } from '../../../services/external-commands.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -62,6 +61,11 @@ import {
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { MatSort } from '@angular/material/sort';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
+import { HostObject } from '../../hosts/hosts.interface';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import {
+    ServiceCumulatedStatusIconComponent
+} from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -107,7 +111,9 @@ import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-
         TableDirective,
         NgForOf,
         HoststatusIconComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        ButtonGroupComponent,
+        ServiceCumulatedStatusIconComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -218,6 +224,41 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    // Open the Delete All Modal
+    public toggleDeleteAllModal(host?: HostObject) {
+        let items: DeleteAllItem[] = [];
+
+        if (host) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(host.id),
+                displayName: String(host.hostname)
+            }];
+        } else {
+            // User clicked on delete selected button
+            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
+                return {
+                    id: item.Host.id,
+                    displayName: item.Host.hostname
+                };
+            });
+        }
+
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
 
     public toggleDowntimeModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDowntimeItem => {
