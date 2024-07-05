@@ -43,14 +43,16 @@ import {
     ServiceParams,
     ServicesIndexRoot,
 } from "../services.interface";
-import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import {
+    ServicestatusIconComponent
+} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import {
     ServiceMaintenanceModalComponent
 } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
-import {HoststatusIconComponent} from '../../hosts/hoststatus-icon/hoststatus-icon.component';
+import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 
 import {
     CardBodyComponent,
@@ -94,7 +96,9 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
-import { AcknowledgementIconComponent } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import {
+    AcknowledgementIconComponent
+} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
@@ -125,7 +129,9 @@ import { FilterBookmarkComponent } from '../../../components/filter-bookmark/fil
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
@@ -322,12 +328,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public selectedItems: any[] = [];
     public userFullname: string = '';
 
-    constructor (private _liveAnnouncer: LiveAnnouncer) {
+    constructor(private _liveAnnouncer: LiveAnnouncer) {
 
     }
 
 
-    ngOnInit () {
+    ngOnInit() {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
@@ -335,11 +341,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.load();
     }
 
-    public ngOnDestroy () {
+    public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    load () {
+    load() {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
             .subscribe((services) => {
@@ -354,12 +360,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         );
     }
 
-    public setTab (tab: number) {
+    public setTab(tab: number) {
         //will be replaced by routers later
         this.tab = tab;
     }
 
-    public onSortChange (sort: Sort) {
+    public onSortChange(sort: Sort) {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
@@ -367,28 +373,47 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onPaginatorChange (change: PaginatorChangeEvent): void {
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
         this.load();
     }
 
-    public refresh () {
+    public refresh() {
         this.load();
     }
 
-    public showFilterToggle () {
+    public showFilterToggle() {
         this.showFilter = !this.showFilter;
         if (!this.showFilter) {
             this.showColumnConfig = false;
         }
     }
 
-    public togglecolumnConfiguration () {
+    public problemsOnly() {
+        this.resetFilter();
+
+        this.filter.Servicestatus.current_state = {
+            ok: false,
+            warning: true,
+            critical: true,
+            unknown: true
+        };
+
+        this.filter.Servicestatus.acknowledged = false;
+        this.filter.Servicestatus.not_acknowledged = true;
+
+        this.filter.Servicestatus.in_downtime = false;
+        this.filter.Servicestatus.not_in_downtime = true;
+
+    }
+
+
+    public togglecolumnConfiguration() {
         this.showColumnConfig = !this.showColumnConfig;
     }
 
-    public toggleColumnsConfigExport () {
+    public toggleColumnsConfigExport() {
         const exportConfigObject = {
             key: this.columnsTableKey,
             value: this.fields
@@ -400,14 +425,14 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleColumnsConfigImport () {
+    public toggleColumnsConfigImport() {
         this.modalService.toggle({
             show: true,
             id: 'columnsConfigImportModal',
         });
     }
 
-    public linkFor (type: string) {
+    public linkFor(type: string) {
         let baseUrl: string = '/services/listToPdf.pdf?';
         if (type === 'csv') {
             baseUrl = '/services/listToCsv?';
@@ -446,7 +471,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     }
 
-    public resetChecktime () {
+    public resetChecktime() {
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceResetItem => {
             return {
                 command: 'rescheduleService',
@@ -472,7 +497,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public disableNotifications () {
+    public disableNotifications() {
         // let commands = [];
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
@@ -503,7 +528,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public enableNotifications () {
+    public enableNotifications() {
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
                 command: 'submitEnableServiceNotifications',
@@ -534,7 +559,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public toggleDowntimeModal () {
+    public toggleDowntimeModal() {
         let items: ServiceDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): ServiceDowntimeItem => {
             return {
@@ -560,7 +585,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleDisableModal (service?: ServiceObject) {
+    public toggleDisableModal(service?: ServiceObject) {
         let items: DisableItem[] = [];
 
         if (service) {
@@ -590,7 +615,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    public acknowledgeStatus () {
+    public acknowledgeStatus() {
         let items: ServiceAcknowledgeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
             return {
@@ -615,7 +640,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    toggleDeleteAllModal (service?: ServiceObject) {
+    toggleDeleteAllModal(service?: ServiceObject) {
         let items: DeleteAllItem[] = [];
 
         if (service) {
@@ -645,20 +670,20 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    navigateCopy () {
+    navigateCopy() {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
         }
     }
 
-    public onMassActionComplete (success: boolean) {
+    public onMassActionComplete(success: boolean) {
         if (success) {
             this.load();
         }
     }
 
-    onSelectedBookmark (filterstring: string) {
+    onSelectedBookmark(filterstring: string) {
         if (filterstring === '') {
             this.resetFilter();
         }
@@ -696,7 +721,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    getFilter (filter: ServiceIndexFilter) {
+    getFilter(filter: ServiceIndexFilter) {
         this.params.page = 1;
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
         this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
@@ -744,13 +769,13 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     }
 
-    private getUserTimezone () {
+    private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
         }));
     }
 
-    private getUsername () {
+    private getUsername() {
         this.subscriptions.add(this.ProfileService.getProfile()
             .subscribe((profile) => {
                 let firstname = profile.user.firstname ?? ''
@@ -760,28 +785,28 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         );
     }
 
-    loadColumns () {
+    loadColumns() {
         if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
             this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
         }
     }
 
-    getDefaultColumns () {
+    getDefaultColumns() {
         this.fields = [true, true, true, true, true, true, true, true, false, false, true, true, true, true];
         this.LocalStorageService.removeItem(this.columnsTableKey)
     };
 
-    saveColumnsConfig () {
+    saveColumnsConfig() {
         this.LocalStorageService.removeItem(this.columnsTableKey);
         this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
     }
 
-    setColumnConfig (fieldsConfig: boolean[]) {
+    setColumnConfig(fieldsConfig: boolean[]) {
         this.fields = fieldsConfig;
     }
 
     //filter
-    public resetFilter () {
+    public resetFilter() {
         this.filter = {
             Servicestatus: {
                 current_state: {
@@ -826,7 +851,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.getFilter(this.filter);
     }
 
-    public onFilterChange (event: Event | null) {
+    public onFilterChange(event: Event | null) {
         this.getFilter(this.filter);
     }
 
