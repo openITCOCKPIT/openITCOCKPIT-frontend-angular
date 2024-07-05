@@ -23,14 +23,16 @@
  *     confirmation.
  */
 
-import {inject, Injectable} from '@angular/core';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {catchError, map, Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {PROXY_PATH} from '../../tokens/proxy-path.token';
-import {SelectKeyValue} from '../../layouts/primeng/select.interface';
+import { inject, Injectable } from '@angular/core';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { PROXY_PATH } from '../../tokens/proxy-path.token';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceCommandArgument,
+    ServiceCopyGet,
+    ServiceCopyPost,
     ServiceEditApiResult,
     ServiceElements,
     ServiceLoadServicetemplateApiResult,
@@ -38,11 +40,11 @@ import {
     ServicePost,
     ServicesIndexRoot
 } from './services.interface';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
-import {ServiceTypesEnum} from './services.enum';
-import {TranslocoService} from '@jsverse/transloco';
-import {PermissionsService} from '../../permissions/permissions.service';
-import {DisableItem} from '../../layouts/coreui/disable-modal/disable.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { ServiceTypesEnum } from './services.enum';
+import { TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../permissions/permissions.service';
+import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -55,11 +57,11 @@ export class ServicesService {
     private TranslocoService = inject(TranslocoService);
     private PermissionsService = inject(PermissionsService);
 
-    constructor () {
+    constructor() {
     }
 
     // Generic function for the Delete All Modal
-    public delete (item: DeleteAllItem): Observable<Object> {
+    public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/services/delete/${item.id}.json?angular=true`, {});
     }
@@ -69,7 +71,7 @@ export class ServicesService {
      *    Add action    *
      **********************/
 
-    public loadCommands (): Observable<{ commands: SelectKeyValue[], eventhandlerCommands: SelectKeyValue[] }> {
+    public loadCommands(): Observable<{ commands: SelectKeyValue[], eventhandlerCommands: SelectKeyValue[] }> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             commands: SelectKeyValue[],
@@ -85,7 +87,7 @@ export class ServicesService {
         )
     }
 
-    public loadElements (hostId: number, serviceId?: number): Observable<ServiceElements> {
+    public loadElements(hostId: number, serviceId?: number): Observable<ServiceElements> {
         const proxyPath = this.proxyPath;
         let url = `${proxyPath}/services/loadElementsByHostId/${hostId}.json`;
         if (serviceId) {
@@ -103,7 +105,7 @@ export class ServicesService {
         )
     }
 
-    public loadCommandArguments (commandId: number, serviceId?: number): Observable<ServiceCommandArgument[]> {
+    public loadCommandArguments(commandId: number, serviceId?: number): Observable<ServiceCommandArgument[]> {
         const proxyPath = this.proxyPath;
         // Add action
         let url = `${proxyPath}/services/loadCommandArguments/${commandId}.json`;
@@ -125,7 +127,7 @@ export class ServicesService {
         );
     }
 
-    public loadEventHandlerCommandArguments (commandId: number, serviceId?: number): Observable<ServiceCommandArgument[]> {
+    public loadEventHandlerCommandArguments(commandId: number, serviceId?: number): Observable<ServiceCommandArgument[]> {
         const proxyPath = this.proxyPath;
         // Add action
         let url = `${proxyPath}/services/loadEventhandlerCommandArguments/${commandId}.json`;
@@ -147,7 +149,7 @@ export class ServicesService {
         );
     }
 
-    public add (service: ServicePost): Observable<GenericResponseWrapper> {
+    public add(service: ServicePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/services/add.json?angular=true`, {
             Service: service
@@ -170,7 +172,7 @@ export class ServicesService {
             );
     }
 
-    public loadServicetemplate (servicetemplateId: number, hostId: number): Observable<ServiceLoadServicetemplateApiResult> {
+    public loadServicetemplate(servicetemplateId: number, hostId: number): Observable<ServiceLoadServicetemplateApiResult> {
         const proxyPath = this.proxyPath;
 
 
@@ -189,7 +191,7 @@ export class ServicesService {
      *    Edit action    *
      **********************/
 
-    public getEdit (id: number): Observable<ServiceEditApiResult> {
+    public getEdit(id: number): Observable<ServiceEditApiResult> {
         const proxyPath = this.proxyPath;
         return this.http.get<ServiceEditApiResult>(`${proxyPath}/services/edit/${id}.json`, {
             params: {
@@ -202,7 +204,7 @@ export class ServicesService {
         );
     }
 
-    public edit (service: ServicePost): Observable<GenericResponseWrapper> {
+    public edit(service: ServicePost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/services/edit/${service.id}.json?angular=true`, {
             Service: service
@@ -229,7 +231,7 @@ export class ServicesService {
      *    Service Index   *
      **********************/
 
-    public getServicesIndex (params: ServiceParams): Observable<ServicesIndexRoot> {
+    public getServicesIndex(params: ServiceParams): Observable<ServicesIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<ServicesIndexRoot>(`${proxyPath}/services/index.json`, {
             params: params as {}
@@ -240,7 +242,7 @@ export class ServicesService {
         )
     }
 
-    public disable (item: DisableItem): Observable<Object> {
+    public disable(item: DisableItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/services/deactivate/${item.id}.json?angular=true`, {});
     }
@@ -249,7 +251,7 @@ export class ServicesService {
      *    Service Types   *
      **********************/
 
-    public getServiceTypes (): { id: number, name: string }[] {
+    public getServiceTypes(): { id: number, name: string }[] {
         let types = [
             {
                 id: ServiceTypesEnum.GENERIC_SERVICE,
@@ -300,4 +302,30 @@ export class ServicesService {
         return types;
     }
 
+    /**********************
+     *    Copy action    *
+     **********************/
+
+    public getServicesCopy(ids: number[], hostId: number): Observable<ServiceCopyGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServiceCopyGet>(`${proxyPath}/services/copy/${ids.join('/')}.json`, {
+            params: {
+                angular: true,
+                hostId: hostId
+            }
+        })
+            .pipe(
+                map(data => {
+                    return data
+                })
+            )
+    }
+
+    public saveServicesCopy(services: ServiceCopyPost[], hostId: number): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/services/copy/.json?angular=true`, {
+            data: services,
+            hostId: hostId
+        });
+    }
 }

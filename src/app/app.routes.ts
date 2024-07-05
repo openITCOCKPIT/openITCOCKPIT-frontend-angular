@@ -125,6 +125,9 @@ const coreRoutes: Routes = [{
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
+    path: 'services/copy/:ids',
+    loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
+}, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {
