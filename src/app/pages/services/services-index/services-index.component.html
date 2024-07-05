@@ -26,7 +26,7 @@
                         {{ t('overview') }}
                     </small>
                 </h5>
-                <c-nav variant="underline" class="card-toolbar card-header-pills">
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                     <c-nav-item>
                         <a href="javascript:void(0);" (click)="setTab(0)" class="nav-link"
                            [ngClass]="{'active' : tab === 0}">
@@ -41,7 +41,7 @@
                             {{ t('Not monitored') }}
                         </a>
                     </c-nav-item>
-                    <c-nav-item class="me-3">
+                    <c-nav-item>
                         <a href="javascript:void(0);" (click)="setTab(2)" class="nav-link"
                            [ngClass]="{'active' : tab === 2}">
                             <fa-icon [icon]="['fas', 'plug']"></fa-icon>
