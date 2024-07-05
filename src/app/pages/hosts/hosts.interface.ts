@@ -442,3 +442,50 @@ export interface HostsLoadHostsByStringParams {
     'selected[]': number[],
     'includeDisabled': boolean
 }
+
+/**********************
+ *   Disabled action  *
+ **********************/
+export interface HostsDisabledParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[Hosts.name_regex]': boolean,
+    'filter[Hosts.description]': string,
+    'filter[Hosts.address]': string,
+    'filter[Hosts.address_regex]': boolean,
+    'filter[Hosts.satellite_id][]': number[]
+}
+
+export function getDefaultHostsDisabledParams(): HostsDisabledParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[Hosts.name_regex]': false,
+        'filter[Hosts.description]': '',
+        'filter[Hosts.address]': '',
+        'filter[Hosts.address_regex]': false,
+        'filter[Hosts.satellite_id][]': []
+    }
+}
+
+export interface HostsDisabledRoot extends PaginateOrScroll {
+    all_hosts: {
+        Host: HostObject
+        Hosttemplate: {
+            id: number;
+            name: string;
+        }
+        Hoststatus: {
+            isInMonitoring: false,
+            currentState: number
+        }
+    }[]
+}

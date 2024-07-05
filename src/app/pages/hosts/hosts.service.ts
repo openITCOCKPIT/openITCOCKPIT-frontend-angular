@@ -15,6 +15,8 @@ import {
     HostEditApiResult,
     HostElements,
     HostPost,
+    HostsDisabledParams,
+    HostsDisabledRoot,
     HostSharing,
     HostsIndexFilter,
     HostsIndexParams,
@@ -24,6 +26,7 @@ import {
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
+import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
 
 
 @Injectable({
@@ -404,6 +407,28 @@ export class HostsService {
                 return data.hosts;
             })
         );
+    }
+
+    /**********************
+     *    Hosts Disabled  *
+     **********************/
+
+    public getHostsDisabled(params: HostsDisabledParams): Observable<HostsDisabledRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostsDisabledRoot>(`${proxyPath}/hosts/disabled.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public enable(item: EnableItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/hosts/enable/${item.id}.json?`, {
+            empty: true // ??
+        });
     }
 
 }

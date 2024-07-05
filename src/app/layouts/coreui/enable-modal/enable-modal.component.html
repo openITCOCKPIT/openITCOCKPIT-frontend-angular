@@ -27,10 +27,10 @@
     <c-modal
         #modal='cModal'
         [keyboard]="true"
-        id="disableModal"
+        id="enableModal"
         size="lg"
     >
-        <c-modal-header class="text-bg-warning">
+        <c-modal-header class="text-bg-primary">
             <h5 cModalTitle>
                 {{ t('Attention!') }}
             </h5>
@@ -38,11 +38,11 @@
         </c-modal-header>
         <c-modal-body>
             <c-row>
-                <c-col *ngIf="!disableMessage" xs="12">
-                    <strong>{{ t('Do you really want deactivate the selected objects?') }}</strong>
+                <c-col *ngIf="!enableMessage" xs="12">
+                    <strong>{{ t('Do you really want activate the selected objects? ') }}</strong>
                 </c-col>
-                <c-col *ngIf="disableMessage" xs="12">
-                    <strong>{{ disableMessage }}</strong>
+                <c-col *ngIf="enableMessage" xs="12">
+                    <strong>{{ enableMessage }}</strong>
                 </c-col>
                 <c-col *ngIf="helpMessage" class="help-block" xs="12">
                     {{ helpMessage }}
@@ -54,33 +54,26 @@
                     <ul class="mb-0">
                         <li>
                             {{ item.displayName }}
-                            <div *ngIf="hasErrors && currentItemHasErrors(item)">
-                                <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                    {{ error.message }}
-
-                                </div>
-                            </div>
                         </li>
                     </ul>
                 </c-col>
             </c-row>
 
-            <c-row [hidden]="!isDisable" class="pt-4 pb-2">
+            <c-row [hidden]="!isEnable" class="pt-4 pb-2">
                 <c-col sm="12">
-                    <h4>{{ t('Deleting...') }}</h4>
+                    <h4>{{ t('Enabling...') }}</h4>
                 </c-col>
                 <c-col sm="12">
-                    <c-progress [animated]="true" [value]="percentage" color="warning" variant="striped"/>
+                    <c-progress [animated]="true" [value]="percentage" color="primary" variant="striped"/>
                 </c-col>
             </c-row>
 
 
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="disable()" [disabled]="isDisable" cButton class="ripple" color="warning">
-                <fa-icon [hidden]="!isDisable" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                {{ t('Disable') }}
+            <button (click)="enable()" [disabled]="isEnable" cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isEnable" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Enable') }}
             </button>
             <button (click)="hideModal()" cButton class="ripple" color="light">
                 {{ t('Cancel') }}
