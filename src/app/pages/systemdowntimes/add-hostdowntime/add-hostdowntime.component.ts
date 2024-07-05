@@ -1,0 +1,216 @@
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent
+} from '@coreui/angular';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { Router, RouterLink } from '@angular/router';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { SystemdowntimesHostGet, SystemdowntimesHostPost } from '../systemdowntimes.interface';
+import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { Subscription } from 'rxjs';
+import { HostsService } from '../../hosts/hosts.service';
+import { SystemdowntimesService } from '../systemdowntimes.service';
+import { JsonPipe, NgIf } from '@angular/common';
+import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
+import _ from 'lodash';
+
+
+@Component({
+    selector: 'oitc-add-hostdowntime',
+    standalone: true,
+    imports: [
+        CardComponent,
+        CoreuiComponent,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        UserMacrosModalComponent,
+        XsButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        JsonPipe,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        FormCheckInputDirective,
+        FormControlDirective,
+        TrueFalseDirective,
+        CardFooterComponent,
+        NgIf,
+        IntervalInputComponent
+    ],
+    templateUrl: './add-hostdowntime.component.html',
+    styleUrl: './add-hostdowntime.component.css'
+})
+export class AddHostdowntimeComponent implements OnInit, OnDestroy {
+    public hosts: SelectKeyValueWithDisabled[] = [];
+    public errors: GenericValidationError | null = null;
+    public post: SystemdowntimesHostPost = this.getClearForm();
+    public get!: SystemdowntimesHostGet;
+    public TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
+    private router: Router = inject(Router);
+    private readonly HostsService = inject(HostsService);
+    private readonly SystemdowntimesService = inject(SystemdowntimesService);
+    private subscriptions: Subscription = new Subscription();
+    public createAnother: boolean = false;
+    public weekdays = {
+        1: this.TranslocoService.translate('Monday'),
+        2: this.TranslocoService.translate('Tuesday'),
+        3: this.TranslocoService.translate('Wednesday'),
+        4: this.TranslocoService.translate('Thursday'),
+        5: this.TranslocoService.translate('Friday'),
+        6: this.TranslocoService.translate('Saturday'),
+        7: this.TranslocoService.translate('Sunday')
+    };
+    public weekdaysForSelect: any[] = [];
+
+    public ngOnInit(): void {
+        this.weekdaysForSelect = this.getWeekdays();
+        this.subscriptions.add(this.SystemdowntimesService.loadDefaults()
+            .subscribe((result) => {
+                let fromDate = this.parseDateTime(result.defaultValues.js_from);
+                let toDate = this.parseDateTime(result.defaultValues.js_to);
+                this.post.from_date = fromDate;
+                this.post.from_time = result.defaultValues.from_time;
+                this.post.to_date = toDate;
+                this.post.to_time = result.defaultValues.to_time;
+                this.post.comment = result.defaultValues.comment;
+                this.post.duration = result.defaultValues.duration;
+                this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+            }));
+        this.loadHosts('');
+
+    }
+
+    public getWeekdays() {
+        return _.map(
+            this.weekdays,
+            (value, key) => {
+                return {key: key, value: value}
+            }
+        );
+    }
+
+
+    public getClearForm(): SystemdowntimesHostPost {
+        return {
+            is_recurring: 0,
+            weekdays: [],
+            day_of_month: '',
+            from_date: '',
+            from_time: '',
+            to_date: '',
+            to_time: '',
+            duration: 15,
+            downtime_type: 'host',
+            downtimetype_id: '0',
+            objecttype_id: ObjectTypesEnum['HOST'],
+            object_id: [],
+            comment: '',
+            is_recursive: 0
+        };
+    }
+
+    public ngOnDestroy(): void {
+    }
+
+    public loadHosts = (searchString: string) => {
+        let selected: number[] = [];
+        if (this.post.object_id) {
+            selected = this.post.object_id;
+        }
+        let params: HostsLoadHostsByStringParams = {
+            angular: true,
+            'filter[Hosts.name]': searchString,
+            'selected[]': selected,
+            includeDisabled: false
+        }
+
+        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
+            .subscribe((result) => {
+                this.hosts = result;
+            })
+        );
+    }
+
+    private parseDateTime = function (jsStringData: string) {
+        let splitData = jsStringData.split(',');
+        return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim();
+    }
+
+    public submit() {
+        this.subscriptions.add(this.SystemdowntimesService.createHostdowntime(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+
+                    const title = this.TranslocoService.translate('Downtime');
+                    const msg = this.TranslocoService.translate('created successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
+                    if (!this.createAnother) {
+                        this.router.navigate(['/downtimes/host']);
+                        return;
+                    }
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
+    }
+}
