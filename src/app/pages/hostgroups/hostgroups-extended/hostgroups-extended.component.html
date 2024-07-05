@@ -125,48 +125,57 @@
 
                 <thead>
                 <tr>
-                    <td>
-                        <span class="input-group-text">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                        </span>
+                    <td colspan="8">
 
-                        <input cFormControl
-                               id="filter.Host.name"
-                               type="text"
-                               name="filter.Host.name"
-                               [(ngModel)]="filter.Host.name"/>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            </span>
+                            <input
+                                   [(ngModel)]="filter.Host.name"
+                                   aria-label="host group name"
+                                   cFormControl
+                                   name="filter.Host.name"
+                                   id="filter.Host.name"
+                                   oitcDebounce
+                                   type="text"
+                            />
+                        </c-input-group>
                     </td>
-                    <td colspan="6">
-                        <div class="bg-up">
-                            <label for="statusFilterup">
-                                <input type="checkbox"
-                                       name="statusFilterup"
-                                       oitcDebounce
-                                       [(ngModel)]="filter.Hoststatus.current_state['up']"
-                                       id="statusFilterup">
-                                {{ hostgroupExtended.StatusSummary.up }}
-                            </label>
-                        </div>
-                        <div class="bg-down">
-                            <label for="statusFilterdown">
-                                <input type="checkbox"
-                                       name="statusFilterdown"
-                                       oitcDebounce
-                                       [(ngModel)]="filter.Hoststatus.current_state['down']"
-                                       id="statusFilterdown">
-                                {{ hostgroupExtended.StatusSummary.down }}
-                            </label>
-                        </div>
-                        <div class="bg-unreachable">
-                            <label for="statusFilterunreachable">
-                                <input type="checkbox"
-                                       name="statusFilterunreachable"
-                                       oitcDebounce
-                                       [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
-                                       id="statusFilterunreachable">
-                                {{ hostgroupExtended.StatusSummary.unreachable }}
-                            </label>
-                        </div>
+                    <td colspan="4">
+                        <c-row>
+                            <c-col class="bg-up">
+                                <label for="statusFilterup">
+                                    <input type="checkbox"
+                                           name="statusFilterup"
+                                           oitcDebounce
+                                           [(ngModel)]="filter.Hoststatus.current_state['up']"
+                                           id="statusFilterup">
+                                    {{ hostgroupExtended.StatusSummary.up }}
+                                </label>
+                            </c-col>
+                            <c-col class="bg-down">
+
+                                <label for="statusFilterdown">
+                                    <input type="checkbox"
+                                           name="statusFilterdown"
+                                           oitcDebounce
+                                           [(ngModel)]="filter.Hoststatus.current_state['down']"
+                                           id="statusFilterdown">
+                                    {{ hostgroupExtended.StatusSummary.down }}
+                                </label>
+                            </c-col>
+                            <c-col class="bg-unreachable">
+                                <label for="statusFilterunreachable">
+                                    <input type="checkbox"
+                                           name="statusFilterunreachable"
+                                           oitcDebounce
+                                           [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                           id="statusFilterunreachable">
+                                    {{ hostgroupExtended.StatusSummary.unreachable }}
+                                </label>
+                            </c-col>
+                        </c-row>
                     </td>
                 </tr>
                 <tr>

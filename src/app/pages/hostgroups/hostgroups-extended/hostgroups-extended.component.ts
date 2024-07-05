@@ -8,13 +8,13 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective,
+    CardTitleDirective, ColComponent,
     DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, ModalService,
+    FormLabelDirective, InputGroupComponent, InputGroupTextDirective, ModalService,
     NavComponent,
-    NavItemComponent, TableDirective
+    NavItemComponent, RowComponent, TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -113,7 +113,11 @@ import {
         HoststatusIconComponent,
         TranslocoPipe,
         ButtonGroupComponent,
-        ServiceCumulatedStatusIconComponent
+        ServiceCumulatedStatusIconComponent,
+        RowComponent,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
