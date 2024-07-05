@@ -134,6 +134,7 @@
                                         [(ngModel)]="filter.Host.name"
                                         aria-label="host group name"
                                         cFormControl
+                                        [placeholder]="'Filter by host name' | transloco"
                                         name="filter.Host.name"
                                         id="filter.Host.name"
                                         oitcDebounce
@@ -258,22 +259,25 @@
                             <c-button-group size="sm">
                                 <button cButton
                                         class="bg-ok"
-                                        [routerLink]="['/', 'services', 'index']"
-                                >
+                                        [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
+                                        [routerLink]="['/', 'services', 'index']">
                                     {{ host.ServicestatusSummary.state.unknown }}
                                 </button>
                                 <button cButton
                                         class="bg-warning"
+                                        [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                         [routerLink]="['/', 'services', 'index']">
                                     {{ host.ServicestatusSummary.state.warning }}
                                 </button>
                                 <button cButton
                                         class="bg-critical"
+                                        [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                         [routerLink]="['/', 'services', 'index']">
                                     {{ host.ServicestatusSummary.state.critical }}
                                 </button>
                                 <button cButton
                                         class="bg-unknown"
+                                        [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                         [routerLink]="['/', 'services', 'index']">
                                     {{ host.ServicestatusSummary.state.unknown }}
                                 </button>
