@@ -21,6 +21,8 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!servicetemplate"></oitc-form-loader>
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Service template') }}

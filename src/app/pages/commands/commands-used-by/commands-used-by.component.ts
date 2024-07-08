@@ -22,6 +22,8 @@ import { CommandUsedByCommand, CommandUsedByObjects } from '../commands.interfac
 import { NgForOf, NgIf } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -46,7 +48,9 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         TableDirective,
         NgForOf,
         NotUsedByObjectComponent,
-        NavItemComponent
+        NavItemComponent,
+        TableLoaderComponent,
+        FormLoaderComponent
     ],
     templateUrl: './commands-used-by.component.html',
     styleUrl: './commands-used-by.component.css'
