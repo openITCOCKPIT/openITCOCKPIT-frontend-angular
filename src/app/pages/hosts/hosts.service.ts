@@ -21,12 +21,14 @@ import {
     HostsIndexFilter,
     HostsIndexParams,
     HostsIndexRoot,
-    HostsLoadHostsByStringParams
+    HostsLoadHostsByStringParams,
+    HostsNotMonitoredParams
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
+import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
 
 
 @Injectable({
@@ -94,6 +96,11 @@ export class HostsService {
                 return data.satellites
             })
         );
+    }
+
+    public disable(item: DisableItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/hosts/deactivate/${item.id}.json?angular=true`, {});
     }
 
     /**********************
@@ -429,6 +436,21 @@ export class HostsService {
         return this.http.post(`${proxyPath}/hosts/enable/${item.id}.json?`, {
             empty: true // ??
         });
+    }
+
+    /***************************
+     *    Hosts Not Monitored  *
+     ***************************/
+
+    public getNotMonitored(params: HostsNotMonitoredParams): Observable<HostsDisabledRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostsDisabledRoot>(`${proxyPath}/hosts/notMonitored.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }

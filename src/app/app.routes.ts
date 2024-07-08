@@ -215,6 +215,9 @@ const coreRoutes: Routes = [{
     path: 'hosts/copy/:ids',
     loadComponent: () => import('./pages/hosts/hosts-copy/hosts-copy.component').then(m => m.HostsCopyComponent)
 }, {
+    path: 'hosts/notMonitored',
+    loadComponent: () => import('./pages/hosts/hosts-not-monitored/hosts-not-monitored.component').then(m => m.HostsNotMonitoredComponent)
+}, {
     path: 'hosts/disabled',
     loadComponent: () => import('./pages/hosts/hosts-disabled/hosts-disabled.component').then(m => m.HostsDisabledComponent)
 }, {
