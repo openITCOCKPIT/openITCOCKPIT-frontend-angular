@@ -131,7 +131,7 @@ export class DowntimesServiceComponent implements OnInit, OnDestroy {
     public readonly router = inject(Router);
     public params: ServiceDowntimesParams = getDefaultServiceDowntimesParams();
     public serviceDowntimes?: DowntimeServiceIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
     public showFlashSuccess: boolean = false;
     public autoRefreshCounter: number | null = null;
     private interval: any;

@@ -39,7 +39,7 @@ export interface DowntimeServiceIndexRoot extends PaginateOrScroll {
 export interface ServiceDowntime {
     Host: HostObject
     Service: ServiceObject
-    Downtime: Downtime
+    DowntimeService: Downtime
 }
 
 export interface Downtime {
@@ -110,7 +110,7 @@ export interface ServiceDowntimesParams {
     'filter[DowntimeServices.was_cancelled]'?: boolean | string,
     'filter[DowntimeServices.was_not_cancelled]'?: boolean | string,
     'filter[Hosts.name]': '',
-    'filter[Services.name]': '',
+    'filter[servicename]': '',
     'filter[hideExpired]': boolean,
     'filter[isRunning]': boolean,
     'filter[from]': Date | string,
@@ -121,20 +121,20 @@ export interface ServiceDowntimesParams {
 export function getDefaultServiceDowntimesParams(): ServiceDowntimesParams {
     let now = new Date();
     return {
-    angular: true,
-    scroll: true,
-    sort: 'DowntimeServices.scheduled_start_time',
-    page: 1,
-    direction: 'desc',
-    'filter[DowntimeServices.author_name]': '',
-    'filter[DowntimeServices.comment_data]': '',
-    'filter[DowntimeServices.was_cancelled]': '',
-    'filter[DowntimeServices.was_not_cancelled]': '',
-    'filter[Hosts.name]': '',
-    'filter[Services.name]': '',
-    'filter[hideExpired]': true,
-    'filter[isRunning]': false,
-    'filter[from]': new Date(now.getTime() - (3600 * 24 * 30 * 1000)),
-    'filter[to]': new Date(now.getTime() + (3600 * 24 * 30 * 1000 * 2))
-}
+        angular: true,
+        scroll: true,
+        sort: 'DowntimeServices.scheduled_start_time',
+        page: 1,
+        direction: 'desc',
+        'filter[DowntimeServices.author_name]': '',
+        'filter[DowntimeServices.comment_data]': '',
+        'filter[DowntimeServices.was_cancelled]': '',
+        'filter[DowntimeServices.was_not_cancelled]': '',
+        'filter[Hosts.name]': '',
+        'filter[servicename]': '',
+        'filter[hideExpired]': true,
+        'filter[isRunning]': false,
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 30 * 1000)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 30 * 1000 * 2))
+    }
 }

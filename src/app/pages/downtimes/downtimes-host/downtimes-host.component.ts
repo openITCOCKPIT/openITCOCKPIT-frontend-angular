@@ -127,7 +127,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     public readonly router = inject(Router);
     public params: HostDowntimesParams = getDefaultHostDowntimesParams();
     public hostDowntimes?: DowntimeHostIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
     public showFlashSuccess: boolean = false;
     public autoRefreshCounter: number | null = null;
     private interval: any;
