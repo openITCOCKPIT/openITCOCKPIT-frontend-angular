@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { DowntimeHostIndexRoot, DowntimeObject, HostDowntimesParams } from './downtimes.interface';
+import {
+    DowntimeHostIndexRoot,
+    DowntimeObject, DowntimeServiceIndexRoot,
+    HostDowntimesParams,
+    ServiceDowntimesParams
+} from './downtimes.interface';
 import { CancelAllItem } from './cancel-hostdowntime-modal/cancel-hostdowntime.interface';
 
 @Injectable({
@@ -58,12 +63,47 @@ export class DowntimesService {
     }
 
 
+    public getServiceDowntimes(params: ServiceDowntimesParams): Observable<DowntimeServiceIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        let tempParams = JSON.parse(JSON.stringify(params));
+        let wasCancelled: boolean | string = tempParams['filter[DowntimeServices.was_cancelled]'];
+        let wasNotCancelled: boolean | string = tempParams['filter[DowntimeServices.was_not_cancelled]'];
+
+        delete tempParams['filter[DowntimeServices.was_cancelled]'];
+        delete tempParams['filter[DowntimeServices.was_not_cancelled]'];
+
+        if (wasCancelled && !wasNotCancelled) {
+            tempParams['filter[DowntimeServices.was_cancelled]'] = true;
+        } else if (!wasCancelled && wasNotCancelled) {
+            tempParams['filter[DowntimeServices.was_cancelled]'] = false;
+        }
+
+        return this.http.get<DowntimeServiceIndexRoot>(`${proxyPath}/downtimes/service.json`, {
+            params: tempParams as {} // cast CommandsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+
     // Generic function for the Delete All Modal
     public deleteHostdowntime(item: CancelAllItem, includeServices: boolean): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/downtimes/delete/${item.id}.json?angular=true`, {
             includeServices: includeServices,
             type: 'host'
+        });
+    }
+
+
+    // Generic function for the Delete All Modal
+    public deleteServicedowntime(item: CancelAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/downtimes/delete/${item.id}.json?angular=true`, {
+            type: 'service'
         });
     }
 }
