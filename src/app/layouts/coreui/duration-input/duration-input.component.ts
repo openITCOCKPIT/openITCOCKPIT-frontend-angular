@@ -9,7 +9,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { HumanTimeComponent } from '../interval-input/human-time/human-time.component';
-import { NgForOf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
@@ -27,7 +27,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         RowComponent,
         TranslocoPipe,
         XsButtonDirective,
-        FormsModule
+        FormsModule,
+        NgClass
     ],
     templateUrl: './duration-input.component.html',
     styleUrl: './duration-input.component.css'

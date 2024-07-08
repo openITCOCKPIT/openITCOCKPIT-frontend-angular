@@ -186,12 +186,12 @@
                                 {{ t('Duration') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
-                            <oitc-interval-input
+                            <oitc-duration-input
                                 id="duration"
                                 name="duration"
                                 [selectedInterval]="post.duration"
                                 (selectedIntervalChange)="post.duration = $event"
-                            ></oitc-interval-input>
+                            ></oitc-duration-input>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="duration"></oitc-form-feedback>
                         </div>
