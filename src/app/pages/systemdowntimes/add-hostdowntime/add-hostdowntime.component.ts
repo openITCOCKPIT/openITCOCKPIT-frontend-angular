@@ -39,8 +39,8 @@ import { SystemdowntimesService } from '../systemdowntimes.service';
 import { JsonPipe, NgIf } from '@angular/common';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import _ from 'lodash';
+import { DurationInputComponent } from '../../../layouts/coreui/duration-input/duration-input.component';
 
 
 @Component({
@@ -77,7 +77,7 @@ import _ from 'lodash';
         TrueFalseDirective,
         CardFooterComponent,
         NgIf,
-        IntervalInputComponent
+        DurationInputComponent
     ],
     templateUrl: './add-hostdowntime.component.html',
     styleUrl: './add-hostdowntime.component.css'
