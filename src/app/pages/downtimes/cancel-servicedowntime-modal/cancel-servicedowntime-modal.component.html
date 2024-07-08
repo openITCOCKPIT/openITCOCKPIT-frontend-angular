@@ -1,0 +1,48 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="cancelAllModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-danger">
+            <h5 cModalTitle class="text-white">
+                {{ t('Attention!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col *ngIf="!deleteMessage" xs="12">
+                    <strong>{{ t('Do you really want to cancel the selected service downtimes?') }}</strong>
+                </c-col>
+
+                <c-col *ngIf="deleteMessage" xs="12">
+                    <strong>{{ deleteMessage }}</strong>
+                </c-col>
+                <c-col *ngIf="helpMessage" class="help-block" xs="12">
+                    {{ helpMessage }}
+                </c-col>
+            </c-row>
+
+
+            <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Canceling...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
+                <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Cancel downtime') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

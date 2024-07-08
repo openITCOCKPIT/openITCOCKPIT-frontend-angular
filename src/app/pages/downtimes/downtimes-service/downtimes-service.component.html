@@ -8,15 +8,15 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['downtimes', 'host']"
-                       [routerLink]="['/', 'downtimes', 'host']">
+                    <a *oitcPermission="['downtimes', 'service']"
+                       [routerLink]="['/', 'downtimes', 'service']">
                         <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                         {{ t('Downtimes') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    {{ t('Host') }}
+                    {{ t('Service') }}
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'list']"></fa-icon>
@@ -27,7 +27,7 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host downtimes') }}
+                <h5 cCardTitle>{{ t('Service downtimes') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
@@ -35,14 +35,14 @@
                 <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                     <c-nav-item>
                         <a [routerLink]="['/', 'downtimes', 'host']"
-                           *oitcPermission="['downtimes', 'host']" class="nav-link active">
+                           *oitcPermission="['downtimes', 'host']" class="nav-link">
                             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                             {{ t('Host downtimes') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
                         <a [routerLink]="['/', 'downtimes', 'service']"
-                           *oitcPermission="['downtimes', 'service']" class="nav-link">
+                           *oitcPermission="['downtimes', 'service']" class="nav-link active">
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                             {{ t('Service downtimes') }}
                         </a>
@@ -50,7 +50,7 @@
                 </c-nav>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadHostDowntimes()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadServiceDowntimes()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -63,38 +63,38 @@
                             </button>
                             <ul cDropdownMenu>
                                 <li>
-                                    <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
                                        class="pointer"
-                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        {{ t('Create host downtime') }}
+                                        {{ t('Create service downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
                                        *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                         {{ t('Create service downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
-                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                                        {{ t('Create host group downtime') }}
+                                        {{ t('Create service group downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
-                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'link']"></fa-icon>
                                         {{ t('Create container downtime') }}
                                     </a>
                                 </li>
                                 @if (PermissionsService.hasModule('DistributeModule')) {
                                     <li>
-                                        <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
-                                           *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
+                                           *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                             <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
                                             {{ t('Create satellite downtime') }}
                                         </a>
@@ -162,11 +162,11 @@
                                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[DowntimeHosts.author_name]']"
+                                           [(ngModel)]="params['filter[DowntimeServices.author_name]']"
                                            [placeholder]="'Filter by user' | transloco"
                                            aria-label="name"
                                            cFormControl
-                                           name="DowntimeHosts.author_name"
+                                           name="DowntimeServices.author_name"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -178,11 +178,11 @@
                                         <fa-icon [icon]="['fas', 'comment']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[DowntimeHosts.comment_data]']"
+                                           [(ngModel)]="params['filter[DowntimeServices.comment_data]']"
                                            [placeholder]="'Filter by comment' | transloco"
                                            aria-label="name"
                                            cFormControl
-                                           name="DowntimeHosts.comment_data"
+                                           name="DowntimeServices.comment_data"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -199,6 +199,22 @@
                                            aria-label="name"
                                            cFormControl
                                            name="Hosts.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[servicename]']"
+                                           [placeholder]="'Filter by service name' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="servicename"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -230,32 +246,32 @@
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="filter.DowntimeHosts.was_not_cancelled"
-                                            id="filter.DowntimeHosts.was_not_cancelled"
+                                            name="filter.DowntimeServices.was_not_cancelled"
+                                            id="filter.DowntimeServices.was_not_cancelled"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [trueValue]="true"
                                             [falseValue]="''"
-                                            [(ngModel)]="params['filter[DowntimeHosts.was_not_cancelled]']"/>
+                                            [(ngModel)]="params['filter[DowntimeServices.was_not_cancelled]']"/>
                                         <label cFormCheckLabel
-                                               for="filter.DowntimeHosts.was_not_cancelled">{{ t('Was not cancelled') }}</label>
+                                               for="filter.DowntimeServices.was_not_cancelled">{{ t('Was not cancelled') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
                                             cFormCheckInput
                                             class="checkbox-primary"
-                                            name="filter.DowntimeHosts.was_cancelled"
-                                            id="filter.DowntimeHosts.was_cancelled"
+                                            name="filter.DowntimeServices.was_cancelled"
+                                            id="filter.DowntimeServices.was_cancelled"
                                             type="checkbox"
                                             trueFalseValue
                                             oitcDebounce
                                             [trueValue]="true"
                                             [falseValue]="''"
-                                            [(ngModel)]="params['filter[DowntimeHosts.was_cancelled]']"/>
+                                            [(ngModel)]="params['filter[DowntimeServices.was_cancelled]']"/>
                                         <label cFormCheckLabel
-                                               for="filter.DowntimeHosts.was_cancelled">{{ t('Was cancelled') }}</label>
+                                               for="filter.DowntimeServices.was_cancelled">{{ t('Was cancelled') }}</label>
                                     </c-form-check>
                                     <c-form-check>
                                         <input
@@ -301,25 +317,28 @@
                         <th scope="col" mat-sort-header="Hosts.name">
                             {{ t('Host') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.author_name">
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="DowntimeServices.author_name">
                             {{ t('User') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.comment_data">
+                        <th scope="col" mat-sort-header="DowntimeServices.comment_data">
                             {{ t('Comment') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.entry_time">
+                        <th scope="col" mat-sort-header="DowntimeServices.entry_time">
                             {{ t('Created') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.scheduled_start_time">
+                        <th scope="col" mat-sort-header="DowntimeServices.scheduled_start_time">
                             {{ t('Start') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.scheduled_end_time">
+                        <th scope="col" mat-sort-header="DowntimeServices.scheduled_end_time">
                             {{ t('End') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.duration">
+                        <th scope="col" mat-sort-header="DowntimeServices.duration">
                             {{ t('Duration') }}
                         </th>
-                        <th scope="col" mat-sort-header="DowntimeHosts.was_cancelled">
+                        <th scope="col" mat-sort-header="DowntimeServices.was_cancelled">
                             {{ t('Was cancelled') }}
                         </th>
                         <th>
@@ -327,62 +346,71 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="hostDowntimes">
-                    <tr *ngFor="let hostDowntime of hostDowntimes.all_host_downtimes">
+                    <tbody *ngIf="serviceDowntimes">
+                    <tr *ngFor="let serviceDowntime of serviceDowntimes.all_service_downtimes">
                         <td class="text-center">
-                            <div *ngIf="hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable">
+                            <div
+                                *ngIf="serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable">
                                 <oitc-item-select
                                     *oitcPermission="['downtimes', 'delete']"
                                     [disabled]="false"
-                                    [item]="hostDowntime.DowntimeHost.internalDowntimeId"></oitc-item-select>
+                                    [item]="serviceDowntime.DowntimeService.internalDowntimeId"></oitc-item-select>
                             </div>
-
-
                         </td>
                         <td class="text-center">
                             <oitc-downtime-simple-icon
-                                [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
+                                [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
                         </td>
                         <td>
                             <a *oitcPermission="['hosts', 'browser']"
-                               [routerLink]="['/', 'hosts', 'browser', hostDowntime.Host.id]">
-                                {{ hostDowntime.Host.hostname }}
+                               [routerLink]="['/', 'hosts', 'browser', serviceDowntime.Host.id]">
+                                {{ serviceDowntime.Host.hostname }}
                             </a>
                             <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                {{ hostDowntime.Host.hostname }}
+                                {{ serviceDowntime.Host.hostname }}
                             </span>
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.authorName }}
+                            <a *oitcPermission="['services', 'browser']"
+                               [routerLink]="['/', 'services', 'browser', serviceDowntime.Service.id]">
+                                {{ serviceDowntime.Service.servicename }}
+                            </a>
+                            <span *oitcPermission="['services', 'browser']; negate: true">
+                                {{ serviceDowntime.Service.servicename }}
+                            </span>
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.commentData }}
+                            {{ serviceDowntime.DowntimeService.authorName }}
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.entryTime }}
+                            {{ serviceDowntime.DowntimeService.commentData }}
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                            {{ serviceDowntime.DowntimeService.entryTime }}
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                            {{ serviceDowntime.DowntimeService.scheduledStartTime }}
                         </td>
                         <td>
-                            {{ hostDowntime.DowntimeHost.durationHuman }}
+                            {{ serviceDowntime.DowntimeService.scheduledEndTime }}
+                        </td>
+                        <td>
+                            {{ serviceDowntime.DowntimeService.durationHuman }}
                         </td>
                         <td class="text-center">
                             <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
-                                  *ngIf="hostDowntime.DowntimeHost.wasCancelled">
+                                  *ngIf="serviceDowntime.DowntimeService.wasCancelled">
                                 {{ t('Yes') }}
                             </span>
                             <span class="badge bg-success mx-1" title="{{ t('No') }}"
-                                  *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
+                                  *ngIf="!serviceDowntime.DowntimeService.wasCancelled">
                                 {{ t('No') }}
                             </span>
                         </td>
                         <td>
-                            <div *ngIf="hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable">
-                                <button (click)="toggleCancelDowntimeModal(hostDowntime.DowntimeHost)"
+                            <div
+                                *ngIf="serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable">
+                                <button (click)="toggleCancelDowntimeModal(serviceDowntime.DowntimeService)"
                                         *oitcPermission="['downtimes', 'delete']"
                                         cButton class="ripple" color="danger" size="xs">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -394,13 +422,13 @@
                     </tbody>
                 </table>
                 <oitc-no-records
-                    *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes.length === 0"></oitc-no-records>
-                <ng-container *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes">
+                    *ngIf="serviceDowntimes && serviceDowntimes.all_service_downtimes.length === 0"></oitc-no-records>
+                <ng-container *ngIf="serviceDowntimes && serviceDowntimes.all_service_downtimes">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="hostDowntimes.all_host_downtimes.length"></oitc-select-all>
+                                    [itemsCount]="serviceDowntimes.all_service_downtimes.length"></oitc-select-all>
                             </c-col>
                             <c-col>
                                 <div *oitcPermission="['downtimes', 'delete']"
@@ -420,8 +448,8 @@
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="hostDowntimes"
-                                [paginateOrScroll]="hostDowntimes"></oitc-paginate-or-scroll>
+                                *ngIf="serviceDowntimes"
+                                [paginateOrScroll]="serviceDowntimes"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>
@@ -429,5 +457,5 @@
         </c-card>
     </ng-container>
 </oitc-coreui>
-<oitc-cancel-hostdowntime-modal (completed)="onMassActionComplete($event)"
-                                [items]="selectedItems"></oitc-cancel-hostdowntime-modal>
+<oitc-cancel-servicedowntime-modal (completed)="onMassActionComplete($event)"
+                                   [items]="selectedItems"></oitc-cancel-servicedowntime-modal>
