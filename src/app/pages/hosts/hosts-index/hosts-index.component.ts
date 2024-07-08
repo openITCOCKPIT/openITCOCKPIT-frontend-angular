@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -91,9 +91,7 @@ import {
 import {
     HostDisableNotificationsItem,
     HostDowntimeItem,
-    HostEnableNotificationsItem,
-    HostRescheduleItem,
-    ServiceDowntimeItem
+    HostEnableNotificationsItem
 } from '../../../services/external-commands.service';
 import {
     HostsMaintenanceModalComponent
@@ -105,6 +103,12 @@ import {
 import {
     HostsDisableNotificationsModalComponent
 } from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import {
+    ServiceMaintenanceModalComponent
+} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -173,11 +177,15 @@ import {
         ServiceResetChecktimeModalComponent,
         HostsMaintenanceModalComponent,
         HostsEnableNotificationsModalComponent,
-        HostsDisableNotificationsModalComponent
+        HostsDisableNotificationsModalComponent,
+        DisableModalComponent,
+        ServiceMaintenanceModalComponent,
+        JsonPipe
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [
+        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
@@ -481,8 +489,34 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         return baseUrl + stringParams.toString();
     }
 
-    public toggleDisableModal() {
-        console.log("Todo implement me");
+    public toggleDisableModal(host?: HostObject) {
+        let items: DisableItem[] = [];
+
+        if (host) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(host.id),
+                displayName: String(host.name)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
+                return {
+                    id: item.Host.id,
+                    displayName: item.Host.name
+                };
+            });
+        }
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+
+        this.modalService.toggle({
+            show: true,
+            id: 'disableModal',
+        });
     }
 
     public resetChecktime() {
