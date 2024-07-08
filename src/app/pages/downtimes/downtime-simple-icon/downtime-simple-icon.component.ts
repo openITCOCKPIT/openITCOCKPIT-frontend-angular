@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { DowntimeHost, DowntimeObject, HostDowntime } from '../downtimes.interface';
+import { Downtime, DowntimeObject, HostDowntime } from '../downtimes.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 

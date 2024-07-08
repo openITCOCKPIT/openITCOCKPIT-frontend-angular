@@ -39,16 +39,18 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 import {
     Downtime,
-    DowntimeHostIndexRoot,
-    getDefaultHostDowntimesParams,
-    HostDowntimesParams
+    DowntimeServiceIndexRoot,
+    getDefaultServiceDowntimesParams,
+    ServiceDowntimesParams
 } from '../downtimes.interface';
 import { Subscription } from 'rxjs';
 import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { DowntimesService } from '../downtimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import {
+    ServicestatusSimpleIconComponent
+} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { DowntimeSimpleIconComponent } from '../downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -58,13 +60,15 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
-import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.interface';
+import {
+    CancelServicedowntimeModalComponent
+} from '../cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
+import { CancelAllItem } from '../cancel-servicedowntime-modal/cancel-servicedowntime.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
 
 
 @Component({
-    selector: 'oitc-downtimes-host',
+    selector: 'oitc-downtimes-service',
     standalone: true,
     imports: [
         CardComponent,
@@ -93,7 +97,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         RowComponent,
         TranslocoPipe,
         TrueFalseDirective,
-        HoststatusSimpleIconComponent,
+        ServicestatusSimpleIconComponent,
         MatSort,
         MatSortHeader,
         NgForOf,
@@ -108,25 +112,25 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         TemplateIdDirective,
         ButtonCloseDirective,
         AlertHeadingDirective,
-        CancelHostdowntimeModalComponent,
+        CancelServicedowntimeModalComponent,
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
         DropdownItemDirective
     ],
-    templateUrl: './downtimes-host.component.html',
-    styleUrl: './downtimes-host.component.css',
+    templateUrl: './downtimes-service.component.html',
+    styleUrl: './downtimes-service.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
     ]
 })
-export class DowntimesHostComponent implements OnInit, OnDestroy {
+export class DowntimesServiceComponent implements OnInit, OnDestroy {
     private DowntimesService = inject(DowntimesService)
 
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: HostDowntimesParams = getDefaultHostDowntimesParams();
-    public hostDowntimes?: DowntimeHostIndexRoot;
+    public params: ServiceDowntimesParams = getDefaultServiceDowntimesParams();
+    public serviceDowntimes?: DowntimeServiceIndexRoot;
     public hideFilter: boolean = false;
     public showFlashSuccess: boolean = false;
     public autoRefreshCounter: number | null = null;
@@ -144,22 +148,22 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
-            this.loadHostDowntimes();
+            this.loadServiceDowntimes();
         }));
     }
 
     public ngOnDestroy(): void {
     }
 
-    public loadHostDowntimes() {
+    public loadServiceDowntimes() {
         this.SelectionServiceService.deselectAll();
 
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        this.subscriptions.add(this.DowntimesService.getHostDowntimes(this.params)
+        this.subscriptions.add(this.DowntimesService.getServiceDowntimes(this.params)
             .subscribe((result) => {
-                this.hostDowntimes = result;
+                this.serviceDowntimes = result;
             })
         );
     }
@@ -169,24 +173,24 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultHostDowntimesParams();
+        this.params = getDefaultServiceDowntimesParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.loadHostDowntimes();
+        this.loadServiceDowntimes();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadHostDowntimes();
+        this.loadServiceDowntimes();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadHostDowntimes();
+        this.loadServiceDowntimes();
     }
 
     // Callback when sort has changed
@@ -194,18 +198,18 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadHostDowntimes();
+            this.loadServiceDowntimes();
         }
     }
 
     // Open the Delete All Modal
-    public toggleCancelDowntimeModal(hostDowntime?: Downtime) {
+    public toggleCancelDowntimeModal(serviceDowntime?: Downtime) {
         let items: CancelAllItem[] = [];
-        if (hostDowntime) {
+        if (serviceDowntime) {
             // User just want to delete a single command
 
             items = [{
-                id: hostDowntime.internalDowntimeId
+                id: serviceDowntime.internalDowntimeId
             }];
 
 
@@ -232,7 +236,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     // Generic callback whenever a mass action (like delete all) has been finished
     public onMassActionComplete(success: boolean) {
         if (success) {
-            this.loadHostDowntimes();
+            this.loadServiceDowntimes();
         }
     }
 }
