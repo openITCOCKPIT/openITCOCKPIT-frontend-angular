@@ -208,126 +208,284 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let host of hostgroupExtended.Hosts">
-                        <td>PLUS</td>
-                        <td>
-                            <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
-                        </td>
-                        <td>
-                            <oitc-service-cumulated-status-icon
-                                    [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
-                        </td>
-                        <td>
-                            <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type == 1"
-                                    [icon]="['fas', 'user']"
-                                    [title]="'Acknowledgement' | transloco"
-                            ></fa-icon>
-                            <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type == 2"
-                                    [icon]="['fas', 'user']"
-                                    [title]="'Sticky Acknowledgement' | transloco"
-                            ></fa-icon>
-                        </td>
-                        <td>
-                            <fa-icon
-                                    *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
-                                    [icon]="['fas', 'power-off']"
-                            ></fa-icon>
-                        </td>
-                        <td>
-                            <fa-icon
-                                    *ngIf="!host.Host.active_checks_enabled || host.Host.is_satellite_host"
-                                    [icon]="['fas', 'power-off']"
-                                    [title]="'Passively transferred service' | transloco"
-                            ></fa-icon>
-                        </td>
-                        <td>
-                            <span *oitcPermission="['hosts', 'browser']">
-                                <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                    <ng-container *ngFor="let host of hostgroupExtended.Hosts">
+                        <tr>
+                            <td (click)="toggleHostServicelist(host.Host.id)">
+                                PLUS
+                            </td>
+                            <td>
+                                <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
+                            </td>
+                            <td>
+                                <oitc-service-cumulated-status-icon
+                                        [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
+                            </td>
+                            <td>
+                                <fa-icon
+                                        *ngIf="host.Hoststatus.acknowledgement_type == 1"
+                                        [icon]="['fas', 'user']"
+                                        [title]="'Acknowledgement' | transloco"
+                                ></fa-icon>
+                                <fa-icon
+                                        *ngIf="host.Hoststatus.acknowledgement_type == 2"
+                                        [icon]="['fas', 'user']"
+                                        [title]="'Sticky Acknowledgement' | transloco"
+                                ></fa-icon>
+                            </td>
+                            <td>
+                                <fa-icon
+                                        *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
+                                        [icon]="['fas', 'power-off']"
+                                ></fa-icon>
+                            </td>
+                            <td>
+                                <fa-icon
+                                        *ngIf="!host.Host.active_checks_enabled || host.Host.is_satellite_host"
+                                        [icon]="['fas', 'power-off']"
+                                        [title]="'Passively transferred service' | transloco"
+                                ></fa-icon>
+                            </td>
+                            <td>
+                                <span *oitcPermission="['hosts', 'browser']">
+                                    <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                        {{ host.Host.name }}
+                                    </a>
+                                </span>
+                                <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     {{ host.Host.name }}
-                                </a>
-                            </span>
-                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                {{ host.Host.name }}
-                            </span>
-                        </td>
-                        <td>{{ host.Hoststatus.lastHardStateChange }}</td>
-                        <td>{{ host.Hoststatus.lastCheck }}</td>
-                        <td>{{ host.Hoststatus.nextCheck }}</td>
-                        <td>
-                            <c-button-group size="sm">
-                                <button cButton
-                                        class="bg-ok"
-                                        [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
-                                        [routerLink]="['/', 'services', 'index']">
-                                    {{ host.ServicestatusSummary.state.unknown }}
-                                </button>
-                                <button cButton
-                                        class="bg-warning"
-                                        [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
-                                        [routerLink]="['/', 'services', 'index']">
-                                    {{ host.ServicestatusSummary.state.warning }}
-                                </button>
-                                <button cButton
-                                        class="bg-critical"
-                                        [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
-                                        [routerLink]="['/', 'services', 'index']">
-                                    {{ host.ServicestatusSummary.state.critical }}
-                                </button>
-                                <button cButton
-                                        class="bg-unknown"
-                                        [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
-                                        [routerLink]="['/', 'services', 'index']">
-                                    {{ host.ServicestatusSummary.state.unknown }}
-                                </button>
-                            </c-button-group>
-                        </td>
-                        <td>
+                                </span>
+                            </td>
+                            <td>{{ host.Hoststatus.lastHardStateChange }}</td>
+                            <td>{{ host.Hoststatus.lastCheck }}</td>
+                            <td>{{ host.Hoststatus.nextCheck }}</td>
+                            <td>
+                                <c-button-group size="sm">
+                                    <button cButton
+                                            class="bg-ok"
+                                            [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
+                                            [routerLink]="['/', 'services', 'index']">
+                                        {{ host.ServicestatusSummary.state.unknown }}
+                                    </button>
+                                    <button cButton
+                                            class="bg-warning"
+                                            [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
+                                            [routerLink]="['/', 'services', 'index']">
+                                        {{ host.ServicestatusSummary.state.warning }}
+                                    </button>
+                                    <button cButton
+                                            class="bg-critical"
+                                            [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
+                                            [routerLink]="['/', 'services', 'index']">
+                                        {{ host.ServicestatusSummary.state.critical }}
+                                    </button>
+                                    <button cButton
+                                            class="bg-unknown"
+                                            [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
+                                            [routerLink]="['/', 'services', 'index']">
+                                        {{ host.ServicestatusSummary.state.unknown }}
+                                    </button>
+                                </c-button-group>
+                            </td>
+                            <td>
 
-                            <oitc-actions-button [permission]="'hosts.edit'"
-                                                 [url]="'/hosts/edit/' + host.Host.id"
-                                                 [allowEdit]="host.Host.allow_edit">
-                                <oitc-actions-button-element [permission]="'hosts.edit'"
-                                                             *ngIf="host.Host.allow_edit"
-                                                             [url]="'/hosts/edit/' + host.Host.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
+                                <oitc-actions-button [permission]="'hosts.edit'"
+                                                     [url]="'/hosts/edit/' + host.Host.id"
+                                                     [allowEdit]="host.Host.allow_edit">
+                                    <oitc-actions-button-element [permission]="'hosts.edit'"
+                                                                 *ngIf="host.Host.allow_edit"
+                                                                 [url]="'/hosts/edit/' + host.Host.id">
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                        {{ t('Edit') }}
+                                    </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                                                             *ngIf="host.Host.allow_edit">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('Disable') }}
-                                    <!-- todo implement -->
-                                </oitc-actions-button-element>
+                                    <oitc-actions-button-element [permission]="'hosts.deactivate'"
+                                                                 *ngIf="host.Host.allow_edit">
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        {{ t('Disable') }}
+                                        <!-- todo implement -->
+                                    </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/host/' + host.Host.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
+                                    <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                 [url]="'/changelogs/entity/host/' + host.Host.id">
+                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                        {{ t('Changelog') }}
+                                    </oitc-actions-button-element>
 
 
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element [permission]="'hosts.copy'"
-                                                             [url]="'/hosts/copy/' + host.Host.id">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </oitc-actions-button-element>
+                                    <li cDropdownDivider></li>
+                                    <oitc-actions-button-element [permission]="'hosts.copy'"
+                                                                 [url]="'/hosts/copy/' + host.Host.id">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </oitc-actions-button-element>
 
-                                <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
-                                                             [permission]="'hosts.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
+                                    <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
+                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                                                 [permission]="'hosts.delete'">
+                                        <span class="text-danger">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Delete') }}
+                                        </span>
+                                    </oitc-actions-button-element>
 
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
+                                </oitc-actions-button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="host.services">
+                            <td colspan="12">
+
+                                <table bordered cTable class="mt-2 mb-0" hover striped>
+                                    <thead>
+
+                                    <tr>
+                                        <td colspan="8">
+
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                </span>
+                                                <input
+                                                        [(ngModel)]="filter.Service.name"
+                                                        aria-label="service name"
+                                                        cFormControl
+                                                        [placeholder]="'Filter by service name' | transloco"
+                                                        name="filter.Service.name"
+                                                        id="filter.Service.name"
+                                                        oitcDebounce
+                                                        type="text"
+                                                />
+                                            </c-input-group>
+                                        </td>
+                                        <td colspan="4">
+                                            <c-row>
+                                                <c-col class="bg-up">
+                                                    <label for="statusFilterServiceOk">
+                                                        <input type="checkbox"
+                                                               name="statusFilterServiceOk"
+                                                               oitcDebounce
+                                                               [(ngModel)]="filter.Hoststatus.current_state['up']"
+                                                               id="statusFilterServiceOk">
+                                                        {{ hostgroupExtended.StatusSummary.up }}
+                                                    </label>
+                                                </c-col>
+                                                <c-col class="bg-down">
+
+                                                    <label for="statusFilterServiceWarning">
+                                                        <input type="checkbox"
+                                                               name="statusFilterServiceWarning"
+                                                               oitcDebounce
+                                                               [(ngModel)]="filter.Hoststatus.current_state['down']"
+                                                               id="statusFilterServiceWarning">
+                                                        {{ hostgroupExtended.StatusSummary.down }}
+                                                    </label>
+                                                </c-col>
+                                                <c-col class="bg-unreachable">
+                                                    <label for="statusFilterServiceCritical">
+                                                        <input type="checkbox"
+                                                               name="statusFilterServiceCritical"
+                                                               oitcDebounce
+                                                               [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                                               id="statusFilterServiceCritical">
+                                                        {{ hostgroupExtended.StatusSummary.unreachable }}
+                                                    </label>
+                                                </c-col>
+                                                <c-col class="bg-unknown">
+                                                    <label for="statusFilterServiceUnknown">
+                                                        <input type="checkbox"
+                                                               name="statusFilterServiceUnknown"
+                                                               oitcDebounce
+                                                               [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                                               id="statusFilterServiceUnknown">
+                                                        {{ hostgroupExtended.StatusSummary.unreachable }}
+                                                    </label>
+                                                </c-col>
+                                            </c-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="10">
+                                            {{ t('Status') }}
+                                        </th>
+                                        <th width="10">
+                                            <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
+                                        </th>
+                                        <th width="10">
+                                            <fa-icon [icon]="['fas', 'power-off']" [title]="'is in downtime' | transloco"></fa-icon>
+                                        </th>
+                                        <th width="10">
+                                            <fa-icon [icon]="['fas', 'chart-area']" [title]="'Grapher' | transloco"></fa-icon>
+                                        </th>
+                                        <th width="10">
+                                            <span [title]="'Passively transferred service' | transloco">
+                                                P
+                                            </span>
+                                        </th>
+                                        <th>{{ t('Service name') }}</th>
+                                        <th>{{ t('State since') }}</th>
+                                        <th>{{ t('Last check') }}</th>
+                                        <th>{{ t('Next check') }}</th>
+                                        <th>{{ t('Output') }}</th>
+                                        <th width="10"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let service of host.services">
+                                        <th width="10">
+                                            <oitc-servicestatus-icon [service]="service.Servicestatus"/>
+                                        </th>
+                                        <th width="10">
+                                            <fa-icon
+                                                    *ngIf="service.Servicestatus.acknowledgement_type == 1"
+                                                    [icon]="['fas', 'user']"
+                                                    [title]="'Acknowledgement' | transloco"
+                                            ></fa-icon>
+                                            <fa-icon
+                                                    *ngIf="service.Servicestatus.acknowledgement_type == 2"
+                                                    [icon]="['fas', 'user']"
+                                                    [title]="'Sticky Acknowledgement' | transloco"
+                                            ></fa-icon>
+                                        </th>
+                                        <th width="10">
+
+                                            <fa-icon
+                                                    *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
+                                                    [icon]="['fas', 'power-off']"
+                                            ></fa-icon>
+                                        </th>
+                                        <th width="10">
+
+                                            <oitc-popover-graph [service]="service.Service.uuid" [host]="service.Host.uuid"
+                                                                [timezone]="timezone"></oitc-popover-graph>
+                                        </th>
+                                        <th width="10">
+                                            <span [title]="'Passively transferred service' | transloco">
+                                                P
+                                            </span>
+                                        </th>
+                                        <th>
+                                            {{service.Service.servicename}}
+                                        </th>
+                                        <th>
+                                            {{service.Servicestatus.last_state_change}}
+                                        </th>
+                                        <th>
+                                            {{service.Servicestatus.lastCheck}}
+                                        </th>
+                                        <th>
+                                            {{service.Servicestatus.nextCheck}}
+                                        </th>
+                                        <th>
+                                            {{service.Servicestatus.outputHtml}}
+                                        </th>
+                                        <th width="10">
+                                            DROPDOWN :-D
+                                        </th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-container>
                     </tbody>
                 </table>
             </c-card-body>

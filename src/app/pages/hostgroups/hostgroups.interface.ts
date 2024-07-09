@@ -215,7 +215,8 @@ export interface HostgroupExtended {
             }
             total: number
             cumulatedState: number
-        }
+        },
+        services: ServicesList[] | undefined
     }[]
     StatusSummary: {
         up: number
@@ -230,3 +231,125 @@ export interface LoadHostgroupsByStringRoot {
     _csrfToken: string
 }
 
+// LOAD SERVICES FOR HOSTS
+export interface LoadServicesForHosts extends PaginateOrScroll {
+    all_services: ServicesList[]
+    username: string
+    satellites: SelectKeyValue[]
+    _csrfToken: string
+
+}
+
+export interface ServicesList {
+    Service: {
+        id: number
+        uuid: string
+        servicename: string
+        hostname: string
+        description: any
+        active_checks_enabled: boolean
+        tags: any
+        host_id: number
+        allow_edit: boolean
+        disabled: boolean
+        serviceType: number
+        priority: number
+        has_graph: boolean
+    }
+    Host: {
+        id: number
+        uuid: string
+        hostname: string
+        address: string
+        description: any
+        hosttemplate_id: any
+        active_checks_enabled: any
+        satelliteId: number
+        containerId: any
+        containerIds: any
+        tags: any
+        usageFlag: any
+        allow_edit: boolean
+        disabled: boolean
+        priority: any
+        notes: any
+        is_satellite_host: boolean
+        name: string
+        satelliteName: string
+    }
+
+    Hoststatus: {
+        currentState: number
+        isFlapping: boolean
+        problemHasBeenAcknowledged: boolean
+        scheduledDowntimeDepth: any
+        lastCheck: string
+        nextCheck: string
+        activeChecksEnabled: any
+        lastHardState: any
+        lastHardStateChange: string
+        last_state_change: string
+        output: any
+        long_output: any
+        acknowledgement_type: any
+        state_type: boolean
+        flap_detection_enabled: any
+        notifications_enabled: any
+        current_check_attempt: any
+        max_check_attempts: any
+        latency: any
+        last_time_up: string
+        lastHardStateChangeInWords: string
+        last_state_change_in_words: string
+        lastCheckInWords: string
+        nextCheckInWords: string
+        isHardstate: boolean
+        isInMonitoring: boolean
+        humanState: string
+        cssClass: string
+        textClass: string
+        outputHtml: string
+    }
+    Servicestatus: {
+        currentState: number
+        lastHardState: any
+        isFlapping: boolean
+        problemHasBeenAcknowledged: boolean
+        scheduledDowntimeDepth: number
+        lastCheck: string
+        nextCheck: string
+        activeChecksEnabled: number
+        lastHardStateChange: string
+        last_state_change: string
+        processPerformanceData: any
+        state_type: number
+        acknowledgement_type: number
+        flap_detection_enabled: any
+        notifications_enabled: boolean
+        current_check_attempt: any
+        output: string
+        long_output: any
+        perfdata: string
+        latency: any
+        max_check_attempts: any
+        last_time_ok: string
+        lastHardStateChangeInWords: string
+        last_state_change_in_words: string
+        lastCheckInWords: string
+        nextCheckInWords: string
+        isHardstate: boolean
+        isInMonitoring: boolean
+        humanState: string
+        cssClass: string
+        textClass: string
+        outputHtml: string
+    }
+    ServiceType: {
+        title: string
+        color: string
+        class: string
+        icon: string
+    }
+    Downtime: any[]
+    Acknowledgement: any[]
+}

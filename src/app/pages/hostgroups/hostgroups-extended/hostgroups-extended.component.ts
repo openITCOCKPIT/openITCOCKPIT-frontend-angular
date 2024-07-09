@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import {NgForOf, NgFor, NgIf} from '@angular/common';
+import { NgForOf, NgFor, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -31,7 +31,7 @@ import { TranslocoDirective, TranslocoService, TranslocoPipe } from '@jsverse/tr
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HostgroupsService } from '../hostgroups.service';
-import { HostgroupExtended } from '../hostgroups.interface';
+import { HostgroupExtended, ServicesList } from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -66,6 +66,11 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import {
     ServiceCumulatedStatusIconComponent
 } from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
+import {
+    ServicestatusIconComponent
+} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -117,7 +122,9 @@ import {
         RowComponent,
         ColComponent,
         InputGroupComponent,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        ServicestatusIconComponent,
+        PopoverGraphComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -141,12 +148,14 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 down: null,
                 unreachable: null
             }
-        }
+        },
+        Service: {}
     };
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
     protected hostgroupExtended: HostgroupExtended = {} as HostgroupExtended;
+    protected timezone!: TimezoneObject;
 
     private userFullname: string = '';
 
@@ -157,6 +166,9 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // Fetch the id from the URL
         this.hostgroupId = Number(this.route.snapshot.paramMap.get('id'));
+
+        // Fetch the users timezone
+        this.getUserTimezone();
 
         // Load all hostgroups for the dropdown
         this.loadHostgroups();
@@ -328,6 +340,31 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             show: true,
             id: 'hostEnableNotificationsModal',
         });
+    }
+
+    protected toggleHostServicelist(hostId: number): void {
+        this.hostgroupExtended.Hosts.map((element) => {
+            if (element.Host.id !== hostId) {
+                return;
+            }
+            if (typeof element.services === 'undefined') {
+                this.HostgroupsService.loadServicesByHostId(hostId, '').subscribe((services: ServicesList[]) => {
+                    element.services = services
+                });
+                element.services = [];
+                return;
+            }
+            element.services = undefined;
+        })
+    }
+
+
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+
+    private getUserTimezone() {
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone = data;
+        }));
     }
 
 }
