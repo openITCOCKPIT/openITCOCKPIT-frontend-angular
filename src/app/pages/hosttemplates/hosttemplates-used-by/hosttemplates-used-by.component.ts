@@ -38,6 +38,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HostsService } from '../../hosts/hosts.service';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosttemplates-used-by',
@@ -69,7 +70,8 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
         DeleteAllModalComponent,
         ColComponent,
         RowComponent,
-        SelectAllComponent
+        SelectAllComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hosttemplates-used-by.component.html',
     styleUrl: './hosttemplates-used-by.component.css',

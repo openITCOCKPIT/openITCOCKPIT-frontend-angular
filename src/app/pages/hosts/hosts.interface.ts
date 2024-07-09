@@ -7,6 +7,7 @@ import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 export interface HostObject {
     id?: number
@@ -531,4 +532,29 @@ export interface HostsNotMonitoredRoot extends PaginateOrScroll {
             currentState: number
         }
     }[]
+}
+
+/**********************
+ *    Used By action  *
+ **********************/
+export interface HostUsedByRoot {
+    host: HostEntity
+    objects: HostUsedByObjects
+    total: number
+}
+
+export interface HostUsedByObjects {
+    Hostgroups: GenericIdAndName[]
+    Instantreports: GenericIdAndName[]
+    Autoreports: GenericIdAndName[]
+    Eventcorrelations: {
+        host_id: number,
+        Hosts: {
+            name: string
+        },
+        FilterHost: {
+            id: number
+        }
+    }[]
+    Maps: GenericIdAndName[]
 }

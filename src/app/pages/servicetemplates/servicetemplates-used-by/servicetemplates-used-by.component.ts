@@ -48,6 +48,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PaginatorModule } from 'primeng/paginator';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-servicetemplates-used-by',
@@ -84,7 +85,8 @@ import { PaginatorModule } from 'primeng/paginator';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        PaginatorModule
+        PaginatorModule,
+        FormLoaderComponent
     ],
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',

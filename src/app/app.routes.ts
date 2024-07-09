@@ -218,6 +218,9 @@ const coreRoutes: Routes = [{
     path: 'hosts/copy/:ids',
     loadComponent: () => import('./pages/hosts/hosts-copy/hosts-copy.component').then(m => m.HostsCopyComponent)
 }, {
+    path: 'hosts/usedBy/:id',
+    loadComponent: () => import('./pages/hosts/hosts-used-by/hosts-used-by.component').then(m => m.HostsUsedByComponent)
+}, {
     path: 'hosts/notMonitored',
     loadComponent: () => import('./pages/hosts/hosts-not-monitored/hosts-not-monitored.component').then(m => m.HostsNotMonitoredComponent)
 }, {
@@ -319,6 +322,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'downtimes/service',
     loadComponent: () => import('./pages/downtimes/downtimes-service/downtimes-service.component').then(m => m.DowntimesServiceComponent)
+}, {
+    path: 'systemdowntimes/addServicedowntime',
+    loadComponent: () => import('./pages/systemdowntimes/add-servicedowntime/add-servicedowntime.component').then(m => m.AddServicedowntimeComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

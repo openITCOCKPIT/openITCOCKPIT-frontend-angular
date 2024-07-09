@@ -19,6 +19,8 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!command"></oitc-form-loader>
         <c-card class="mb-3" *ngIf="command">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Command') }}

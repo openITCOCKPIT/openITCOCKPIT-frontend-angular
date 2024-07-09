@@ -19,6 +19,8 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!contactgroup"></oitc-form-loader>
         <c-card class="mb-3" *ngIf="contactgroup">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Contact group') }}

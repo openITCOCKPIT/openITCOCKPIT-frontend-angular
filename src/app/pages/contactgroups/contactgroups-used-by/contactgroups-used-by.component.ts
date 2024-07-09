@@ -25,6 +25,8 @@ import {
 import { ContactgroupsService } from '../contactgroups.service';
 import { Subscription } from 'rxjs';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-contactgroups-used-by',
@@ -47,7 +49,9 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         XsButtonDirective,
         RouterLink,
         NavItemComponent,
-        NotUsedByObjectComponent
+        NotUsedByObjectComponent,
+        TableLoaderComponent,
+        FormLoaderComponent
     ],
     templateUrl: './contactgroups-used-by.component.html',
     styleUrl: './contactgroups-used-by.component.css'

@@ -23,6 +23,8 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-timeperiods-used-by',
@@ -47,7 +49,9 @@ import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-ob
         RowComponent,
         ColComponent,
         NotUsedByObjectComponent,
-        NavItemComponent
+        NavItemComponent,
+        TableLoaderComponent,
+        FormLoaderComponent
     ],
     templateUrl: './timeperiods-used-by.component.html',
     styleUrl: './timeperiods-used-by.component.css'
