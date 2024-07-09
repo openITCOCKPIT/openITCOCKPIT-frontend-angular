@@ -22,7 +22,8 @@ import {
     HostsIndexParams,
     HostsIndexRoot,
     HostsLoadHostsByStringParams,
-    HostsNotMonitoredParams
+    HostsNotMonitoredParams,
+    HostUsedByRoot
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -452,5 +453,20 @@ export class HostsService {
             })
         )
     }
+
+    /**********************
+     *   Used By action   *
+     **********************/
+    public usedBy(id: number): Observable<HostUsedByRoot> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<HostUsedByRoot>(`${proxyPath}/hosts/usedBy/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
 
 }
