@@ -31,20 +31,23 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesHostGet, SystemdowntimesPost } from '../systemdowntimes.interface';
-import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
+import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
-import { HostsService } from '../../hosts/hosts.service';
+import { ServicesService } from '../../services/services.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { JsonPipe, NgIf } from '@angular/common';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
 import { DurationInputComponent } from '../../../layouts/coreui/duration-input/duration-input.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 
 
 @Component({
-    selector: 'oitc-add-hostdowntime',
+    selector: 'oitc-add-servicedowntime',
     standalone: true,
     imports: [
         CardComponent,
@@ -77,20 +80,21 @@ import { DurationInputComponent } from '../../../layouts/coreui/duration-input/d
         TrueFalseDirective,
         CardFooterComponent,
         NgIf,
-        DurationInputComponent
+        DurationInputComponent,
+        MultiSelectOptgroupComponent
     ],
-    templateUrl: './add-hostdowntime.component.html',
-    styleUrl: './add-hostdowntime.component.css'
+    templateUrl: './add-servicedowntime.component.html',
+    styleUrl: './add-servicedowntime.component.css'
 })
-export class AddHostdowntimeComponent implements OnInit, OnDestroy {
-    public hosts: SelectKeyValueWithDisabled[] = [];
+export class AddServicedowntimeComponent implements OnInit, OnDestroy {
+    public services: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
     public post: SystemdowntimesPost = this.getClearForm();
     public get!: SystemdowntimesHostGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
-    private readonly HostsService = inject(HostsService);
+    private readonly ServicesService = inject(ServicesService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
     public createAnother: boolean = false;
@@ -119,7 +123,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
             }));
-        this.loadHosts('');
+        this.loadServices('');
 
     }
 
@@ -143,9 +147,9 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
             to_date: '',
             to_time: '',
             duration: 15,
-            downtime_type: 'host',
+            downtime_type: 'service',
             downtimetype_id: '0',
-            objecttype_id: ObjectTypesEnum['HOST'],
+            objecttype_id: ObjectTypesEnum['SERVICE'],
             object_id: [],
             comment: '',
             is_recursive: 0
@@ -155,21 +159,21 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
     }
 
-    public loadHosts = (searchString: string) => {
+    public loadServices = (searchString: string) => {
         let selected: number[] = [];
         if (this.post.object_id) {
             selected = this.post.object_id;
         }
-        let params: HostsLoadHostsByStringParams = {
+        let params: ServicesLoadServicesByStringParams = {
             angular: true,
-            'filter[Hosts.name]': searchString,
+            'filter[Services.name]': searchString,
             'selected[]': selected,
             includeDisabled: false
         }
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
+        this.subscriptions.add(this.ServicesService.loadServicesByString(params)
             .subscribe((result) => {
-                this.hosts = result;
+                this.services = result;
             })
         );
     }
@@ -180,7 +184,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
-        this.subscriptions.add(this.SystemdowntimesService.createHostdowntime(this.post)
+        this.subscriptions.add(this.SystemdowntimesService.createServicedowntime(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
@@ -191,7 +195,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/downtimes/host']);
+                        this.router.navigate(['/downtimes/service']);
                         return;
                     }
 

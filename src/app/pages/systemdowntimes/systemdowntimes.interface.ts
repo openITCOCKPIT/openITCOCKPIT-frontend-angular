@@ -1,4 +1,4 @@
-export interface SystemdowntimesHostPost {
+export interface SystemdowntimesPost {
     id?: null | number
     is_recurring: number
     weekdays: number[]

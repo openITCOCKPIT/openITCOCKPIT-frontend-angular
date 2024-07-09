@@ -63,15 +63,15 @@
                             </button>
                             <ul cDropdownMenu>
                                 <li>
-                                    <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
                                        class="pointer"
-                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
                                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        {{ t('Create service downtime') }}
+                                        {{ t('Create host downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
                                        *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                         {{ t('Create service downtime') }}

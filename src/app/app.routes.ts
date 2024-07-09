@@ -317,6 +317,9 @@ const coreRoutes: Routes = [{
     path: 'downtimes/service',
     loadComponent: () => import('./pages/downtimes/downtimes-service/downtimes-service.component').then(m => m.DowntimesServiceComponent)
 }, {
+    path: 'systemdowntimes/addServicedowntime',
+    loadComponent: () => import('./pages/systemdowntimes/add-servicedowntime/add-servicedowntime.component').then(m => m.AddServicedowntimeComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
