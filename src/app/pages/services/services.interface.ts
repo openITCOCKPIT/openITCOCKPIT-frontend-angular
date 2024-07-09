@@ -374,3 +374,13 @@ export interface ServiceCopyPost {
     Service: ServiceCopy
     Error?: GenericValidationError | null
 }
+
+/**********************
+ *     Global action    *
+ **********************/
+export interface ServicesLoadServicesByStringParams {
+    'angular': true,
+    'filter[Services.name]': string,
+    'selected[]': number[],
+    'includeDisabled': boolean
+}

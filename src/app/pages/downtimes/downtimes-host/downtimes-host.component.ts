@@ -61,6 +61,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { CancelHostdowntimeModalComponent } from '../cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
 import { CancelAllItem } from '../cancel-hostdowntime-modal/cancel-hostdowntime.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 
 @Component({
@@ -112,7 +113,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        TableLoaderComponent
     ],
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',
