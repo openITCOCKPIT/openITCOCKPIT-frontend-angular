@@ -211,7 +211,8 @@
                     <ng-container *ngFor="let host of hostgroupExtended.Hosts">
                         <tr>
                             <td (click)="toggleHostServicelist(host.Host.id)">
-                                PLUS
+                                <fa-icon *ngIf="! host.services" [icon]="['fas', 'plus']" />
+                                <fa-icon *ngIf="host.services" [icon]="['fas', 'minus']" />
                             </td>
                             <td>
                                 <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
@@ -333,7 +334,6 @@
                         </tr>
                         <tr *ngIf="host.services">
                             <td colspan="12">
-
                                 <table bordered cTable class="mt-2 mb-0" hover striped>
                                     <thead>
 
@@ -430,10 +430,10 @@
                                     </thead>
                                     <tbody>
                                     <tr *ngFor="let service of host.services">
-                                        <th width="10">
+                                        <td width="10">
                                             <oitc-servicestatus-icon [service]="service.Servicestatus"/>
-                                        </th>
-                                        <th width="10">
+                                        </td>
+                                        <td width="10">
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.acknowledgement_type == 1"
                                                     [icon]="['fas', 'user']"
@@ -444,42 +444,66 @@
                                                     [icon]="['fas', 'user']"
                                                     [title]="'Sticky Acknowledgement' | transloco"
                                             ></fa-icon>
-                                        </th>
-                                        <th width="10">
+                                        </td>
+                                        <td width="10">
 
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
                                                     [icon]="['fas', 'power-off']"
                                             ></fa-icon>
-                                        </th>
-                                        <th width="10">
+                                        </td>
+                                        <td width="10">
 
                                             <oitc-popover-graph [service]="service.Service.uuid" [host]="service.Host.uuid"
                                                                 [timezone]="timezone"></oitc-popover-graph>
-                                        </th>
-                                        <th width="10">
+                                        </td>
+                                        <td width="10">
                                             <span [title]="'Passively transferred service' | transloco">
                                                 P
                                             </span>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             {{service.Service.servicename}}
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             {{service.Servicestatus.last_state_change}}
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             {{service.Servicestatus.lastCheck}}
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             {{service.Servicestatus.nextCheck}}
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             {{service.Servicestatus.outputHtml}}
-                                        </th>
-                                        <th width="10">
-                                            DROPDOWN :-D
-                                        </th>
+                                        </td>
+                                        <td width="10">
+                                            <oitc-actions-button [permission]="'services.edit'"
+                                                                 [url]="'/services/edit/' + service.Service.id">
+                                                <oitc-actions-button-element [permission]="'services.edit'"
+                                                                             [url]="'/services/edit/' + service.Service.id">
+                                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                    {{ t('Edit') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element
+                                                        [permission]="'changelogs.index'"
+                                                        [url]="'/changelogs/entity/service/' + service.Service.id">
+                                                    <fa-icon [icon]="['fas', 'timeline']"></fa-icon>
+                                                    {{ t('Changelog') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element
+                                                        [permission]="'services.copy'"
+                                                        [url]="'/service/copy/' + service.Service.id">
+                                                    <fa-icon [icon]="['fas', 'file']"></fa-icon>
+                                                    {{ t('Copy') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element [permission]="'services.usedBy'"
+                                                                             [url]="'/services/usedBy/' + service.Host.id">
+                                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                                    {{ t('Used By') }}
+                                                </oitc-actions-button-element>
+                                            </oitc-actions-button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
