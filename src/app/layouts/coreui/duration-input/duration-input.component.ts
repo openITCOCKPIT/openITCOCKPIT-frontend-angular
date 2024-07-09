@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { IntervalInput } from '../interval-input/interval-input.interface';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     ButtonGroupComponent,
     ColComponent,
@@ -7,35 +8,32 @@ import {
     InputGroupComponent,
     RowComponent
 } from '@coreui/angular';
-import { IntervalInput } from './interval-input.interface';
-import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+import { HumanTimeComponent } from '../interval-input/human-time/human-time.component';
 import { NgClass, NgForOf } from '@angular/common';
-import { FormErrorDirective } from '../form-error.directive';
-import { PaginatorModule } from 'primeng/paginator';
-import { HumanTimeComponent } from './human-time/human-time.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
-    selector: 'oitc-interval-input',
+    selector: 'oitc-duration-input',
     standalone: true,
     imports: [
-        TranslocoPipe,
-        TranslocoDirective,
-        RowComponent,
-        ColComponent,
         ButtonGroupComponent,
-        XsButtonDirective,
-        NgClass,
+        ColComponent,
         FormControlDirective,
-        FormErrorDirective,
-        PaginatorModule,
         HumanTimeComponent,
+        InputGroupComponent,
         NgForOf,
-        InputGroupComponent
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoPipe,
+        XsButtonDirective,
+        FormsModule,
+        NgClass
     ],
-    templateUrl: './interval-input.component.html',
-    styleUrl: './interval-input.component.css'
+    templateUrl: './duration-input.component.html',
+    styleUrl: './duration-input.component.css'
 })
-export class IntervalInputComponent {
+export class DurationInputComponent {
     private readonly TranslocoService = inject(TranslocoService);
 
     public interval: IntervalInput[] = [];
@@ -43,72 +41,72 @@ export class IntervalInputComponent {
     @Input() id: string | undefined;
     @Input() name: string = '';
 
-    /** The selected interval in seconds */
+    /** The selected interval in minutes */
     @Input() public selectedInterval: number = 0;
     @Output() selectedIntervalChange = new EventEmitter<number>();
 
     public constructor() {
         this.interval = [
             {
-                interval: 30,
-                short: this.TranslocoService.translate('30s'),
-                long: this.TranslocoService.translate('30 seconds')
-            },
-            {
-                interval: 60,
+                interval: 1,
                 short: this.TranslocoService.translate('1m'),
                 long: this.TranslocoService.translate('1 minute')
             },
             {
-                interval: (2 * 60),
+                interval: 2,
                 short: this.TranslocoService.translate('2m'),
                 long: this.TranslocoService.translate('2 minutes')
             },
             {
-                interval: (5 * 60),
+                interval: 5,
                 short: this.TranslocoService.translate('5m'),
                 long: this.TranslocoService.translate('5 minutes')
             },
             {
-                interval: (10 * 60),
+                interval: 10,
                 short: this.TranslocoService.translate('10m'),
                 long: this.TranslocoService.translate('10 minutes')
             },
             {
-                interval: (15 * 60),
+                interval: 15,
                 short: this.TranslocoService.translate('15m'),
                 long: this.TranslocoService.translate('15 minutes')
             },
             {
-                interval: (30 * 60),
+                interval: 30,
                 short: this.TranslocoService.translate('30m'),
                 long: this.TranslocoService.translate('30 minutes')
             },
             {
-                interval: (45 * 60),
+                interval: 45,
                 short: this.TranslocoService.translate('45m'),
                 long: this.TranslocoService.translate('45 minutes')
             },
             {
-                interval: 3600,
+                interval: 60,
                 short: this.TranslocoService.translate('1h'),
                 long: this.TranslocoService.translate('1 hour')
             },
             {
-                interval: (1800 + 3600),
+                interval: (1.5 * 60),
                 short: this.TranslocoService.translate('1.5h'),
                 long: this.TranslocoService.translate('1.5 hours')
             },
             {
-                interval: (2 * 3600),
+                interval: (2 * 60),
                 short: this.TranslocoService.translate('2h'),
                 long: this.TranslocoService.translate('2 hours')
             },
             {
-                interval: (4 * 3600),
+                interval: (4 * 60),
                 short: this.TranslocoService.translate('4h'),
                 long: this.TranslocoService.translate('4 hours')
             },
+            {
+                interval: (8 * 60),
+                short: this.TranslocoService.translate('8h'),
+                long: this.TranslocoService.translate('8 hours')
+            }
         ];
     }
 
@@ -120,5 +118,4 @@ export class IntervalInputComponent {
         this.selectedInterval = interval;
         this.selectedIntervalChange.emit(interval);
     }
-
 }

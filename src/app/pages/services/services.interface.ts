@@ -3,6 +3,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 /**********************
  *    Index action    *
@@ -186,7 +187,6 @@ export interface Servicestatus {
 }
 
 
-
 /**********************
  *    Add action    *
  **********************/
@@ -338,4 +338,39 @@ export interface ServiceEditApiResult {
     areContactsInheritedFromServicetemplate: boolean,
     serviceType: HostOrServiceType,
     isSlaHost: boolean
+}
+
+/**********************
+ *    Copy action    *
+ **********************/
+
+export interface ServiceCopy {
+    id?: number
+    name: string // Use for GET
+    _name?: string // Used for POST
+    description: string
+    command_id: number
+    active_checks_enabled: number,
+    servicecommandargumentvalues: ServiceCommandArgument[]
+    host: {
+        id: number
+        name: string
+    },
+    servicetemplate: any // unused just post it back to the server
+}
+
+export interface ServiceCopyGet {
+    services: ServiceCopy[]
+    commands: SelectKeyValue[]
+    eventhandlerCommands: SelectKeyValue[]
+}
+
+export interface ServiceCopyPost {
+    Source: {
+        id: number,
+        _name: string
+        hostname: string
+    }
+    Service: ServiceCopy
+    Error?: GenericValidationError | null
 }

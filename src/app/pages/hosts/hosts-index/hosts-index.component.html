@@ -14,8 +14,8 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                    {{ t('Overview') }}
+                    <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                    {{ t('Monitored') }}
                 </li>
             </ol>
         </nav>
@@ -800,6 +800,7 @@
                                        class="text-info">
                                         <fa-icon [icon]="['fas', 'database']"></fa-icon>
                                         {{ t('CMDB') }}
+                                        {{ host.Host.additionalInformationExists }}
                                     </a>
                                 </span>
                             }
@@ -886,10 +887,10 @@
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                                                             *ngIf="host.Host.allow_edit">
+                                                             *ngIf="host.Host.allow_edit"
+                                                             (click)="toggleDisableModal(host.Host)">
                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                     {{ t('Disable') }}
-                                    <!-- todo implement -->
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'changelogs.index'"
@@ -898,7 +899,7 @@
                                     {{ t('Changelog') }}
                                 </oitc-actions-button-element>
 
-                                @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                                @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) && host.Host.additionalInformationExists) {
                                     <oitc-actions-button-element [permission]="'hosts.browser'"
                                                                  [url]="'/hosts/browser/' + host.Host.id">
                                         <fa-icon [icon]="['fas', 'database']"></fa-icon>
@@ -911,14 +912,12 @@
                                                              [url]="'/services/serviceList/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
                                     {{ t('Service list') }}
-                                    <!-- todo open tab6 -->
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHost'"
                                                              [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
                                     {{ t('Allocate service template group') }}
-                                    <!-- todo implement link -->
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'hostgroups.add'"
@@ -1091,11 +1090,17 @@
 </oitc-coreui>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
 
-<oitc-service-reset-checktime-modal [items]="selectedItems" (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
 
-<oitc-hosts-maintenance-modal [items]="selectedItems" (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
+<oitc-service-reset-checktime-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
 
-<oitc-hosts-enable-notifications-modal [items]="selectedItems" (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+<oitc-hosts-maintenance-modal [items]="selectedItems"
+                              (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
 
-<oitc-hosts-disable-notifications-modal [items]="selectedItems" (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+<oitc-hosts-enable-notifications-modal [items]="selectedItems"
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+
+<oitc-hosts-disable-notifications-modal [items]="selectedItems"
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>

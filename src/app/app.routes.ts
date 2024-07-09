@@ -128,6 +128,9 @@ const coreRoutes: Routes = [{
     path: 'services/browser/:id',
     loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
 }, {
+    path: 'services/copy/:ids',
+    loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
+}, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {
@@ -214,6 +217,12 @@ const coreRoutes: Routes = [{
 }, {
     path: 'hosts/copy/:ids',
     loadComponent: () => import('./pages/hosts/hosts-copy/hosts-copy.component').then(m => m.HostsCopyComponent)
+}, {
+    path: 'hosts/notMonitored',
+    loadComponent: () => import('./pages/hosts/hosts-not-monitored/hosts-not-monitored.component').then(m => m.HostsNotMonitoredComponent)
+}, {
+    path: 'hosts/disabled',
+    loadComponent: () => import('./pages/hosts/hosts-disabled/hosts-disabled.component').then(m => m.HostsDisabledComponent)
 }, {
     path: 'deletedHosts/index',
     loadComponent: () => import('./pages/deletedHosts/deleted-hosts-index/deleted-hosts-index.component').then(m => m.DeletedHostsIndexComponent)
@@ -307,6 +316,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'systemdowntimes/addHostdowntime',
     loadComponent: () => import('./pages/systemdowntimes/add-hostdowntime/add-hostdowntime.component').then(m => m.AddHostdowntimeComponent)
+}, {
+    path: 'downtimes/service',
+    loadComponent: () => import('./pages/downtimes/downtimes-service/downtimes-service.component').then(m => m.DowntimesServiceComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
