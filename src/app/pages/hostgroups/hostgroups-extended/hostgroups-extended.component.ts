@@ -8,8 +8,8 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
-    DropdownDividerDirective,
+    CardTitleDirective, ColComponent, DropdownComponent,
+    DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective, InputGroupComponent, InputGroupTextDirective, ModalService,
@@ -124,7 +124,11 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         InputGroupComponent,
         InputGroupTextDirective,
         ServicestatusIconComponent,
-        PopoverGraphComponent
+        PopoverGraphComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'

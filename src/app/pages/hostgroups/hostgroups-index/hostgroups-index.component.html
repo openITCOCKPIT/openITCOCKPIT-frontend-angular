@@ -140,7 +140,16 @@
                                     [item]="hostgroup"></oitc-item-select>
 
                         </td>
-                        <td>{{ hostgroup.container.name }}</td>
+                        <td>
+                            <span *oitcPermission="['hostgroups', 'extended']">
+                                <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
+                                    {{ hostgroup.container.name }}
+                                </a>
+                            </span>
+                            <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+                                {{ hostgroup.container.name }}
+                            </span>
+                        </td>
                         <td>{{ hostgroup.description }}</td>
                         <td class="width-50">
                             <oitc-actions-button *ngIf="hostgroup.allowEdit"
