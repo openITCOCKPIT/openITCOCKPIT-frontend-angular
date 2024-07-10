@@ -143,29 +143,36 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
-
-    protected filter: any = {
-        Host: {},
-        Hoststatus: {
-            current_state: {
-                up: null,
-                down: null,
-                unreachable: null
-            }
-        },
-        Service: {}
-    };
+    private userFullname: string = '';
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
     protected hostgroupExtended: HostgroupExtended = {} as HostgroupExtended;
     protected timezone!: TimezoneObject;
 
-    private userFullname: string = '';
-
-
-    constructor() {
-    }
+    protected filter: any = {
+        Host: {
+            name: ''
+        },
+        Hoststatus: {
+            current_state: {
+                up: false,
+                down: false,
+                unreachable: false
+            }
+        },
+        Service: {
+            name: ''
+        },
+        Servicestatus: {
+            current_state: {
+                ok: false,
+                warning: false,
+                critical: false,
+                unknown: false
+            }
+        }
+    };
 
     public ngOnInit() {
         // Fetch the id from the URL
@@ -216,7 +223,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     private loadHostgroupExtended(): void {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId)
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.filter.Host.name, this.filter.Hoststatus.current_state.up, this.filter.Hoststatus.current_state.down, this.filter.Hoststatus.current_state.unreachable)
             .subscribe((result: HostgroupExtended) => {
                 // Then put post where it belongs. Also unpack that bullshit
                 this.hostgroupExtended = result;
@@ -351,15 +358,20 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             if (element.Host.id !== hostId) {
                 return;
             }
-            if (typeof element.services === 'undefined') {
-                this.HostgroupsService.loadServicesByHostId(hostId, '').subscribe((services: ServicesList[]) => {
-                    element.services = services
-                });
-                element.services = [];
+            if (typeof element.services !== 'undefined') {
+                element.services = undefined;
                 return;
             }
-            element.services = undefined;
+            this.loadServicesList(element);
         })
+    }
+
+    private loadServicesList(element: any): void {
+        this.HostgroupsService.loadServicesByHostId(element.Host.id, this.filter.Service.name).subscribe((services: ServicesList[]) => {
+            element.services = services
+        });
+        element.services = [];
+        return;
     }
 
 
@@ -369,6 +381,14 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
         }));
+    }
+
+    protected onHostFilterChange(event: Event): void {
+        this.loadHostgroupExtended();
+    }
+
+    protected onServiceFilterChange(event: Event, element: any): void {
+        this.loadServicesList(element);
     }
 
 }

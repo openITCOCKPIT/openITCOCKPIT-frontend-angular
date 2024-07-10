@@ -188,13 +188,19 @@ export class HostgroupsService {
 
     }
 
-    public loadHostgroupWithHostsById(id: number): Observable<HostgroupExtended> {
+    public loadHostgroupWithHostsById(id: number, hostsName: string, up: boolean, down: boolean, unreachable: boolean): Observable<HostgroupExtended> {
         const proxyPath: string = this.proxyPath;
+        let stateFilter = [
+            up ? 'up' : null,
+            down ? 'down' : null,
+            unreachable ? 'unreachable' : null
+        ];
         return this.http.get<HostgroupExtendedRoot>(`${proxyPath}/hostgroups/loadHostgroupWithHostsById/${id}.json`, {
             params: {
                 angular: true,
-                'filter["Hosts.name"]': '',
-            }
+                'filter[Hosts.name]': hostsName,
+                'filter[Hoststatus.current_state][]': stateFilter
+            } as {}
         }).pipe(
             map((data: HostgroupExtendedRoot) => {
                 return data.hostgroup;

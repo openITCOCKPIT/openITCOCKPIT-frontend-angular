@@ -132,7 +132,7 @@
 
                     <thead>
                     <tr>
-                        <td colspan="8">
+                        <td colspan="8" class="spaceless">
 
                             <c-input-group>
                                 <span cInputGroupText>
@@ -146,18 +146,20 @@
                                         name="filter.Host.name"
                                         id="filter.Host.name"
                                         oitcDebounce
+                                        (debouncedValue)="onHostFilterChange($event)"
                                         type="text"
                                 />
                             </c-input-group>
                         </td>
-                        <td colspan="4">
+                        <td colspan="4" class="spaceless">
                             <c-row>
                                 <c-col class="bg-up">
                                     <label for="statusFilterup">
                                         <input type="checkbox"
                                                name="statusFilterup"
                                                oitcDebounce
-                                               [(ngModel)]="filter.Hoststatus.current_state['up']"
+                                               (debouncedValue)="onHostFilterChange($event)"
+                                               [(ngModel)]="filter.Hoststatus.current_state.up"
                                                id="statusFilterup">
                                         {{ hostgroupExtended.StatusSummary.up }}
                                     </label>
@@ -168,7 +170,8 @@
                                         <input type="checkbox"
                                                name="statusFilterdown"
                                                oitcDebounce
-                                               [(ngModel)]="filter.Hoststatus.current_state['down']"
+                                               (debouncedValue)="onHostFilterChange($event)"
+                                               [(ngModel)]="filter.Hoststatus.current_state.down"
                                                id="statusFilterdown">
                                         {{ hostgroupExtended.StatusSummary.down }}
                                     </label>
@@ -178,7 +181,8 @@
                                         <input type="checkbox"
                                                name="statusFilterunreachable"
                                                oitcDebounce
-                                               [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                               (debouncedValue)="onHostFilterChange($event)"
+                                               [(ngModel)]="filter.Hoststatus.current_state.unreachable"
                                                id="statusFilterunreachable">
                                         {{ hostgroupExtended.StatusSummary.unreachable }}
                                     </label>
@@ -219,8 +223,8 @@
                     <ng-container *ngFor="let host of hostgroupExtended.Hosts">
                         <tr>
                             <td (click)="toggleHostServicelist(host.Host.id)">
-                                <fa-icon *ngIf="! host.services" [icon]="['fas', 'plus']" />
-                                <fa-icon *ngIf="host.services" [icon]="['fas', 'minus']" />
+                                <fa-icon class="cursor-pointer" *ngIf="! host.services" [icon]="['fas', 'plus-square']" />
+                                <fa-icon class="cursor-pointer" *ngIf="host.services"   [icon]="['far', 'minus-square']" />
                             </td>
                             <td>
                                 <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
@@ -342,11 +346,11 @@
                         </tr>
                         <tr *ngIf="host.services">
                             <td colspan="12" style="padding:0;margin:0;">
-                                <table bordered cTable class="mt-2 mb-0" hover striped style="padding:0;margin:0;">
+                                <table bordered cTable hover striped class="spaceless">
                                     <thead>
 
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="8" class="spaceless">
 
                                             <c-input-group>
                                                 <span cInputGroupText>
@@ -360,18 +364,20 @@
                                                         name="filter.Service.name"
                                                         id="filter.Service.name"
                                                         oitcDebounce
+                                                        (debouncedValue)="onServiceFilterChange($event, host)"
                                                         type="text"
                                                 />
                                             </c-input-group>
                                         </td>
-                                        <td colspan="4">
+                                        <td colspan="4" class="spaceless">
                                             <c-row>
                                                 <c-col class="bg-up">
                                                     <label for="statusFilterServiceOk">
                                                         <input type="checkbox"
                                                                name="statusFilterServiceOk"
                                                                oitcDebounce
-                                                               [(ngModel)]="filter.Hoststatus.current_state['up']"
+                                                               (debouncedValue)="onServiceFilterChange($event, host)"
+                                                               [(ngModel)]="filter.Servicestatus.current_state.ok"
                                                                id="statusFilterServiceOk">
                                                         {{ host.ServicestatusSummary.state.ok }}
                                                     </label>
@@ -382,7 +388,8 @@
                                                         <input type="checkbox"
                                                                name="statusFilterServiceWarning"
                                                                oitcDebounce
-                                                               [(ngModel)]="filter.Hoststatus.current_state['down']"
+                                                               (debouncedValue)="onServiceFilterChange($event, host)"
+                                                               [(ngModel)]="filter.Servicestatus.current_state.warning"
                                                                id="statusFilterServiceWarning">
                                                         {{ host.ServicestatusSummary.state.warning }}
                                                     </label>
@@ -392,7 +399,8 @@
                                                         <input type="checkbox"
                                                                name="statusFilterServiceCritical"
                                                                oitcDebounce
-                                                               [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                                               (debouncedValue)="onServiceFilterChange($event, host)"
+                                                               [(ngModel)]="filter.Servicestatus.current_state.critical"
                                                                id="statusFilterServiceCritical">
                                                         {{ host.ServicestatusSummary.state.critical }}
                                                     </label>
@@ -402,7 +410,8 @@
                                                         <input type="checkbox"
                                                                name="statusFilterServiceUnknown"
                                                                oitcDebounce
-                                                               [(ngModel)]="filter.Hoststatus.current_state['unreachable']"
+                                                               (debouncedValue)="onServiceFilterChange($event, host)"
+                                                               [(ngModel)]="filter.Servicestatus.current_state.unknown"
                                                                id="statusFilterServiceUnknown">
                                                         {{ host.ServicestatusSummary.state.unknown }}
                                                     </label>
@@ -442,7 +451,6 @@
                                             <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                                         </td>
                                         <td width="10">
-🐞: {{service.Servicestatus.acknowledgement_type}}
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.acknowledgement_type == 1"
                                                     [icon]="['fas', 'user']"
@@ -455,14 +463,12 @@
                                             ></fa-icon>
                                         </td>
                                         <td width="10">
-🐞: {{service.Servicestatus.scheduledDowntimeDepth}}
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
                                                     [icon]="['fas', 'power-off']"
                                             ></fa-icon>
                                         </td>
                                         <td width="10">
-🐞:{{service.Service.has_graph}}
                                             <oitc-popover-graph *ngIf="service.Service.has_graph" [service]="service.Service.uuid" [host]="service.Host.uuid"
                                                                 [timezone]="timezone"></oitc-popover-graph>
                                         </td>
