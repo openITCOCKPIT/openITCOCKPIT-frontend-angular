@@ -301,6 +301,13 @@ export class HostsNotMonitoredComponent {
         }
     }
 
+    public linkForEditDetails() {
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
+        if (ids) {
+            this.router.navigate(['/', 'hosts', 'edit_details', ids]);
+        }
+    }
+
     public toggleDisableModal(host?: HostObject) {
         let items: DisableItem[] = [];
 

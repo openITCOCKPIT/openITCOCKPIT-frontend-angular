@@ -407,8 +407,9 @@
                                         <ul cDropdownMenu>
                                             <li *oitcPermission="['hosts', 'edit_details']">
                                                 <a
-                                                    href="javascript:void(0);" cDropdownItem>
-                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                    href="javascript:void(0);" cDropdownItem
+                                                    (click)="linkForEditDetails()">
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                     {{ t('Edit details') }}
                                                 </a>
                                             </li>
