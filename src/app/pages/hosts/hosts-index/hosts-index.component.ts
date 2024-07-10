@@ -432,6 +432,13 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public linkForEditDetails() {
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
+        if (ids) {
+            this.router.navigate(['/', 'hosts', 'edit_details', ids]);
+        }
+    }
+
     public linkFor(format: 'pdf' | 'csv') {
         let baseUrl = '/hosts/listToPdf.pdf?';
         if (format === 'csv') {

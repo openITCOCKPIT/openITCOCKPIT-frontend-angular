@@ -28,63 +28,69 @@
  */
 
 .header-sticky {
-  box-shadow: 0 0 28px 0 rgba(11, 81, 197, 0.13);
+    box-shadow: 0 0 28px 0 rgba(11, 81, 197, 0.13);
 }
 
 .width-50 {
-  width: 50px;
+    width: 50px;
 }
 
 .width-90 {
-  width: 90px;
+    width: 90px;
 }
 
 .width-130 {
-  width: 130px;
+    width: 130px;
 }
 
 .width-150 {
-  width: 150px;
+    width: 150px;
 }
 
 .width-160 {
-  width: 160px;
+    width: 160px;
 }
 
 .width-240 {
-  width: 240px;
+    width: 240px;
 }
 
 .tableStatewidth {
-  min-width: 155px;
+    min-width: 155px;
 }
 
 .state-button-small {
-  padding: 0 2px;
-  font-size: 12px;
+    padding: 0 2px;
+    font-size: 12px;
 }
 
 .editItemWidth {
-  min-width: 52px;
-  max-width: 52px;
+    min-width: 52px;
+    max-width: 52px;
 }
 
 .border-dashed {
-  border-style: dashed;
+    border-style: dashed;
 }
 
 
 .input-group .ng-select, input-group .ng-select-multiple {
-  display: flex;
-  flex: 1;
+    display: flex;
+    flex: 1;
 }
 
 .input-group .ng-select.ng-select-single .ng-select-container, .input-group .ng-select-multiple .ng-select-container {
-  margin-left: calc(var(--cui-border-width) * -1);
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+    margin-left: calc(var(--cui-border-width) * -1);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .ng-option-label {
-  color: dodgerblue;
+    color: dodgerblue;
+}
+
+.disabled-area {
+    -webkit-filter: opacity(.5);
+    filter: opacity(.5);
+    pointer-events: none;
 }

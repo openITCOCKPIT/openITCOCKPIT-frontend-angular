@@ -48,6 +48,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-hosts-sharing',
@@ -92,7 +93,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         RouterLink,
         ObjectUuidComponent,
         SelectComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        FormLoaderComponent
     ],
     templateUrl: './hosts-sharing.component.html',
     styleUrl: './hosts-sharing.component.css'
