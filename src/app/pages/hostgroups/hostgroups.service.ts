@@ -235,8 +235,8 @@ export class HostgroupsService {
         return this.http.get<LoadServicesForHosts>(`${proxyPath}/services/index.json`, {
             params: {
                 angular: true,
-                'filter["Hosts.id"]': hostId,
-                'filter["servicename"]': serviceName,
+                'filter[Hosts.id]': hostId,
+                'filter[servicename]': serviceName,
             }
         }).pipe(
             map((data: LoadServicesForHosts) => {
