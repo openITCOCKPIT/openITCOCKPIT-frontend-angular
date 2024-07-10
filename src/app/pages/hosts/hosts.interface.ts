@@ -558,3 +558,137 @@ export interface HostUsedByObjects {
     }[]
     Maps: GenericIdAndName[]
 }
+
+/*************************
+ *  edit_details action  *
+ *************************/
+export interface HostEditDetailsGet {
+    hosts: HostEditDetailsHost[], // Looks like this is unused for now
+    contacts: SelectKeyValue[],
+    contactgroups: SelectKeyValue[],
+    sharingContainers: SelectKeyValue[],
+    satellites: SelectKeyValue[]
+}
+
+export interface HostEditDetailsHost {
+    id: number,
+    hosttemplate_id: number,
+    container_id: number,
+    description: string | null,
+    host_url: string | null,
+    tags: string | null,
+    check_interval: number | null,
+    retry_interval: number | null,
+    max_check_attempts: number | null,
+    notification_interval: number | null,
+    notes: string | null,
+    priority: number,
+    hosttemplate: {
+        id: number,
+        description: string,
+        host_url: string,
+        tags: string,
+        check_interval: number,
+        retry_interval: number,
+        max_check_attempts: number,
+        notification_interval: number,
+        notes: string,
+        priority: number,
+        contactgroups: {
+            id: number,
+            _joinData: {
+                id: number,
+                contactgroup_id: number,
+                hosttemplate_id: number
+            },
+            ContactgroupsToHosttemplates: {
+                hosttemplate_id: number,
+            }
+        }[],
+        contacts: {
+            id: number,
+            _joinData: {
+                id: number,
+                contact_id: number,
+                hosttemplate_id: number
+            },
+            ContactsToHosttemplates: {
+                hosttemplate_id: number,
+            }
+        }[],
+    },
+    contactgroups: {
+        id: number,
+        _joinData: {
+            id: number,
+            contactgroup_id: number,
+            host_id: number
+        },
+        ContactgroupsToHosts: {
+            host_id: number,
+        }
+    }[],
+    contacts: {
+        id: number,
+        _joinData: {
+            id: number,
+            contact_id: number,
+            hosttemplate_id: number
+        },
+        ContactsToHosts: {
+            host_id: number,
+        }
+    }[],
+    hosts_to_containers_sharing: {
+        _joinData: {
+            id: number,
+            host_id: number,
+            container_id: number
+        },
+        HostsToContainers: {
+            host_id: number,
+            container_id: number
+        }
+    }[],
+}
+
+export interface HostEditDetailsPost {
+    Host: {
+        hosts_to_containers_sharing: {
+            _ids: number[]
+        },
+        description: null | string,
+        host_url: null | string,
+        tags: null | string,
+
+        check_interval: null | number,
+        retry_interval: null | number,
+        max_check_attempts: null | number,
+        notification_interval: null | number,
+        notes: null | string,
+        priority: null | number,
+        satellite_id: null | number,
+        contacts: {
+            _ids: number[]
+        },
+        contactgroups: {
+            _ids: number[]
+        }
+    },
+    keepSharedContainers: boolean,
+    keepContacts: boolean,
+    keepContactgroups: boolean,
+    editSharedContainers: boolean,
+    editDescription: boolean,
+    editTags: boolean,
+    editPriority: boolean,
+    editCheckInterval: boolean,
+    editRetryInterval: boolean,
+    editMaxNumberOfCheckAttempts: boolean,
+    editNotificationInterval: boolean,
+    editContacts: boolean,
+    editContactgroups: boolean,
+    editHostUrl: boolean,
+    editNotes: boolean,
+    editSatellites: boolean
+}

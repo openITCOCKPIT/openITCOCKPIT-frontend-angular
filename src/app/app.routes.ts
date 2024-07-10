@@ -215,6 +215,9 @@ const coreRoutes: Routes = [{
     path: 'hosts/edit/:id',
     loadComponent: () => import('./pages/hosts/hosts-edit/hosts-edit.component').then(m => m.HostsEditComponent)
 }, {
+    path: 'hosts/edit_details/:ids',
+    loadComponent: () => import('./pages/hosts/hosts-edit-details/hosts-edit-details.component').then(m => m.HostsEditDetailsComponent)
+}, {
     path: 'hosts/copy/:ids',
     loadComponent: () => import('./pages/hosts/hosts-copy/hosts-copy.component').then(m => m.HostsCopyComponent)
 }, {

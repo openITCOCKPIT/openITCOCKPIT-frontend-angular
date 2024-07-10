@@ -13,6 +13,8 @@ import {
     HostCopyPost,
     HostDnsLookup,
     HostEditApiResult,
+    HostEditDetailsGet,
+    HostEditDetailsPost,
     HostElements,
     HostPost,
     HostsDisabledParams,
@@ -468,5 +470,33 @@ export class HostsService {
             )
     }
 
+    /*************************
+     *  edit_details action  *
+     *************************/
+    public getEditDetails(ids: number[]): Observable<HostEditDetailsGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<HostEditDetailsGet>(`${proxyPath}/hosts/edit_details/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+    public saveEditDetails(post: HostEditDetailsPost, hostIds: number[]): Observable<null> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<null>(`${proxyPath}/hosts/edit_details/.json?angular=true`, {
+            data: {
+                hosts: hostIds,
+                details: post
+            }
+        }).pipe(
+            map(data => {
+                // This API has no return value
+                return null;
+            })
+        );
+
+    }
 
 }
