@@ -38,7 +38,8 @@ import {
     ServiceLoadServicetemplateApiResult,
     ServiceParams,
     ServicePost,
-    ServicesIndexRoot
+    ServicesIndexRoot,
+    ServicesLoadServicesByStringParams
 } from './services.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
@@ -327,5 +328,19 @@ export class ServicesService {
             data: services,
             hostId: hostId
         });
+    }
+
+    public loadServicesByString(params: ServicesLoadServicesByStringParams): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+
+        let url = `${proxyPath}/services/loadServicesByStringForOptionGroup.json`;
+
+        return this.http.get<{ services: SelectKeyValue[] }>(url, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.services;
+            })
+        );
     }
 }

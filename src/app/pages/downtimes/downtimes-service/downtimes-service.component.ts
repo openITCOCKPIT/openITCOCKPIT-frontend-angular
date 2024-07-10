@@ -65,6 +65,7 @@ import {
 } from '../cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
 import { CancelAllItem } from '../cancel-servicedowntime-modal/cancel-servicedowntime.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 
 @Component({
@@ -116,7 +117,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        TableLoaderComponent
     ],
     templateUrl: './downtimes-service.component.html',
     styleUrl: './downtimes-service.component.css',

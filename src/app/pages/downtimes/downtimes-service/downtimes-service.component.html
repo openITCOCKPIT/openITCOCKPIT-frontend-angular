@@ -63,15 +63,15 @@
                             </button>
                             <ul cDropdownMenu>
                                 <li>
-                                    <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
                                        class="pointer"
-                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
                                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        {{ t('Create service downtime') }}
+                                        {{ t('Create host downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
                                        *oitcPermission="['systemdowntimes', 'addservicedowntime']">
                                         <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                         {{ t('Create service downtime') }}
@@ -303,6 +303,7 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
+                <oitc-table-loader *ngIf="!serviceDowntimes"></oitc-table-loader>
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
