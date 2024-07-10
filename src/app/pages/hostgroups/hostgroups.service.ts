@@ -1,23 +1,25 @@
-import {inject, Injectable} from '@angular/core';
-import {catchError, map, Observable, of} from "rxjs";
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, Observable, of } from "rxjs";
 import {
     AddHostgroupsPost,
+    Hostgroup,
     HostgroupsCopyGet,
     HostgroupsCopyGetHostgroup,
     HostgroupsCopyPostResult,
     HostgroupsEditGet,
-    Hostgroup,
     HostgroupsIndexParams,
     HostgroupsIndexRoot,
+    HostgroupsLoadHostgroupsByStringParams,
     LoadContainersRoot,
     LoadHostsRequest,
     LoadHostsResponse,
     LoadHosttemplates
 } from "./hostgroups.interface";
-import {HttpClient} from "@angular/common/http";
-import {PROXY_PATH} from "../../tokens/proxy-path.token";
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from "../../generic-responses";
-import {DeleteAllItem} from "../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { HttpClient } from "@angular/common/http";
+import { PROXY_PATH } from "../../tokens/proxy-path.token";
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
+import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -121,6 +123,7 @@ export class HostgroupsService {
             })
         )
     }
+
     public updateHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hostgroups/edit/${hostgroup.id}.json?angular=true`, {
@@ -163,4 +166,17 @@ export class HostgroupsService {
 
     }
 
+    public loadHostgroupsByString(params: HostgroupsLoadHostgroupsByStringParams): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            hostgroups: SelectKeyValue[]
+        }>(`${proxyPath}/hostgroups/loadHostgroupsByString.json?angular=true`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.hostgroups;
+            })
+        );
+    }
 }

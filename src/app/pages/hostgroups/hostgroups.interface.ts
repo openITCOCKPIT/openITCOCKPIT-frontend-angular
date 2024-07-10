@@ -1,6 +1,6 @@
-import {PaginateOrScroll} from "../../layouts/coreui/paginator/paginator.interface";
-import {GenericValidationError} from "../../generic-responses";
-import {SelectKeyValue} from "../../layouts/primeng/select.interface";
+import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
+import { GenericValidationError } from "../../generic-responses";
+import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
@@ -159,3 +159,12 @@ export interface AddHostgroupsPost {
     Hostgroup: Hostgroup
 }
 
+/**********************
+ *     Global action    *
+ **********************/
+
+export interface HostgroupsLoadHostgroupsByStringParams {
+    'angular': true,
+    'filter[Containers.name]': string,
+    'selected[]': number[]
+}
