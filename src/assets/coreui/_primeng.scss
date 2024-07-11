@@ -281,6 +281,7 @@
     padding: 0 0.75rem;
 }
 
+/* Skeleton https://primeng.org/skeleton */
 body.dark-theme .p-skeleton {
     background-color: rgba(255, 255, 255, 0.06);
 }
@@ -288,3 +289,34 @@ body.dark-theme .p-skeleton {
 body.dark-theme .p-skeleton::after {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
 }
+
+/* OverlayPanel https://primeng.org/overlaypanel */
+body.dark-theme .p-overlaypanel {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    /*background: var(--cui-body-bg);*/
+    background: var(--cui-secondary-bg-dark);
+    color: var(--cui-body-color);
+    border: 1px solid var(--cui-border-color);
+    border-radius: 6px;
+}
+
+/* chevron pointing down */
+body.dark-theme .p-overlaypanel.p-overlaypanel-flipped::before {
+    border-top-color: var(--cui-border-color);
+    border-bottom-color: transparent;
+}
+
+body.dark-theme .p-overlaypanel.p-overlaypanel-flipped::after {
+    border-top-color: var(--cui-border-color);
+    border-bottom-color: transparent;
+}
+
+/* chevron pointing up */
+body.dark-theme .p-overlaypanel::before {
+    border-bottom-color: transparent;
+}
+
+body.dark-theme .p-overlaypanel::after {
+    border-bottom-color: var(--cui-border-color);
+}
+

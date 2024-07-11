@@ -1,25 +1,38 @@
 import uPlot from 'uplot';
-import {inject, Injectable} from "@angular/core";
 
-@Injectable({
-    providedIn: 'root'
-})
 
+export interface GraphThresholds {
+    show: boolean,
+    warning: number | string | null,
+    critical: number | string | null
+}
 
 export class PopoverConfigBuilder {
     public can: HTMLCanvasElement = document.createElement("canvas");
     public ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>this.can.getContext('2d');
+
+    // All properties are public, so we do not need to define them in the constructor or initialize them
+    public title: string = "Area Chart";
+    public label: string | false = "";
+    public height: number = 250;
+    public width: number = 350;
+    public timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
+    public lineWidth: number = 3;
+    public thresholds: GraphThresholds = {
+        show: true,
+        warning: null,
+        critical: null
+    };
+    public start: number = 0;
+    public end: number = (new Date().getTime());
+    public strokeColor: string = "rgba(50, 116, 217, 1)";
+    public fillColor: string = "rgba(50, 116, 217, 0.2)";
+    public YAxisLabelLength: number = 50;
     public unit: string = '';
-    public seriesIdx = 0;
-    public dataIdx = null;
-    public over = {};
-
-    public fmtDate = uPlot.fmtDate("{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}");
-
 
     // Gradient thresholds vars
-    public thresholdColors: any = [];
-    public colors = {
+    private thresholdColors: any = [];
+    private colors = {
         stroke: {
             default: "rgba(50, 116, 217, 1)",
             ok: "rgb(18, 132, 10, 1)",
@@ -34,14 +47,8 @@ export class PopoverConfigBuilder {
         }
     };
 
-    constructor () {
-    }
 
-    public getColors = () => {
-        return this.colors;
-    }
-
-    public getColorByIndex (index: number) {
+    public getColorByIndex(index: number) {
         let colors = {
             stroke: [
                 "rgba(50, 116, 217, 1)",
@@ -70,163 +77,152 @@ export class PopoverConfigBuilder {
         };
     }
 
-    public getDefaultOptions (opts: any) {
+    public getOptions() {
         // @ts-ignore
-        let _linear: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.linear();
+        const _linear: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.linear();
         // @ts-ignore
-        let _spline: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.spline();
-        opts = opts || {};
-        opts.unit = opts.unit || '';
-        opts.timezone = opts.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
-        opts.showLegend = opts.showLegend !== false;
-        opts.lineWidth = opts.lineWidth || 3;
-        opts.thresholds = opts.thresholds || {};
-        opts.thresholds.show = opts.thresholds.show !== false;
-        opts.thresholds.warning = opts.thresholds.warning || null;
-        opts.thresholds.critical = opts.thresholds.critical || null;
+        const _spline: uPlot.Series.PathBuilder = <uPlot.Series.PathBuilder>uPlot.paths.spline();
 
-        opts.start = opts.start || 0;
-        opts.end = opts.end || new Date().getTime();
-
-        opts.strokeColor = opts.strokeColor || "rgba(50, 116, 217, 1)";
-        opts.fillColor = opts.fillColor || "rgba(50, 116, 217, 0.2)";
-
-        opts.enableTooltip = opts.enableTooltip !== false;
-        opts.YAxisLabelLength = opts.YAxisLabelLength || 50;
-
-        this.unit = opts.unit;
+        let cssTextColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-color').trim();
 
         let uPlotOptions = {
-            title: "",
-            height:0,
-            width: 0,
-
+            unit: this.unit,
+            title: this.title,
+            width: this.width,
+            height: this.height,
+            tzDate: (ts: number) => {
+                return uPlot.tzDate(new Date(ts * 1000), this.timezone)
+            },
             cursor: {
                 drag: {
                     x: true,
                     y: false,
                 },
+                points: {
+                    stroke: this.pointColorFn(0.5).bind(this),
+                    fill: this.pointColorFn().bind(this),
+                    size: 10,
+                    width: 2.5
+                }
             },
             scales: {
                 x: {
                     time: true,
                     auto: true,
-                    min: opts.start,
-                    max: opts.end,
+                    min: this.start,
+                    max: this.end,
                     //range: [opts.start, opts.end],
                 },
-                y: {
-                    auto: true,
-                  //  min: -1,
-                    // range: (self, dataMin, dataMax) => uPlot.rangeNum(0, dataMax, 0.2, true),
-                    distr: 1
-
-                }
             },
             series: [
                 {},
                 {
-                    label: "Series Title",
-                    width: opts.lineWidth,
-                   // paths: spline(),//(spline) ? spline() : (linear) ? linear() : null,
+                    label: null,
+                    width: this.lineWidth,
+                    paths: _spline,
 
-                    stroke: opts.strokeColor,
-                    fill: opts.fillColor,
+                    stroke: this.strokeColor,
+                    fill: this.fillColor,
                     points: {
                         show: false
                     },
                 },
-
-
             ],
             axes: [
                 {
                     // https://github.com/leeoniya/uPlot/tree/master/docs#axis--grid-opts
                     // https://github.com/leeoniya/uPlot/blob/master/src/fmtDate.js#L65-L107
                     // @formatter:off
-                    label: "Time",
-                values: [
-                    // tick incr          default           year                             month    day                        hour     min                sec       mode
-                    [3600 * 24 * 365,   "{YYYY}",         null,                            null,    null,                      null,    null,              null,        1],
-                    [3600 * 24 * 28,    "{MMM}",          "\n{YYYY}",                      null,    null,                      null,    null,              null,        1],
-                    [3600 * 24,         "{M}/{D}",        "\n{YYYY}",                      null,    null,                      null,    null,              null,        1],
-                    [3600,              "{h}{aa}",        "\n{M}/{D}/{YY}",                null,    null,                      null,    null,              null,        1],
-                    [60,                "{HH}:{mm}",      null,                            null,    null,                      null,    null,              null,        1],
-                    [1,                 ":{ss}",          "\n{M}/{D}/{YY} {h}:{mm}{aa}",   null,    "\n{M}/{D} {h}:{mm}{aa}",  null,    "\n{h}:{mm}{aa}",  null,        1],
-                    [0.001,             ":{ss}.{fff}",    "\n{M}/{D}/{YY} {h}:{mm}{aa}",   null,    "\n{M}/{D} {h}:{mm}{aa}",  null,    "\n{h}:{mm}{aa}",  null,        1],
-                ],
-                // @formatter:on
+                    values: [
+                        // tick incr          default           year                             month    day                        hour     min                sec       mode
+                        [3600 * 24 * 365,   "{YYYY}",         null,                            null,    null,                      null,    null,              null,        1],
+                        [3600 * 24 * 28,    "{MMM}",          "\n{YYYY}",                      null,    null,                      null,    null,              null,        1],
+                        [3600 * 24,         "{M}/{D}",        "\n{YYYY}",                      null,    null,                      null,    null,              null,        1],
+                        [3600,              "{h}{aa}",        "\n{M}/{D}/{YY}",                null,    null,                      null,    null,              null,        1],
+                        [60,                "{HH}:{mm}",      null,                            null,    null,                      null,    null,              null,        1],
+                        [1,                 ":{ss}",          "\n{M}/{D}/{YY} {h}:{mm}{aa}",   null,    "\n{M}/{D} {h}:{mm}{aa}",  null,    "\n{h}:{mm}{aa}",  null,        1],
+                        [0.001,             ":{ss}.{fff}",    "\n{M}/{D}/{YY} {h}:{mm}{aa}",   null,    "\n{M}/{D} {h}:{mm}{aa}",  null,    "\n{h}:{mm}{aa}",  null,        1],
+                    ],
+                    label: this.label,
+                    stroke: cssTextColor,
+                    // @formatter:on
                 },
                 {
-                    label: "",
-                    values: function (u: uPlot, vals: any[], space: any) {
+                    // https://github.com/leeoniya/uPlot/blob/master/docs/README.md#axis--grid-opts,
+                    stroke: cssTextColor,
+                    size: this.YAxisLabelLength,
+                    values: (u: uPlot, vals: any[], space: any) => {
                         return vals.map((v) => {
-                            return v + ' ' + opts.unit;
-                            ;
+                            return v + ' ' + this.unit;
                         });
                     }
-                }
+                },
             ],
             legend: {
-                show: false//opts.showLegend
+                show: false
             }
         };
 
-        if (opts.thresholds.show) {
-            if (opts.thresholds.warning !== "" &&
-                opts.thresholds.critical !== "" &&
-                opts.thresholds.warning !== null &&
-                opts.thresholds.critical !== null) {
-                opts.thresholds.warning = parseFloat(opts.thresholds.warning);
-                opts.thresholds.critical = parseFloat(opts.thresholds.critical);
-                if (opts.thresholds.critical > opts.thresholds.warning) {
+        if (this.thresholds.show) {
+            if (this.thresholds.warning !== "" &&
+                this.thresholds.critical !== "" &&
+                this.thresholds.warning !== null &&
+                this.thresholds.critical !== null) {
+                this.thresholds.warning = parseFloat(this.thresholds.warning.toString());
+                this.thresholds.critical = parseFloat(this.thresholds.critical.toString());
+                if (this.thresholds.critical > this.thresholds.warning) {
                     // Normal thresholds like for a Ping
+                    // .stroke and .fill are not known to TypeScript I don't know why - its hardcoded a few lines above
+                    // @ts-ignore
                     uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(86, 166, 75, 1)"],
-                            [opts.thresholds.warning, "rgba(234, 184, 57, 1)"],
-                            [opts.thresholds.critical, "rgba(224, 47, 68, 1)"],
+                            [this.thresholds.warning, "rgba(234, 184, 57, 1)"],
+                            [this.thresholds.critical, "rgba(224, 47, 68, 1)"],
                         ], true)
                     };
 
+                    // @ts-ignore
                     uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(86, 166, 75, 0.2)"],
-                            [opts.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
-                            [opts.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
+                            [this.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
+                            [this.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
                         ], true)
                     };
 
-                    // Save the thresholds so we can set the color for the mouse over point
+                    // Save the thresholds, so we can set the color for the mouse over point
                     this.thresholdColors = [
                         [0, "rgba(86, 166, 75, 0.2)"],
-                        [opts.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
-                        [opts.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
+                        [this.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
+                        [this.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
                     ];
 
                 } else {
                     // warning is < than critical, Free disk space for example
+                    // @ts-ignore
                     uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(224, 47, 68, 1)"],
-                            [opts.thresholds.critical, "rgba(234, 184, 57, 1)"],
-                            [opts.thresholds.warning, "rgba(86, 166, 75, 1)"],
+                            [this.thresholds.critical, "rgba(234, 184, 57, 1)"],
+                            [this.thresholds.warning, "rgba(86, 166, 75, 1)"],
                         ], true)
                     };
 
+                    // @ts-ignore
                     uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(224, 47, 68, 0.2)"],
-                            [opts.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
-                            [opts.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
+                            [this.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
+                            [this.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
                         ], true)
                     };
 
-                    // Save the thresholds so we can set the color for the mouse over point
+                    // Save the thresholds, so we can set the color for the mouse over point
                     this.thresholdColors = [
                         [0, "rgba(224, 47, 68, 0.2)"],
-                        [opts.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
-                        [opts.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
+                        [this.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
+                        [this.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
                     ];
                 }
             }
@@ -235,36 +231,46 @@ export class PopoverConfigBuilder {
     }
 
     private scaleGradient = (u: uPlot, scaleKey: string, ori: number, scaleStops: any, discrete: boolean = false): CanvasGradient => {
-        let scale: uPlot.Scale = <uPlot.Scale>u.scales[scaleKey];
+        let scale = u.scales[scaleKey];
 
         // we want the stop below or at the scaleMax
         // and the stop below or at the scaleMin, else the stop above scaleMin
-        let minStopIdx: number = 0;
-        let maxStopIdx: number = 0;
+        let minStopIdx = 0;
+        let maxStopIdx = 0;
 
         for (let i = 0; i < scaleStops.length; i++) {
-            let stopVal: number = scaleStops[i][0];
-            if (scale.min && scale.max) {
+            let stopVal = scaleStops[i][0];
+
+            if (scale.min) {
                 if (stopVal <= scale.min || minStopIdx == null)
                     minStopIdx = i;
-                maxStopIdx = i;
+            }
+
+            maxStopIdx = i;
+
+            if (scale.max) {
                 if (stopVal >= scale.max)
                     break;
             }
         }
 
-        if (minStopIdx == maxStopIdx) {
+        if (minStopIdx == maxStopIdx)
             return scaleStops[minStopIdx][1];
-        }
 
         let minStopVal = scaleStops[minStopIdx][0];
         let maxStopVal = scaleStops[maxStopIdx][0];
 
-        if (minStopVal == -Infinity)
-            minStopVal = scale.min;
+        if (minStopVal == -Infinity) {
+            if (scale.min) {
+                minStopVal = scale.min;
+            }
+        }
 
-        if (maxStopVal == Infinity)
-            maxStopVal = scale.max;
+        if (maxStopVal == Infinity) {
+            if (scale.max) {
+                maxStopVal = scale.max;
+            }
+        }
 
         let minStopPos = u.valToPos(minStopVal, scaleKey, true);
         let maxStopPos = u.valToPos(maxStopVal, scaleKey, true);
@@ -283,8 +289,7 @@ export class PopoverConfigBuilder {
             x1 = maxStopPos;
         }
 
-
-        let grd = <CanvasGradient>this.ctx.createLinearGradient(x0, y0, x1, y1);
+        let grd = this.ctx.createLinearGradient(x0, y0, x1, y1);
 
         let prevColor;
 
@@ -303,5 +308,72 @@ export class PopoverConfigBuilder {
         return grd;
     }
 
+
+    public pointColorFn(alpha?: number | null) {
+        if (typeof alpha === "undefined") {
+            alpha = null;
+        }
+
+        return (u: uPlot, seriesIdx: number) => {
+            let parseRgba = (rgba: string) => {
+                // https://stackoverflow.com/questions/34980574/how-to-extract-color-values-from-rgb-string-in-javascript#comment107835204_34980657
+                let parsedRgbaString = rgba.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d*)?)\))?/);
+                let r, g, b = '0';
+                let a = '1';
+                if (parsedRgbaString) {
+                    r = parsedRgbaString[1] || '0';
+                    g = parsedRgbaString[2] || '0';
+                    b = parsedRgbaString[3] || '0';
+                    a = parsedRgbaString[4] || '1';
+                }
+                return [r, g, b, a];
+            };
+
+            // @ts-ignore
+            let s = u.series[seriesIdx].points._stroke;
+            // interpolate for gradients/thresholds
+            if (typeof s !== 'string') {
+                //let timestamp = u.data[0][u.cursor.idxs[0]];
+
+                let pointColor = 'rgba(0,0,0,1)';
+
+                // @ts-ignore
+                let currentValue = u.data[1][u.cursor.idxs[0]];
+
+                for (let i in this.thresholdColors) {
+                    let threshold = this.thresholdColors[i][0];
+                    let color = this.thresholdColors[i][1];
+
+                    if (currentValue >= threshold) {
+                        pointColor = color;
+                    }
+                }
+
+                let rgba = parseRgba(pointColor);
+                let r = rgba[0];
+                let g = rgba[1];
+                let b = rgba[2];
+                let a = 1;
+
+                if (alpha !== null) {
+                    a = Number(alpha);
+                }
+
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+            }
+
+            let rgba = parseRgba(s);
+            let r = rgba[0];
+            let g = rgba[1];
+            let b = rgba[2];
+            let a = rgba[3];
+
+            if (alpha !== null) {
+                a = String(alpha);
+            }
+
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        };
+    }
 
 }

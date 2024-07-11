@@ -1,3 +1,5 @@
+import { ScaleTypes } from './scale-types';
+
 export interface PopoverGraphInterface {
     performance_data: PerformanceData[]
     _csrfToken: string
@@ -18,7 +20,27 @@ export interface Datasource {
     warn: string | null
     crit: string | null
     min: number | null,
-    max: number | null;
+    max: number | null,
+    setup: {
+        metric: {
+            value: number,
+            unit: string,
+            name: ScaleTypes
+        },
+        scale: {
+            min: number | null,
+            max: number | null,
+            type: string,
+        }
+        warn: {
+            low: null | number,
+            high: null | number,
+        }
+        crit: {
+            low: null | number,
+            high: null | number,
+        }
+    }
 }
 
 export interface Data {

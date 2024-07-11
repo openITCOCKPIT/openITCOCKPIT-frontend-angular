@@ -663,7 +663,7 @@
                             <th *ngIf="fields[11]" mat-sort-header="Servicestatus.last_check">{{ t('Last check') }}</th>
                             <th *ngIf="fields[12]" mat-sort-header="Servicestatus.next_check">{{ t('Next check') }}</th>
                             <th *ngIf="fields[13]" mat-sort-header="Servicestatus.output">{{ t('Service output') }}</th>
-                            <th>
+                            <th class="text-center">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                             </th>
                         </tr>
@@ -672,7 +672,7 @@
                         <ng-container *ngFor="let service of services.all_services;  index as i;">
                             <tr *ngIf="i === 0 || (i > 0 && services.all_services[i -1].Host.uuid !== service.Host.uuid)">
                                 <td colspan="16">
-                                    <oitc-hoststatus-icon [hoststatus]="service.Hoststatus"/>
+                                    <oitc-hoststatus-icon [hoststatus]="service.Hoststatus" class="pe-1"/>
                                     @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
                                         <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
                                             {{ service.Service.hostname }}
@@ -718,10 +718,10 @@
                                         [disabled]="false"
                                         [item]="service"></oitc-item-select>
                                 </td>
-                                <td *ngIf="fields[0]" class="width-50">
+                                <td *ngIf="fields[0]" class="width-50 text-center">
                                     <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                                 </td>
-                                <td *ngIf="fields[1]" class="width-50">
+                                <td *ngIf="fields[1]" class="width-50 text-center">
                                     <span *oitcPermission="['services', 'browser']">
                                         <div *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
                                             <oitc-acknowledgement-icon
@@ -739,7 +739,7 @@
                                                  title="{{t('Sticky Acknowledgement')}}"></fa-icon>
                                     </span>
                                 </td>
-                                <td *ngIf="fields[2]" class="width-50">
+                                <td *ngIf="fields[2]" class="width-50 text-center">
                                     <div
                                         *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0">
                                         <oitc-downtime-icon
@@ -751,7 +751,7 @@
                                                  *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
                                     </div>
                                 </td>
-                                <td *ngIf="fields[3]" class="width-50">
+                                <td *ngIf="fields[3]" class="width-50 text-center">
                                     <div *ngIf="service.Servicestatus.notifications_enabled"
                                          [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
                                         <fa-stack>
@@ -771,21 +771,21 @@
                                         </fa-stack>
                                     </div>
                                 </td>
-                                <td *ngIf="fields[4]" class="width-50">
+                                <td *ngIf="fields[4]" class="width-50 text-center">
                                     <div *ngIf="service.Service.has_graph">
                                         <!--<fa-icon [icon]="['fas', 'area-chart']"></fa-icon>-->
                                         <oitc-popover-graph [service]="service.Service.uuid" [host]="service.Host.uuid"
                                                             [timezone]="timezone"></oitc-popover-graph>
                                     </div>
                                 </td>
-                                <td *ngIf="fields[5]" class="width-50">
+                                <td *ngIf="fields[5]" class="width-50 text-center">
                                     <strong [cTooltip]="'Passively transferred host' | transloco"
                                             cTooltipPlacement="right"
                                             *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
                                         P
                                     </strong>
                                 </td>
-                                <td *ngIf="fields[6]" class="width-50">
+                                <td *ngIf="fields[6]" class="width-50 text-center">
                                     <fa-icon [icon]="['fas', 'fire']" size="lg" [ngClass]="{'ok-soft' : service.Service.priority==1,
                                         'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
                                         'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
@@ -813,7 +813,7 @@
                                 <td *ngIf="fields[13]">
                                     <div [innerHTML]="service.Servicestatus.outputHtml"></div>
                                 </td>
-                                <td>
+                                <td class="width-50">
                                     <oitc-actions-button [permission]="'services.edit'"
                                                          [url]="'/services/edit/' + service.Service.id">
                                         <oitc-actions-button-element [permission]="'services.edit'"
