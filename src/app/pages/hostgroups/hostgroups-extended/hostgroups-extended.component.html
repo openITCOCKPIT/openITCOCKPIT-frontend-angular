@@ -357,7 +357,7 @@
                                                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                                 </span>
                                                 <input
-                                                        [(ngModel)]="filter.Service.name"
+                                                        [(ngModel)]="host.serviceParams['filter[servicename]']"
                                                         aria-label="service name"
                                                         cFormControl
                                                         [placeholder]="'Filter by service name' | transloco"
@@ -530,11 +530,38 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
+                                <oitc-no-records
+                                        *ngIf="host.services.length === 0"></oitc-no-records>
+
+                                <c-container fluid>
+                                    <c-row>
+                                        <c-col>
+                                            <oitc-paginate-or-scroll
+                                                    (paginatorChange)="onServicePaginatorChange($event, host)"
+                                                    *ngIf="host.services"
+                                                    [paginateOrScroll]="host.servicesRoot"></oitc-paginate-or-scroll>
+                                        </c-col>
+                                    </c-row>
+                                </c-container>
                             </td>
                         </tr>
                     </ng-container>
                     </tbody>
                 </table>
+                <oitc-no-records
+                        *ngIf="hostgroupExtended.Hosts.length === 0"></oitc-no-records>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                    (paginatorChange)="onHostPaginatorChange($event)"
+                                    *ngIf="hostgroups"
+                                    [paginateOrScroll]="hostgroupExtendedRoot"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
             </c-card-body>
         </c-card>
 

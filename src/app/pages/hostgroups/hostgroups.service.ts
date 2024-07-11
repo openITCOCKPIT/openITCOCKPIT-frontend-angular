@@ -17,7 +17,7 @@ import {
     HostgroupExtendedRoot,
     LoadHostgroupsByStringRoot,
     ServicesList,
-    LoadServicesForHosts
+    LoadServicesForHosts, HostgroupsExtendedParams, HostgroupsExtendedServiceListParams
 } from "./hostgroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
@@ -188,22 +188,13 @@ export class HostgroupsService {
 
     }
 
-    public loadHostgroupWithHostsById(id: number, hostsName: string, up: boolean, down: boolean, unreachable: boolean): Observable<HostgroupExtended> {
+    public loadHostgroupWithHostsById(id: number, params: HostgroupsExtendedParams): Observable<HostgroupExtendedRoot> {
         const proxyPath: string = this.proxyPath;
-        let stateFilter = [
-            up ? 'up' : null,
-            down ? 'down' : null,
-            unreachable ? 'unreachable' : null
-        ];
         return this.http.get<HostgroupExtendedRoot>(`${proxyPath}/hostgroups/loadHostgroupWithHostsById/${id}.json`, {
-            params: {
-                angular: true,
-                'filter[Hosts.name]': hostsName,
-                'filter[Hoststatus.current_state][]': stateFilter
-            } as {}
+            params: params as {}
         }).pipe(
             map((data: HostgroupExtendedRoot) => {
-                return data.hostgroup;
+                return data;
             })
         )
     }
@@ -236,17 +227,13 @@ export class HostgroupsService {
         )
     }
 
-    public loadServicesByHostId(hostId: number, serviceName: string): Observable<ServicesList[]> {
+    public loadServicesByHostId(hostId: number, params: HostgroupsExtendedServiceListParams): Observable<LoadServicesForHosts> {
         const proxyPath: string = this.proxyPath;
         return this.http.get<LoadServicesForHosts>(`${proxyPath}/services/index.json`, {
-            params: {
-                angular: true,
-                'filter[Hosts.id]': hostId,
-                'filter[servicename]': serviceName,
-            }
+            params:params as {}
         }).pipe(
             map((data: LoadServicesForHosts) => {
-                return data.all_services;
+                return data;
             })
         )
     }

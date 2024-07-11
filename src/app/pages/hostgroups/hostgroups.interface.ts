@@ -1,4 +1,4 @@
-import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
+import { PaginateOrScroll, Paging, Scroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 import { HoststatusObject } from '../hosts/hosts.interface';
@@ -25,6 +25,54 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         direction: 'asc',
         'filter[Hostgroups.description]': "",
         'filter[Containers.name]': ""
+    }
+}
+
+/** EXTENDED VIEW PARAMS **/
+export interface HostgroupsExtendedParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+
+    'filter[Hosts.name]' : string,
+    'filter[Hoststatus.current_state][]': string[]
+}
+
+export function getDefaultHostgroupsExtendedParams(): HostgroupsExtendedParams {
+    return {
+        angular: true,
+        scroll: true,
+        page: 1,
+        direction: 'asc',
+
+        "filter[Hosts.name]": '',
+        "filter[Hoststatus.current_state][]": [],
+    }
+}
+
+/** EXTENDED VIEW SERVICE LIST PARAMS **/
+export interface HostgroupsExtendedServiceListParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+
+    'filter[Hosts.id]': number,
+    'filter[servicename]': string,
+}
+
+export function getDefaultHostgroupsExtendedServiceListParams(): HostgroupsExtendedServiceListParams {
+    return {
+        angular: true,
+        scroll: true,
+        page: 1,
+        direction: 'asc',
+
+        "filter[Hosts.id]": 0,
+        "filter[servicename]": '',
     }
 }
 
@@ -183,46 +231,49 @@ export interface HostgroupExtended {
         }
         allowEdit: boolean
     }
-    Hosts: {
-        Host: {
-            id: number
-            uuid: string
-            hostname: string
-            address: string
-            description: string
-            hosttemplate_id: number
-            active_checks_enabled: boolean
-            satelliteId: number
-            containerId: number
-            containerIds: number[]
-            tags: string
-            usageFlag: any
-            allow_edit: boolean
-            disabled: boolean
-            priority: number
-            notes: string
-            is_satellite_host: boolean
-            name: string
-        }
-        Hoststatus: HoststatusObject,
-
-        ServicestatusSummary: {
-            state: {
-                ok: number
-                warning: number
-                critical: number
-                unknown: number
-            }
-            total: number
-            cumulatedState: number
-        },
-        services: ServicesList[] | undefined
-    }[]
+    Hosts: HostGroupExtendedHost[]
     StatusSummary: {
         up: number
         down: any
         unreachable: any
     }
+}
+export interface HostGroupExtendedHost{
+    Host: {
+        id: number
+        uuid: string
+        hostname: string
+        address: string
+        description: string
+        hosttemplate_id: number
+        active_checks_enabled: boolean
+        satelliteId: number
+        containerId: number
+        containerIds: number[]
+        tags: string
+        usageFlag: any
+        allow_edit: boolean
+        disabled: boolean
+        priority: number
+        notes: string
+        is_satellite_host: boolean
+        name: string
+    }
+    Hoststatus: HoststatusObject,
+
+    ServicestatusSummary: {
+        state: {
+            ok: number
+            warning: number
+            critical: number
+            unknown: number
+        }
+        total: number
+        cumulatedState: number
+    },
+    services: ServicesList[] | undefined,
+    servicesRoot: LoadServicesForHosts|undefined,
+    serviceParams: HostgroupsExtendedServiceListParams
 }
 
 // LOAD HOST GROUPS BY NAME

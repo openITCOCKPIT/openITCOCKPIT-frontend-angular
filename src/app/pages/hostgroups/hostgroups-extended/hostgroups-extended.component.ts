@@ -8,7 +8,7 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent, DropdownComponent,
+    CardTitleDirective, ColComponent, ContainerComponent, DropdownComponent,
     DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
@@ -31,7 +31,17 @@ import { TranslocoDirective, TranslocoService, TranslocoPipe } from '@jsverse/tr
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HostgroupsService } from '../hostgroups.service';
-import { HostgroupExtended, ServicesList } from '../hostgroups.interface';
+import {
+    getDefaultHostgroupsExtendedParams, getDefaultHostgroupsExtendedServiceListParams,
+    getDefaultHostgroupsIndexParams,
+    HostgroupExtended,
+    HostGroupExtendedHost,
+    HostgroupExtendedRoot,
+    HostgroupsExtendedParams,
+    HostgroupsExtendedServiceListParams,
+    HostgroupsIndexParams, LoadServicesForHosts,
+    ServicesList
+} from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -71,6 +81,12 @@ import {
 } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -128,7 +144,11 @@ import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../
         DropdownComponent,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        ContainerComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -148,6 +168,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
     protected hostgroupExtended: HostgroupExtended = {} as HostgroupExtended;
+    protected hostgroupExtendedRoot: HostgroupExtendedRoot = {} as HostgroupExtendedRoot;
     protected timezone!: TimezoneObject;
 
     protected filter: any = {
@@ -223,10 +244,15 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     private loadHostgroupExtended(): void {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.filter.Host.name, this.filter.Hoststatus.current_state.up, this.filter.Hoststatus.current_state.down, this.filter.Hoststatus.current_state.unreachable)
-            .subscribe((result: HostgroupExtended) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams)
+            .subscribe((result: HostgroupExtendedRoot) => {
                 // Then put post where it belongs. Also unpack that bullshit
-                this.hostgroupExtended = result;
+                this.hostgroupExtended = result.hostgroup;
+                this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {
+                    host.serviceParams = getDefaultHostgroupsExtendedServiceListParams();
+                    host.serviceParams['filter[Hosts.id]'] = host.Host.id;
+                });
+                this.hostgroupExtendedRoot = result;
             }));
     }
 
@@ -366,9 +392,10 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         })
     }
 
-    private loadServicesList(element: any): void {
-        this.HostgroupsService.loadServicesByHostId(element.Host.id, this.filter.Service.name).subscribe((services: ServicesList[]) => {
-            element.services = services
+    private loadServicesList(element: HostGroupExtendedHost): void {
+        this.HostgroupsService.loadServicesByHostId(element.Host.id, element.serviceParams as HostgroupsExtendedServiceListParams).subscribe((root: LoadServicesForHosts) => {
+            element.services = root.all_services;
+            element.servicesRoot = root;
         });
         element.services = [];
         return;
@@ -384,11 +411,38 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     protected onHostFilterChange(event: Event): void {
+        this.hostParams['filter[Hoststatus.current_state][]'] = [];
+        if (this.filter.Hoststatus.current_state.up) {
+            this.hostParams['filter[Hoststatus.current_state][]'].push('up');
+        }
+        if (this.filter.Hoststatus.current_state.down) {
+            this.hostParams['filter[Hoststatus.current_state][]'].push('down');
+        }
+        if (this.filter.Hoststatus.current_state.unreachable) {
+            this.hostParams['filter[Hoststatus.current_state][]'].push('unreachable');
+        }
+        this.hostParams.page = 1;
         this.loadHostgroupExtended();
     }
 
     protected onServiceFilterChange(event: Event, element: any): void {
+        element.serviceParams.page = 1;
         this.loadServicesList(element);
+    }
+
+    public hostParams: HostgroupsExtendedParams = getDefaultHostgroupsExtendedParams();
+
+    // Callback for Paginator or Scroll Index Component
+    public onHostPaginatorChange(change: PaginatorChangeEvent): void {
+        this.hostParams.page = change.page;
+        this.hostParams.scroll = change.scroll;
+        this.loadHostgroupExtended();
+    }
+
+    public onServicePaginatorChange(change: PaginatorChangeEvent, host: HostGroupExtendedHost): void {
+        host.serviceParams.page = change.page;
+        host.serviceParams.scroll = change.scroll;
+        this.loadServicesList(host);
     }
 
 }
