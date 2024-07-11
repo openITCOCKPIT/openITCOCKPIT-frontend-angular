@@ -1,18 +1,13 @@
 .popup-graph-container {
-    position: fixed;
-    /*top: 320px;*/
-    /*left: 495px;*/
-    width: 60%;
+    width: 750px;
     height: auto;
-    min-height:220px;
-    background-color: #FFF;
-    box-shadow: 0 0 15px #9E9E9E;
-    border-radius: 3px;
-    z-index: 1;
 }
 
+.word-wrap-anywhere {
+    word-wrap: anywhere;
+}
 
-.serviceGraphUPlot {
+.popover-chart {
     width: 100%;
-    height:180px;
+    height: 260px;
 }
