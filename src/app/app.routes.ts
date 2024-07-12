@@ -323,6 +323,9 @@ const coreRoutes: Routes = [{
     path: 'systemdowntimes/addHostgroupdowntime',
     loadComponent: () => import('./pages/systemdowntimes/add-hostgroupdowntime/add-hostgroupdowntime.component').then(m => m.AddHostgroupdowntimeComponent)
 }, {
+    path: 'systemdowntimes/addContainerdowntime',
+    loadComponent: () => import('./pages/systemdowntimes/add-containerdowntime/add-containerdowntime.component').then(m => m.AddContainerdowntimeComponent)
+}, {
     path: 'downtimes/service',
     loadComponent: () => import('./pages/downtimes/downtimes-service/downtimes-service.component').then(m => m.DowntimesServiceComponent)
 }, {

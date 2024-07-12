@@ -96,4 +96,27 @@ export class SystemdowntimesService {
                 })
             );
     }
+
+    public createContainerdowntime(containerdowntime: SystemdowntimesPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/systemdowntimes/addContainerdowntime.json?angular=true`, {
+            Systemdowntime: containerdowntime
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
 }

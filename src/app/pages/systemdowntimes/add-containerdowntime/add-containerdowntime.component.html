@@ -16,7 +16,7 @@
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                    {{ t('Host group') }}
+                    {{ t('Container') }}
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -27,7 +27,7 @@
         <form cForm (ngSubmit)="submit()">
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new host group downtime') }}</h5>
+                    <h5 cCardTitle>{{ t('Create new container downtime') }}</h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
@@ -42,19 +42,18 @@
                 </c-card-header>
                 <c-card-body>
                     <div class="mb-3">
-                        <label cLabel for="Hostgroups">
-                            {{ t('Host groups') }}
+                        <label cLabel for="Containers">
+                            {{ t('Containers') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <c-input-group>
                             <oitc-multi-select
-                                name="Hostgroups"
-                                id="Hostgroups"
+                                name="Containers"
+                                id="Containers"
                                 optionValue="key"
                                 optionLabel="value"
-                                [options]="hostgroups"
+                                [options]="containers"
                                 [(ngModel)]="post.object_id"
-                                [searchCallback]="loadHostgroups"
                                 class="flex-1"
                                 oitcFormError [errors]="errors" errorField="object_id">
                             </oitc-multi-select>
@@ -63,7 +62,7 @@
                                             errorField="object_id"></oitc-form-feedback>
                     </div>
                     <div>
-                        <label>
+                        <label cLabel>
                             {{ t('Maintenance period for') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
@@ -236,7 +235,7 @@
                     </label>
 
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Create new host group downtime') }}
+                        {{ t('Create new container downtime') }}
                     </button>
                     <button [fallbackUrl]="['downtimes', 'host']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

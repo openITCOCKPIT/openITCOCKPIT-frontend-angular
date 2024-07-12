@@ -85,7 +85,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addContainerdowntime']" cDropdownItem
                                        *oitcPermission="['systemdowntimes', 'addhostdowntime']">
                                         <fa-icon [icon]="['fas', 'link']"></fa-icon>
                                         {{ t('Create container downtime') }}
@@ -93,8 +93,9 @@
                                 </li>
                                 @if (PermissionsService.hasModule('DistributeModule')) {
                                     <li>
-                                        <a [routerLink]="['/', 'downtimes', 'host', 'create']" cDropdownItem
-                                           *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                        <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
+                                           cDropdownItem
+                                           *oitcPermission="['distributemodule', 'satellites', 'addsatellitedowntime']">
                                             <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
                                             {{ t('Create satellite downtime') }}
                                         </a>
