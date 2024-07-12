@@ -128,6 +128,9 @@ const coreRoutes: Routes = [{
     path: 'services/copy/:ids',
     loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
 }, {
+    path: 'services/notMonitored',
+    loadComponent: () => import('./pages/services/services-not-monitored/services-not-monitored.component').then(m => m.ServicesNotMonitoredComponent)
+}, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {

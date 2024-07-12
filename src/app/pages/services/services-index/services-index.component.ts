@@ -323,7 +323,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public showFilter: boolean = false;
     public showColumnConfig: boolean = false;
     public services?: ServicesIndexRoot;
-    public tab: number = 0;
     public timezone!: TimezoneObject;
     public selectedItems: any[] = [];
     public userFullname: string = '';
@@ -360,11 +359,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         );
     }
 
-    public setTab(tab: number) {
-        //will be replaced by routers later
-        this.tab = tab;
-    }
-
     public onSortChange(sort: Sort) {
         if (sort.direction) {
             this.params.sort = sort.active;
@@ -383,7 +377,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.load();
     }
 
-    public showFilterToggle() {
+    public toggleFilter() {
         this.showFilter = !this.showFilter;
         if (!this.showFilter) {
             this.showColumnConfig = false;
