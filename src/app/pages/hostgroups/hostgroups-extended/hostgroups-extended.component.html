@@ -377,7 +377,7 @@
                                                                name="statusFilterServiceOk"
                                                                oitcDebounce
                                                                (debouncedValue)="onServiceFilterChange($event, host)"
-                                                               [(ngModel)]="filter.Servicestatus.current_state.ok"
+                                                               [(ngModel)]="host.Servicestatus.current_state.ok"
                                                                id="statusFilterServiceOk">
                                                         {{ host.ServicestatusSummary.state.ok }}
                                                     </label>
@@ -389,7 +389,7 @@
                                                                name="statusFilterServiceWarning"
                                                                oitcDebounce
                                                                (debouncedValue)="onServiceFilterChange($event, host)"
-                                                               [(ngModel)]="filter.Servicestatus.current_state.warning"
+                                                               [(ngModel)]="host.Servicestatus.current_state.warning"
                                                                id="statusFilterServiceWarning">
                                                         {{ host.ServicestatusSummary.state.warning }}
                                                     </label>
@@ -400,7 +400,7 @@
                                                                name="statusFilterServiceCritical"
                                                                oitcDebounce
                                                                (debouncedValue)="onServiceFilterChange($event, host)"
-                                                               [(ngModel)]="filter.Servicestatus.current_state.critical"
+                                                               [(ngModel)]="host.Servicestatus.current_state.critical"
                                                                id="statusFilterServiceCritical">
                                                         {{ host.ServicestatusSummary.state.critical }}
                                                     </label>
@@ -411,7 +411,7 @@
                                                                name="statusFilterServiceUnknown"
                                                                oitcDebounce
                                                                (debouncedValue)="onServiceFilterChange($event, host)"
-                                                               [(ngModel)]="filter.Servicestatus.current_state.unknown"
+                                                               [(ngModel)]="host.Servicestatus.current_state.unknown"
                                                                id="statusFilterServiceUnknown">
                                                         {{ host.ServicestatusSummary.state.unknown }}
                                                     </label>

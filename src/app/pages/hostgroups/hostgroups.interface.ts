@@ -36,7 +36,7 @@ export interface HostgroupsExtendedParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
 
-    'filter[Hosts.name]' : string,
+    'filter[Hosts.name]': string,
     'filter[Hoststatus.current_state][]': string[]
 }
 
@@ -62,6 +62,7 @@ export interface HostgroupsExtendedServiceListParams {
 
     'filter[Hosts.id]': number,
     'filter[servicename]': string,
+    'filter[Servicestatus.current_state][]': string[],
 }
 
 export function getDefaultHostgroupsExtendedServiceListParams(): HostgroupsExtendedServiceListParams {
@@ -73,6 +74,7 @@ export function getDefaultHostgroupsExtendedServiceListParams(): HostgroupsExten
 
         "filter[Hosts.id]": 0,
         "filter[servicename]": '',
+        "filter[Servicestatus.current_state][]": [],
     }
 }
 
@@ -238,7 +240,8 @@ export interface HostgroupExtended {
         unreachable: any
     }
 }
-export interface HostGroupExtendedHost{
+
+export interface HostGroupExtendedHost {
     Host: {
         id: number
         uuid: string
@@ -272,8 +275,16 @@ export interface HostGroupExtendedHost{
         cumulatedState: number
     },
     services: ServicesList[] | undefined,
-    servicesRoot: LoadServicesForHosts|undefined,
-    serviceParams: HostgroupsExtendedServiceListParams
+    servicesRoot: LoadServicesForHosts | undefined,
+    serviceParams: HostgroupsExtendedServiceListParams,
+    Servicestatus: {
+        current_state: {
+            ok: false,
+            warning: false,
+            critical: false,
+            unknown: false
+        }
+    }
 }
 
 // LOAD HOST GROUPS BY NAME

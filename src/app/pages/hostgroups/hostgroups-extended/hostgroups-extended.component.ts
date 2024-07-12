@@ -251,6 +251,16 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {
                     host.serviceParams = getDefaultHostgroupsExtendedServiceListParams();
                     host.serviceParams['filter[Hosts.id]'] = host.Host.id;
+
+
+                    host.Servicestatus = {
+                        current_state: {
+                            ok: false,
+                            warning: false,
+                            critical: false,
+                            unknown: false
+                        }
+                    }
                 });
                 this.hostgroupExtendedRoot = result;
             }));
@@ -393,6 +403,19 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     private loadServicesList(element: HostGroupExtendedHost): void {
+        element.serviceParams['filter[Servicestatus.current_state][]'] = [];
+        if (element.Servicestatus.current_state.ok) {
+            element.serviceParams['filter[Servicestatus.current_state][]'].push('ok');
+        }
+        if (element.Servicestatus.current_state.warning) {
+            element.serviceParams['filter[Servicestatus.current_state][]'].push('warning');
+        }
+        if (element.Servicestatus.current_state.critical) {
+            element.serviceParams['filter[Servicestatus.current_state][]'].push('critical');
+        }
+        if (element.Servicestatus.current_state.unknown) {
+            element.serviceParams['filter[Servicestatus.current_state][]'].push('unknown');
+        }
         this.HostgroupsService.loadServicesByHostId(element.Host.id, element.serviceParams as HostgroupsExtendedServiceListParams).subscribe((root: LoadServicesForHosts) => {
             element.services = root.all_services;
             element.servicesRoot = root;
