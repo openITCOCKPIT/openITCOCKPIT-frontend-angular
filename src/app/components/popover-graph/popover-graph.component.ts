@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy } from '@angular/core';
+import { Component, inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
@@ -9,9 +9,8 @@ import { PerformanceData } from './popover-graph.interface';
 import { NgClass, NgForOf, NgIf, NgStyle } from '@angular/common';
 import { PopoverConfigBuilder } from './popover-config-builder';
 import * as _uPlot from 'uplot';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { debounce } from '../debounce.decorator';
-import { ScaleTypes } from './scale-types';
 import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
 
 const uPlot: any = (_uPlot as any)?.default;
@@ -47,7 +46,7 @@ type PerfParams = {
     styleUrl: './popover-graph.component.css'
 })
 export class PopoverGraphComponent implements OnDestroy {
-    public visible: boolean = false;
+    private visible: boolean = false;
     public _hostUuid: string = '';
     public _serviceUuid: string = '';
     public perfData: PerformanceData[] = [];
@@ -55,6 +54,7 @@ export class PopoverGraphComponent implements OnDestroy {
 
     private PopoverGraphService = inject(PopoverGraphService);
     private subscriptions: Subscription = new Subscription();
+    private timeout: any = null;
 
     public readonly chartHeight: number = 260;
 
@@ -70,6 +70,8 @@ export class PopoverGraphComponent implements OnDestroy {
 
     private timer: ReturnType<typeof setTimeout> | null = null;
     private startTimestamp: number = new Date().getTime();
+
+    @ViewChild('graphOverlayPanel') graphOverlayPanel!: OverlayPanel;
 
     public constructor(private window: Window) {
     }
@@ -103,16 +105,14 @@ export class PopoverGraphComponent implements OnDestroy {
         this._timezone = timezone;
     }
 
-    public showTooltip() {
-        this.visible = true;
-        this.setParamsAndLoadPerfdata();
-    }
-
-    public hideTooltip() {
-        this.visible = false;
-        if (this.timer !== null) {
-            clearTimeout(this.timer);
-            this.timer = null;
+    public showTooltip(event: MouseEvent) {
+        // delay to prevent requests if a user is quickly hovering over multiple icons
+        if (this.timeout === null) {
+            this.timeout = setTimeout(() => {
+                this.visible = true;
+                this.graphOverlayPanel.toggle(event); // open popup
+                this.setParamsAndLoadPerfdata();
+            }, 150);
         }
     }
 
@@ -144,6 +144,13 @@ export class PopoverGraphComponent implements OnDestroy {
                 setTimeout(() => {
                     this.renderGraphs();
                     this.isLoading = false;
+
+                    // Check position after everything has rendered
+                    setTimeout(() => {
+                        this.graphOverlayPanel.align();
+                    }, 150);
+
+
                 }, 150);
             })
         );
@@ -177,17 +184,13 @@ export class PopoverGraphComponent implements OnDestroy {
             }
 
             let GraphDefaults = new PopoverConfigBuilder();
+            GraphDefaults.setDatasource(this.perfData[i].datasource);
 
             const colors = GraphDefaults.getColorByIndex(i);
 
             // Setup graph defaults
             GraphDefaults.title = "";
             GraphDefaults.lineWidth = 2;
-            GraphDefaults.thresholds = {
-                show: (this.perfData[i].datasource.setup.scale.type !== ScaleTypes.O),
-                warning: parseFloat(<string>this.perfData[i].datasource.warn),
-                critical: parseFloat(<string>this.perfData[i].datasource.crit),
-            };
 
             GraphDefaults.timezone = this.timezone.user_timezone;
 
@@ -212,7 +215,6 @@ export class PopoverGraphComponent implements OnDestroy {
             options.legend.show = false;
 
             if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
-                console.log(options);
                 try {
                     let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
 
@@ -231,5 +233,17 @@ export class PopoverGraphComponent implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    public cancelDebounce(event: MouseEvent) {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
+
+        if (this.visible) {
+            // Close popup
+            this.graphOverlayPanel.toggle(event);
+            this.visible = false;
+        }
+    }
 
 }
