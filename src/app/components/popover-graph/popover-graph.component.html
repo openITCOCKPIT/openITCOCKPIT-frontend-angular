@@ -1,13 +1,15 @@
 <ng-container *transloco="let t">
     <div #hoverIcon
-         (mouseenter)="graphOverlayPanel.toggle($event); showTooltip()">
+         (mouseenter)="showTooltip($event)"
+         (mouseleave)="cancelDebounce($event)">
         <fa-icon [icon]="['fas', 'area-chart']"
                  id="serviceGraphContainer-{{service}}"
         ></fa-icon>
     </div>
 
     <p-overlayPanel #graphOverlayPanel [showCloseIcon]="true"
-                    class="popup-graph-container" [style]="{ width: '70%' }">
+                    class="popup-graph-container"
+                    [style]="{ width: '70%', 'margin-left': '35px' }">
         <ng-template pTemplate="content">
             <div class="row" *ngIf="isLoading">
                 <div class="col-12">
