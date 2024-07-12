@@ -301,21 +301,22 @@ body.dark-theme .p-overlaypanel {
 }
 
 /* chevron pointing down */
-.p-overlaypanel.p-overlaypanel-flipped::before {
+body.dark-theme .p-overlaypanel.p-overlaypanel-flipped::before {
     border-top-color: var(--cui-border-color);
+    border-bottom-color: transparent;
 }
 
 body.dark-theme .p-overlaypanel.p-overlaypanel-flipped::after {
     border-top-color: var(--cui-border-color);
+    border-bottom-color: transparent;
 }
 
 /* chevron pointing up */
-/*
 body.dark-theme .p-overlaypanel::before {
-    border-bottom-color: var(--cui-border-color);
+    border-bottom-color: transparent;
 }
 
 body.dark-theme .p-overlaypanel::after {
-    border-bottom-color: var(--cui-border-color);;
-}*/
+    border-bottom-color: var(--cui-border-color);
+}
 

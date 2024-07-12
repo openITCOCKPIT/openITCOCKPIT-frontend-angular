@@ -12,11 +12,13 @@ import * as _uPlot from 'uplot';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { debounce } from '../debounce.decorator';
 import { ScaleTypes } from './scale-types';
+import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
 
 const uPlot: any = (_uPlot as any)?.default;
 
 type PerfParams = {
-    angular: boolean,
+    angular: true,
+    disableGlobalLoader: true,
     host_uuid: string,
     service_uuid: string,
     start: number,
@@ -38,7 +40,8 @@ type PerfParams = {
         RowComponent,
         NgIf,
         ContainerComponent,
-        OverlayPanelModule
+        OverlayPanelModule,
+        ChartLoaderComponent
     ],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css'
@@ -48,6 +51,7 @@ export class PopoverGraphComponent implements OnDestroy {
     public _hostUuid: string = '';
     public _serviceUuid: string = '';
     public perfData: PerformanceData[] = [];
+    public isLoading: boolean = false;
 
     private PopoverGraphService = inject(PopoverGraphService);
     private subscriptions: Subscription = new Subscription();
@@ -56,6 +60,7 @@ export class PopoverGraphComponent implements OnDestroy {
 
     private perfParams: PerfParams = {
         angular: true,
+        disableGlobalLoader: true,
         host_uuid: this._hostUuid,
         service_uuid: this._serviceUuid,
         start: 0,
@@ -127,6 +132,7 @@ export class PopoverGraphComponent implements OnDestroy {
     }
 
     private loadPerfData() {
+        this.isLoading = true;
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
                 if (perfdata.performance_data && perfdata.performance_data.length > 4) {
@@ -137,6 +143,7 @@ export class PopoverGraphComponent implements OnDestroy {
 
                 setTimeout(() => {
                     this.renderGraphs();
+                    this.isLoading = false;
                 }, 150);
             })
         );

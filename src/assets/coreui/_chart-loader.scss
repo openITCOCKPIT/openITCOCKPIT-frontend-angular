@@ -1,0 +1,92 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2024 Agus Eko Setiyono (https://codepen.io/agusesetiyono/pen/dJZqve)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
+
+.chart-loader {
+    background-color: transparent;
+    margin: 0 auto;
+    max-width: 472px;
+}
+
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.chart-loader-animated-bg {
+    height: 200px;
+    position: relative;
+}
+
+.chart-loader-bg-mask {
+    background: rgba(0, 0, 0, .1);
+    position: absolute;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: placeHolderShimmer;
+    background: rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, rgba(0, 0, 0, .1) 8%, rgba(0, 0, 0, .2) 18%, rgba(0, 0, 0, .1) 33%);
+    background-size: 800px 104px;
+}
+
+.chart-loader-bg-mask.c-a {
+    bottom: 0;
+    left: 0;
+    width: 20px;
+    height: 50%;
+}
+
+.chart-loader-bg-mask.c-b {
+    bottom: 0;
+    left: 40px;
+    width: 20px;
+    height: 40%;
+}
+
+.chart-loader-bg-mask.c-c {
+    bottom: 0;
+    left: 80px;
+    width: 20px;
+    height: 80%;
+}
+
+.chart-loader-bg-mask.c-d {
+    bottom: 0;
+    left: 120px;
+    width: 20px;
+    height: 70%;
+}
+
+.chart-loader-bg-mask.c-e {
+    bottom: 0;
+    left: 160px;
+    width: 20px;
+    height: 100%;
+}
