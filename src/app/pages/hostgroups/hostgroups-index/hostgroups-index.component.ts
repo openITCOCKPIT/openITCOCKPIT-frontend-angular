@@ -22,8 +22,8 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent,
-    DropdownDividerDirective,
+    ContainerComponent, DropdownComponent,
+    DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -56,6 +56,7 @@ import {
     getDefaultHostgroupsIndexParams
 } from '../hostgroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-hostgroups-index',
@@ -102,7 +103,11 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         TranslocoPipe,
         XsButtonDirective,
         BadgeComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './hostgroups-index.component.html',
     styleUrl: './hostgroups-index.component.css',
@@ -226,5 +231,27 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
         if (ids) {
             this.router.navigate(['/', 'hostgroups', 'copy', ids]);
         }
+    }
+
+
+    public linkFor(type: string) {
+        let baseUrl: string = '/services/listToPdf.pdf?';
+        if (type === 'csv') {
+            baseUrl = '/services/listToCsv?';
+        }
+
+        let urlParams = {
+            'angular': true,
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
+        };
+
+
+        let stringParams: HttpParams = new HttpParams();
+
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
+
     }
 }
