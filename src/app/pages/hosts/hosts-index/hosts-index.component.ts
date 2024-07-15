@@ -89,10 +89,10 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
+    HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
-    HostEnableNotificationsItem,
-    ServiceAcknowledgeItem
+    HostEnableNotificationsItem
 } from '../../../services/external-commands.service';
 import {
     HostsMaintenanceModalComponent
@@ -111,6 +111,12 @@ import {
     ServiceMaintenanceModalComponent
 } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import {
+    ServiceAcknowledgeModalComponent
+} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import {
+    HostAcknowledgeModalComponent
+} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -182,7 +188,9 @@ import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
         HostsDisableNotificationsModalComponent,
         DisableModalComponent,
         ServiceMaintenanceModalComponent,
-        JsonPipe
+        JsonPipe,
+        ServiceAcknowledgeModalComponent,
+        HostAcknowledgeModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -654,16 +662,16 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public acknowledgeStatus() {
-        let items: ServiceAcknowledgeItem[] = [];
-        items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
+        let items: HostAcknowledgeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): HostAcknowledgeItem => {
             return {
-                command: ExternalCommandsEnum.submitServicestateAck,
+                command: ExternalCommandsEnum.submitHoststateAck,
                 hostUuid: item.Host.uuid,
-                serviceUuid: item.Service.uuid,
-                sticky: 0,
-                notify: false,
+                hostAckType: item.type,
                 author: this.userFullname,
                 comment: '',
+                notify: true,
+                sticky: 0
             };
         });
         this.selectedItems = items;
@@ -674,7 +682,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         }
         this.modalService.toggle({
             show: true,
-            id: 'serviceAcknowledgeModal',
+            id: 'hostAcknowledgeModal',
         });
     }
 

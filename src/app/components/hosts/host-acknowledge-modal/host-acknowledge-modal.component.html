@@ -15,9 +15,25 @@
         <c-modal-body>
             <c-row>
                 <c-col>
-                    <div class="mb-2">
+                    <div class="mb-3">
+                        <label for="hostAckType">
+                            {{ t('Select method') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <select
+                            cSelect
+                            name="hostAckType"
+                            id="hostAckType"
+                            [(ngModel)]="ackType">
+                            <option [value]="'hostOnly'">{{ t('Individual hosts') }}</option>
+                            <option [value]="'hostAndServices'">{{ t('Hosts including services') }}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
                         <label cLabel for="inputcomment_host">{{ t('Comment') }}</label>
                         <input cFormControl id="inputcomment_host" name="inputcomment_host"
+                               [placeholder]="'Comment' | transloco"
                                [(ngModel)]="ackModal.comment">
                         <div *ngIf="error" cFormText>
                             <div class="help-block text-danger">
@@ -25,24 +41,26 @@
                             </div>
                         </div>
                     </div>
-                    <c-form-check class="mb-2">
+                    <c-form-check class="mb-3">
                         <input cFormCheckInput id="acksticky_host" name="acksticky_host" type="checkbox"
                                class="checkbox-lg custom-check-default"
                                [(ngModel)]="ackModal.sticky"/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="acksticky_host">{{ t('Sticky') }}</label>
+                        <div class="helptext help-block">
+                            {{ t('Sticky acknowledgements will be stay until the host is back in state Ok') }}
+                        </div>
                     </c-form-check>
-                    <div class="helptext help-block">
-                        {{ t('Sticky acknowledgements will be stay until the host is back in state Ok') }}
-                    </div>
-                    <c-form-check class="mb-2">
+
+                    <c-form-check class="mb-3">
                         <input cFormCheckInput id="acknotify_host" name="acknotify_host" type="checkbox"
                                class="checkbox-lg custom-check-default"
                                [(ngModel)]="ackModal.notify"/>
                         <label cFormCheckLabel class="ms-1 mt-1" for="acknotify_host">{{ t('Notify') }}</label>
+                        <div class="helptext help-block">
+                            {{ t('The system will send a notification to inform contacts that the current host problem has been acknowledged.') }}
+                        </div>
                     </c-form-check>
-                    <div class="helptext help-block">
-                        {{ t('The system will send a notification to inform contacts that the current host problem has been acknowledged.') }}
-                    </div>
+
                 </c-col>
             </c-row>
         </c-modal-body>

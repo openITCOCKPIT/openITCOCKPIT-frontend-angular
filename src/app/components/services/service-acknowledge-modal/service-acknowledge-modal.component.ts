@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
@@ -75,7 +75,8 @@ import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../servic
         DebounceDirective,
         FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        TranslocoPipe
     ],
     templateUrl: './service-acknowledge-modal.component.html',
     styleUrl: './service-acknowledge-modal.component.css'
@@ -97,7 +98,7 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
     public ackModal = {
         comment: '',
         sticky: false,
-        notify: false,
+        notify: true,
     };
 
     hideModal() {

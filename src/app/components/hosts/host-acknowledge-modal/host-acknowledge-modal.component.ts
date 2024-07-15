@@ -8,6 +8,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
+    FormSelectDirective,
     FormTextDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -19,11 +20,13 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { ExternalCommandsService, HostAcknowledgeItem } from '../../../services/external-commands.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 
 
 @Component({
@@ -48,18 +51,25 @@ import { Subscription } from 'rxjs';
         NgIf,
         ReactiveFormsModule,
         RowComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        NgSelectModule,
+        RequiredIconComponent,
+        FormsModule,
+        FormSelectDirective,
+        TranslocoPipe
     ],
     templateUrl: './host-acknowledge-modal.component.html',
     styleUrl: './host-acknowledge-modal.component.css'
 })
 export class HostAcknowledgeModalComponent implements OnDestroy {
-    @Input({required: true}) public items: ServiceAcknowledgeItem[] = [];
+    @Input({required: true}) public items: HostAcknowledgeItem[] = [];
     @Input({required: false}) public mAcknowledgeMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed = new EventEmitter<boolean>();
     public isSend: boolean = false;
     public error: boolean = false;
+
+    public ackType: 'hostOnly' | 'hostAndServices' = 'hostOnly';
 
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
@@ -70,7 +80,7 @@ export class HostAcknowledgeModalComponent implements OnDestroy {
     public ackModal = {
         comment: '',
         sticky: false,
-        notify: false,
+        notify: true,
     };
 
     hideModal() {
@@ -93,10 +103,11 @@ export class HostAcknowledgeModalComponent implements OnDestroy {
         const NON_STICKY = 0;
         const STICKY = 2;
 
-        this.items.forEach((element: ServiceAcknowledgeItem) => {
+        this.items.forEach((element: HostAcknowledgeItem) => {
             element.sticky = (this.ackModal.sticky) ? STICKY : NON_STICKY;
             element.notify = this.ackModal.notify;
             element.comment = this.ackModal.comment;
+            element.hostAckType = this.ackType;
         });
 
         this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
