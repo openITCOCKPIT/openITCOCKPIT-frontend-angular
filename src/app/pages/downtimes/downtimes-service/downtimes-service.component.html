@@ -78,23 +78,24 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
-                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addHostgroupdowntime']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
                                         <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                                        {{ t('Create service group downtime') }}
+                                        {{ t('Create host group downtime') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
-                                       *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                    <a [routerLink]="['/', 'systemdowntimes', 'addContainerdowntime']" cDropdownItem
+                                       *oitcPermission="['systemdowntimes', 'addhostdowntime']">
                                         <fa-icon [icon]="['fas', 'link']"></fa-icon>
                                         {{ t('Create container downtime') }}
                                     </a>
                                 </li>
                                 @if (PermissionsService.hasModule('DistributeModule')) {
                                     <li>
-                                        <a [routerLink]="['/', 'downtimes', 'service', 'create']" cDropdownItem
-                                           *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                        <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
+                                           cDropdownItem
+                                           *oitcPermission="['distributemodule', 'satellites', 'addsatellitedowntime']">
                                             <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
                                             {{ t('Create satellite downtime') }}
                                         </a>
