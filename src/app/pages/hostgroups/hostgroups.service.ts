@@ -3,17 +3,21 @@ import { catchError, map, Observable, of } from "rxjs";
 import {
     AddHostgroupsPost,
     Hostgroup,
+    HostgroupExtendedRoot,
     HostgroupsCopyGet,
     HostgroupsCopyGetHostgroup,
     HostgroupsCopyPostResult,
     HostgroupsEditGet,
+    HostgroupsExtendedParams,
+    HostgroupsExtendedServiceListParams,
     HostgroupsIndexParams,
     HostgroupsIndexRoot,
     HostgroupsLoadHostgroupsByStringParams,
     LoadContainersRoot,
     LoadHostsRequest,
     LoadHostsResponse,
-    LoadHosttemplates
+    LoadHosttemplates,
+    LoadServicesForHosts
 } from "./hostgroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
@@ -26,11 +30,11 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
     providedIn: 'root'
 })
 export class HostgroupsService {
-    private readonly http = inject(HttpClient);
-    private readonly proxyPath = inject(PROXY_PATH);
+    private readonly http: HttpClient = inject(HttpClient);
+    private readonly proxyPath: string = inject(PROXY_PATH);
 
     public getIndex(params: HostgroupsIndexParams): Observable<HostgroupsIndexRoot> {
-        const proxyPath = this.proxyPath;
+        const proxyPath: string = this.proxyPath;
         return this.http.get<HostgroupsIndexRoot>(`${proxyPath}/hostgroups/index.json`, {
             params: params as {} // cast HostgroupsIndexParams into object
         }).pipe(
@@ -41,8 +45,12 @@ export class HostgroupsService {
     }
 
     public loadContainers(): Observable<LoadContainersRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<LoadContainersRoot>(`${proxyPath}/hostgroups/loadContainers.json?angular=true`).pipe(
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/hostgroups/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
             map((data: LoadContainersRoot) => {
                 return data;
             })
@@ -71,7 +79,13 @@ export class HostgroupsService {
         for (let i = 0; i < selected.length; i++) {
             selectedString += `&selected[]=${selected[i]}`;
         }
-        return this.http.get<LoadHosttemplates>(`${proxyPath}/hostgroups/loadHosttemplates.json?angular=true&containerId=${containerId}&filter[Hosttemplates.name]=${search}`).pipe(
+        return this.http.get<LoadHosttemplates>(`${proxyPath}/hostgroups/loadHosttemplates.json`, {
+            params: {
+                angular: true,
+                'containerId': containerId,
+                'filter[Hosttemplates.name]': search
+            }
+        }).pipe(
             map((data: LoadHosttemplates) => {
                 return data;
             })
@@ -79,7 +93,7 @@ export class HostgroupsService {
     }
 
     public addHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
-        const proxyPath = this.proxyPath;
+        const proxyPath: string = this.proxyPath;
         const postObject: AddHostgroupsPost = {Hostgroup: hostgroup}
         return this.http.post<any>(`${proxyPath}/hostgroups/add.json?angular=true`, postObject)
             .pipe(
@@ -109,7 +123,7 @@ export class HostgroupsService {
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
-        const proxyPath = this.proxyPath;
+        const proxyPath: string = this.proxyPath;
 
         return this.http.post(`${proxyPath}/hostgroups/delete/${item.id}.json?angular=true`, {});
     }
@@ -117,7 +131,11 @@ export class HostgroupsService {
 
     public getEdit(id: number): Observable<HostgroupsEditGet> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<HostgroupsEditGet>(`${proxyPath}/hostgroups/edit/${id}.json?angular=true`, {}).pipe(
+        return this.http.get<HostgroupsEditGet>(`${proxyPath}/hostgroups/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
             map(data => {
                 return data;
             })
@@ -125,7 +143,7 @@ export class HostgroupsService {
     }
 
     public updateHostgroup(hostgroup: Hostgroup): Observable<GenericResponseWrapper> {
-        const proxyPath = this.proxyPath;
+        const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hostgroups/edit/${hostgroup.id}.json?angular=true`, {
             Hostgroup: hostgroup
         })
@@ -150,7 +168,11 @@ export class HostgroupsService {
     public getHostgroupsCopy(ids: number[]): Observable<HostgroupsCopyGetHostgroup[]> {
         const proxyPath: string = this.proxyPath;
         return this
-            .http.get<HostgroupsCopyGet>(`${proxyPath}/hostgroups/copy/${ids.join('/')}.json?angular=true`)
+            .http.get<HostgroupsCopyGet>(`${proxyPath}/hostgroups/copy/${ids.join('/')}.json?angular=true`, {
+                params: {
+                    angular: true
+                }
+            })
             .pipe(
                 map((data: HostgroupsCopyGet) => {
                     return data.hostgroups;
@@ -178,5 +200,41 @@ export class HostgroupsService {
                 return data.hostgroups;
             })
         );
+    }
+
+    public loadHostgroupWithHostsById(id: number, params: HostgroupsExtendedParams): Observable<HostgroupExtendedRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<HostgroupExtendedRoot>(`${proxyPath}/hostgroups/loadHostgroupWithHostsById/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map((data: HostgroupExtendedRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public loadAdditionalInformation(id: number): Observable<any> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/hostgroups/loadAdditionalInformation/.json`, {
+            params: {
+                angular: true,
+                id: id
+            }
+        }).pipe(
+            map((data: any) => {
+                return data;
+            })
+        )
+    }
+
+    public loadServicesByHostId(hostId: number, params: HostgroupsExtendedServiceListParams): Observable<LoadServicesForHosts> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadServicesForHosts>(`${proxyPath}/services/index.json`, {
+            params: params as {}
+        }).pipe(
+            map((data: LoadServicesForHosts) => {
+                return data;
+            })
+        )
     }
 }

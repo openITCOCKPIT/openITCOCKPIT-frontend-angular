@@ -110,6 +110,9 @@ const coreRoutes: Routes = [{
     path: 'hostgroups/edit/:id',
     loadComponent: () => import('./pages/hostgroups/hostgroups-edit/hostgroups-edit.component').then(m => m.HostgroupsEditComponent)
 }, {
+    path: 'hostgroups/extended/:id',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-extended/hostgroups-extended.component').then(m => m.HostgroupsExtendedComponent)
+}, {
     path: 'hostgroups/index',
     loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
 }, {
@@ -127,6 +130,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'services/copy/:ids',
     loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
+}, {
+    path: 'services/notMonitored',
+    loadComponent: () => import('./pages/services/services-not-monitored/services-not-monitored.component').then(m => m.ServicesNotMonitoredComponent)
 }, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)

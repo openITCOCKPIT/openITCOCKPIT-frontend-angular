@@ -1,4 +1,4 @@
-import { HostEntity, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import { HostEntity, HostObject, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -383,4 +383,42 @@ export interface ServicesLoadServicesByStringParams {
     'filter[Services.name]': string,
     'selected[]': number[],
     'includeDisabled': boolean
+}
+
+/**************************
+ *   Not Monitored action  *
+ ***************************/
+export interface ServicesNotMonitoredParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[Hosts.name_regex]': boolean,
+    'filter[servicename]': string,
+    'filter[servicename_regex]': boolean
+}
+
+export function getDefaultServicesNotMonitoredParams(): ServicesNotMonitoredParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'servicename',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[Hosts.name_regex]': false,
+        'filter[servicename]': '',
+        'filter[servicename_regex]': false
+    }
+}
+
+export interface ServicesNotMonitoredRoot extends PaginateOrScroll {
+    all_services: {
+        Service: ServiceObject,
+        ServiceType: HostOrServiceType,
+        Host: HostObject,
+        Hoststatus: HoststatusObject
+    }[]
 }

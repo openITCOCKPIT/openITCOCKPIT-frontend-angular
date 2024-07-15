@@ -121,14 +121,14 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
-                    const title: string = this.TranslocoService.translate('Contactgroup');
+                    const title: string = this.TranslocoService.translate('Hostgroup');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['contactgroups', 'edit', response.id];
+                    const url: (string | number)[] = ['hostgroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/contactgroups/index']);
+                        this.router.navigate(['/hostgroups/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();
