@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { ContainersLoadContainersByStringParams } from '../../../../pages/containers/containers.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HttpClient } from '@angular/common/http';
@@ -9,25 +8,26 @@ import { SystemdowntimesPost } from '../../../../pages/systemdowntimes/systemdow
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SatellitesService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-  constructor() { }
+    constructor() {
+    }
 
 
     public loadSatellitesByString(params: SatellitesLoadSatellitesByStringParams): Observable<SelectKeyValue[]> {
         const proxyPath: string = this.proxyPath;
 
         return this.http.get<{
-            satellites: SelectKeyValue[]
+            all_satellites: SelectKeyValue[]
         }>(`${proxyPath}/distribute_module/satellites/index.json`, {
             params: params as {}
         }).pipe(
             map(data => {
-                return data.satellites;
+                return data.all_satellites;
             })
         );
     }
