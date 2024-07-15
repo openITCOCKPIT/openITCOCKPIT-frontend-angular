@@ -431,10 +431,11 @@
                                 <oitc-select-all
                                     [itemsCount]="serviceDowntimes.all_service_downtimes.length"></oitc-select-all>
                             </c-col>
-                            <c-col>
+                            <c-col md="3">
                                 <div *oitcPermission="['downtimes', 'delete']"
                                      class="btn-group d-flex flex-row" role="group">
-                                    <button (click)="toggleCancelDowntimeModal()" class="btn btn-outline-danger col-3"
+                                    <button (click)="toggleCancelDowntimeModal()"
+                                            class="btn btn-outline-danger col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Cancel selected') }}
