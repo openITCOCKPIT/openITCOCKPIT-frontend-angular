@@ -231,6 +231,8 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     public hostTypes: any[] = [];
     public selectedItems: any[] = [];
 
+    public userFullname: string = '';
+
     private readonly HostsService = inject(HostsService);
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
@@ -299,6 +301,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.getIndex(this.params, this.filter)
             .subscribe((result) => {
                 this.hosts = result;
+                this.userFullname = result.username;
             })
         );
     }
@@ -630,7 +633,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
                 hostUuid: item.Host.uuid,
                 start: 0,
                 end: 0,
-                author: 'ASNAEB',
+                author: this.userFullname,
                 comment: '',
                 downtimetype: ''
             };

@@ -20,7 +20,8 @@ export class AcknowledgementsService {
             acknowledgement: AcknowledgementObject
         }>(`${proxyPath}/${type}/browser/${objectId}.json`, {
             params: {
-                angular: true
+                angular: true,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

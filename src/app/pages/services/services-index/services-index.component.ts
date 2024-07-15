@@ -336,7 +336,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
-        this.getUsername();
         this.load();
     }
 
@@ -352,9 +351,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 if (services.satellites) {
                     this.satellites = services.satellites;
                 }
-                if (services.username) {
-                    this.userFullname = services.username;
-                }
+                this.userFullname = services.username;
             })
         );
     }
@@ -767,16 +764,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
         }));
-    }
-
-    private getUsername() {
-        this.subscriptions.add(this.ProfileService.getProfile()
-            .subscribe((profile) => {
-                let firstname = profile.user.firstname ?? ''
-                let lastname = profile.user.lastname ?? '';
-                this.userFullname = firstname + ' ' + lastname
-            })
-        );
     }
 
     public loadColumns() {
