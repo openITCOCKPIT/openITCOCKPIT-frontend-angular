@@ -76,13 +76,14 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 [options]="hostgroups"
+                                [searchCallback]="loadHostgroups"
                                 (onChange)="onHostgroupChange()">
                         </oitc-select>
 
                     </c-col>
                     <c-col>
                         <c-dropdown>
-                            <button cButton cDropdownToggle color="light">
+                            <button cButton cDropdownToggle color="default">
                                 {{t('Action')}}
                             </button>
                             <ul cDropdownMenu>
