@@ -91,7 +91,8 @@ import {
 import {
     HostDisableNotificationsItem,
     HostDowntimeItem,
-    HostEnableNotificationsItem
+    HostEnableNotificationsItem,
+    ServiceAcknowledgeItem
 } from '../../../services/external-commands.service';
 import {
     HostsMaintenanceModalComponent
@@ -109,6 +110,7 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 import {
     ServiceMaintenanceModalComponent
 } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -542,7 +544,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             this.selectedItems.push({
-                command: 'rescheduleHost',
+                command: ExternalCommandsEnum.rescheduleHost,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
                 satelliteId: 0
@@ -574,7 +576,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             items.push({
-                command: 'submitDisableHostNotifications',
+                command: ExternalCommandsEnum.submitDisableHostNotifications,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
             });
@@ -606,7 +608,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             items.push({
-                command: 'submitEnableHostNotifications',
+                command: ExternalCommandsEnum.submitEnableHostNotifications,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
             });
@@ -629,7 +631,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         let items: HostDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {
             return {
-                command: 'submitHostDowntime',
+                command: ExternalCommandsEnum.submitHostDowntime,
                 hostUuid: item.Host.uuid,
                 start: 0,
                 end: 0,
@@ -652,7 +654,28 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public acknowledgeStatus() {
-        console.log("Todo implement me");
+        let items: ServiceAcknowledgeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
+            return {
+                command: ExternalCommandsEnum.submitServicestateAck,
+                hostUuid: item.Host.uuid,
+                serviceUuid: item.Service.uuid,
+                sticky: 0,
+                notify: false,
+                author: this.userFullname,
+                comment: '',
+            };
+        });
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceAcknowledgeModal',
+        });
     }
 
     protected readonly String = String;

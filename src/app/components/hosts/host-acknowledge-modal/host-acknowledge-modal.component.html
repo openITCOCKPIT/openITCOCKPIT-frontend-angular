@@ -1,0 +1,59 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="hostAcknowledgeModal"
+        size="lg"
+    >
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                {{ t('Acknowledge host status') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+                    <div class="mb-2">
+                        <label cLabel for="inputcomment_host">{{ t('Comment') }}</label>
+                        <input cFormControl id="inputcomment_host" name="inputcomment_host"
+                               [(ngModel)]="ackModal.comment">
+                        <div *ngIf="error" cFormText>
+                            <div class="help-block text-danger">
+                                {{ t('Comment can not be empty') }}
+                            </div>
+                        </div>
+                    </div>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="acksticky_host" name="acksticky_host" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="ackModal.sticky"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="acksticky_host">{{ t('Sticky') }}</label>
+                    </c-form-check>
+                    <div class="helptext help-block">
+                        {{ t('Sticky acknowledgements will be stay until the host is back in state Ok') }}
+                    </div>
+                    <c-form-check class="mb-2">
+                        <input cFormCheckInput id="acknotify_host" name="acknotify_host" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="ackModal.notify"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="acknotify_host">{{ t('Notify') }}</label>
+                    </c-form-check>
+                    <div class="helptext help-block">
+                        {{ t('The system will send a notification to inform contacts that the current host problem has been acknowledged.') }}
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="light">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
