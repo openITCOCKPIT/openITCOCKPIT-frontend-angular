@@ -54,6 +54,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -129,6 +130,7 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -359,7 +361,7 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/servicetemplates/index']);
+                        this.HistoryService.navigateWithFallback(['/servicetemplates/index']);
                         return;
                     }
                     this.post = this.getDefaultPost(this.servicetemplateTypeId);

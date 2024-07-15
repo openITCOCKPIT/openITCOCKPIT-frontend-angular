@@ -63,6 +63,7 @@ import { HostEntity, HostOrServiceType } from '../../hosts/hosts.interface';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 import { ServiceTypesEnum } from '../services.enum';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -161,6 +162,7 @@ export class ServicesEditComponent {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -505,7 +507,7 @@ export class ServicesEditComponent {
                     const url = ['services', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/services/index']);
+                    this.HistoryService.navigateWithFallback(['/services/index']);
 
                     return;
                 }

@@ -53,6 +53,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosttemplates-edit',
@@ -130,6 +131,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -264,7 +266,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
 
-                    this.router.navigate(['/hosttemplates/index']);
+                    this.HistoryService.navigateWithFallback(['/hosttemplates/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }

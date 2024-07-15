@@ -53,6 +53,7 @@ import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-serviceescalations-edit',
@@ -117,6 +118,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -344,7 +346,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
 
-                    this.router.navigate(['/serviceescalations/index']);
+                    this.HistoryService.navigateWithFallback(['/serviceescalations/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }

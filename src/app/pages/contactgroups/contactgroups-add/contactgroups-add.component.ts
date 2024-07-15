@@ -10,7 +10,12 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -22,18 +27,17 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ContactgroupsService } from '../contactgroups.service';
-import {
-    ContactgroupAddPostContactgroup, LoadContainersRoot
-} from '../contactgroups.interface';
+import { ContactgroupAddPostContactgroup, LoadContainersRoot } from '../contactgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contactgroups-add',
@@ -87,7 +91,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
     public post: ContactgroupAddPostContactgroup = {} as ContactgroupAddPostContactgroup;
     protected containers: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute)
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -115,8 +119,8 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (! this.createAnother) {
-                        this.router.navigate(['/contactgroups/index']);
+                    if (!this.createAnother) {
+                        this.HistoryService.navigateWithFallback(['/contactgroups/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();

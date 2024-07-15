@@ -121,7 +121,7 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
     };
 
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private TimeperiodsService = inject(TimeperiodsService);
     private subscriptions: Subscription = new Subscription();

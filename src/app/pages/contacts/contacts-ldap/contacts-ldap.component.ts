@@ -51,8 +51,9 @@ import { LoadUsersByContainerIdRoot, UserByContainer } from '../../users/users.i
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
-import {LabelLinkComponent} from "../../../layouts/coreui/label-link/label-link.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -120,6 +121,8 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     protected ldapUsers: LdapUser[] = [];
     protected ldapUser: LdapUser | null = null;
     protected ldapConfig: LdapConfig = {} as LdapConfig;
+
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -191,6 +194,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
                         this.ldapUser = null;
                         return;
                     }
+                    // Not sure if HistoryService is a good idea
                     this.router.navigate(['/contacts/index']);
                     return;
                 }

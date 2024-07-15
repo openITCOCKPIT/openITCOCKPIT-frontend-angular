@@ -66,7 +66,7 @@ export class TimeperiodsUsedByComponent implements OnInit, OnDestroy {
 
     private TimeperiodsService = inject(TimeperiodsService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
 

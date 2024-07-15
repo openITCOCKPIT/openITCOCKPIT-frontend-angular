@@ -64,7 +64,7 @@ export class HostsUsedByComponent {
     private HostsService = inject(HostsService);
     public PermissionsService = inject(PermissionsService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
 

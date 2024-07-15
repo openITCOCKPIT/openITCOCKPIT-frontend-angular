@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class HistoryService implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private location: Location) {
         this.currentrUrl = this.router.url;
 
         const sub = router.events.subscribe(event => {
@@ -44,6 +45,20 @@ export class HistoryService implements OnDestroy {
         }
 
         return null;
+    }
+
+    public navigateWithFallback(fallbackUrl: any[]): void {
+        const previousUrl = this.getPreviousUrl();
+        //console.log(previousUrl);
+        if (previousUrl) {
+            // if (previousUrl != '/') { // '/' is the Dashboard in this case
+            this.location.back();
+            return;
+            // }
+        }
+
+        // Use fallback state
+        this.router.navigate(fallbackUrl);
     }
 
 }

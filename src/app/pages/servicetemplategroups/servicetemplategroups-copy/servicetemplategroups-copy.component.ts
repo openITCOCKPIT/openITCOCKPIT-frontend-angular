@@ -31,6 +31,7 @@ import {
 } from '../servicetemplategroups.interface';
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-copy',
@@ -72,6 +73,7 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
 
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -110,7 +112,7 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
             this.ServicetemplategroupsService.saveServicetemplategroupsCopy(this.servicetemplategroups).subscribe({
                 next: (value: any) => {
                     this.notyService.genericSuccess();
-                    this.router.navigate(['/', 'servicetemplategroups', 'index']);
+                    this.HistoryService.navigateWithFallback(['/', 'servicetemplategroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.notyService.genericError();

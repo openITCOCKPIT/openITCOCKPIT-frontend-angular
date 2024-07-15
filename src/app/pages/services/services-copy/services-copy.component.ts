@@ -32,6 +32,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { HostsService } from '../../hosts/hosts.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-services-copy',
@@ -77,7 +78,8 @@ export class ServicesCopyComponent {
     private ServicesService = inject(ServicesService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private ids: number[] = [];
 
@@ -166,7 +168,7 @@ export class ServicesCopyComponent {
                 //console.log(value); // Serve result with the new copied service templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'services', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'services', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

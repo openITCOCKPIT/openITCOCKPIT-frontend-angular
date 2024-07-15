@@ -66,6 +66,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-edit',
@@ -183,6 +184,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
     private readonly LocalStorageService = inject(LocalStorageService);
     private readonly AnimateCssService = inject(AnimateCssService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -601,7 +603,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                                 break;
 
                             default:
-                                this.router.navigate(['/hosts/index']);
+                                this.HistoryService.navigateWithFallback(['/hosts/index']);
                                 break;
                         }
                         return;

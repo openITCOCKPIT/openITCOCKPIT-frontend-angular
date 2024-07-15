@@ -3,7 +3,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -52,6 +52,7 @@ import { CalendarsService } from '../calendars.service';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-calendars-add',
@@ -129,7 +130,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     private CalendarsService = inject(CalendarsService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
-    private router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -204,7 +205,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/calendars/index']);
+                        this.HistoryService.navigateWithFallback(['/calendars/index']);
                         return;
                     }
 

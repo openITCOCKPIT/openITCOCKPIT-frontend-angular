@@ -110,7 +110,7 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     public ngOnInit(): void {
         this.servicetemplateId = Number(this.route.snapshot.paramMap.get('id'));
