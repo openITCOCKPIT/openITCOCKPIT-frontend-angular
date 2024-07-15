@@ -167,7 +167,30 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
-    protected hostgroupExtended: HostgroupExtended = {} as HostgroupExtended;
+    protected hostgroupExtended: HostgroupExtended = {
+        Hosts: [],
+        Hostgroup: {
+            id: 0,
+            uuid:'',
+            container_id: 0,
+            description: '',
+            hostgroup_url: '',
+            container: {
+                id: 0,
+                containertype_id: 0,
+                name: '',
+                parent_id: 0,
+                lft: 0,
+                rght: 0,
+            },
+            allowEdit: false
+        },
+        StatusSummary: {
+            up: 0,
+            down: 0,
+            unreachable: 0
+        }
+    } as HostgroupExtended;
     protected hostgroupExtendedRoot: HostgroupExtendedRoot = {} as HostgroupExtendedRoot;
     protected timezone!: TimezoneObject;
 
