@@ -25,6 +25,7 @@ import {
     HostsIndexRoot,
     HostsLoadHostsByStringParams,
     HostsNotMonitoredParams,
+    HostsNotMonitoredRoot,
     HostUsedByRoot
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -445,9 +446,9 @@ export class HostsService {
      *    Hosts Not Monitored  *
      ***************************/
 
-    public getNotMonitored(params: HostsNotMonitoredParams): Observable<HostsDisabledRoot> {
+    public getNotMonitored(params: HostsNotMonitoredParams): Observable<HostsNotMonitoredRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostsDisabledRoot>(`${proxyPath}/hosts/notMonitored.json`, {
+        return this.http.get<HostsNotMonitoredRoot>(`${proxyPath}/hosts/notMonitored.json`, {
             params: params as {}
         }).pipe(
             map(data => {

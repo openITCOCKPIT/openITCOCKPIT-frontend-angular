@@ -30,74 +30,76 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective,
-    TooltipDirective
+    TableDirective
 } from '@coreui/angular';
+import {
+    ColumnsConfigExportModalComponent
+} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
+import {
+    ColumnsConfigImportModalComponent
+} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-    HostsDisableNotificationsModalComponent
-} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
-import {
-    HostsEnableNotificationsModalComponent
-} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
-import {
-    HostsMaintenanceModalComponent
-} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
-import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
+import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
+import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import {
     RegexHelperTooltipComponent
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import {
-    ServiceResetChecktimeModalComponent
-} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+    ServiceAcknowledgeModalComponent
+} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import {
+    ServiceMaintenanceModalComponent
+} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import {
+    ServicestatusIconComponent
+} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-    getDefaultHostsNotMonitoredParams,
-    HostObject,
-    HostsNotMonitoredParams,
-    HostsNotMonitoredRoot
-} from '../hosts.interface';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { HostsService } from '../hosts.service';
+import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
+import { ServicesService } from '../services.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { HoststatusSimpleIconComponent } from '../hoststatus-simple-icon/hoststatus-simple-icon.component';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import {
+    getDefaultServicesNotMonitoredParams,
+    ServiceObject,
+    ServicesNotMonitoredParams,
+    ServicesNotMonitoredRoot
+} from '../services.interface';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
-    selector: 'oitc-hosts-not-monitored',
+    selector: 'oitc-services-not-monitored',
     standalone: true,
     imports: [
         AcknowledgementIconComponent,
@@ -109,11 +111,14 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
+        ColumnsConfigExportModalComponent,
+        ColumnsConfigImportModalComponent,
         ContainerComponent,
         CopyToClipboardComponent,
         CoreuiComponent,
         DebounceDirective,
         DeleteAllModalComponent,
+        DisableModalComponent,
         DowntimeIconComponent,
         DropdownComponent,
         DropdownDividerDirective,
@@ -123,15 +128,11 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         FaIconComponent,
         FaStackComponent,
         FaStackItemSizeDirective,
+        FilterBookmarkComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         FormControlDirective,
-        FormDirective,
-        FormsModule,
-        HostsDisableNotificationsModalComponent,
-        HostsEnableNotificationsModalComponent,
-        HostsMaintenanceModalComponent,
         HoststatusIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
@@ -146,44 +147,45 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         NgSelectModule,
         NoRecordsComponent,
         PaginateOrScrollComponent,
+        PaginatorModule,
         PermissionDirective,
-        QueryHandlerCheckerComponent,
-        ReactiveFormsModule,
+        PopoverGraphComponent,
         RegexHelperTooltipComponent,
         RowComponent,
         SelectAllComponent,
-        ServiceResetChecktimeModalComponent,
+        ServiceAcknowledgeModalComponent,
+        ServiceMaintenanceModalComponent,
+        ServicestatusIconComponent,
         TableDirective,
         TableLoaderComponent,
         TranslocoDirective,
         TranslocoPipe,
-        TrueFalseDirective,
-        TrustAsHtmlPipe,
         XsButtonDirective,
         RouterLink,
-        TooltipDirective,
+        NgClass,
+        ServicestatusSimpleIconComponent,
+        FormDirective,
         HoststatusSimpleIconComponent,
-        DisableModalComponent
+        QueryHandlerCheckerComponent
     ],
-    templateUrl: './hosts-not-monitored.component.html',
-    styleUrl: './hosts-not-monitored.component.css',
+    templateUrl: './services-not-monitored.component.html',
+    styleUrl: './services-not-monitored.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DisableAllModalComponent
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DisableAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
-export class HostsNotMonitoredComponent {
-    // Filter vars
-    public params: HostsNotMonitoredParams = getDefaultHostsNotMonitoredParams();
+export class ServicesNotMonitoredComponent {
+// Filter vars
+    public params: ServicesNotMonitoredParams = getDefaultServicesNotMonitoredParams();
     // Filter end
 
-    public hosts?: HostsNotMonitoredRoot;
+    public services?: ServicesNotMonitoredRoot;
     public hideFilter: boolean = true;
-    public satellites: SelectKeyValue[] = [];
 
     public selectedItems: any[] = [];
 
-    private readonly HostsService = inject(HostsService);
+    private readonly ServicesService = inject(ServicesService);
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
@@ -195,25 +197,19 @@ export class HostsNotMonitoredComponent {
 
 
     public ngOnInit() {
-        this.loadHosts();
-
-        this.subscriptions.add(this.HostsService.getSatellites()
-            .subscribe((result) => {
-                this.satellites = result;
-            })
-        );
+        this.loadServices();
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    public loadHosts() {
+    public loadServices() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.HostsService.getNotMonitored(this.params)
+        this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
             .subscribe((result) => {
-                this.hosts = result;
+                this.services = result;
             })
         );
     }
@@ -226,7 +222,7 @@ export class HostsNotMonitoredComponent {
     // Callback when a filter has changed
     public onFilterChange(event: any) {
         this.params.page = 1;
-        this.loadHosts();
+        this.loadServices();
     }
 
     // Callback when sort has changed
@@ -234,7 +230,7 @@ export class HostsNotMonitoredComponent {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadHosts();
+            this.loadServices();
         }
     }
 
@@ -242,31 +238,31 @@ export class HostsNotMonitoredComponent {
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadHosts();
+        this.loadServices();
     }
 
     public resetFilter() {
-        this.params = getDefaultHostsNotMonitoredParams();
+        this.params = getDefaultServicesNotMonitoredParams();
 
-        this.loadHosts();
+        this.loadServices();
     }
 
     // Open the Delete All Modal
-    public toggleDeleteAllModal(host?: HostObject) {
+    public toggleDeleteAllModal(service?: ServiceObject) {
         let items: DeleteAllItem[] = [];
 
-        if (host) {
+        if (service) {
             // User just want to delete a single command
             items = [{
-                id: Number(host.id),
-                displayName: String(host.hostname)
+                id: Number(service.id),
+                displayName: String(service.hostname) + '/' + String(service.servicename)
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
-                    id: item.Host.id,
-                    displayName: item.Host.hostname
+                    id: item.Service.id,
+                    displayName: String(item.Service.hostname) + '/' + String(item.Service.servicename)
                 };
             });
         }
@@ -290,38 +286,31 @@ export class HostsNotMonitoredComponent {
     // Generic callback whenever a mass action (like delete all) has been finished
     public onMassActionComplete(success: boolean) {
         if (success) {
-            this.loadHosts();
+            this.loadServices();
         }
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
-            this.router.navigate(['/', 'hosts', 'copy', ids]);
+            this.router.navigate(['/', 'services', 'copy', ids]);
         }
     }
 
-    public linkForEditDetails() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
-        if (ids) {
-            this.router.navigate(['/', 'hosts', 'edit_details', ids]);
-        }
-    }
-
-    public toggleDisableModal(host?: HostObject) {
+    public toggleDisableModal(service?: ServiceObject) {
         let items: DisableItem[] = [];
 
-        if (host) {
+        if (service) {
             // User just want to delete a single command
             items = [{
-                id: Number(host.id),
-                displayName: String(host.name)
+                id: Number(service.id),
+                displayName: String(service.hostname) + '/' + String(service.servicename)
             }];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
                 return {
-                    id: item.Host.id,
-                    displayName: item.Host.name
+                    id: item.Service.id,
+                    displayName: item.Service.hostname + '/' + item.Service.servicename
                 };
             });
         }
@@ -337,5 +326,4 @@ export class HostsNotMonitoredComponent {
             id: 'disableModal',
         });
     }
-
 }

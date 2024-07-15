@@ -39,7 +39,9 @@ import {
     ServiceParams,
     ServicePost,
     ServicesIndexRoot,
-    ServicesLoadServicesByStringParams
+    ServicesLoadServicesByStringParams,
+    ServicesNotMonitoredParams,
+    ServicesNotMonitoredRoot
 } from './services.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
@@ -342,5 +344,20 @@ export class ServicesService {
                 return data.services;
             })
         );
+    }
+
+    /***************************
+     * Services Not Monitored  *
+     ***************************/
+
+    public getNotMonitored(params: ServicesNotMonitoredParams): Observable<ServicesNotMonitoredRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicesNotMonitoredRoot>(`${proxyPath}/services/notMonitored.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

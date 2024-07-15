@@ -1,9 +1,10 @@
 import { Customvariable } from '../../contacts/contacts.interface';
 import { Commandargument } from '../../commands/commands.interface';
+import { HostOrServiceType } from '../../hosts/hosts.interface';
 
 export interface ServicesBrowser {
     mergedService: MergedService
-    serviceType: ServiceTypeObject
+    serviceType: HostOrServiceType
     host: ServiceHost
     areContactsFromService: boolean
     areContactsInheritedFromHosttemplate: boolean
@@ -167,14 +168,6 @@ export interface ContainerJoinData {
     id: number
     contact_id: number
     container_id: number
-}
-
-
-export interface ServiceTypeObject {
-    title: string
-    color: string
-    class: string
-    icon: string
 }
 
 export interface ServiceHost {

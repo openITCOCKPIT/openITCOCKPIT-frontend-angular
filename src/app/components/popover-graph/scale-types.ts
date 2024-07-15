@@ -17,6 +17,6 @@ export enum ScaleTypes {
     // 🟥🟨🟩🟨🟥
     C_W_O_W_C = 'C<W<O<W<C',
 
-    //🟩🟨🟥🟨🟩
+    // 🟩🟨🟥🟨🟩
     O_W_C_W_O = 'O<W<C<W<O'
 }

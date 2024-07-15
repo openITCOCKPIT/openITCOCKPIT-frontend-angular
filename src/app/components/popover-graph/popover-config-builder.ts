@@ -1,4 +1,6 @@
 import uPlot from 'uplot';
+import { Datasource } from './popover-graph.interface';
+import { ScaleTypes } from './scale-types';
 
 
 export interface GraphThresholds {
@@ -18,6 +20,9 @@ export class PopoverConfigBuilder {
     public width: number = 350;
     public timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
     public lineWidth: number = 3;
+
+    public datasource?: Datasource;
+
     public thresholds: GraphThresholds = {
         show: true,
         warning: null,
@@ -75,6 +80,10 @@ export class PopoverConfigBuilder {
             stroke: colors.stroke[index],
             fill: colors.fill[index],
         };
+    }
+
+    public setDatasource(ds: Datasource) {
+        this.datasource = ds;
     }
 
     public getOptions() {
@@ -163,22 +172,74 @@ export class PopoverConfigBuilder {
             }
         };
 
-        if (this.thresholds.show) {
-            if (this.thresholds.warning !== "" &&
-                this.thresholds.critical !== "" &&
-                this.thresholds.warning !== null &&
-                this.thresholds.critical !== null) {
-                this.thresholds.warning = parseFloat(this.thresholds.warning.toString());
-                this.thresholds.critical = parseFloat(this.thresholds.critical.toString());
-                if (this.thresholds.critical > this.thresholds.warning) {
-                    // Normal thresholds like for a Ping
-                    // .stroke and .fill are not known to TypeScript I don't know why - its hardcoded a few lines above
+        if (this.datasource) {
+            //console.log(this.datasource.setup.scale.type);
+            //console.log(this.datasource.setup);
+            switch (this.datasource.setup.scale.type) {
+                case ScaleTypes.O:
+                    // We do not have any thresholds
+                    break;
+
+                case ScaleTypes.W_O:
+                    // ✅
+                    // @ts-ignore
+                    uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [-Infinity, "rgba(234, 184, 57, 1)"],
+                            [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 1)"], // -3
+                        ], true)
+                    };
+
+                    // @ts-ignore
+                    uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [-Infinity, "rgba(234, 184, 57, 0.2)"],
+                            [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 0.2)"],
+                        ], true)
+                    };
+
+                    // Save the thresholds, so we can set the color for the mouse over point
+                    this.thresholdColors = [
+                        [-Infinity, "rgba(234, 184, 57, 0.2)"],
+                        [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 0.2)"],
+                    ];
+                    break;
+
+                case ScaleTypes.C_W_O:
+                    // ✅
+                    // @ts-ignore
+                    uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 1)"],  // -5
+                            [this.datasource?.setup.crit.low, "rgba(234, 184, 57, 1)"], // -5
+                            [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 1)"],  // -3
+                        ], true)
+                    };
+
+                    // @ts-ignore
+                    uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],
+                            [this.datasource?.setup.crit.low, "rgba(234, 184, 57, 0.2)"],
+                            [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 0.2)"]
+                        ], true)
+                    };
+
+                    // Save the thresholds, so we can set the color for the mouse over point
+                    this.thresholdColors = [
+                        [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],
+                        [this.datasource?.setup.crit.low, "rgba(234, 184, 57, 0.2)"],
+                        [this.datasource?.setup.warn.low, "rgba(86, 166, 75, 0.2)"]
+                    ];
+                    break;
+
+                case ScaleTypes.O_W:
+                    // ✅
                     // @ts-ignore
                     uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(86, 166, 75, 1)"],
-                            [this.thresholds.warning, "rgba(234, 184, 57, 1)"],
-                            [this.thresholds.critical, "rgba(224, 47, 68, 1)"],
+                            [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 1)"],  // 3
                         ], true)
                     };
 
@@ -186,47 +247,122 @@ export class PopoverConfigBuilder {
                     uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
                             [0, "rgba(86, 166, 75, 0.2)"],
-                            [this.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
-                            [this.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
+                            [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 0.2)"],
                         ], true)
                     };
 
                     // Save the thresholds, so we can set the color for the mouse over point
                     this.thresholdColors = [
                         [0, "rgba(86, 166, 75, 0.2)"],
-                        [this.thresholds.warning, "rgba(234, 184, 57, 0.2)"],
-                        [this.thresholds.critical, "rgba(224, 47, 68, 0.2)"]
+                        [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 0.2)"]
                     ];
+                    break;
 
-                } else {
-                    // warning is < than critical, Free disk space for example
+                case ScaleTypes.O_W_C:
+                    // ✅
+                    if (this.datasource?.setup.warn.low === this.datasource?.setup.crit.low) {
+                        // If all values are the zero, this breaks the gradient
+                        break;
+                    }
+
                     // @ts-ignore
                     uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
-                            [0, "rgba(224, 47, 68, 1)"],
-                            [this.thresholds.critical, "rgba(234, 184, 57, 1)"],
-                            [this.thresholds.warning, "rgba(86, 166, 75, 1)"],
+                            [0, "rgba(86, 166, 75, 1)"],
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 1)"], // 3
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 1)"],  // 5
                         ], true)
                     };
 
                     // @ts-ignore
                     uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
                         return this.scaleGradient(u, 'y', 1, [
-                            [0, "rgba(224, 47, 68, 0.2)"],
-                            [this.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
-                            [this.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
+                            [0, "rgba(86, 166, 75, 0.2)"],
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"]
                         ], true)
                     };
 
                     // Save the thresholds, so we can set the color for the mouse over point
                     this.thresholdColors = [
-                        [0, "rgba(224, 47, 68, 0.2)"],
-                        [this.thresholds.critical, "rgba(234, 184, 57, 0.2)"],
-                        [this.thresholds.warning, "rgba(86, 166, 75, 0.2)"]
+                        [0, "rgba(86, 166, 75, 0.2)"],
+                        [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],
+                        [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"]
                     ];
-                }
+                    break;
+
+                case ScaleTypes.C_W_O_W_C:
+                    // ✅
+                    let green = (Number(this.datasource.setup.warn.high) + Number(this.datasource.setup.warn.low)) / 2;
+
+                    // @ts-ignore
+                    uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 1)"],   // -5
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 1)"],  // -3
+                            [green, "rgba(86, 166, 75, 1)"],                             // middle of warn.high and warn.log
+                            [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 1)"], // 3
+                            [this.datasource?.setup.crit.high, "rgba(224, 47, 68, 1)"],  // 5
+                        ], true)
+                    };
+
+                    // @ts-ignore
+                    uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],
+                            [green, "rgba(86, 166, 75, 0.2)"],
+                            [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 0.2)"],
+                            [this.datasource?.setup.crit.high, "rgba(224, 47, 68, 0.2)"],
+                        ], true)
+                    };
+
+                    // Save the thresholds, so we can set the color for the mouse over point
+                    this.thresholdColors = [
+                        [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],
+                        [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],
+                        [green, "rgba(86, 166, 75, 0.2)"],
+                        [this.datasource?.setup.warn.high, "rgba(234, 184, 57, 0.2)"],
+                        [this.datasource?.setup.crit.high, "rgba(224, 47, 68, 0.2)"],
+                    ];
+                    break;
+
+                case ScaleTypes.O_W_C_W_O:
+                    // ✅
+                    // @ts-ignore
+                    uPlotOptions.series[1].stroke = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [-Infinity, "rgba(86, 166, 75, 1)"],
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 1)"],  // -5
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 1)"],   // -3
+                            [this.datasource?.setup.crit.high, "rgba(234, 184, 57, 1)"], // 3
+                            [this.datasource?.setup.warn.high, "rgba(86, 166, 75, 1)"],  // 5
+                        ], true)
+                    };
+
+                    // @ts-ignore
+                    uPlotOptions.series[1].fill = (u: uPlot, seriesIdx: number) => {
+                        return this.scaleGradient(u, 'y', 1, [
+                            [-Infinity, "rgba(86, 166, 75, 0.2)"],
+                            [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],  // -5
+                            [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],   // -3
+                            [this.datasource?.setup.crit.high, "rgba(234, 184, 57, 0.2)"], // 3
+                            [this.datasource?.setup.warn.high, "rgba(86, 166, 75, 0.2)"],  // 5
+                        ], true)
+                    };
+
+                    // Save the thresholds, so we can set the color for the mouse over point
+                    this.thresholdColors = [
+                        [-Infinity, "rgba(86, 166, 75, 0.2)"],
+                        [this.datasource?.setup.warn.low, "rgba(234, 184, 57, 0.2)"],  // -5
+                        [this.datasource?.setup.crit.low, "rgba(224, 47, 68, 0.2)"],   // -3
+                        [this.datasource?.setup.crit.high, "rgba(234, 184, 57, 0.2)"], // 3
+                        [this.datasource?.setup.warn.high, "rgba(86, 166, 75, 0.2)"],  // 5
+                    ];
+                    break;
             }
         }
+
         return uPlotOptions;
     }
 
