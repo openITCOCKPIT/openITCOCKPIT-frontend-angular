@@ -3,6 +3,7 @@ import { DOCUMENT } from "@angular/common";
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
+import { distributeModuleRoutes } from './modules/distribute_module/distribute_module.routes';
 
 // Just some quick ideas for our PoC workshop, this is no production ready code :)
 
@@ -30,7 +31,8 @@ class LegacyUrlComponent {
 
 /***    Routes for modules   ***/
 const moduleRoutes: Routes = [
-    ...snmpTrapModuleRoutes
+    ...snmpTrapModuleRoutes,
+    ...distributeModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

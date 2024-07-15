@@ -22,7 +22,6 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -61,7 +60,6 @@ import { DurationInputComponent } from '../../../layouts/coreui/duration-input/d
         CardTitleDirective,
         NavComponent,
         NavItemComponent,
-        UserMacrosModalComponent,
         XsButtonDirective,
         FormErrorDirective,
         FormFeedbackComponent,
