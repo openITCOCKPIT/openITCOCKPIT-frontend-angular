@@ -1,19 +1,11 @@
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output,
-    ViewChild
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ButtonDirective,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
+    FormSelectDirective,
     FormTextDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -30,12 +22,8 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import {
-    ValidationErrors
-} from '../../../services/downtimes-defaults.service';
-import {
-    ExternalCommandsService, HostRescheduleItem,
-} from '../../../services/external-commands.service';
+import { ValidationErrors } from '../../../services/downtimes-defaults.service';
+import { ExternalCommandsService, HostRescheduleItem, } from '../../../services/external-commands.service';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
@@ -65,12 +53,16 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
         FormsModule,
         SelectComponent,
         NgSelectModule,
-        RequiredIconComponent
+        RequiredIconComponent,
+        FormSelectDirective
     ],
     templateUrl: './service-reset-checktime-modal.component.html',
     styleUrl: './service-reset-checktime-modal.component.css'
 })
 export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
+
+    /* This component is used to reset the check time of an HOST - the naming is bad */
+
     @Input({required: true}) public items: HostRescheduleItem[] = [];
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -86,9 +78,9 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly subscriptions: Subscription = new Subscription();
 
-    protected resetType: string = 'hostOnly';
+    protected resetType: 'hostOnly' | 'hostAndServices' = 'hostOnly';
 
-    hideModal() {
+    public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
         this.errors = {};
@@ -99,18 +91,18 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'serviceResetChecktimeModal' && state.show === true) {
             }
         }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    sendCommands(): void {
+    public sendCommands(): void {
         this.error = false;
         this.isSend = true;
         this.items.forEach((item) => {

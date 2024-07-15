@@ -101,6 +101,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -185,7 +186,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         Hosts: [],
         Hostgroup: {
             id: 0,
-            uuid:'',
+            uuid: '',
             container_id: 0,
             description: '',
             hostgroup_url: '',
@@ -256,7 +257,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public toggleResetCheckModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host) => {
             return {
-                command: 'rescheduleHost',
+                command: ExternalCommandsEnum.rescheduleHost,
                 hostUuid: host.Host.uuid,
                 type: '',
                 satelliteId: 0
@@ -368,7 +369,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public toggleDowntimeModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDowntimeItem => {
             return {
-                command: 'submitHostDowntime',
+                command: ExternalCommandsEnum.submitHostDowntime,
                 hostUuid: host.Host.uuid,
                 start: 0,
                 end: 0,
@@ -392,7 +393,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public disableNotifications() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDisableNotificationsItem => {
             return {
-                command: 'submitDisableHostNotifications',
+                command: ExternalCommandsEnum.submitDisableHostNotifications,
                 hostUuid: host.Host.uuid,
                 type: 'hostOnly',
             };
@@ -413,7 +414,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public enableNotifications() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostEnableNotificationsItem => {
             return {
-                command: 'submitEnableHostNotifications',
+                command: ExternalCommandsEnum.submitEnableHostNotifications,
                 hostUuid: host.Host.uuid,
                 type: 'hostOnly',
             };

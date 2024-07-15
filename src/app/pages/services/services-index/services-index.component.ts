@@ -134,6 +134,7 @@ import {
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 
 @Component({
     selector: 'oitc-services-index',
@@ -465,7 +466,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public resetChecktime() {
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceResetItem => {
             return {
-                command: 'rescheduleService',
+                command: ExternalCommandsEnum.rescheduleService,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid,
                 satelliteId: item.Host.satelliteId
@@ -492,7 +493,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         // let commands = [];
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
-                command: 'submitDisableServiceNotifications',
+                command: ExternalCommandsEnum.submitDisableServiceNotifications,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid
             };
@@ -522,7 +523,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public enableNotifications() {
         const commands = this.SelectionServiceService.getSelectedItems().map((item): ServiceNotifcationItem => {
             return {
-                command: 'submitEnableServiceNotifications',
+                command: ExternalCommandsEnum.submitEnableServiceNotifications,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid
             };
@@ -554,7 +555,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         let items: ServiceDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): ServiceDowntimeItem => {
             return {
-                command: 'submitServiceDowntime',
+                command: ExternalCommandsEnum.submitServiceDowntime,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid,
                 start: 0,
@@ -610,7 +611,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         let items: ServiceAcknowledgeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
             return {
-                command: 'submitServicestateAck',
+                command: ExternalCommandsEnum.submitServicestateAck,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid,
                 sticky: 0,
