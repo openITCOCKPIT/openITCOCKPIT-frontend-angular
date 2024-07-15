@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../tokens/proxy-path.token';
-import {catchError, map, Observable} from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 
-export interface ServiceDowntimeItem  {
+export interface ServiceDowntimeItem {
     command: string,
     hostUuid: string,
     serviceUuid: string,
@@ -12,7 +12,8 @@ export interface ServiceDowntimeItem  {
     author: string,
     comment: string,
 }
-export interface HostDowntimeItem  {
+
+export interface HostDowntimeItem {
     command: string,
     hostUuid: string,
     start: number,
@@ -27,11 +28,23 @@ export interface HostEnableNotificationsItem {
     hostUuid: string,
     type: string,
 }
+
 export interface HostDisableNotificationsItem {
     command: string,
     hostUuid: string,
     type: string,
 }
+
+export interface HostAcknowledgeItem {
+    command: string,
+    hostUuid: string,
+    hostAckType: 'hostOnly' | 'hostAndServices',
+    sticky: number,
+    notify: boolean,
+    author: string,
+    comment: string,
+}
+
 export interface ServiceAcknowledgeItem {
     command: string,
     hostUuid: string,
@@ -48,10 +61,11 @@ export interface ServiceResetItem {
     serviceUuid: string
     satelliteId: number
 }
+
 export interface HostRescheduleItem {
     command: string
     hostUuid: string
-    type: string
+    type: 'hostOnly' | 'hostAndServices'
     satelliteId: number
 }
 
@@ -61,7 +75,7 @@ export interface ServiceNotifcationItem {
     serviceUuid: string
 }
 
-type Commands =  ServiceDowntimeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
+type Commands = ServiceDowntimeItem[] | HostAcknowledgeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
     | ServiceNotifcationItem[] | HostRescheduleItem[] | HostDowntimeItem[] | HostEnableNotificationsItem[]
 
 @Injectable({
@@ -78,7 +92,8 @@ export class ExternalCommandsService {
     public setExternalCommands(params: Commands): Observable<any> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/nagios_module/cmd/submit_bulk_naemon.json`,
-            params)
+            params
+        )
             .pipe(map(result => {
                     return result
                 }),

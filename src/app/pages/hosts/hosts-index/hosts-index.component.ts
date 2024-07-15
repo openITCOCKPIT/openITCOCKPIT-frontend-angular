@@ -89,6 +89,7 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
+    HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
     HostEnableNotificationsItem
@@ -109,6 +110,13 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 import {
     ServiceMaintenanceModalComponent
 } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import {
+    ServiceAcknowledgeModalComponent
+} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import {
+    HostAcknowledgeModalComponent
+} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -180,7 +188,9 @@ import {
         HostsDisableNotificationsModalComponent,
         DisableModalComponent,
         ServiceMaintenanceModalComponent,
-        JsonPipe
+        JsonPipe,
+        ServiceAcknowledgeModalComponent,
+        HostAcknowledgeModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -542,7 +552,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             this.selectedItems.push({
-                command: 'rescheduleHost',
+                command: ExternalCommandsEnum.rescheduleHost,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
                 satelliteId: 0
@@ -574,7 +584,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             items.push({
-                command: 'submitDisableHostNotifications',
+                command: ExternalCommandsEnum.submitDisableHostNotifications,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
             });
@@ -606,7 +616,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             items.push({
-                command: 'submitEnableHostNotifications',
+                command: ExternalCommandsEnum.submitEnableHostNotifications,
                 hostUuid: item.Host.uuid,
                 type: 'hostOnly',
             });
@@ -629,7 +639,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         let items: HostDowntimeItem[] = [];
         items = this.SelectionServiceService.getSelectedItems().map((item): HostDowntimeItem => {
             return {
-                command: 'submitHostDowntime',
+                command: ExternalCommandsEnum.submitHostDowntime,
                 hostUuid: item.Host.uuid,
                 start: 0,
                 end: 0,
@@ -652,7 +662,28 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public acknowledgeStatus() {
-        console.log("Todo implement me");
+        let items: HostAcknowledgeItem[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): HostAcknowledgeItem => {
+            return {
+                command: ExternalCommandsEnum.submitHoststateAck,
+                hostUuid: item.Host.uuid,
+                hostAckType: item.type,
+                author: this.userFullname,
+                comment: '',
+                notify: true,
+                sticky: 0
+            };
+        });
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostAcknowledgeModal',
+        });
     }
 
     protected readonly String = String;

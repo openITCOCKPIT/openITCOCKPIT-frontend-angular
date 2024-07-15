@@ -1,19 +1,11 @@
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output,
-    ViewChild
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ButtonDirective,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
+    FormSelectDirective,
     FormTextDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -30,10 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import {
-    ExternalCommandsService,
-    HostEnableNotificationsItem
-} from '../../../services/external-commands.service';
+import { ExternalCommandsService, HostEnableNotificationsItem } from '../../../services/external-commands.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 
@@ -61,7 +50,8 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
         FormLabelDirective,
         FormsModule,
         NgSelectModule,
-        RequiredIconComponent
+        RequiredIconComponent,
+        FormSelectDirective
     ],
     templateUrl: './hosts-enable-notifications-modal.component.html',
     styleUrl: './hosts-enable-notifications-modal.component.css'

@@ -1105,6 +1105,9 @@
 <oitc-service-reset-checktime-modal [items]="selectedItems"
                                     (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
 
+<oitc-host-acknowledge-modal (completed)="onMassActionComplete($event)"
+                             [items]="selectedItems"></oitc-host-acknowledge-modal>
+
 <oitc-hosts-maintenance-modal [items]="selectedItems"
                               (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
 

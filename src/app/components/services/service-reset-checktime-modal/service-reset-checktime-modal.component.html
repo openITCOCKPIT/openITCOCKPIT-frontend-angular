@@ -17,18 +17,17 @@
                 <c-col>
                     <div class="mb-3">
                         <label for="resetType">
-                            {{t('Select method')}}
-                            <oitc-required-icon />
+                            {{ t('Select method') }}
+                            <oitc-required-icon/>
                         </label>
-                        <ng-select
-                                name="resetType"
-                                id="resetType"
-                                [(ngModel)]="resetType"
-                                clearable="false"
-                                >
-                            <ng-option [value]="'hostOnly'">{{t('Host')}}</ng-option>
-                            <ng-option [value]="'hostAndServices'">{{t('Host and services')}}</ng-option>
-                        </ng-select>
+                        <select
+                            cSelect
+                            name="resetType"
+                            id="resetType"
+                            [(ngModel)]="resetType">
+                            <option [value]="'hostOnly'">{{ t('Host') }}</option>
+                            <option [value]="'hostAndServices'">{{ t('Host and services') }}</option>
+                        </select>
                     </div>
                 </c-col>
             </c-row>
