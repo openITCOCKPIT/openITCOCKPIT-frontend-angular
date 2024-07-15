@@ -50,6 +50,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -111,6 +112,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     public errors: GenericValidationError = {} as GenericValidationError;
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -169,7 +171,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/contacts/index']);
+                        this.HistoryService.navigateWithFallback(['/contacts/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();

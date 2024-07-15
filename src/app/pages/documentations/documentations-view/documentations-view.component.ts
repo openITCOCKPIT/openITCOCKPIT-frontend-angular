@@ -72,7 +72,7 @@ export class DocumentationsViewComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
 

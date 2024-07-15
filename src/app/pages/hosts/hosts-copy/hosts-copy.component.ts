@@ -29,6 +29,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HostsService } from '../hosts.service';
 import { HostCopyPost } from '../hosts.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-copy',
@@ -70,7 +71,8 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
     private HostsService = inject(HostsService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     isHostnameInUse: { [key: number]: boolean } = {};
 
@@ -122,7 +124,7 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied host templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'hosts', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'hosts', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

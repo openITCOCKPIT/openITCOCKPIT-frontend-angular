@@ -37,6 +37,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-timeperiods-edit',
@@ -96,6 +97,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly WeekdaysService = inject(WeekdaysService);
     public errors: GenericValidationError = {} as GenericValidationError;
     private subscriptions: Subscription = new Subscription();
@@ -252,7 +254,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
                     const url = ['timeperiods', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/timeperiods/index']);
+                    this.HistoryService.navigateWithFallback(['/timeperiods/index']);
 
                     return;
                 }

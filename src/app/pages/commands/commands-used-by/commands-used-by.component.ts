@@ -62,7 +62,7 @@ export class CommandsUsedByComponent implements OnInit, OnDestroy {
 
     private CommandsService = inject(CommandsService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
     private commandId: number = 0;

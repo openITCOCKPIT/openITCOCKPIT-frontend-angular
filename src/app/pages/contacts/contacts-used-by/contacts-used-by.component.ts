@@ -63,7 +63,7 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
 
 
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
     private contactId: number = 0;

@@ -62,6 +62,7 @@ import { TemplateDiffComponent } from '../../../components/template-diff/templat
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { HostSubmitType } from '../hosts.enum';
 import { sprintf } from "sprintf-js";
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-add',
@@ -161,6 +162,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
     private readonly LocalStorageService = inject(LocalStorageService);
     private readonly AnimateCssService = inject(AnimateCssService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -584,7 +586,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                                 break;
 
                             default:
-                                this.router.navigate(['/hosts/index']);
+                                this.HistoryService.navigateWithFallback(['/hosts/index']);
                                 break;
                         }
                         return;

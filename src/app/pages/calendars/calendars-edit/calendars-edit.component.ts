@@ -23,7 +23,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { CalendarContainer, CalendarEvent, CalendarPost, Countries } from '../calendars.interface';
@@ -31,6 +31,7 @@ import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { CalendarsService } from '../calendars.service';
 import { forkJoin, Subscription } from 'rxjs';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-calendars-edit',
@@ -86,8 +87,8 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
     private CalendarsService = inject(CalendarsService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
-    private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -154,7 +155,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
                     const url = ['calendars', 'edit', this.post.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/calendars/index']);
+                    this.HistoryService.navigateWithFallback(['/calendars/index']);
 
                     return;
                 }

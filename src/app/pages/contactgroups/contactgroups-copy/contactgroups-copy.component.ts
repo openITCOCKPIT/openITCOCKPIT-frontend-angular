@@ -28,6 +28,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contactgroups-copy',
@@ -69,6 +70,7 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
 
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -107,7 +109,7 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
             this.ContactgroupsService.saveContactgroupsCopy(this.contactgroups).subscribe({
                 next: (value: any) => {
                     this.notyService.genericSuccess();
-                    this.router.navigate(['/', 'contactgroups', 'index']);
+                    this.HistoryService.navigateWithFallback(['/', 'contactgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.notyService.genericError();

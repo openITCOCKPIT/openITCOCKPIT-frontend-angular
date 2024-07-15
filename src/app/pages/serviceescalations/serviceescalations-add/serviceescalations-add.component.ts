@@ -48,6 +48,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-serviceescalations-add',
@@ -110,6 +111,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -331,7 +333,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost();
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
-                    this.router.navigate(['/serviceescalations/index']);
+                    this.HistoryService.navigateWithFallback(['/serviceescalations/index']);
                     return;
                 }
 

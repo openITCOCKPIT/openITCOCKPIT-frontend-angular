@@ -42,6 +42,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -102,6 +103,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -314,7 +316,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
 
-                    this.router.navigate(['/hostescalations/index']);
+                    this.HistoryService.navigateWithFallback(['/hostescalations/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }

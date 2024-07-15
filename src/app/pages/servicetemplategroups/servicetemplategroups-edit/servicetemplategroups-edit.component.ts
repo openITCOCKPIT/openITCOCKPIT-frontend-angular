@@ -44,6 +44,7 @@ import {
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-edit',
@@ -116,7 +117,8 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
         uuid: ''
     }
     protected containers: SelectKeyValue[] = [];
-    private route: ActivatedRoute = inject(ActivatedRoute)
+    private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -149,7 +151,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
                     const url: (string | number)[] = ['servicetemplategroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/servicetemplategroups/index']);
+                    this.HistoryService.navigateWithFallback(['/servicetemplategroups/index']);
 
                     return;
                 }

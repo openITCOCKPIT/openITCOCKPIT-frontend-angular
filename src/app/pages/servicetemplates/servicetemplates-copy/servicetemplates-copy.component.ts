@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplates-copy',
@@ -75,7 +76,8 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     private ServicetemplatesService = inject(ServicetemplatesService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -138,7 +140,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied host templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'servicetemplates', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'servicetemplates', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

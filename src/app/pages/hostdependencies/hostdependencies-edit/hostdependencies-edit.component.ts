@@ -3,7 +3,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -47,6 +47,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -107,7 +108,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -301,8 +302,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-
-                    this.router.navigate(['/hostdependencies/index']);
+                    this.HistoryService.navigateWithFallback(['/hostdependencies/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }

@@ -28,6 +28,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-timeperiods-copy',
@@ -68,7 +69,8 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
     private TimeperiodsService = inject(TimeperiodsService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     ngOnInit(): void {
 
@@ -109,7 +111,7 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied timeperiods
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'timeperiods', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'timeperiods', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

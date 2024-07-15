@@ -43,6 +43,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-edit-details',
@@ -145,7 +146,8 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     private HostsService = inject(HostsService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         this.isLoading = true;
@@ -291,7 +293,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.notyService.genericSuccess();
                 this.notyService.scrollContentDivToTop();
-                this.router.navigate(['/hosts/index']);
+                this.HistoryService.navigateWithFallback(['/hosts/index']);
             }));
     }
 
