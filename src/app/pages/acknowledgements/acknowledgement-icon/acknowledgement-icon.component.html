@@ -3,7 +3,8 @@
 
         <span
             (mouseenter)="loadAcknowledgementDetails()"
-            (mouseleave)="cancelDebounce()">
+            (mouseleave)="cancelDebounce()"
+            class="p-1 cursor-pointer">
             <fa-icon
                 [icon]="(acknowledgement_type === AcknowledgementTypes.Normal)?['far', 'user']:['fas', 'user']"
                 [cPopover]="popoverHtml"
@@ -49,11 +50,13 @@
             </fa-icon>
         </span>
     } @else {
-        <!-- User has no permissions to browser action -->
-        <fa-icon [icon]="['far', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Normal"
-                 [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
+        <span class="p-1">
+            <!-- User has no permissions to browser action -->
+            <fa-icon [icon]="['far', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Normal"
+                     [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
 
-        <fa-icon [icon]="['fas', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Sticky"
-                 [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
+            <fa-icon [icon]="['fas', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Sticky"
+                     [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
+        </span>
     }
 </ng-container>
