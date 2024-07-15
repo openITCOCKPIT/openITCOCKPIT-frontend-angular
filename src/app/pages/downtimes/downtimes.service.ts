@@ -4,7 +4,8 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
     DowntimeHostIndexRoot,
-    DowntimeObject, DowntimeServiceIndexRoot,
+    DowntimeObject,
+    DowntimeServiceIndexRoot,
     HostDowntimesParams,
     ServiceDowntimesParams
 } from './downtimes.interface';
@@ -28,7 +29,8 @@ export class DowntimesService {
             downtime: DowntimeObject
         }>(`${proxyPath}/${type}/browser/${objectId}.json`, {
             params: {
-                angular: true
+                angular: true,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

@@ -166,7 +166,8 @@ export interface HostsIndexRoot extends PaginateOrScroll {
                 total: number
             }
         }
-    }[]
+    }[],
+    username: string
 }
 
 export interface HostsIndexParams {

@@ -38,6 +38,7 @@ import {
     ServiceLoadServicetemplateApiResult,
     ServiceParams,
     ServicePost,
+    ServicesDisabledRoot,
     ServicesIndexRoot,
     ServicesLoadServicesByStringParams,
     ServicesNotMonitoredParams,
@@ -48,6 +49,7 @@ import { ServiceTypesEnum } from './services.enum';
 import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
+import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -359,5 +361,27 @@ export class ServicesService {
                 return data;
             })
         )
+    }
+
+    /**********************
+     * Services Disabled  *
+     **********************/
+
+    public getDisabled(params: ServicesNotMonitoredParams): Observable<ServicesDisabledRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicesDisabledRoot>(`${proxyPath}/services/disabled.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public enable(item: EnableItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/services/enable/${item.id}.json?`, {
+            empty: true // ??
+        });
     }
 }

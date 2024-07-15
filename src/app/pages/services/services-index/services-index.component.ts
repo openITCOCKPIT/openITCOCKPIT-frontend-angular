@@ -336,7 +336,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
-        this.getUsername();
         this.load();
     }
 
@@ -344,7 +343,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    load() {
+    public load() {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
             .subscribe((services) => {
@@ -352,9 +351,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 if (services.satellites) {
                     this.satellites = services.satellites;
                 }
-                if (services.username) {
-                    this.userFullname = services.username;
-                }
+                this.userFullname = services.username;
             })
         );
     }
@@ -634,7 +631,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    toggleDeleteAllModal(service?: ServiceObject) {
+    public toggleDeleteAllModal(service?: ServiceObject) {
         let items: DeleteAllItem[] = [];
 
         if (service) {
@@ -664,7 +661,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    navigateCopy() {
+    public navigateCopy() {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
@@ -677,7 +674,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    onSelectedBookmark(filterstring: string) {
+    public onSelectedBookmark(filterstring: string) {
         if (filterstring === '') {
             this.resetFilter();
         }
@@ -715,7 +712,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    getFilter(filter: ServiceIndexFilter) {
+    public getFilter(filter: ServiceIndexFilter) {
         this.params.page = 1;
         this.params['filter[Hosts.name]'] = filter.Hosts.name;
         this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
@@ -769,33 +766,23 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    private getUsername() {
-        this.subscriptions.add(this.ProfileService.getProfile()
-            .subscribe((profile) => {
-                let firstname = profile.user.firstname ?? ''
-                let lastname = profile.user.lastname ?? '';
-                this.userFullname = firstname + ' ' + lastname
-            })
-        );
-    }
-
-    loadColumns() {
+    public loadColumns() {
         if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
             this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
         }
     }
 
-    getDefaultColumns() {
+    public getDefaultColumns() {
         this.fields = [true, true, true, true, true, true, true, true, false, false, true, true, true, true];
         this.LocalStorageService.removeItem(this.columnsTableKey)
     };
 
-    saveColumnsConfig() {
+    public saveColumnsConfig() {
         this.LocalStorageService.removeItem(this.columnsTableKey);
         this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
     }
 
-    setColumnConfig(fieldsConfig: boolean[]) {
+    public setColumnConfig(fieldsConfig: boolean[]) {
         this.fields = fieldsConfig;
     }
 

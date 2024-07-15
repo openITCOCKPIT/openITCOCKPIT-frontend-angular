@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
 import { EnableItem } from './enable.interface';
+import { GenericActionErrorResponse } from '../../../generic-responses';
 
 @Component({
     selector: 'oitc-enable-modal',
@@ -52,6 +53,7 @@ export class EnableModalComponent {
     public isEnable: boolean = false;
     public percentage: number = 0;
     public hasErrors: boolean = false;
+    public errors: GenericActionErrorResponse[] = [];
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
@@ -73,6 +75,7 @@ export class EnableModalComponent {
         this.isEnable = false;
         this.percentage = 0;
         this.hasErrors = false;
+        this.errors = [];
 
         this.modalService.toggle({
             show: false,
@@ -92,6 +95,7 @@ export class EnableModalComponent {
         let issueCount: number = 0;
 
         // Delete any old errors
+        this.errors = [];
 
         for (let i in this.items) {
             const item = this.items[i];
@@ -107,6 +111,7 @@ export class EnableModalComponent {
                             this.isEnable = false;
                             this.percentage = 0;
                             this.hasErrors = false;
+                            this.errors = [];
 
                             this.hideModal();
                         }, 250);
@@ -115,11 +120,19 @@ export class EnableModalComponent {
 
                 },
                 error: (error: HttpErrorResponse) => {
-                    // This API does not return any errors
+                    // The /enable endpoint for hosts does not return any errors
                     // The only error could be a network error
+                    //
+                    // The /enable endpoint for services can return an error if the host is not enabled
 
                     issueCount++
                     this.hasErrors = true;
+
+                    if (error.hasOwnProperty('error')) {
+                        if (error.error.hasOwnProperty('message')) {
+                            this.errors.push((error.error as GenericActionErrorResponse));
+                        }
+                    }
 
                     responseCount++;
                     this.percentage = Math.round((responseCount / count) * 100);
@@ -135,6 +148,14 @@ export class EnableModalComponent {
                 }
             });
         }
+    }
+
+    public currentItemHasErrors(item: EnableItem): boolean {
+        return this.errors.some((error) => Number(error.id) == item.id);
+    }
+
+    public getErrorsForItem(item: EnableItem): GenericActionErrorResponse[] {
+        return this.errors.filter((error) => Number(error.id) == item.id);
     }
 
 }

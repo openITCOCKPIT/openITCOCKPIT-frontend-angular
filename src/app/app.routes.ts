@@ -136,6 +136,9 @@ const coreRoutes: Routes = [{
     path: 'services/notMonitored',
     loadComponent: () => import('./pages/services/services-not-monitored/services-not-monitored.component').then(m => m.ServicesNotMonitoredComponent)
 }, {
+    path: 'services/disabled',
+    loadComponent: () => import('./pages/services/services-disabled/services-disabled.component').then(m => m.ServicesDisabledComponent)
+}, {
     path: 'servicetemplategroups/add',
     loadComponent: () => import('./pages/servicetemplategroups/servicetemplategroups-add/servicetemplategroups-add.component').then(m => m.ServicetemplategroupsAddComponent)
 }, {

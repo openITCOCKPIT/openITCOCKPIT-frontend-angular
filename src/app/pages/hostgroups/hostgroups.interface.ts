@@ -222,6 +222,7 @@ export interface HostgroupsLoadHostgroupsByStringParams {
 // EXTENDED VIEW
 export interface HostgroupExtendedRoot extends PaginateOrScroll {
     hostgroup: HostgroupExtended
+    username: string
     _csrfToken: string
 }
 
