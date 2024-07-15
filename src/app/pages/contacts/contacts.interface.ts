@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { HostsToContainersSharing } from '../hosts/hosts.interface';
-import { Container } from '../containers/container.interface';
+import { Container } from '../containers/containers.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactsIndexParams {

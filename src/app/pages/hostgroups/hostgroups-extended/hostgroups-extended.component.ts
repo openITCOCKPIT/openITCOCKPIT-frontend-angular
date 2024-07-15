@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgForOf, NgFor, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -8,13 +8,24 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent, ContainerComponent, DropdownComponent,
-    DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent, InputGroupTextDirective, ModalService,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
     NavComponent,
-    NavItemComponent, RowComponent, TableDirective
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -27,20 +38,20 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HostgroupsService } from '../hostgroups.service';
 import {
-    getDefaultHostgroupsExtendedParams, getDefaultHostgroupsExtendedServiceListParams,
-    getDefaultHostgroupsIndexParams,
+    getDefaultHostgroupsExtendedParams,
+    getDefaultHostgroupsExtendedServiceListParams,
     HostgroupExtended,
     HostGroupExtendedHost,
     HostgroupExtendedRoot,
     HostgroupsExtendedParams,
     HostgroupsExtendedServiceListParams,
-    HostgroupsIndexParams, LoadServicesForHosts,
-    ServicesList
+    HostgroupsLoadHostgroupsByStringParams,
+    LoadServicesForHosts
 } from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -54,7 +65,10 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
-    ExternalCommandsService, HostDisableNotificationsItem, HostDowntimeItem, HostEnableNotificationsItem,
+    ExternalCommandsService,
+    HostDisableNotificationsItem,
+    HostDowntimeItem,
+    HostEnableNotificationsItem,
 } from '../../../services/external-commands.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -226,7 +240,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.getUserTimezone();
 
         // Load all hostgroups for the dropdown
-        this.loadHostgroups();
+        this.loadHostgroups('');
     }
 
     protected onHostgroupChange(): void {
@@ -289,8 +303,12 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             }));
     }
 
-    private loadHostgroups(): void {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString('')
+    public loadHostgroups = (searchString: string) => {
+        let params: HostgroupsLoadHostgroupsByStringParams = {
+            angular: true,
+            'filter[Containers.name]': searchString
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString(params)
             .subscribe((result: SelectKeyValue[]) => {
                 // Put the hostgroups to the instance
                 this.hostgroups = result;

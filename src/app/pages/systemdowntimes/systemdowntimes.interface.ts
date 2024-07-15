@@ -3,21 +3,21 @@ export interface SystemdowntimesPost {
     is_recurring: number
     weekdays: number[]
     day_of_month?: string
-    from_date: Date|string
-    from_time: Date|string
-    to_date: Date|string
-    to_time: Date|string
+    from_date: Date | string
+    from_time: Date | string
+    to_date: Date | string
+    to_time: Date | string
     duration: number
     downtime_type: string
-    downtimetype_id: number|string
+    downtimetype_id: number | string
     objecttype_id: number
     object_id: number[]
     comment: string
     is_recursive: number
 }
 
-export interface SystemdowntimesHostGet {
-    defaultValues:{
+export interface SystemdowntimesGet {
+    defaultValues: {
         js_from: string
         js_to: string
         from_date: string

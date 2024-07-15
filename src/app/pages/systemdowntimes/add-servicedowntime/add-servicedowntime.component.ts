@@ -30,7 +30,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { SystemdowntimesHostGet, SystemdowntimesPost } from '../systemdowntimes.interface';
+import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
 import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
@@ -90,7 +90,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     public services: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
     public post: SystemdowntimesPost = this.getClearForm();
-    public get!: SystemdowntimesHostGet;
+    public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);

@@ -31,10 +31,10 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
-import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
+import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
-import { HostsService } from '../../hosts/hosts.service';
+import { ContainersService } from '../../containers/containers.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { JsonPipe, NgIf } from '@angular/common';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
@@ -44,7 +44,7 @@ import { DurationInputComponent } from '../../../layouts/coreui/duration-input/d
 
 
 @Component({
-    selector: 'oitc-add-hostdowntime',
+    selector: 'oitc-add-containerdowntime',
     standalone: true,
     imports: [
         CardComponent,
@@ -79,18 +79,18 @@ import { DurationInputComponent } from '../../../layouts/coreui/duration-input/d
         NgIf,
         DurationInputComponent
     ],
-    templateUrl: './add-hostdowntime.component.html',
-    styleUrl: './add-hostdowntime.component.css'
+    templateUrl: './add-containerdowntime.component.html',
+    styleUrl: './add-containerdowntime.component.css'
 })
-export class AddHostdowntimeComponent implements OnInit, OnDestroy {
-    public hosts: SelectKeyValueWithDisabled[] = [];
+export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
+    public containers: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
     public post: SystemdowntimesPost = this.getClearForm();
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
-    private readonly HostsService = inject(HostsService);
+    private readonly ContainersService = inject(ContainersService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
     public createAnother: boolean = false;
@@ -119,7 +119,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
             }));
-        this.loadHosts('');
+        this.loadContainers('');
 
     }
 
@@ -143,9 +143,9 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
             to_date: '',
             to_time: '',
             duration: 15,
-            downtime_type: 'host',
+            downtime_type: 'container',
             downtimetype_id: '0',
-            objecttype_id: ObjectTypesEnum['HOST'],
+            objecttype_id: ObjectTypesEnum['NODE'],
             object_id: [],
             comment: '',
             is_recursive: 0
@@ -155,21 +155,16 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
     }
 
-    public loadHosts = (searchString: string) => {
-        let selected: number[] = [];
-        if (this.post.object_id) {
-            selected = this.post.object_id;
-        }
-        let params: HostsLoadHostsByStringParams = {
+    public loadContainers = (searchString: string) => {
+        let params: ContainersLoadContainersByStringParams = {
             angular: true,
-            'filter[Hosts.name]': searchString,
-            'selected[]': selected,
-            includeDisabled: false
+            'filter[Containers.name]': searchString
+
         }
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
+        this.subscriptions.add(this.ContainersService.loadContainersByString(params)
             .subscribe((result) => {
-                this.hosts = result;
+                this.containers = result;
             })
         );
     }
@@ -180,7 +175,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
-        this.subscriptions.add(this.SystemdowntimesService.createHostdowntime(this.post)
+        this.subscriptions.add(this.SystemdowntimesService.createContainerdowntime(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
@@ -212,5 +207,6 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                 }
             })
         );
+
     }
 }
