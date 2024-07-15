@@ -210,6 +210,15 @@ export interface AddHostgroupsPost {
     Hostgroup: Hostgroup
 }
 
+/**********************
+ *     Global action    *
+ **********************/
+// LOAD HOST GROUPS BY NAME
+export interface HostgroupsLoadHostgroupsByStringParams {
+    'angular': true,
+    'filter[Containers.name]': string,
+    'selected[]'?: number[]
+}
 // EXTENDED VIEW
 export interface HostgroupExtendedRoot extends PaginateOrScroll {
     hostgroup: HostgroupExtended
@@ -287,11 +296,7 @@ export interface HostGroupExtendedHost {
     }
 }
 
-// LOAD HOST GROUPS BY NAME
-export interface LoadHostgroupsByStringRoot {
-    hostgroups: SelectKeyValue[]
-    _csrfToken: string
-}
+
 
 // LOAD SERVICES FOR HOSTS
 export interface LoadServicesForHosts extends PaginateOrScroll {

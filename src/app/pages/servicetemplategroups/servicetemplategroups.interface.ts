@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
-import { Container } from '../containers/container.interface';
+import { Container } from '../containers/containers.interface';
 
 export interface ServiceTemplateGroupsIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
@@ -269,4 +269,3 @@ export interface LoadHostsByStringResponse {
     hosts: SelectKeyValue[]
     _csrfToken: string
 }
-
