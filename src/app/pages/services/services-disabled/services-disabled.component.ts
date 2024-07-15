@@ -1,7 +1,4 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -14,14 +11,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownComponent,
     DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -32,77 +22,58 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import {
-    ColumnsConfigExportModalComponent
-} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
-import {
-    ColumnsConfigImportModalComponent
-} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import {
     RegexHelperTooltipComponent
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import {
-    ServiceAcknowledgeModalComponent
-} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
-import {
-    ServiceMaintenanceModalComponent
-} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
-import {
-    ServicestatusIconComponent
-} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
-import { ServicesService } from '../services.service';
-import { Subscription } from 'rxjs';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
-    getDefaultServicesNotMonitoredParams,
+    getDefaultServicesDisabledParams,
     ServiceObject,
-    ServicesNotMonitoredParams,
-    ServicesNotMonitoredRoot
+    ServicesDisabledParams,
+    ServicesDisabledRoot
 } from '../services.interface';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
+import { ServicesService } from '../services.service';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
+import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
+
 
 @Component({
-    selector: 'oitc-services-not-monitored',
+    selector: 'oitc-services-disabled',
     standalone: true,
     imports: [
-        AcknowledgementIconComponent,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         CardBodyComponent,
@@ -111,76 +82,55 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent,
         ContainerComponent,
         CopyToClipboardComponent,
         CoreuiComponent,
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
-        DowntimeIconComponent,
-        DropdownComponent,
         DropdownDividerDirective,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
         FaIconComponent,
-        FaStackComponent,
-        FaStackItemSizeDirective,
-        FilterBookmarkComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
         FormControlDirective,
+        FormDirective,
+        FormsModule,
         HoststatusIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NgIf,
-        NgSelectModule,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        PaginatorModule,
         PermissionDirective,
-        PopoverGraphComponent,
+        QueryHandlerCheckerComponent,
         RegexHelperTooltipComponent,
         RowComponent,
         SelectAllComponent,
-        ServiceAcknowledgeModalComponent,
-        ServiceMaintenanceModalComponent,
-        ServicestatusIconComponent,
+        ServicestatusSimpleIconComponent,
         TableDirective,
         TableLoaderComponent,
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        NgClass,
-        ServicestatusSimpleIconComponent,
-        FormDirective,
-        HoststatusSimpleIconComponent,
-        QueryHandlerCheckerComponent
+        EnableModalComponent
     ],
-    templateUrl: './services-not-monitored.component.html',
-    styleUrl: './services-not-monitored.component.css',
+    templateUrl: './services-disabled.component.html',
+    styleUrl: './services-disabled.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DisableAllModalComponent
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
     ]
 })
-export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
+export class ServicesDisabledComponent implements OnInit, OnDestroy {
 // Filter vars
-    public params: ServicesNotMonitoredParams = getDefaultServicesNotMonitoredParams();
+    public params: ServicesDisabledParams = getDefaultServicesDisabledParams();
     // Filter end
 
-    public services?: ServicesNotMonitoredRoot;
+    public services?: ServicesDisabledRoot;
     public hideFilter: boolean = true;
 
     public selectedItems: any[] = [];
@@ -207,7 +157,7 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     public loadServices() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
+        this.subscriptions.add(this.ServicesService.getDisabled(this.params)
             .subscribe((result) => {
                 this.services = result;
             })
@@ -242,7 +192,7 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultServicesNotMonitoredParams();
+        this.params = getDefaultServicesDisabledParams();
 
         this.loadServices();
     }
@@ -297,8 +247,8 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleDisableModal(service?: ServiceObject) {
-        let items: DisableItem[] = [];
+    public toggleEnableModal(service?: ServiceObject) {
+        let items: EnableItem[] = [];
 
         if (service) {
             // User just want to delete a single command
@@ -323,7 +273,7 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'disableModal',
+            id: 'enableModal',
         });
     }
 }

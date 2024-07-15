@@ -30,3 +30,9 @@ export interface GenericResponse {
 export interface GenericMessageResponse {
     message: string
 }
+
+export interface GenericActionErrorResponse {
+    success: boolean
+    id: string
+    message: string
+}

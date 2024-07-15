@@ -3,7 +3,8 @@
 
         <span
             (mouseenter)="loadDowntimeDetails()"
-            (mouseleave)="cancelDebounce()">
+            (mouseleave)="cancelDebounce()"
+            class="p-1 cursor-pointer">
             <fa-icon
                 [icon]="['fas', 'power-off']"
                 [cPopover]="popoverHtml"
@@ -51,7 +52,9 @@
         </span>
     } @else {
         <!-- User has no permissions to browser action -->
-        <fa-icon [icon]="['fas', 'power-off']"
-                 [cTooltip]="'Scheduled maintenance' | transloco" cTooltipPlacement="right"></fa-icon>
+        <span class="p-1">
+            <fa-icon [icon]="['fas', 'power-off']"
+                     [cTooltip]="'Scheduled maintenance' | transloco" cTooltipPlacement="right"></fa-icon>
+        </span>
     }
 </ng-container>

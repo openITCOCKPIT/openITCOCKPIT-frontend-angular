@@ -14,8 +14,8 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                    {{ t('Not monitored') }}
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('Disabled') }}
                 </li>
             </ol>
         </nav>
@@ -26,7 +26,7 @@
             <c-card-header>
                 <h5 cCardTitle>{{ t('Services') }}
                     <small class="fw-300">
-                        {{ t('Not monitored') }}
+                        {{ t('Disabled') }}
                     </small>
                 </h5>
 
@@ -40,14 +40,14 @@
                     </c-nav-item>
                     <c-nav-item>
                         <a [routerLink]="['/', 'services', 'notMonitored']"
-                           *oitcPermission="['services', 'notMonitored']" class="nav-link active">
+                           *oitcPermission="['services', 'notMonitored']" class="nav-link">
                             <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                             {{ t('Not monitored') }}
                         </a>
                     </c-nav-item>
                     <c-nav-item>
                         <a [routerLink]="['/', 'services', 'disabled']"
-                           *oitcPermission="['services', 'disabled']" class="nav-link">
+                           *oitcPermission="['services', 'disabled']" class="nav-link active">
                             <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                             {{ t('Disabled') }}
                         </a>
@@ -151,7 +151,6 @@
 
                         </c-row>
 
-
                         <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
@@ -183,10 +182,6 @@
                             {{ t('Service name') }}
                         </th>
 
-                        <th>
-                            {{ t('Service type') }}
-                        </th>
-
                         <th class="text-center editItemWidth" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
@@ -195,7 +190,7 @@
                     <tbody>
                         @for (service of services.all_services; track index; let index = $index) {
                             <tr *ngIf="index === 0 || (index > 0 && services.all_services[index -1].Host.uuid !== service.Host.uuid)">
-                                <td colspan="5">
+                                <td colspan="4">
                                     <oitc-hoststatus-icon [hoststatus]="service.Hoststatus" class="pe-1"/>
                                     @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
                                         <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
@@ -239,15 +234,6 @@
                                     }
                                 </td>
 
-                                <td>
-                                    <span class="badge border margin-right-10"
-                                          [ngClass]="[service.ServiceType.class, service.ServiceType.color]">
-                                        <fa-icon [icon]="service.ServiceType.icon"
-                                                 [rotate]="service.ServiceType.rotate"></fa-icon>
-                                        {{ service.ServiceType.title }}
-                                    </span>
-                                </td>
-
                                 <td class="width-50">
                                     <oitc-actions-button [permission]="'services.edit'"
                                                          [url]="'/services/edit/' + service.Service.id"
@@ -261,9 +247,9 @@
 
                                         <oitc-actions-button-element [permission]="'services.deactivate'"
                                                                      *ngIf="service.Service.allow_edit"
-                                                                     (click)="toggleDisableModal(service.Service)">
+                                                                     (click)="toggleEnableModal(service.Service)">
                                             <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                            {{ t('Disable') }}
+                                            {{ t('Enable') }}
                                         </oitc-actions-button-element>
 
                                         <oitc-actions-button-element [permission]="'changelogs.index'"
@@ -311,11 +297,10 @@
                                         <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                         {{ t('Copy') }}
                                     </button>
-                                    <button (click)="toggleDisableModal()"
-                                            class="btn btn-outline-primary col-3 border-0"
+                                    <button (click)="toggleEnableModal()" class="btn btn-outline-primary col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('Disable services') }}
+                                        {{ t('Enable') }}
                                     </button>
                                     <button (click)="toggleDeleteAllModal()"
                                             class="btn btn-outline-danger col-3 border-0"
@@ -350,4 +335,4 @@
 </oitc-coreui>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
-<oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
+<oitc-enable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-enable-modal>
