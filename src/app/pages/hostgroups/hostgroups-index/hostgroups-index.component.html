@@ -192,6 +192,9 @@
 
                 <oitc-no-records
                         *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
+
+
+
                 <ng-container *ngIf="hostgroups && hostgroups.all_hostgroups">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
@@ -211,6 +214,20 @@
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete selected') }}
                                     </button>
+
+                                    <c-dropdown>
+                                        <button cButton cDropdownToggle color="default">
+                                            {{ t('More actions') }}
+                                        </button>
+                                        <ul cDropdownMenu>
+                                            <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                                {{ t('List as pdf') }}</a></li>
+                                            <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                                {{ t('List as csv') }}</a></li>
+                                        </ul>
+                                    </c-dropdown>
                                 </div>
                             </c-col>
                         </c-row>
