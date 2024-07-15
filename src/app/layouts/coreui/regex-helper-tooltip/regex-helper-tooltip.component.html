@@ -25,7 +25,7 @@
 
 <ng-container *transloco="let t">
     <fa-icon [icon]="['far', 'lightbulb']"
-             [ngClass]="{'light' : !light, 'warning': light}"
+             [ngClass]="{'light' : !light, 'light-on': light}"
              [cPopover]="popoverHtml"
              cPopoverPlacement="left"
              [cPopoverTrigger]="'hover'"
@@ -46,26 +46,26 @@
                     <c-row class="mb-1 nav-underline-border">
                         <div class="col col-lg-1 bg-primary fw-bold text-white rounded">.</div>
                         <div class="col col-lg-3 text-nowrap fw-bold">local<span
-                                class="fw-bold text-primary">.</span><span
-                                class="fw-bold">ost</span></div>
+                            class="fw-bold text-primary">.</span><span
+                            class="fw-bold">ost</span></div>
                         <div class="col-md-auto">{{ t('Match any character') }}</div>
                     </c-row>
                     <c-row class="mb-1 nav-underline-border">
                         <div class="col col-lg-1 bg-primary fw-bold text-white rounded">^</div>
                         <div class="col col-lg-3 text-nowrap"><span class="fw-bold text-primary">^</span><span
-                                class="fw-bold">ocalhost</span></div>
+                            class="fw-bold">ocalhost</span></div>
                         <div class="col-md-auto">{{ t('Match the beginning of a string') }}</div>
                     </c-row>
                     <c-row class="mb-1 nav-underline-border">
                         <div class="col col-lg-1 bg-primary fw-bold text-white rounded">$</div>
                         <div class="col col-lg-3 text-nowrap fw-bold">localhos<span
-                                class="text-primary fw-bold">$</span></div>
+                            class="text-primary fw-bold">$</span></div>
                         <div class="col-md-auto">{{ t('Match the end of a string') }}</div>
                     </c-row>
                     <c-row class="mb-1 nav-underline-border">
                         <div class="col col-lg-1 bg-primary fw-bold text-white rounded">|</div>
                         <div class="col col-lg-3 text-nowrap fw-bold">wan<span
-                                class="fw-bold text-primary">|</span><span class="fw-bold">lan</span>
+                            class="fw-bold text-primary">|</span><span class="fw-bold">lan</span>
                         </div>
                         <div class="col-md-auto">{{ t('Match either of the sequences') }}</div>
                     </c-row>

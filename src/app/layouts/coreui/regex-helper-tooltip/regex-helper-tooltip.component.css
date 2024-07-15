@@ -1,3 +1,9 @@
 .custom-width {
-    width:400px;
+    width: 400px;
+}
+
+.light-on {
+    text-shadow: 0 0 3px #FFE205, 0 0 7px #FFE205, 0 0 20px #EDD205; /* old Font Awesome icons where text */
+    filter: drop-shadow(0px 0px 3px #FFE205); /* new Font Awesome icons are svg images */
+    color: #FFE205;
 }

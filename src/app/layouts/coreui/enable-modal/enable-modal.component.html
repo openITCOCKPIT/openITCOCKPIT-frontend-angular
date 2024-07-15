@@ -54,8 +54,15 @@
                     <ul class="mb-0">
                         <li>
                             {{ item.displayName }}
+                            <div *ngIf="hasErrors && currentItemHasErrors(item)">
+                                <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
+                                    <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                    {{ error.message }}
+                                </div>
+                            </div>
                         </li>
                     </ul>
+
                 </c-col>
             </c-row>
 

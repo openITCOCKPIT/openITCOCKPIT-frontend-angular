@@ -404,7 +404,7 @@ export function getDefaultServicesNotMonitoredParams(): ServicesNotMonitoredPara
     return {
         angular: true,
         scroll: true,
-        sort: 'servicename',
+        sort: 'Hosts.name',
         page: 1,
         direction: 'asc',
         'filter[Hosts.name]': '',
@@ -418,6 +418,44 @@ export interface ServicesNotMonitoredRoot extends PaginateOrScroll {
     all_services: {
         Service: ServiceObject,
         ServiceType: HostOrServiceType,
+        Host: HostObject,
+        Hoststatus: HoststatusObject
+    }[]
+}
+
+
+/**********************
+ *   Disabled action  *
+ **********************/
+export interface ServicesDisabledParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[Hosts.name_regex]': boolean,
+    'filter[servicename]': string,
+    'filter[servicename_regex]': boolean
+}
+
+export function getDefaultServicesDisabledParams(): ServicesDisabledParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[Hosts.name_regex]': false,
+        'filter[servicename]': '',
+        'filter[servicename_regex]': false
+    }
+}
+
+export interface ServicesDisabledRoot extends PaginateOrScroll {
+    all_services: {
+        Service: ServiceObject,
         Host: HostObject,
         Hoststatus: HoststatusObject
     }[]
