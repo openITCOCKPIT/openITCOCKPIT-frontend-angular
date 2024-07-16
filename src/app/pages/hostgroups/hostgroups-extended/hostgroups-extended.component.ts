@@ -240,6 +240,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // Fetch the id from the URL
         this.hostgroupId = Number(this.route.snapshot.paramMap.get('id'));
+        this.hostParams.selected = this.hostgroupId;
 
         // Fetch the users timezone
         this.getUserTimezone();
@@ -251,6 +252,8 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     protected onHostgroupChange(): void {
         // Load the hostgroup extended info
         this.loadHostgroupExtended();
+
+        this.hostParams.selected = this.hostgroupId;
 
         // Load additional information
         this.loadAdditionalInformation();
