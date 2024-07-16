@@ -460,3 +460,35 @@ export interface ServicesDisabledRoot extends PaginateOrScroll {
         Hoststatus: HoststatusObject
     }[]
 }
+
+/**********************
+ *   Deleted  action  *
+ **********************/
+
+export interface ServicesDeletedParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '',
+    'filter[DeletedServices.host_id]': number
+}
+
+export interface ServicesDeletedServicesRoot extends PaginateOrScroll {
+    all_services: {
+        DeletedService: DeletedService
+    }[]
+}
+
+export interface DeletedService {
+    id: number
+    uuid: string
+    hostUuid: string
+    servicetemplateId: number
+    hostId: number
+    name: string
+    description: null | string
+    perfdataDeleted: boolean
+    created: string
+    modified: string
+}

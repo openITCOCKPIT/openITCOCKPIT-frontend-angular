@@ -95,6 +95,21 @@ export interface HostEntity {
     allow_edit?: boolean
 }
 
+export interface HostEntityWithContainers extends HostEntity {
+    is_satellite_host?: boolean
+    hosts_to_containers_sharing: {
+        _joinData: {
+            id: number,
+            host_id: number,
+            container_id: number
+        },
+        HostsToContainers: {
+            host_id: number,
+            container_id: number
+        }
+    }[],
+}
+
 export interface HoststatusObject {
     currentState?: number
     isFlapping?: boolean

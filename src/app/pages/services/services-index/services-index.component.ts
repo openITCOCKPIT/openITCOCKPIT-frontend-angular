@@ -24,7 +24,7 @@
  */
 
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
@@ -135,6 +135,7 @@ import {
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
 
 @Component({
     selector: 'oitc-services-index',
@@ -216,7 +217,6 @@ import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
     ]
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy {
-    private readonly http = inject(HttpClient);
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -321,7 +321,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         'filter[servicepriority][]': []
     };
 
-    public showFilter: boolean = false;
+    public hideFilter: boolean = true;
     public showColumnConfig: boolean = false;
     public services?: ServicesIndexRoot;
     public timezone!: TimezoneObject;
@@ -376,8 +376,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
     public toggleFilter() {
-        this.showFilter = !this.showFilter;
-        if (!this.showFilter) {
+        this.hideFilter = !this.hideFilter;
+        if (this.hideFilter) {
             this.showColumnConfig = false;
         }
     }
@@ -838,4 +838,5 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
 
+    protected readonly AcknowledgementTypes = AcknowledgementTypes;
 }

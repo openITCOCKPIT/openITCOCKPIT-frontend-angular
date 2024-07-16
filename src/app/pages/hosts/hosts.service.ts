@@ -16,6 +16,7 @@ import {
     HostEditDetailsGet,
     HostEditDetailsPost,
     HostElements,
+    HostEntityWithContainers,
     HostPost,
     HostsDisabledParams,
     HostsDisabledRoot,
@@ -416,6 +417,22 @@ export class HostsService {
         }).pipe(
             map(data => {
                 return data.hosts;
+            })
+        );
+    }
+
+    public loadHostById(hostId: number): Observable<HostEntityWithContainers> {
+        const proxyPath = this.proxyPath;
+        const params = {
+            angular: true
+        };
+        return this.http.get<{
+            host: HostEntityWithContainers
+        }>(`${proxyPath}/hosts/loadHostById/${hostId}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data.host;
             })
         );
     }

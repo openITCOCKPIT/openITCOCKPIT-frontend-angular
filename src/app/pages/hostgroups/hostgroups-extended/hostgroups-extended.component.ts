@@ -66,6 +66,7 @@ import {
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
     ExternalCommandsService,
+    HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
     HostEnableNotificationsItem,
@@ -102,6 +103,10 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
+import {
+    HostAcknowledgeModalComponent
+} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -163,7 +168,8 @@ import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
         ContainerComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
-        SelectAllComponent
+        SelectAllComponent,
+        HostAcknowledgeModalComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -236,6 +242,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // Fetch the id from the URL
         this.hostgroupId = Number(this.route.snapshot.paramMap.get('id'));
+        this.hostParams.selected = this.hostgroupId;
 
         // Fetch the users timezone
         this.getUserTimezone();
@@ -247,6 +254,8 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     protected onHostgroupChange(): void {
         // Load the hostgroup extended info
         this.loadHostgroupExtended();
+
+        this.hostParams.selected = this.hostgroupId;
 
         // Load additional information
         this.loadAdditionalInformation();
@@ -511,4 +520,29 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicesList(host);
     }
 
+    protected readonly AcknowledgementTypes = AcknowledgementTypes;
+
+    public acknowledgeStatus() {
+        let items: HostAcknowledgeItem[] = this.hostgroupExtended.Hosts.map((host: HostGroupExtendedHost): HostAcknowledgeItem => {
+            return {
+                command: ExternalCommandsEnum.submitHoststateAck,
+                hostUuid: host.Host.uuid,
+                hostAckType: 'hostOnly',
+                author: this.userFullname,
+                comment: '',
+                notify: true,
+                sticky: 0
+            };
+        });
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+        this.modalService.toggle({
+            show: true,
+            id: 'hostAcknowledgeModal',
+        });
+    }
 }
