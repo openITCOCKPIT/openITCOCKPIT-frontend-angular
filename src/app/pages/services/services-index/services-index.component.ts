@@ -321,7 +321,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         'filter[servicepriority][]': []
     };
 
-    public showFilter: boolean = false;
+    public hideFilter: boolean = true;
     public showColumnConfig: boolean = false;
     public services?: ServicesIndexRoot;
     public timezone!: TimezoneObject;
@@ -376,8 +376,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
     public toggleFilter() {
-        this.showFilter = !this.showFilter;
-        if (!this.showFilter) {
+        this.hideFilter = !this.hideFilter;
+        if (this.hideFilter) {
             this.showColumnConfig = false;
         }
     }

@@ -86,7 +86,7 @@
                                               [filter]="filter"
                                               (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
                         <!--</c-card-header>-->
-                        <c-card-body *ngIf="showFilter">
+                        <c-card-body *ngIf="!hideFilter">
                             <c-row class="mb-3">
                                 <c-col [xs]="12" [lg]="6">
                                     <c-input-group>
@@ -455,7 +455,7 @@
                                 </c-col>
                             </c-row>
                         </c-card-body>
-                        <c-card-footer *ngIf="showFilter">
+                        <c-card-footer *ngIf="!hideFilter">
                             <c-row class="mt-2">
                                 <c-col>
                                     <fa-icon [icon]="['fas', 'list']" size="lg" class="ms-1"></fa-icon>
