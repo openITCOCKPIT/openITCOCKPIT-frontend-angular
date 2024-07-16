@@ -387,6 +387,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.ok"
                                                                id="statusFilterServiceOk">
                                                         {{ host.ServicestatusSummary.state.ok }}
+                                                        {{t('ok')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-warning">
@@ -399,6 +400,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.warning"
                                                                id="statusFilterServiceWarning">
                                                         {{ host.ServicestatusSummary.state.warning }}
+                                                        {{t('warning')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-critical">
@@ -410,6 +412,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.critical"
                                                                id="statusFilterServiceCritical">
                                                         {{ host.ServicestatusSummary.state.critical }}
+                                                        {{t('critical')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-unknown">
@@ -421,6 +424,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.unknown"
                                                                id="statusFilterServiceUnknown">
                                                         {{ host.ServicestatusSummary.state.unknown }}
+                                                        {{t('unknown')}}
                                                     </label>
                                                 </c-col>
                                             </c-row>
