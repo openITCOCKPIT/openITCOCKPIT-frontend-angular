@@ -29,7 +29,10 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
-import { SystemdowntimesGet, SystemdowntimesPost } from '../../../../../pages/systemdowntimes/systemdowntimes.interface';
+import {
+    SystemdowntimesGet,
+    SystemdowntimesPost
+} from '../../../../../pages/systemdowntimes/systemdowntimes.interface';
 import { SatellitesLoadSatellitesByStringParams } from '../satellites.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
@@ -40,6 +43,7 @@ import { ObjectTypesEnum } from '../../../../../pages/changelogs/object-types.en
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import _ from 'lodash';
 import { DurationInputComponent } from '../../../../../layouts/coreui/duration-input/duration-input.component';
+import { HistoryService } from '../../../../../history.service';
 
 
 @Component({
@@ -102,6 +106,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
         7: this.TranslocoService.translate('Sunday')
     };
     public weekdaysForSelect: any[] = [];
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -183,10 +188,8 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/downtimes/host']);
-                        return;
+                        this.HistoryService.navigateWithFallback(['/downtimes/host']);
                     }
-
                     // Create another
                     this.post = this.getClearForm();
                     this.errors = null;

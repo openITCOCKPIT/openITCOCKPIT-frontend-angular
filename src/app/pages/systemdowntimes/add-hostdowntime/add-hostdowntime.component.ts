@@ -40,7 +40,7 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
 import { DurationInputComponent } from '../../../layouts/coreui/duration-input/duration-input.component';
-
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-add-hostdowntime',
@@ -102,6 +102,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
         7: this.TranslocoService.translate('Sunday')
     };
     public weekdaysForSelect: any[] = [];
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -189,10 +190,8 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/downtimes/host']);
-                        return;
+                        this.HistoryService.navigateWithFallback(['/downtimes/host']);
                     }
-
                     // Create another
                     this.post = this.getClearForm();
                     this.errors = null;
