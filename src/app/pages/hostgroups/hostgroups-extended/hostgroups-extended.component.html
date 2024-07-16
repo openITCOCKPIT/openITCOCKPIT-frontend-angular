@@ -112,10 +112,16 @@
                                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                     {{ t('Set planned maintenance times') }}
                                 </oitc-actions-button-element></li>
-                                <li><oitc-actions-button-element [permission]="'hostgroups.copy'">
-                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    {{ t('Acknowledge host status') }}
-                                </oitc-actions-button-element></li>
+
+                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+
+                                    <a
+                                            href="javascript:void(0);" cDropdownItem
+                                            (click)="acknowledgeStatus()">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                        {{ t('Acknowledge host status') }}
+                                    </a>
+                                </li>
                                 <li><oitc-actions-button-element [permission]="'hostgroups.copy'" (click)="disableNotifications()">
                                     <fa-icon [icon]="['far', 'envelope']"></fa-icon>
                                     {{ t('Disable notifications') }}
@@ -577,3 +583,5 @@
                                        [items]="selectedItems"></oitc-hosts-enable-notifications-modal>
 <oitc-hosts-disable-notifications-modal (completed)="onResetChecktime($event)"
                                         [items]="selectedItems"></oitc-hosts-disable-notifications-modal>
+<oitc-host-acknowledge-modal (completed)="onResetChecktime($event)"
+                             [items]="selectedItems"></oitc-host-acknowledge-modal>

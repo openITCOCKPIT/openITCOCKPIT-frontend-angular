@@ -75,15 +75,12 @@ export class HostgroupsService {
 
     public loadHosttemplates(containerId: number, search: string, selected: number[]): Observable<LoadHosttemplates> {
         const proxyPath: string = this.proxyPath;
-        let selectedString = '';
-        for (let i = 0; i < selected.length; i++) {
-            selectedString += `&selected[]=${selected[i]}`;
-        }
         return this.http.get<LoadHosttemplates>(`${proxyPath}/hostgroups/loadHosttemplates.json`, {
             params: {
                 angular: true,
                 'containerId': containerId,
-                'filter[Hosttemplates.name]': search
+                'filter[Hosttemplates.name]': search,
+                'selected[]': selected
             }
         }).pipe(
             map((data: LoadHosttemplates) => {
