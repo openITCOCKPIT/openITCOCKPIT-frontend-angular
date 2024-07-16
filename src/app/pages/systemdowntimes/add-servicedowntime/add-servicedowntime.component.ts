@@ -22,7 +22,6 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -44,7 +43,7 @@ import { DurationInputComponent } from '../../../layouts/coreui/duration-input/d
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-add-servicedowntime',
@@ -64,7 +63,6 @@ import {
         CardTitleDirective,
         NavComponent,
         NavItemComponent,
-        UserMacrosModalComponent,
         XsButtonDirective,
         FormErrorDirective,
         FormFeedbackComponent,
@@ -108,6 +106,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
         7: this.TranslocoService.translate('Sunday')
     };
     public weekdaysForSelect: any[] = [];
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -195,10 +194,8 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/downtimes/service']);
-                        return;
+                        this.HistoryService.navigateWithFallback(['/downtimes/service']);
                     }
-
                     // Create another
                     this.post = this.getClearForm();
                     this.errors = null;
