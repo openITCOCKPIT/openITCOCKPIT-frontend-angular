@@ -38,6 +38,8 @@ import {
     ServiceLoadServicetemplateApiResult,
     ServiceParams,
     ServicePost,
+    ServicesDeletedParams,
+    ServicesDeletedServicesRoot,
     ServicesDisabledRoot,
     ServicesIndexRoot,
     ServicesLoadServicesByStringParams,
@@ -383,5 +385,20 @@ export class ServicesService {
         return this.http.post(`${proxyPath}/services/enable/${item.id}.json?`, {
             empty: true // ??
         });
+    }
+
+    /**********************
+     *   Service Deleted  *
+     **********************/
+
+    public getServicesDeleted(params: ServicesDeletedParams): Observable<ServicesDeletedServicesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ServicesDeletedServicesRoot>(`${proxyPath}/services/deleted.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

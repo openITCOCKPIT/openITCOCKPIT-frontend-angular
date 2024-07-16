@@ -102,6 +102,7 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -511,4 +512,5 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicesList(host);
     }
 
+    protected readonly AcknowledgementTypes = AcknowledgementTypes;
 }

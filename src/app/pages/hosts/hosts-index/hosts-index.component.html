@@ -920,14 +920,13 @@
                                     {{ t('Allocate service template group') }}
                                 </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'hostgroups.add'"
-                                >
+                                <oitc-actions-button-element [permission]="'hostgroups.add'">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                     {{ t('Append to host group') }}
                                     <!-- todo implement modal -->
                                 </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'wizard.agentconnector'"
+                                <oitc-actions-button-element [permission]="'agentconnector.wizard'"
                                                              [url]="'/agentconnector/wizard/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
                                     {{ t('openITCOCKPIT Agent discovery') }}
@@ -1027,9 +1026,12 @@
                                                     {{ t('Disable') }}
                                                 </a>
                                             </li>
-                                            <li><a href="javascript:void(0);" cDropdownItem>
-                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                {{ t('Add to service group') }}</a></li>
+                                            <li>
+                                                <a href="javascript:void(0);" cDropdownItem>
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                    {{ t('Add to host group') }}</a>
+                                            </li>
+
                                             <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
                                                 <a
                                                     href="javascript:void(0);" cDropdownItem

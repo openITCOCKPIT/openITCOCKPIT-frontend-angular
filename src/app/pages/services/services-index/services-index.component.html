@@ -635,18 +635,24 @@
                                 <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                             </th>
                             <th *ngIf="fields[2]" class="text-center" scope="col"
-                                mat-sort-header="Servicestatus.scheduled_downtime_depth">
+                                mat-sort-header="Servicestatus.scheduled_downtime_depth"
+                                [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                             </th>
                             <th *ngIf="fields[3]" class="text-center" scope="col"
-                                mat-sort-header="Servicestatus.notifications_enabled">
+                                mat-sort-header="Servicestatus.notifications_enabled"
+                                [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                             </th>
                             <th *ngIf="fields[4]" class="text-center" scope="col">
                                 <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
                             </th>
-                            <th *ngIf="fields[5]">P</th>
-                            <th *ngIf="fields[6]" class="text-center" scope="col" mat-sort-header="servicepriority">
+                            <th *ngIf="fields[5]"
+                                [cTooltip]="'Passively transferred service' | transloco" cTooltipPlacement="top">
+                                <strong>P</strong>
+                            </th>
+                            <th *ngIf="fields[6]" class="text-center" scope="col" mat-sort-header="servicepriority"
+                                [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'fire']"></fa-icon>
                             </th>
 
@@ -739,9 +745,9 @@
                                         </span>
                                         <span *oitcPermission="['services', 'browser'];negate:true">
                                             <fa-icon [icon]="['far', 'user']"
-                                                     *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 1"></fa-icon>
+                                                     *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Normal"></fa-icon>
                                             <fa-icon [icon]="['fas', 'user']"
-                                                     *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == 2"
+                                                     *ngIf="service.Servicestatus.problemHasBeenAcknowledged && service.Servicestatus.acknowledgement_type == AcknowledgementTypes.Sticky"
                                                      title="{{t('Sticky Acknowledgement')}}"></fa-icon>
                                         </span>
                                     </td>
@@ -787,7 +793,7 @@
                                         </div>
                                     </td>
                                     <td *ngIf="fields[5]" class="width-50 text-center">
-                                        <strong [cTooltip]="'Passively transferred host' | transloco"
+                                        <strong [cTooltip]="'Passively transferred service' | transloco"
                                                 cTooltipPlacement="right"
                                                 *ngIf="!service.Service.active_checks_enabled || service.Host.is_satellite_host">
                                             P
