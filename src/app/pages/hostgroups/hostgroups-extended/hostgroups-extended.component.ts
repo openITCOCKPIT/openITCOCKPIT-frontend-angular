@@ -65,7 +65,8 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
-    ExternalCommandsService, HostAcknowledgeItem,
+    ExternalCommandsService,
+    HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
     HostEnableNotificationsItem,
@@ -544,5 +545,4 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             id: 'hostAcknowledgeModal',
         });
     }
->>>>>>> 9ef3e28f7b51b2f104bb0071034491b042323743
 }
