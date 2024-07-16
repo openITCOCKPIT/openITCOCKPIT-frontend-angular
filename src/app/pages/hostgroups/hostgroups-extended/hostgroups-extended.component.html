@@ -34,7 +34,7 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="default" size="xs">
+                        <button cButton class="ripple" color="default" size="xs" (click)="onHostgroupChange()">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -146,7 +146,7 @@
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
                                 <input
-                                        [(ngModel)]="filter.Host.name"
+                                        [(ngModel)]="hostParams['filter[Hosts.name]']"
                                         aria-label="host group name"
                                         cFormControl
                                         [placeholder]="'Filter by host name' | transloco"
@@ -259,11 +259,10 @@
                                 ></fa-icon>
                             </td>
                             <td>
-                                <fa-icon
-                                        *ngIf="!host.Host.active_checks_enabled || host.Host.is_satellite_host"
-                                        [icon]="['fas', 'power-off']"
-                                        [title]="'Passively transferred service' | transloco"
-                                ></fa-icon>
+                                <span
+                                        *ngIf="! host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
+                                        [title]="'Passively transferred host' | transloco"
+                                >P</span>
                             </td>
                             <td>
                                 <span *oitcPermission="['hosts', 'browser']">
@@ -284,7 +283,7 @@
                                             class="bg-ok"
                                             [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                             [routerLink]="['/', 'services', 'index']">
-                                        {{ host.ServicestatusSummary.state.unknown }}
+                                        {{ host.ServicestatusSummary.state.ok }}
                                     </button>
                                     <button cButton
                                             class="bg-warning"
@@ -387,6 +386,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.ok"
                                                                id="statusFilterServiceOk">
                                                         {{ host.ServicestatusSummary.state.ok }}
+                                                        {{t('ok')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-warning">
@@ -399,6 +399,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.warning"
                                                                id="statusFilterServiceWarning">
                                                         {{ host.ServicestatusSummary.state.warning }}
+                                                        {{t('warning')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-critical">
@@ -410,6 +411,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.critical"
                                                                id="statusFilterServiceCritical">
                                                         {{ host.ServicestatusSummary.state.critical }}
+                                                        {{t('critical')}}
                                                     </label>
                                                 </c-col>
                                                 <c-col class="bg-unknown">
@@ -421,6 +423,7 @@
                                                                [(ngModel)]="host.Servicestatus.current_state.unknown"
                                                                id="statusFilterServiceUnknown">
                                                         {{ host.ServicestatusSummary.state.unknown }}
+                                                        {{t('unknown')}}
                                                     </label>
                                                 </c-col>
                                             </c-row>
