@@ -771,7 +771,7 @@
 
                         <td class="text-center">
                             <strong
-                                *ngIf="host.Host.active_checks_enabled === true || host.Host.is_satellite_host === true"
+                                *ngIf="host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
                                 [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right">
                                 P
                             </strong>
