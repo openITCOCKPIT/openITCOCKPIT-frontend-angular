@@ -1,6 +1,6 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -39,38 +39,41 @@ import {
     TableColorDirective,
     TableDirective
 } from "@coreui/angular";
-import {XsButtonDirective} from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {NgForOf, NgIf} from '@angular/common';
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {RequiredIconComponent} from "../../../components/required-icon/required-icon.component";
-import {Router, RouterLink} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import {DebounceDirective} from '../../../directives/debounce.directive';
-import {PermissionDirective} from "../../../permissions/permission.directive";
-import {TrueFalseDirective} from '../../../directives/true-false.directive';
-import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
-import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import {CommandTypesEnum} from '../command-types.enum';
-import {BackButtonDirective} from '../../../directives/back-button.directive';
-import {UserMacrosModalComponent} from '../user-macros-modal/user-macros-modal.component';
-import {ArgumentsMissmatch, CommandPost} from '../commands.interface';
-import {Subscription} from 'rxjs';
-import {CommandsService} from '../commands.service';
-import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {GenericIdResponse, GenericValidationError} from '../../../generic-responses';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {CodeMirrorContainerComponent} from "../../../components/code-mirror-container/code-mirror-container.component";
-import {DefaultMacros} from "../../../components/code-mirror-container/code-mirror-container.interface";
-import {MacrosService} from '../../macros/macros.service';
-import {MacroIndex} from "../../macros/macros.interface";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { CommandTypesEnum } from '../command-types.enum';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { UserMacrosModalComponent } from '../user-macros-modal/user-macros-modal.component';
+import { ArgumentsMissmatch, CommandPost } from '../commands.interface';
+import { Subscription } from 'rxjs';
+import { CommandsService } from '../commands.service';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import {
+    CodeMirrorContainerComponent
+} from "../../../components/code-mirror-container/code-mirror-container.component";
+import { DefaultMacros } from "../../../components/code-mirror-container/code-mirror-container.interface";
+import { MacrosService } from '../../macros/macros.service';
+import { MacroIndex } from "../../macros/macros.interface";
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-commands-add',
@@ -166,7 +169,7 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private MacrosService = inject(MacrosService);
-    private router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -272,7 +275,7 @@ export class CommandsAddComponent implements OnInit, OnDestroy {
                         show: false,
                         id: 'macroAddModal',
                     });
-                    this.router.navigate(['/commands/index']);
+                    this.HistoryService.navigateWithFallback(['/commands/index']);
 
                     return;
                 }

@@ -49,7 +49,8 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -108,7 +109,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     public post!: Contact;
 
     protected containers: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
     private hostPushCommandId: number = 0;
     private servicePushCommandId: number = 0;
     protected notificationCommands: SelectKeyValue[] = [];
@@ -122,6 +123,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected contactId: number = 0;
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         this.loadCommands();
@@ -160,7 +162,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     const url: (string | number)[] = ['contacts', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/contacts/index']);
+                    this.HistoryService.navigateWithFallback(['/contacts/index']);
 
                     return;
                 }

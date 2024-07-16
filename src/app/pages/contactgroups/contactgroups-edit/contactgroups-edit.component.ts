@@ -42,6 +42,7 @@ import {
 } from '../contactgroups.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contactgroups-edit',
@@ -95,7 +96,8 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
 
     public post!: ContactgroupEditPostContactgroup;
     protected containers: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -128,7 +130,7 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
                     const url: (string | number)[] = ['contactgroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/contactgroups/index']);
+                    this.HistoryService.navigateWithFallback(['/contactgroups/index']);
 
                     return;
                 }

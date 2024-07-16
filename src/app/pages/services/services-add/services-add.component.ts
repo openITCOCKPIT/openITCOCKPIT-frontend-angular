@@ -41,7 +41,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
     ServiceInheritedContactsAndContactgroups,
     ServiceInheritedContactsAndContactgroupsWithId,
@@ -60,6 +60,7 @@ import { ServicetemplatePost } from '../../servicetemplates/servicetemplates.int
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -156,7 +157,7 @@ export class ServicesAddComponent {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -544,7 +545,7 @@ export class ServicesAddComponent {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/services/index']);
+                        this.HistoryService.navigateWithFallback(['/services/index']);
                         return;
                     }
                     this.post = this.getDefaultPost(this.hostId);

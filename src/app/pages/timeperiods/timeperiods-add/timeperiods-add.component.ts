@@ -36,6 +36,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-timeperiods-add',
@@ -103,6 +104,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly WeekdaysService = inject(WeekdaysService);
     private router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
     public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
@@ -221,7 +223,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
                     const url = ['timeperiods', 'edit', response.timeperiod.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.router.navigate(['/timeperiods/index']);
+                    this.HistoryService.navigateWithFallback(['/timeperiods/index']);
 
                     return;
                 }

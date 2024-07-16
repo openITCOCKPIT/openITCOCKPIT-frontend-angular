@@ -54,6 +54,7 @@ import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -118,6 +119,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -302,7 +304,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
                     const url = ['servicedependencies', 'edit', response.id];
                     this.notyService.genericSuccess(msg, title, url);
 
-                    this.router.navigate(['/servicedependencies/index']);
+                    this.HistoryService.navigateWithFallback(['/servicedependencies/index']);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }

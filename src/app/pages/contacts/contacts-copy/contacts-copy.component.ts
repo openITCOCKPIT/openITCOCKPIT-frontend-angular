@@ -28,6 +28,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ContactsService } from '../contacts.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-contacts-copy',
@@ -68,8 +69,8 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
     private ContactsService: ContactsService = inject(ContactsService);
     private readonly notyService: NotyService = inject(NotyService);
     private router: Router = inject(Router);
-    private route: ActivatedRoute = inject(ActivatedRoute)
-
+    private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -108,7 +109,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
             this.ContactsService.saveContactsCopy(this.contacts).subscribe({
                 next: (value: any) => {
                     this.notyService.genericSuccess();
-                    this.router.navigate(['/', 'contacts', 'index']);
+                    this.HistoryService.navigateWithFallback(['/', 'contacts', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.notyService.genericError();

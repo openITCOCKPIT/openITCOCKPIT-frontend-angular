@@ -64,7 +64,7 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
     private ContactgroupsService: ContactgroupsService = inject(ContactgroupsService);
 
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
     private contactgroupId: number = 0;
 
     private subscriptions: Subscription = new Subscription();

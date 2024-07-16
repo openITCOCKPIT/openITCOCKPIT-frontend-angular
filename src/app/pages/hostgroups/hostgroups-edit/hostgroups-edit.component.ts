@@ -1,5 +1,5 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {BackButtonDirective} from '../../../directives/back-button.directive';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -10,36 +10,43 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective, FormLabelDirective, NavComponent, NavItemComponent, TooltipDirective
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormErrorDirective} from '../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormsModule} from '@angular/forms';
-import {MacrosComponent} from '../../../components/macros/macros.component';
-import {NgForOf, NgIf} from '@angular/common';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {RequiredIconComponent} from '../../../components/required-icon/required-icon.component';
-import {TranslocoDirective, TranslocoPipe, TranslocoService} from '@jsverse/transloco';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../../generic-responses';
-import {Subscription} from 'rxjs';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NotyService} from '../../../layouts/coreui/noty.service';
-import {ObjectUuidComponent} from '../../../layouts/coreui/object-uuid/object-uuid.component';
-import {HostgroupsService} from '../hostgroups.service';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { MacrosComponent } from '../../../components/macros/macros.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { HostgroupsService } from '../hostgroups.service';
 import {
-    HostgroupsEditGet,
     Hostgroup,
-    LoadContainersRoot, LoadHostsResponse,
+    HostgroupsEditGet,
+    LoadContainersRoot,
+    LoadHostsResponse,
     LoadHosttemplates
 } from "../hostgroups.interface";
-import {SelectComponent} from "../../../layouts/primeng/select/select/select.component";
-import {MultiSelectComponent} from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
-import {SelectKeyValue} from "../../../layouts/primeng/select.interface";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hostgroups-edit',
@@ -94,6 +101,8 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public createAnother: boolean = false;
 
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+
     public post: Hostgroup = {
         container: {
             containertype_id: 0,
@@ -117,7 +126,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     }
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
 
     public ngOnInit() {
@@ -153,7 +162,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/hostgroups/index']);
+                        this.HistoryService.navigateWithFallback(['/hostgroups/index']);
                         return;
                     }
                     this.errors = null;

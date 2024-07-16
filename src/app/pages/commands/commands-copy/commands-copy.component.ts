@@ -29,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-commands-copy',
@@ -70,7 +71,8 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
     private CommandsService = inject(CommandsService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -110,7 +112,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied commands
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'commands', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'commands', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

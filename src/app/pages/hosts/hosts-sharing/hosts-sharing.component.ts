@@ -49,6 +49,7 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosts-sharing',
@@ -113,6 +114,7 @@ export class HostsSharingComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -144,7 +146,7 @@ export class HostsSharingComponent implements OnInit, OnDestroy {
                         this.notyService.genericSuccess(msg, title, url);
 
 
-                        this.router.navigate(['/hosts/index']);
+                        this.HistoryService.navigateWithFallback(['/hosts/index']);
                         this.notyService.scrollContentDivToTop();
                         return;
                     }

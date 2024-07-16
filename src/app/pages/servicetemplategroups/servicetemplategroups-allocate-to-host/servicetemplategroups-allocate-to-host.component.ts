@@ -49,6 +49,7 @@ import { NotyService } from "../../../layouts/coreui/noty.service";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-host',
@@ -108,6 +109,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     protected readonly route: ActivatedRoute = inject(ActivatedRoute);
     protected selectedItems: DeleteAllItem[] = [];
     protected readonly router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
     protected hideFilter: boolean = true;
 
     protected servicetemplategroups: SelectKeyValue[] = [];
@@ -197,7 +199,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
                     this.percentage = Math.round(i / count * 100);
 
                     this.notyService.genericSuccess();
-                    this.router.navigate(['/servicetemplategroups/index']);
+                    this.HistoryService.navigateWithFallback(['/servicetemplategroups/index']);
                     return;
                 }
 

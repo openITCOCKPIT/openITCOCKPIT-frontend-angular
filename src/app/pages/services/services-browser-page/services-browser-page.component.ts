@@ -1,31 +1,28 @@
-import {
-    Component,
-    inject,
-    OnInit,
-    OnDestroy
-} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ServicesbrowserService } from './servicesbrowser.service';
 import { ServicesBrowser } from './services-browser.interface';
 import { TimezoneObject } from "./timezone.interface";
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { NgIf, NgForOf, JsonPipe } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import {
     CardBodyComponent,
-    CardComponent, CardHeaderComponent, CardTitleDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
     ContainerComponent,
     NavComponent,
     NavItemComponent,
 } from '@coreui/angular'
 import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {UserMacrosModalComponent} from '../../commands/user-macros-modal/user-macros-modal.component';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-services-browser-page',
@@ -63,7 +60,7 @@ export class ServicesBrowserPageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ServicesBrowserService = inject(ServicesbrowserService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
 

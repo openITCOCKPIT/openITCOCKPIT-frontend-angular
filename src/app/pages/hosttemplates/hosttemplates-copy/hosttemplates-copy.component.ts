@@ -30,6 +30,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hosttemplates-copy',
@@ -73,7 +74,8 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
     private HosttemplatesService = inject(HosttemplatesService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -135,7 +137,7 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied host templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.router.navigate(['/', 'hosttemplates', 'index']);
+                this.HistoryService.navigateWithFallback(['/', 'hosttemplates', 'index']);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.

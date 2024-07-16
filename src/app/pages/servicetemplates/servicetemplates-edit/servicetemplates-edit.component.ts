@@ -56,6 +56,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -133,6 +134,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -289,7 +291,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    this.router.navigate(['/servicetemplates/index']);
+                    this.HistoryService.navigateWithFallback(['/servicetemplates/index']);
 
                     return;
                 }

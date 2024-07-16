@@ -43,6 +43,7 @@ import {
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-servicetemplategroups-add',
@@ -99,7 +100,8 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
     public post: ServiceTemplateGroupsAddPostServicetemplategroup = {} as ServiceTemplateGroupsAddPostServicetemplategroup;
     protected containers: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -128,7 +130,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.router.navigate(['/servicetemplategroups/index']);
+                        this.HistoryService.navigateWithFallback(['/servicetemplategroups/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();

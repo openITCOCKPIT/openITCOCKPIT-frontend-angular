@@ -46,7 +46,7 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { PermissionDirective } from "../../../permissions/permission.directive";
@@ -74,6 +74,7 @@ import {
 import { DefaultMacros } from '../../../components/code-mirror-container/code-mirror-container.interface';
 import { MacroIndex } from '../../macros/macros.interface';
 import { MacrosService } from '../../macros/macros.service';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-commands-edit',
@@ -170,8 +171,8 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private MacrosService = inject(MacrosService);
-    private router = inject(Router);
-    private route = inject(ActivatedRoute)
+    private route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -281,7 +282,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
                         show: false,
                         id: 'macroAddModal',
                     });
-                    this.router.navigate(['/commands/index']);
+                    this.HistoryService.navigateWithFallback(['/commands/index']);
 
                     return;
                 }
