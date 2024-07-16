@@ -1,16 +1,16 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CoreuiComponent} from '../../../layouts/coreui/coreui.component';
-import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
-import {SelectionServiceService} from '../../../layouts/coreui/select-all/selection-service.service';
-import {Subscription} from 'rxjs';
-import {HostgroupsService} from '../hostgroups.service';
-import {DeleteAllModalComponent} from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import {DeleteAllItem} from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {PermissionDirective} from '../../../permissions/permission.directive';
-import {DELETE_SERVICE_TOKEN} from '../../../tokens/delete-injection.token';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {ActionsButtonComponent} from '../../../components/actions-button/actions-button.component';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { Subscription } from 'rxjs';
+import { HostgroupsService } from '../hostgroups.service';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
@@ -37,18 +37,18 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import {DebounceDirective} from '../../../directives/debounce.directive';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
-import {NgForOf, NgIf} from '@angular/common';
-import {NoRecordsComponent} from '../../../layouts/coreui/no-records/no-records.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { NgForOf, NgIf } from '@angular/common';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {SelectAllComponent} from '../../../layouts/coreui/select-all/select-all.component';
-import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
     HostgroupsIndexHostgroup,
     HostgroupsIndexParams,
@@ -235,16 +235,15 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
 
 
     public linkFor(type: string) {
-        let baseUrl: string = '/services/listToPdf.pdf?';
+        let baseUrl: string = '/hostgroups/listToPdf.pdf?';
         if (type === 'csv') {
-            baseUrl = '/services/listToCsv?';
+            baseUrl = '/hostgroups/listToCsv?';
         }
 
         let urlParams = {
             'angular': true,
-            'sort': this.params.sort,
-            'page': this.params.page,
-            'direction': this.params.direction,
+            'filter[Containers.name]': this.params['filter[Containers.name]'],
+            'filter[Hostgroups.description]': this.params['filter[Hostgroups.description]'],
         };
 
 
