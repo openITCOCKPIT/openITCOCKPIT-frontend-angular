@@ -284,7 +284,7 @@
                                             class="bg-ok"
                                             [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                             [routerLink]="['/', 'services', 'index']">
-                                        {{ host.ServicestatusSummary.state.unknown }}
+                                        {{ host.ServicestatusSummary.state.ok }}
                                     </button>
                                     <button cButton
                                             class="bg-warning"
