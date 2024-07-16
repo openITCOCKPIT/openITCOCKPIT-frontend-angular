@@ -146,7 +146,7 @@
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
                                 <input
-                                        [(ngModel)]="filter.Host.name"
+                                        [(ngModel)]="hostParams['filter[Hosts.name]']"
                                         aria-label="host group name"
                                         cFormControl
                                         [placeholder]="'Filter by host name' | transloco"
