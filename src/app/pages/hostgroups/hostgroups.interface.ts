@@ -34,7 +34,6 @@ export interface HostgroupsExtendedParams {
     angular: true,
     scroll: boolean,
     page: number,
-    direction: 'asc' | 'desc' | '', // asc or desc
 
     'filter[Hosts.name]': string,
     'filter[Hoststatus.current_state][]': string[]
@@ -45,7 +44,6 @@ export function getDefaultHostgroupsExtendedParams(): HostgroupsExtendedParams {
         angular: true,
         scroll: true,
         page: 1,
-        direction: 'asc',
 
         "filter[Hosts.name]": '',
         "filter[Hoststatus.current_state][]": [],
