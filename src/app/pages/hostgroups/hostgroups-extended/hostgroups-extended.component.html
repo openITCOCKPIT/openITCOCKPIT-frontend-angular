@@ -259,11 +259,10 @@
                                 ></fa-icon>
                             </td>
                             <td>
-                                <fa-icon
-                                        *ngIf="!host.Host.active_checks_enabled || host.Host.is_satellite_host"
-                                        [icon]="['fas', 'power-off']"
-                                        [title]="'Passively transferred service' | transloco"
-                                ></fa-icon>
+                                <span
+                                        *ngIf="! host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
+                                        [title]="'Passively transferred host' | transloco"
+                                >P</span>
                             </td>
                             <td>
                                 <span *oitcPermission="['hosts', 'browser']">
