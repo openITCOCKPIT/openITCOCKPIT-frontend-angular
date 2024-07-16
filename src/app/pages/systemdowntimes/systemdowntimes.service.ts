@@ -2,13 +2,20 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { SystemdowntimesGet, SystemdowntimesPost } from './systemdowntimes.interface';
+import {
+    SystemdowntimesGet,
+    SystemdowntimesPost,
+    HostSystemdowntimesParams,
+    SystemdowntimeHostIndexRoot,
+} from './systemdowntimes.interface';
+
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SystemdowntimesService {
+export class SystemdowntimesService implements DeleteAllModalService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
@@ -118,5 +125,24 @@ export class SystemdowntimesService {
                     });
                 })
             );
+    }
+
+
+    public getHostSystemdowntimes(params: HostSystemdowntimesParams): Observable<SystemdowntimeHostIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<SystemdowntimeHostIndexRoot>(`${proxyPath}/systemdowntimes/host.json`, {
+            params: params as {} // cast CommandsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/systemdowntimes/delete/${item.id}.json?angular=true`, {});
     }
 }

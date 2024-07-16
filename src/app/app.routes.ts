@@ -346,6 +346,18 @@ const coreRoutes: Routes = [{
     path: 'systemdowntimes/addServicedowntime',
     loadComponent: () => import('./pages/systemdowntimes/add-servicedowntime/add-servicedowntime.component').then(m => m.AddServicedowntimeComponent)
 }, {
+    path: 'systemdowntimes/host',
+    loadComponent: () => import('./pages/systemdowntimes/systemdowntimes-host/systemdowntimes-host.component').then(m => m.SystemdowntimesHostComponent)
+}, {
+    path: 'systemdowntimes/service',
+    loadComponent: () => import('./pages/systemdowntimes/systemdowntimes-service/systemdowntimes-service.component').then(m => m.SystemdowntimesServiceComponent)
+}, {
+    path: 'systemdowntimes/hostgroup',
+    loadComponent: () => import('./pages/systemdowntimes/systemdowntimes-hostgroup/systemdowntimes-hostgroup.component').then(m => m.SystemdowntimesHostgroupComponent)
+}, {
+    path: 'systemdowntimes/node',
+    loadComponent: () => import('./pages/systemdowntimes/systemdowntimes-node/systemdowntimes-node.component').then(m => m.SystemdowntimesNodeComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
