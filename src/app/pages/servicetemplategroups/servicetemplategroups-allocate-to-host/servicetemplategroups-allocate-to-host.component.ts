@@ -117,12 +117,17 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGetServicetemplatesForDeploy[] = [];
 
     protected servicetemplategroupId: number = 0;
-    protected hostId: number | null = null;
+    protected hostId: number = 0;
 
     protected percentage: number = 42;
 
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
+        let hostId: number = Number(this.route.snapshot.paramMap.get('hostId'));
+        if (hostId > 0) {
+
+            this.hostId = hostId;
+        }
         this.loadServicetemplategroups('');
         this.loadHosts('');
     }
@@ -133,7 +138,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
 
 
     private loadServices(): void {
-        if (this.servicetemplategroupId === null || this.hostId === null) {
+        if (this.servicetemplategroupId === 0 || this.hostId === 0) {
             return;
         }
         this.ServicetemplategroupsService.allocateToHostGet(this.servicetemplategroupId, this.hostId).subscribe(
@@ -151,7 +156,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         if (typeof this.hostsWithServicetemplatesForDeploy === "undefined") {
             return;
         }
-        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+        for (let hostIndex in this.hostsWithServicetemplatesForDeploy) {
             this.hostsWithServicetemplatesForDeploy[hostIndex].createServiceOnTargetHost = true;
         }
     }
@@ -161,7 +166,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         if (typeof this.hostsWithServicetemplatesForDeploy === "undefined") {
             return;
         }
-        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+        for (let hostIndex in this.hostsWithServicetemplatesForDeploy) {
             this.hostsWithServicetemplatesForDeploy[hostIndex].createServiceOnTargetHost = false;
         }
     }
@@ -175,13 +180,13 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         let item: AllocateToHostPost =
             {
                 Host: {
-                    id: this.hostId as number
+                    id: this.hostId
                 },
                 Servicetemplates: {
                     _ids: []
                 }
             };
-        for (var hostIndex in this.hostsWithServicetemplatesForDeploy) {
+        for (let hostIndex in this.hostsWithServicetemplatesForDeploy) {
             if (this.hostsWithServicetemplatesForDeploy[hostIndex].createServiceOnTargetHost) {
                 item.Servicetemplates._ids.push(this.hostsWithServicetemplatesForDeploy[hostIndex].servicetemplate.id);
             }
@@ -224,7 +229,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     }
 
     protected loadHosts = (containerName: string): void => {
-        this.subscriptions.add(this.ServicetemplategroupsService.loadHostsByString(this.hostId as number, containerName)
+        this.subscriptions.add(this.ServicetemplategroupsService.loadHostsByString(this.hostId, containerName)
             .subscribe((result: LoadHostsByStringResponse): void => {
                 this.hosts = result.hosts;
             }))
