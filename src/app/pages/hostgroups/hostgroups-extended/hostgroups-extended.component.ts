@@ -107,6 +107,7 @@ import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-typ
 import {
     HostAcknowledgeModalComponent
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -169,7 +170,8 @@ import {
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
-        HostAcknowledgeModalComponent
+        HostAcknowledgeModalComponent,
+        TableLoaderComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'

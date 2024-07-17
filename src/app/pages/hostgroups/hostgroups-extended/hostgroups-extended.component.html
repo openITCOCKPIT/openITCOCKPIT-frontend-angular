@@ -153,6 +153,8 @@
                     </c-col>
                 </c-row>
 
+                <oitc-table-loader *ngIf="!hostgroupExtended"></oitc-table-loader>
+
                 <table bordered cTable class="mt-2 mb-0" hover striped>
 
                     <thead>
@@ -367,6 +369,7 @@
                         </tr>
                         <tr *ngIf="host.services">
                             <td colspan="12" style="padding:0;margin:0;">
+                                <oitc-table-loader *ngIf="!host.services"></oitc-table-loader>
                                 <table bordered cTable hover striped class="spaceless">
                                     <thead>
 
@@ -584,6 +587,7 @@
                 <oitc-no-records
                         *ngIf="hostgroupExtended.Hosts.length === 0"></oitc-no-records>
 
+                
                 <c-container fluid>
                     <c-row>
                         <c-col>
