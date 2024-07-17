@@ -17,7 +17,7 @@ export class ChangelogsService {
     public getEntity(params: ChangelogsEntityParams): Observable<ChangelogIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<ChangelogIndexRoot>(`${proxyPath}/changelogs/index.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
@@ -28,7 +28,7 @@ export class ChangelogsService {
     public getIndex(params: ChangelogsIndexParams): Observable<ChangelogIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<ChangelogIndexRoot>(`${proxyPath}/changelogs/index.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;

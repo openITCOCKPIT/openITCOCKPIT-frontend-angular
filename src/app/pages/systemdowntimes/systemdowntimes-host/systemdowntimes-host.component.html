@@ -25,6 +25,16 @@
             </ol>
         </nav>
 
+        <c-col sm="12">
+            <c-alert color="info">
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                <strong>
+                    {{ t('Notice') }}:
+                </strong>
+                {{ t('Recurring downtimes with deleted objects will be deleted automatically by the cronjob') }}
+            </c-alert>
+        </c-col>
+
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Recurring downtimes') }}

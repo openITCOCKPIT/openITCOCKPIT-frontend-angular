@@ -1,6 +1,8 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { HostObject } from '../hosts/hosts.interface';
 
+/**
+ * Hosts list
+ */
 export interface SystemdowntimeHostIndexRoot extends PaginateOrScroll {
     all_host_recurring_downtimes: HostSystemdowntime[]
     _csrfToken: string
@@ -10,7 +12,6 @@ export interface HostSystemdowntime {
     Host: SystemdowntimeHost
     Systemdowntime: Systemdowntime
 }
-
 
 export interface SystemdowntimeHost {
     id: string
@@ -31,6 +32,67 @@ export interface SystemdowntimeHost {
     notes: any
     is_satellite_host: boolean
     name: string
+}
+
+/**
+ * Services list
+ */
+
+export interface SystemdowntimeServiceIndexRoot extends PaginateOrScroll {
+    all_service_recurring_downtimes: ServiceSystemdowntime[]
+    _csrfToken: string
+}
+
+export interface ServiceSystemdowntime {
+    Host: SystemdowntimeHost
+    Service: SystemdowntimeService
+    Systemdowntime: Systemdowntime
+}
+
+export interface SystemdowntimeService {
+    id: string
+    uuid: string
+    servicename: string
+    hostname: any
+    description: any
+    active_checks_enabled: any
+    tags: any
+    host_id: any
+    allow_edit: boolean
+    disabled: boolean
+    serviceType: number
+    priority: any
+}
+
+/**
+ * Host groups list
+ */
+
+
+export interface SystemdowntimeHostgroupIndexRoot extends PaginateOrScroll {
+    all_hostgroup_recurring_downtimes: HostgroupSystemdowntime[]
+    _csrfToken: string
+}
+
+export interface HostgroupSystemdowntime {
+    Container: SystemdowntimeHostgroupContainer
+    Hostgroup: SystemdowntimeHostgroup
+    Systemdowntime: Systemdowntime
+}
+
+export interface SystemdowntimeHostgroupContainer {
+    id: number
+    containertype_id: number
+    name: string
+}
+
+export interface SystemdowntimeHostgroup {
+    id: number
+    uuid: string
+    description: string
+    container_id: number
+    container: SystemdowntimeHostgroupContainer
+    allow_edit: boolean
 }
 
 export interface SystemdowntimesPost {
@@ -102,5 +164,56 @@ export function getDefaultHostSystemdowntimesParams(): HostSystemdowntimesParams
         'filter[Systemdowntimes.author]': '',
         'filter[Systemdowntimes.comment]': '',
         'filter[Hosts.name]': ''
+    }
+}
+
+export interface ServiceSystemdowntimesParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Systemdowntimes.author]': '',
+    'filter[Systemdowntimes.comment]': '',
+    'filter[Hosts.name]': '',
+    'filter[servicename]': ''
+}
+
+export function getDefaultServiceSystemdowntimesParams(): ServiceSystemdowntimesParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Systemdowntimes.from_time',
+        page: 1,
+        direction: 'desc',
+        'filter[Systemdowntimes.author]': '',
+        'filter[Systemdowntimes.comment]': '',
+        'filter[Hosts.name]': '',
+        'filter[servicename]': ''
+    }
+}
+
+
+export interface HostgroupSystemdowntimesParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Systemdowntimes.author]': '',
+    'filter[Systemdowntimes.comment]': '',
+    'filter[Containers.name]': ''
+}
+
+export function getDefaultHostgroupSystemdowntimesParams(): HostgroupSystemdowntimesParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Systemdowntimes.from_time',
+        page: 1,
+        direction: 'desc',
+        'filter[Systemdowntimes.author]': '',
+        'filter[Systemdowntimes.comment]': '',
+        'filter[Containers.name]': ''
     }
 }
