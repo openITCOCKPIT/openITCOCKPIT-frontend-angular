@@ -48,7 +48,6 @@ import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { DowntimeSimpleIconComponent } from '../../downtimes/downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -99,7 +98,6 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         NgIf,
         TableDirective,
         ItemSelectComponent,
-        DowntimeSimpleIconComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
@@ -117,7 +115,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     templateUrl: './systemdowntimes-service.component.html',
     styleUrl: './systemdowntimes-service.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService} // Inject the SystemdowntimesService into the CancelAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
     ]
 })
 export class SystemdowntimesServiceComponent implements OnInit, OnDestroy {
@@ -128,9 +126,6 @@ export class SystemdowntimesServiceComponent implements OnInit, OnDestroy {
     public params: ServiceSystemdowntimesParams = getDefaultServiceSystemdowntimesParams();
     public serviceSystemdowntimes?: SystemdowntimeServiceIndexRoot;
     public hideFilter: boolean = true;
-    public showFlashSuccess: boolean = false;
-    public autoRefreshCounter: number | null = null;
-    private interval: any;
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);

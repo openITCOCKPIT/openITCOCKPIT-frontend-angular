@@ -1,7 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     ModalBodyComponent,
     ModalComponent,
@@ -10,19 +9,19 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-reload-interface-modal',
     standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         ModalBodyComponent,
@@ -34,7 +33,8 @@ import { Subscription } from 'rxjs';
         NgIf,
         ProgressComponent,
         RowComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        XsButtonDirective
     ],
     templateUrl: './reload-interface-modal.component.html',
     styleUrl: './reload-interface-modal.component.css'

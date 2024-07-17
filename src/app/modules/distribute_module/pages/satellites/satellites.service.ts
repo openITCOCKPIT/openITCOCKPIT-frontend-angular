@@ -3,9 +3,14 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { SatellitesLoadSatellitesByStringParams } from './satellites.interface';
+import {
+    SatellitesLoadSatellitesByStringParams,
+    SatelliteSystemdowntimesParams,
+    SystemdowntimeSatelliteIndexRoot
+} from './satellites.interface';
 import { SystemdowntimesPost } from '../../../../pages/systemdowntimes/systemdowntimes.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -54,5 +59,17 @@ export class SatellitesService {
                     });
                 })
             );
+    }
+
+    public getSatelliteSystemdowntimes(params: SatelliteSystemdowntimesParams): Observable<SystemdowntimeSatelliteIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<SystemdowntimeSatelliteIndexRoot>(`${proxyPath}/distribute_module/satellites/downtime.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

@@ -43,9 +43,9 @@
                 </label>
                 <c-input-group>
                     <input
-                            cFormControl
-                            readonly="readonly"
-                            [(ngModel)]="configString">
+                        cFormControl
+                        readonly="readonly"
+                        [(ngModel)]="configString">
                     <span cInputGroupText id="copy">
                         <oitc-copy-to-clipboard [data]="configString">
                             <fa-icon [icon]="['fas', 'copy']"></fa-icon>
@@ -55,7 +55,7 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="hideModal()" cButton class="ripple" color="light">
+            <button (click)="hideModal()" cButton class="ripple" color="default">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

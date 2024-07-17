@@ -276,6 +276,9 @@
                             {{ hostgroupSystemdowntime.Systemdowntime.author }}
                         </td>
                         <td>
+                            <span class="text-muted">
+                                AUTO[{{hostgroupSystemdowntime.Systemdowntime.id}}]:
+                            </span>
                             {{ hostgroupSystemdowntime.Systemdowntime.comment }}
                         </td>
                         <td>
@@ -320,7 +323,7 @@
                                             class="btn btn-outline-danger col-3 border-0"
                                             type="button">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Cancel selected') }}
+                                        {{ t('Delete selected') }}
                                     </button>
                                 </div>
                             </c-col>

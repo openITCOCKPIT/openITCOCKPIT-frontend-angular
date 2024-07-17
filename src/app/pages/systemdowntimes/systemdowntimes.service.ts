@@ -9,7 +9,7 @@ import {
     SystemdowntimeHostIndexRoot,
     ServiceSystemdowntimesParams,
     SystemdowntimeServiceIndexRoot,
-    SystemdowntimeHostgroupIndexRoot, HostgroupSystemdowntimesParams,
+    SystemdowntimeHostgroupIndexRoot, ContainerSystemdowntimesParams, SystemdowntimeNodeIndexRoot,
 } from './systemdowntimes.interface';
 
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -154,10 +154,22 @@ export class SystemdowntimesService implements DeleteAllModalService {
         )
     }
 
-    public getHostgroupSystemdowntimes(params: HostgroupSystemdowntimesParams): Observable<SystemdowntimeHostgroupIndexRoot> {
+    public getHostgroupSystemdowntimes(params: ContainerSystemdowntimesParams): Observable<SystemdowntimeHostgroupIndexRoot> {
         const proxyPath = this.proxyPath;
 
         return this.http.get<SystemdowntimeHostgroupIndexRoot>(`${proxyPath}/systemdowntimes/hostgroup.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getNodeSystemdowntimes(params: ContainerSystemdowntimesParams): Observable<SystemdowntimeNodeIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<SystemdowntimeNodeIndexRoot>(`${proxyPath}/systemdowntimes/node.json`, {
             params: params as {}
         }).pipe(
             map(data => {

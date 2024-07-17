@@ -38,8 +38,8 @@ import { FormsModule } from '@angular/forms';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 import {
+    ContainerSystemdowntimesParams,
     HostgroupSystemdowntime,
-    HostgroupSystemdowntimesParams,
     SystemdowntimeHostgroupIndexRoot
 } from '../../systemdowntimes/systemdowntimes.interface';
 import { Subscription } from 'rxjs';
@@ -48,7 +48,6 @@ import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { DowntimeSimpleIconComponent } from '../../downtimes/downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -58,7 +57,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { getDefaultHostgroupSystemdowntimesParams } from '../systemdowntimes.interface';
+import { getDefaultContainerSystemdowntimesParams } from '../systemdowntimes.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 
@@ -99,7 +98,6 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         NgIf,
         TableDirective,
         ItemSelectComponent,
-        DowntimeSimpleIconComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
@@ -117,7 +115,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     templateUrl: './systemdowntimes-hostgroup.component.html',
     styleUrl: './systemdowntimes-hostgroup.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService} // Inject the SystemdowntimesService into the CancelAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
     ]
 })
 export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
@@ -125,12 +123,9 @@ export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: HostgroupSystemdowntimesParams = getDefaultHostgroupSystemdowntimesParams();
+    public params: ContainerSystemdowntimesParams = getDefaultContainerSystemdowntimesParams();
     public hostgroupSystemdowntimes?: SystemdowntimeHostgroupIndexRoot;
     public hideFilter: boolean = true;
-    public showFlashSuccess: boolean = false;
-    public autoRefreshCounter: number | null = null;
-    private interval: any;
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
@@ -164,7 +159,7 @@ export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultHostgroupSystemdowntimesParams();
+        this.params = getDefaultContainerSystemdowntimesParams();
         this.loadHostgroupSystemdowntimes();
     }
 

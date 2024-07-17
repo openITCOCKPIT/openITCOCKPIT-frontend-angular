@@ -27,7 +27,6 @@ import { Component, inject, Input, ViewChild } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -37,11 +36,12 @@ import {
     ModalHeaderComponent,
     ModalService,
     ModalTitleDirective,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { CopyToClipboardComponent } from '../copy-to-clipboard/copy-to-clipboard.component';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-columns-config-export-modal',
@@ -52,7 +52,6 @@ import { CopyToClipboardComponent } from '../copy-to-clipboard/copy-to-clipboard
         ButtonCloseDirective,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ButtonDirective,
         FaIconComponent,
         ModalFooterComponent,
         ModalBodyComponent,
@@ -61,7 +60,8 @@ import { CopyToClipboardComponent } from '../copy-to-clipboard/copy-to-clipboard
         InputGroupComponent,
         InputGroupTextDirective,
         CopyToClipboardComponent,
-        FormControlDirective
+        FormControlDirective,
+        XsButtonDirective
     ],
     templateUrl: './columns-config-export-modal.component.html',
     styleUrl: './columns-config-export-modal.component.css'
@@ -72,7 +72,7 @@ export class ColumnsConfigExportModalComponent {
     private readonly modalService = inject(ModalService);
     @ViewChild('modal') private modal!: ModalComponent;
 
-    public hideModal () {
+    public hideModal() {
         this.modalService.toggle({
             show: false,
             id: 'columnsConfigExportModal'

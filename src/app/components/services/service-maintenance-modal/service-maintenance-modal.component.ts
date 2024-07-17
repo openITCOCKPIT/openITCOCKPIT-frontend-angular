@@ -26,7 +26,6 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
@@ -38,7 +37,7 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
@@ -46,8 +45,13 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { DowntimesDefaultsService, ValidateInput, ValidationErrors } from '../../../services/downtimes-defaults.service';
+import {
+    DowntimesDefaultsService,
+    ValidateInput,
+    ValidationErrors
+} from '../../../services/downtimes-defaults.service';
 import { ExternalCommandsService, ServiceDowntimeItem } from '../../../services/external-commands.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
@@ -55,7 +59,6 @@ import { ExternalCommandsService, ServiceDowntimeItem } from '../../../services/
     standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         ModalBodyComponent,
@@ -71,7 +74,8 @@ import { ExternalCommandsService, ServiceDowntimeItem } from '../../../services/
         FormTextDirective,
         FormControlDirective,
         FormLabelDirective,
-        FormsModule
+        FormsModule,
+        XsButtonDirective
     ],
     templateUrl: './service-maintenance-modal.component.html',
     styleUrl: './service-maintenance-modal.component.css'
@@ -103,7 +107,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
-    hideModal () {
+    hideModal() {
         this.isSend = false;
         this.hasErrors = false;
         this.errors = {};
@@ -114,7 +118,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    setExternalCommands () {
+    setExternalCommands() {
         this.error = false;
         this.isSend = true;
         const validate: ValidateInput = {
@@ -145,7 +149,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
     }
 
 
-    ngOnInit () {
+    ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'serviceMaintenanceModal' && state.show === true) {
                 this.getDefaults();
@@ -154,11 +158,11 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         this.downtimeModal.comment = this.TranslocoService.translate('In progress');
     }
 
-    ngOnDestroy () {
+    ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    getDefaults () {
+    getDefaults() {
         this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
             this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
             this.downtimeModal.from_time = downtimeDefaults.from_time;
@@ -174,7 +178,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim()
     }
 
-    sendCommands () {
+    sendCommands() {
         this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
             message: any;
         }) => {

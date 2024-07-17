@@ -27,7 +27,6 @@ import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angu
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     FormControlDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -40,6 +39,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-columns-config-import-modal',
@@ -50,14 +50,14 @@ import { NgIf } from '@angular/common';
         ButtonCloseDirective,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ButtonDirective,
         FaIconComponent,
         ModalFooterComponent,
         ModalBodyComponent,
         RowComponent,
         FormsModule,
         NgIf,
-        FormControlDirective
+        FormControlDirective,
+        XsButtonDirective
     ],
     templateUrl: './columns-config-import-modal.component.html',
     styleUrl: './columns-config-import-modal.component.css'
@@ -72,7 +72,7 @@ export class ColumnsConfigImportModalComponent {
     private readonly modalService = inject(ModalService);
     @ViewChild('modal') private modal!: ModalComponent;
 
-    public hideModal () {
+    public hideModal() {
         this.error = false;
         this.configString = '';
         this.modalService.toggle({
@@ -81,7 +81,7 @@ export class ColumnsConfigImportModalComponent {
         });
     }
 
-    public sendConfig () {
+    public sendConfig() {
         try {
             var configObject = JSON.parse(this.configString);
             if (configObject.key == this.columnsTableKey && Array.isArray(configObject.value)) {

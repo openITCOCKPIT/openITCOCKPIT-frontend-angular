@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, inject, Input, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     ModalBodyComponent,
     ModalComponent,
@@ -10,7 +9,7 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
@@ -20,13 +19,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
 import { EnableItem } from './enable.interface';
 import { GenericActionErrorResponse } from '../../../generic-responses';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-enable-modal',
     standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         ModalBodyComponent,
@@ -38,7 +37,8 @@ import { GenericActionErrorResponse } from '../../../generic-responses';
         NgIf,
         ProgressComponent,
         RowComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        XsButtonDirective
     ],
     templateUrl: './enable-modal.component.html',
     styleUrl: './enable-modal.component.css'

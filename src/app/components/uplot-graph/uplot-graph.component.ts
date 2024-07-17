@@ -35,15 +35,14 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import {TranslocoDirective, TranslocoPipe} from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-    ButtonDirective,
     ColComponent,
     ContainerComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormSelectDirective,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { JsonPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import * as _uPlot from 'uplot';
@@ -54,6 +53,7 @@ import { TimezoneObject } from "../../pages/services/services-browser-page/timez
 import { UPlotConfigBuilder } from './uplot-config-builder';
 import { FormsModule } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -72,7 +72,6 @@ type availableTimeranges = { hours: number, name: string }[];
     imports: [
         ColComponent,
         ContainerComponent,
-        ButtonDirective,
         RowComponent,
         JsonPipe,
         KeyValuePipe,
@@ -85,6 +84,7 @@ type availableTimeranges = { hours: number, name: string }[];
         TranslocoDirective,
         TranslocoPipe,
         FaIconComponent,
+        XsButtonDirective
     ],
     templateUrl: './uplot-graph.component.html',
     styleUrl: './uplot-graph.component.css',
@@ -95,11 +95,11 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     @Input() host: string = '';
 
     @Input()
-    get gauges () {
+    get gauges() {
         return this.availableGauges;
     }
 
-    set gauges (gauges: any) {
+    set gauges(gauges: any) {
         this.availableGauges = gauges;
     }
 
@@ -118,7 +118,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     @Output() showTooltip: EventEmitter<any> = new EventEmitter<any>();
     @Output() hideTooltip: EventEmitter<void> = new EventEmitter<void>();
 
-    @Input() set cursor (val: _uPlot.Cursor) {
+    @Input() set cursor(val: _uPlot.Cursor) {
         this._cursor = val;
         if (this.options.cursor) {
             this.options.cursor = Object.assign(this.options.cursor, val);
@@ -127,7 +127,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    get cursor (): _uPlot.Cursor {
+    get cursor(): _uPlot.Cursor {
         return this._cursor;
     }
 
@@ -140,7 +140,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     resizeObservable$: Observable<Event> = fromEvent(window, 'resize');
     stopPlay$: Subject<any> = new Subject();
 
-    ngOnInit () {
+    ngOnInit() {
         this.resizeObservable$ = fromEvent(window, 'resize');
         this.subscriptions.add(
             this.resizeObservable$.subscribe(e => {
@@ -308,12 +308,12 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     private perfData!: UplotGraphInterface;
 
-    constructor () {
+    constructor() {
         this.config = new UPlotConfigBuilder();
         this.colors = this.config.getColors();
     }
 
-    ngOnChanges () {
+    ngOnChanges() {
         if (this.service) {
 
             this.perfParams.service_uuid = this.service;
@@ -328,24 +328,24 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    protected onTimerangeChange (range: number) {
+    protected onTimerangeChange(range: number) {
         this.prepare();
     }
 
-    protected onAgregationChange (val: string) {
+    protected onAgregationChange(val: string) {
         this.prepare();
     }
 
-    protected onGaugeChange (val: string) {
+    protected onGaugeChange(val: string) {
         this.currentGauge = val;
         this.prepare();
     }
 
-    protected reload () {
+    protected reload() {
         this.prepare();
     }
 
-    protected autoreload () {
+    protected autoreload() {
         if (this.autoReload) {
             timer(0, 30000).pipe(
                 takeUntil(this.stopPlay$,)
@@ -355,14 +355,14 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    private getSize () {
+    private getSize() {
         return {
             width: window.innerWidth - 300,
             height: 300,
         }
     }
 
-    private prepare () {
+    private prepare() {
         this.serverTimeDateObject = new Date(this.timezoneObject.server_time_iso);
         this.perfParams.start = this.serverTimeDateObject.getTime() / 1000 - (this.currentSelectedTimerange * 3600);
         this.perfParams.end = this.serverTimeDateObject.getTime() / 1000;
@@ -379,13 +379,13 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         this.getPerfData()
     }
 
-    private setZoom (min: number, max: number) {
+    private setZoom(min: number, max: number) {
         this.perfParams.start = min;
         this.perfParams.end = max;
         this.getPerfData()
     }
 
-    public getPerfData () {
+    public getPerfData() {
         this.subscriptions.add(this.UplotGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
                 this.perfData = perfdata;
@@ -401,7 +401,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
-    public makeGraph () {
+    public makeGraph() {
 
         if (this.options.series.length > 2) {
             this.options.series.pop();
@@ -522,7 +522,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
         this.uPlotChart = new uPlot(this.options, data, this.chartUPlot.nativeElement);
     }
 
-    tooltipPlugin ({shiftX = 10, shiftY = 10}: any) {
+    tooltipPlugin({shiftX = 10, shiftY = 10}: any) {
         let tooltipLeftOffset: number = 0;
         let tooltipTopOffset: number = 0;
 
@@ -615,7 +615,7 @@ export class UplotGraphComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
-    public ngOnDestroy () {
+    public ngOnDestroy() {
         this.stopPlay$.next(false);
         this.stopPlay$.complete();
         this.subscriptions.unsubscribe();

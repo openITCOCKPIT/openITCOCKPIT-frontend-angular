@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 
-// Just some quick ideas for our PoC workshop, this is no production ready code :)
-
 export const distributeModuleRoutes: Routes = [
     {
         path: 'distribute_module/satellites/addSatelliteDowntime',
