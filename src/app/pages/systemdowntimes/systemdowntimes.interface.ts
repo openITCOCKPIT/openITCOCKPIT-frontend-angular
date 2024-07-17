@@ -68,7 +68,6 @@ export interface SystemdowntimeService {
  * Host groups list
  */
 
-
 export interface SystemdowntimeHostgroupIndexRoot extends PaginateOrScroll {
     all_hostgroup_recurring_downtimes: HostgroupSystemdowntime[]
     _csrfToken: string
@@ -94,6 +93,28 @@ export interface SystemdowntimeHostgroup {
     container: SystemdowntimeHostgroupContainer
     allow_edit: boolean
 }
+
+/**
+ * Node list
+ */
+
+export interface SystemdowntimeNodeIndexRoot extends PaginateOrScroll {
+    all_node_recurring_downtimes: NodeSystemdowntime[]
+    _csrfToken: string
+}
+
+export interface NodeSystemdowntime {
+    Container: SystemdowntimeNode
+    Systemdowntime: Systemdowntime
+}
+
+export interface SystemdowntimeNode {
+    id: number
+    containertype_id: number
+    name: string
+    allow_edit: boolean
+}
+
 
 export interface SystemdowntimesPost {
     id?: null | number
@@ -193,8 +214,8 @@ export function getDefaultServiceSystemdowntimesParams(): ServiceSystemdowntimes
     }
 }
 
-
-export interface HostgroupSystemdowntimesParams {
+/* Host group and container params are the same */
+export interface ContainerSystemdowntimesParams {
     angular: true,
     scroll: boolean,
     sort: string,
@@ -205,7 +226,7 @@ export interface HostgroupSystemdowntimesParams {
     'filter[Containers.name]': ''
 }
 
-export function getDefaultHostgroupSystemdowntimesParams(): HostgroupSystemdowntimesParams {
+export function getDefaultContainerSystemdowntimesParams(): ContainerSystemdowntimesParams {
     return {
         angular: true,
         scroll: true,

@@ -118,7 +118,7 @@ import { Statistics } from '../../statistics/statistics.enum';
     templateUrl: './systemdowntimes-host.component.html',
     styleUrl: './systemdowntimes-host.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService} // Inject the SystemdowntimesService into the CancelAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
     ]
 })
 export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
