@@ -23,7 +23,7 @@ export class NotificationsService {
     public getIndex(params: NotificationIndexParams): Observable<NotificationIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationIndexRoot>(`${proxyPath}/notifications/index.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
@@ -34,7 +34,7 @@ export class NotificationsService {
     public getServices(params: NotificationServicesParams): Observable<NotificationServicesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationServicesRoot>(`${proxyPath}/notifications/services.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
@@ -45,7 +45,7 @@ export class NotificationsService {
     public getHostNotifications(id: number,params: NotificationIndexParams): Observable<NotificationIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationIndexRoot>(`${proxyPath}/notifications/hostNotification/${id}.json?angular=true`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
@@ -56,7 +56,7 @@ export class NotificationsService {
     public getServiceNotifications(id: number,params: NotificationServicesParams): Observable<NotificationServicesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationServicesRoot>(`${proxyPath}/notifications/serviceNotification/${id}.json?angular=true`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;

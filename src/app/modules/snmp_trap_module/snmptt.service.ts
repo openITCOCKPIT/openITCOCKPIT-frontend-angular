@@ -18,7 +18,7 @@ export class SnmpttService implements DeleteAllModalService{
     public getIndex(params: SnmpttEntryIndexParams): Observable<SnmpttEntryIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<SnmpttEntryIndexRoot>(`${proxyPath}/snmp_trap_module/SnmpttList/index.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;

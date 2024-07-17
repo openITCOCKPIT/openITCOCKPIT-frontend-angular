@@ -7,6 +7,9 @@ import {
     SystemdowntimesPost,
     HostSystemdowntimesParams,
     SystemdowntimeHostIndexRoot,
+    ServiceSystemdowntimesParams,
+    SystemdowntimeServiceIndexRoot,
+    SystemdowntimeHostgroupIndexRoot, HostgroupSystemdowntimesParams,
 } from './systemdowntimes.interface';
 
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -127,18 +130,42 @@ export class SystemdowntimesService implements DeleteAllModalService {
             );
     }
 
-
     public getHostSystemdowntimes(params: HostSystemdowntimesParams): Observable<SystemdowntimeHostIndexRoot> {
         const proxyPath = this.proxyPath;
 
         return this.http.get<SystemdowntimeHostIndexRoot>(`${proxyPath}/systemdowntimes/host.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;
             })
         )
     }
+
+    public getServiceSystemdowntimes(params: ServiceSystemdowntimesParams): Observable<SystemdowntimeServiceIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<SystemdowntimeServiceIndexRoot>(`${proxyPath}/systemdowntimes/service.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getHostgroupSystemdowntimes(params: HostgroupSystemdowntimesParams): Observable<SystemdowntimeHostgroupIndexRoot> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get<SystemdowntimeHostgroupIndexRoot>(`${proxyPath}/systemdowntimes/hostgroup.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {
