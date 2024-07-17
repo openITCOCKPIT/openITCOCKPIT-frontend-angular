@@ -216,22 +216,22 @@
                         </td>
                     </tr>
                     <tr>
-                        <th width="10">
+                        <th class="width-20">
 
                         </th>
-                        <th width="10">
+                        <th class="width-20">
                             {{ t('Status') }}
                         </th>
-                        <th width="10">
+                        <th class="width-20">
 
                         </th>
-                        <th width="10">
+                        <th class="width-20">
                             <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
                         </th>
-                        <th width="10">
+                        <th class="width-20">
                             <fa-icon [icon]="['fas', 'power-off']" [title]="'is in downtime' | transloco"></fa-icon>
                         </th>
-                        <th width="10">
+                        <th class="width-20">
                             <span [title]="'Passively transferred service' | transloco">
                                 P
                             </span>
@@ -240,26 +240,26 @@
                         <th>{{ t('State since') }}</th>
                         <th>{{ t('Last check') }}</th>
                         <th>{{ t('Next check') }}</th>
-                        <th width="10">{{ t('Service Summary') }}</th>
-                        <th width="10"></th>
+                        <th class="width-20">{{ t('Service Summary') }}</th>
+                        <th class="width-20"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <ng-container *ngFor="let host of hostgroupExtended.Hosts">
                         <tr>
-                            <td (click)="toggleHostServicelist(host.Host.id)">
+                            <td class="text-center" (click)="toggleHostServicelist(host.Host.id)">
                                 <fa-icon class="cursor-pointer" *ngIf="! host.services"
                                          [icon]="['fas', 'plus-square']"/>
                                 <fa-icon class="cursor-pointer" *ngIf="host.services" [icon]="['far', 'minus-square']"/>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <oitc-service-cumulated-status-icon
                                         [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <fa-icon
                                         *ngIf="host.Hoststatus.acknowledgement_type == 1"
                                         [icon]="['fas', 'user']"
@@ -271,13 +271,13 @@
                                         [title]="'Sticky Acknowledgement' | transloco"
                                 ></fa-icon>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <fa-icon
                                         *ngIf="host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0"
                                         [icon]="['fas', 'power-off']"
                                 ></fa-icon>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <span
                                         *ngIf="! host.Hoststatus.activeChecksEnabled || host.Host.is_satellite_host"
                                         [title]="'Passively transferred host' | transloco"
@@ -445,22 +445,22 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th width="10">
+                                        <th class="width-20">
                                             {{ t('Status') }}
                                         </th>
-                                        <th width="10">
+                                        <th class="width-20">
                                             <fa-icon [icon]="['fas', 'user']"
                                                      [title]="'is acknowledged' | transloco"></fa-icon>
                                         </th>
-                                        <th width="10">
+                                        <th class="width-20">
                                             <fa-icon [icon]="['fas', 'power-off']"
                                                      [title]="'is in downtime' | transloco"></fa-icon>
                                         </th>
-                                        <th width="10">
+                                        <th class="width-20">
                                             <fa-icon [icon]="['fas', 'chart-area']"
                                                      [title]="'Grapher' | transloco"></fa-icon>
                                         </th>
-                                        <th width="10">
+                                        <th class="width-20">
                                             <span [title]="'Passively transferred service' | transloco">
                                                 P
                                             </span>
@@ -470,15 +470,15 @@
                                         <th>{{ t('Last check') }}</th>
                                         <th>{{ t('Next check') }}</th>
                                         <th>{{ t('Output') }}</th>
-                                        <th width="10"></th>
+                                        <th class="width-20"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr *ngFor="let service of host.services">
-                                        <td width="10">
+                                        <td class="text-center">
                                             <oitc-servicestatus-icon [service]="service.Servicestatus"/>
                                         </td>
-                                        <td width="10">
+                                        <td class="text-center">
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.acknowledgement_type == 1"
                                                     [icon]="['fas', 'user']"
@@ -490,19 +490,19 @@
                                                     [title]="'Sticky Acknowledgement' | transloco"
                                             ></fa-icon>
                                         </td>
-                                        <td width="10">
+                                        <td class="text-center">
                                             <fa-icon
                                                     *ngIf="service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0"
                                                     [icon]="['fas', 'power-off']"
                                             ></fa-icon>
                                         </td>
-                                        <td width="10">
+                                        <td class="text-center">
                                             <oitc-popover-graph *ngIf="service.Service.has_graph"
                                                                 [service]="service.Service.uuid"
                                                                 [host]="service.Host.uuid"
                                                                 [timezone]="timezone"></oitc-popover-graph>
                                         </td>
-                                        <td width="10">
+                                        <td class="text-center">
                                             <span
                                                     *ngIf="service.Service.active_checks_enabled === false || service.Host.is_satellite_host === true"
                                                     [title]="'Passively transferred service' | transloco">
@@ -532,7 +532,7 @@
                                         <td>
                                             {{ service.Servicestatus.outputHtml }}
                                         </td>
-                                        <td width="10">
+                                        <td>
                                             <oitc-actions-button [permission]="'services.edit'"
                                                                  [url]="'/services/edit/' + service.Service.id">
                                                 <oitc-actions-button-element [permission]="'services.edit'"
