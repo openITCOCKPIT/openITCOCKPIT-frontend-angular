@@ -1,0 +1,42 @@
+<ng-container *transloco="let t">
+    <button [cModalToggle]="apiKeyUserDocsModal.id" cButton color="link">
+        {{ t('Click here for help') }}
+    </button>
+
+    <c-modal #apiKeyUserDocsModal id="apiKeyUserDocsModal" size="lg">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                {{ t('API Keys Overview') }}
+            </h5>
+            <button [cModalToggle]="apiKeyUserDocsModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row>
+                <c-col>
+                    {{ t('Click on your name in the top left corner to edit your profile.') }}
+                </c-col>
+                <c-col xs="12" class="text-center">
+                    <img class="img-fluid" src="./assets/images/docs/apikey/edit_profile.png"/>
+
+                </c-col>
+
+                <c-col xs="12">
+                    {{ t('At the bottom of the page, you can find the "API Keys" section. Click on "Create new API key"') }}
+                </c-col>
+                <c-col xs="12" class="text-center">
+                    <img class="img-fluid" src="./assets/images/docs/apikey/create_api_key.png"/>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <a class="btn btn-primary" [routerLink]="['/', 'profile', 'edit']">
+                {{ t('Open Profile') }}
+            </a>
+            <button [cModalToggle]="apiKeyUserDocsModal.id" cButton color="secondary">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
