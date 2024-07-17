@@ -19,7 +19,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ExternalCommandsService, HostDisableNotificationsItem } from '../../../services/external-commands.service';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -71,6 +71,8 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
+
 
     public type: string = 'hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
@@ -110,14 +112,20 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
             }) => {
                 //result.message: /nagios_module//cmdController line 256
                 if (result.message) {
+
                     this.currentIndex++;
                 } else {
                     this.notyService.genericError();
                 }
 
                 if (this.currentIndex === this.items.length) {
+                    const title = this.TranslocoService.translate('Disable host notification');
+                    const msg = this.TranslocoService.translate('Command sent successfully. Refresh in 5 seconds');
+                    this.notyService.genericSuccess(msg, title);
                     this.hideModal();
-                    this.completed.emit(true);
+                    setTimeout(() => {
+                        this.completed.emit(true);
+                    }, 5000);
                 }
             }));
         });

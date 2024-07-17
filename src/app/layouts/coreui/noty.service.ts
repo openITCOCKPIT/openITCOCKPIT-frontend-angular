@@ -24,7 +24,7 @@ export class NotyService {
         }
 
         const toast = this.toastr.success(message, title, {
-            timeOut: (timeout) ? timeout : 3500,
+            timeOut: (timeout) ? timeout : 5000,
             progressBar: true,
             enableHtml: true
         });
@@ -47,7 +47,7 @@ export class NotyService {
         }
 
         const toast = this.toastr.error(message, title, {
-            timeOut: 3500,
+            timeOut: 500,
             progressBar: true,
             enableHtml: true
         });
@@ -68,7 +68,7 @@ export class NotyService {
         }
 
         const toast = this.toastr.warning(message, title, {
-            timeOut: 3500,
+            timeOut: 5000,
             progressBar: true,
             enableHtml: true
         });
@@ -89,7 +89,7 @@ export class NotyService {
         }
 
         const toast = this.toastr.info(message, title, {
-            timeOut: 3500,
+            timeOut: 5000,
             progressBar: true,
             enableHtml: true
         });
