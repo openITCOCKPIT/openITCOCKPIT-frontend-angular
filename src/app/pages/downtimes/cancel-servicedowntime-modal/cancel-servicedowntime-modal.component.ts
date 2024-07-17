@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
@@ -13,7 +12,7 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
@@ -25,6 +24,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
@@ -37,7 +37,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         ModalTitleDirective,
         ButtonCloseDirective,
         ModalFooterComponent,
-        ButtonDirective,
         TranslocoDirective,
         RowComponent,
         ColComponent,
@@ -51,7 +50,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         FormsModule,
-        TrueFalseDirective
+        TrueFalseDirective,
+        XsButtonDirective
     ],
     templateUrl: './cancel-servicedowntime-modal.component.html',
     styleUrl: './cancel-servicedowntime-modal.component.css'

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
@@ -27,6 +26,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
@@ -34,7 +34,6 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
     standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         FormCheckComponent,
@@ -56,7 +55,8 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
         RequiredIconComponent,
         FormsModule,
         FormSelectDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './host-acknowledge-modal.component.html',
     styleUrl: './host-acknowledge-modal.component.css'

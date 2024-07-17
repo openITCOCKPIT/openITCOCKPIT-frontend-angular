@@ -42,8 +42,8 @@
                 <b> {{ t('Paste a column configuration string') }}</b>
             </label>
             <input
-                    cFormControl
-                    [(ngModel)]="configString">
+                cFormControl
+                [(ngModel)]="configString">
             <div *ngIf="error" class="help-block text-danger">{{ t(errorMessage) }}</div>
 
 
@@ -52,7 +52,7 @@
             <button (click)="sendConfig()" cButton class="ripple" color="success">
                 {{ t('Import') }}
             </button>
-            <button (click)="hideModal()" cButton class="ripple" color="light">
+            <button (click)="hideModal()" cButton class="ripple" color="default">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

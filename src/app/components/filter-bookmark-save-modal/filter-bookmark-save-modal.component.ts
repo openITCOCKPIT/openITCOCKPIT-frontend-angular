@@ -28,7 +28,6 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     FormControlDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -46,6 +45,7 @@ import { BookmarksService } from '../filter-bookmark/bookmarks.service';
 import { ServiceIndexFilter } from '../../pages/services/services.interface';
 import { BookmarkPost, BookmarkResponse, BookmarksObject } from '../filter-bookmark/bookmarks.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 type NewBookmark = {
@@ -63,7 +63,7 @@ type NewBookmark = {
         ButtonCloseDirective,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ButtonDirective,
+        XsButtonDirective,
         FaIconComponent,
         ModalFooterComponent,
         ModalBodyComponent,
@@ -101,7 +101,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
 
 
-    public hideModal () {
+    public hideModal() {
         // this.bookmark = null;
         this.errors = null
         this.newBookmark = {
@@ -115,7 +115,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveNewBookmark () {
+    public saveNewBookmark() {
         let post: BookmarkPost = {
             name: this.newBookmark.name,
             favorite: this.newBookmark.favorite,
@@ -149,7 +149,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     }
 
 
-    public updateBookmark () {
+    public updateBookmark() {
         if (this.bookmark !== null) {
             this.bookmark.name = this.newBookmark.name
             this.bookmark.favorite = this.newBookmark.favorite
@@ -176,7 +176,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
 
     }
 
-    ngOnInit () {
+    ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'filterBookmarkSaveModal' && state.show === true) {
 
@@ -189,7 +189,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
 
     }
 
-    ngOnDestroy () {
+    ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 

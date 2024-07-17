@@ -1,7 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
@@ -14,7 +13,7 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
@@ -27,6 +26,7 @@ import { ExternalCommandsService, HostRescheduleItem, } from '../../../services/
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
 @Component({
@@ -34,7 +34,6 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
     standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         ModalBodyComponent,
@@ -54,7 +53,8 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
         SelectComponent,
         NgSelectModule,
         RequiredIconComponent,
-        FormSelectDirective
+        FormSelectDirective,
+        XsButtonDirective
     ],
     templateUrl: './service-reset-checktime-modal.component.html',
     styleUrl: './service-reset-checktime-modal.component.css'

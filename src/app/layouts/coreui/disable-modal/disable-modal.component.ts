@@ -1,37 +1,30 @@
-import { Component,
-    EventEmitter,
-    Inject,
-    inject,
-    Input,
-    OnDestroy,
-    OnInit, Output,
-    ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
     ModalHeaderComponent,
-    ModalService, ModalTitleDirective,
+    ModalService,
+    ModalTitleDirective,
     ProgressComponent,
-    RowComponent } from '@coreui/angular';
+    RowComponent,
+} from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { DisableItem,
-    DisableResponse } from './disable.interface';
+import { DisableItem, DisableResponse } from './disable.interface';
 import { Subscription } from 'rxjs';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
-  selector: 'oitc-disable-modal',
-  standalone: true,
+    selector: 'oitc-disable-modal',
+    standalone: true,
     imports: [
         ButtonCloseDirective,
-        ButtonDirective,
         ColComponent,
         FaIconComponent,
         ModalBodyComponent,
@@ -43,10 +36,11 @@ import { HttpErrorResponse } from '@angular/common/http';
         NgIf,
         ProgressComponent,
         RowComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        XsButtonDirective
     ],
-  templateUrl: './disable-modal.component.html',
-  styleUrl: './disable-modal.component.css'
+    templateUrl: './disable-modal.component.html',
+    styleUrl: './disable-modal.component.css'
 })
 export class DisableModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: DisableItem[] = [];

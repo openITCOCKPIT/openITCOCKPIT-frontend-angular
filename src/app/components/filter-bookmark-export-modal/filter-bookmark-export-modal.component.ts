@@ -27,7 +27,6 @@ import { Component, inject, Input, ViewChild } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -42,6 +41,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { CopyToClipboardComponent } from '../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-filter-bookmark-export-modal',
@@ -52,7 +52,7 @@ import { CopyToClipboardComponent } from '../../layouts/coreui/copy-to-clipboard
         ButtonCloseDirective,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ButtonDirective,
+        XsButtonDirective,
         FaIconComponent,
         ModalFooterComponent,
         ModalBodyComponent,
@@ -72,7 +72,7 @@ export class FilterBookmarkExportModalComponent {
     private readonly modalService = inject(ModalService);
     @ViewChild('modal') private modal!: ModalComponent;
 
-    public hideModal () {
+    public hideModal() {
         this.modalService.toggle({
             show: false,
             id: 'bookmarkExportModal'

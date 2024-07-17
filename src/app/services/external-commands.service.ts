@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../tokens/proxy-path.token';
 import { catchError, map, Observable } from 'rxjs';
+import { ExternalCommandDefinitionRoot } from '../modules/nagios_module/pages/cmd/ExternalCommands.interface';
 
 export interface ServiceDowntimeItem {
     command: string,
@@ -101,6 +102,20 @@ export class ExternalCommandsService {
                     return 'error';
                 })
             )
+    }
+
+
+    public getExternalCommandsWithParams(): Observable<ExternalCommandDefinitionRoot> {
+        const proxyPath = this.proxyPath;
+
+
+        return this.http.get<{
+            externalCommands: ExternalCommandDefinitionRoot
+        }>(`${proxyPath}/nagios_module/cmd/index.json`).pipe(
+            map(data => {
+                return data.externalCommands;
+            })
+        );
     }
 
 }

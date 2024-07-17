@@ -14,10 +14,10 @@
         <c-modal-body>
             <c-row>
                 <c-input-group>
-                <input
-                       cFormControl
-                       readonly="readonly"
-                       [(ngModel)]="urlString">
+                    <input
+                        cFormControl
+                        readonly="readonly"
+                        [(ngModel)]="urlString">
                     <span cInputGroupText id="copy">
                         <oitc-copy-to-clipboard [data]="urlString">
                             <fa-icon [icon]="['fas', 'copy']"></fa-icon>
@@ -27,7 +27,7 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="hideModal()" cButton class="ripple" color="light">
+            <button (click)="hideModal()" cButton class="ripple" color="default">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

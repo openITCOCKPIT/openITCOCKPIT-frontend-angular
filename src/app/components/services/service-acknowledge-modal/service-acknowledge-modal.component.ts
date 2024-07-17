@@ -27,7 +27,6 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
@@ -50,6 +49,7 @@ import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-service-acknowledge-modal',
@@ -61,7 +61,6 @@ import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../servic
         FaIconComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        ButtonDirective,
         ModalFooterComponent,
         ModalBodyComponent,
         ColComponent,
@@ -76,7 +75,8 @@ import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../servic
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        XsButtonDirective
     ],
     templateUrl: './service-acknowledge-modal.component.html',
     styleUrl: './service-acknowledge-modal.component.css'

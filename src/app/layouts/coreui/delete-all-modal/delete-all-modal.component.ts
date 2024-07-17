@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
-    ButtonDirective,
     ColComponent,
     ModalBodyComponent,
     ModalComponent,
@@ -10,7 +9,7 @@ import {
     ModalService,
     ModalTitleDirective,
     ProgressComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
@@ -19,6 +18,7 @@ import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-delete-all-modal',
@@ -30,7 +30,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         ModalTitleDirective,
         ButtonCloseDirective,
         ModalFooterComponent,
-        ButtonDirective,
         TranslocoDirective,
         RowComponent,
         ColComponent,
@@ -38,7 +37,8 @@ import { HttpErrorResponse } from '@angular/common/http';
         FaIconComponent,
         ProgressComponent,
         NgIf,
-        JsonPipe
+        JsonPipe,
+        XsButtonDirective
     ],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css'
