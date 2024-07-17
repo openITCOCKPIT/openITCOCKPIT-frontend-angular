@@ -615,9 +615,8 @@
                         </div>
                     </div>
 
-                    <div *ngIf="ldapUser !== null" class="row padding-bottom-10"
-                         oitc-permission="['wiki', 'documentations']">
-                        <div class="col-xs-12 col-lg-12 text-info">
+                    <div *ngIf="ldapUser !== null" class="row padding-bottom-10">
+                        <div *oitcPermission="['documentations', 'wiki']" class="col-xs-12 col-lg-12 text-info">
                             <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
                             {{ t('Read more about browser push notification in the') }} <a
                             href="/documentations/wiki/additional_help%3Abrowser_push_notifications">
