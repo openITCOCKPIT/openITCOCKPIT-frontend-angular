@@ -117,7 +117,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     templateUrl: './systemdowntimes-service.component.html',
     styleUrl: './systemdowntimes-service.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService} // Inject the SystemdowntimesService into the CancelAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
     ]
 })
 export class SystemdowntimesServiceComponent implements OnInit, OnDestroy {
