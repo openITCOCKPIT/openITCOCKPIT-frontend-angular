@@ -8,6 +8,7 @@ import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
     HostAddEditSuccessResponse,
+    HostBrowserMenu,
     HostCommandArgument,
     HostCopyGet,
     HostCopyPost,
@@ -516,5 +517,37 @@ export class HostsService {
         );
 
     }
+
+    /**********************
+     *   Browser action   *
+     **********************/
+    public getHostByUuid(uuid: string): Observable<HostEntityWithContainers> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ host: HostEntityWithContainers }>(`${proxyPath}/hosts/byUuid/${uuid}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.host;
+                })
+            )
+    }
+
+    public getHostBrowserMenuConfig(hostId: number, includeHoststatus: boolean = true): Observable<HostBrowserMenu> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ config: HostBrowserMenu }>(`${proxyPath}/angular/hostBrowserMenu/.json`, {
+                params: {
+                    angular: true,
+                    hostId: hostId,
+                    includeHoststatus: includeHoststatus
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.config;
+                })
+            )
+    }
+
 
 }
