@@ -48,7 +48,6 @@ import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { DowntimeSimpleIconComponent } from '../../downtimes/downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -100,7 +99,6 @@ import { Statistics } from '../../statistics/statistics.enum';
         NgIf,
         TableDirective,
         ItemSelectComponent,
-        DowntimeSimpleIconComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
@@ -129,9 +127,6 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
     public params: HostSystemdowntimesParams = getDefaultHostSystemdowntimesParams();
     public hostSystemdowntimes?: SystemdowntimeHostIndexRoot;
     public hideFilter: boolean = true;
-    public showFlashSuccess: boolean = false;
-    public autoRefreshCounter: number | null = null;
-    private interval: any;
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
