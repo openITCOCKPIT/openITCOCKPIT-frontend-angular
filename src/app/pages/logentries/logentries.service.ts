@@ -22,7 +22,7 @@ export class LogentriesService {
          */
         const proxyPath = this.proxyPath;
         return this.http.get<LogentriesRoot>(`${proxyPath}/logentries/index.json`, {
-            params: params as {} // cast CommandsIndexParams into object
+            params: params as {}
         }).pipe(
             map(data => {
                 return data;

@@ -56,7 +56,7 @@ export class DowntimesService {
         }
 
         return this.http.get<DowntimeHostIndexRoot>(`${proxyPath}/downtimes/host.json`, {
-            params: tempParams as {} // cast CommandsIndexParams into object
+            params: tempParams as {}
         }).pipe(
             map(data => {
                 return data;
@@ -82,7 +82,7 @@ export class DowntimesService {
         }
 
         return this.http.get<DowntimeServiceIndexRoot>(`${proxyPath}/downtimes/service.json`, {
-            params: tempParams as {} // cast CommandsIndexParams into object
+            params: tempParams as {}
         }).pipe(
             map(data => {
                 return data;

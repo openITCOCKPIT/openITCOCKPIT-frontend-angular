@@ -47,7 +47,6 @@ import { NgForOf, NgIf } from '@angular/common';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { DowntimeSimpleIconComponent } from '../../downtimes/downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -57,14 +56,12 @@ import {
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import {
-    CancelHostdowntimeModalComponent
-} from '../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { getDefaultHostSystemdowntimesParams } from '../systemdowntimes.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { Statistics } from '../../statistics/statistics.enum';
 
 
 @Component({
@@ -97,7 +94,6 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         RowComponent,
         TranslocoPipe,
         TrueFalseDirective,
-        HoststatusSimpleIconComponent,
         MatSort,
         MatSortHeader,
         NgForOf,
@@ -112,7 +108,6 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         TemplateIdDirective,
         ButtonCloseDirective,
         AlertHeadingDirective,
-        CancelHostdowntimeModalComponent,
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
@@ -233,4 +228,6 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
             this.loadHostSystemdowntimes();
         }
     }
+
+    protected readonly Statistics = Statistics;
 }
