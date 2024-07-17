@@ -317,6 +317,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public loadHostgroups = (searchString: string) => {
         let params: HostgroupsLoadHostgroupsByStringParams = {
             angular: true,
+            'selected[]': [this.hostgroupId],
             'filter[Containers.name]': searchString
         }
         this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString(params)
