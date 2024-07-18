@@ -1,35 +1,29 @@
 <ng-container *transloco="let t">
 
     <!-- Fancy skeleton loader -->
-    <c-row class="mt-3" *ngIf="isLoading">
-        <c-col xs="6">
-            <p-skeleton height="2rem"/>
-        </c-col>
-        <c-col xs="6" class="d-flex justify-content-end">
-            <p-skeleton size="2rem" styleClass="me-2"/>
-            <p-skeleton size="2rem" styleClass="me-2"/>
-            <p-skeleton size="2rem" styleClass="me-2"/>
-            <p-skeleton size="2rem" styleClass="me-2"/>
-            <p-skeleton size="2rem" styleClass="me-2"/>
-            <p-skeleton width="4rem" height="2rem" styleClass="me-2"/>
-        </c-col>
-    </c-row>
+    <oitc-browser-menu-loader *ngIf="isLoading"></oitc-browser-menu-loader>
 
     <c-row class="mt-3" *ngIf="!isLoading">
         <c-col xs="12" sm="7" lg="6" *ngIf="data && data?.includeHoststatus">
-            <h2 [ngClass]="hostStatusTextClass">
-                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                {{ data.hostName }}
 
-                (
-                <oitc-copy-to-clipboard [data]="data.hostAddress">
-                    {{ data.hostAddress }}
-                </oitc-copy-to-clipboard>
-                )
+            <div class="d-flex">
+                <div>
+                    <oitc-hoststatus-icon [hoststatus]="data.Hoststatus" [statusCircleClass]="''">
+                        <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
+                        {{ data.Hoststatus.humanState | titlecase }}
+                    </oitc-hoststatus-icon>
+                </div>
 
-                {{ t('is') }}
-                {{ data.Hoststatus.humanState }}
-            </h2>
+                <div class="flex-status-header flex-1 h2">
+                    <span [ngClass]="hostStatusTextClass">
+                        &raquo;{{ data.hostName }}&laquo;
+                    </span>
+                    &nbsp;
+                    <oitc-copy-to-clipboard [data]="data.hostAddress">
+                        [{{ data.hostAddress }}]
+                    </oitc-copy-to-clipboard>
+                </div>
+            </div>
         </c-col>
         <c-col xs="12" sm="5" lg="6" class="text-end">
             @if (data) {

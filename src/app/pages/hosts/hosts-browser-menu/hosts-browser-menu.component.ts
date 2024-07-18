@@ -14,13 +14,17 @@ import { Subscription } from 'rxjs';
 import { HostsService } from '../hosts.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HostBrowserMenu } from '../hosts.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../permissions/permission.directive';
+import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
+import {
+    BrowserMenuLoaderComponent
+} from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
 
 
 export interface HostBrowserMenuConfig {
@@ -51,7 +55,10 @@ export interface HostBrowserMenuConfig {
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        PermissionDirective
+        PermissionDirective,
+        TitleCasePipe,
+        HoststatusIconComponent,
+        BrowserMenuLoaderComponent
     ],
     templateUrl: './hosts-browser-menu.component.html',
     styleUrl: './hosts-browser-menu.component.css'

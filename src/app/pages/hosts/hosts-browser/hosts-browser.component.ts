@@ -12,9 +12,18 @@ import { HostsService } from '../hosts.service';
 import { UUID } from '../../../classes/UUID';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { ColComponent, RowComponent } from '@coreui/angular';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    RowComponent
+} from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
 import { NgIf } from '@angular/common';
+import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -29,7 +38,13 @@ import { NgIf } from '@angular/common';
         RowComponent,
         ColComponent,
         HostsBrowserMenuComponent,
-        NgIf
+        NgIf,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        BrowserLoaderComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css'

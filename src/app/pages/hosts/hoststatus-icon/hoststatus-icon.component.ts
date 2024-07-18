@@ -34,6 +34,9 @@ export class HoststatusIconComponent implements OnInit, OnDestroy {
         return this._hoststatus;
     }
 
+    // Set this to an empty string if you use the ng-content outlet
+    @Input() statusCircleClass: string = 'status-circle';
+
     onHoststatusChange() {
         if (this.hoststatus) {
 
