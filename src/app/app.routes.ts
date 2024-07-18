@@ -250,6 +250,9 @@ const coreRoutes: Routes = [{
     path: 'deletedHosts/index',
     loadComponent: () => import('./pages/deletedHosts/deleted-hosts-index/deleted-hosts-index.component').then(m => m.DeletedHostsIndexComponent)
 }, {
+    path: 'hosts/browser/:idOrUuid',
+    loadComponent: () => import('./pages/hosts/hosts-browser/hosts-browser.component').then(m => m.HostsBrowserComponent)
+}, {
     path: 'calendars/index',
     loadComponent: () => import('./pages/calendars/calendars-index/calendars-index.component').then(m => m.CalendarsIndexComponent)
 }, {

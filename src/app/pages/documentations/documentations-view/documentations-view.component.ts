@@ -26,6 +26,7 @@ import { DocumentationView } from '../documentations.interface';
 import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { BbCodeParserService } from '../../../services/bb-code-parser.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 
 @Component({
@@ -55,7 +56,8 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         RowComponent,
         ColComponent,
         NavItemComponent,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        FormLoaderComponent
     ],
     templateUrl: './documentations-view.component.html',
     styleUrl: './documentations-view.component.css'

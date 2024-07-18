@@ -1,0 +1,165 @@
+<ng-container *transloco="let t">
+
+    <!-- Fancy skeleton loader -->
+    <oitc-browser-menu-loader *ngIf="isLoading"></oitc-browser-menu-loader>
+
+    <c-row class="mt-3" *ngIf="!isLoading">
+        <c-col xs="12" sm="7" lg="6" *ngIf="data && data?.includeHoststatus">
+
+            <div class="d-flex">
+                <div>
+                    <oitc-hoststatus-icon [hoststatus]="data.Hoststatus" [statusCircleClass]="''">
+                        <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
+                        {{ data.Hoststatus.humanState | titlecase }}
+                    </oitc-hoststatus-icon>
+                </div>
+
+                <div class="flex-status-header flex-1 h2">
+                    <span [ngClass]="hostStatusTextClass">
+                        &raquo;{{ data.hostName }}&laquo;
+                    </span>
+                    &nbsp;
+                    <oitc-copy-to-clipboard [data]="data.hostAddress">
+                        [{{ data.hostAddress }}]
+                    </oitc-copy-to-clipboard>
+                </div>
+            </div>
+        </c-col>
+        <c-col xs="12" sm="5" lg="6" class="text-end">
+            @if (data) {
+                @if (config.showBackButton && this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                    <button cButton color="primary"
+                            class="me-2 ripple"
+                            [routerLink]="['/', 'hosts', 'browser', data.hostId]">
+                        <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
+                        {{ t('Back to overview') }}
+                    </button>
+                }
+
+                @if (config.showReschedulingButton) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'hosts', 'browser', data.hostId]"
+                            [cTooltip]="'Reset check time'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                    </button>
+                }
+
+                @if (this.PermissionsService.hasPermission(['documentations', 'view'])) {
+                    <button cButton color="default" class="position-relative me-2"
+                            [routerLink]="'/documentations/view/' + data.hostUuid +'/host'"
+                            [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'book']"></fa-icon>
+
+                        <c-badge color="success" position="top-start" shape="rounded-pill" *ngIf="data.docuExists">
+                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                        </c-badge>
+                    </button>
+                }
+
+                @if (this.PermissionsService.hasPermission(['notifications', 'hostNotification'])) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'notifications', 'hostNotification', data.hostId]"
+                            [cTooltip]="'Notifications'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                    </button>
+                }
+
+                @if (this.PermissionsService.hasPermission(['hostchecks', 'index'])) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'hostchecks', 'index', data.hostId]"
+                            [cTooltip]="'Check history'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
+                    </button>
+                }
+
+                @if (this.PermissionsService.hasPermission(['statehistories', 'host'])) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'statehistories', 'host', data.hostId]"
+                            [cTooltip]="'State history'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'history']"></fa-icon>
+                    </button>
+                }
+
+                @if (this.PermissionsService.hasPermission(['acknowledgements', 'host'])) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'acknowledgements', 'host', data.hostId]"
+                            [cTooltip]="'Acknowledgement history'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                    </button>
+                }
+
+                <a cButton color="default" *ngIf="data.hostUrl"
+                   class="ripple me-2"
+                   [href]="data.hostUrl"
+                   target="_blank"
+                   [cTooltip]="'External link'|transloco" cTooltipPlacement="bottom">
+                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                </a>
+
+                @if (this.PermissionsService.hasPermission(['hosts', 'edit']) && data.allowEdit) {
+                    <button cButton color="default"
+                            class="ripple me-2"
+                            [routerLink]="['/', 'hosts', 'edit', data.hostId]"
+                            [cTooltip]="'Edit host'|transloco" cTooltipPlacement="bottom">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    </button>
+                }
+
+                <c-dropdown class="d-inline-block">
+                    <button cButton cDropdownToggle color="default">
+                        {{ t('More actions') }}
+                    </button>
+                    <ul cDropdownMenu>
+                        <li *oitcPermission="['services', 'serviceList']">
+                            <a [routerLink]="['/', 'services', 'serviceList', data.hostId]"
+                               cDropdownItem>
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                {{ t('Service list') }}
+                            </a>
+                        </li>
+
+                        <li *oitcPermission="['changelogs', 'index']">
+                            <a [routerLink]="['/', 'changelogs', 'entity', 'host', data.hostId]"
+                               cDropdownItem>
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog') }}
+                            </a>
+                        </li>
+
+                        <li *oitcPermission="['servicetemplategroups', 'allocateToHost']">
+                            <a [routerLink]="'/servicetemplategroups/allocateToHost/0/' + data.hostId"
+                               cDropdownItem>
+                                <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
+                                {{ t('Allocate service template group') }}
+                            </a>
+                        </li>
+
+                        <li *oitcPermission="['agentconnector', 'wizard']">
+                            <a [routerLink]="['/', 'agentconnector', 'wizard', data.hostId]"
+                               cDropdownItem>
+                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                {{ t('openITCOCKPIT Agent discovery') }}
+                            </a>
+                        </li>
+
+                        @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                            <li *oitcPermission="['CheckmkModule','scans', 'index']">
+                                <a [routerLink]="['/', 'checkmk_module', 'scans', 'index', data.hostId]"
+                                   cDropdownItem>
+                                    <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                    {{ t('Checkmk discovery') }}
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </c-dropdown>
+            }
+
+        </c-col>
+    </c-row>
+</ng-container>

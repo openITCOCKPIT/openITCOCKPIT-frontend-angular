@@ -20,6 +20,9 @@
                 </li>
             </ol>
         </nav>
+
+        <oitc-form-loader *ngIf="!documentation"></oitc-form-loader>
+        
         <c-card class="mb-3" *ngIf="documentation">
             <c-card-header>
                 <ng-container [ngSwitch]="type">

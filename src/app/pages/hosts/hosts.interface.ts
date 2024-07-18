@@ -708,3 +708,18 @@ export interface HostEditDetailsPost {
     editNotes: boolean,
     editSatellites: boolean
 }
+
+/*************************
+ *  Host Browser Menu    *
+ *************************/
+export interface HostBrowserMenu {
+    hostId: number
+    hostUuid: string
+    hostName: string
+    hostAddress: string
+    docuExists: boolean
+    hostUrl: string
+    allowEdit: boolean
+    includeHoststatus: boolean,
+    Hoststatus: HoststatusObject
+}

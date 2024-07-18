@@ -4,7 +4,8 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent, ContainerComponent,
+    ColComponent,
+    ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -50,6 +51,7 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -92,7 +94,8 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
         NoRecordsComponent,
         PaginateOrScrollComponent,
         HoststatusSimpleIconComponent,
-        ContainerComponent
+        ContainerComponent,
+        TableLoaderComponent
     ],
     templateUrl: './notifications-index.component.html',
     styleUrl: './notifications-index.component.css'
