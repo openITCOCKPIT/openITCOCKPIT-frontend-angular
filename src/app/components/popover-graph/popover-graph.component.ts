@@ -2,7 +2,6 @@ import { Component, inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
-import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
 import { PopoverGraphService } from './popover-graph.service';
 import { Subscription } from 'rxjs';
 import { PerformanceData } from './popover-graph.interface';
@@ -12,6 +11,7 @@ import * as _uPlot from 'uplot';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { debounce } from '../debounce.decorator';
 import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
+import { TimezoneObject } from '../../pages/services/timezone.interface';
 
 const uPlot: any = (_uPlot as any)?.default;
 

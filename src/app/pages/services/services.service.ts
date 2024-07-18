@@ -30,11 +30,13 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
+    ServiceBrowserMenu,
     ServiceCommandArgument,
     ServiceCopyGet,
     ServiceCopyPost,
     ServiceEditApiResult,
     ServiceElements,
+    ServiceEntity,
     ServiceLoadServicetemplateApiResult,
     ServiceParams,
     ServicePost,
@@ -400,5 +402,37 @@ export class ServicesService {
                 return data;
             })
         )
+    }
+
+    /**********************
+     *   Browser action   *
+     **********************/
+    public getServiceByUuid(uuid: string): Observable<ServiceEntity> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ service: ServiceEntity }>(`${proxyPath}/services/byUuid/${uuid}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.service;
+                })
+            )
+    }
+
+    public getServiceBrowserMenuConfig(serviceId: number, includeHoststatus: boolean = true, includeServicestatus: boolean = true): Observable<ServiceBrowserMenu> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ config: ServiceBrowserMenu }>(`${proxyPath}/angular/serviceBrowserMenu/.json`, {
+                params: {
+                    angular: true,
+                    serviceId: serviceId,
+                    includeHoststatus: includeHoststatus,
+                    includeServicestatus: includeServicestatus
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.config;
+                })
+            )
     }
 }

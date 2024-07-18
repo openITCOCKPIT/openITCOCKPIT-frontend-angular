@@ -49,11 +49,11 @@ import * as _uPlot from 'uplot';
 import { fromEvent, Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { UplotGraphService } from './uplot-graph.service';
 import { Datasource, PerfParams, UplotGraphInterface } from "./uplot-graph.interface";
-import { TimezoneObject } from "../../pages/services/services-browser-page/timezone.interface";
 import { UPlotConfigBuilder } from './uplot-config-builder';
 import { FormsModule } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { TimezoneObject } from '../../pages/services/timezone.interface';
 
 const uPlot: any = (_uPlot as any)?.default;
 
