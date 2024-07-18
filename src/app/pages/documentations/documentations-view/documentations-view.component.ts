@@ -27,6 +27,14 @@ import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { BbCodeParserService } from '../../../services/bb-code-parser.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import {
+    HostBrowserMenuConfig,
+    HostsBrowserMenuComponent
+} from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
+import {
+    ServiceBrowserMenuConfig,
+    ServicesBrowserMenuComponent
+} from '../../services/services-browser-menu/services-browser-menu.component';
 
 
 @Component({
@@ -57,7 +65,9 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         ColComponent,
         NavItemComponent,
         TrustAsHtmlPipe,
-        FormLoaderComponent
+        FormLoaderComponent,
+        HostsBrowserMenuComponent,
+        ServicesBrowserMenuComponent
     ],
     templateUrl: './documentations-view.component.html',
     styleUrl: './documentations-view.component.css'
@@ -68,6 +78,10 @@ export class DocumentationsViewComponent implements OnInit, OnDestroy {
     public uuid: string = '';
     public type: string = 'unknown';
     public html: string | undefined;
+
+    public hostBrowserConfig?: HostBrowserMenuConfig;
+    public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+
 
     private DocumentationsService = inject(DocumentationsService);
     private BbCodeParserService = inject(BbCodeParserService);
@@ -85,6 +99,22 @@ export class DocumentationsViewComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DocumentationsService.getView(this.uuid, this.type)
             .subscribe((result) => {
                 this.documentation = result;
+
+                if (this.type === 'host') {
+                    this.hostBrowserConfig = {
+                        hostId: result.objectId,
+                        showReschedulingButton: false,
+                        showBackButton: true
+                    };
+                }
+
+                if (this.type === 'service') {
+                    this.serviceBrowserConfig = {
+                        serviceId: result.objectId,
+                        showReschedulingButton: false,
+                        showBackButton: true
+                    };
+                }
 
                 if (this.documentation.docuExists) {
                     this.html = this.BbCodeParserService.parse(this.documentation.bbcode);
