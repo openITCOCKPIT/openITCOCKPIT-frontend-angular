@@ -361,6 +361,9 @@ const coreRoutes: Routes = [{
     path: 'systemdowntimes/node',
     loadComponent: () => import('./pages/systemdowntimes/systemdowntimes-node/systemdowntimes-node.component').then(m => m.SystemdowntimesNodeComponent)
 }, {
+    path: 'systemfailures/index',
+    loadComponent: () => import('./pages/systemfailures/systemfailures-index/systemfailures-index.component').then(m => m.SystemfailuresIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
