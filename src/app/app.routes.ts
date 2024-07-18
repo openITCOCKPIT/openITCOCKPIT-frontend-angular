@@ -127,8 +127,8 @@ const coreRoutes: Routes = [{
     path: 'services/edit/:id',
     loadComponent: () => import('./pages/services/services-edit/services-edit.component').then(m => m.ServicesEditComponent)
 }, {
-    path: 'services/browser/:id',
-    loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+    path: 'services/browser/:idOrUuid',
+    loadComponent: () => import('./pages/services/services-browser/services-browser.component').then(m => m.ServicesBrowserComponent)
 }, {
     path: 'services/copy/:ids',
     loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
