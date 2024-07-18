@@ -62,11 +62,11 @@ export class ServicegroupsService {
         let postObject: LoadServicesRequest = {
             containerId: containerId,
             filter: {
-                'Services.name': search
+                'servicename': search
             },
             selected: selected
         }
-        return this.http.post<LoadServicesResponse>(`${proxyPath}/servicesgroups/loadServices.json?angular=true`, postObject).pipe(
+        return this.http.post<LoadServicesResponse>(`${proxyPath}/services/loadServicesByContainerIdCake4.json?angular=true`, postObject).pipe(
             map((data: LoadServicesResponse) => {
                 return data;
             })
@@ -79,7 +79,7 @@ export class ServicegroupsService {
             params: {
                 angular: true,
                 'containerId': containerId,
-                'filter[Servicetemplates.name]': search,
+                'filter[Servicetemplates.template_name]': search,
                 'selected[]': selected
             }
         }).pipe(

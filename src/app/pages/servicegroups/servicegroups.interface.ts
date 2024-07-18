@@ -88,7 +88,7 @@ export interface ServicegroupsIndexServicegroup {
     description: string
     servicegroup_url: string
     container: ServicegroupsIndexContainer
-    allowEdit: boolean
+    allow_edit: boolean
 }
 
 export interface ServicegroupsIndexContainer {
@@ -184,7 +184,7 @@ export interface LoadContainersRoot {
 export interface LoadServicesRequest {
     containerId: number
     filter: {
-        "Services.name": string
+        "servicename": string
     }
     selected: any[]
 }
@@ -192,8 +192,17 @@ export interface LoadServicesRequest {
 
 // LOAD SERVICES RESPONSE
 export interface LoadServicesResponse {
-    services: SelectKeyValue[]
+    services: ServicesListService[]
     _csrfToken: string
+}
+
+export interface ServicesListService {
+    key: number
+    value: {
+        servicename: string,
+        id: number,
+        disabled: number
+    }
 }
 
 // LOAD SERVICETEMPLATES RESPONSE
@@ -238,7 +247,7 @@ export interface ServicegroupExtended {
             lft: number
             rght: number
         }
-        allowEdit: boolean
+        allow_edit: boolean
     }
     Services: ServiceGroupExtendedService[]
     StatusSummary: {

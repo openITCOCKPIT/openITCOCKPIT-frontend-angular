@@ -10,7 +10,7 @@
                     </a></li>
                 <li class="breadcrumb-item">
                     <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
-                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                         {{ t('Service groups') }}
                     </a>
                 </li>
@@ -86,7 +86,7 @@
                             <c-col md="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Servicegroups.description]']"
@@ -138,7 +138,6 @@
                                     *oitcPermission="['servicegroups', 'delete']"
                                     [disabled]="false"
                                     [item]="servicegroup"></oitc-item-select>
-
                         </td>
                         <td>
                             <span *oitcPermission="['servicegroups', 'extended']">
@@ -152,7 +151,7 @@
                         </td>
                         <td>{{ servicegroup.description }}</td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="servicegroup.allowEdit"
+                            <oitc-actions-button *ngIf="servicegroup.allow_edit"
                                                  [permission]="'servicegroups.edit'"
                                                  [url]="'/servicegroups/edit/' + servicegroup.id">
                                 <oitc-actions-button-element [permission]="'servicegroups.edit'"

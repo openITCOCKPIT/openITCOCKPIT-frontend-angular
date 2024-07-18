@@ -124,6 +124,9 @@ const coreRoutes: Routes = [{
     path: 'servicegroups/index',
     loadComponent: () => import('./pages/servicegroups/servicegroups-index/servicegroups-index.component').then(m => m.ServicegroupsIndexComponent)
 }, {
+    path: 'servicegroups/edit/:id',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-edit/servicegroups-edit.component').then(m => m.ServicegroupsEditComponent)
+}, {
     path: 'services/add',
     loadComponent: () => import('./pages/services/services-add/services-add.component').then(m => m.ServicesAddComponent)
 }, {
