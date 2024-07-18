@@ -1,1 +1,30 @@
-<p>services-browser works!</p>
+<oitc-coreui>
+    <ng-container *transloco="let t">
+
+        <oitc-services-browser-menu
+            *ngIf="serviceBrowserConfig"
+            [config]="serviceBrowserConfig">
+        </oitc-services-browser-menu>
+
+        <oitc-query-handler-checker></oitc-query-handler-checker>
+
+
+        <oitc-browser-loader></oitc-browser-loader>
+        <c-card class="mb-3 mt-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Host:') }}
+                    <small class="fw-300">
+                        Display Hostname and Servicename
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
+                <p>service-browser works!</p>
+
+            </c-card-body>
+            <c-card-footer>
+            </c-card-footer>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+

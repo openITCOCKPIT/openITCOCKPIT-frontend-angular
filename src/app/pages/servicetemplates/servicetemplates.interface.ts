@@ -292,7 +292,7 @@ export interface ServicetemplateEntity {
     high_flap_threshold: number
     process_performance_data: number
     freshness_checks_enabled: number
-    freshness_threshold: number
+    freshness_threshold: number | null
     passive_checks_enabled: number
     event_handler_enabled: number
     active_checks_enabled: number
