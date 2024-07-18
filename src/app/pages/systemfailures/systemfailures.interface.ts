@@ -33,6 +33,26 @@ export interface SystemfailureIndexParams {
     'filter[full_name]': ''
 }
 
+export interface SystemfailuresPost {
+    from_date: Date | string
+    from_time: Date | string
+    to_date: Date | string
+    to_time: Date | string
+    comment: string
+}
+
+export interface SystemfailuresGet {
+    defaultValues: {
+        js_from: string
+        js_to: string
+        from_date: string
+        from_time: string
+        to_date: string
+        to_time: string
+        comment: string
+    }
+}
+
 export function getDefaultSystemfailuresParams(): SystemfailureIndexParams {
     return {
         angular: true,
