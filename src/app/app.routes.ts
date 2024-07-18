@@ -367,6 +367,9 @@ const coreRoutes: Routes = [{
     path: 'systemfailures/add',
     loadComponent: () => import('./pages/systemfailures/systemfailures-add/systemfailures-add.component').then(m => m.SystemfailuresAddComponent)
 }, {
+    path: 'hostchecks/index/:id',
+    loadComponent: () => import('./pages/hostchecks/hostchecks-index/hostchecks-index.component').then(m => m.HostchecksIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
