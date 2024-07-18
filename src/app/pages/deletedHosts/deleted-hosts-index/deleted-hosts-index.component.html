@@ -118,7 +118,7 @@
                                                    (debouncedValue)="onFilterChange($event)"
                                                    [(ngModel)]="params['filter[DeletedHosts.name_regex]']"
                                             />
-                                            <!-- todo implement regex light bulb -->
+                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
                                         </label>
                                     </span>
                                 </c-input-group>
