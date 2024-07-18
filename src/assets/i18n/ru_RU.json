@@ -2404,7 +2404,7 @@
     "Create new system failure": "Создать новый отказ системы",
     " created successfully": "успешно создан",
     "What are \"System Failures\" for?": "Для чего нужны \"системные сбои\"?",
-    "<i>System failures<\/i> are outages of the openITCOCKPIT server itself. They need to be created manually.": "<i>Системные сбои <\/i> - это простои самого сервера openITCOCKPIT. Их нужно создавать вручную.",
+    "\"System failures\" are outages of the openITCOCKPIT server itself. They need to be created manually.": "\"Системные сбои \" - это простои самого сервера openITCOCKPIT. Их нужно создавать вручную.",
     "Timeframes defined by System failures will be ignored while report generation.": "Сроки, определенные системными сбоями, будут игнорироваться при создании отчета.",
     "Create system failure": "Создать системный сбой",
     "System Failure": "Системный сбой",

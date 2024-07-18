@@ -2627,7 +2627,7 @@
     "Create new system failure": "Erstelle neuen Systemausfall",
     " created successfully": " erfolgreich erstelle",
     "What are \"System Failures\" for?": "Wozu sind \"Systemausfälle\" gut?",
-    "<i>System failures<\/i> are outages of the openITCOCKPIT server itself. They need to be created manually.": "<i>Systemausfälle<\/i> sind Ausfälle des openITCOCKPIT-Servers selbst. Sie müssen manuell erstellt werden.",
+    "\"System failures\" are outages of the openITCOCKPIT server itself. They need to be created manually.": "\"Systemausfälle\" sind Ausfälle des openITCOCKPIT-Servers selbst. Sie müssen manuell erstellt werden.",
     "Timeframes defined by System failures will be ignored while report generation.": "Zeitrahmen, die durch Systemausfälle definiert sind, werden bei der Berichtserstellung ignoriert.",
     "Create system failure": "Erstelle Systemausfall",
     "System Failure": "Systemausfall",
