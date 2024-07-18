@@ -191,7 +191,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
                 this.hideModal();
                 setTimeout(() => {
                     this.completed.emit(true);
-                }, 3500);
+                }, 5000);
 
             } else {
                 this.notyService.genericError();
