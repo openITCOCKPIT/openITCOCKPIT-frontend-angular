@@ -180,11 +180,13 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
                 }
 
                 if (this.currentIndex === this.items.length) {
-                    this.hideModal();
-                    this.completed.emit(true);
                     const title: string = this.TranslocoService.translate('Downtimes added');
                     const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
                     this.notyService.genericSuccess(msg, title);
+                    this.hideModal();
+                    setTimeout(() => {
+                        this.completed.emit(true);
+                    }, 5000);
                 }
             }));
         });

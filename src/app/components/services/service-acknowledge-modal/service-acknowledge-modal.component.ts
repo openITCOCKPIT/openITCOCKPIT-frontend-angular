@@ -139,8 +139,7 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
                 this.hideModal();
                 setTimeout(() => {
                     this.completed.emit(true);
-                }, 3500);
-                // this.completed.emit(true);
+                }, 5000);
             } else {
                 this.notyService.genericError();
                 this.hideModal();

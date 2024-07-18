@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -19,7 +19,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ValidationErrors } from '../../../services/downtimes-defaults.service';
 import { ExternalCommandsService, HostRescheduleItem, } from '../../../services/external-commands.service';
@@ -66,7 +66,6 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: HostRescheduleItem[] = [];
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @ViewChild('modal') private modal!: ModalComponent;
     public hasErrors: boolean = false;
     public errors?: ValidationErrors;
     public error: boolean = false;
@@ -77,8 +76,9 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
 
-    protected resetType: 'hostOnly' | 'hostAndServices' = 'hostOnly';
+    protected resetType: 'hostOnly' | 'hostAndServices' = 'hostAndServices';
 
     public hideModal() {
         this.isSend = false;
@@ -113,9 +113,13 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
         }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
-
+                const title = this.TranslocoService.translate('Reset check time');
+                const msg = this.TranslocoService.translate('Command sent successfully. Refresh in 5 seconds');
+                this.notyService.genericSuccess(msg, title);
                 this.hideModal();
-                this.completed.emit(true);
+                setTimeout(() => {
+                    this.completed.emit(true);
+                }, 5000);
             } else {
                 this.notyService.genericError();
                 this.hideModal();

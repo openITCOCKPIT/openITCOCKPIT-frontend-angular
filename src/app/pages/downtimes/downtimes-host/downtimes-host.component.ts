@@ -48,7 +48,6 @@ import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { DowntimesService } from '../downtimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { DowntimeSimpleIconComponent } from '../downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -94,7 +93,6 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         RowComponent,
         TranslocoPipe,
         TrueFalseDirective,
-        HoststatusSimpleIconComponent,
         MatSort,
         MatSortHeader,
         NgForOf,
@@ -130,9 +128,6 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     public params: HostDowntimesParams = getDefaultHostDowntimesParams();
     public hostDowntimes?: DowntimeHostIndexRoot;
     public hideFilter: boolean = true;
-    public showFlashSuccess: boolean = false;
-    public autoRefreshCounter: number | null = null;
-    private interval: any;
     public selectedItems: CancelAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);

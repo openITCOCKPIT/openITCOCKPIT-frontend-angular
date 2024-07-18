@@ -478,7 +478,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             }
             setTimeout(() => {
                 this.load()
-            }, 3500);
+            }, 5000);
         }));
     }
 
@@ -509,7 +509,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.load()
-            }, 3500);
+            }, 5000);
         }));
     }
 
