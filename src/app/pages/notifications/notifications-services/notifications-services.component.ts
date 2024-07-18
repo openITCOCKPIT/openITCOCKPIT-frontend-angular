@@ -4,7 +4,8 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent, ContainerComponent,
+    ColComponent,
+    ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -29,8 +30,8 @@ import { NotificationsService } from '../notifications.service';
 import {
     getDefaultNotificationsServicesParams,
     getServiceNotificationStateForApi,
-    NotificationIndexRoot,
-    NotificationServicesParams, NotificationServicesRoot,
+    NotificationServicesParams,
+    NotificationServicesRoot,
     ServiceNotificationsStateFilter
 } from '../notifications.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -52,6 +53,7 @@ import {
 import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -94,7 +96,8 @@ import {
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ServicestatusSimpleIconComponent,
-        ContainerComponent
+        ContainerComponent,
+        TableLoaderComponent
     ],
     templateUrl: './notifications-services.component.html',
     styleUrl: './notifications-services.component.css'

@@ -94,7 +94,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             rescheduleCallback: () => {
                 console.log('implement callback')
             },
-            showBackButton: true
+            showBackButton: false
         };
 
         console.log(this.id);

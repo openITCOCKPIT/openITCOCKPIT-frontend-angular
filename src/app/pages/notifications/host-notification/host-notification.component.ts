@@ -4,7 +4,8 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    ColComponent, ContainerComponent,
+    ColComponent,
+    ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -50,6 +51,11 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import {
+    HostBrowserMenuConfig,
+    HostsBrowserMenuComponent
+} from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
 
 @Component({
     selector: 'oitc-host-notification',
@@ -92,7 +98,9 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
         NoRecordsComponent,
         PaginateOrScrollComponent,
         HoststatusSimpleIconComponent,
-        ContainerComponent
+        ContainerComponent,
+        TableLoaderComponent,
+        HostsBrowserMenuComponent
     ],
     templateUrl: './host-notification.component.html',
     styleUrl: './host-notification.component.css'
@@ -114,9 +122,19 @@ export class HostNotificationComponent implements OnInit, OnDestroy {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
+    public hostBrowserConfig?: HostBrowserMenuConfig;
+
     public ngOnInit(): void {
         this.hostId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadNotifications();
+
+        // Define the configuration for the HostBrowserMenuComponent because we know the hostId now
+        this.hostBrowserConfig = {
+            hostId: this.hostId,
+            showReschedulingButton: false,
+            showBackButton: true
+        };
+
     }
 
     public ngOnDestroy(): void {

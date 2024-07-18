@@ -192,7 +192,10 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
+
+                <oitc-table-loader *ngIf="!notifications"></oitc-table-loader>
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       *ngIf="notifications"
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
@@ -214,7 +217,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="notifications">
+                    <tbody>
                     <tr *ngFor="let notification of notifications.all_notifications">
                         <td class="text-center">
                             <oitc-servicestatus-simple-icon
