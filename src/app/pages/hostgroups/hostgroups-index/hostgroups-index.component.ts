@@ -123,10 +123,10 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
 
     public params: HostgroupsIndexParams = getDefaultHostgroupsIndexParams();
 
-    public readonly route = inject(ActivatedRoute);
+    public readonly route: ActivatedRoute = inject(ActivatedRoute);
     public selectedItems: DeleteAllItem[] = [];
-    public hostgroups: HostgroupsIndexRoot = {all_hostgroups: [], _csrfToken: ''}
-    public readonly router = inject(Router);
+    public hostgroups?: HostgroupsIndexRoot;
+    public readonly router: Router = inject(Router);
     public hideFilter: boolean = true;
 
     // Show or hide the filter
