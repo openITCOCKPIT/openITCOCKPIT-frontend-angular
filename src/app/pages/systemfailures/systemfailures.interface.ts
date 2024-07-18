@@ -39,6 +39,10 @@ export interface SystemfailuresPost {
     to_date: Date | string
     to_time: Date | string
     comment: string
+    author: {
+        id?: number
+        fullname: string
+    }
 }
 
 export interface SystemfailuresGet {
@@ -50,6 +54,10 @@ export interface SystemfailuresGet {
         to_date: string
         to_time: string
         comment: string
+    }
+    author: {
+        id: number
+        fullname: string
     }
 }
 

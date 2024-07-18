@@ -1,10 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+    AlertComponent, AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective,
+    CardTitleDirective, ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -26,16 +27,15 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SystemfailuresGet, SystemfailuresPost } from '../systemfailures.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SystemfailuresService } from '../systemfailures.service';
 import { NgIf } from '@angular/common';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { DurationInputComponent } from '../../../layouts/coreui/duration-input/duration-input.component';
 import { HistoryService } from '../../../history.service';
+import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-systemfailures-add',
@@ -65,16 +65,18 @@ import { HistoryService } from '../../../history.service';
         FormCheckLabelDirective,
         FormCheckInputDirective,
         FormControlDirective,
-        TrueFalseDirective,
         CardFooterComponent,
         NgIf,
-        DurationInputComponent
+        FakeSelectComponent,
+        LabelLinkComponent,
+        AlertComponent,
+        ColComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './systemfailures-add.component.html',
     styleUrl: './systemfailures-add.component.css'
 })
 export class SystemfailuresAddComponent implements OnInit, OnDestroy {
-    public hosts: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
     public post: SystemfailuresPost = this.getClearForm();
     public get!: SystemfailuresGet;
@@ -97,6 +99,7 @@ export class SystemfailuresAddComponent implements OnInit, OnDestroy {
                 this.post.to_date = toDate;
                 this.post.to_time = result.defaultValues.to_time;
                 this.post.comment = result.defaultValues.comment;
+                this.post.author = result.author;
             }));
     }
 
@@ -106,7 +109,10 @@ export class SystemfailuresAddComponent implements OnInit, OnDestroy {
             from_time: '',
             to_date: '',
             to_time: '',
-            comment: ''
+            comment: '',
+            author: {
+                fullname: ''
+            }
         };
     }
 

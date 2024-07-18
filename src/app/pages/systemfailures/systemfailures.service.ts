@@ -9,7 +9,6 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes/systemdowntimes.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
@@ -54,8 +53,8 @@ export class SystemfailuresService {
 
     public createSystemfailure(systemfailure: SystemfailuresPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/systemdowntimes/addHostdowntime.json?angular=true`, {
-            Systemfailures: systemfailure
+        return this.http.post<any>(`${proxyPath}/systemfailures/add.json?angular=true`, {
+            Systemfailure: systemfailure
         })
             .pipe(
                 map(data => {
