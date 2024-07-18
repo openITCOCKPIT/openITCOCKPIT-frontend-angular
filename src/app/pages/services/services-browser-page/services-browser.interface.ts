@@ -1,6 +1,7 @@
 import { Customvariable } from '../../contacts/contacts.interface';
 import { Commandargument } from '../../commands/commands.interface';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
+import { GenericIdAndName } from '../../../generic.interfaces';
 
 export interface ServicesBrowser {
     mergedService: MergedService
@@ -20,9 +21,15 @@ export interface ServicesBrowser {
     checkPeriod: CheckPeriod
     notifyPeriod: NotifyPeriod
     canSubmitExternalCommands: boolean
-    mainContainer: MainContainer[]
-    sharedContainers: any[]
-    objects: Objects
+    mainContainer: GenericIdAndName[]
+    sharedContainers: GenericIdAndName[]
+    objects: {
+        Instantreports: GenericIdAndName[]
+        Autoreports: GenericIdAndName[]
+        Eventcorrelations: GenericIdAndName[]
+        Maps: GenericIdAndName[]
+        Servicegroups: GenericIdAndName[]
+    }
     usageFlag: number
     _csrfToken: string
 }
@@ -316,25 +323,12 @@ export interface NotifyPeriod {
     modified: string
 }
 
-export interface MainContainer {
-    id: number
-    name: string
-}
 
 export interface Objects {
-    Instantreports: any[]
-    Autoreports: Autoreport[]
-    Eventcorrelations: any[]
-    Maps: any[]
-    Servicegroups: ObjectsServicegroup[]
+    Instantreports: GenericIdAndName[]
+    Autoreports: GenericIdAndName[]
+    Eventcorrelations: GenericIdAndName[]
+    Maps: GenericIdAndName[]
+    Servicegroups: GenericIdAndName[]
 }
 
-export interface Autoreport {
-    id: number
-    name: string
-}
-
-export interface ObjectsServicegroup {
-    name: string
-    id: number
-}
