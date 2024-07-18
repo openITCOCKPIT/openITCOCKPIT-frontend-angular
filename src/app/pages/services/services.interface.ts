@@ -103,16 +103,22 @@ export interface ServicesIndexRoot extends PaginateOrScroll {
     satellites: SelectKeyValue[]
 }
 
+/**
+ * @deprecated
+ */
 export interface AllService {
     Service: ServiceObject
     Host: ServiceHostObject
     Hoststatus: HoststatusObject
-    Servicestatus: Servicestatus
+    Servicestatus: ServicestatusObject
     ServiceType: HostOrServiceType
     Downtime: any[]
     Acknowledgement: any[]
 }
 
+/**
+ * @deprecated use ServiceEntity instead
+ */
 export interface ServiceObject {
     id: number
     uuid: string
@@ -151,6 +157,9 @@ export interface ServiceHostObject {
     satelliteName: string
 }
 
+/**
+ * @deprecated use ServicestatusObject instead
+ */
 export interface Servicestatus {
     currentState: number
     lastHardState: any
@@ -186,6 +195,40 @@ export interface Servicestatus {
     outputHtml: string
 }
 
+export interface ServicestatusObject {
+    currentState?: number
+    lastHardState?: string
+    isFlapping?: boolean
+    problemHasBeenAcknowledged?: boolean
+    scheduledDowntimeDepth?: number
+    lastCheck?: string
+    nextCheck?: string
+    activeChecksEnabled?: number
+    lastHardStateChange?: string
+    last_state_change?: string
+    processPerformanceData?: boolean
+    state_type?: number
+    acknowledgement_type?: number
+    flap_detection_enabled?: boolean
+    notifications_enabled?: boolean
+    current_check_attempt?: number
+    output?: string
+    long_output?: string
+    perfdata?: string
+    latency?: number
+    max_check_attempts?: number
+    last_time_ok?: string
+    lastHardStateChangeInWords?: string
+    last_state_change_in_words?: string
+    lastCheckInWords?: string
+    nextCheckInWords?: string
+    isHardstate?: boolean
+    isInMonitoring?: boolean
+    humanState?: string
+    cssClass?: string
+    textClass?: string
+    outputHtml?: string
+}
 
 /**********************
  *    Add action    *
