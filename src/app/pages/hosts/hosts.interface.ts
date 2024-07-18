@@ -125,10 +125,10 @@ export interface HoststatusObject {
     long_output?: string
     acknowledgement_type?: AcknowledgementTypes
     state_type?: number
-    flap_detection_enabled?: any
+    flap_detection_enabled?: boolean
     notifications_enabled?: boolean
-    current_check_attempt?: any
-    max_check_attempts?: any
+    current_check_attempt?: number
+    max_check_attempts?: number
     latency?: number
     last_time_up?: string
     lastHardStateChangeInWords?: string

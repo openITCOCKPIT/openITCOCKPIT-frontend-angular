@@ -1,104 +1,133 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { timer, Subject, takeUntil, Subscription } from "rxjs";
-import { Servicestatus } from '../../../pages/services/services.interface';
+import { TranslocoService } from '@jsverse/transloco';
+import { ServicestatusObject } from '../../../pages/services/services.interface';
+
 
 @Component({
-  selector: 'oitc-servicestatus-icon',
-  standalone: true,
-    imports: [ NgClass, NgIf, TooltipDirective, FaIconComponent ],
-  templateUrl: './servicestatus-icon.component.html',
-  styleUrl: './servicestatus-icon.component.css'
+    selector: 'oitc-servicestatus-icon',
+    standalone: true,
+    imports: [NgClass, NgIf, TooltipDirective, FaIconComponent],
+    templateUrl: './servicestatus-icon.component.html',
+    styleUrl: './servicestatus-icon.component.css'
 })
 export class ServicestatusIconComponent implements OnInit, OnDestroy {
 
+
+    private _servicestatus?: ServicestatusObject;
+
+    private readonly TranslocoService = inject(TranslocoService);
+
+
     @Input()
-    get service() {
-        return this.status;
+    set servicestatus(value: ServicestatusObject | undefined) {
+        this._servicestatus = value;
+        this.onServicestatusChange();
     }
 
-    set service(service: Servicestatus) {
-        this.status = service;
-    }
-    stopPlay$: Subject<any> = new Subject();
-    subscription: Subscription= new Subscription();
-    protected status!: Servicestatus;
-    protected isFlapping: boolean = false;
-    protected humanState: string = '';
-    protected isHardstate: boolean = false;
-    protected title:string = '';
-    protected btnColor: string = '';
-    protected flappingColor: string = '';
-    protected opacity: string = '';
-    protected flappingState: boolean = false;
-
-    ngOnInit() {
-        this.setServiceStatusColors();
+    get servicestatus(): ServicestatusObject | undefined {
+        return this._servicestatus;
     }
 
-    setServiceStatusColors() {
-        let currentstate: number  = -1;
-        currentstate = parseInt(String(this.status.currentState), 10);
-        this.humanState = this.status.humanState;
-        this.isHardstate = this.status.isHardstate;
-        this.title = this.status.humanState;
-        this.isFlapping = this.status.isFlapping;
+    // Set this to an empty string if you use the ng-content outlet
+    @Input() statusCircleClass: string = 'status-circle';
 
-        switch(currentstate){
-            case 0:
-                this.btnColor = 'success';
-                this.flappingColor = 'text-success';
-                this.humanState = this.humanState || 'up';
-                break;
-            case 1:
-                this.btnColor = 'warning';
-                this.flappingColor = 'text-warning';
-                this.humanState = this.humanState || 'warning';
-                break;
-            case 2:
-                this.btnColor = 'danger';
-                this.flappingColor = 'text-danger';
-                this.humanState = this.humanState || 'down';
-                break;
-            case 3:
-                this.btnColor = 'secondary';
-                this.flappingColor = 'text-secondary';
-                this.humanState = this.humanState || 'unreachable';
-                break;
-            default:
-                this.btnColor = 'primary';
-                this.flappingColor = 'text-primary';
-                this.humanState = this.humanState || 'not in monitoring';
-        }
+    onServicestatusChange() {
+        if (this.servicestatus) {
 
-        if(this.isHardstate){
-            this.title = this.title + ' (HARD)';
-        } else {
-            this.title = this.title + ' (SOFT)';
-            this.opacity = 'opacity-50 ';
-        }
+            this.isFlapping = Boolean(this.servicestatus.isFlapping);
+            this.isHardstate = Boolean(this.servicestatus.isHardstate);
+            this.inMonitoring = typeof this.servicestatus.currentState === 'number';
+            this.currentState = Number(this.servicestatus.currentState);
 
-        if(this.isFlapping){
-            this.startFlap();
-        }
-    }
+            this.btnColor = 'btn-primary';
+            this.flappingColor = 'text-primary';
+            this.humanState = this.TranslocoService.translate('not in monitoring');
+            this.opacity = '';
 
-    startFlap(){
-        if(this.isFlapping){
-            timer(0, 750).pipe(
-                takeUntil(this.stopPlay$,)
-            ).subscribe(t => {
-                this.flappingState = !this.flappingState;
-            });
-        }else {
-            this.stopPlay$.next(true);
-           // this.stopPlay$.complete();
+            if (this.inMonitoring) {
+                switch (this.currentState) {
+                    case 0:
+                        this.btnColor = 'btn-success';
+                        this.flappingColor = 'text-success';
+                        this.humanState = this.TranslocoService.translate('ok');
+                        break;
+
+                    case 1:
+                        this.btnColor = 'btn-warning';
+                        this.flappingColor = 'text-warning';
+                        this.humanState = this.TranslocoService.translate('warning');
+                        break;
+
+                    case 2:
+                        this.btnColor = 'btn-danger';
+                        this.flappingColor = 'text-danger';
+                        this.humanState = this.TranslocoService.translate('critical');
+                        break;
+
+                    case 3:
+                        this.btnColor = 'btn-secondary';
+                        this.flappingColor = 'text-secondary';
+                        this.humanState = this.TranslocoService.translate('unknown');
+                        break;
+                }
+
+                if (this.isHardstate) {
+                    this.humanState = this.humanState + ' ' + this.TranslocoService.translate('(HARD)');
+                    this.opacity = '';
+                } else {
+                    this.humanState = this.humanState + ' ' + this.TranslocoService.translate('(SOFT)');
+                    this.opacity = 'opacity-50';
+                }
+
+                this.stopFlapping();
+                if (this.isFlapping) {
+                    this.startFlapping();
+                }
+
+            }
         }
     }
 
-    public ngOnDestroy() {
-        this.stopPlay$.complete();
+    public isFlapping: boolean = false;
+    public isHardstate: boolean = true;
+    public inMonitoring: boolean = false;
+    public btnColor: string = 'btn-primary';
+    public flappingColor: string = 'text-primary';
+    public currentState: number = -1; //Not found in monitoring
+    public humanState: string = this.TranslocoService.translate('not in monitoring');
+    public opacity: string = '';
+
+    public flappingState: number = 0;
+
+
+    private interval: any;
+
+    public ngOnInit(): void {
+
     }
+
+    public ngOnDestroy(): void {
+        this.stopFlapping();
+    }
+
+    public startFlapping() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+
+        // We use a classic setInterval as it is way more constant and needs WAY LESS cpu power as the new RxJS fancy hipster stuff
+        this.interval = setInterval(() => {
+            this.flappingState = this.flappingState === 0 ? 1 : 0;
+        }, 750);
+    }
+
+    public stopFlapping() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+
 }
