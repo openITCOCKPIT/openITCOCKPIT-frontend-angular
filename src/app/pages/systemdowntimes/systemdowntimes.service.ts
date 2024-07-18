@@ -178,7 +178,6 @@ export class SystemdowntimesService implements DeleteAllModalService {
         )
     }
 
-
     // Generic function for the Delete All Modal
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
