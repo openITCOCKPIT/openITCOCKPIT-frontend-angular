@@ -263,12 +263,12 @@
                             </td>
                             <td class="text-center">
                                 <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type == 1"
-                                    [icon]="['fas', 'user']"
+                                    *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                    [icon]="['far', 'user']"
                                     [title]="'Acknowledgement' | transloco"
                                 ></fa-icon>
                                 <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type == 2"
+                                    *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Sticky"
                                     [icon]="['fas', 'user']"
                                     [title]="'Sticky Acknowledgement' | transloco"
                                 ></fa-icon>
@@ -483,12 +483,12 @@
                                         </td>
                                         <td class="text-center">
                                             <fa-icon
-                                                *ngIf="service.Servicestatus.acknowledgement_type == 1"
-                                                [icon]="['fas', 'user']"
+                                                *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                                [icon]="['far', 'user']"
                                                 [title]="'Acknowledgement' | transloco"
                                             ></fa-icon>
                                             <fa-icon
-                                                *ngIf="service.Servicestatus.acknowledgement_type == 2"
+                                                *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky"
                                                 [icon]="['fas', 'user']"
                                                 [title]="'Sticky Acknowledgement' | transloco"
                                             ></fa-icon>
