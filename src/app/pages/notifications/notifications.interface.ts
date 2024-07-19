@@ -119,7 +119,7 @@ export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
         scroll: true,
         sort: 'NotificationHosts.start_time',
         page: 1,
-        direction: 'asc',
+        direction: 'desc',
         'filter[NotificationHosts.output]': '',
         'filter[NotificationHosts.state][]': [],
         'filter[Hosts.name]': '',
@@ -137,7 +137,7 @@ export function getDefaultNotificationsServicesParams(): NotificationServicesPar
         scroll: true,
         sort: 'NotificationServices.start_time',
         page: 1,
-        direction: 'asc',
+        direction: 'desc',
         'filter[NotificationServices.output]': '',
         'filter[NotificationServices.state][]': [],
         'filter[Hosts.name]': '',
@@ -155,6 +155,10 @@ export interface HostNotificationsStateFilter {
     unreachable: boolean
 }
 
+/**
+ * Generic function that can be used by more actionms than notifications
+ * @param state
+ */
 export function getHostNotificationStateForApi(state: HostNotificationsStateFilter): string[] {
     let result = [];
     if (state.recovery) {
@@ -170,6 +174,14 @@ export function getHostNotificationStateForApi(state: HostNotificationsStateFilt
     return result;
 }
 
+/**
+ * Wrapper with a more generic name
+ * @param state
+ */
+export function getHostStateForApi(state: HostNotificationsStateFilter): string[] {
+    return getHostNotificationStateForApi(state);
+}
+
 export interface ServiceNotificationsStateFilter {
     ok: boolean
     warning: boolean
@@ -177,6 +189,10 @@ export interface ServiceNotificationsStateFilter {
     unknown: boolean
 }
 
+/**
+ * Generic function that can be used by more actionms than notifications
+ * @param state
+ */
 export function getServiceNotificationStateForApi(state: ServiceNotificationsStateFilter): string[] {
     let result = [];
     if (state.ok) {
@@ -192,4 +208,12 @@ export function getServiceNotificationStateForApi(state: ServiceNotificationsSta
         result.push('unknown');
     }
     return result;
+}
+
+/**
+ * Wrapper with a more generic name
+ * @param state
+ */
+export function getServiceStateForApi(state: ServiceNotificationsStateFilter): string[] {
+    return getServiceNotificationStateForApi(state);
 }

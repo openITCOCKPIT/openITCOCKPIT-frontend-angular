@@ -1,28 +1,43 @@
 <oitc-coreui>
-
-    <!-- todo add host and service browser menu -->
-
+    
     <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                    {{ t('Documentation') }}
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    {{ t('View') }}
-                </li>
-            </ol>
-        </nav>
+        @if (type === 'host') {
+            <div class="mb-3">
+                <oitc-hosts-browser-menu
+                    *ngIf="hostBrowserConfig"
+                    [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+            </div>
+        } @else if (type === 'service') {
+            <div class="mb-3">
+                <oitc-services-browser-menu
+                    *ngIf="serviceBrowserConfig"
+                    [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+            </div>
+        } @else {
+            <nav aria-label="breadcrumb" class="mt-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/']">
+                            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                            {{ t('Home') }}
+                        </a></li>
+                    <li class="breadcrumb-item">
+                        <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                        {{ t('Documentation') }}
+                    </li>
+                    <li aria-current="page" class="breadcrumb-item active">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        {{ t('View') }}
+                    </li>
+                    <li aria-current="page" class="breadcrumb-item active" *ngIf="documentation">
+                        {{ documentation.objectName }}
+                    </li>
+                </ol>
+            </nav>
+        }
 
         <oitc-form-loader *ngIf="!documentation"></oitc-form-loader>
-        
+
         <c-card class="mb-3" *ngIf="documentation">
             <c-card-header>
                 <ng-container [ngSwitch]="type">

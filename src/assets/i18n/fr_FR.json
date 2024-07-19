@@ -1662,7 +1662,7 @@
     "System failure": "Défaillance du système",
     "Create new system failure": "Créer une nouvelle défaillance du système",
     "What are \"System Failures\" for?": "A quoi servent les \"pannes du système\" ?",
-    "<i>System failures<\/i> are outages of the openITCOCKPIT server itself. They need to be created manually.": "Les <i> pannes système <\/ i> sont des pannes du serveur openITCOCKPIT lui-même. Ils doivent être créés manuellement.",
+    "\"System failures\" are outages of the openITCOCKPIT server itself. They need to be created manually.": "Les \"pannes système\" sont des pannes du serveur openITCOCKPIT lui-même. Ils doivent être créés manuellement.",
     "Timeframes defined by System failures will be ignored while report generation.": "Les délais définis par les défaillances du système seront ignorés lors de la génération du rapport.",
     "Create system failure": "Créer une défaillance du système",
     "System Failure": "Défaillance du système",

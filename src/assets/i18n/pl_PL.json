@@ -2584,7 +2584,7 @@
     "Create new system failure": "Utwórz nową awarię systemu",
     " created successfully": " utworzono pomyślnie",
     "What are \"System Failures\" for?": "Do czego służą \"Awarie Systemowe\"?",
-    "<i>System failures<\/i> are outages of the openITCOCKPIT server itself. They need to be created manually.": "<i>Awarie systemowe<\/i> to przerwy w działaniu samego serwera openITCOCKPIT. Muszą być tworzone ręcznie.",
+    "\"System failures\" are outages of the openITCOCKPIT server itself. They need to be created manually.": "\"Awarie systemowe\" to przerwy w działaniu samego serwera openITCOCKPIT. Muszą być tworzone ręcznie.",
     "Timeframes defined by System failures will be ignored while report generation.": "Przedziały czasowe zdefiniowane przez awarie systemowe będą ignorowane podczas generowania raportu.",
     "Create system failure": "Utwórz awarię systemową",
     "System Failure": "Awaria systemowa",

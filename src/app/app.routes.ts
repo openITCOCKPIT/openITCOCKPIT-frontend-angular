@@ -127,8 +127,8 @@ const coreRoutes: Routes = [{
     path: 'services/edit/:id',
     loadComponent: () => import('./pages/services/services-edit/services-edit.component').then(m => m.ServicesEditComponent)
 }, {
-    path: 'services/browser/:id',
-    loadComponent: () => import('./pages/services/services-browser-page/services-browser-page.component').then(m => m.ServicesBrowserPageComponent)
+    path: 'services/browser/:idOrUuid',
+    loadComponent: () => import('./pages/services/services-browser/services-browser.component').then(m => m.ServicesBrowserComponent)
 }, {
     path: 'services/copy/:ids',
     loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
@@ -366,6 +366,21 @@ const coreRoutes: Routes = [{
 }, {
     path: 'systemfailures/index',
     loadComponent: () => import('./pages/systemfailures/systemfailures-index/systemfailures-index.component').then(m => m.SystemfailuresIndexComponent)
+}, {
+    path: 'systemfailures/add',
+    loadComponent: () => import('./pages/systemfailures/systemfailures-add/systemfailures-add.component').then(m => m.SystemfailuresAddComponent)
+}, {
+    path: 'hostchecks/index/:id',
+    loadComponent: () => import('./pages/hostchecks/hostchecks-index/hostchecks-index.component').then(m => m.HostchecksIndexComponent)
+}, {
+    path: 'servicechecks/index/:id',
+    loadComponent: () => import('./pages/servicechecks/servicechecks-index/servicechecks-index.component').then(m => m.ServicechecksIndexComponent)
+}, {
+    path: 'statehistories/host/:id',
+    loadComponent: () => import('./pages/statehistories/statehistories-host/statehistories-host.component').then(m => m.StatehistoriesHostComponent)
+}, {
+    path: 'statehistories/service/:id',
+    loadComponent: () => import('./pages/statehistories/statehistories-host/statehistories-host.component').then(m => m.StatehistoriesHostComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

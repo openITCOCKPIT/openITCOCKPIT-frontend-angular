@@ -2,7 +2,7 @@ import { HostEntity, HostObject, HostOrServiceType, HoststatusObject } from '../
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
-import { ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
+import { ServicetemplateEntity, ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
 
 /**********************
@@ -155,6 +155,61 @@ export interface ServiceHostObject {
     is_satellite_host: boolean
     name: string
     satelliteName: string
+}
+
+export interface ServiceEntity {
+    id?: number
+    uuid?: string
+    servicetemplate_id?: number
+    host_id?: number
+    name?: string
+    description?: string
+    command_id?: number
+    check_command_args?: string
+    eventhandler_command_id?: number
+    notify_period_id?: number
+    check_period_id?: number
+    check_interval?: number
+    retry_interval?: number
+    max_check_attempts?: number
+    first_notification_delay?: number
+    notification_interval?: number
+    notify_on_warning?: number
+    notify_on_unknown?: number
+    notify_on_critical?: number
+    notify_on_recovery?: number
+    notify_on_flapping?: number
+    notify_on_downtime?: number
+    is_volatile?: number
+    flap_detection_enabled?: number
+    flap_detection_on_ok?: number
+    flap_detection_on_warning?: number
+    flap_detection_on_unknown?: number
+    flap_detection_on_critical?: number
+    low_flap_threshold?: number
+    high_flap_threshold?: number
+    process_performance_data?: number
+    freshness_checks_enabled?: number
+    freshness_threshold?: number
+    passive_checks_enabled?: number
+    event_handler_enabled?: number
+    active_checks_enabled?: number
+    notifications_enabled?: number
+    notes?: string
+    priority?: number
+    tags?: string
+    own_contacts?: number
+    own_contactgroups?: number
+    own_customvariables?: number
+    service_url?: string
+    sla_relevant?: boolean
+    service_type?: number
+    disabled?: number
+    usage_flag?: number
+    created?: string
+    modified?: string
+    servicetemplate?: ServicetemplateEntity
+    host?: HostEntity
 }
 
 /**
@@ -535,3 +590,27 @@ export interface DeletedService {
     created: string
     modified: string
 }
+
+/****************************
+ *  Service Browser Menu    *
+ ****************************/
+export interface ServiceBrowserMenu {
+    hostId: number
+    serviceId: number
+    serviceUuid: string
+    hostName: string
+    serviceName: string
+    hostAddress: string
+    docuExists: boolean
+    serviceUrl: string | null
+    allowEdit: boolean
+    includeServicestatus: boolean,
+    Servicestatus: ServicestatusObject,
+    includeHoststatus: boolean,
+    Hoststatus: HoststatusObject
+}
+
+
+/**************************
+ * Service Browser action  *
+ ***************************/

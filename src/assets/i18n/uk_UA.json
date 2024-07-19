@@ -2398,7 +2398,7 @@
     "Create new system failure": "Створити нову системну помилку",
     " created successfully": " створено успішно",
     "What are \"System Failures\" for?": "Для чого призначені \"Збої системи\"?",
-    "<i>System failures<\/i> are outages of the openITCOCKPIT server itself. They need to be created manually.": "<i> Системні збої <\/i> - це відключення самого сервера openITCOCKPIT. Їх потрібно створювати вручну.",
+    "\"System failures\" are outages of the openITCOCKPIT server itself. They need to be created manually.": "\" Системні збої \" - це відключення самого сервера openITCOCKPIT. Їх потрібно створювати вручну.",
     "Timeframes defined by System failures will be ignored while report generation.": "Часи, визначені системними збоями, будуть ігноруватися під час формування звіту.",
     "Create system failure": "Створити системний збій",
     "System Failure": "Помилка системи",

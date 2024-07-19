@@ -108,6 +108,7 @@ import {
     HostAcknowledgeModalComponent
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -171,7 +172,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         SelectAllComponent,
         HostAcknowledgeModalComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
