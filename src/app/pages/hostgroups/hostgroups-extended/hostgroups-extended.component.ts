@@ -15,7 +15,7 @@ import {
     DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective,
+    DropdownToggleDirective, FormCheckInputDirective, FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -24,7 +24,7 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent,
+    RowComponent, RowDirective,
     TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -173,7 +173,10 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         SelectAllComponent,
         HostAcknowledgeModalComponent,
         TableLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        RowDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'

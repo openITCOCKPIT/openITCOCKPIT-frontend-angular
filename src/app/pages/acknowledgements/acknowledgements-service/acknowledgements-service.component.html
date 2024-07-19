@@ -3,19 +3,19 @@
 
         <oitc-services-browser-menu
             *ngIf="serviceBrowserConfig"
-            [config]="serviceBrowserConfig">
-        </oitc-services-browser-menu>
+            [config]="serviceBrowserConfig"></oitc-services-browser-menu>
 
         <c-card class="mb-3 mt-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Service') }}
                     <small class="fw-300">
-                        {{ t('state history') }}
+                        {{ t('acknowledgement history') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadServicestatehistories()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadServiceacknowledgements()" cButton class="ripple" color="default"
+                                size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -79,11 +79,27 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[StatehistoryServices.output]']"
-                                           [placeholder]="'Filter by output' | transloco"
+                                           [(ngModel)]="params['filter[AcknowledgementServices.comment_data]']"
+                                           [placeholder]="'Filter by comment' | transloco"
                                            aria-label="name"
                                            cFormControl
-                                           name="StatehistoryServices.output"
+                                           name="AcknowledgementServices.comment_data"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[AcknowledgementServices.author_name]']"
+                                           [placeholder]="'Filter by author' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="AcknowledgementServices.author_name"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -97,21 +113,6 @@
                                     <h5>
                                         {{ t('States') }}
                                     </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-success"
-                                            name="stateFilter.ok"
-                                            id="stateFilter.ok"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.ok"/>
-
-                                        <label cFormCheckLabel
-                                               for="stateFilter.ok">{{ t('Ok') }}</label>
-                                    </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
@@ -156,42 +157,6 @@
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-                            <c-col [xs]="12" lg="2">
-                                <fieldset>
-                                    <h5>
-                                        {{ t('State Types') }}
-                                    </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-primary"
-                                            name="StatehistoryServices.soft"
-                                            id="StatehistoryServices.soft"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="state_typesFilter.soft"/>
-
-                                        <label cFormCheckLabel
-                                               for="StatehistoryServices.soft">{{ t('Soft') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-primary"
-                                            name="StatehistoryServices.hard"
-                                            id="StatehistoryServices.hard"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="state_typesFilter.hard"/>
-                                        <label cFormCheckLabel
-                                               for="StatehistoryServices.hard">{{ t('Hard') }}</label>
-                                    </c-form-check>
-                                </fieldset>
-                            </c-col>
                         </c-row>
                         <c-row class="mt-2">
                             <c-col class="text-end">
@@ -204,83 +169,69 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="!servicestatehistories"></oitc-table-loader>
+                <oitc-table-loader *ngIf="!serviceAcknowledgements"></oitc-table-loader>
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       *ngIf="servicestatehistories"
+                       *ngIf="serviceAcknowledgements"
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryServices.state">
+                        <th class="width-50 text-center" scope="col" mat-sort-header="AcknowledgementServices.state">
                             {{ t('State') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryServices.state_time">
+                        <th scope="col" mat-sort-header="AcknowledgementServices.entry_time">
                             {{ t('Date') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryServices.current_check_attempt">
-                            {{ t('Check attempt') }}
+                        <th scope="col" mat-sort-header="AcknowledgementServices.author_name">
+                            {{ t('Author') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryServices.is_hardstate">
-                            {{ t('State type') }}
+                        <th scope="col" mat-sort-header="AcknowledgementServices.comment_data">
+                            {{ t('Comment') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryServices.output">
-                            {{ t('Service output') }}
+                        <th scope="col" mat-sort-header="AcknowledgementServices.is_sticky">
+                            {{ t('Sticky') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let statehistory of servicestatehistories.all_statehistories">
+                    <tr *ngFor="let acknowledgement of serviceAcknowledgements.all_acknowledgements">
                         <td class="text-center">
                             <oitc-servicestatus-simple-icon
-                                [servicestatus]="statehistory.StatehistoryService.state"
-                                [hardstate]="statehistory.StatehistoryService.is_hardstate"></oitc-servicestatus-simple-icon>
+                                [servicestatus]="acknowledgement.AcknowledgedService.state"></oitc-servicestatus-simple-icon>
                         </td>
                         <td>
-                            {{ statehistory.StatehistoryService.state_time }}
+                            {{ acknowledgement.AcknowledgedService.entry_time }}
                         </td>
-                        <td class="text-center">
-                            {{ statehistory.StatehistoryService.current_check_attempt }}/
-                            {{ statehistory.StatehistoryService.max_check_attempts }}
-                        </td>
-                        <td class="text-center">
-                            <span class="badge text-uppercase"
-                                  [ngClass]="{
-                                    'bg-ok': statehistory.StatehistoryService.state == 0,
-                                    'bg-warning': statehistory.StatehistoryService.state == 1,
-                                    'bg-critical': statehistory.StatehistoryService.state == 2,
-                                    'bg-unknown': statehistory.StatehistoryService.state == 3
-                                    }"
-                                  *ngIf="statehistory.StatehistoryService.is_hardstate">
-                                {{ 'Hard' | transloco }}
-                            </span>
-                            <span class="badge text-uppercase opacity-50"
-                                  [ngClass]="{
-                                    'bg-ok': statehistory.StatehistoryService.state == 0,
-                                    'bg-warning': statehistory.StatehistoryService.state == 1,
-                                    'bg-critical': statehistory.StatehistoryService.state == 2,
-                                    'bg-unknown': statehistory.StatehistoryService.state == 3
-                                    }"
-                                  *ngIf="!statehistory.StatehistoryService.is_hardstate">
-                                {{ 'Soft' | transloco }}
-                            </span>
+                        <td>
+                            {{ acknowledgement.AcknowledgedService.author_name }}
                         </td>
                         <td>
                             <div class="word-break"
-                                 [innerHTML]="statehistory.StatehistoryService.outputHtml | trustAsHtml "></div>
+                                 [innerHTML]="acknowledgement.AcknowledgedService.comment_data | trustAsHtml "></div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-primary"
+                                  *ngIf="acknowledgement.AcknowledgedService.is_sticky">
+                                {{ 'True' | transloco }}
+                            </span>
+                            <span class="badge bg-secondary"
+                                  *ngIf="!acknowledgement.AcknowledgedService.is_sticky">
+                                {{ 'False' | transloco }}
+                            </span>
                         </td>
 
                     </tr>
                     </tbody>
                 </table>
                 <oitc-no-records
-                    *ngIf="servicestatehistories && servicestatehistories.all_statehistories.length === 0"></oitc-no-records>
+                    *ngIf="serviceAcknowledgements && serviceAcknowledgements.all_acknowledgements.length === 0"></oitc-no-records>
                 <c-container fluid class="mb-3 py-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="servicestatehistories"
-                                [paginateOrScroll]="servicestatehistories"></oitc-paginate-or-scroll>
+                                *ngIf="serviceAcknowledgements"
+                                [paginateOrScroll]="serviceAcknowledgements"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

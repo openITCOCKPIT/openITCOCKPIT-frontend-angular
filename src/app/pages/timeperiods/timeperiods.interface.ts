@@ -59,6 +59,7 @@ export interface TimeperiodsEditRoot {
 
 export interface Timeperiod {
     id?: number,
+    uuid?: string,
     container_id: number | null,
     name: string,
     calendar_id: number | null,

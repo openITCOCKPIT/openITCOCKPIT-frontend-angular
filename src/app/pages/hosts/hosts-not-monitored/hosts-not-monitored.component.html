@@ -241,13 +241,13 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let host of hosts.all_hosts">
-                        <td class="text-center">
+                        <td class="text-center width-50">
                             <oitc-item-select
                                 *oitcPermission="['hosts', 'delete']"
                                 [disabled]="!host.Host.allow_edit"
                                 [item]="host"></oitc-item-select>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center width-50">
                             <oitc-hoststatus-simple-icon></oitc-hoststatus-simple-icon>
                         </td>
 
