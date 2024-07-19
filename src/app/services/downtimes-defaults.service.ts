@@ -13,6 +13,7 @@ export interface DowntimesDefaultsConfiguration {
     to_time: string
     duration: number
     comment: string
+    downtimetype_id: number
 }
 
 export interface ValidateInput{
