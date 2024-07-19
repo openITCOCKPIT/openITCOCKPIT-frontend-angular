@@ -34,6 +34,10 @@
                     </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
@@ -53,14 +57,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                                name="post.container.parent_id"
-                                id="post.container.parent_id"
-                                [(ngModel)]="post.container.parent_id"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="containers"
-                                (onChange)="onContainerChange()"
-                                oitcFormError [errors]="errors" errorField="parent_id">
+                            name="post.container.parent_id"
+                            id="post.container.parent_id"
+                            [(ngModel)]="post.container.parent_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="parent_id">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                         <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
@@ -114,14 +118,14 @@
                             {{ t('Hosts') }}
                         </label>
                         <oitc-multi-select
-                                name="post.hosts._ids"
-                                id="post.hosts._ids"
-                                [(ngModel)]="post.hosts._ids"
-                                optionValue="key"
-                                optionLabel="value"
-                                [searchCallback]="loadHosts"
-                                [options]="hosts"
-                                oitcFormError [errors]="errors" errorField="hosts">
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="hosts">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>
@@ -131,14 +135,14 @@
                             {{ t('Host templates') }}
                         </label>
                         <oitc-multi-select
-                                name="post.hosttemplates._ids"
-                                id="post.hosttemplates._ids"
-                                [(ngModel)]="post.hosttemplates._ids"
-                                optionValue="key"
-                                optionLabel="value"
-                                [searchCallback]="loadHosttemplates"
-                                [options]="hosttemplates"
-                                oitcFormError [errors]="errors" errorField="hosttemplates">
+                            name="post.hosttemplates._ids"
+                            id="post.hosttemplates._ids"
+                            [(ngModel)]="post.hosttemplates._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosttemplates"
+                            [options]="hosttemplates"
+                            oitcFormError [errors]="errors" errorField="hosttemplates">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>

@@ -27,9 +27,13 @@
                     {{ hostgroupExtended.Hostgroup.container.name }}
 
                     <small class="fw-300">
-                        UUID: {{ hostgroupExtended.Hostgroup.uuid }}
+                        {{ t('extended overview') }}
                     </small>
                 </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <oitc-object-uuid [uuid]="hostgroupExtended.Hostgroup.uuid"></oitc-object-uuid>
+                </c-nav>
 
 
                 <c-nav class="card-toolbar card-header-pills">
