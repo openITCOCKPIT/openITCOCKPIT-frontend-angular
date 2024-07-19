@@ -108,11 +108,6 @@ export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
         unreachable: false
     };
 
-    public state_typesFilter = {
-        soft: false,
-        hard: false
-    };
-
     public hostAcknowledgements?: AcknowledgementsHostRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
