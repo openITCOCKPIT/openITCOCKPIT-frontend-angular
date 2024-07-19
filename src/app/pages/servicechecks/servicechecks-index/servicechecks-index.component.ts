@@ -22,11 +22,6 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import {
-    HostBrowserMenuConfig,
-    HostsBrowserMenuComponent
-} from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -34,22 +29,31 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { getHostStateForApi, HostNotificationsStateFilter } from '../../notifications/notifications.interface';
-import { Subscription } from 'rxjs';
-import { HostchecksService } from '../hostchecks.service';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { getDefaultHostchecksIndexParams, HostchecksIndexParams, HostchecksIndexRoot } from '../hostchecks.interface';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
-import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {
+    ServiceBrowserMenuConfig,
+    ServicesBrowserMenuComponent
+} from '../../services/services-browser-menu/services-browser-menu.component';
+import {
+    ServicestatusSimpleIconComponent
+} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../notifications/notifications.interface';
+import { Subscription } from 'rxjs';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { ServicechecksService } from '../servicechecks.service';
+import {
+    getDefaultServicechecksIndexParams,
+    ServicechecksIndexParams,
+    ServicechecksIndexRoot
+} from '../servicechecks.interface';
 
 @Component({
-    selector: 'oitc-hostchecks-index',
+    selector: 'oitc-servicechecks-index',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -67,8 +71,6 @@ import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-se
         FormControlDirective,
         FormDirective,
         FormsModule,
-        HostsBrowserMenuComponent,
-        HoststatusSimpleIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         MatSort,
@@ -80,33 +82,33 @@ import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-se
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PaginatorModule,
-        PermissionDirective,
         RowComponent,
         TableDirective,
         TableLoaderComponent,
         TranslocoDirective,
         TranslocoPipe,
         TrueFalseDirective,
-        XsButtonDirective,
-        RouterLink,
         TrustAsHtmlPipe,
-        NgClass,
-        FakeSelectComponent
+        XsButtonDirective,
+        ServicesBrowserMenuComponent,
+        ServicestatusSimpleIconComponent,
+        NgClass
     ],
-    templateUrl: './hostchecks-index.component.html',
-    styleUrl: './hostchecks-index.component.css'
+    templateUrl: './servicechecks-index.component.html',
+    styleUrl: './servicechecks-index.component.css'
 })
-export class HostchecksIndexComponent implements OnInit, OnDestroy {
-    private hostId: number = 0;
-    private HostchecksService = inject(HostchecksService)
+export class ServicechecksIndexComponent implements OnInit, OnDestroy {
+    private serviceId: number = 0;
+    private ServicechecksService = inject(ServicechecksService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public params: HostchecksIndexParams = getDefaultHostchecksIndexParams();
-    public stateFilter: HostNotificationsStateFilter = {
-        recovery: false,
-        down: false,
-        unreachable: false
+    public params: ServicechecksIndexParams = getDefaultServicechecksIndexParams();
+    public stateFilter: ServiceNotificationsStateFilter = {
+        ok: false,
+        warning: false,
+        critical: false,
+        unknown: false
     };
 
     public state_typesFilter = {
@@ -114,21 +116,21 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
         hard: false
     };
 
-    public hostchecks?: HostchecksIndexRoot;
+    public servicechecks?: ServicechecksIndexRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
-    public hostBrowserConfig?: HostBrowserMenuConfig;
+    public serviceBrowserConfig?: ServiceBrowserMenuConfig;
 
     public ngOnInit(): void {
-        this.hostId = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadHostchecks();
+        this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadServicechecks();
 
-        // Define the configuration for the HostBrowserMenuComponent because we know the hostId now
-        this.hostBrowserConfig = {
-            hostId: this.hostId,
+        // Define the configuration for the ServiceBrowserMenuComponent because we know the serviceId now
+        this.serviceBrowserConfig = {
+            serviceId: this.serviceId,
             showReschedulingButton: false,
             showBackButton: true
         };
@@ -139,8 +141,8 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public loadHostchecks() {
-        this.params['filter[Hostchecks.state][]'] = getHostStateForApi(this.stateFilter);
+    public loadServicechecks() {
+        this.params['filter[Servicechecks.state][]'] = getServiceStateForApi(this.stateFilter);
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
@@ -151,12 +153,12 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
                 state_type = '1';
             }
         }
-        this.params['filter[Hostchecks.state_type]'] = state_type;
+        this.params['filter[Servicechecks.state_type]'] = state_type;
 
 
-        this.subscriptions.add(this.HostchecksService.getHostchecksIndex(this.hostId, this.params)
+        this.subscriptions.add(this.ServicechecksService.getServicechecksIndex(this.serviceId, this.params)
             .subscribe((result) => {
-                this.hostchecks = result;
+                this.servicechecks = result;
             })
         );
     }
@@ -167,29 +169,30 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultHostchecksIndexParams();
+        this.params = getDefaultServicechecksIndexParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.stateFilter = {
-            recovery: false,
-            down: false,
-            unreachable: false
+            ok: false,
+            warning: false,
+            critical: false,
+            unknown: false
         };
-        this.loadHostchecks();
+        this.loadServicechecks();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadHostchecks();
+        this.loadServicechecks();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadHostchecks();
+        this.loadServicechecks();
     }
 
     // Callback when sort has changed
@@ -197,9 +200,7 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadHostchecks();
+            this.loadServicechecks();
         }
     }
-
-    protected readonly String = String;
 }

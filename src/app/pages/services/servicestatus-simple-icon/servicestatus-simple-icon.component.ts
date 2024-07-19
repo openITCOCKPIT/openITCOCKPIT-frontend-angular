@@ -20,6 +20,7 @@ export class ServicestatusSimpleIconComponent {
     private readonly TranslocoService = inject(TranslocoService);
     public btnColor: string = 'btn-primary';
     public state?: number = -1; //Not found in monitoring
+    public isHardstate: boolean = true;
     public humanState: string = this.TranslocoService.translate('not in monitoring');
 
     @Input()
@@ -52,5 +53,17 @@ export class ServicestatusSimpleIconComponent {
 
     get servicestatus(): number | undefined {
         return this.state;
+    }
+
+    @Input()
+    set hardstate(value: number | boolean | undefined) {
+        this.isHardstate = false;
+        if (value === 1 || value === true) {
+            this.isHardstate = true;
+        }
+    }
+
+    get hardstate(): boolean {
+        return this.isHardstate;
     }
 }

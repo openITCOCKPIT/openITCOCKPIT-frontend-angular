@@ -370,6 +370,9 @@ const coreRoutes: Routes = [{
     path: 'hostchecks/index/:id',
     loadComponent: () => import('./pages/hostchecks/hostchecks-index/hostchecks-index.component').then(m => m.HostchecksIndexComponent)
 }, {
+    path: 'servicechecks/index/:id',
+    loadComponent: () => import('./pages/servicechecks/servicechecks-index/servicechecks-index.component').then(m => m.ServicechecksIndexComponent)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {
