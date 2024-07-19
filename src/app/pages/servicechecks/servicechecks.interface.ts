@@ -35,8 +35,7 @@ export function getDefaultServicechecksIndexParams(): ServicechecksIndexParams {
 export interface ServicechecksIndexRoot extends PaginateOrScroll {
     all_servicechecks: {
         Servicecheck: Servicecheck
-    }[],
-    username: string
+    }[]
 }
 
 export interface Servicecheck {

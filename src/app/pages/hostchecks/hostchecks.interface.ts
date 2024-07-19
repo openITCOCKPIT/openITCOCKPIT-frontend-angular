@@ -35,8 +35,7 @@ export function getDefaultHostchecksIndexParams(): HostchecksIndexParams {
 export interface HostchecksIndexRoot extends PaginateOrScroll {
     all_hostchecks: {
         Hostcheck: Hostcheck
-    }[],
-    username: string
+    }[]
 }
 
 export interface Hostcheck {
