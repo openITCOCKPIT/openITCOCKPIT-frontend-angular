@@ -34,6 +34,10 @@
                     </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['timeperiods', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
