@@ -23,7 +23,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -38,23 +38,22 @@ import {
     ServiceBrowserMenuConfig,
     ServicesBrowserMenuComponent
 } from '../../services/services-browser-menu/services-browser-menu.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+    AcknowledgementsServiceParams,
+    AcknowledgementsServiceRoot,
+    getDefaultAcknowledgementsServiceParams
+} from '../acknowledgement.interface';
+import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../notifications/notifications.interface';
+import { Subscription } from 'rxjs';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { AcknowledgementsService } from '../acknowledgements.service';
 import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { Subscription } from 'rxjs';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { StatehistoryService } from '../statehistory.service';
-import {
-    getDefaultStatehistoryServiceParams,
-    StatehistoriesServiceRoot,
-    StatehistoryServiceParams
-} from '../statehistories.interface';
-import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../notifications/notifications.interface';
 
 @Component({
-    selector: 'oitc-statehistories-service',
+    selector: 'oitc-acknowledgements-service',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -92,32 +91,26 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         TrustAsHtmlPipe,
         XsButtonDirective,
         ServicesBrowserMenuComponent,
-        ServicestatusSimpleIconComponent,
-        NgClass
+        ServicestatusSimpleIconComponent
     ],
-    templateUrl: './statehistories-service.component.html',
-    styleUrl: './statehistories-service.component.css'
+    templateUrl: './acknowledgements-service.component.html',
+    styleUrl: './acknowledgements-service.component.css'
 })
-export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
+export class AcknowledgementsServiceComponent implements OnInit, OnDestroy {
     private serviceId: number = 0;
-    private StatehistoryService = inject(StatehistoryService)
+    private AcknowledgementsService = inject(AcknowledgementsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public params: StatehistoryServiceParams = getDefaultStatehistoryServiceParams();
+    public params: AcknowledgementsServiceParams = getDefaultAcknowledgementsServiceParams();
     public stateFilter: ServiceNotificationsStateFilter = {
         ok: false,
         warning: false,
-        unknown: false,
-        critical: false
+        critical: false,
+        unknown: false
     };
 
-    public state_typesFilter = {
-        soft: false,
-        hard: false
-    };
-
-    public servicestatehistories?: StatehistoriesServiceRoot;
+    public serviceAcknowledgements?: AcknowledgementsServiceRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -127,7 +120,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadServicestatehistories();
+        this.loadServiceacknowledgements();
 
         // Define the configuration for the ServiceBrowserMenuComponent because we know the serviceId now
         this.serviceBrowserConfig = {
@@ -142,24 +135,15 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public loadServicestatehistories() {
-        this.params['filter[StatehistoryServices.state][]'] = getServiceStateForApi(this.stateFilter);
+    public loadServiceacknowledgements() {
+        this.params['filter[AcknowledgementServices.state][]'] = getServiceStateForApi(this.stateFilter);
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        let state_type: string = '';
-        if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
-            state_type = '0';
-            if (this.state_typesFilter.hard) {
-                state_type = '1';
-            }
-        }
-        this.params['filter[StatehistoryServices.state_type]'] = state_type;
 
-
-        this.subscriptions.add(this.StatehistoryService.getStatehistoryService(this.serviceId, this.params)
+        this.subscriptions.add(this.AcknowledgementsService.getAcknowledgementsService(this.serviceId, this.params)
             .subscribe((result) => {
-                this.servicestatehistories = result;
+                this.serviceAcknowledgements = result;
             })
         );
     }
@@ -170,30 +154,30 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultStatehistoryServiceParams();
+        this.params = getDefaultAcknowledgementsServiceParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.stateFilter = {
             ok: false,
             warning: false,
-            unknown: false,
-            critical: false
+            critical: false,
+            unknown: false
         };
-        this.loadServicestatehistories();
+        this.loadServiceacknowledgements();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadServicestatehistories();
+        this.loadServiceacknowledgements();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadServicestatehistories();
+        this.loadServiceacknowledgements();
     }
 
     // Callback when sort has changed
@@ -201,7 +185,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadServicestatehistories();
+            this.loadServiceacknowledgements();
         }
     }
 }

@@ -380,7 +380,13 @@ const coreRoutes: Routes = [{
     loadComponent: () => import('./pages/statehistories/statehistories-host/statehistories-host.component').then(m => m.StatehistoriesHostComponent)
 }, {
     path: 'statehistories/service/:id',
-    loadComponent: () => import('./pages/statehistories/statehistories-host/statehistories-host.component').then(m => m.StatehistoriesHostComponent)
+    loadComponent: () => import('./pages/statehistories/statehistories-service/statehistories-service.component').then(m => m.StatehistoriesServiceComponent)
+}, {
+    path: 'acknowledgements/host/:id',
+    loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
+}, {
+    path: 'acknowledgements/service/:id',
+    loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
 }, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)

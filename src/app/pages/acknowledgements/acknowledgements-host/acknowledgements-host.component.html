@@ -9,12 +9,12 @@
             <c-card-header>
                 <h5 cCardTitle>{{ t('Host') }}
                     <small class="fw-300">
-                        {{ t('state history') }}
+                        {{ t('acknowledgement history') }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadHoststatehistories()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadHostacknowledgements()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -78,11 +78,27 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[StatehistoryHosts.output]']"
-                                           [placeholder]="'Filter by output' | transloco"
+                                           [(ngModel)]="params['filter[AcknowledgementHosts.comment_data]']"
+                                           [placeholder]="'Filter by comment' | transloco"
                                            aria-label="name"
                                            cFormControl
-                                           name="StatehistoryHosts.output"
+                                           name="AcknowledgementHosts.comment_data"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[AcknowledgementHosts.author_name]']"
+                                           [placeholder]="'Filter by author' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="AcknowledgementHosts.author_name"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -96,21 +112,6 @@
                                     <h5>
                                         {{ t('States') }}
                                     </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-success"
-                                            name="stateFilter.recovery"
-                                            id="stateFilter.recovery"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.recovery"/>
-
-                                        <label cFormCheckLabel
-                                               for="stateFilter.recovery">{{ t('Up') }}</label>
-                                    </c-form-check>
                                     <c-form-check>
                                         <input
                                             (debouncedValue)="onFilterChange($event)"
@@ -141,42 +142,6 @@
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-                            <c-col [xs]="12" lg="2">
-                                <fieldset>
-                                    <h5>
-                                        {{ t('State Types') }}
-                                    </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-primary"
-                                            name="StatehistoryHosts.soft"
-                                            id="StatehistoryHosts.soft"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="state_typesFilter.soft"/>
-
-                                        <label cFormCheckLabel
-                                               for="StatehistoryHosts.soft">{{ t('Soft') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-primary"
-                                            name="StatehistoryHosts.hard"
-                                            id="StatehistoryHosts.hard"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="state_typesFilter.hard"/>
-                                        <label cFormCheckLabel
-                                               for="StatehistoryHosts.hard">{{ t('Hard') }}</label>
-                                    </c-form-check>
-                                </fieldset>
-                            </c-col>
                         </c-row>
                         <c-row class="mt-2">
                             <c-col class="text-end">
@@ -189,81 +154,69 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="!hoststatehistories"></oitc-table-loader>
+                <oitc-table-loader *ngIf="!hostAcknowledgements"></oitc-table-loader>
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       *ngIf="hoststatehistories"
+                       *ngIf="hostAcknowledgements"
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryHosts.state">
+                        <th class="width-50 text-center" scope="col" mat-sort-header="AcknowledgementHosts.state">
                             {{ t('State') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryHosts.state_time">
+                        <th scope="col" mat-sort-header="AcknowledgementHosts.entry_time">
                             {{ t('Date') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryHosts.current_check_attempt">
-                            {{ t('Check attempt') }}
+                        <th scope="col" mat-sort-header="AcknowledgementHosts.author_name">
+                            {{ t('Author') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryHosts.is_hardstate">
-                            {{ t('State type') }}
+                        <th scope="col" mat-sort-header="AcknowledgementHosts.comment_data">
+                            {{ t('Comment') }}
                         </th>
-                        <th scope="col" mat-sort-header="StatehistoryHosts.output">
-                            {{ t('Host output') }}
+                        <th scope="col" mat-sort-header="AcknowledgementHosts.is_sticky">
+                            {{ t('Sticky') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let statehistory of hoststatehistories.all_statehistories">
+                    <tr *ngFor="let acknowledgement of hostAcknowledgements.all_acknowledgements">
                         <td class="text-center">
                             <oitc-hoststatus-simple-icon
-                                [hoststatus]="statehistory.StatehistoryHost.state"
-                                [hardstate]="statehistory.StatehistoryHost.is_hardstate"></oitc-hoststatus-simple-icon>
+                                [hoststatus]="acknowledgement.AcknowledgedHost.state"></oitc-hoststatus-simple-icon>
                         </td>
                         <td>
-                            {{ statehistory.StatehistoryHost.state_time }}
+                            {{ acknowledgement.AcknowledgedHost.entry_time }}
                         </td>
-                        <td class="text-center">
-                            {{ statehistory.StatehistoryHost.current_check_attempt }}/
-                            {{ statehistory.StatehistoryHost.max_check_attempts }}
-                        </td>
-                        <td class="text-center">
-                            <span class="badge text-uppercase"
-                                  [ngClass]="{
-                                    'bg-up': statehistory.StatehistoryHost.state == 0,
-                                    'bg-down': statehistory.StatehistoryHost.state == 1,
-                                    'bg-unreachable': statehistory.StatehistoryHost.state == 2
-                                    }"
-                                  *ngIf="statehistory.StatehistoryHost.is_hardstate">
-                                {{ 'Hard' | transloco }}
-                            </span>
-                            <span class="badge text-uppercase opacity-50"
-                                  [ngClass]="{
-                                    'bg-up': statehistory.StatehistoryHost.state == 0,
-                                    'bg-down': statehistory.StatehistoryHost.state == 1,
-                                    'bg-unreachable': statehistory.StatehistoryHost.state == 2
-                                    }"
-                                  *ngIf="!statehistory.StatehistoryHost.is_hardstate">
-                                {{ 'Soft' | transloco }}
-                            </span>
+                        <td>
+                            {{ acknowledgement.AcknowledgedHost.author_name }}
                         </td>
                         <td>
                             <div class="word-break"
-                                 [innerHTML]="statehistory.StatehistoryHost.outputHtml | trustAsHtml "></div>
+                                 [innerHTML]="acknowledgement.AcknowledgedHost.comment_data | trustAsHtml "></div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-primary"
+                                  *ngIf="acknowledgement.AcknowledgedHost.is_sticky">
+                                {{ 'True' | transloco }}
+                            </span>
+                            <span class="badge bg-secondary"
+                                  *ngIf="!acknowledgement.AcknowledgedHost.is_sticky">
+                                {{ 'False' | transloco }}
+                            </span>
                         </td>
 
                     </tr>
                     </tbody>
                 </table>
                 <oitc-no-records
-                    *ngIf="hoststatehistories && hoststatehistories.all_statehistories.length === 0"></oitc-no-records>
+                    *ngIf="hostAcknowledgements && hostAcknowledgements.all_acknowledgements.length === 0"></oitc-no-records>
                 <c-container fluid class="mb-3 py-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="hoststatehistories"
-                                [paginateOrScroll]="hoststatehistories"></oitc-paginate-or-scroll>
+                                *ngIf="hostAcknowledgements"
+                                [paginateOrScroll]="hostAcknowledgements"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

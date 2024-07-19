@@ -38,6 +38,7 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-timeperiods-edit',
@@ -75,7 +76,8 @@ import { HistoryService } from '../../../history.service';
         NgSelectModule,
         NgOptionHighlightModule,
         DebounceDirective,
-        FormLoaderComponent
+        FormLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './timeperiods-edit.component.html',
     styleUrl: './timeperiods-edit.component.css'

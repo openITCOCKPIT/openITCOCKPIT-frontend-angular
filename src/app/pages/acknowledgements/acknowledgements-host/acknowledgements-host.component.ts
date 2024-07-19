@@ -22,6 +22,11 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import {
+    HostBrowserMenuConfig,
+    HostsBrowserMenuComponent
+} from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
+import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -34,27 +39,19 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    ServiceBrowserMenuConfig,
-    ServicesBrowserMenuComponent
-} from '../../services/services-browser-menu/services-browser-menu.component';
-import {
-    ServicestatusSimpleIconComponent
-} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { getHostStateForApi, HostNotificationsStateFilter } from '../../notifications/notifications.interface';
 import { Subscription } from 'rxjs';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { StatehistoryService } from '../statehistory.service';
+import { AcknowledgementsService } from '../acknowledgements.service';
 import {
-    getDefaultStatehistoryServiceParams,
-    StatehistoriesServiceRoot,
-    StatehistoryServiceParams
-} from '../statehistories.interface';
-import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../notifications/notifications.interface';
+    AcknowledgementsHostParams,
+    AcknowledgementsHostRoot,
+    getDefaultAcknowledgementsHostParams
+} from '../acknowledgement.interface';
 
 @Component({
-    selector: 'oitc-statehistories-service',
+    selector: 'oitc-acknowledgements-host',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -72,6 +69,8 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         FormControlDirective,
         FormDirective,
         FormsModule,
+        HostsBrowserMenuComponent,
+        HoststatusSimpleIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         MatSort,
@@ -91,47 +90,39 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         TrueFalseDirective,
         TrustAsHtmlPipe,
         XsButtonDirective,
-        ServicesBrowserMenuComponent,
-        ServicestatusSimpleIconComponent,
         NgClass
     ],
-    templateUrl: './statehistories-service.component.html',
-    styleUrl: './statehistories-service.component.css'
+    templateUrl: './acknowledgements-host.component.html',
+    styleUrl: './acknowledgements-host.component.css'
 })
-export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
-    private serviceId: number = 0;
-    private StatehistoryService = inject(StatehistoryService)
+export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
+    private hostId: number = 0;
+    private AcknowledgementsService = inject(AcknowledgementsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
-    public params: StatehistoryServiceParams = getDefaultStatehistoryServiceParams();
-    public stateFilter: ServiceNotificationsStateFilter = {
-        ok: false,
-        warning: false,
-        unknown: false,
-        critical: false
+    public params: AcknowledgementsHostParams = getDefaultAcknowledgementsHostParams();
+    public stateFilter: HostNotificationsStateFilter = {
+        recovery: false,
+        down: false,
+        unreachable: false
     };
 
-    public state_typesFilter = {
-        soft: false,
-        hard: false
-    };
-
-    public servicestatehistories?: StatehistoriesServiceRoot;
+    public hostAcknowledgements?: AcknowledgementsHostRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
-    public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+    public hostBrowserConfig?: HostBrowserMenuConfig;
 
     public ngOnInit(): void {
-        this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
-        this.loadServicestatehistories();
+        this.hostId = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadHostacknowledgements();
 
-        // Define the configuration for the ServiceBrowserMenuComponent because we know the serviceId now
-        this.serviceBrowserConfig = {
-            serviceId: this.serviceId,
+        // Define the configuration for the HostBrowserMenuComponent because we know the hostId now
+        this.hostBrowserConfig = {
+            hostId: this.hostId,
             showReschedulingButton: false,
             showBackButton: true
         };
@@ -142,24 +133,15 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public loadServicestatehistories() {
-        this.params['filter[StatehistoryServices.state][]'] = getServiceStateForApi(this.stateFilter);
+    public loadHostacknowledgements() {
+        this.params['filter[AcknowledgementHosts.state][]'] = getHostStateForApi(this.stateFilter);
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        let state_type: string = '';
-        if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
-            state_type = '0';
-            if (this.state_typesFilter.hard) {
-                state_type = '1';
-            }
-        }
-        this.params['filter[StatehistoryServices.state_type]'] = state_type;
 
-
-        this.subscriptions.add(this.StatehistoryService.getStatehistoryService(this.serviceId, this.params)
+        this.subscriptions.add(this.AcknowledgementsService.getAcknowledgementsHost(this.hostId, this.params)
             .subscribe((result) => {
-                this.servicestatehistories = result;
+                this.hostAcknowledgements = result;
             })
         );
     }
@@ -170,30 +152,29 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultStatehistoryServiceParams();
+        this.params = getDefaultAcknowledgementsHostParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.stateFilter = {
-            ok: false,
-            warning: false,
-            unknown: false,
-            critical: false
+            recovery: false,
+            down: false,
+            unreachable: false
         };
-        this.loadServicestatehistories();
+        this.loadHostacknowledgements();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.loadServicestatehistories();
+        this.loadHostacknowledgements();
     }
 
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.params.page = 1;
-        this.loadServicestatehistories();
+        this.loadHostacknowledgements();
     }
 
     // Callback when sort has changed
@@ -201,7 +182,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.loadServicestatehistories();
+            this.loadHostacknowledgements();
         }
     }
 }
