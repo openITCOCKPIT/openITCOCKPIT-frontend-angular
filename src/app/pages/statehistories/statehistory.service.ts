@@ -3,7 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { StatehistoriesHostRoot, StatehistoriesServiceRoot, StatehistoryHostParams } from './statehistories.interface';
+import {
+    StatehistoriesHostRoot,
+    StatehistoriesServiceRoot,
+    StatehistoryHostParams,
+    StatehistoryServiceParams
+} from './statehistories.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +39,7 @@ export class StatehistoryService {
     /**********************
      *   Service action   *
      **********************/
-    public getStatehistoryService(serviceId: number, params: StatehistoryHostParams): Observable<StatehistoriesServiceRoot> {
+    public getStatehistoryService(serviceId: number, params: StatehistoryServiceParams): Observable<StatehistoriesServiceRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<StatehistoriesServiceRoot>(`${proxyPath}/statehistories/service/${serviceId}.json`, {
             params: params as {}
