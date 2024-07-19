@@ -77,7 +77,8 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         from_date: '',
         from_time: '',
         to_date: '',
-        to_time: ''
+        to_time: '',
+        downtimetype_id: 0
     };
 
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
@@ -87,7 +88,6 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
 
     private subscriptions: Subscription = new Subscription();
-    public maintenanceType: number = 1;
     @ViewChild('modal') private modal!: ModalComponent;
 
     hideModal() {
@@ -125,10 +125,9 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
                 const start = result.data.js_start;
                 const end = result.data.js_end;
                 this.items.forEach((element: HostDowntimeItem) => {
-                    element.downtimetype = this.maintenanceType;
+                    element.downtimetype = this.downtimeModal.downtimetype_id;
                     element.start = start;
                     element.end = end;
-                    element.comment = this.downtimeModal.comment;
                 });
                 this.sendCommands();
             }
@@ -151,11 +150,11 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
 
     getDefaults() {
         this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
+            this.downtimeModal.downtimetype_id = downtimeDefaults.downtimetype_id
             this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
             this.downtimeModal.from_time = downtimeDefaults.from_time;
             this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
             this.downtimeModal.to_time = downtimeDefaults.to_time;
-            this.downtimeModal.comment = this.TranslocoService.translate(downtimeDefaults.comment);
         }));
     }
 
