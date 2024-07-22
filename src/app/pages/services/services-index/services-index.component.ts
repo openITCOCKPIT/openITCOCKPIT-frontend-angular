@@ -329,7 +329,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public userFullname: string = '';
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
-
     }
 
 
@@ -337,6 +336,30 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
+        this.route.queryParams.subscribe(params => {
+            console.log(params);
+            let hostId: number = parseInt(params['host_id']);
+            if (hostId) {
+                this.params['filter[Hosts.id]'] = [hostId];
+            }
+            switch (parseInt(params['servicestate'] || -1)) {
+                case 0:
+                    this.filter.Servicestatus.current_state.ok = true;
+                    break;
+                case 1:
+                    this.filter.Servicestatus.current_state.warning = true;
+                    break;
+                case 2:
+                    this.filter.Servicestatus.current_state.critical = true;
+                    break;
+                case 3:
+                    this.filter.Servicestatus.current_state.unknown = true;
+                    break;
+                default:
+                    break;
+            }
+        });
+        this.getFilter(this.filter);
         this.load();
     }
 
