@@ -15,7 +15,7 @@ import {
     DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective,
+    DropdownToggleDirective, FormCheckInputDirective, FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -24,7 +24,7 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent,
+    RowComponent, RowDirective,
     TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -108,6 +108,7 @@ import {
     HostAcknowledgeModalComponent
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -171,7 +172,11 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         SelectAllComponent,
         HostAcknowledgeModalComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        ObjectUuidComponent,
+        RowDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'

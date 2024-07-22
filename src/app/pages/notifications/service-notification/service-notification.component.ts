@@ -54,6 +54,11 @@ import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
+import {
+    ServiceBrowserMenuConfig,
+    ServicesBrowserMenuComponent
+} from '../../services/services-browser-menu/services-browser-menu.component';
 
 @Component({
     selector: 'oitc-service-notification',
@@ -97,7 +102,9 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         ServicestatusSimpleIconComponent,
         ContainerComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        ServicesBrowserMenuComponent,
+        HostsBrowserMenuComponent
     ],
     templateUrl: './service-notification.component.html',
     styleUrl: './service-notification.component.css'
@@ -120,9 +127,18 @@ export class ServiceNotificationComponent implements OnInit, OnDestroy {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
+    public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadNotifications();
+
+        // Define the configuration for the ServiceBrowserMenuComponent because we know the serviceId now
+        this.serviceBrowserConfig = {
+            serviceId: this.serviceId,
+            showReschedulingButton: false,
+            showBackButton: true
+        };
     }
 
     public ngOnDestroy(): void {

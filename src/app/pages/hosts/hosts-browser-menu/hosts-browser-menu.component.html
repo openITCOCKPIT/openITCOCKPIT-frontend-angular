@@ -4,7 +4,7 @@
     <oitc-browser-menu-loader *ngIf="isLoading"></oitc-browser-menu-loader>
 
     <c-row class="mt-3" *ngIf="!isLoading">
-        <c-col xs="12" sm="7" lg="6" *ngIf="data && data?.includeHoststatus">
+        <c-col xs="12" sm="7" lg="7" *ngIf="data && data?.includeHoststatus">
 
             <div class="d-flex">
                 <div>
@@ -14,7 +14,7 @@
                     </oitc-hoststatus-icon>
                 </div>
 
-                <div class="flex-status-header flex-1 h2">
+                <div class="flex-status-header flex-1 h3">
                     <span [ngClass]="hostStatusTextClass">
                         &raquo;{{ data.hostName }}&laquo;
                     </span>
@@ -25,7 +25,7 @@
                 </div>
             </div>
         </c-col>
-        <c-col xs="12" sm="5" lg="6" class="text-end">
+        <c-col xs="12" sm="5" lg="5" class="text-end">
             @if (data) {
                 @if (config.showBackButton && this.PermissionsService.hasPermission(['hosts', 'browser'])) {
                     <button cButton color="primary"

@@ -228,7 +228,7 @@
                                 <c-col [xs]="12" lg="2">
                                     <h5>{{ t('Service status') }}</h5>
                                     <c-form-check class="mb-2">
-                                        <input cFormCheckInput sizing="xl" id="checkstatusok" type="checkbox"
+                                        <input cFormCheckInput id="checkstatusok" type="checkbox"
                                                class="checkbox-lg checkbox-success"
                                                [(ngModel)]="filter.Servicestatus.current_state.ok"
                                                (debouncedValue)="onFilterChange($event)"
@@ -731,7 +731,7 @@
                                             [item]="service"></oitc-item-select>
                                     </td>
                                     <td *ngIf="fields[0]" class="width-50 text-center">
-                                        <oitc-servicestatus-icon [service]="service.Servicestatus"/>
+                                        <oitc-servicestatus-icon [servicestatus]="service.Servicestatus"/>
                                     </td>
                                     <td *ngIf="fields[1]" class="width-50 text-center">
                                         <span *oitcPermission="['services', 'browser']">
