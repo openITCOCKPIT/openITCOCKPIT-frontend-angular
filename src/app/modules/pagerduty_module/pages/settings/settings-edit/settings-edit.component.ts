@@ -7,6 +7,32 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { NgIf } from '@angular/common';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
+} from '@coreui/angular';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { ObjectUuidComponent } from '../../../../../layouts/coreui/object-uuid/object-uuid.component';
+import { PaginatorModule } from 'primeng/paginator';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-settings-edit',
@@ -16,7 +42,33 @@ import { RouterLink } from '@angular/router';
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
-        RouterLink
+        RouterLink,
+        FormLoaderComponent,
+        NgIf,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        ObjectUuidComponent,
+        PaginatorModule,
+        RequiredIconComponent,
+        SelectComponent,
+        XsButtonDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './settings-edit.component.html',
     styleUrl: './settings-edit.component.css'
@@ -24,12 +76,21 @@ import { RouterLink } from '@angular/router';
 export class SettingsEditComponent implements OnInit, OnDestroy {
     private readonly pagerdutySettingsService: PagerdutySettingsService = inject(PagerdutySettingsService);
     private readonly subscriptions: Subscription = new Subscription();
-    protected settings: PagerdutySettings = {} as PagerdutySettings;
+    protected post: PagerdutySettings = {
+        api_key: '',
+        api_url: '',
+        created: '',
+        id: null,
+        integration_key: '',
+        modified: '',
+        two_way: false,
+        use_proxy: false
+    };
 
     public ngOnInit(): void {
         this.subscriptions.add(
             this.pagerdutySettingsService.getPagerdutySettings().subscribe((settings: PagerdutySettings): void => {
-                    this.settings = settings
+                    this.post = settings
                 }
             )
         );
@@ -38,5 +99,13 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    protected updatePagerdutySettings(): void {
+
+    }
+
+    protected openHelpModal(): void {
+
     }
 }

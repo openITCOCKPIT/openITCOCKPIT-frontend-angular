@@ -13,7 +13,7 @@ export interface PagerdutySettings {
     api_key: string
     api_url: string
     created: string
-    id: number
+    id: number | null
     integration_key: string
     modified: string
     two_way: boolean

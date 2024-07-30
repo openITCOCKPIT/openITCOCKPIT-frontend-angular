@@ -27,5 +27,127 @@
                 </li>
             </ol>
         </nav>
+
+
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
+
+        <form cForm (ngSubmit)="updatePagerdutySettings()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit PagerDuty Settings') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.api_key"
+                               id="post.api_key"
+                               [(ngModel)]="post.api_key"/>
+                        <div class="help-block">
+                            {{ t('The API Key you got from PagerDuty') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.api_key">
+                            {{ t('Integration Key') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.integration_key"
+                               id="post.integration_key"
+                               [(ngModel)]="post.integration_key"/>
+                        <div class="help-block">
+                            {{ t('The Integration Key you got from PagerDuty after you created the Service') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.api_url">
+                            {{ t('API URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.api_url"
+                               id="post.api_url"
+                               [(ngModel)]="post.api_url"/>
+                        <div class="help-block">
+                            {{ t('API URL of the PagerDuty service.') }}
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.two_way"
+                                   id="post.two_way"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [(ngModel)]="post.two_way"/>
+                            <label cFormCheckLabel for="post.two_way">
+                                {{ t('Enable Two-Way Integration') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block">
+                        </div>
+                        <div class="help-block">
+                            {{ t('Via the Two-Way Integration PagerDuty is able, to acknowledge host and service problems.') }}
+                            <br/>
+                            {{ t('For this it is required, that your openITCOCKPIT Server is accessible from the Internet.') }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.webhook_url">
+                            {{ t('Webhook URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.webhook_url"
+                               id="post.webhook_url"
+                               value="https://%s/pagerduty_module/acknowledge/submit.json?apikey=%s"
+                        />
+                        <span class="help-block">
+                            {{ t('Webhook URL for PagerDuty. You need to create an openITCOCKPIT user defined API key first.') }}
+                            <a (click)="openHelpModal()">
+                                {{ t('Click here for help') }}
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.use_proxy"
+                                   id="post.use_proxy"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [(ngModel)]="post.use_proxy"/>
+                            <label cFormCheckLabel for="post.use_proxy">
+                                {{ t('Use Proxy Server') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block" *oitcPermission="['proxy', 'index'];negate:true">
+                            {{ t('Determine if the configured proxy should be used.') }}
+                        </div>
+                        <div class="help-block" *oitcPermission="['proxy', 'index']">
+                            LINK: {{ t('Determine if the configured proxy should be used.') }}
+                        </div>
+                    </div>
+
+                </c-card-body>
+
+            </c-card>
+        </form>
+
+
     </ng-container>
 </oitc-coreui>
