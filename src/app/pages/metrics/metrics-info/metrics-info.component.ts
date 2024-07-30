@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -15,10 +15,13 @@ import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MetricsService } from '../metrics.service';
+import { MetricsInfoResponse } from '../metrics.interface';
 
 @Component({
-  selector: 'oitc-metrics-info',
-  standalone: true,
+    selector: 'oitc-metrics-info',
+    standalone: true,
     imports: [
         CoreuiComponent,
         FaIconComponent,
@@ -43,10 +46,26 @@ import { RouterLink } from '@angular/router';
         AlertHeadingDirective,
         RouterLink
     ],
-  templateUrl: './metrics-info.component.html',
-  styleUrl: './metrics-info.component.css'
+    templateUrl: './metrics-info.component.html',
+    styleUrl: './metrics-info.component.css'
 })
-export class MetricsInfoComponent {
-    public hostname: string = 'wurstfachverkäuferin.dockland.xyz';
-    public metrics: string = 'metrics';
+export class MetricsInfoComponent implements OnInit, OnDestroy {
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly metricsService: MetricsService = inject(MetricsService);
+
+    protected hostname: string = '';
+    protected metrics: string = '';
+    protected serverAddress: string = '';
+
+    public ngOnInit() {
+        this.subscriptions.add(this.metricsService.getInfo().subscribe((data: MetricsInfoResponse): void => {
+            this.hostname = data.systemname;
+            this.metrics = data.metrics;
+            this.serverAddress = data.serverAddress;
+        }));
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
 }

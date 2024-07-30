@@ -32,7 +32,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <div class="alert alert-primary">
+                        <div class="alert alert-info">
                             <fa-icon [icon]="['fas', 'info-circle']" class="fa-lg"></fa-icon>
                             {{ t('This Prometheus Exporter can be used to monitor internal metrics of {0} with a second instance of {1} or with Prometheus.') }}
                         </div>
@@ -54,7 +54,7 @@
 
                         <dt class="col-xs-12 col-sm-1">{{t('Full path')}}</dt>
                         <dd class="col-xs-12 col-sm-11 help-text">
-                            {{t('https://{1}/metrics?apikey=YOUR_API_KEY_HERE', [hostname])}}
+                            https://{{serverAddress}}/metrics?apikey=YOUR_API_KEY_HERE
                         </dd>
 
                         <dt class="col-xs-12 col-sm-1">{{t('Additional config')}}</dt>
