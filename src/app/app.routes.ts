@@ -121,11 +121,20 @@ const coreRoutes: Routes = [{
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
 }, {
-    path: 'servicegroups/index',
-    loadComponent: () => import('./pages/servicegroups/servicegroups-index/servicegroups-index.component').then(m => m.ServicegroupsIndexComponent)
+    path: 'servicegroups/add',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-add/servicegroups-add.component').then(m => m.ServicegroupsAddComponent)
+}, {
+    path: 'servicegroups/copy/:ids',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-copy/servicegroups-copy.component').then(m => m.ServicegroupsCopyComponent)
 }, {
     path: 'servicegroups/edit/:id',
     loadComponent: () => import('./pages/servicegroups/servicegroups-edit/servicegroups-edit.component').then(m => m.ServicegroupsEditComponent)
+}, {
+    path: 'servicegroups/extended/:id',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-extended/servicegroups-extended.component').then(m => m.ServicegroupsExtendedComponent)
+}, {
+    path: 'servicegroups/index',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-index/servicegroups-index.component').then(m => m.ServicegroupsIndexComponent)
 }, {
     path: 'services/add',
     loadComponent: () => import('./pages/services/services-add/services-add.component').then(m => m.ServicesAddComponent)

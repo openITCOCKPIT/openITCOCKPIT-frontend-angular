@@ -3,7 +3,6 @@ import { catchError, map, Observable, of } from "rxjs";
 import {
     AddServicegroupsPost,
     Servicegroup,
-    ServicegroupExtendedRoot,
     ServicegroupsCopyGet,
     ServicegroupsCopyGetServicegroup,
     ServicegroupsCopyPostResult,
@@ -17,7 +16,8 @@ import {
     LoadServicesRequest,
     LoadServicesResponse,
     LoadServicetemplates,
-    LoadServicesForServices
+    LoadServicesForServices,
+    ServiceGroupExtendedRoot
 } from "./servicegroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
@@ -199,26 +199,12 @@ export class ServicegroupsService {
         );
     }
 
-    public loadServicegroupWithServicesById(id: number, params: ServicegroupsExtendedParams): Observable<ServicegroupExtendedRoot> {
+    public loadServicegroupWithServicesById(id: number, params: ServicegroupsExtendedParams): Observable<ServiceGroupExtendedRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<ServicegroupExtendedRoot>(`${proxyPath}/servicegroups/loadServicegroupWithServicesById/${id}.json`, {
+        return this.http.get<ServiceGroupExtendedRoot>(`${proxyPath}/servicegroups/loadServicegroupWithServicesById/${id}.json`, {
             params: params as {}
         }).pipe(
-            map((data: ServicegroupExtendedRoot) => {
-                return data;
-            })
-        )
-    }
-
-    public loadAdditionalInformation(id: number): Observable<any> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/servicegroups/loadAdditionalInformation/.json`, {
-            params: {
-                angular: true,
-                id: id
-            }
-        }).pipe(
-            map((data: any) => {
+            map((data: ServiceGroupExtendedRoot) => {
                 return data;
             })
         )

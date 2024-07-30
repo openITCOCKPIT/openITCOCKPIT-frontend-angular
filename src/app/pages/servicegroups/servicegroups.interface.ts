@@ -226,74 +226,129 @@ export interface ServicegroupsLoadServicegroupsByStringParams {
     'selected[]'?: number[]
 }
 // EXTENDED VIEW
-export interface ServicegroupExtendedRoot extends PaginateOrScroll {
-    servicegroup: ServicegroupExtended
+export interface ServiceGroupExtendedRoot extends PaginateOrScroll {
+    servicegroup: {
+        Servicegroup: Servicegroup
+        Services: Service[]
+        StatusSummary: StatusSummary
+    }
     username: string
     _csrfToken: string
 }
 
-export interface ServicegroupExtended {
-    Servicegroup: {
-        id: number
-        uuid: string
-        container_id: number
-        description: string
-        servicegroup_url: string
-        container: {
-            id: number
-            containertype_id: number
-            name: string
-            parent_id: number
-            lft: number
-            rght: number
-        }
-        allow_edit: boolean
-    }
-    Services: ServiceGroupExtendedService[]
-    StatusSummary: {
-        up: number
-        down: any
-        unreachable: any
-    }
-}
 
-export interface ServiceGroupExtendedService {
+export interface Service {
     Service: {
         id: number
         uuid: string
         servicename: string
-        address: string
-        description: string
-        servicetemplate_id: number
+        hostname: string
+        description: any
         active_checks_enabled: boolean
+        tags: any
+        host_id: number
+        allow_edit: boolean
+        disabled: boolean
+        serviceType: number
+        priority: number
+        has_graph: boolean
+    }
+    Host:  {
+        id: number
+        uuid: string
+        hostname: string
+        address: string
+        description: any
+        hosttemplate_id: any
+        active_checks_enabled: any
         satelliteId: number
-        containerId: number
-        containerIds: number[]
-        tags: string
+        containerId: any
+        containerIds: any
+        tags: any
         usageFlag: any
         allow_edit: boolean
         disabled: boolean
-        priority: number
-        notes: string
-        is_satellite_service: boolean
+        priority: any
+        notes: any
+        is_satellite_host: boolean
         name: string
     }
-
-    ServicestatusSummary: {
-        state: {
-            ok: number
-            warning: number
-            critical: number
-            unknown: number
-        }
-        total: number
-        cumulatedState: number
-    },
-    services: ServicesList[] | undefined,
-    servicesRoot: LoadServicesForServices | undefined,
-    serviceParams: ServicegroupsExtendedServiceListParams,
+    Hoststatus: {
+        currentState: number
+        isFlapping: any
+        problemHasBeenAcknowledged: boolean
+        scheduledDowntimeDepth: number
+        lastCheck: string
+        nextCheck: string
+        activeChecksEnabled: any
+        lastHardState: any
+        lastHardStateChange: string
+        last_state_change: string
+        output: any
+        long_output: any
+        acknowledgement_type: any
+        state_type: any
+        flap_detection_enabled: any
+        notifications_enabled: any
+        current_check_attempt: any
+        max_check_attempts: any
+        latency: any
+        last_time_up: string
+        lastHardStateChangeInWords: string
+        last_state_change_in_words: string
+        lastCheckInWords: string
+        nextCheckInWords: string
+        isHardstate: boolean
+        isInMonitoring: boolean
+        humanState: string
+        cssClass: string
+        textClass: string
+        outputHtml: string
+    }
+    Servicestatus: {
+        currentState: number
+        lastHardState: any
+        isFlapping: boolean
+        problemHasBeenAcknowledged: boolean
+        scheduledDowntimeDepth: number
+        lastCheck: string
+        nextCheck: string
+        activeChecksEnabled: number
+        lastHardStateChange: string
+        last_state_change: string
+        processPerformanceData: any
+        state_type: number
+        acknowledgement_type: number
+        flap_detection_enabled: any
+        notifications_enabled: boolean
+        current_check_attempt: any
+        output: string
+        long_output: any
+        perfdata: string
+        latency: any
+        max_check_attempts: any
+        last_time_ok: string
+        lastHardStateChangeInWords: string
+        last_state_change_in_words: string
+        lastCheckInWords: string
+        nextCheckInWords: string
+        isHardstate: boolean
+        isInMonitoring: boolean
+        humanState: string
+        cssClass: string
+        textClass: string
+        outputHtml: string
+    }
 }
 
+
+
+export interface StatusSummary {
+    ok: number
+    warning: any
+    critical: any
+    unknown: any
+}
 
 
 // LOAD SERVICES FOR SERVICES
