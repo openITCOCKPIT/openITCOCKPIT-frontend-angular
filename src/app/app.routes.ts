@@ -118,6 +118,9 @@ const coreRoutes: Routes = [{
     path: 'hostgroups/index',
     loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
 }, {
+    path: 'metrics/info',
+    loadComponent: () => import('./pages/metrics/metrics-info/metrics-info.component').then(m => m.MetricsInfoComponent)
+}, {
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
 }, {
