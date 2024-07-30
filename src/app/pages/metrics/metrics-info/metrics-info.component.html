@@ -3,7 +3,7 @@
         <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
+                    <a>
                         <fa-icon [icon]="['fas', 'home']"></fa-icon>
                         {{ t('Home') }}
                     </a></li>
@@ -40,24 +40,24 @@
                 </div>
 
                 <div class="col-xs-12 margin-top-10">
-                    <h4>{{t('How to use')}}</h4>
+                    <h4>{{ t('How to use') }}</h4>
                 </div>
                 <div class="col-xs-12">
-                    {{t('This exporter can be scraped by any Prometheus compatible client.')}}
+                    {{ t('This exporter can be scraped by any Prometheus compatible client.') }}
 
                     <dl class="row">
-                        <dt class="col-xs-12 col-sm-1">{{t('Port')}}</dt>
+                        <dt class="col-xs-12 col-sm-1">{{ t('Port') }}</dt>
                         <dd class="col-xs-12 col-sm-11">443</dd>
 
-                        <dt class="col-xs-12 col-sm-1">{{t('Metric path')}}</dt>
+                        <dt class="col-xs-12 col-sm-1">{{ t('Metric path') }}</dt>
                         <dd class="col-xs-12 col-sm-11">/metrics</dd>
 
-                        <dt class="col-xs-12 col-sm-1">{{t('Full path')}}</dt>
+                        <dt class="col-xs-12 col-sm-1">{{ t('Full path') }}</dt>
                         <dd class="col-xs-12 col-sm-11 help-text">
-                            https://{{serverAddress}}/metrics?apikey=YOUR_API_KEY_HERE
+                            https://{{ serverAddress }}/metrics?apikey=YOUR_API_KEY_HERE
                         </dd>
 
-                        <dt class="col-xs-12 col-sm-1">{{t('Additional config')}}</dt>
+                        <dt class="col-xs-12 col-sm-1">{{ t('Additional config') }}</dt>
                         <dd class="col-xs-12 col-sm-11">
 <pre>
 params:
@@ -73,24 +73,21 @@ tls_config:
 
 
                 <div class="col-xs-12 margin-top-10">
-                    <h4>{{t('Available metrics')}}</h4>
+                    <h4>{{ t('Available metrics') }}</h4>
                 </div>
                 <div class="col-xs-12">
-                    {{t('This list shows all metrics that are exported.')}}
+                    {{ t('This list shows all metrics that are exported.') }}
                 </div>
 
                 <div class="col-xs-12">
                     <div class="form-group">
                             <textarea class="form-control" rows="15"
-                                      readonly>{{metrics}}</textarea>
+                                      readonly>{{ metrics }}</textarea>
                     </div>
                 </div>
 
 
             </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
         </c-card>
     </ng-container>
 </oitc-coreui>
