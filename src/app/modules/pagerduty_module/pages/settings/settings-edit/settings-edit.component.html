@@ -1,0 +1,31 @@
+<oitc-coreui>
+
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a>
+                        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                        {{ t('PagerDuty Module') }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/', 'pagerduty_module', 'settings', 'edit']"
+                       *oitcPermission="['pagerdutymodule', 'settings', 'edit']">
+                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                        {{ t('PagerDuty Settings') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Settings') }}
+                </li>
+            </ol>
+        </nav>
+    </ng-container>
+</oitc-coreui>
