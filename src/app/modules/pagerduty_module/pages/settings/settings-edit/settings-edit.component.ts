@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { PagerdutySettingsService } from '../PagerdutySettings.service';
 import { Subscription } from 'rxjs';
-import { PagerdutySettings, PagerdutySettingsPostResponse } from '../PagerdutySettings.interface';
+import { PagerdutySettings } from '../PagerdutySettings.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -35,7 +35,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
@@ -109,17 +109,16 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
 
     protected updatePagerdutySettings(): void {
         this.subscriptions.add(
-            this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: PagerdutySettingsPostResponse): void => {
+            this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: GenericResponseWrapper): void => {
+                console.log(result);
+                if (result.success) {
+                    this.errors = null;
+                    this.post = result.data as PagerdutySettings;
+                    this.notyService.genericSuccess();
+                    return;
+                }
 
-                    this.post = result.settings;
-                    console.log(result);
-
-                    if (typeof (result.errors) === 'undefined') {
-                        this.notyService.genericSuccess();
-                        return;
-                    }
-
-                    this.errors = result.errors as GenericValidationError;
+                this.errors = result.data as GenericValidationError;
                     this.notyService.genericError();
                 }
             )

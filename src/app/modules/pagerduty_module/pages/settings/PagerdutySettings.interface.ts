@@ -13,7 +13,7 @@ export interface PagerdutySettingsPost {
 
 export interface PagerdutySettingsPostResponse {
     settings: PagerdutySettings
-    errors: GenericValidationError | null
+    error: GenericValidationError | null
 }
 
 export interface PagerdutySettings {
