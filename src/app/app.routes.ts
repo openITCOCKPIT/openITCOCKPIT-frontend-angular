@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
 import { distributeModuleRoutes } from './modules/distribute_module/distribute_module.routes';
+import { msteamsModuleRoutes } from './modules/msteams_module/msteams_module.routes';
 import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes';
 import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
 
@@ -33,6 +34,7 @@ class LegacyUrlComponent {
 const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
     ...distributeModuleRoutes,
+    ...msteamsModuleRoutes,
     ...nagiosModuleRoutes,
     ...pagerdutyModuleRoutes
 ];
@@ -119,6 +121,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'hostgroups/index',
     loadComponent: () => import('./pages/hostgroups/hostgroups-index/hostgroups-index.component').then(m => m.HostgroupsIndexComponent)
+}, {
+    path: 'metrics/info',
+    loadComponent: () => import('./pages/metrics/metrics-info/metrics-info.component').then(m => m.MetricsInfoComponent)
 }, {
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
