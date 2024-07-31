@@ -127,8 +127,4 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
             )
         );
     }
-
-    protected openHelpModal(): void {
-
-    }
 }
