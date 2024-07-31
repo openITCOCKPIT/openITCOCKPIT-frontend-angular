@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { PagerdutySettingsService } from '../PagerdutySettings.service';
 import { Subscription } from 'rxjs';
-import { PagerdutySettings } from '../PagerdutySettings.interface';
+import { PagerdutySettings, PagerdutySettingsPostResponse } from '../PagerdutySettings.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -16,7 +16,9 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -33,6 +35,8 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { GenericValidationError } from '../../../../../generic-responses';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-settings-edit',
@@ -76,6 +80,8 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 export class SettingsEditComponent implements OnInit, OnDestroy {
     private readonly pagerdutySettingsService: PagerdutySettingsService = inject(PagerdutySettingsService);
     private readonly subscriptions: Subscription = new Subscription();
+    protected errors: GenericValidationError | null = null;
+    private readonly notyService: NotyService = inject(NotyService);
     protected post: PagerdutySettings = {
         api_key: '',
         api_url: '',
@@ -102,7 +108,22 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
     }
 
     protected updatePagerdutySettings(): void {
+        this.subscriptions.add(
+            this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: PagerdutySettingsPostResponse): void => {
 
+                    this.post = result.settings;
+                    console.log(result);
+
+                    if (typeof (result.errors) === 'undefined') {
+                        this.notyService.genericSuccess();
+                        return;
+                    }
+
+                    this.errors = result.errors as GenericValidationError;
+                    this.notyService.genericError();
+                }
+            )
+        );
     }
 
     protected openHelpModal(): void {

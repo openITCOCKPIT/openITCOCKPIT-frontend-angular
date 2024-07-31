@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { PagerdutySettings, PagerdutySettingsGet } from './PagerdutySettings.interface';
+import { PagerdutySettings, PagerdutySettingsGet, PagerdutySettingsPostResponse } from './PagerdutySettings.interface';
 import { map, Observable } from 'rxjs';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -25,15 +24,16 @@ export class PagerdutySettingsService {
         );
     }
 
-    setPagerdutySettings(settings: PagerdutySettings): Observable<PagerdutySettings> {
+    setPagerdutySettings(settings: PagerdutySettings): Observable<PagerdutySettingsPostResponse> {
         const proxyPath: string = this.proxyPath;
-        return this.http.post<PagerdutySettings>(`${proxyPath}/pagerduty_module/settings/edit.json`, {
+        return this.http.post<PagerdutySettingsPostResponse>(`${proxyPath}/pagerduty_module/settings/edit.json?angular=true`, {
             PagerdutySettings: settings
         }).pipe(
-            map((data: PagerdutySettings) => {
+            map((data: PagerdutySettingsPostResponse) => {
                 return data;
             })
         );
+
     }
 
 }

@@ -49,7 +49,9 @@
                         <input cFormControl
                                name="post.api_key"
                                id="post.api_key"
-                               [(ngModel)]="post.api_key"/>
+                               [(ngModel)]="post.api_key"
+                               oitcFormError [errors]="errors" errorField="api_key"/>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                         <div class="help-block">
                             {{ t('The API Key you got from PagerDuty') }}
                         </div>
@@ -63,7 +65,9 @@
                         <input cFormControl
                                name="post.integration_key"
                                id="post.integration_key"
-                               [(ngModel)]="post.integration_key"/>
+                               [(ngModel)]="post.integration_key"
+                               oitcFormError [errors]="errors" errorField="integration_key"/>
+                        <oitc-form-feedback [errors]="errors" errorField="integration_key"></oitc-form-feedback>
                         <div class="help-block">
                             {{ t('The Integration Key you got from PagerDuty after you created the Service') }}
                         </div>
@@ -77,7 +81,9 @@
                         <input cFormControl
                                name="post.api_url"
                                id="post.api_url"
-                               [(ngModel)]="post.api_url"/>
+                               [(ngModel)]="post.api_url"
+                               oitcFormError [errors]="errors" errorField="api_url"/>
+                        <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
                         <div class="help-block">
                             {{ t('API URL of the PagerDuty service.') }}
                         </div>
@@ -91,7 +97,9 @@
                                    id="post.two_way"
                                    type="checkbox"
                                    trueFalseValue
-                                   [(ngModel)]="post.two_way"/>
+                                   [(ngModel)]="post.two_way"
+                                   oitcFormError [errors]="errors" errorField="two_way"/>
+                            <oitc-form-feedback [errors]="errors" errorField="two_way"></oitc-form-feedback>
                             <label cFormCheckLabel for="post.two_way">
                                 {{ t('Enable Two-Way Integration') }}
                             </label>
@@ -114,6 +122,7 @@
                                name="post.webhook_url"
                                id="post.webhook_url"
                                value="https://%s/pagerduty_module/acknowledge/submit.json?apikey=%s"
+                               disabled
                         />
                         <span class="help-block">
                             {{ t('Webhook URL for PagerDuty. You need to create an openITCOCKPIT user defined API key first.') }}
@@ -130,7 +139,9 @@
                                    id="post.use_proxy"
                                    type="checkbox"
                                    trueFalseValue
-                                   [(ngModel)]="post.use_proxy"/>
+                                   [(ngModel)]="post.use_proxy"
+                                   oitcFormError [errors]="errors" errorField="use_proxy"/>
+                            <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
                             <label cFormCheckLabel for="post.use_proxy">
                                 {{ t('Use Proxy Server') }}
                             </label>
@@ -144,6 +155,12 @@
                     </div>
 
                 </c-card-body>
+
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                </c-card-footer>
 
             </c-card>
         </form>

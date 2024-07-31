@@ -1,3 +1,5 @@
+import { GenericValidationError } from '../../../../generic-responses';
+
 export interface PagerdutySettingsGet {
     settings: {
         PagerdutySettings: PagerdutySettings
@@ -7,6 +9,11 @@ export interface PagerdutySettingsGet {
 
 export interface PagerdutySettingsPost {
     PagerdutySettings: PagerdutySettings
+}
+
+export interface PagerdutySettingsPostResponse {
+    settings: PagerdutySettings
+    errors: GenericValidationError | null
 }
 
 export interface PagerdutySettings {
