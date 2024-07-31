@@ -1,3 +1,6 @@
 {
-    "Start Page": ""
+    "Start Page": "",
+    "{0} metrics": "{{hostname}} metrics",
+    "Prometheus metrics export of {0} internal metrics" : "Prometheus metrics export of {{hostname}} internal metrics",
+    "This Prometheus Exporter can be used to monitor internal metrics of {0} with a second instance of {1} or with Prometheus.": "This Prometheus Exporter can be used to monitor internal metrics of {{hostname}} with a second instance of {{hostname}} or with Prometheus."
 }
