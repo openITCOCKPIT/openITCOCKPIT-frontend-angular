@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
 import { distributeModuleRoutes } from './modules/distribute_module/distribute_module.routes';
+import { msteamsModuleRoutes } from './modules/msteams_module/msteams_module.routes';
 import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes';
 
 @Component({
@@ -32,6 +33,7 @@ class LegacyUrlComponent {
 const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
     ...distributeModuleRoutes,
+    ...msteamsModuleRoutes,
     ...nagiosModuleRoutes
 ];
 /***    Core routes   ***/
