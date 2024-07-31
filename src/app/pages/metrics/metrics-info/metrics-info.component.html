@@ -10,12 +10,12 @@
                 <li class="breadcrumb-item">
                     <a>
                         <fa-icon [icon]="['fas', 'line-chart']"></fa-icon>
-                        {{ t('{0} Metrics', [hostname]) }}
+                        {{ t('{0} metrics', {hostname: hostname}) }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    {{ t('info') }}
+                    {{ t('Info') }}
                 </li>
             </ol>
         </nav>
@@ -24,7 +24,7 @@
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
-                    {{ t('Prometheus metrics export of {0} internal metrics', [hostname]) }}
+                    {{ t('Prometheus metrics export of {0} internal metrics', {hostname: hostname}) }}
                 </h5>
             </c-card-header>
             <c-card-body>
@@ -34,7 +34,7 @@
                     <div class="col-12">
                         <div class="alert alert-info">
                             <fa-icon [icon]="['fas', 'info-circle']" class="fa-lg"></fa-icon>
-                            {{ t('This Prometheus Exporter can be used to monitor internal metrics of {0} with a second instance of {1} or with Prometheus.') }}
+                            {{ t('This Prometheus Exporter can be used to monitor internal metrics of {0} with a second instance of {1} or with Prometheus.', {hostname: hostname}) }}
                         </div>
                     </div>
                 </div>
