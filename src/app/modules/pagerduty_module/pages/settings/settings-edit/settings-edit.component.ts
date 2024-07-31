@@ -21,7 +21,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
+    FormLabelDirective, ModalComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -37,6 +37,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 
 @Component({
     selector: 'oitc-settings-edit',
@@ -72,7 +73,9 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        ModalComponent,
+        ApikeyDocModalComponent
     ],
     templateUrl: './settings-edit.component.html',
     styleUrl: './settings-edit.component.css'
