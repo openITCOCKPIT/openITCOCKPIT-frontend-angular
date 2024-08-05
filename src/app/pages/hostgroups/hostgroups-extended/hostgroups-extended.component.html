@@ -266,16 +266,18 @@
                                     [cumulatedState]="host.ServicestatusSummary.cumulatedState"/>
                             </td>
                             <td class="text-center">
-                                <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Normal"
-                                    [icon]="['far', 'user']"
-                                    [title]="'Acknowledgement' | transloco"
-                                ></fa-icon>
-                                <fa-icon
-                                    *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Sticky"
-                                    [icon]="['fas', 'user']"
-                                    [title]="'Sticky Acknowledgement' | transloco"
-                                ></fa-icon>
+                                <ng-container *ngIf="host.Hoststatus.problemHasBeenAcknowledged">
+                                    <fa-icon
+                                        *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                        [icon]="['far', 'user']"
+                                        [title]="'Acknowledgement' | transloco"
+                                    ></fa-icon>
+                                    <fa-icon
+                                        *ngIf="host.Hoststatus.acknowledgement_type === AcknowledgementTypes.Sticky"
+                                        [icon]="['fas', 'user']"
+                                        [title]="'Sticky Acknowledgement' | transloco"
+                                    ></fa-icon>
+                                </ng-container>
                             </td>
                             <td class="text-center">
                                 <fa-icon
@@ -301,7 +303,14 @@
                             </td>
                             <td>{{ host.Hoststatus.lastHardStateChange }}</td>
                             <td>{{ host.Hoststatus.lastCheck }}</td>
-                            <td>{{ host.Hoststatus.nextCheck }}</td>
+                            <td>
+                                <span *ngIf="host.Hoststatus.activeChecksEnabled && host.Host.is_satellite_host === false">
+                                    {{ host.Hoststatus.nextCheck }}
+                                </span>
+                                <span *ngIf="host.Hoststatus.activeChecksEnabled === false || host.Host.is_satellite_host === true">
+                                    n/a
+                                </span>
+                            </td>
                             <td>
                                 <div class="btn-group btn-group-justified w-100" role="group">
                                     <a class="btn btn-success state-button-small"
@@ -505,16 +514,18 @@
                                                                 [timezone]="timezone"></oitc-popover-graph>
                                         </td>
                                         <td class="text-center">
-                                            <fa-icon
-                                                *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal"
-                                                [icon]="['far', 'user']"
-                                                [title]="'Acknowledgement' | transloco"
-                                            ></fa-icon>
-                                            <fa-icon
-                                                *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky"
-                                                [icon]="['fas', 'user']"
-                                                [title]="'Sticky Acknowledgement' | transloco"
-                                            ></fa-icon>
+                                            <ng-container *ngIf="service.Servicestatus.problemHasBeenAcknowledged">
+                                                <fa-icon
+                                                    *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal"
+                                                    [icon]="['far', 'user']"
+                                                    [title]="'Acknowledgement' | transloco"
+                                                ></fa-icon>
+                                                <fa-icon
+                                                    *ngIf="service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky"
+                                                    [icon]="['fas', 'user']"
+                                                    [title]="'Sticky Acknowledgement' | transloco"
+                                                ></fa-icon>
+                                            </ng-container>
                                         </td>
                                         <td class="text-center">
                                             <fa-icon
