@@ -6,6 +6,7 @@ import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_modul
 import { distributeModuleRoutes } from './modules/distribute_module/distribute_module.routes';
 import { msteamsModuleRoutes } from './modules/msteams_module/msteams_module.routes';
 import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes';
+import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -34,7 +35,8 @@ const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
-    ...nagiosModuleRoutes
+    ...nagiosModuleRoutes,
+    ...pagerdutyModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
