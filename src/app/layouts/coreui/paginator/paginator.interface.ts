@@ -14,6 +14,14 @@ export interface Scroll {
     hasNextPage: boolean  // Is there a next page
 }
 
+export interface PaginatedRequest {
+    angular: boolean
+    direction: string
+    page: number
+    scroll: boolean
+    sort: string
+}
+
 export interface Paging {
     page: number        // Current page
     current: number     // Current amount of items

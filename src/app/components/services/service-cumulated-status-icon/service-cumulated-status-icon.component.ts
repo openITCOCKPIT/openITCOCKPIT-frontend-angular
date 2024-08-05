@@ -17,18 +17,20 @@ export class ServiceCumulatedStatusIconComponent implements OnInit {
 
     public ngOnInit(): void {
         switch (this.cumulatedState) {
-            case 0:
+            case 0:  //OK
                 this.iconColor = 'text-success';
                 break;
-            case 1:
+            case 1:  //WARNING
                 this.iconColor = 'text-warning';
                 break;
-            case 2:
+            case 2:  //CRITICAL
                 this.iconColor = 'text-danger';
                 break;
-            case 3:
-            default:
+            case 3:  //UNKNOWN
                 this.iconColor = 'text-muted';
+                break;
+            default: //NOT IN MONITORING
+                this.iconColor = 'text-primary';
                 break;
         }
     }
