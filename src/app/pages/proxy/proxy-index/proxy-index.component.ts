@@ -17,7 +17,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective
+    FormLabelDirective, ModalComponent, ModalHeaderComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { ProxyPost } from '../proxy.interface';
@@ -60,7 +60,9 @@ import { ProxyService } from '../proxy.service';
         FormCheckLabelDirective,
         BackButtonDirective,
         CardFooterComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        ModalComponent,
+        ModalHeaderComponent
     ],
     templateUrl: './proxy-index.component.html',
     styleUrl: './proxy-index.component.css'

@@ -1,0 +1,361 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['packetmanager', 'index']" [routerLink]="['/', 'packetmanager', 'index']">
+                        <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                        {{ t('Package manager') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+
+
+        <ng-container *ngIf="data.result.data.isContainer">
+            <c-alert color="primary">
+                <span class="icon-stack icon-stack-md">
+                    <i class="base-7 icon-stack-3x color-info-600"></i>
+                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                </span>
+                {{ t('Containerized installation') }}
+                <br>
+                {{ t('Your installation of {0} is running in a container based environment like Docker.', {systemname: data.result.data.systemname}) }}
+                {{ t('Therefore all available module are installed by default.') }}
+
+            </c-alert>
+        </ng-container>
+
+        <ng-container *ngIf="!data.result.data.isContainer">
+            t $this->element('repository_checker')
+        </ng-container>
+
+
+        <!-- alerts -->
+        <c-alert *ngIf="!data.result.data.isContainer && data.result.data.codename === 'bionic'">
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Ubuntu Bionic 18.04 is end of life soon!') }}
+            </h4>
+            {{ t('Official end of life of Ubuntu Bionic scheduled for April 2023.') }}
+            {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Ubuntu Bionic. Please update to Ubuntu Focal to receive further updates.') }}
+            <br/>
+            {{ t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {}) }}
+
+        </c-alert>
+
+
+        <c-alert *ngIf="!data.result.data.isContainer && data.result.data.codename === 'buster'">
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Debian Buster 10 end of life!') }}
+            </h4>
+            {{ t('Debian Buster is not supported by the Debian security team anymore!') }}
+            {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Debian Buster. Please update to Debian Bullseye to receive further updates.') }}
+            <br/>
+            {{ t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {}) }}
+
+        </c-alert>
+
+        <!--- da list -->
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Packagemanager') }}
+                </h5>
+            </c-card-header>
+            <c-card-body>
+                <c-row [lg]="3">
+
+                    <!-- update available -->
+                    <c-col *ngIf="data.result.data.newVersion && data.result.data.changelog.length > 0">
+                        <c-card>
+                            <c-card-header>
+                                <c-container>
+                                    <c-row class="row align-items-center">
+                                        <c-col>
+                                            <h4>
+                                                🥳
+                                                {{ t('New version available!') }}
+                                            </h4>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col>
+                                            {{ data.result.data.changelog[0].Changelog.version }}
+                                        </c-col>
+                                    </c-row>
+                                </c-container>
+                            </c-card-header>
+                            <c-card-body>
+                                {{ t('Please update your {0} installation to the latest version to get new features and latest security fixes.', {systemname: data.result.data.systemname}) }}
+
+
+                                <div class="float-right">
+
+                                    <a href="https://openitcockpit.io/2018/01/02/how-to-update-openitcockpit/"
+                                       target="_blank"
+                                       class="btn btn-success">
+                                        <span class="btn-label">
+                                            <i class="fa fa-rocket"></i>
+                                        </span>
+                                        {{ t('How to Update') }}
+                                    </a>
+
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-default"
+                                       data-toggle="modal"
+                                       data-target="#changelogModal">
+                                        <span class="btn-label">
+                                            <i class="fas fa-code-fork"></i>
+                                        </span>
+                                        {{ t('Changelog') }}
+                                    </a>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+
+
+                    <!-- packages -->
+                    <ng-container *ngIf="data.result">
+                        <c-col *ngFor="let module of data.result.data.modules">
+                            <c-card>
+                                <c-card-header
+                                        [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
+                                >
+                                    <c-container>
+                                        <c-row class="row align-items-center text-white">
+                                            <c-col>
+                                                <h4>
+                                                    {{ module.Module.name }}
+                                                </h4>
+                                            </c-col>
+                                        </c-row>
+                                        <c-row>
+                                            <c-col class="italic text-white">
+                                                <span  *ngIf="module.Module.enterprise">
+                                                    {{ t('Enterprise') }}
+                                                </span>
+                                            </c-col>
+                                            <c-col>
+                                                <span  class="right text-white">
+                                                    {{ module.Module.author }}
+                                                </span>
+                                            </c-col>
+                                        </c-row>
+                                    </c-container>
+                                </c-card-header>
+                                <c-card-body>
+
+                                    <div class="text">
+                                        {{ module.Module.description }}
+                                    </div>
+
+                                    <div class="padding-top-10">
+                                        <i class="fa fa-key"></i>
+                                        {{ module.Module.license }}
+                                    </div>
+
+                                    <div *ngIf="module.Module.tags">
+                                        <fa-icon [icon]="['fas', 'tags']"></fa-icon>
+                                        <c-badge *ngFor="let tag of splitV3Tags(module.Module.tags)"
+                                                 color="secondary">
+                                            {{ tag }}
+                                        </c-badge>
+                                    </div>
+                                </c-card-body>
+                                <c-card-footer class="text-end card-footer">
+
+<!--
+                                        <button
+                                                type="button"
+                                                [title]="'This module is already installed' | transloco"
+                                                *ngIf="data.installedModules[module.Module.apt_name]"
+                                                class="btn btn-success float-right">
+                                            <span class="btn-label">
+                                                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                            </span>
+                                            {{ t('Installed') }}
+                                        </button>
+-->
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <input cFormCheckInput
+                                                       type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       (click)="installPacket(module.Module.apt_name)"
+                                                       [(ngModel)]="modulesToCheckboxesInstall[module.Module.apt_name]"
+                                                />
+                                            </span>
+                                            <button
+                                                    type="button"
+                                                    class="btn btn-primary"
+                                                    style="border-top-right-radius: 4px; border-bottom-right-radius: 4px;"
+                                                    (click)="installPacket(module.Module.apt_name)">
+                                                {{ t('Install') }}
+                                            </button>
+                                        </c-input-group>
+<!--
+                                        <div class="col-lg-12 padding-right-0">
+                                            <a
+                                                    href="https://it-services.it-novum.com/support-2/"
+                                                    target="_blank"
+                                                    class="btn btn-primary float-right">
+                                                <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
+                                                {{ t('Request a quote') }}
+                                            </a>
+                                        </div>
+-->
+                                </c-card-footer>
+                            </c-card>
+                        </c-col>
+                    </ng-container>
+                </c-row>
+
+
+            </c-card-body>
+        </c-card>
+
+
+        <!-- changelogModal -->
+        <c-modal id="changelogModal">
+            <c-modal-header>
+
+                <h5>
+                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                    {{ t('Changelog') }}
+                </h5>
+            </c-modal-header>
+            <c-modal-body>
+
+                <c-alert color="primary">
+
+                    <div class="d-flex flex-start w-100">
+                        <div class="mr-2 hidden-md-down">
+                            <span class="icon-stack icon-stack-lg">
+                                <i class="base base-6 icon-stack-3x opacity-100 color-primary-500"></i>
+                                <i class="base base-10 icon-stack-2x opacity-100 color-primary-300 fa-flip-vertical"></i>
+                                <i class="ni ni-info icon-stack-1x opacity-100 color-white"></i>
+                            </span>
+                        </div>
+                        <div class="d-flex flex-fill">
+                            <div class="flex-fill">
+                                <span class="h5">
+                                    {{ t('Blog') }}
+                                </span>
+                                <p>
+                                    {{ t('News about IT monitoring from the experts behind openITCOCKPIT ') }}
+                                </p>
+                                <p class="m-0">
+                                    {{ t('Visit our blog for more details:') }}
+                                    <a href="https://openitcockpit.io/blog/" target="_blank">
+                                        https://openitcockpit.io/blog/
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </c-alert>
+
+
+                <div class="container" *ngIf="data.result && data.result.data.changelog.length > 0">
+                    <div class="row ">
+                        <div class="col-12">
+                            <h4>
+                                {{ t('Latest version') }}
+                                {{ data.result.data.changelog[0].Changelog.version }}
+                            </h4>
+                            <ul class="timeline">
+                                <li *ngFor="let record of data.result.data.changelog">
+                                    <span class="text-primary">{{ record.Changelog.version }}</span>
+                                    <p>{{ record.Changelog.changes }}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button [cModalToggle]="'changelogModal'" cButton color="secondary">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </c-modal>
+
+
+        <!-- installPackageModal -->
+        <c-modal id="installPacketModal" size="lg">
+            <c-modal-header>
+                <h5>{{ t('Install packages') }}</h5>
+            </c-modal-header>
+            <c-modal-body>
+                {{ t('To install the selected packages, please execute the following command on your {0} system.', {systemname: data.result.data.systemname}) }}
+
+                <div class="copy-to-clipboard-container">
+                    <div *ngIf="data.result.data.isDebianBased"
+                         class="bg-color-black txt-color-white code-font padding-7 packetmanager-selection">
+                        sudo apt-get update && sudo apt-get dist-upgrade
+                        <br>
+                        sudo apt-get install {{getCliCommand()}}
+                        \ <br>
+                        && echo "#########################################" \ <br>
+                        && echo
+                        "{{ t('Installation done. Please reload your {0} web interface.', {systemname: data.result.data.systemname}) }}
+                        "
+                    </div>
+
+                    <div *ngIf="data.result.data.isRhelBased"
+                         class="bg-color-black txt-color-white code-font padding-7 packetmanager-selection">
+                        sudo dnf check-update
+                        <br>
+                        sudo dnf upgrade
+                        <br>
+                        sudo dnf install {{getCliCommand()}}
+                        \ <br>
+                        && echo "#########################################" \ <br>
+                        && echo
+                        "{{ t('Installation done. Please reload your {0} web interface.', {systemname: data.result.data.systemname}) }}
+                        "
+                    </div>
+
+                    <div
+                            class="copy-to-clipboard-btn copy-to-clipboard-btn-top-right"
+                            style="right: 20px;"
+                            rel="tooltip"
+                            data-toggle="tooltip"
+                            data-trigger="click"
+                            data-placement="left"
+                            data-original-title="<?= __('Copied'); ?>">
+                        <div
+                                class="btn btn-default btn-xs waves-effect waves-themed"
+                                ng-click="clipboardCommand()"
+                                title="{{t('Copy to clipboard')}}">
+                            <i class="fa fa-copy"></i>
+                        </div>
+                    </div>
+                </div>
+
+                {{ t('To install two or more packages at once, close this window and select the next module you like to install. All selected modules will be added to the installation command.') }}
+
+            </c-modal-body>
+            <c-modal-footer>
+                <button [cModalToggle]="'installPacketModal'" cButton color="secondary">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </c-modal>
+
+    </ng-container>
+</oitc-coreui>
