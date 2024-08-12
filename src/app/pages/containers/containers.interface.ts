@@ -7,6 +7,17 @@ export interface Container {
     rght: number
 }
 
+export interface ContainerWithHostJoinData extends Container {
+    id: number
+    host_id: number
+    container_id: number
+}
+
+export interface ContainerWithContactJoinData extends Container {
+    id: number
+    contact_id: number
+    container_id: number
+}
 
 /**********************
  *     Global action    *

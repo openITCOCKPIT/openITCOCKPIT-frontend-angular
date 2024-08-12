@@ -24,6 +24,7 @@ import {
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
 import { NgIf } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
+import { HostBrowserResult } from '../hosts.interface';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -54,6 +55,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public id: number = 0;
 
     public hostBrowserConfig?: HostBrowserMenuConfig;
+
+    public result?: HostBrowserResult;
 
     private subscriptions: Subscription = new Subscription();
     private HostsService = inject(HostsService);

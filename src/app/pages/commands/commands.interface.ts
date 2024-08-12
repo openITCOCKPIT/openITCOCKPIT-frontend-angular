@@ -251,3 +251,25 @@ export interface CommandUsedByServicetemplates {
     uuid: string
 }
 
+/*************************
+ *     Host Browser      *
+ *************************/
+export interface CheckCommandCake2 {
+    Command: {
+        id: number
+        name: string
+        command_line: string
+        command_type: number
+        human_args: any
+        uuid: string
+        description: string
+    }
+    Commandargument: {
+        id: number
+        command_id: number
+        name: string
+        human_name: string
+        created: string
+        modified: string
+    }[]
+}

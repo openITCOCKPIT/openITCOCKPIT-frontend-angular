@@ -9,6 +9,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import {
     HostAddEditSuccessResponse,
     HostBrowserMenu,
+    HostBrowserResult,
     HostCommandArgument,
     HostCopyGet,
     HostCopyPost,
@@ -549,5 +550,15 @@ export class HostsService {
             )
     }
 
+    public getHostBrowser(id: number): Observable<HostBrowserResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<HostBrowserResult>(`${proxyPath}/hosts/browser/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
 
 }
