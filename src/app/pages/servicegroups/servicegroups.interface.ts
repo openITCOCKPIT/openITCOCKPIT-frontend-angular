@@ -36,6 +36,7 @@ export interface ServicegroupsExtendedParams {
 
     selected: number;
     'filter[Services.name]': string,
+    'filter[servicename]': string,
     'filter[Servicestatus.current_state][]': string[]
 }
 
@@ -47,6 +48,7 @@ export function getDefaultServicegroupsExtendedParams(): ServicegroupsExtendedPa
 
         selected: 0,
         "filter[Services.name]": '',
+        "filter[servicename]": '',
         "filter[Servicestatus.current_state][]": [],
     }
 }

@@ -121,7 +121,7 @@
                         <input cFormControl
                                name="post.webhook_url"
                                id="post.webhook_url"
-                               value="https://%s/pagerduty_module/acknowledge/submit.json?apikey=%s"
+                               [(ngModel)]="currentCommandAsPostRequest"
                                disabled
                         />
                         <span class="help-block">

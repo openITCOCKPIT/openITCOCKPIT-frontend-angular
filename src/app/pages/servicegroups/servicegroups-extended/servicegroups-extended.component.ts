@@ -188,7 +188,14 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
             Servicegroup: {
                 container: {
                     name: ''
-                }
+                },
+                uuid : '',
+            },
+            StatusSummary: {
+                ok: 0,
+                warning: 0,
+                critical: 0,
+                unknown: 0
             }
         }
     } as ServiceGroupExtendedRoot;
@@ -263,6 +270,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
             .subscribe((result: ServiceGroupExtendedRoot) => {
                 // Then put post where it belongs. Also unpack that bullshit
                 this.servicegroupExtended = result;
+
 
                 this.userFullname = result.username;
             }));
