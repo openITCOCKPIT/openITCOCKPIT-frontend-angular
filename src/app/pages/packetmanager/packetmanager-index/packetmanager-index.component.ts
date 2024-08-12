@@ -8,7 +8,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     AlertComponent,
-    BadgeComponent,
+    BadgeComponent, ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -86,7 +86,8 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         ContainerComponent,
         InputGroupComponent,
         InputGroupTextDirective,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        ButtonGroupComponent
     ],
     templateUrl: './packetmanager-index.component.html',
     styleUrl: './packetmanager-index.component.css'
