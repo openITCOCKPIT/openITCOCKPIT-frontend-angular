@@ -159,7 +159,7 @@
                 <oitc-table-loader
                         *ngIf="servicegroupExtended.servicegroup.Servicegroup.uuid === ''"></oitc-table-loader>
 
-                <table bordered cTable class="mt-2 mb-0" hover striped>
+                <table *ngIf="servicegroupExtended.servicegroup.Servicegroup.uuid !== ''" bordered cTable class="mt-2 mb-0" hover striped>
 
                     <thead>
                     <tr class="border-bottom">
@@ -305,7 +305,7 @@
                             </td>
                             <td [class]="getBackgroundClass(service.Hoststatus.currentState)">
                                 <span *oitcPermission="['hosts', 'browser']">
-                                    <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
+                                    <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]" class="text-white">
                                         {{ service.Host.name }}
                                     </a>
                                 </span>
@@ -378,7 +378,7 @@
                     </tbody>
                 </table>
                 <oitc-no-records
-                        *ngIf="servicegroupExtended.servicegroup.Services.length === 0"></oitc-no-records>
+                        *ngIf="servicegroupExtended.servicegroup.Services && servicegroupExtended.servicegroup.Services.length === 0"></oitc-no-records>
                 <c-container fluid class="mb-3 py-3">
                     <c-row>
                         <c-col>
