@@ -57,10 +57,10 @@
                             optionLabel="value"
                             [options]="containers"
                             (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="container">
+                            oitcFormError [errors]="errors" errorField="parent_id">
                         </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="container"></oitc-form-feedback>
-                        <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                        <div *ngIf="post.container.parent_id === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
                     </div>

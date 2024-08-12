@@ -173,6 +173,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         return {
             container: {
                 name: '',
+                parent_id: 0
             },
             description: "",
             servicegroup_url: "",

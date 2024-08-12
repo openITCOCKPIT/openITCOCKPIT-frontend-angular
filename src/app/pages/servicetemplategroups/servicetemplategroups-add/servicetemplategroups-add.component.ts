@@ -150,6 +150,11 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
                     if (typeof this.errors['container']['name'] !== 'undefined') {
                         this.errors['name'] = <any>this.errors['container']['name'];
                     }
+
+                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
+                    if (typeof this.errors['container']['parent_id'] !== 'undefined') {
+                        this.errors['parent_id'] = <any>this.errors['container']['parent_id'];
+                    }
                 }
             })
         );
@@ -166,7 +171,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         return {
             container: {
                 name: '',
-                parent_id: null
+                parent_id: 0
             },
             description: '',
             servicetemplates: {
