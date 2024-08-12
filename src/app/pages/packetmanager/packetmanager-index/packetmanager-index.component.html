@@ -96,8 +96,8 @@
                                     </c-row>
                                 </c-container>
                             </c-card-header>
-                            <c-card-body>
-                                <div class="card-body packagemanagerCardBody">
+                            <c-card-body class="packetManagerCardBody">
+                                <div>
                                     <div class="text text-center">
                                         <img class="img-fluid" alt="Logo" src="{{data.result.data.logoURL}}"
                                              style="max-height: 140px;">
@@ -135,7 +135,7 @@
                                     </c-row>
                                 </c-container>
                             </c-card-header>
-                            <c-card-body>
+                            <c-card-body class="packetManagerCardBody">
                                 {{ t('Please update your {0} installation to the latest version to get new features and latest security fixes.', {systemname: data.result.data.systemname}) }}
 
                             </c-card-body>
@@ -164,7 +164,7 @@
                     <!-- packages -->
                     <ng-container *ngIf="data.result">
                         <c-col *ngFor="let module of data.result.data.modules">
-                            <c-card class="flex-1 mb-3 mt-3 flex-1">
+                            <c-card class="mb-3 mt-3">
                                 <c-card-header
                                         [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
                                 >
@@ -188,7 +188,7 @@
                                         </c-row>
                                     </c-container>
                                 </c-card-header>
-                                <c-card-body>
+                                <c-card-body class="packetManagerCardBody overflow-auto">
 
                                     <div class="text">
                                         {{ module.Module.description }}
