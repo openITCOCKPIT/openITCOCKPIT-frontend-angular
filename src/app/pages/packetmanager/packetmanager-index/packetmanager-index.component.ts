@@ -98,6 +98,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly PacketmanagerService: PacketmanagerService = inject(PacketmanagerService);
 
     protected modulesToCheckboxesInstall: { [key: string]: boolean } = {};
+    protected command: string = '';
     protected data: PacketmanagerIndexRoot = {
         result: {
             error: false,
@@ -112,6 +113,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 systemname: '',
                 newVersion: false,
                 version: '',
+                logoURL: '',
                 _csrfToken: ''
             }
         },
@@ -152,24 +154,47 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         return tags;
     }
 
-    protected getCliCommand(): string {
+    protected installPacket(aptName: string): void {
+        this.modulesToCheckboxesInstall[aptName] = !this.modulesToCheckboxesInstall[aptName];
+
         let packages: string[] = [];
         this.data.result.data.modules.forEach((module: PacketmanagerModule) => {
             if (this.modulesToCheckboxesInstall[module.Module.apt_name]) {
                 packages.push(module.Module.apt_name);
             }
         });
-        console.log(packages.join(' '));
-        return packages.join(' ');
-    }
-
-    protected installPacket(aptName: string): void {
-        console.log(this.modulesToCheckboxesInstall);
-        console.log(aptName);
+        this.command =  packages.join(' \\ <br />');
 
         this.modalService.toggle({
             show: true,
             id: 'installPacketModal'
+        });
+    }
+    protected clipboardCommand(): void{
+        // If you change this command please make also sure to change the command in the index.php template !!
+
+        var command = 'sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get install ';
+
+
+        let packages: string[] = [];
+        this.data.result.data.modules.forEach((module: PacketmanagerModule) => {
+            if (this.modulesToCheckboxesInstall[module.Module.apt_name]) {
+                packages.push(module.Module.apt_name);
+            }
+        });
+
+        command += packages.join(' ');
+        command += ' && echo "#########################################" && echo "Installation done. Please reload your openITCOCKPIT web interface."';
+
+        navigator.clipboard.writeText(command);
+    };
+
+    protected openChangeLog(): void
+    {
+
+        this.modalService.toggle({
+            show: true,
+            id: 'changelogModal'
         });
     }
 }

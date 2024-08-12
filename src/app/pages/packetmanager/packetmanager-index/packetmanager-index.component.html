@@ -76,21 +76,60 @@
             <c-card-body>
                 <c-row [lg]="3">
 
+                    <!-- No update available -->
+                    <c-col *ngIf="!data.result.data.newVersion">
+                        <c-card class="mb-3 mt-3">
+                            <c-card-header class="community-bg-header">
+                                <c-container>
+                                    <c-row>
+                                        <c-col>
+                                            <h4 class="text-white">
+                                                🥳
+                                                {{ t('Your system is on the latest version!') }}
+                                            </h4>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col class="text-white text-end">
+                                            {{ data.result.data.changelog[0].Changelog.version }}
+                                        </c-col>
+                                    </c-row>
+                                </c-container>
+                            </c-card-header>
+                            <c-card-body>
+                                <div class="card-body packagemanagerCardBody">
+                                    <div class="text text-center">
+                                        <img class="img-fluid" alt="Logo" src="{{data.result.data.logoURL}}"
+                                             style="max-height: 140px;">
+                                    </div>
+
+                                </div>
+                            </c-card-body>
+                            <c-card-footer class="text-end">
+                                <a class="btn btn-default"
+                                   (click)="openChangeLog()">
+                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </a>
+                            </c-card-footer>
+                        </c-card>
+                    </c-col>
+
                     <!-- update available -->
                     <c-col *ngIf="data.result.data.newVersion && data.result.data.changelog.length > 0">
-                        <c-card>
-                            <c-card-header>
+                        <c-card class="mb-3 mt-3">
+                            <c-card-header class="community-bg-header">
                                 <c-container>
                                     <c-row class="row align-items-center">
                                         <c-col>
-                                            <h4>
-                                                🥳
+                                            <h4 class="text-white">
+                                                🎉
                                                 {{ t('New version available!') }}
                                             </h4>
                                         </c-col>
                                     </c-row>
                                     <c-row>
-                                        <c-col>
+                                        <c-col class="text-white text-end">
                                             {{ data.result.data.changelog[0].Changelog.version }}
                                         </c-col>
                                     </c-row>
@@ -99,29 +138,25 @@
                             <c-card-body>
                                 {{ t('Please update your {0} installation to the latest version to get new features and latest security fixes.', {systemname: data.result.data.systemname}) }}
 
-
-                                <div class="float-right">
-
-                                    <a href="https://openitcockpit.io/2018/01/02/how-to-update-openitcockpit/"
-                                       target="_blank"
-                                       class="btn btn-success">
-                                        <span class="btn-label">
-                                            <i class="fa fa-rocket"></i>
-                                        </span>
-                                        {{ t('How to Update') }}
-                                    </a>
-
-                                    <a href="javascript:void(0);"
-                                       class="btn btn-default"
-                                       data-toggle="modal"
-                                       data-target="#changelogModal">
-                                        <span class="btn-label">
-                                            <i class="fas fa-code-fork"></i>
-                                        </span>
-                                        {{ t('Changelog') }}
-                                    </a>
-                                </div>
                             </c-card-body>
+                            <c-card-footer class="text-end">
+
+
+                                <a href="https://openitcockpit.io/2018/01/02/how-to-update-openitcockpit/"
+                                   target="_blank"
+                                   class="btn btn-success">
+                                    <span class="btn-label">
+                                        <i class="fa fa-rocket"></i>
+                                    </span>
+                                    {{ t('How to Update') }}
+                                </a>
+
+                                <a class="btn btn-default"
+                                   (click)="openChangeLog()">
+                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </a>
+                            </c-card-footer>
                         </c-card>
                     </c-col>
 
@@ -129,7 +164,7 @@
                     <!-- packages -->
                     <ng-container *ngIf="data.result">
                         <c-col *ngFor="let module of data.result.data.modules">
-                            <c-card>
+                            <c-card class="flex-1 mb-3 mt-3">
                                 <c-card-header
                                         [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
                                 >
@@ -143,14 +178,12 @@
                                         </c-row>
                                         <c-row>
                                             <c-col class="italic text-white">
-                                                <span  *ngIf="module.Module.enterprise">
+                                                <span *ngIf="module.Module.enterprise">
                                                     {{ t('Enterprise') }}
                                                 </span>
                                             </c-col>
-                                            <c-col>
-                                                <span  class="right text-white">
+                                            <c-col class="text-end text-white">
                                                     {{ module.Module.author }}
-                                                </span>
                                             </c-col>
                                         </c-row>
                                     </c-container>
@@ -162,23 +195,20 @@
                                     </div>
 
                                     <div class="padding-top-10">
-                                        <i class="fa fa-key"></i>
+                                        <fa-icon [icon]="['fas', 'key']"/>
                                         {{ module.Module.license }}
                                     </div>
 
                                     <div *ngIf="module.Module.tags">
                                         <fa-icon [icon]="['fas', 'tags']"></fa-icon>
                                         <c-badge *ngFor="let tag of splitV3Tags(module.Module.tags)"
-                                                 color="secondary">
+                                                 color="secondary" class="sidebar-brand-full">
                                             {{ tag }}
                                         </c-badge>
                                     </div>
                                 </c-card-body>
-                                <c-card-footer class="text-end card-footer">
-
-<!--
-                                        <button
-                                                type="button"
+                                <c-card-footer class="text-end">
+                                    <button type="button"
                                                 [title]="'This module is already installed' | transloco"
                                                 *ngIf="data.installedModules[module.Module.apt_name]"
                                                 class="btn btn-success float-right">
@@ -187,8 +217,7 @@
                                             </span>
                                             {{ t('Installed') }}
                                         </button>
--->
-                                        <c-input-group>
+                                    <c-input-group *ngIf="module.Module.license_included">
                                             <span cInputGroupText>
                                                 <input cFormCheckInput
                                                        type="checkbox"
@@ -205,8 +234,8 @@
                                                 {{ t('Install') }}
                                             </button>
                                         </c-input-group>
-<!--
-                                        <div class="col-lg-12 padding-right-0">
+
+                                    <div *ngIf="!module.Module.license_included" class="col-lg-12 padding-right-0">
                                             <a
                                                     href="https://it-services.it-novum.com/support-2/"
                                                     target="_blank"
@@ -215,7 +244,6 @@
                                                 {{ t('Request a quote') }}
                                             </a>
                                         </div>
--->
                                 </c-card-footer>
                             </c-card>
                         </c-col>
@@ -228,7 +256,7 @@
 
 
         <!-- changelogModal -->
-        <c-modal id="changelogModal">
+        <c-modal size="lg" id="changelogModal">
             <c-modal-header>
 
                 <h5>
@@ -268,9 +296,10 @@
                 </c-alert>
 
 
-                <div class="container" *ngIf="data.result && data.result.data.changelog.length > 0">
-                    <div class="row ">
-                        <div class="col-12">
+                <c-container *ngIf="data.result && data.result.data.changelog.length > 0">
+
+                    <c-row>
+                        <c-col>
                             <h4>
                                 {{ t('Latest version') }}
                                 {{ data.result.data.changelog[0].Changelog.version }}
@@ -278,12 +307,12 @@
                             <ul class="timeline">
                                 <li *ngFor="let record of data.result.data.changelog">
                                     <span class="text-primary">{{ record.Changelog.version }}</span>
-                                    <p>{{ record.Changelog.changes }}</p>
+                                    <p [innerHTML]="record.Changelog.changes | trustAsHtml"></p>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
 
 
             </c-modal-body>
@@ -304,25 +333,23 @@
                 {{ t('To install the selected packages, please execute the following command on your {0} system.', {systemname: data.result.data.systemname}) }}
 
                 <div class="copy-to-clipboard-container">
-                    <div *ngIf="data.result.data.isDebianBased"
-                         class="bg-color-black txt-color-white code-font padding-7 packetmanager-selection">
+                    <div *ngIf="data.result.data.isDebianBased" class="console">
                         sudo apt-get update && sudo apt-get dist-upgrade
-                        <br>
-                        sudo apt-get install {{getCliCommand()}}
-                        \ <br>
+                        <br/>
+                        sudo apt-get install <span [innerHTML]="command | trustAsHtml"></span>
+                        \ <br/>
                         && echo "#########################################" \ <br>
                         && echo
                         "{{ t('Installation done. Please reload your {0} web interface.', {systemname: data.result.data.systemname}) }}
                         "
                     </div>
 
-                    <div *ngIf="data.result.data.isRhelBased"
-                         class="bg-color-black txt-color-white code-font padding-7 packetmanager-selection">
+                    <div *ngIf="data.result.data.isRhelBased" class="console">
                         sudo dnf check-update
                         <br>
                         sudo dnf upgrade
                         <br>
-                        sudo dnf install {{getCliCommand()}}
+                        sudo dnf install <span [innerHTML]="command | trustAsHtml"></span>
                         \ <br>
                         && echo "#########################################" \ <br>
                         && echo
@@ -338,12 +365,13 @@
                             data-trigger="click"
                             data-placement="left"
                             data-original-title="<?= __('Copied'); ?>">
-                        <div
+                        <button
                                 class="btn btn-default btn-xs waves-effect waves-themed"
-                                ng-click="clipboardCommand()"
+                                (click)="clipboardCommand()"
                                 title="{{t('Copy to clipboard')}}">
-                            <i class="fa fa-copy"></i>
-                        </div>
+
+                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        </button>
                     </div>
                 </div>
 
