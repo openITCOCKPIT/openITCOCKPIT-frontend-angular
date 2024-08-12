@@ -58,7 +58,7 @@
                                 oitcFormError [errors]="errors" errorField="parent_id">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
-                        <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
+                        <div *ngIf="post.container.parent_id === 0" class="text-warning-glow pt-1">
                             {{ t('Please select a container.') }}
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                                 [options]="services"
                                 oitcFormError [errors]="errors" errorField="services">
                         </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
                     </div>
 
                     <div class="mb-3">
@@ -135,7 +135,7 @@
                                 [options]="servicetemplates"
                                 oitcFormError [errors]="errors" errorField="servicetemplates">
                         </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="servicetemplates"></oitc-form-feedback>
                     </div>
 
                 </c-card-body>

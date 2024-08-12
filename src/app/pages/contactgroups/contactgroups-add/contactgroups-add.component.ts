@@ -160,7 +160,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
             },
             container: {
                 name: '',
-                parent_id: null,
+                parent_id: 0
             },
             description: '',
         }
