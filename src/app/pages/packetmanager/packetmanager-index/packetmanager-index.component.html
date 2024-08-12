@@ -90,7 +90,7 @@
                                         </c-col>
                                     </c-row>
                                     <c-row>
-                                        <c-col class="text-white text-end">
+                                        <c-col *ngIf="data.result.data.changelog.length > 0" class="text-white text-end">
                                             {{ data.result.data.changelog[0].Changelog.version }}
                                         </c-col>
                                     </c-row>
@@ -164,7 +164,7 @@
                     <!-- packages -->
                     <ng-container *ngIf="data.result">
                         <c-col *ngFor="let module of data.result.data.modules">
-                            <c-card class="flex-1 mb-3 mt-3">
+                            <c-card class="flex-1 mb-3 mt-3 flex-1">
                                 <c-card-header
                                         [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
                                 >
@@ -217,7 +217,9 @@
                                             </span>
                                             {{ t('Installed') }}
                                         </button>
-                                    <c-input-group *ngIf="module.Module.license_included">
+                                    <div class="text-end">
+                                        <c-button-group>
+
                                             <span cInputGroupText>
                                                 <input cFormCheckInput
                                                        type="checkbox"
@@ -233,7 +235,8 @@
                                                     (click)="installPacket(module.Module.apt_name)">
                                                 {{ t('Install') }}
                                             </button>
-                                        </c-input-group>
+                                        </c-button-group>
+                                    </div>
 
                                     <div *ngIf="!module.Module.license_included" class="col-lg-12 padding-right-0">
                                             <a
