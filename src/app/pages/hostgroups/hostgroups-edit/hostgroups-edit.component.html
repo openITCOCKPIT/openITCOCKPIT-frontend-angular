@@ -20,9 +20,9 @@
             </ol>
         </nav>
 
-        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+        <oitc-form-loader *ngIf="post.container.id === 0"></oitc-form-loader>
 
-        <form cForm (ngSubmit)="updateHostgroup()">
+        <form cForm *ngIf="post.container.id !== 0" (ngSubmit)="updateHostgroup()">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>

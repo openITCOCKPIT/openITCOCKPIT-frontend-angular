@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { PagerdutySettings } from '../PagerdutySettings.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgIf } from '@angular/common';
@@ -21,7 +21,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, ModalComponent,
+    FormLabelDirective,
+    ModalComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -83,7 +84,9 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 export class SettingsEditComponent implements OnInit, OnDestroy {
     private readonly pagerdutySettingsService: PagerdutySettingsService = inject(PagerdutySettingsService);
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     protected errors: GenericValidationError | null = null;
+    protected currentCommandAsPostRequest: string = '';
     private readonly notyService: NotyService = inject(NotyService);
     protected post: PagerdutySettings = {
         api_key: '',
@@ -103,6 +106,8 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
                 }
             )
         );
+        const API_KEY_TRANSLATION = this.TranslocoService.translate('YOUR_API_KEY_HERE');
+        this.currentCommandAsPostRequest = `https://${window.location.hostname}/pagerduty_module/acknowledge/submit.json?apikey=${API_KEY_TRANSLATION}`;
     }
 
 
