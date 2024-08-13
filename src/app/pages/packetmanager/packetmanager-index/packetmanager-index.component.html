@@ -20,7 +20,6 @@
             </ol>
         </nav>
 
-
         <ng-container *ngIf="data.result.data.isContainer">
             <c-alert color="primary">
                 <span class="icon-stack icon-stack-md">
@@ -36,7 +35,7 @@
         </ng-container>
 
         <ng-container *ngIf="!data.result.data.isContainer">
-            t $this->element('repository_checker')
+            <oitc-repository-checker />
         </ng-container>
 
 

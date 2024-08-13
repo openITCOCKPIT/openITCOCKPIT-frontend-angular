@@ -42,6 +42,7 @@ import { PacketmanagerIndexRoot, PacketmanagerModule } from '../packetmanager.in
 import { Subscription } from 'rxjs';
 import { PacketmanagerService } from '../packetmanager.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { RepositoryCheckerComponent } from '../../../components/repository-checker/repository-checker.component';
 
 @Component({
     selector: 'oitc-packetmanager-index',
@@ -87,7 +88,8 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         InputGroupComponent,
         InputGroupTextDirective,
         TrustAsHtmlPipe,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        RepositoryCheckerComponent
     ],
     templateUrl: './packetmanager-index.component.html',
     styleUrl: './packetmanager-index.component.css'

@@ -1,100 +1,78 @@
-
 <ng-container *transloco="let t">
+    <ng-container *ngIf="data !== null">
 
-<div *ngIf="isOldRepositoryInUse === true || hasError === true) && isDebianBased">
-    <div class="alert alert-danger alert-block">
-        <a href="javascript:void(0);" data-dismiss="alert" class="close">×</a>
-        <h5 class="alert-heading"><i class="fa fa-warning"></i>
-            {{t('APT Repository - Manually action required!')}}
-        </h5>
-        <p>
-            {{t('Please contact your system administrator.')}}
-        </p>
-        <p>
-            <ng-container *ngIf="!repositoryCheckerExists">
-                printf('<b>%s:</b><br />', __('Error code'));
-                printf('<code>%s</code>', RepositoryCheckerIsReadable);
-            </ng-container>
-        </p>
-        <p>
-            <ng-container *ngIf="!repositoryCheckerIsReadable">
-                printf('<b>%s:</b><br />', __('Error code'));
-                printf('<code>%s</code>', repositoryCheckerIsReadableErrorMessage);
-                printf('<br />Try <br /><code>chmod 644 %s</code>', RepositoryCheckerIsReadableSourcesList);
-            </ng-container>
-        </p>
-        <?php
-            try {
-                $RepositoryChecker->isOldRepositoryInUse();
-        ?>
-        <p>
-            {{t('Your system is using the old openITCOCKPIT APT repository, which will be shut down soon.')}}
-            <br/>
-            {{t('Please update your sources.list to use our new repository')}}
-            <br/>
-            <code>apt-get update</code>
-            <br/>
-            <code>apt-get install openitcockpit-release</code>
-            <br/>
-            <code>dpkg-reconfigure openitcockpit-release</code>
+        <div *ngIf="data.result.data.isDebianBased && (data.result.data.isOldRepositoryInUse || data.result.data.hasError)">
+            <c-alert color="danger">
 
-        </p>
-        <?php
-            } catch (\Exception $e) {
-                printf('<b>%s:</b><br />', __('Error code'));
-        printf('<code>%s</code>', $e->getMessage());
-        }
-        ?>
-    </div>
-</div>
-<?php endif;
+                <h5 class="alert-heading">
+                    <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                    {{ t('APT Repository - Manually action required!') }}
+                </h5>
+                <p>
+                    {{ t('Please contact your system administrator.') }}
+                </p>
 
-// Checking DNF Repo on RHEL
+                <p *ngIf="!data.result.data.repositoryCheckerExists">
+                    <strong>{{ t('Error code') }}:</strong>
+                    <br/>
+                    <code>{{ data.result.data.RepositoryCheckerExistsError }}</code>
+                </p>
+                <p *ngIf="!data.result.data.repositoryCheckerIsReadable">
+                    <strong>{{ t('Error code') }}:</strong>
+                    <br/>
+                    <code>{{ data.result.data.repositoryCheckerIsReadableError }}</code>
+                    <br/>
+                    {{ t('Try') }}
+                    <br/>
+                    <code>chmod 644 {{ data.result.data.RepositoryCheckerIsReadableSourcesList }}</code>
+                </p>
+                <p *ngIf="data.result.data.isOldRepositoryInUse">
+                    {{ t('Your system is using the old openITCOCKPIT APT repository, which will be shut down soon.') }}
+                    <br/>
+                    {{ t('Please update your sources.list to use our new repository') }}
+                    <br/>
+                    <code>apt-get update</code>
+                    <br/>
+                    <code>apt-get install openitcockpit-release</code>
+                    <br/>
+                    <code>dpkg-reconfigure openitcockpit-release</code>
+                </p>
+                <p *ngIf="data.result.data.isOldRepositoryInUseErrorMessage">
+                    <strong>{{ t('Error code') }}:</strong>
+                    <br/>
+                    <code>{{ data.result.data.isOldRepositoryInUseErrorMessage }}</code>
+                </p>
 
-$hasError = false;
-try {
-    $hasError = $DnfRepositoryChecker->hasError();
-} catch (\Exception $e) {
-$hasError = true;
-}
 
-if ($hasError && $LsbRelease->isRhelBased()):?>
-<div>
-    <div class="alert alert-danger alert-block">
-        <a href="javascript:void(0);" data-dismiss="alert" class="close">×</a>
-        <h5 class="alert-heading"><i class="fa fa-warning"></i>
-            {{t('DNF Repository - Manually action required!')}}
-        </h5>
-        <p>
-            {{t('Please contact your system administrator.')}}
-        </p>
-        <p>
-            <?php
-                try {
-                    $DnfRepositoryChecker->exists();
+            </c-alert>
 
-            } catch (Exception $e) {
-            printf('<b>%s:</b><br />', __('Error code'));
-            printf('<code>%s</code>', $e->getMessage());
-            }
-            ?>
-        </p>
-        <p>
-            <?php
-                try {
-                    $DnfRepositoryChecker->isReadable();
+        </div>
 
-            } catch (Exception $e) {
-            printf('<b>%s:</b><br />', __('Error code'));
-            printf('<code>%s</code>', $e->getMessage());
-            printf('<br />Try <br /><code>chmod 644 %s</code>', $DnfRepositoryChecker->getRepoConfig());
-            }
-            ?>
-        </p>
-    </div>
-</div>
-<?php endif;
-?>
+        <div *ngIf="data.result.data.isRhelBased && data.result.data.hasError">
+            <c-alert color="danger">
+                <h5 class="alert-heading">
+                    <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                    {{ t('DNF Repository - Manually action required!') }}
+                </h5>
+                <p>
+                    {{ t('Please contact your system administrator.') }}
+                </p>
+                <p *ngIf="!data.result.data.dnfRepositoryCheckerExists">
+                    <strong>{{ t('Error code') }}:</strong>
+                    <br/>
+                    <code>{{ data.result.data.dnfRepositoryCheckerExistsError }}</code>
+                </p>
+                <p *ngIf="!data.result.data.dnfRepositoryIsReadable">
+                    <strong>{{ t('Error code') }}:</strong>
+                    <br/>
+                    <code>{{ data.result.data.dnfRepositoryIsReadableError }}</code>
+                    <br/>
+                    {{ t('Try') }}
+                    <br/>
+                    <code>chmod 644 {{ data.result.data.dnfRepositoryRepoConfig }}</code>
+                </p>
+            </c-alert>
+        </div>
+    </ng-container>
 
-HIER IS WAS!
 </ng-container>
