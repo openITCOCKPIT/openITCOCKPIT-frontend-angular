@@ -122,8 +122,8 @@ export interface HoststatusObject {
     isFlapping?: boolean
     problemHasBeenAcknowledged?: boolean
     scheduledDowntimeDepth?: number
-    lastCheck?: string
-    nextCheck?: string
+    lastCheck?: string // "5 minutes ago"
+    nextCheck?: string  // "1 hour, 54 minutes"
     activeChecksEnabled?: boolean
     lastHardState?: string
     lastHardStateChange?: string
@@ -140,14 +140,18 @@ export interface HoststatusObject {
     last_time_up?: string
     lastHardStateChangeInWords?: string
     last_state_change_in_words?: string
-    lastCheckInWords?: string
-    nextCheckInWords?: string
+    lastCheckInWords?: string // "5 minutes ago"
+    nextCheckInWords?: string // "1 hour, 54 minutes"
     isHardstate?: boolean
     isInMonitoring?: boolean
-    humanState?: string
-    cssClass?: string
-    textClass?: string
+    humanState?: string // "up"
+    cssClass?: string // "bg-up"
+    textClass?: string // "up"
     outputHtml?: string
+    lastHardStateChangeUser?: string, // "09:31:53 - 11.07.2024"
+    last_state_change_user?: string, // "09:31:53 - 11.07.2024"
+    lastCheckUser?: string, // "09:31:53 - 11.07.2024"
+    nextCheckUser?: string, // "09:31:53 - 11.07.2024"
 }
 
 export interface HostsToContainersSharing {
@@ -789,5 +793,14 @@ export interface HostBrowserResult {
         Maps: GenericIdAndName[],
     },
     satelliteId: number,
-    mapModule: boolean
+    mapModule: boolean,
+    username: string
+}
+
+export interface HostBrowserSlaOverview {
+    state: string,
+    evaluation_end: number, // could be a unix timestamp or a date string "2024-08-12T00:00:00+02:00"
+    determined_availability_percent?: number,
+    warning_threshold?: number | null,
+    minimal_availability?: number,
 }

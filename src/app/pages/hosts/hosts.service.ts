@@ -10,6 +10,7 @@ import {
     HostAddEditSuccessResponse,
     HostBrowserMenu,
     HostBrowserResult,
+    HostBrowserSlaOverview,
     HostCommandArgument,
     HostCopyGet,
     HostCopyPost,
@@ -36,6 +37,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
 import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
+import { GrafanaIframeUrlForDatepicker } from '../../modules/grafana_module/grafana.interface';
 
 
 @Injectable({
@@ -557,6 +559,57 @@ export class HostsService {
             .pipe(
                 map(data => {
                     return data;
+                })
+            )
+    }
+
+    public loadHostGrafanaIframeUrl(uuid: string, selectedGrafanaTimerange: string, selectedGrafanaAutorefresh: string): Observable<GrafanaIframeUrlForDatepicker> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<GrafanaIframeUrlForDatepicker>(`${proxyPath}/hosts/getGrafanaIframeUrlForDatepicker/.json`, {
+                params: {
+                    angular: true,
+                    uuid: uuid,
+                    from: selectedGrafanaTimerange,
+                    refresh: selectedGrafanaAutorefresh
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+    public loadAdditionalInformation(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ AdditionalInformationExists: boolean }>(`${proxyPath}/hosts/loadAdditionalInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.AdditionalInformationExists;
+                })
+            )
+    }
+
+    public loadSlaInformation(id: number, slaId: number): Observable<false | HostBrowserSlaOverview> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ slaOverview: false | HostBrowserSlaOverview }>(`${proxyPath}/hosts/loadSlaInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id,
+                    sla_id: slaId
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.slaOverview;
                 })
             )
     }

@@ -13,3 +13,13 @@ export enum HostSubmitType {
     ServiceAdd = 'ServiceAdd',
     AssignMatchingServicetemplateGroups = 'AssignMatchingServicetemplateGroups',
 }
+
+export enum HostBrowserTabs {
+    StatusInformation = 'StatusInformation',
+    DeviceInformation = 'DeviceInformation',
+    Timeline = 'Timeline',
+    ServiceNow = 'ServiceNow',
+    Grafana = 'Grafana',
+    CMDB = 'CMDB',
+    SLA = 'SLA',
+}
