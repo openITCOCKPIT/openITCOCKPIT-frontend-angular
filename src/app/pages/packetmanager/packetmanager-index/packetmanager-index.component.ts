@@ -2,13 +2,14 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     AlertComponent,
-    BadgeComponent, ButtonGroupComponent,
+    BadgeComponent,
+    ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -43,6 +44,7 @@ import { Subscription } from 'rxjs';
 import { PacketmanagerService } from '../packetmanager.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { RepositoryCheckerComponent } from '../../../components/repository-checker/repository-checker.component';
+import { ConsoleCopyComponent } from '../../../components/console-copy/console-copy.component';
 
 @Component({
     selector: 'oitc-packetmanager-index',
@@ -89,7 +91,8 @@ import { RepositoryCheckerComponent } from '../../../components/repository-check
         InputGroupTextDirective,
         TrustAsHtmlPipe,
         ButtonGroupComponent,
-        RepositoryCheckerComponent
+        RepositoryCheckerComponent,
+        ConsoleCopyComponent
     ],
     templateUrl: './packetmanager-index.component.html',
     styleUrl: './packetmanager-index.component.css'
@@ -99,9 +102,13 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly modalService: ModalService = inject(ModalService);
     private readonly PacketmanagerService: PacketmanagerService = inject(PacketmanagerService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+
 
     protected modulesToCheckboxesInstall: { [key: string]: boolean } = {};
-    protected command: string = '';
+    private packageList: string = '';
+    protected debianCommand: string = '';
+    protected rhelCommand: string = '';
     protected data: PacketmanagerIndexRoot = {
         result: {
             error: false,
@@ -146,10 +153,6 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected submit(): void {
-
-    }
-
     protected splitV3Tags(tags: string | string[]): string[] {
         if (typeof tags === 'string') {
             return tags.split(',');
@@ -166,35 +169,31 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 packages.push(module.Module.apt_name);
             }
         });
-        this.command =  packages.join(' \\ <br />');
+        this.packageList = packages.join(' \\ \n');
 
+        this.buildCommands();
         this.modalService.toggle({
             show: true,
             id: 'installPacketModal'
         });
     }
-    protected clipboardCommand(): void{
-        // If you change this command please make also sure to change the command in the index.php template !!
 
-        var command = 'sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get install ';
+    private buildCommands(): void {
+        this.debianCommand = `sudo apt-get update && sudo apt-get dist-upgrade
+sudo apt-get install ${this.packageList} \\
+&& echo "#########################################" \\
+&& echo "${this.TranslocoService.translate('Installation done. Please reload your {0} web interface.', {systemname: this.data.result.data.systemname})}"`;
 
+        this.rhelCommand = `sudo dnf check-update
+sudo dnf upgrade \\
+sudo dnf install ${this.packageList} \\
+&& echo "#########################################" \\
+&& echo "${this.TranslocoService.translate('Installation done. Please reload your {0} web interface.', {systemname: this.data.result.data.systemname})}"`;
+    }
 
-        let packages: string[] = [];
-        this.data.result.data.modules.forEach((module: PacketmanagerModule) => {
-            if (this.modulesToCheckboxesInstall[module.Module.apt_name]) {
-                packages.push(module.Module.apt_name);
-            }
-        });
-
-        command += packages.join(' ');
-        command += ' && echo "#########################################" && echo "Installation done. Please reload your openITCOCKPIT web interface."';
-
-        navigator.clipboard.writeText(command);
-    };
 
     protected openChangeLog(): void
     {
-
         this.modalService.toggle({
             show: true,
             id: 'changelogModal'
