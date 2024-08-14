@@ -89,7 +89,7 @@
                                         </c-col>
                                     </c-row>
                                     <c-row>
-                                        <c-col *ngIf="data.result.data.changelog.length > 0" class="text-white text-end">
+                                        <c-col *ngIf="data.result.data.changelog.length > 0" class="text-white text-end italic">
                                             {{ data.result.data.changelog[0].Changelog.version }}
                                         </c-col>
                                     </c-row>
@@ -182,7 +182,7 @@
                                                     {{ t('Enterprise') }}
                                                 </span>
                                             </c-col>
-                                            <c-col class="text-end text-white">
+                                            <c-col class="italic text-end text-white">
                                                     {{ module.Module.author }}
                                             </c-col>
                                         </c-row>
@@ -208,18 +208,18 @@
                                     </div>
                                 </c-card-body>
                                 <c-card-footer class="text-end">
-                                    <button type="button"
-                                            cButton
+                                    <div *ngIf="module.Module.license_included" class="text-end">
+                                        <button type="button"
+                                                cButton
                                                 [title]="'This module is already installed' | transloco"
                                                 *ngIf="data.installedModules[module.Module.apt_name]"
-                                            class="btn btn-success float-right ripple">
+                                                class="btn btn-success float-right ripple">
                                             <span class="btn-label">
                                                 <fa-icon [icon]="['fas', 'check']"></fa-icon>
                                             </span>
                                             {{ t('Installed') }}
                                         </button>
-                                    <div class="text-end">
-                                        <c-button-group>
+                                        <c-button-group *ngIf="!data.installedModules[module.Module.apt_name]">
 
                                             <span cInputGroupText>
                                                 <input cFormCheckInput
