@@ -13,6 +13,7 @@ import { UUID } from '../../../classes/UUID';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
+    AlertComponent,
     BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
@@ -106,7 +107,8 @@ import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
         HostsDisableFlapdetectionModalComponent,
         CardTextDirective,
         BorderDirective,
-        HostStatusNamePipe
+        HostStatusNamePipe,
+        AlertComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css'
