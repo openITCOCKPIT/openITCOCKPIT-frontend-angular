@@ -209,9 +209,10 @@
                                 </c-card-body>
                                 <c-card-footer class="text-end">
                                     <button type="button"
+                                            cButton
                                                 [title]="'This module is already installed' | transloco"
                                                 *ngIf="data.installedModules[module.Module.apt_name]"
-                                                class="btn btn-success float-right">
+                                            class="btn btn-success float-right ripple">
                                             <span class="btn-label">
                                                 <fa-icon [icon]="['fas', 'check']"></fa-icon>
                                             </span>
@@ -229,8 +230,9 @@
                                                 />
                                             </span>
                                             <button
+                                                    cButton
                                                     type="button"
-                                                    class="btn btn-primary"
+                                                    class="btn btn-primary ripple"
                                                     style="border-top-right-radius: 4px; border-bottom-right-radius: 4px;"
                                                     (click)="installPacket(module.Module.apt_name)">
                                                 {{ t('Install') }}
@@ -320,7 +322,7 @@
 
             </c-modal-body>
             <c-modal-footer>
-                <button [cModalToggle]="'changelogModal'" cButton color="secondary">
+                <button [cModalToggle]="'changelogModal'" cButton class="ripple" color="secondary">
                     {{ t('Close') }}
                 </button>
             </c-modal-footer>
@@ -330,59 +332,23 @@
         <!-- installPackageModal -->
         <c-modal id="installPacketModal" size="lg">
             <c-modal-header>
-                <h5>{{ t('Install packages') }}</h5>
+                <h5>
+                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                    {{ t('Install packages') }}
+                </h5>
             </c-modal-header>
             <c-modal-body>
                 {{ t('To install the selected packages, please execute the following command on your {0} system.', {systemname: data.result.data.systemname}) }}
 
-                <div class="copy-to-clipboard-container">
-                    <div *ngIf="data.result.data.isDebianBased" class="console">
-                        sudo apt-get update && sudo apt-get dist-upgrade
-                        <br/>
-                        sudo apt-get install <span [innerHTML]="command | trustAsHtml"></span>
-                        \ <br/>
-                        && echo "#########################################" \ <br>
-                        && echo
-                        "{{ t('Installation done. Please reload your {0} web interface.', {systemname: data.result.data.systemname}) }}
-                        "
-                    </div>
+                <oitc-console-copy *ngIf="data.result.data.isDebianBased" [command]="debianCommand"/>
 
-                    <div *ngIf="data.result.data.isRhelBased" class="console">
-                        sudo dnf check-update
-                        <br>
-                        sudo dnf upgrade
-                        <br>
-                        sudo dnf install <span [innerHTML]="command | trustAsHtml"></span>
-                        \ <br>
-                        && echo "#########################################" \ <br>
-                        && echo
-                        "{{ t('Installation done. Please reload your {0} web interface.', {systemname: data.result.data.systemname}) }}
-                        "
-                    </div>
-
-                    <div
-                            class="copy-to-clipboard-btn copy-to-clipboard-btn-top-right"
-                            style="right: 20px;"
-                            rel="tooltip"
-                            data-toggle="tooltip"
-                            data-trigger="click"
-                            data-placement="left"
-                            data-original-title="<?= __('Copied'); ?>">
-                        <button
-                                class="btn btn-default btn-xs waves-effect waves-themed"
-                                (click)="clipboardCommand()"
-                                title="{{t('Copy to clipboard')}}">
-
-                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                        </button>
-                    </div>
-                </div>
+                <oitc-console-copy *ngIf="data.result.data.isRhelBased" [command]="rhelCommand"/>
 
                 {{ t('To install two or more packages at once, close this window and select the next module you like to install. All selected modules will be added to the installation command.') }}
 
             </c-modal-body>
             <c-modal-footer>
-                <button [cModalToggle]="'installPacketModal'" cButton color="secondary">
+                <button [cModalToggle]="'installPacketModal'" class="ripple" cButton color="secondary">
                     {{ t('Close') }}
                 </button>
             </c-modal-footer>
