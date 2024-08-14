@@ -41,10 +41,3 @@ ul.timeline > li:before {
     height: 20px;
     z-index: 400;
 }
-
-.console {
-    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    color:white;
-    background:black;
-    padding:7px;
-}
