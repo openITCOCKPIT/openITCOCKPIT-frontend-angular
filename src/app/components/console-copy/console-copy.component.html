@@ -14,7 +14,7 @@
                 <fa-icon [icon]="['fas', 'copy']"></fa-icon>
             </button>
         </div>
-        <span [innerHTML]="command.replaceAll('\n', '<br />') | trustAsHtml">
+        <span [innerHTML]="_htmlCommand | trustAsHtml">
 
         </span>
     </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
 import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
@@ -21,20 +21,20 @@ import { ButtonDirective } from '@coreui/angular';
     templateUrl: './console-copy.component.html',
     styleUrl: './console-copy.component.css'
 })
-export class ConsoleCopyComponent implements OnInit{
+export class ConsoleCopyComponent implements OnChanges {
     @Input({required: true}) public command: string = '';
     @Input() htmlCommand: string = '';
-
+    protected _htmlCommand: string = '';
 
     protected copy(): void {
         navigator.clipboard.writeText(this.command);
     }
 
-
-    public ngOnInit(): void {
+    public ngOnChanges(): void {
         if (this.htmlCommand === '') {
-            this.htmlCommand = this.command.replace('\n', '<br>');
-            console.log(this.command);
+            this._htmlCommand = this.command.replaceAll('\n', '<br />');
+            return;
         }
+        this._htmlCommand = this.htmlCommand;
     }
 }
