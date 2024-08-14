@@ -83,17 +83,6 @@
                     </div>
                 </c-col>
             </c-row>
-            <c-row>
-                <c-col *ngIf="isSend">
-                    <hr/>
-                    <h5>
-                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                        {{ t('Executing command') }}
-                    </h5>
-                    <c-progress [value]="currentIndex" [max]="items.length" color="primary" variant="striped"
-                                [animated]="true"/>
-                </c-col>
-            </c-row>
 
         </c-modal-body>
         <c-modal-footer>

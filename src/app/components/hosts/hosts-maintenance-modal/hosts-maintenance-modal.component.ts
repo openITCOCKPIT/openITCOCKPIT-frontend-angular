@@ -67,7 +67,6 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
-    public currentIndex: number = 0;
     public errors?: ValidationErrors;
     public error: boolean = false;
     public isSend: boolean = false;
@@ -90,10 +89,9 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
-    hideModal(): void {
+    public hideModal(): void {
         this.isSend = false;
         this.hasErrors = false;
-        this.currentIndex = 0;
         this.errors = {};
 
         this.modalService.toggle({
@@ -102,10 +100,9 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    setExternalCommands(): void {
+    public setExternalCommands(): void {
         this.error = false;
         this.isSend = true;
-        this.currentIndex = 0;
         const validate: ValidateInput = {
             comment: this.downtimeModal.comment,
             from_date: this.downtimeModal.from_date,
@@ -119,7 +116,6 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
             if (!result.success) {
                 this.errors = result.data.Downtime;
                 this.isSend = false;
-                this.currentIndex = 0;
             }
             if (result.success) {
                 const start = result.data.js_start;
@@ -136,7 +132,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     }
 
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'hostMaintenanceModal' && state.show === true) {
                 this.getDefaults();
@@ -144,11 +140,11 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         }));
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    getDefaults(): void {
+    public getDefaults(): void {
         this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
             this.downtimeModal.downtimetype_id = downtimeDefaults.downtimetype_id
             this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
@@ -160,35 +156,29 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     }
 
 
-    createDateString = function (jsStringData: string): string {
+    public createDateString = function (jsStringData: string): string {
         let splitData: string[] = jsStringData.split(',');
         return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim()
     }
 
-    sendCommands(): void {
-        this.currentIndex = 0;
-        this.items.forEach((element: HostDowntimeItem): void => {
+    public sendCommands(): void {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
+            message: any;
+        }) => {
+            //result.message: /nagios_module//cmdController line 256
+            if (result.message) {
+                const title: string = this.TranslocoService.translate('Downtimes added');
+                const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
 
-            this.subscriptions.add(this.ExternalCommandsService.setExternalCommands([element]).subscribe((result: {
-                message: any;
-            }): void => {
-                //result.message: /nagios_module//cmdController line 256
-                if (result.message) {
-                    this.currentIndex++;
-                } else {
-                    this.notyService.genericError();
-                }
-
-                if (this.currentIndex === this.items.length) {
-                    const title: string = this.TranslocoService.translate('Downtimes added');
-                    const msg: string = this.TranslocoService.translate('Commands added successfully to queue');
-                    this.notyService.genericSuccess(msg, title);
-                    this.hideModal();
-                    setTimeout(() => {
-                        this.completed.emit(true);
-                    }, 5000);
-                }
-            }));
-        });
+                this.notyService.genericSuccess(msg, title);
+                this.hideModal();
+                setTimeout(() => {
+                    this.completed.emit(true);
+                }, 5000);
+            } else {
+                this.notyService.genericError();
+                this.hideModal();
+            }
+        }));
     }
 }
