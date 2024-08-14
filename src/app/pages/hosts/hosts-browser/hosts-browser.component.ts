@@ -13,12 +13,14 @@ import { UUID } from '../../../classes/UUID';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
+    BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
+    CardTextDirective,
     CardTitleDirective,
     ColComponent,
     ModalService,
@@ -63,6 +65,7 @@ import {
 import {
     HostsDisableFlapdetectionModalComponent
 } from '../../../components/hosts/hosts-disable-flapdetection-modal/hosts-disable-flapdetection-modal.component';
+import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -100,7 +103,10 @@ import {
         ServiceResetChecktimeModalComponent,
         HostsProcessCheckresultModalComponent,
         HostsEnableFlapdetectionModalComponent,
-        HostsDisableFlapdetectionModalComponent
+        HostsDisableFlapdetectionModalComponent,
+        CardTextDirective,
+        BorderDirective,
+        HostStatusNamePipe
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css'

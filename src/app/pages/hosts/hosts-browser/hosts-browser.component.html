@@ -136,14 +136,14 @@
                 <!-- Status information start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.StatusInformation">
 
-                    <!-- Status for small resolution -->
+                    <!-- Status for small resolution (mobile) -->
                     <div class="d-md-none p-2 text-white" [ngClass]="result.hoststatus.cssClass">
                         <c-row>
                             <c-col [xs]="6">
                                 {{ 'State' }}
                             </c-col>
                             <c-col [xs]="6">
-                                {{ result.hoststatus.humanState }}
+                                {{ result.hoststatus.currentState | hostStatusName }}
                             </c-col>
 
                             <c-col [xs]="6">
@@ -246,6 +246,42 @@
 
 
                     </div>
+                    <!-- End of mobile status view -->
+
+                    <c-row>
+                        <c-col [xs]="12" [sm]="6" [md]="7" [lg]="9">
+
+                            <!-- Check if host is disabled -->
+                            <c-col *ngIf="result.mergedHost.disabled">
+                                <c-card [cBorder]="{top: {color: 'danger', width: 3}}" [textColor]="'danger'"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h4>{{ t('Attention!') }}</h4>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <p cCardText>
+                                            {{ t('This host is currently disabled!') }}
+                                        </p>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+
+                        </c-col>
+
+                        <!-- Desktop status bar -->
+                        <c-col [sm]="6" [md]="5" [lg]="3" class="d-none d-md-block"
+                               [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
+
+                            <div class="text-center text-white">
+                                <div class="display-6">
+                                    {{ result.hoststatus.currentState | hostStatusName }}
+                                </div>
+                            </div>
+
+                        </c-col>
+                        <!-- End of desktop status bar -->
+
+                    </c-row>
 
 
                 </div>
