@@ -6,7 +6,7 @@
     <c-row class="mt-3" *ngIf="!isLoading">
         <c-col xs="12" sm="7" lg="7" *ngIf="data && data?.includeServicestatus">
 
-            <div class="d-flex">
+            <div class="d-flex flex-align-items-center">
                 <div>
                     <oitc-servicestatus-icon [servicestatus]="data.Servicestatus" [statusCircleClass]="''">
                         <fa-icon [icon]="['fas', 'cog']" class="pe-1"></fa-icon>
