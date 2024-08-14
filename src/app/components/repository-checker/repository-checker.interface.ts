@@ -11,7 +11,7 @@ export interface RespositoryCheckerResponse {
             repositoryCheckerIsReadableError: string
             RepositoryCheckerIsReadableSourcesList: string
             isOldRepositoryInUse: boolean
-            isOldRepositoryInUseErrorMessage: string,
+            isOldRepositoryInUseError: string,
 
 
             /// RHEL

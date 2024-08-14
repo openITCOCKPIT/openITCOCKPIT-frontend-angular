@@ -37,10 +37,10 @@
                     <br/>
                     <code>dpkg-reconfigure openitcockpit-release</code>
                 </p>
-                <p *ngIf="data.result.data.isOldRepositoryInUseErrorMessage">
+                <p *ngIf="data.result.data.isOldRepositoryInUseError">
                     <strong>{{ t('Error code') }}:</strong>
                     <br/>
-                    <code>{{ data.result.data.isOldRepositoryInUseErrorMessage }}</code>
+                    <code>{{ data.result.data.isOldRepositoryInUseError }}</code>
                 </p>
 
 
