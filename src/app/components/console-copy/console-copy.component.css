@@ -1,0 +1,18 @@
+
+.console {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    color:white;
+    background:black;
+    padding:7px;
+}
+/* Hide button by default */
+.copyBtn {
+    animation: fade-out .2s both;
+    display: none;
+    position: absolute;
+}
+/* Show button on hover */
+.console:hover .copyBtn {
+    animation: fade-in .2s both;
+    display: block;
+}
