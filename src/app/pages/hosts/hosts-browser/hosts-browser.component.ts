@@ -67,6 +67,18 @@ import {
     HostsDisableFlapdetectionModalComponent
 } from '../../../components/hosts/hosts-disable-flapdetection-modal/hosts-disable-flapdetection-modal.component';
 import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
+import {
+    HostsSendCustomNotificationModalComponent
+} from '../../../components/hosts/hosts-send-custom-notification-modal/hosts-send-custom-notification-modal.component';
+import {
+    CancelHostdowntimeModalComponent
+} from '../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
+import { DowntimeObject } from '../../downtimes/downtimes.interface';
+import { CancelAllItem } from '../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime.interface';
+import { DowntimesService } from '../../downtimes/downtimes.service';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { AcknowledgedHost } from '../../acknowledgements/acknowledgement.interface';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -108,10 +120,16 @@ import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
         CardTextDirective,
         BorderDirective,
         HostStatusNamePipe,
-        AlertComponent
+        AlertComponent,
+        HostsSendCustomNotificationModalComponent,
+        CancelHostdowntimeModalComponent,
+        TrustAsHtmlPipe
     ],
     templateUrl: './hosts-browser.component.html',
-    styleUrl: './hosts-browser.component.css'
+    styleUrl: './hosts-browser.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
+    ]
 })
 export class HostsBrowserComponent implements OnInit, OnDestroy {
 
@@ -141,6 +159,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private readonly DowntimesService = inject(DowntimesService);
 
 
     constructor() {
@@ -361,6 +380,47 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         });
     }
 
+    public sendCustomNotification(host: MergedHost) {
+        this.selectedItems = [];
+
+        if (this.result) {
+            this.selectedItems.push({
+                command: ExternalCommandsEnum.sendCustomHostNotification,
+                hostUuid: host.uuid,
+                options: 0, // will be overwritten by modal
+                comment: '', // will be overwritten by modal
+                author: this.result.username,
+            });
+
+            this.modalService.toggle({
+                show: true,
+                id: 'hostSendCustomNotificationModal',
+            });
+        }
+    }
+
+    public toggleCancelDowntimeModal(hostDowntime: DowntimeObject) {
+        this.selectedItems = [];
+
+        const item: CancelAllItem[] = [{
+            id: hostDowntime.internalDowntimeId
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'cancelAllModal',
+        });
+    }
+
+    public toggleDeleteAcknowledgementModal(hostAcknowledgement: AcknowledgedHost) {
+
+    }
+
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
+    protected readonly String = String;
 }

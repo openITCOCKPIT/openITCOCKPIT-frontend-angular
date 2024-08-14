@@ -250,7 +250,7 @@
                     <!-- End of mobile status view -->
 
                     <c-row>
-                        <c-col [xs]="12" [sm]="6" [md]="7" [lg]="9">
+                        <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
 
                             <!-- Check if host is disabled -->
                             <c-col *ngIf="result.mergedHost.disabled">
@@ -267,15 +267,111 @@
                                 </c-card>
                             </c-col>
 
+                            <c-row>
+                                <c-col [xs]="12" class="mt-1">
+                                    <h4>{{ t('Status overview') }}</h4>
+                                </c-col>
+                            </c-row>
+
+                            <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.downtime">
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                {{ t('The host is currently in a planned maintenance period') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <div>
+                                                {{ t('Downtime was set by') }}
+                                                <b>{{ result.downtime.authorName }}</b>
+                                                {{ t('with an duration of') }}
+                                                <b>{{ result.downtime.durationHuman }}</b>.
+                                            </div>
+                                            <div class="pt-1">
+                                                <small>
+                                                    {{ t('Start time:') }}
+                                                    {{ result.downtime.scheduledStartTime }}
+                                                    {{ t('End time:') }}
+                                                    {{ result.downtime.scheduledEndTime }}
+                                                </small>
+                                            </div>
+                                            <div class="pt-1">
+                                                {{ t('Comment: ') }}
+                                                {{ result.downtime.commentData }}
+                                            </div>
+
+                                            <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                                <button (click)="toggleCancelDowntimeModal(result.downtime)" cButton
+                                                        class="ripple float-end" color="danger"
+                                                        size="xs"
+                                                        *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Cancel') }}
+                                                </button>
+                                            </div>
+
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
+                            <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.acknowledgement">
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon
+                                                    [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                                {{ t('State of host is acknowledged') }}
+                                                <span [hidden]="!result.acknowledgement.is_sticky">
+                                                    ({{ t('Sticky') }})
+                                                </span>
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <div>
+                                                {{ t('Acknowledgement was set by') }}
+                                                <b>{{ result.acknowledgement.author_name }}</b>
+                                                {{ t('at') }}
+                                                {{ result.acknowledgement.entry_time }}.
+                                            </div>
+                                            <div class="pt-1">
+                                                {{ t('Comment: ') }}
+                                                <div class="word-break"
+                                                     [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                            </div>
+
+                                            <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                                <button
+                                                    (click)="toggleDeleteAcknowledgementModal(result.acknowledgement)"
+                                                    cButton
+                                                    class="ripple float-end" color="danger"
+                                                    size="xs"
+                                                    *ngIf="result.acknowledgement.allowEdit">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </button>
+                                            </div>
+
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
                             <c-alert color="warning" [dismissible]="false" *ngIf="result.hoststatus.isFlapping">
                                 <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                                 {{ t('The state of this host is currently flapping!') }}
                             </c-alert>
 
+
                         </c-col>
 
                         <!-- Desktop status bar -->
-                        <c-col [sm]="6" [md]="5" [lg]="3" class="d-none d-md-block"
+                        <c-col [md]="5" [lg]="3" class="d-none d-md-block"
                                [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
 
                             <div class="text-center text-white">
@@ -428,7 +524,8 @@
                                     </div>
                                 </div>
 
-                                <div class="browser-action d-flex p-0 mt-2">
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="sendCustomNotification(result.mergedHost)">
                                     <div class="browser-action-padding-top browser-action-label-bootstrap-5">
                                         <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
                                     </div>
@@ -437,6 +534,10 @@
                                     </div>
                                 </div>
 
+                            </c-row>
+
+                            <c-row class="mb-2">
+                                <!-- spacer -->
                             </c-row>
 
 
@@ -515,3 +616,8 @@
 
 <oitc-hosts-disable-flapdetection-modal [items]="selectedItems"
                                         (completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>
+
+<oitc-hosts-send-custom-notification-modal [items]="selectedItems"
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
+<oitc-cancel-hostdowntime-modal [items]="selectedItems"
+                                (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>

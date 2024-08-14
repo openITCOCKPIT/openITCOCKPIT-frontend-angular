@@ -23,13 +23,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ExternalCommandsService, HostProcessCheckResultItem, } from '../../../services/external-commands.service';
+import { ExternalCommandsService, HostSendCustomNotificationItem } from '../../../services/external-commands.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 
-
 @Component({
-    selector: 'oitc-hosts-process-checkresult-modal',
+    selector: 'oitc-hosts-send-custom-notification-modal',
     standalone: true,
     imports: [
         ButtonCloseDirective,
@@ -56,16 +55,14 @@ import { Subscription } from 'rxjs';
         XsButtonDirective,
         FormsModule
     ],
-    templateUrl: './hosts-process-checkresult-modal.component.html',
-    styleUrl: './hosts-process-checkresult-modal.component.css'
+    templateUrl: './hosts-send-custom-notification-modal.component.html',
+    styleUrl: './hosts-send-custom-notification-modal.component.css'
 })
-export class HostsProcessCheckresultModalComponent implements OnDestroy {
-    @Input({required: true}) public items: HostProcessCheckResultItem[] = [];
+export class HostsSendCustomNotificationModalComponent implements OnDestroy {
+    @Input({required: true}) public items: HostSendCustomNotificationItem[] = [];
     @Output() completed = new EventEmitter<boolean>();
     public isSend: boolean = false;
     public error: boolean = false;
-
-    public state: 0 | 1 | 2 = 0;
 
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
@@ -73,10 +70,10 @@ export class HostsProcessCheckresultModalComponent implements OnDestroy {
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
-    public processCheckresultModal = {
-        state: 0,
-        output: this.TranslocoService.translate('Test alert'),
-        force_hardstate: false
+    public sentNotificationModal = {
+        comment: this.TranslocoService.translate('Test notification'),
+        force: true,
+        broadcast: false
     };
 
     public hideModal() {
@@ -85,21 +82,30 @@ export class HostsProcessCheckresultModalComponent implements OnDestroy {
 
         this.modalService.toggle({
             show: false,
-            id: 'hostProcessCheckresultModal'
+            id: 'hostSendCustomNotificationModal'
         });
     }
 
     public setExternalCommands() {
-        if (this.processCheckresultModal.output === '') {
+        if (this.sentNotificationModal.comment === '') {
             this.error = true;
             return;
         }
 
+        let options: 0 | 1 | 2 | 3 = 0;
+        if (this.sentNotificationModal.force) {
+            options = 1;
+        }
+        if (this.sentNotificationModal.broadcast) {
+            options = 2;
+        }
+        if (this.sentNotificationModal.force && this.sentNotificationModal.broadcast) {
+            options = 3;
+        }
 
-        this.items.forEach((element: HostProcessCheckResultItem) => {
-            element.status_code = this.processCheckresultModal.state;
-            element.plugin_output = this.processCheckresultModal.output;
-            element.forceHardstate = this.processCheckresultModal.force_hardstate
+        this.items.forEach((element: HostSendCustomNotificationItem) => {
+            element.comment = this.sentNotificationModal.comment;
+            element.options = options;
         });
 
         this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
@@ -107,7 +113,7 @@ export class HostsProcessCheckresultModalComponent implements OnDestroy {
         }) => {
             //result.message: /nagios_module//cmdController line 256
             if (result.message) {
-                const title = this.TranslocoService.translate('Check results added');
+                const title = this.TranslocoService.translate('Notification send');
                 const msg = this.TranslocoService.translate('Commands added successfully to queue');
 
                 this.notyService.genericSuccess(msg, title);
