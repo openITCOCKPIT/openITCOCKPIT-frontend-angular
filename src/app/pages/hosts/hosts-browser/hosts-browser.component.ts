@@ -53,6 +53,16 @@ import {
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import {
+    HostsProcessCheckresultModalComponent
+} from '../../../components/hosts/hosts-process-checkresult-modal/hosts-process-checkresult-modal.component';
+import { HostProcessCheckResultItem } from '../../../services/external-commands.service';
+import {
+    HostsEnableFlapdetectionModalComponent
+} from '../../../components/hosts/hosts-enable-flapdetection-modal/hosts-enable-flapdetection-modal.component';
+import {
+    HostsDisableFlapdetectionModalComponent
+} from '../../../components/hosts/hosts-disable-flapdetection-modal/hosts-disable-flapdetection-modal.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -87,7 +97,10 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
         HostsDisableNotificationsModalComponent,
         HostsEnableNotificationsModalComponent,
         HostsMaintenanceModalComponent,
-        ServiceResetChecktimeModalComponent
+        ServiceResetChecktimeModalComponent,
+        HostsProcessCheckresultModalComponent,
+        HostsEnableFlapdetectionModalComponent,
+        HostsDisableFlapdetectionModalComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css'
@@ -286,6 +299,57 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         this.modalService.toggle({
             show: true,
             id: 'hostDisableNotificationsModal',
+        });
+    }
+
+    public processCheckResult(host: MergedHost) {
+        this.selectedItems = [];
+
+        const item: HostProcessCheckResultItem = {
+            command: ExternalCommandsEnum.commitPassiveResult,
+            maxCheckAttempts: Number(host.max_check_attempts),
+            hostUuid: String(host.uuid),
+            status_code: 0, // Will be overwritten with the modals default value
+            plugin_output: '', // Will be overwritten with the modals default value
+            forceHardstate: false, // Will be overwritten with the modals default value
+            long_output: ''
+        };
+
+        this.selectedItems.push(item);
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostProcessCheckresultModal',
+        });
+    }
+
+    public enableFlapdetection(host: MergedHost) {
+        this.selectedItems = [];
+
+        this.selectedItems.push({
+            command: ExternalCommandsEnum.enableOrDisableHostFlapdetection,
+            hostUuid: host.uuid,
+            condition: 1
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostEnableFlapdetectionModal',
+        });
+    }
+
+    public disableFlapdetection(host: MergedHost) {
+        this.selectedItems = [];
+
+        this.selectedItems.push({
+            command: ExternalCommandsEnum.enableOrDisableHostFlapdetection,
+            hostUuid: host.uuid,
+            condition: 0
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostDisableFlapdetectionModal',
         });
     }
 

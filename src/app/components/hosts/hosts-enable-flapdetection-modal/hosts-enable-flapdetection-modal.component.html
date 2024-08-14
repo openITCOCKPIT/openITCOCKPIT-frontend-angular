@@ -1,0 +1,44 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="hostEnableFlapdetectionModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['far', 'adjust']"></fa-icon>
+                {{ t('Enable host flap detection') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col class="text-center">
+                    <c-card>
+                        <c-card-body>
+                            <span
+                                class="hintmark">{{ t('Yes, I would like to temporarily enable flap detection.') }}</span>
+                            <br/>
+                            <br/>
+                            <span
+                                class="hintmark_before">{{ t('This option is only temporary. It does not affect your configuration. This is an external command and only saved in the memory of your monitoring engine.') }}</span>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Execute') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+
+

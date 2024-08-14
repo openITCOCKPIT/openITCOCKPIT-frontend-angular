@@ -1,6 +1,8 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
@@ -51,7 +53,9 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         NgSelectModule,
         RequiredIconComponent,
         FormSelectDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        CardComponent,
+        CardBodyComponent
     ],
     templateUrl: './hosts-enable-notifications-modal.component.html',
     styleUrl: './hosts-enable-notifications-modal.component.css'

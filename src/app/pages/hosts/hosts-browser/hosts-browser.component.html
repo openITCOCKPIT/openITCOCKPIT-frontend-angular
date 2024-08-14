@@ -211,17 +211,20 @@
 
                                     <button cButton color="default"
                                             [cTooltip]="'Passive transfer check result' | transloco"
-                                            cTooltipPlacement="top">
+                                            cTooltipPlacement="top"
+                                            (click)="processCheckResult(result.mergedHost)">
                                         <fa-icon [icon]="['fas', 'download']"></fa-icon>
                                     </button>
 
                                     <button cButton color="default" *ngIf="!result.hoststatus.flap_detection_enabled"
-                                            [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top">
+                                            [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
+                                            (click)="enableFlapdetection(result.mergedHost)">
                                         <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                     </button>
 
                                     <button cButton color="default" *ngIf="result.hoststatus.flap_detection_enabled"
-                                            [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top">
+                                            [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
+                                            (click)="disableFlapdetection(result.mergedHost)">
                                         <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                     </button>
 
@@ -305,3 +308,12 @@
 
 <oitc-hosts-disable-notifications-modal [items]="selectedItems"
                                         (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+
+<oitc-hosts-process-checkresult-modal [items]="selectedItems"
+                                      (completed)="onMassActionComplete($event)"></oitc-hosts-process-checkresult-modal>
+
+<oitc-hosts-enable-flapdetection-modal [items]="selectedItems"
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-flapdetection-modal>
+
+<oitc-hosts-disable-flapdetection-modal [items]="selectedItems"
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>

@@ -76,8 +76,46 @@ export interface ServiceNotifcationItem {
     serviceUuid: string
 }
 
-type Commands = ServiceDowntimeItem[] | HostAcknowledgeItem[] | ServiceAcknowledgeItem[] | ServiceResetItem[]
-    | ServiceNotifcationItem[] | HostRescheduleItem[] | HostDowntimeItem[] | HostEnableNotificationsItem[]
+export interface HostProcessCheckResultItem {
+    command: string,
+    hostUuid: string,
+    plugin_output: string,
+    long_output: string,
+    status_code: number,
+    forceHardstate: boolean
+    maxCheckAttempts: number
+}
+
+export interface ServiceProcessCheckResultItem {
+    command: string,
+    hostUuid: string,
+    serviceUuid: string,
+    plugin_output: string,
+    long_output: string,
+    status_code: number,
+    forceHardstate: boolean,
+    maxCheckAttempts: number,
+}
+
+export interface EnableOrDisableHostFlapDetectionItem {
+    command: string,
+    hostUuid: string,
+    condition: 0 | 1, // 0 - disable, 1 - enable
+}
+
+type Commands =
+    ServiceDowntimeItem[]
+    | HostAcknowledgeItem[]
+    | ServiceAcknowledgeItem[]
+    | ServiceResetItem[]
+    | ServiceNotifcationItem[]
+    | HostRescheduleItem[]
+    | HostDowntimeItem[]
+    | HostEnableNotificationsItem[]
+    | HostDisableNotificationsItem[]
+    | HostProcessCheckResultItem[]
+    | ServiceProcessCheckResultItem[]
+    | EnableOrDisableHostFlapDetectionItem[]
 
 @Injectable({
     providedIn: 'root'
