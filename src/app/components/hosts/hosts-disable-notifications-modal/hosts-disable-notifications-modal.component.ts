@@ -66,8 +66,6 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
-    public currentIndex: number = 0;
-    public error: boolean = false;
     public isSend: boolean = false;
     public state?: any
 
@@ -81,10 +79,9 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     public type: string = 'hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
-    hideModal() {
+    public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
-        this.currentIndex = 0;
 
         this.modalService.toggle({
             show: false,
@@ -92,46 +89,37 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
         });
     }
 
-    setExternalCommands() {
-        this.error = false;
+    public setExternalCommands() {
         this.isSend = true;
-        this.currentIndex = 0;
         this.sendCommands();
     }
 
 
-    ngOnInit() {
+    public ngOnInit() {
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    sendCommands() {
-        this.currentIndex = 0;
-        this.items.forEach((element: HostDisableNotificationsItem) => {
+    public sendCommands() {
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(this.items).subscribe((result: {
+            message: any;
+        }) => {
+            //result.message: /nagios_module//cmdController line 256
+            if (result.message) {
+                const title = this.TranslocoService.translate('Disable host notification');
+                const msg = this.TranslocoService.translate('Command sent successfully. Refresh in 5 seconds');
 
-            this.subscriptions.add(this.ExternalCommandsService.setExternalCommands([element]).subscribe((result: {
-                message: any;
-            }) => {
-                //result.message: /nagios_module//cmdController line 256
-                if (result.message) {
-
-                    this.currentIndex++;
-                } else {
-                    this.notyService.genericError();
-                }
-
-                if (this.currentIndex === this.items.length) {
-                    const title = this.TranslocoService.translate('Disable host notification');
-                    const msg = this.TranslocoService.translate('Command sent successfully. Refresh in 5 seconds');
-                    this.notyService.genericSuccess(msg, title);
-                    this.hideModal();
-                    setTimeout(() => {
-                        this.completed.emit(true);
-                    }, 5000);
-                }
-            }));
-        });
+                this.notyService.genericSuccess(msg, title);
+                this.hideModal();
+                setTimeout(() => {
+                    this.completed.emit(true);
+                }, 5000);
+            } else {
+                this.notyService.genericError();
+                this.hideModal();
+            }
+        }));
     }
 }
