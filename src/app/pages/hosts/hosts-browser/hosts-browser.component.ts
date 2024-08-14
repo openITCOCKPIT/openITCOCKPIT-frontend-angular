@@ -78,7 +78,12 @@ import { CancelAllItem } from '../../downtimes/cancel-hostdowntime-modal/cancel-
 import { DowntimesService } from '../../downtimes/downtimes.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
-import { AcknowledgedHost } from '../../acknowledgements/acknowledgement.interface';
+import { DeleteAcknowledgementItem } from '../../acknowledgements/acknowledgement.interface';
+import {
+    DeleteAcknowledgementsModalComponent
+} from '../../../layouts/coreui/delete-acknowledgements-modal/delete-acknowledgements-modal.component';
+import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
+import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -123,12 +128,14 @@ import { AcknowledgedHost } from '../../acknowledgements/acknowledgement.interfa
         AlertComponent,
         HostsSendCustomNotificationModalComponent,
         CancelHostdowntimeModalComponent,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        DeleteAcknowledgementsModalComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
     ]
 })
 export class HostsBrowserComponent implements OnInit, OnDestroy {
@@ -160,6 +167,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
+    private readonly AcknowledgementsService = inject(AcknowledgementsService);
 
 
     constructor() {
@@ -416,8 +424,23 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleDeleteAcknowledgementModal(hostAcknowledgement: AcknowledgedHost) {
+    public toggleDeleteAcknowledgementModal(host: MergedHost) {
+        this.selectedItems = [];
 
+        const item: DeleteAcknowledgementItem[] = [{
+            displayName: String(host.name),
+            hostId: host.id,
+            serviceId: null
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAcknowledgements',
+        });
     }
 
     protected readonly HostBrowserTabs = HostBrowserTabs;

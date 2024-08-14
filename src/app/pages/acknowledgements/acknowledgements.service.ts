@@ -7,7 +7,8 @@ import {
     AcknowledgementsHostParams,
     AcknowledgementsHostRoot,
     AcknowledgementsServiceParams,
-    AcknowledgementsServiceRoot
+    AcknowledgementsServiceRoot,
+    DeleteAcknowledgementItem
 } from './acknowledgement.interface';
 
 @Injectable({
@@ -62,5 +63,17 @@ export class AcknowledgementsService {
                 return data;
             })
         )
+    }
+
+    /************************************
+     *   Host /Service browser action   *
+     ************************************/
+    public deleteAcknowledgement(acknowledgement: DeleteAcknowledgementItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.post(`${proxyPath}/acknowledgements/delete/.json`, {
+            hostId: acknowledgement.hostId,
+            serviceId: acknowledgement.serviceId,
+        });
     }
 }

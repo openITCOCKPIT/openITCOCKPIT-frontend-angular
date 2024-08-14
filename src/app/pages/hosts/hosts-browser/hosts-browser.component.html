@@ -341,13 +341,13 @@
                                             </div>
                                             <div class="pt-1">
                                                 {{ t('Comment: ') }}
-                                                <div class="word-break"
+                                                <div class="word-break d-inline"
                                                      [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
                                             </div>
 
                                             <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
                                                 <button
-                                                    (click)="toggleDeleteAcknowledgementModal(result.acknowledgement)"
+                                                    (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
                                                     cButton
                                                     class="ripple float-end" color="danger"
                                                     size="xs"
@@ -621,3 +621,6 @@
                                            (completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
 <oitc-cancel-hostdowntime-modal [items]="selectedItems"
                                 (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
+
+<oitc-delete-acknowledgements-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
