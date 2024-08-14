@@ -101,7 +101,7 @@ export interface Container {
 // EDIT (POST)
 export interface ContactgroupEditPostContactgroup {
     contacts: ContactgroupPostContactgroupContacts
-    container:  {
+    container: {
         containertype_id: number
         id: number
         lft: number
@@ -140,7 +140,7 @@ export interface ContactgroupsCopyGetContactgroup {
         description: string
         container_id: number
     }
-    Container:  {
+    Container: {
         id: number
         name: string
     }
@@ -159,7 +159,6 @@ export interface ContactgroupsCopyPost {
     }
     Error: GenericValidationError | null
 }
-
 
 
 // USED BY
@@ -181,7 +180,7 @@ export interface ContactgroupUsedByObjects {
             contactgroup_id: number
             serviceescalation_id: number
         }
-        ContactgroupsToServiceescalations:  {
+        ContactgroupsToServiceescalations: {
             contactgroup_id: number
         }
     }[]
@@ -245,4 +244,23 @@ export interface GetContactsByContainerIdRoot {
 export interface LoadContainersRoot {
     containers: SelectKeyValue[]
     _csrfToken: string
+}
+
+
+/**********************
+ *    Hosts Browser   *
+ **********************/
+
+export interface ContactgroupEntity {
+    id: number
+    uuid: string
+    container_id: number
+    description: string
+    _joinData: {
+        id: number
+        contactgroup_id: number
+        hosttemplate_id: number
+    }
+    container: Container,
+    allowEdit?: boolean
 }

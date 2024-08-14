@@ -331,3 +331,14 @@ export interface MaxUploadLimit {
     unit: string
     string: string
 }
+
+export interface TimeperiodEnity {
+    id: number
+    uuid: string
+    container_id: number
+    name: string
+    description: string
+    calendar_id: number
+    created: string
+    modified: string
+}

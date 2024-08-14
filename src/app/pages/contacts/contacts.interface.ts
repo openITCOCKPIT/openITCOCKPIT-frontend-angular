@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { HostsToContainersSharing } from '../hosts/hosts.interface';
-import { Container } from '../containers/containers.interface';
+import { Container, ContainerWithContactJoinData } from '../containers/containers.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactsIndexParams {
@@ -496,4 +496,36 @@ export interface LoadUsersByContainerId {
 // LoadUsersByContainerIdRequest
 export interface LoadUsersByContainerIdRequest {
     containerIds: number[]
+}
+
+/**********************
+ *    Hosts Browser   *
+ **********************/
+export interface ContactEntity {
+    id: number
+    uuid: string
+    name: string
+    description: string
+    email: string
+    phone: string
+    user_id: any
+    host_timeperiod_id: number
+    service_timeperiod_id: number
+    host_notifications_enabled: number
+    service_notifications_enabled: number
+    notify_service_recovery: number
+    notify_service_warning: number
+    notify_service_unknown: number
+    notify_service_critical: number
+    notify_service_flapping: number
+    notify_service_downtime: number
+    notify_host_recovery: number
+    notify_host_down: number
+    notify_host_unreachable: number
+    notify_host_flapping: number
+    notify_host_downtime: number
+    host_push_notifications_enabled: number
+    service_push_notifications_enabled: number
+    containers: ContainerWithContactJoinData[]
+    allowEdit?: boolean
 }

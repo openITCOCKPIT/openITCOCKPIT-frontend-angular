@@ -65,7 +65,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: HostDowntimeItem[] = [];
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
-    @Output() completed = new EventEmitter<boolean>();
+    @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public currentIndex: number = 0;
     public errors?: ValidationErrors;
@@ -90,7 +90,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
-    hideModal() {
+    hideModal(): void {
         this.isSend = false;
         this.hasErrors = false;
         this.currentIndex = 0;
@@ -102,7 +102,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         });
     }
 
-    setExternalCommands() {
+    setExternalCommands(): void {
         this.error = false;
         this.isSend = true;
         this.currentIndex = 0;
@@ -114,7 +114,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
             to_time: this.downtimeModal.to_time
         }
         this.isSend = true;
-        this.subscriptions.add(this.DowntimesDefaultsService.validateDowntimesInput(validate).subscribe((result: any) => {
+        this.subscriptions.add(this.DowntimesDefaultsService.validateDowntimesInput(validate).subscribe((result: any): void => {
 
             if (!result.success) {
                 this.errors = result.data.Downtime;
@@ -124,10 +124,11 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
             if (result.success) {
                 const start = result.data.js_start;
                 const end = result.data.js_end;
-                this.items.forEach((element: HostDowntimeItem) => {
+                this.items.forEach((element: HostDowntimeItem): void => {
                     element.downtimetype = this.downtimeModal.downtimetype_id;
                     element.start = start;
                     element.end = end;
+                    element.comment = this.downtimeModal.comment;
                 });
                 this.sendCommands();
             }
@@ -135,42 +136,42 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     }
 
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'hostMaintenanceModal' && state.show === true) {
                 this.getDefaults();
             }
         }));
-        this.downtimeModal.comment = this.TranslocoService.translate('In progress');
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    getDefaults() {
+    getDefaults(): void {
         this.subscriptions.add(this.DowntimesDefaultsService.getDowntimesDefaultsConfiguration().subscribe(downtimeDefaults => {
             this.downtimeModal.downtimetype_id = downtimeDefaults.downtimetype_id
             this.downtimeModal.from_date = this.createDateString(downtimeDefaults.js_from);
             this.downtimeModal.from_time = downtimeDefaults.from_time;
             this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
             this.downtimeModal.to_time = downtimeDefaults.to_time;
+            this.downtimeModal.comment = downtimeDefaults.comment;
         }));
     }
 
 
-    createDateString = function (jsStringData: string) {
-        let splitData = jsStringData.split(',');
+    createDateString = function (jsStringData: string): string {
+        let splitData: string[] = jsStringData.split(',');
         return splitData[0].trim() + '-' + splitData[1].trim() + '-' + splitData[2].trim()
     }
 
-    sendCommands() {
+    sendCommands(): void {
         this.currentIndex = 0;
-        this.items.forEach((element: HostDowntimeItem) => {
+        this.items.forEach((element: HostDowntimeItem): void => {
 
             this.subscriptions.add(this.ExternalCommandsService.setExternalCommands([element]).subscribe((result: {
                 message: any;
-            }) => {
+            }): void => {
                 //result.message: /nagios_module//cmdController line 256
                 if (result.message) {
                     this.currentIndex++;

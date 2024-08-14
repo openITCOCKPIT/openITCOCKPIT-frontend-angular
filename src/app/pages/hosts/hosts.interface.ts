@@ -3,11 +3,18 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
-import { Customvariable } from '../contacts/contacts.interface';
+import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { GenericIdAndName } from '../../generic.interfaces';
+import { AcknowledgementObject } from '../acknowledgements/acknowledgement.interface';
+import { DowntimeObject } from '../downtimes/downtimes.interface';
+import { CheckCommandCake2 } from '../commands/commands.interface';
+import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
+import { ContainerWithHostJoinData } from '../containers/containers.interface';
+import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
+import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
 
 export interface HostObject {
     id?: number
@@ -115,8 +122,8 @@ export interface HoststatusObject {
     isFlapping?: boolean
     problemHasBeenAcknowledged?: boolean
     scheduledDowntimeDepth?: number
-    lastCheck?: string
-    nextCheck?: string
+    lastCheck?: string // "5 minutes ago"
+    nextCheck?: string  // "1 hour, 54 minutes"
     activeChecksEnabled?: boolean
     lastHardState?: string
     lastHardStateChange?: string
@@ -133,14 +140,18 @@ export interface HoststatusObject {
     last_time_up?: string
     lastHardStateChangeInWords?: string
     last_state_change_in_words?: string
-    lastCheckInWords?: string
-    nextCheckInWords?: string
+    lastCheckInWords?: string // "5 minutes ago"
+    nextCheckInWords?: string // "1 hour, 54 minutes"
     isHardstate?: boolean
     isInMonitoring?: boolean
-    humanState?: string
-    cssClass?: string
-    textClass?: string
+    humanState?: string // "up"
+    cssClass?: string // "bg-up"
+    textClass?: string // "up"
     outputHtml?: string
+    lastHardStateChangeUser?: string, // "09:31:53 - 11.07.2024"
+    last_state_change_user?: string, // "09:31:53 - 11.07.2024"
+    lastCheckUser?: string, // "09:31:53 - 11.07.2024"
+    nextCheckUser?: string, // "09:31:53 - 11.07.2024"
 }
 
 export interface HostsToContainersSharing {
@@ -722,4 +733,74 @@ export interface HostBrowserMenu {
     allowEdit: boolean
     includeHoststatus: boolean,
     Hoststatus: HoststatusObject
+}
+
+/*************************
+ *     Host Browser      *
+ *************************/
+
+export interface MergedHost extends HostEntity {
+    hostcommandargumentvalues: HostCommandArgument[],
+    hosts_to_containers_sharing: ContainerWithHostJoinData[],
+    parenthosts: HostEntity[],
+    customvariables: Customvariable[],
+    hostgroups: HostgroupEntityWithJoinData[],
+    contacts: ContactEntity[],
+    contactgroups: ContactgroupEntity[],
+    is_satellite_host: boolean,
+    allowEdit: boolean,
+    showServices: boolean,
+    host_url_replaced: string,
+    hostCommandLine: string,
+    checkIntervalHuman: string,
+    retryIntervalHuman: string,
+    notificationIntervalHuman: string,
+}
+
+export interface HostBrowserResult {
+    mergedHost: MergedHost,
+    docuExists: boolean,
+    areContactsFromHost: boolean,
+    areContactsInheritedFromHosttemplate: boolean,
+    hoststatus: HoststatusObject,
+    mainContainer: GenericIdAndName[],
+    sharedContainers: {
+        [key: number]: GenericIdAndName[]
+    },
+    parenthosts: HostEntity[],
+    parentHostStatus: {
+        [key: string]: HoststatusObject
+    },
+    acknowledgement?: AcknowledgementObject,
+    downtime?: DowntimeObject,
+    checkCommand: CheckCommandCake2,
+    checkPeriod: TimeperiodEnity,
+    notifyPeriod: TimeperiodEnity,
+    canSubmitExternalCommands: boolean,
+    objects: {
+        Hostgroups: GenericIdAndName[],
+        Instantreports: GenericIdAndName[],
+        Autoreports: GenericIdAndName[],
+        Eventcorrelations: {
+            host_id: number,
+            Hosts: {
+                name: string
+            },
+            FilterHost: {
+                id: number
+            }
+        }[]
+        Maps: GenericIdAndName[],
+    },
+    satelliteId: number,
+    mapModule: boolean,
+    username: string
+}
+
+export interface HostBrowserSlaOverview {
+    state: string,
+    evaluation_end: number, // could be a unix timestamp or a date string "2024-08-12T00:00:00+02:00"
+    determined_availability_percent?: number,
+    warning_threshold?: number | null,
+    minimal_availability?: number,
 }

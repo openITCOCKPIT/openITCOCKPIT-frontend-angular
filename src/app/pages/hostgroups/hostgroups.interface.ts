@@ -1,4 +1,4 @@
-import { PaginateOrScroll, Paging, Scroll } from "../../layouts/coreui/paginator/paginator.interface";
+import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 import { HoststatusObject } from '../hosts/hosts.interface';
@@ -217,6 +217,7 @@ export interface HostgroupsLoadHostgroupsByStringParams {
     'filter[Containers.name]': string,
     'selected[]'?: number[]
 }
+
 // EXTENDED VIEW
 export interface HostgroupExtendedRoot extends PaginateOrScroll {
     hostgroup: HostgroupExtended
@@ -294,7 +295,6 @@ export interface HostGroupExtendedHost {
         }
     }
 }
-
 
 
 // LOAD SERVICES FOR HOSTS
@@ -418,4 +418,17 @@ export interface ServicesList {
     }
     Downtime: any[]
     Acknowledgement: any[]
+}
+
+export interface HostgroupEntityWithJoinData {
+    id: number,
+    uuid: string,
+    container_id: number,
+    description: string,
+    hostgroup_url: string,
+    _joinData: {
+        id: number,
+        host_id: number,
+        hostgroup_id: number,
+    }
 }

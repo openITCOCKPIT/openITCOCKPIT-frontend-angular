@@ -8,17 +8,281 @@
         <oitc-query-handler-checker></oitc-query-handler-checker>
 
 
-        <oitc-browser-loader></oitc-browser-loader>
-        <c-card class="mb-3 mt-3">
+        <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
+        <c-card class="mb-3 mt-3" *ngIf="result">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host:') }}
+                <h5 cCardTitle>{{ t('Host') }}:
                     <small class="fw-300">
-                        Display Hostname
+                        {{ result.mergedHost.name }}
                     </small>
                 </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadHost()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.StatusInformation}"
+                            (click)="changeTab(HostBrowserTabs.StatusInformation)">
+                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                            {{ t('Status information') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.DeviceInformation}"
+                            (click)="changeTab(HostBrowserTabs.DeviceInformation)">
+                            <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
+                            {{ t('Device information') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            *oitcPermission="['hosts', 'timeline']" class="nav-link"
+                            [ngClass]="{'active': selectedTab == HostBrowserTabs.Timeline}"
+                            (click)="changeTab(HostBrowserTabs.Timeline)">
+                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                            {{ t('Timeline') }}
+                        </button>
+                    </c-nav-item>
+
+                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.ServiceNow}"
+                                (click)="changeTab(HostBrowserTabs.ServiceNow)">
+                                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                                {{ t('ServiceNow') }}
+                            </button>
+                        </c-nav-item>
+                    }
+
+                    @if (PermissionsService.hasModule('GrafanaModule') && GrafanaIframe?.GrafanaDashboardExists) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.Grafana}"
+                                (click)="changeTab(HostBrowserTabs.Grafana)">
+                                <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon>
+                                {{ t('Grafana') }}
+                            </button>
+                        </c-nav-item>
+                    }
+
+                    @if (PermissionsService.hasModule('ImportModule') && PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                        <c-nav-item *ngIf="AdditionalInformationExists">
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
+                                (click)="changeTab(HostBrowserTabs.CMDB)">
+                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                {{ t('CMDB') }}
+                            </button>
+                        </c-nav-item>
+                    }
+
+                    @if (PermissionsService.hasModule('SLAModule') && SlaOverview) {
+                        <c-nav-item>
+                            @if (SlaOverview.state === 'not_available') {
+                                <button
+                                    class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
+                                    (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                    </span> {{ t('Not available') }}
+                                </button>
+                            } @else {
+                                <button
+                                    class="btn btn-labeled btn-xs btn-w-m ripple"
+                                    [ngClass]="'btn-'+SlaOverview.state"
+                                    (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'check']"
+                                                 *ngIf="SlaOverview.state == 'success'"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                 *ngIf="SlaOverview.state == 'warning'"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'bolt']"
+                                                 *ngIf="SlaOverview.state == 'danger'"></fa-icon>
+                                    </span> {{ SlaOverview.determined_availability_percent }} %
+                                </button>
+                            }
+
+                        </c-nav-item>
+                    }
+
+                </c-nav>
+
             </c-card-header>
             <c-card-body>
-                <p>hosts-browser works!</p>
+
+                <!-- Status information start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.StatusInformation">
+
+                    <!-- Status for small resolution -->
+                    <div class="d-md-none p-2 text-white" [ngClass]="result.hoststatus.cssClass">
+                        <c-row>
+                            <c-col [xs]="6">
+                                {{ 'State' }}
+                            </c-col>
+                            <c-col [xs]="6">
+                                {{ result.hoststatus.humanState }}
+                            </c-col>
+
+                            <c-col [xs]="6">
+                                {{ 'State since' }}
+                            </c-col>
+                            <c-col [xs]="6" [title]="result.hoststatus.last_state_change_user">
+                                {{ result.hoststatus.last_state_change }}
+                            </c-col>
+
+                            <c-col [xs]="6">
+                                {{ 'Last check' }}
+                            </c-col>
+                            <c-col [xs]="6" [title]="result.hoststatus.lastCheckUser">
+                                {{ result.hoststatus.lastCheck }}
+                            </c-col>
+
+                            <c-col [xs]="6">
+                                {{ 'Next check' }}
+                            </c-col>
+                            @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
+                                <c-col [xs]="6" [title]="result.hoststatus.nextCheckUser">
+                                    {{ result.hoststatus.nextCheck }}
+                                </c-col>
+                            } @else {
+                                <c-col [xs]="6">
+                                    {{ t('n/a') }}
+                                </c-col>
+                            }
+
+                            <c-col [xs]="6">
+                                {{ 'State type' }}
+                            </c-col>
+                            <c-col [xs]="6">
+                                @if (result.hoststatus.isHardstate) {
+                                    {{ t('Hard state') }}
+                                } @else {
+                                    {{ t('Soft state') }}
+                                }
+                                ({{ result.hoststatus.current_check_attempt }}
+                                /{{ result.hoststatus.max_check_attempts }})
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit">
+                            <c-button-toolbar role="group" class="justify-content-center pt-2">
+                                <c-button-group role="group">
+                                    <button cButton color="default"
+                                            [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
+                                            (click)="resetChecktime(result.mergedHost)">
+                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default"
+                                            [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
+                                            (click)="toggleDowntimeModal(result.mergedHost)">
+                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="Number(result.hoststatus.currentState) > 0"
+                                            [cTooltip]="'Acknowledge host status' | transloco" cTooltipPlacement="top"
+                                            (click)="acknowledgeStatus(result.mergedHost)">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default"
+                                            [cTooltip]="'Passive transfer check result' | transloco"
+                                            cTooltipPlacement="top">
+                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="!result.hoststatus.flap_detection_enabled"
+                                            [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="result.hoststatus.flap_detection_enabled"
+                                            [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="!result.hoststatus.notifications_enabled"
+                                            [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
+                                            (click)="enableNotifications(result.mergedHost)">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="result.hoststatus.notifications_enabled"
+                                            [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
+                                            (click)="disableNotifications(result.mergedHost)">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </button>
+
+                                </c-button-group>
+                            </c-button-toolbar>
+                        </c-row>
+
+
+                    </div>
+
+
+                </div>
+                <!-- Status information end -->
+
+                <!-- Device information start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.DeviceInformation">
+                    DeviceInformation
+                </div>
+                <!-- Device information end -->
+
+                <!-- Timeline start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.Timeline">
+                    Timeline
+                </div>
+                <!-- Timeline end -->
+
+                <!-- ServiceNow Module start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.ServiceNow">
+                    ServiceNow
+                </div>
+                <!-- ServiceNow Module end -->
+
+                <!-- Grafana Module start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.Grafana">
+                    Grafana
+                </div>
+                <!-- Grafana Module end -->
+
+                <!-- Import Module start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.CMDB">
+                    CMDB
+                </div>
+                <!-- Import Module end -->
+
+                <!-- SLA Module start -->
+                <div *ngIf="selectedTab == HostBrowserTabs.SLA">
+                    SLA
+                </div>
+                <!-- SLA Module end -->
 
             </c-card-body>
             <c-card-footer>
@@ -27,3 +291,17 @@
     </ng-container>
 </oitc-coreui>
 
+<oitc-service-reset-checktime-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
+
+<oitc-host-acknowledge-modal (completed)="onMassActionComplete($event)"
+                             [items]="selectedItems"></oitc-host-acknowledge-modal>
+
+<oitc-hosts-maintenance-modal [items]="selectedItems"
+                              (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
+
+<oitc-hosts-enable-notifications-modal [items]="selectedItems"
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+
+<oitc-hosts-disable-notifications-modal [items]="selectedItems"
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
