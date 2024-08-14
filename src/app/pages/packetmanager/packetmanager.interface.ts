@@ -12,7 +12,7 @@ export interface PacketmanagerIndexRoot {
             systemname: string
             newVersion: boolean
             version: string
-            logoURL: string
+            logoUrl: string
             _csrfToken: string
         }
     }

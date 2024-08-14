@@ -116,7 +116,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 systemname: '',
                 newVersion: false,
                 version: '',
-                logoURL: '',
+                logoUrl: '',
                 _csrfToken: ''
             }
         },
