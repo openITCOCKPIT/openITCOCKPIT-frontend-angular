@@ -96,3 +96,12 @@ export interface AcknowledgementsServiceRoot extends PaginateOrScroll {
 export interface AcknowledgedService extends AcknowledgedHost {
 
 }
+
+/************************************
+ *   Host /Service browser action   *
+ ************************************/
+export interface DeleteAcknowledgementItem {
+    displayName: string,
+    hostId: number,
+    serviceId: number | null,
+}

@@ -188,6 +188,7 @@
 
                         </c-row>
 
+                        <!-- External Commands Mobile View -->
                         <c-row *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit">
                             <c-button-toolbar role="group" class="justify-content-center pt-2">
                                 <c-button-group role="group">
@@ -249,7 +250,7 @@
                     <!-- End of mobile status view -->
 
                     <c-row>
-                        <c-col [xs]="12" [sm]="6" [md]="7" [lg]="9">
+                        <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
 
                             <!-- Check if host is disabled -->
                             <c-col *ngIf="result.mergedHost.disabled">
@@ -266,17 +267,279 @@
                                 </c-card>
                             </c-col>
 
+                            <c-row>
+                                <c-col [xs]="12" class="mt-1">
+                                    <h4>{{ t('Status overview') }}</h4>
+                                </c-col>
+                            </c-row>
+
+                            <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.downtime">
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                {{ t('The host is currently in a planned maintenance period') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <div>
+                                                {{ t('Downtime was set by') }}
+                                                <b>{{ result.downtime.authorName }}</b>
+                                                {{ t('with an duration of') }}
+                                                <b>{{ result.downtime.durationHuman }}</b>.
+                                            </div>
+                                            <div class="pt-1">
+                                                <small>
+                                                    {{ t('Start time:') }}
+                                                    {{ result.downtime.scheduledStartTime }}
+                                                    {{ t('End time:') }}
+                                                    {{ result.downtime.scheduledEndTime }}
+                                                </small>
+                                            </div>
+                                            <div class="pt-1">
+                                                {{ t('Comment: ') }}
+                                                {{ result.downtime.commentData }}
+                                            </div>
+
+                                            <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                                <button (click)="toggleCancelDowntimeModal(result.downtime)" cButton
+                                                        class="ripple float-end" color="danger"
+                                                        size="xs"
+                                                        *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Cancel') }}
+                                                </button>
+                                            </div>
+
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
+                            <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.acknowledgement">
+                                <c-col [xs]="12">
+                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                            class="mb-3">
+                                        <c-card-header>
+                                            <h5 class="text-info">
+                                                <fa-icon
+                                                    [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                                {{ t('State of host is acknowledged') }}
+                                                <span [hidden]="!result.acknowledgement.is_sticky">
+                                                    ({{ t('Sticky') }})
+                                                </span>
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <div>
+                                                {{ t('Acknowledgement was set by') }}
+                                                <b>{{ result.acknowledgement.author_name }}</b>
+                                                {{ t('at') }}
+                                                {{ result.acknowledgement.entry_time }}.
+                                            </div>
+                                            <div class="pt-1">
+                                                {{ t('Comment: ') }}
+                                                <div class="word-break d-inline"
+                                                     [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                            </div>
+
+                                            <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                                <button
+                                                    (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
+                                                    cButton
+                                                    class="ripple float-end" color="danger"
+                                                    size="xs"
+                                                    *ngIf="result.acknowledgement.allowEdit">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </button>
+                                            </div>
+
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
+                            <c-alert color="warning" [dismissible]="false" *ngIf="result.hoststatus.isFlapping">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ t('The state of this host is currently flapping!') }}
+                            </c-alert>
+
+
                         </c-col>
 
                         <!-- Desktop status bar -->
-                        <c-col [sm]="6" [md]="5" [lg]="3" class="d-none d-md-block"
+                        <c-col [md]="5" [lg]="3" class="d-none d-md-block"
                                [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
 
                             <div class="text-center text-white">
-                                <div class="display-6">
+                                <div class="display-5">
                                     {{ result.hoststatus.currentState | hostStatusName }}
                                 </div>
                             </div>
+
+                            <!-- State information -->
+                            <c-row *ngIf="result.hoststatus.isInMonitoring" class="pt-2">
+                                <c-col [xs]="12" class="text-center text-white">
+                                    <div>{{ t('State since') }}</div>
+                                    <div class="h3"
+                                         [cTooltip]=" result.hoststatus.last_state_change_user" cTooltipPlacement="top">
+                                        {{ result.hoststatus.last_state_change }}
+                                    </div>
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('Last check') }}</div>
+                                    <div class="h3"
+                                         [cTooltip]=" result.hoststatus.lastCheckUser" cTooltipPlacement="top">
+                                        {{ result.hoststatus.lastCheck }}
+                                    </div>
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('Next check') }}</div>
+                                    @if (result.mergedHost.active_checks_enabled && !result.mergedHost.is_satellite_host) {
+                                        <div class="h3"
+                                             [cTooltip]="result.hoststatus.nextCheckUser" cTooltipPlacement="top">
+                                            {{ result.hoststatus.nextCheck }}
+                                        </div>
+                                        <div [hidden]="Number(result.hoststatus.latency) < 1"
+                                             [cTooltip]="'Latency' | transloco"
+                                             cTooltipPlacement="top">
+                                            <small class="text-muted">(+ {{ result.hoststatus.latency }})</small>
+                                        </div>
+                                    } @else {
+                                        <div class="h3">
+                                            {{ t('n/a') }}
+                                        </div>
+                                    }
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('State type') }}</div>
+                                    @if (result.hoststatus.isHardstate) {
+                                        <div class="h3">
+                                            {{ t('Hard state') }}
+                                            ({{ result.hoststatus.current_check_attempt }}
+                                            /{{ result.hoststatus.max_check_attempts }})
+                                        </div>
+                                    } @else {
+                                        <div class="h3">
+                                            {{ t('Soft state') }}
+                                            ({{ result.hoststatus.current_check_attempt }}
+                                            /{{ result.hoststatus.max_check_attempts }})
+                                        </div>
+                                    }
+                                </c-col>
+                            </c-row>
+
+                            <!-- External Command Buttons -->
+                            <c-row *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit"
+                                   class="text-white">
+
+                                <div class="browser-action d-flex p-0"
+                                     (click)="resetChecktime(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Reset check time ') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="toggleDowntimeModal(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Schedule maintenance') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="Number(result.hoststatus.currentState) > 0"
+                                     (click)="acknowledgeStatus(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Acknowledge host status') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="processCheckResult(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Passive transfer check result') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="!result.hoststatus.flap_detection_enabled"
+                                     (click)="enableFlapdetection(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Enable flap detection') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="result.hoststatus.flap_detection_enabled"
+                                     (click)="disableFlapdetection(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Disable flap detection') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="!result.hoststatus.notifications_enabled"
+                                     (click)="enableNotifications(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Enable notifications') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="result.hoststatus.notifications_enabled"
+                                     (click)="disableNotifications(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Disable notifications') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="sendCustomNotification(result.mergedHost)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Send custom host notification ') }}
+                                    </div>
+                                </div>
+
+                            </c-row>
+
+                            <c-row class="mb-2">
+                                <!-- spacer -->
+                            </c-row>
+
 
                         </c-col>
                         <!-- End of desktop status bar -->
@@ -353,3 +616,11 @@
 
 <oitc-hosts-disable-flapdetection-modal [items]="selectedItems"
                                         (completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>
+
+<oitc-hosts-send-custom-notification-modal [items]="selectedItems"
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
+<oitc-cancel-hostdowntime-modal [items]="selectedItems"
+                                (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
+
+<oitc-delete-acknowledgements-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>

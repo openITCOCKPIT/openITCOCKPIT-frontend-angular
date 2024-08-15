@@ -1,0 +1,70 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="hostSendCustomNotificationModal"
+        size="lg"
+    >
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                {{ t('Send custom host notification') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+
+                    <div class="mb-3">
+                        <label cLabel for="notification_comment_host">{{ t('Comment') }}</label>
+                        <input cFormControl id="notification_comment_host" name="notification_comment_host"
+                               [placeholder]="'Test notification comment' | transloco"
+                               [(ngModel)]="sentNotificationModal.comment">
+                        <div class="help-block">
+                            {{ t('Comment data will be avaiable through the macro') }}
+                            <code>$NOTIFICATIONCOMMENT$</code>
+                        </div>
+                    </div>
+                    <c-form-check class="mb-3">
+                        <input cFormCheckInput id="force_notification_host" name="force_notification_host"
+                               type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="sentNotificationModal.force"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="force_notification_host">
+                            {{ t('Force') }}
+                        </label>
+                        <div class="help-block">
+                            {{ t('Time period and notifications disabled configuration will be ignored') }}
+                        </div>
+                    </c-form-check>
+
+                    <c-form-check class="mb-3">
+                        <input cFormCheckInput id="broadcast_notification_host" name="broadcast_notification_host"
+                               type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="sentNotificationModal.broadcast"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="broadcast_notification_host">
+                            {{ t('Broadcast') }}
+                        </label>
+                        <div class="help-block">
+                            {{ t(' Notification will also be sent to escalation contacts') }}
+                        </div>
+                    </c-form-check>
+
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

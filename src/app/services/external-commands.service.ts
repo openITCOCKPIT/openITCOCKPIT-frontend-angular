@@ -103,6 +103,24 @@ export interface EnableOrDisableHostFlapDetectionItem {
     condition: 0 | 1, // 0 - disable, 1 - enable
 }
 
+export interface HostSendCustomNotificationItem {
+    command: string,
+    hostUuid: string,
+    options: 0 | 1 | 2 | 3, // 1 = force, 2 = broadcast, 3 = force and broadcast
+    author: string,
+    comment: string,
+}
+
+export interface ServiceSendCustomNotificationItem {
+    command: string,
+    hostUuid: string,
+    serviceUuid: string,
+    options: 0 | 1 | 2 | 3, // 1 = force, 2 = broadcast, 3 = force and broadcast
+    author: string,
+    comment: string,
+}
+
+
 type Commands =
     ServiceDowntimeItem[]
     | HostAcknowledgeItem[]
@@ -116,6 +134,8 @@ type Commands =
     | HostProcessCheckResultItem[]
     | ServiceProcessCheckResultItem[]
     | EnableOrDisableHostFlapDetectionItem[]
+    | HostSendCustomNotificationItem[]
+    | ServiceSendCustomNotificationItem[]
 
 @Injectable({
     providedIn: 'root'
