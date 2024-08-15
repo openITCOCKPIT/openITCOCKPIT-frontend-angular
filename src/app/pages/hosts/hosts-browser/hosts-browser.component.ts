@@ -94,6 +94,10 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import {
     SatelliteNameComponent
 } from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
+import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
+import {
+    HostTimelineLegendComponent
+} from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -149,7 +153,9 @@ import {
         LabelLinkComponent,
         RequiredIconComponent,
         KeyValuePipe,
-        SatelliteNameComponent
+        SatelliteNameComponent,
+        BrowserTimelineComponent,
+        HostTimelineLegendComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',

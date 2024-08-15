@@ -1049,8 +1049,12 @@
                 <!-- Device information end -->
 
                 <!-- Timeline start -->
-                <div *ngIf="selectedTab == HostBrowserTabs.Timeline">
-                    Timeline
+                <div *ngIf="selectedTab == HostBrowserTabs.Timeline && result && result.mergedHost">
+                    <oitc-browser-timeline
+                        [type]="'Host'"
+                        [objectId]="result.mergedHost.id">
+                        <oitc-host-timeline-legend></oitc-host-timeline-legend>
+                    </oitc-browser-timeline>
                 </div>
                 <!-- Timeline end -->
 

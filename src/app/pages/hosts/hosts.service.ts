@@ -38,6 +38,7 @@ import { HosttemplatePost } from '../hosttemplates/hosttemplates.interface';
 import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
 import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
 import { GrafanaIframeUrlForDatepicker } from '../../modules/grafana_module/grafana.interface';
+import { BrowserTimelineApiResult } from '../../components/timeline/browser-timeline/browser-timeline.interface';
 
 
 @Injectable({
@@ -610,6 +611,23 @@ export class HostsService {
             .pipe(
                 map(data => {
                     return data.slaOverview;
+                })
+            )
+    }
+
+    public loadTimeline(id: number, startTimestamp: number, endTimetamp: number): Observable<BrowserTimelineApiResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<BrowserTimelineApiResult>(`${proxyPath}/hosts/timeline/${id}.json`, {
+                params: {
+                    angular: true,
+                    start: startTimestamp,
+                    end: endTimetamp
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }
