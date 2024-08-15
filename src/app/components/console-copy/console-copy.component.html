@@ -1,0 +1,21 @@
+<ng-container *transloco="let t">
+    <div class="console">
+        <div class="copyBtn"
+             style="right: 20px;"
+             rel="tooltip"
+             [matTooltip]="'Copied' | transloco">
+            <button
+                    cButton
+                    class="ripple"
+                    size="sm"
+                    color="secondary"
+                    (click)="copy()"
+                    title="{{t('Copy to clipboard')}}">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+            </button>
+        </div>
+        <span [innerHTML]="_htmlCommand | trustAsHtml">
+
+        </span>
+    </div>
+</ng-container>

@@ -125,6 +125,9 @@ const coreRoutes: Routes = [{
     path: 'metrics/info',
     loadComponent: () => import('./pages/metrics/metrics-info/metrics-info.component').then(m => m.MetricsInfoComponent)
 }, {
+    path: 'packetmanager/index',
+    loadComponent: () => import('./pages/packetmanager/packetmanager-index/packetmanager-index.component').then(m => m.PacketmanagerIndexComponent)
+}, {
     path: 'services/index',
     loadComponent: () => import('./pages/services/services-index/services-index.component').then(m => m.ServicesIndexComponent)
 }, {
