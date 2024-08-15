@@ -796,7 +796,8 @@ export interface HostBrowserResult {
     satelliteId: number,
     mapModule: boolean,
     username: string,
-    blurryCommandLine: boolean
+    blurryCommandLine: boolean,
+    masterInstanceName: string
 }
 
 export interface HostBrowserSlaOverview {

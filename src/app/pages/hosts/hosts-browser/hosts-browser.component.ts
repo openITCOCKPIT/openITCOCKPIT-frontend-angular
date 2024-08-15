@@ -33,7 +33,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -91,6 +91,9 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
 import { HoststatusSimpleIconComponent } from '../hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import {
+    SatelliteNameComponent
+} from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -144,7 +147,9 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
         NgForOf,
         HoststatusSimpleIconComponent,
         LabelLinkComponent,
-        RequiredIconComponent
+        RequiredIconComponent,
+        KeyValuePipe,
+        SatelliteNameComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -162,6 +167,9 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public result?: HostBrowserResult;
     public selectedTab: HostBrowserTabs = HostBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
+    public priorityClasses: string[] = ['ok-soft', 'ok', 'warning', 'critical-soft', 'critical'];
+    public priorities: string[] = [];
+    public tags: string[] = [];
 
     public GrafanaIframe?: GrafanaIframeUrlForDatepicker;
 
@@ -222,6 +230,18 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.getHostBrowser(this.id).subscribe((result) => {
             this.result = result;
+
+            let priority = Number(result.mergedHost.priority);
+            // Sift priority into array index
+            if (priority > 0) {
+                priority = priority - 1;
+            }
+            this.priorities = ['text-muted', 'text-muted', 'text-muted', 'text-muted', 'text-muted']; // make all icons gray
+            for (let i = 0; i <= priority; i++) {
+                this.priorities[i] = this.priorityClasses[priority]; // set color depending on priority level
+            }
+
+            this.tags = String(result.mergedHost.tags).split(',');
 
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
