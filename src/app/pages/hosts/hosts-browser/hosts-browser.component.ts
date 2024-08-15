@@ -14,6 +14,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
     AlertComponent,
+    BadgeComponent,
     BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
@@ -28,10 +29,11 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
+    TableDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -84,6 +86,11 @@ import {
 } from '../../../layouts/coreui/delete-acknowledgements-modal/delete-acknowledgements-modal.component';
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
+import { MatSort } from '@angular/material/sort';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { HoststatusSimpleIconComponent } from '../hoststatus-simple-icon/hoststatus-simple-icon.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -129,7 +136,15 @@ import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-ack
         HostsSendCustomNotificationModalComponent,
         CancelHostdowntimeModalComponent,
         TrustAsHtmlPipe,
-        DeleteAcknowledgementsModalComponent
+        DeleteAcknowledgementsModalComponent,
+        MatSort,
+        TableDirective,
+        CopyToClipboardComponent,
+        BadgeComponent,
+        NgForOf,
+        HoststatusSimpleIconComponent,
+        LabelLinkComponent,
+        RequiredIconComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -446,4 +461,5 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
     protected readonly String = String;
+    protected readonly Boolean = Boolean;
 }
