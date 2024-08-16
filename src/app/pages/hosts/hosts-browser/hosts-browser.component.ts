@@ -98,6 +98,9 @@ import { BrowserTimelineComponent } from '../../../components/timeline/browser-t
 import {
     HostTimelineLegendComponent
 } from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
+import {
+    HostsBrowserServicesListComponent
+} from '../hosts-browser-services-list/hosts-browser-services-list.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -155,7 +158,8 @@ import {
         KeyValuePipe,
         SatelliteNameComponent,
         BrowserTimelineComponent,
-        HostTimelineLegendComponent
+        HostTimelineLegendComponent,
+        HostsBrowserServicesListComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -171,6 +175,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public hostBrowserConfig?: HostBrowserMenuConfig;
 
     public result?: HostBrowserResult;
+    public lastUpdated: Date = new Date(); // Used to tell child components to reload data
+
     public selectedTab: HostBrowserTabs = HostBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
     public priorityClasses: string[] = ['ok-soft', 'ok', 'warning', 'critical-soft', 'critical'];
@@ -252,6 +258,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
             this.loadSlaInformation();
+            
+            this.lastUpdated = new Date();
         }));
     }
 

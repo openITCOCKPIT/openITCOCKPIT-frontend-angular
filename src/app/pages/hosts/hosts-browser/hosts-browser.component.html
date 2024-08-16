@@ -3,7 +3,8 @@
 
         <oitc-hosts-browser-menu
             *ngIf="hostBrowserConfig"
-            [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+            [config]="hostBrowserConfig"
+            [lastUpdated]="lastUpdated"></oitc-hosts-browser-menu>
 
         <oitc-query-handler-checker></oitc-query-handler-checker>
 
@@ -413,7 +414,7 @@
                                             </td>
                                         </tr>
 
-                                        <tr>
+                                        <tr *ngIf="Number(result.hoststatus.currentState) > 0">
                                             <td>
                                                 {{ t('Last time') }}
                                                 <c-badge color="success">{{ t('UP') }}</c-badge>
@@ -1083,9 +1084,15 @@
                 <!-- SLA Module end -->
 
             </c-card-body>
-            <c-card-footer>
-            </c-card-footer>
         </c-card>
+
+        <!-- List of services -->
+        <oitc-hosts-browser-services-list *ngIf="result && result.mergedHost"
+                                          [hostId]="result.mergedHost.id"
+                                          [lastUpdated]="lastUpdated">
+            
+        </oitc-hosts-browser-services-list>
+
     </ng-container>
 </oitc-coreui>
 
