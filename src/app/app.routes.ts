@@ -395,6 +395,15 @@ const coreRoutes: Routes = [{
     path: 'systemfailures/add',
     loadComponent: () => import('./pages/systemfailures/systemfailures-add/systemfailures-add.component').then(m => m.SystemfailuresAddComponent)
 }, {
+    path: 'systemHealthUsers/add',
+    loadComponent: () => import('./pages/systemhealthusers/system-health-users-add/system-health-users-add.component').then(m => m.SystemHealthUsersAddComponent)
+}, {
+    path: 'systemHealthUsers/edit/:id',
+    loadComponent: () => import('./pages/systemhealthusers/system-health-users-edit/system-health-users-edit.component').then(m => m.SystemHealthUsersEditComponent)
+}, {
+    path: 'systemHealthUsers/index',
+    loadComponent: () => import('./pages/systemhealthusers/system-health-users-index/system-health-users-index.component').then(m => m.SystemHealthUsersIndexComponent)
+}, {
     path: 'hostchecks/index/:id',
     loadComponent: () => import('./pages/hostchecks/hostchecks-index/hostchecks-index.component').then(m => m.HostchecksIndexComponent)
 }, {
