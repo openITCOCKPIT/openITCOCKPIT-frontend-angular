@@ -103,10 +103,15 @@
                                         />
                                         <span cInputGroupText>
                                             <c-form-check>
-                                                <input cFormCheckInput id="checkRegexHost" type="checkbox"
-                                                       [(ngModel)]="filter.Hosts.name_regex"/>
+                                                <label>
+                                                    <input cFormCheckInput id="checkRegexHost" type="checkbox"
+                                                           oitcDebounce
+                                                           (debouncedValue)="onFilterChange($event)"
+                                                           [(ngModel)]="filter.Hosts.name_regex"/>
+                                                    {{ t('Enable regex') }}
+                                                </label>
                                             </c-form-check>
-                                            {{ t('Enable regex') }}
+
                                             <oitc-regex-helper-tooltip/>
                                         </span>
                                     </c-input-group>
@@ -126,10 +131,14 @@
                                         />
                                         <span cInputGroupText>
                                             <c-form-check>
-                                                <input cFormCheckInput id="checkregexService" type="checkbox"
-                                                       [(ngModel)]="filter.Services.name_regex"/>
+                                                <label>
+                                                    <input cFormCheckInput id="checkregexService" type="checkbox"
+                                                           [(ngModel)]="filter.Services.name_regex"
+                                                           oitcDebounce
+                                                           (debouncedValue)="onFilterChange($event)"/>
+                                                    {{ t('Enable regex') }}
+                                                </label>
                                             </c-form-check>
-                                            {{ t('Enable regex') }}
                                             <oitc-regex-helper-tooltip/>
                                         </span>
                                     </c-input-group>
