@@ -22,7 +22,7 @@
             <button [disabled]="isSend" cButton class="ripple" color="success" [routerLink]="['/', 'hostgroups', 'add', joinedHostIds]">
                 {{ t('Create new host group') }}
             </button>
-            <button [disabled]="isSend" cButton class="ripple" color="primary" [routerLink]="['/', 'hostgroups', 'append', 9]">
+            <button [disabled]="isSend" cButton class="ripple" color="primary" [routerLink]="['/', 'hostgroups', 'append', joinedHostIds]">
                 {{ t('Append existing host group') }}
             </button>
             <button (click)="hideModal()" cButton class="ripple" color="default">

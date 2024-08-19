@@ -690,15 +690,23 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    protected confirmAddHostsToHostgroup() : void
+    protected confirmAddHostsToHostgroup(host?: HostObject) : void
     {
         let items: SelectKeyValue[] = [];
-        items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
-            return {
-                key: item.Host.id,
-                value: item.Host.name
-            };
-        });
+
+        if (host) {
+            items = [{
+                key: Number(host.id),
+                value: String(host.hostname)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+                return {
+                    key: item.Host.id,
+                    value: item.Host.name
+                };
+            });
+        }
         this.selectedItems = items;
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');

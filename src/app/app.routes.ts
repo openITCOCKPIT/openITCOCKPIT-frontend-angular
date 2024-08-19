@@ -113,6 +113,9 @@ const coreRoutes: Routes = [{
     path: 'hostgroups/add/:hostids',
     loadComponent: () => import('./pages/hostgroups/hostgroups-add/hostgroups-add.component').then(m => m.HostgroupsAddComponent)
 }, {
+    path: 'hostgroups/append/:hostids',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-append/hostgroups-append.component').then(m => m.HostgroupsAppendComponent)
+}, {
     path: 'hostgroups/copy/:ids',
     loadComponent: () => import('./pages/hostgroups/hostgroups-copy/hostgroups-copy.component').then(m => m.HostgroupsCopyComponent)
 }, {

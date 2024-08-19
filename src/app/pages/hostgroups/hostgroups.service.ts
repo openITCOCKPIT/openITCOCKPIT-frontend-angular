@@ -3,6 +3,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import {
     AddHostgroupsPost,
     Hostgroup,
+    HostgroupAppend,
     HostgroupExtendedRoot,
     HostgroupsCopyGet,
     HostgroupsCopyGetHostgroup,
@@ -233,5 +234,10 @@ export class HostgroupsService {
                 return data;
             })
         )
+    }
+
+    public appendHosts(param: HostgroupAppend): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/hostgroups/append/.json?angular=true`, param);
     }
 }

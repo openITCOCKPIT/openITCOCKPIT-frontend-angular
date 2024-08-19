@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -63,7 +63,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './hosts-add-to-hostgroup.component.html',
     styleUrl: './hosts-add-to-hostgroup.component.css'
 })
-export class HostsAddToHostgroupComponent implements OnInit, OnDestroy {
+export class HostsAddToHostgroupComponent implements OnChanges {
     @Input({required: true}) public items: SelectKeyValue[] = [];
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
@@ -73,9 +73,8 @@ export class HostsAddToHostgroupComponent implements OnInit, OnDestroy {
     public state?: any
 
     private readonly modalService: ModalService = inject(ModalService);
-    private readonly subscriptions: Subscription = new Subscription();
 
-    protected joinedHostIds: string = '5,6,7,8,9';
+    protected joinedHostIds: string = '';
 
 
     public type: string = 'hostOnly';
@@ -91,11 +90,8 @@ export class HostsAddToHostgroupComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit() {
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
+    public ngOnChanges() {
+        this.joinedHostIds = this.items.map(item => item.key).join(',');
     }
 
 }
