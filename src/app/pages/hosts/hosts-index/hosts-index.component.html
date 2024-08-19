@@ -920,9 +920,9 @@
                                     {{ t('Allocate service template group') }}
                                 </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'hostgroups.add'">
+                                <oitc-actions-button-element [permission]="'hostgroups.add'" (click)="confirmAddHostsToHostgroup()">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                    {{ t('Append to host group') }}
+                                    {{ t('Add to host group') }}
                                     <!-- todo implement modal -->
                                 </oitc-actions-button-element>
 
@@ -1026,8 +1026,10 @@
                                                     {{ t('Disable') }}
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a href="javascript:void(0);" cDropdownItem>
+                                            <li *oitcPermission="['hostgroups', 'add']">
+                                                <a href="javascript:void(0);" cDropdownItem
+                                                   (click)="confirmAddHostsToHostgroup()"
+                                                >
                                                     <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                     {{ t('Add to host group') }}</a>
                                             </li>
@@ -1118,3 +1120,6 @@
 
 <oitc-hosts-disable-notifications-modal [items]="selectedItems"
                                         (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+
+<oitc-hosts-add-to-hostgroup-modal [items]="selectedItems"
+                                   (completed)="onMassActionComplete($event)"></oitc-hosts-add-to-hostgroup-modal>

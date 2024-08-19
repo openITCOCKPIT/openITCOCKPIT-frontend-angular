@@ -117,6 +117,9 @@ import {
 import {
     HostAcknowledgeModalComponent
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
+import {
+    HostsAddToHostgroupComponent
+} from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -190,7 +193,8 @@ import {
         ServiceMaintenanceModalComponent,
         JsonPipe,
         ServiceAcknowledgeModalComponent,
-        HostAcknowledgeModalComponent
+        HostAcknowledgeModalComponent,
+        HostsAddToHostgroupComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -683,6 +687,27 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         this.modalService.toggle({
             show: true,
             id: 'hostAcknowledgeModal',
+        });
+    }
+
+    protected confirmAddHostsToHostgroup() : void
+    {
+        let items: SelectKeyValue[] = [];
+        items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+            return {
+                key: item.Host.id,
+                value: item.Host.name
+            };
+        });
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostAddToHostgroupModal',
         });
     }
 

@@ -110,6 +110,10 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
         // Force hosts and hosttemplates empty if you "create another".
         this.loadHosts('');
         this.loadHosttemplates('');
+        const hostIds = this.route.snapshot.paramMap.get('hostids');
+        if (hostIds) {
+            this.post.hosts._ids = hostIds.split(',').map(Number);
+        }
     }
 
     public ngOnDestroy() {
