@@ -934,7 +934,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0);" cDropdownItem>
+                                                    <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
                                                         <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                         {{ t('Add to service group') }}
                                                     </a>
@@ -1012,3 +1012,5 @@
 <oitc-columns-config-export-modal [configString]="configString"></oitc-columns-config-export-modal>
 <oitc-columns-config-import-modal (toImport)="setColumnConfig($event)"
                                   [columnsTableKey]="columnsTableKey"></oitc-columns-config-import-modal>
+<oitc-service-add-to-servicegroup-modal (completed)="onMassActionComplete($event)"
+                                        [items]="selectedItems"></oitc-service-add-to-servicegroup-modal>
