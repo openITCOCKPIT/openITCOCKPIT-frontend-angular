@@ -107,6 +107,12 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.post = this.getDefaultPost();
+        const serviceIds = this.route.snapshot.paramMap.get('serviceids');
+        console.warn(serviceIds);
+        if (serviceIds) {
+            this.post.services._ids = serviceIds.split(',').map(Number);
+            console.warn(this.post.services._ids);
+        }
     }
 
     public ngOnInit() {

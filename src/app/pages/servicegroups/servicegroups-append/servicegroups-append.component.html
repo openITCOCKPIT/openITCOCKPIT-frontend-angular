@@ -8,14 +8,14 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
+                    <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
                         <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                        {{ t('Host groups') }}
+                        {{ t('Service groups') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
                     <fa-icon [icon]="['fas', 'chain']"></fa-icon>
-                    {{ t('Append hosts to host group') }}
+                    {{ t('Append services to service group') }}
                 </li>
             </ol>
         </nav>
@@ -24,15 +24,15 @@
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>
-                        {{ t('Append hosts') }}
+                        {{ t('Append services') }}
                         <small class="fw-300">
-                            {{ t('to host group') }}
+                            {{ t('to service group') }}
                         </small>
                     </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
+                            <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -45,17 +45,17 @@
                 <c-card-body>
 
                     <div class="mb-3">
-                        <label cLabel for="post.Hostgroup.id">
-                            {{ t('Host group') }}
+                        <label cLabel for="post.Servicegroup.id">
+                            {{ t('Service group') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                                name="post.Hostgroup.id"
-                                id="post.Hostgroup.id"
-                                [(ngModel)]="post.Hostgroup.id"
+                                name="post.Servicegroup.id"
+                                id="post.Servicegroup.id"
+                                [(ngModel)]="post.Servicegroup.id"
                                 optionValue="key"
                                 optionLabel="value"
-                                [options]="hostgroups">
+                                [options]="servicegroups">
                         </oitc-select>
                     </div>
 
@@ -63,16 +63,16 @@
                     <c-alert color="info">
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Please notice:')}}
-                        {{ t('Hosts that could not be assigned to the selected host group due to container permissions, will be removed automatically') }}
+                        {{ t('Services that could not be assigned to the selected service group due to container permissions, will be removed automatically') }}
                     </c-alert>
 
                 </c-card-body>
                 <c-card-footer class="text-end">
 
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Append host to group') }}
+                        {{ t('Append service to group') }}
                     </button>
-                    <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ms-1 ripple" color="default"
+                    <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">
                         {{ t('Cancel') }}

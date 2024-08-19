@@ -140,6 +140,12 @@ const coreRoutes: Routes = [{
     path: 'servicegroups/add',
     loadComponent: () => import('./pages/servicegroups/servicegroups-add/servicegroups-add.component').then(m => m.ServicegroupsAddComponent)
 }, {
+    path: 'servicegroups/add/:serviceids',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-add/servicegroups-add.component').then(m => m.ServicegroupsAddComponent)
+}, {
+    path: 'servicegroups/append/:serviceids',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-append/servicegroups-append.component').then(m => m.ServicegroupsAppendComponent)
+}, {
     path: 'servicegroups/copy/:ids',
     loadComponent: () => import('./pages/servicegroups/servicegroups-copy/servicegroups-copy.component').then(m => m.ServicegroupsCopyComponent)
 }, {
