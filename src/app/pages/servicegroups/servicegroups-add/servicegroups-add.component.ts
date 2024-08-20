@@ -100,6 +100,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     public post: Servicegroup = {} as Servicegroup;
+    private preselectedServiceIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
@@ -108,10 +109,8 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
     constructor() {
         this.post = this.getDefaultPost();
         const serviceIds = this.route.snapshot.paramMap.get('serviceids');
-        console.warn(serviceIds);
         if (serviceIds) {
-            this.post.services._ids = serviceIds.split(',').map(Number);
-            console.warn(this.post.services._ids);
+            this.preselectedServiceIds = serviceIds.split(',').map(Number);
         }
     }
 
@@ -211,6 +210,9 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadServices(this.post.container.parent_id, search, this.post.services._ids)
             .subscribe((result: LoadServicesResponse) => {
                 this.services = result.services;
+
+                // Preselect services if they were passed in the URL.
+                this.post.services._ids = this.preselectedServiceIds;
             }))
     }
 
