@@ -65,16 +65,12 @@ export class ServiceAddToServicegroupModalComponent implements OnChanges {
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
-    public hasErrors: boolean = false;
-    public isSend: boolean = false;
-    public state?: any
-
     private readonly modalService: ModalService = inject(ModalService);
-
+    protected hasErrors: boolean = false;
+    protected isSend: boolean = false;
     protected joinedServiceIds: string = '';
-
-
-    public type: string = 'serviceOnly';
+    protected state?: any
+    protected type: string = 'serviceOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal() {

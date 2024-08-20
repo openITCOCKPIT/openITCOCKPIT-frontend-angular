@@ -74,10 +74,9 @@ import { GenericResponseWrapper } from '../../../generic-responses';
 export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
     private readonly Subscription: Subscription = new Subscription();
     private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
-    private readonly notyService : NotyService= inject(NotyService);
+    private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     protected post: ServicegroupAppend = {
         Servicegroup: {

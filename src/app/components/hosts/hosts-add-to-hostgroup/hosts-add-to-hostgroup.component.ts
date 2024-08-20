@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -20,10 +20,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ExternalCommandsService, HostDisableNotificationsItem } from '../../../services/external-commands.service';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -68,16 +65,13 @@ export class HostsAddToHostgroupComponent implements OnChanges {
     @Input({required: false}) public maintenanceMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
-    public hasErrors: boolean = false;
-    public isSend: boolean = false;
-    public state?: any
-
     private readonly modalService: ModalService = inject(ModalService);
+    protected hasErrors: boolean = false;
+    protected isSend: boolean = false;
+    protected state?: any
+    protected type: string = 'hostOnly';
 
     protected joinedHostIds: string = '';
-
-
-    public type: string = 'hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal() {
