@@ -43,6 +43,7 @@ import {
     ServicesDeletedParams,
     ServicesDeletedServicesRoot,
     ServicesDisabledRoot,
+    ServicesIndexFilterApiRequest,
     ServicesIndexRoot,
     ServicesLoadServicesByStringParams,
     ServicesNotMonitoredParams,
@@ -240,10 +241,24 @@ export class ServicesService {
      *    Service Index   *
      **********************/
 
-    public getServicesIndex(params: ServiceParams): Observable<ServicesIndexRoot> {
+
+    public getServicesIndexViaGet(params: ServiceParams): Observable<ServicesIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<ServicesIndexRoot>(`${proxyPath}/services/index.json`, {
             params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getServicesIndexViaPost(params: ServiceParams, filter: ServicesIndexFilterApiRequest): Observable<ServicesIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ServicesIndexRoot>(`${proxyPath}/services/index.json`, {
+            filter: filter as {} // POST data used for filter
+        }, {
+            params: params as {} // query string parameter
         }).pipe(
             map(data => {
                 return data;

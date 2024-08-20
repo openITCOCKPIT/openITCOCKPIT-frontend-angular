@@ -5,9 +5,15 @@ import { tap } from "rxjs";
 
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
     const authService = inject(AuthService);
-    const csrfRequest = req.clone({
-        headers: req.headers.set('X-CSRF-Token', authService.csrfToken || '')
-    });
+
+    let csrfRequest = req;
+    const csrfToken = authService.csrfToken || '';
+
+    if (req.method !== 'GET' && csrfToken !== '') {
+        csrfRequest = req.clone({
+            headers: req.headers.set('X-CSRF-Token', csrfToken)
+        });
+    }
 
     return next(csrfRequest).pipe(
         tap((event: any) => {

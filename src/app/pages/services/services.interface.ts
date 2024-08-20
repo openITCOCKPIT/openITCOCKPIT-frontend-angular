@@ -4,6 +4,7 @@ import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { ServicetemplateEntity, ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { ServiceTypesEnum } from './services.enum';
 
 /**********************
  *    Index action    *
@@ -14,24 +15,25 @@ export interface ServiceParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '',
-    'filter[Hosts.id]': number[],
-    'filter[Hosts.name]': string,
-    'filter[Hosts.name_regex]': boolean | string,
-    'filter[Hosts.satellite_id][]': number[],
-    'filter[Services.id][]': number[],
-    'filter[Services.service_type][]': number[],
-    'filter[servicename]': string,
-    'filter[servicename_regex]': boolean | string,
-    'filter[servicedescription]': string,
-    'filter[Servicestatus.output]': string,
-    'filter[Servicestatus.current_state][]': string[],
-    'filter[keywords][]': string[],
-    'filter[not_keywords][]': string[],
-    'filter[Servicestatus.problem_has_been_acknowledged]': boolean | string,
-    'filter[Servicestatus.scheduled_downtime_depth]': boolean | string,
-    'filter[Servicestatus.active_checks_enabled]': boolean | string,
-    'filter[Servicestatus.notifications_enabled]': boolean | string,
-    'filter[servicepriority][]': number[]
+    // ITC-3349 Change load function to use POST
+    //'filter[Hosts.id]': number[],
+    //'filter[Hosts.name]': string,
+    //'filter[Hosts.name_regex]': boolean | string,
+    //'filter[Hosts.satellite_id][]': number[],
+    //'filter[Services.id][]': number[],
+    //'filter[Services.service_type][]': number[],
+    //'filter[servicename]': string,
+    //'filter[servicename_regex]': boolean | string,
+    //'filter[servicedescription]': string,
+    //'filter[Servicestatus.output]': string,
+    //'filter[Servicestatus.current_state][]': string[],
+    //'filter[keywords][]': string[],
+    //'filter[not_keywords][]': string[],
+    //'filter[Servicestatus.problem_has_been_acknowledged]': boolean | string,
+    //'filter[Servicestatus.scheduled_downtime_depth]': boolean | string,
+    //'filter[Servicestatus.active_checks_enabled]': boolean | string,
+    //'filter[Servicestatus.notifications_enabled]': boolean | string,
+    //'filter[servicepriority][]': number[]
 }
 
 
@@ -114,6 +116,54 @@ export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
             satellite_id: []
         }
     };
+}
+
+export interface ServicesIndexFilterApiRequest {
+    'Hosts.id': number[]
+    'Hosts.name': string
+    'Hosts.name_regex': boolean
+    'Hosts.satellite_id': number[]
+
+    'Services.id': number[]
+    'Services.name': string
+    'Services.name_regex': boolean
+    'Services.keywords': string[]
+    'Services.not_keywords': string[]
+    'servicedescription': string
+    'servicepriority': string[]
+    'Services.service_type': ServiceTypesEnum[]
+
+    'Servicestatus.output': string
+    'Servicestatus.current_state': string[]
+    'Servicestatus.problem_has_been_acknowledged': string,
+    'Servicestatus.scheduled_downtime_depth': string,
+    'Servicestatus.notifications_enabled': string,
+    'Servicestatus.is_hardstate': string
+}
+
+export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterApiRequest {
+    return {
+        'Hosts.id': [],
+        'Hosts.name': '',
+        'Hosts.name_regex': false,
+        'Hosts.satellite_id': [],
+
+        'Services.id': [],
+        'Services.name': '',
+        'Services.name_regex': false,
+        'Services.keywords': [],
+        'Services.not_keywords': [],
+        'servicedescription': '',
+        'servicepriority': [],
+        'Services.service_type': [],
+
+        'Servicestatus.output': '',
+        'Servicestatus.current_state': [],
+        'Servicestatus.problem_has_been_acknowledged': '',
+        'Servicestatus.scheduled_downtime_depth': '',
+        'Servicestatus.notifications_enabled': '',
+        'Servicestatus.is_hardstate': '',
+    }
 }
 
 export interface ServicesCurrentStateFilter {

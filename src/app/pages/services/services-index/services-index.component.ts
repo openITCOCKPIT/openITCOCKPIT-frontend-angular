@@ -38,10 +38,12 @@ import { ProfileService } from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getDefaultServicesIndexFilter,
+    getDefaultServicesIndexFilterApiRequest,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
     ServiceObject,
     ServiceParams,
+    ServicesIndexFilterApiRequest,
     ServicesIndexRoot,
 } from "../services.interface";
 import {
@@ -259,6 +261,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public satellites: ServicesIndexRoot['satellites'] = [];
     public serviceTypes: any[] = [];
     public filter: ServiceIndexFilter = getDefaultServicesIndexFilter();
+    private RequestFilter: ServicesIndexFilterApiRequest = getDefaultServicesIndexFilterApiRequest();
 
     //end filter
     public params: ServiceParams = {
@@ -267,24 +270,24 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         sort: 'Servicestatus.current_state',
         page: 1,
         direction: 'desc',
-        'filter[Hosts.id]': [],
-        'filter[Hosts.name]': '',
-        'filter[Hosts.name_regex]': '',
-        'filter[Hosts.satellite_id][]': [],
-        'filter[Services.id][]': [],
-        'filter[Services.service_type][]': [],
-        'filter[servicename]': '',
-        'filter[servicename_regex]': '',
-        'filter[servicedescription]': '',
-        'filter[Servicestatus.output]': '',
-        'filter[Servicestatus.current_state][]': [],
-        'filter[keywords][]': [],
-        'filter[not_keywords][]': [],
-        'filter[Servicestatus.problem_has_been_acknowledged]': '',
-        'filter[Servicestatus.scheduled_downtime_depth]': '',
-        'filter[Servicestatus.active_checks_enabled]': '',
-        'filter[Servicestatus.notifications_enabled]': '',
-        'filter[servicepriority][]': []
+        //'filter[Hosts.id]': [],
+        //'filter[Hosts.name]': '',
+        //'filter[Hosts.name_regex]': '',
+        //'filter[Hosts.satellite_id][]': [],
+        //'filter[Services.id][]': [],
+        //'filter[Services.service_type][]': [],
+        //'filter[servicename]': '',
+        //'filter[servicename_regex]': '',
+        //'filter[servicedescription]': '',
+        //'filter[Servicestatus.output]': '',
+        //'filter[Servicestatus.current_state][]': [],
+        //'filter[keywords][]': [],
+        //'filter[not_keywords][]': [],
+        //'filter[Servicestatus.problem_has_been_acknowledged]': '',
+        //'filter[Servicestatus.scheduled_downtime_depth]': '',
+        //'filter[Servicestatus.active_checks_enabled]': '',
+        //'filter[Servicestatus.notifications_enabled]': '',
+        //'filter[servicepriority][]': []
     };
 
     public hideFilter: boolean = true;
@@ -305,7 +308,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             let hostId: number = parseInt(params['host_id']);
             if (hostId) {
-                this.params['filter[Hosts.id]'] = [hostId];
+                this.filter.Hosts.id = [hostId];
             }
             switch (parseInt(params['servicestate'] || -1)) {
                 case 0:
@@ -324,8 +327,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                     break;
             }
         });
-        this.getFilter(this.filter);
-        this.load();
+        this.setFilterAndLoad(this.filter);
     }
 
     public ngOnDestroy() {
@@ -334,7 +336,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     public load() {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
+        this.subscriptions.add(this.ServicesService.getServicesIndexViaPost(this.params, this.RequestFilter)
             .subscribe((services) => {
                 this.services = services;
                 if (services.satellites) {
@@ -386,6 +388,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.filter.Servicestatus.in_downtime = false;
         this.filter.Servicestatus.not_in_downtime = true;
 
+        this.setFilterAndLoad(this.filter);
+
     }
 
 
@@ -418,29 +422,55 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             baseUrl = '/services/listToCsv?';
         }
 
+        let hasBeenAcknowledged = '';
+        let inDowntime = '';
+        let notificationsEnabled = '';
+        let activeChecksEnabled = '';
+
+        if (this.filter.Servicestatus.acknowledged !== this.filter.Servicestatus.not_acknowledged) {
+            hasBeenAcknowledged = String(this.filter.Servicestatus.acknowledged === true);
+        }
+        if (this.filter.Servicestatus.in_downtime !== this.filter.Servicestatus.not_in_downtime) {
+            inDowntime = String(this.filter.Servicestatus.in_downtime === true);
+        }
+        if (this.filter.Servicestatus.notifications_enabled !== this.filter.Servicestatus.notifications_not_enabled) {
+            notificationsEnabled = String(this.filter.Servicestatus.notifications_enabled === true);
+        }
+        if (this.filter.Servicestatus.active !== this.filter.Servicestatus.passive) {
+            activeChecksEnabled = String(this.filter.Servicestatus.active === true);
+        }
+
+        let priorityFilter = [];
+        for (var key in this.filter.Services.priority) {
+            // @ts-ignore
+            if (this.filter.Services.priority[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
         let urlParams = {
             'angular': true,
             'sort': this.params.sort,
             'page': this.params.page,
             'direction': this.params.direction,
-            'filter[Hosts.id]': this.params['filter[Hosts.id]'],
-            'filter[Hosts.name]': this.params['filter[Hosts.name]'],
-            'filter[Hosts.name_regex]': this.params['filter[Hosts.name_regex]'],
-            'filter[Hosts.satellite_id][]': this.params['filter[Hosts.satellite_id][]'],
-            'filter[Services.id][]': this.params['filter[Services.id][]'],
-            'filter[Services.service_type][]': this.params['filter[Services.service_type][]'],
-            'filter[servicename]': this.params['filter[servicename]'],
-            'filter[servicename_regex]': this.params['filter[servicename_regex]'],
-            'filter[servicedescription]': this.params['filter[servicedescription]'],
-            'filter[Servicestatus.output]': this.params['filter[Servicestatus.output]'],
-            'filter[Servicestatus.current_state][]': this.params['filter[Servicestatus.current_state][]'],
-            'filter[keywords][]': this.params['filter[keywords][]'],
-            'filter[not_keywords][]': this.params['filter[not_keywords][]'],
-            'filter[Servicestatus.problem_has_been_acknowledged]': this.params['filter[Servicestatus.problem_has_been_acknowledged]'],
-            'filter[Servicestatus.scheduled_downtime_depth]': this.params['filter[Servicestatus.scheduled_downtime_depth]'],
-            'filter[Servicestatus.active_checks_enabled]': this.params['filter[Servicestatus.active_checks_enabled]'],
-            'filter[Servicestatus.notifications_enabled]': this.params['filter[Servicestatus.notifications_enabled]'],
-            'filter[servicepriority][]': this.params['filter[servicepriority][]']
+            'filter[Hosts.id][]': this.filter.Hosts.id,
+            'filter[Hosts.name]': this.filter.Hosts.name,
+            'filter[Hosts.name_regex]': this.filter.Hosts.name_regex,
+            'filter[Hosts.satellite_id][]': this.filter.Hosts.satellite_id,
+            'filter[Services.id][]': this.filter.Services.id,
+            'filter[Services.service_type][]': this.filter.Services.service_type,
+            'filter[servicename]': this.filter.Services.name,
+            'filter[servicename_regex]': this.filter.Services.name_regex,
+            'filter[servicedescription]': this.filter.Services.servicedescription,
+            'filter[Servicestatus.output]': this.filter.Servicestatus.output,
+            'filter[Servicestatus.current_state][]': getServiceCurrentStateForApi(this.filter.Servicestatus.current_state),
+            'filter[keywords][]': this.filter.Services.keywords,
+            'filter[not_keywords][]': this.filter.Services.not_keywords,
+            'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
+            'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
+            'filter[Servicestatus.active_checks_enabled]': activeChecksEnabled,
+            'filter[Servicestatus.notifications_enabled]': notificationsEnabled,
+            'filter[servicepriority][]': priorityFilter,
         };
 
 
@@ -697,53 +727,60 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 bookmarkfilter.Servicestatus.notifications_not_enabled = false;
             }
 
-            this.getFilter(bookmarkfilter);
+            this.setFilterAndLoad(bookmarkfilter);
         }
     }
 
-    public getFilter(filter: ServiceIndexFilter) {
+    private setFilterAndLoad(filter: ServiceIndexFilter) {
         this.params.page = 1;
-        this.params['filter[Hosts.name]'] = filter.Hosts.name;
-        this.params['filter[Hosts.name_regex]'] = filter.Hosts.name_regex;
-        this.params['filter[Hosts.satellite_id][]'] = filter.Hosts.satellite_id;
-        this.params['filter[servicename]'] = filter.Services.name;
-        this.params['filter[servicename_regex]'] = filter.Services.name_regex;
-        this.params['filter[servicedescription]'] = filter.Services.servicedescription;
-        this.params['filter[keywords][]'] = filter.Services.keywords;
-        this.params['filter[not_keywords][]'] = filter.Services.not_keywords;
-        this.params['filter[Services.service_type][]'] = filter.Services.service_type;
-        this.params['filter[Servicestatus.current_state][]'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
 
+        let priorityFilter = [];
+        for (var key in this.filter.Services.priority) {
+            // @ts-ignore
+            if (this.filter.Services.priority[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.RequestFilter['Hosts.id'] = filter.Hosts.id;
+        this.RequestFilter['Hosts.name'] = filter.Hosts.name;
+        this.RequestFilter['Hosts.name_regex'] = (filter.Hosts.name_regex) ? true : false;
+        this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
+
+        this.RequestFilter['Services.id'] = filter.Services.id;
+        this.RequestFilter['Services.name'] = filter.Services.name;
+        this.RequestFilter['Services.name_regex'] = (filter.Services.name_regex ? true : false);
+        this.RequestFilter['Services.keywords'] = filter.Services.keywords;
+        this.RequestFilter['Services.not_keywords'] = filter.Services.not_keywords;
+        this.RequestFilter['servicedescription'] = filter.Services.servicedescription;
+        this.RequestFilter['servicepriority'] = priorityFilter
+        this.RequestFilter['Services.service_type'] = filter.Services.service_type;
+
+
+        this.RequestFilter['Servicestatus.current_state'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
+
+
+        this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = '';
+        this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = '';
+        this.RequestFilter['Servicestatus.notifications_enabled'] = '';
+        this.RequestFilter['Servicestatus.is_hardstate'] = '';
 
         if (filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged) {
-            this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = filter.Servicestatus.acknowledged;
-        } else {
-            this.params['filter[Servicestatus.problem_has_been_acknowledged]'] = '';
+            this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = String(filter.Servicestatus.acknowledged === true);
         }
+
         if (filter.Servicestatus.in_downtime !== filter.Servicestatus.not_in_downtime) {
-            this.params['filter[Servicestatus.scheduled_downtime_depth]'] = filter.Servicestatus.in_downtime;
-        } else {
-            this.params['filter[Servicestatus.scheduled_downtime_depth]'] = '';
+            this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = String(filter.Servicestatus.in_downtime === true);
         }
 
         if (filter.Servicestatus.notifications_enabled !== filter.Servicestatus.notifications_not_enabled) {
-            this.params['filter[Servicestatus.notifications_enabled]'] = filter.Servicestatus.notifications_enabled;
-        } else {
-            this.params['filter[Servicestatus.notifications_enabled]'] = '';
+            this.RequestFilter['Servicestatus.notifications_enabled'] = String(filter.Servicestatus.notifications_enabled === true);
         }
 
         if (filter.Servicestatus.passive !== filter.Servicestatus.active) {
-            this.params['filter[Servicestatus.active_checks_enabled]'] = !filter.Servicestatus.passive;
-        } else {
-            this.params['filter[Servicestatus.active_checks_enabled]'] = '';
+            this.RequestFilter['Servicestatus.is_hardstate'] = String(filter.Servicestatus.active === true);
         }
-        var priorityFilter: number[] = [];
-        Object.entries(filter.Services.priority).forEach(([key, value]) => {
-            if (value) {
-                priorityFilter.push(parseInt(key));
-            }
-        });
-        this.params['filter[servicepriority][]'] = priorityFilter
+
         this.filter = filter;
         this.load();
 
@@ -818,11 +855,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 satellite_id: []
             }
         };
-        this.getFilter(this.filter);
     }
 
     public onFilterChange(event: Event | null) {
-        this.getFilter(this.filter);
+        this.setFilterAndLoad(this.filter);
     }
 
 
