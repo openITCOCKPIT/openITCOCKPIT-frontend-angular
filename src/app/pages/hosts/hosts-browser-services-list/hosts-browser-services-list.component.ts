@@ -99,6 +99,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     RegexHelperTooltipComponent
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {
+    HostsAddToHostgroupComponent
+} from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
 
 @Component({
     selector: 'oitc-hosts-browser-services-list',
@@ -159,7 +163,8 @@ import {
         InputGroupTextDirective,
         ReactiveFormsModule,
         RegexHelperTooltipComponent,
-        FormsModule
+        FormsModule,
+        HostsAddToHostgroupComponent
     ],
     templateUrl: './hosts-browser-services-list.component.html',
     styleUrl: './hosts-browser-services-list.component.css',
@@ -617,6 +622,36 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             this.load();
         }
     }
+
+    protected confirmAddServicesToServicegroup(service?: ServiceObject): void {
+        let items: SelectKeyValue[] = [];
+
+        if (service) {
+            items = [{
+                key: Number(service.id),
+                value: String(service.hostname + "/" + service.servicename)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+                console.log(item);
+                return {
+                    key: item.Service.id,
+                    value: item.Service.hostname + "/" + item.Service.servicename
+                };
+            });
+        }
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceAddToServicegroupModal',
+        });
+    }
+
 
 
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
