@@ -114,6 +114,9 @@ import {
 import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
 import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
 import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
+import {
+    ServiceAddToServicegroupModalComponent
+} from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 
 
 @Component({
@@ -186,7 +189,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         ColumnsConfigImportModalComponent,
         ServiceAcknowledgeModalComponent,
         ServiceMaintenanceModalComponent,
-        EnableModalComponent
+        EnableModalComponent,
+        ServiceAddToServicegroupModalComponent
     ],
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',
@@ -665,6 +669,34 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
         if (success) {
             this.load();
         }
+    }
+
+    protected confirmAddServicesToServicegroup(service?: ServiceObject): void {
+        let items: SelectKeyValue[] = [];
+
+        if (service) {
+            items = [{
+                key: Number(service.id),
+                value: String(service.hostname + "/" + service.servicename)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+                return {
+                    key: item.Service.id,
+                    value: item.Service.hostname + "/" + item.Service.servicename
+                };
+            });
+        }
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceAddToServicegroupModal',
+        });
     }
 
 

@@ -323,9 +323,9 @@
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'hostgroups.add'"
-                                >
+                                                             (click)="confirmAddHostsToHostgroup(host.Host)">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                    {{ t('Append to host group') }}
+                                    {{ t('Add to host group') }}
                                 </oitc-actions-button-element>
 
                                 <oitc-actions-button-element [permission]="'agentconnector.wizard'"
@@ -422,11 +422,11 @@
                                                 </a>
                                             </li>
                                             <li *oitcPermission="['hostgroups', 'add']">
-                                                <a
-                                                    href="javascript:void(0);" cDropdownItem>
-                                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                                    {{ t('Add to host group') }}
-                                                </a>
+                                                <a href="javascript:void(0);" cDropdownItem
+                                                   (click)="confirmAddHostsToHostgroup()"
+                                                >
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                    {{ t('Add to host group') }}</a>
                                             </li>
                                         </ul>
                                     </c-dropdown>
@@ -458,3 +458,5 @@
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 <oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
+<oitc-hosts-add-to-hostgroup-modal [items]="selectedItems"
+                                   (completed)="onMassActionComplete($event)"></oitc-hosts-add-to-hostgroup-modal>

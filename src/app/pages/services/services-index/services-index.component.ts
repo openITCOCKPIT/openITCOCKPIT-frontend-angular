@@ -137,6 +137,10 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {
+    ServiceAddToServicegroupModalComponent
+} from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 
 @Component({
     selector: 'oitc-services-index',
@@ -209,6 +213,7 @@ import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-typ
         ColumnsConfigImportModalComponent,
         DropdownDividerDirective,
         TableLoaderComponent,
+        ServiceAddToServicegroupModalComponent,
     ],
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
@@ -298,7 +303,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
         this.route.queryParams.subscribe(params => {
-            console.log(params);
             let hostId: number = parseInt(params['host_id']);
             if (hostId) {
                 this.params['filter[Hosts.id]'] = [hostId];
@@ -819,6 +823,35 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     public onFilterChange(event: Event | null) {
         this.getFilter(this.filter);
+    }
+
+
+    protected confirmAddServicesToServicegroup(service?: ServiceObject): void {
+        let items: SelectKeyValue[] = [];
+
+        if (service) {
+            items = [{
+                key: Number(service.id),
+                value: String(service.hostname + "/" + service.servicename)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+                return {
+                    key: item.Service.id,
+                    value: item.Service.hostname + "/" + item.Service.servicename
+                };
+            });
+        }
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceAddToServicegroupModal',
+        });
     }
 
 

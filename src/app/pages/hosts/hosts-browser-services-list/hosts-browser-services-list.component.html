@@ -405,8 +405,8 @@
                                             {{ t('More actions') }}
                                         </button>
                                         <ul cDropdownMenu>
-                                            <li>
-                                                <a href="javascript:void(0);" cDropdownItem>
+                                            <li *oitcPermission="['servicegroups', 'add']">
+                                                <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
                                                     <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                     {{ t('Add to service group') }}
                                                 </a>
@@ -833,3 +833,5 @@
                                 [items]="selectedItems"></oitc-service-maintenance-modal>
 <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
                                 [items]="selectedItems"></oitc-service-acknowledge-modal>
+<oitc-service-add-to-servicegroup-modal  (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-add-to-servicegroup-modal>

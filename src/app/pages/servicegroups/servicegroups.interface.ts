@@ -1,4 +1,4 @@
-import { PaginateOrScroll, Paging, Scroll } from "../../layouts/coreui/paginator/paginator.interface";
+import { PaginateOrScroll } from "../../layouts/coreui/paginator/paginator.interface";
 import { GenericValidationError } from "../../generic-responses";
 import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 
@@ -426,4 +426,13 @@ export interface ServicesList {
     }
     Downtime: any[]
     Acknowledgement: any[]
+}
+
+export interface ServicegroupAppend {
+    Servicegroup: {
+        services: {
+            _ids: number[]
+        }
+        id: number
+    }
 }

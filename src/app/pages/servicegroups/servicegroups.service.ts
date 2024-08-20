@@ -17,13 +17,14 @@ import {
     LoadServicesResponse,
     LoadServicetemplates,
     LoadServicesForServices,
-    ServiceGroupExtendedRoot
+    ServiceGroupExtendedRoot, ServicegroupAppend
 } from "./servicegroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
 import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { HostgroupAppend } from '../hostgroups/hostgroups.interface';
 
 
 @Injectable({
@@ -219,5 +220,10 @@ export class ServicegroupsService {
                 return data;
             })
         )
+    }
+
+    public appendServices(param: ServicegroupAppend): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/servicegroups/append/.json?angular=true`, param);
     }
 }
