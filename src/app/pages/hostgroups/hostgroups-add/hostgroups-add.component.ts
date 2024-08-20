@@ -94,6 +94,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     public post: Hostgroup = {} as Hostgroup;
+    private preselectedHostIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
@@ -112,7 +113,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
         this.loadHosttemplates('');
         const hostIds = this.route.snapshot.paramMap.get('hostids');
         if (hostIds) {
-            this.post.hosts._ids = hostIds.split(',').map(Number);
+            this.preselectedHostIds = hostIds.split(',').map(Number);
         }
     }
 
@@ -208,6 +209,9 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadHosts(this.post.container.parent_id, search, this.post.hosts._ids)
             .subscribe((result: LoadHostsResponse) => {
                 this.hosts = result.hosts;
+
+                // Preselect hosts if they were passed in the URL.
+                this.post.hosts._ids = this.preselectedHostIds;
             }))
     }
 
