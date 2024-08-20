@@ -637,7 +637,6 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             }];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
-                console.log(item);
                 return {
                     key: item.Service.id,
                     value: item.Service.hostname + "/" + item.Service.servicename

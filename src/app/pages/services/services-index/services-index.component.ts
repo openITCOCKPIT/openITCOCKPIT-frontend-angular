@@ -303,7 +303,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
         this.route.queryParams.subscribe(params => {
-            console.log(params);
             let hostId: number = parseInt(params['host_id']);
             if (hostId) {
                 this.params['filter[Hosts.id]'] = [hostId];
@@ -837,7 +836,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             }];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
-                console.log(item);
                 return {
                     key: item.Service.id,
                     value: item.Service.hostname + "/" + item.Service.servicename
