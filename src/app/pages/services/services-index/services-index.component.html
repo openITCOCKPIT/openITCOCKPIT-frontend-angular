@@ -933,7 +933,7 @@
                                                         {{ t('Disable services') }}
                                                     </a>
                                                 </li>
-                                                <li>
+                                                <li *oitcPermission="['servicegroups', 'add']">
                                                     <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
                                                         <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                         {{ t('Add to service group') }}
