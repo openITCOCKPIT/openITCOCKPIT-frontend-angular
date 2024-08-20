@@ -151,7 +151,7 @@
                         </td>
                         <td>
                             <c-badge class="margin-right-5" *ngIf="systemHealthUser.system_health_user.notify_on_recovery === 1" [title]="'recovery' | transloco" color="success">R</c-badge>
-                            <c-badge class="margin-right-5" *ngIf="systemHealthUser.system_health_user.notify_on_warning === 1" [title]="'warning' | transloco" color="warning">W</c-badge>
+                            <c-badge class="margin-right-5 text-dark" *ngIf="systemHealthUser.system_health_user.notify_on_warning === 1" [title]="'warning' | transloco" color="warning">W</c-badge>
                             <c-badge class="margin-right-5" *ngIf="systemHealthUser.system_health_user.notify_on_critical === 1" [title]="'critical' | transloco" color="danger">C</c-badge>
                         </td>
                         <td class="width-50">
