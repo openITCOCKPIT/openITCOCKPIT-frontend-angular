@@ -72,6 +72,50 @@ export interface ServiceIndexFilter {
     }
 }
 
+export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
+    return {
+        Servicestatus: {
+            current_state: {
+                ok: false,
+                warning: false,
+                critical: false,
+                unknown: false
+            },
+            acknowledged: false,
+            not_acknowledged: false,
+            in_downtime: false,
+            not_in_downtime: false,
+            passive: false,
+            active: false,
+            notifications_enabled: false,
+            notifications_not_enabled: false,
+            output: '',
+        },
+        Services: {
+            id: [],
+            name: '',
+            name_regex: false,
+            keywords: [],
+            not_keywords: [],
+            servicedescription: '',
+            priority: {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            },
+            service_type: []
+        },
+        Hosts: {
+            id: [],
+            name: '',
+            name_regex: false,
+            satellite_id: []
+        }
+    };
+}
+
 export interface ServicesCurrentStateFilter {
     ok: boolean,
     warning: boolean,
@@ -116,9 +160,6 @@ export interface AllService {
     Acknowledgement: any[]
 }
 
-/**
- * @deprecated use ServiceEntity instead
- */
 export interface ServiceObject {
     id: number
     uuid: string

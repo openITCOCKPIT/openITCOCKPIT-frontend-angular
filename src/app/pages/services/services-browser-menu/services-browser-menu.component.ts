@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HostsService } from '../../hosts/hosts.service';
 import { ServicesService } from '../services.service';
@@ -69,9 +69,10 @@ export interface ServiceBrowserMenuConfig {
     templateUrl: './services-browser-menu.component.html',
     styleUrl: './services-browser-menu.component.css'
 })
-export class ServicesBrowserMenuComponent implements OnInit, OnDestroy {
+export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() config!: ServiceBrowserMenuConfig;
+    @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
 
     public data?: ServiceBrowserMenu;
     public hostStatusTextClass: string = '';
@@ -86,7 +87,21 @@ export class ServicesBrowserMenuComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
 
     public ngOnInit() {
-        this.loadData();
+        if (!this.lastUpdated) {
+            // If lastUpdate is undefined, load the current status data.
+            // If lastUpdate is set to a date time, the OnChange Method will be triggered and do the loading instead.
+            // This is to avoid duplicate loading of data.
+            this.loadData();
+        }
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        // When the lastUpdated date changes, reload the data
+        // This is used to trigger a reload from an external component
+        // such as hosts/browser or services/browser
+        if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
+            this.loadData();
+        }
     }
 
     public ngOnDestroy() {

@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-12 bold">{{ t('Legend') }}</div>
+            <div class="col-lg-12">
+                {{ t('State types') }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-3">
+                <fa-icon [icon]="['fas', 'square']" class="up-soft"></fa-icon>
+                {{ t('Up soft') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="down-soft"></fa-icon>
+                {{ t('Down soft') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="unreachable-soft"></fa-icon>
+                {{ t('Unreachable soft') }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-3">
+                <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                {{ t('Up hard') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
+                {{ t('Down hard') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
+                {{ t('Unreachable hard') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-lg-3">
+                <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
+                {{ t('Downtime') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="txt-ack"></fa-icon>
+                {{ t('Acknowledged') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="txt-notification"></fa-icon>
+                {{ t('Notification') }}
+            </div>
+            <div class="col-xs-12 col-lg-3 ">
+                <fa-icon [icon]="['fas', 'square']" class="txt-timerange"></fa-icon>
+                {{ t('Check period') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-lg-3">
+                <fa-icon [icon]="['fas', 'square']" class="txt-downtime-cancelled"></fa-icon>
+                {{ t('Downtime cancelled') }}
+            </div>
+        </div>
+    </div>
+</ng-container>

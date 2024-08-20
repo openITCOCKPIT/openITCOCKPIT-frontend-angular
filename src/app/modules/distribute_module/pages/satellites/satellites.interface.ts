@@ -2,11 +2,7 @@
  *     Global action    *
  **********************/
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import {
-    ContainerSystemdowntimesParams,
-    Systemdowntime, SystemdowntimeNodeIndexRoot
-} from '../../../../pages/systemdowntimes/systemdowntimes.interface';
-import { map, Observable } from 'rxjs';
+import { Systemdowntime } from '../../../../pages/systemdowntimes/systemdowntimes.interface';
 
 export interface SatellitesLoadSatellitesByStringParams {
     'angular': true,
@@ -55,4 +51,37 @@ export function getDefaultSatelliteSystemdowntimesParams(): SatelliteSystemdownt
         'filter[Systemdowntimes.comment]': '',
         'filter[Satellites.name]': ''
     }
+}
+
+/*************************
+ * Host / Service Browser *
+ *************************/
+export interface SatelliteEntity {
+    id: number
+    name: string
+    description: string
+    address: string
+    container_id: number
+    sync_instance: number
+    timezone: string
+    created: string
+    modified: string
+    sync_method: string
+    login: string
+    port: number
+    private_key_path: string
+    url: string
+    remote_port: number
+    api_key: string
+    interval: number
+    timeout: number
+    use_proxy: number
+    proxy_url: string
+    verify_certificate: number
+    use_timesync: number
+    nsta_sync_instance: number
+}
+
+export interface SatelliteEntityCake2 {
+    Satellite: SatelliteEntity
 }

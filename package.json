@@ -61,6 +61,7 @@
         "tslib": "^2.6.2",
         "uplot": "^1.6.30",
         "vanilla-jsoneditor": "^0.23.2",
+        "vis-timeline": "^7.7.3",
         "zone.js": "~0.14.4"
     },
     "devDependencies": {

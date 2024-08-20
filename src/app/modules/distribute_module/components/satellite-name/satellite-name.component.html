@@ -1,0 +1,8 @@
+<div *ngIf="!satellite">
+    <p-skeleton width="5rem"/>
+</div>
+
+<div *ngIf="satellite">
+    {{ satellite.Satellite.name }} <span *ngIf="satellite.Satellite.description">({{ satellite.Satellite.description }}
+    )</span>
+</div>

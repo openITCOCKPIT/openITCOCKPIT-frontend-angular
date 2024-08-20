@@ -3,7 +3,8 @@
 
         <oitc-hosts-browser-menu
             *ngIf="hostBrowserConfig"
-            [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+            [config]="hostBrowserConfig"
+            [lastUpdated]="lastUpdated"></oitc-hosts-browser-menu>
 
         <oitc-query-handler-checker></oitc-query-handler-checker>
 
@@ -273,6 +274,7 @@
                                 </c-col>
                             </c-row>
 
+                            <!-- Downtime -->
                             <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.downtime">
                                 <c-col [xs]="12">
                                     <c-card [cBorder]="{top: {color: 'info', width: 3}}"
@@ -318,6 +320,7 @@
                                 </c-col>
                             </c-row>
 
+                            <!-- Acknowledgement -->
                             <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.acknowledgement">
                                 <c-col [xs]="12">
                                     <c-card [cBorder]="{top: {color: 'info', width: 3}}"
@@ -362,16 +365,282 @@
                                 </c-col>
                             </c-row>
 
+                            <!-- Flapping alert -->
                             <c-alert color="warning" [dismissible]="false" *ngIf="result.hoststatus.isFlapping">
                                 <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                                 {{ t('The state of this host is currently flapping!') }}
                             </c-alert>
 
+                            <c-row>
+                                <!-- Check command -->
+                                <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
+                                    <table cTable bordered>
+                                        <tbody>
+                                            @if (PermissionsService.hasPermission(['hosts', 'checkcommand'])) {
+                                                <tr>
+                                                    <td>{{ t('Check command') }}</td>
+                                                    <td>
+                                                        @if (PermissionsService.hasPermission(['commands', 'edit'])) {
+                                                            <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
+                                                                {{ result.checkCommand.Command.name }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ result.checkCommand.Command.name }}
+                                                        }
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>{{ t('Command line') }}</td>
+                                                    <td>
+                                                        <oitc-copy-to-clipboard
+                                                            [data]="result.mergedHost.hostCommandLine">
+                                                            <code
+                                                                [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
+                                                                {{ result.mergedHost.hostCommandLine }}
+                                                            </code>
+                                                        </oitc-copy-to-clipboard>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        <tr>
+                                            <td>{{ t('Output') }}</td>
+                                            <td>
+                                                <div class="code-font"
+                                                     [ngClass]="result.hoststatus.textClass"
+                                                     [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="Number(result.hoststatus.currentState) > 0">
+                                            <td>
+                                                {{ t('Last time') }}
+                                                <c-badge color="success">{{ t('UP') }}</c-badge>
+                                            </td>
+                                            <td>
+                                                {{ result.hoststatus.last_time_up }}
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </c-col>
+
+                                <!-- Check period -->
+                                <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
+                                    <table cTable bordered>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ t('Check period') }}</td>
+                                            <td>
+                                                <oitc-label-link
+                                                    [objectId]=" result.checkPeriod.id"
+                                                    [route]="'/timeperiods/edit'"
+                                                    [permissions]="'timeperiods.edit'"
+                                                >
+                                                    {{ result.checkPeriod.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{{ t('Check interval') }}</td>
+                                            <td>
+                                                {{ result.mergedHost.checkIntervalHuman }}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{{ t('Retry interval') }}</td>
+                                            <td>
+                                                {{ result.mergedHost.retryIntervalHuman }}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
+
+                            <!-- Long output -->
+                            <c-row *ngIf="result.hoststatus.longOutputHtml">
+                                <c-col [xs]="12" class="mt-1">
+                                    <h4>{{ t('Long output') }}</h4>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <c-card>
+                                        <c-card-body>
+                                            <div class="word-break"
+                                                 [innerHTML]="String(result.hoststatus.longOutputHtml) | trustAsHtml "></div>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
+                            <!-- Parent hosts -->
+                            <c-row *ngIf="result.parenthosts.length > 0">
+                                <c-col [xs]="12" class="mt-2">
+                                    <h4>{{ t('Parent host overview') }}</h4>
+                                </c-col>
+
+                                <c-col [xs]="12">
+                                    <table cTable bordered>
+                                        <thead>
+                                        <tr>
+                                            <th class="width-130">{{ t('Parent host state') }}</th>
+                                            <th>{{ t('Parent host name') }}</th>
+                                            <th>{{ t('Last state change') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let parenthost of result.parenthosts">
+                                            <td class="text-center">
+                                                <oitc-hoststatus-simple-icon
+                                                    [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
+                                                    [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
+                                            </td>
+                                            <td>
+                                                <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
+                                                    {{ parenthost.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ result.parentHostStatus[String(parenthost.uuid)].last_state_change }}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
+
+                            <!-- Notification overview -->
+                            <c-row>
+                                <c-col [xs]="12" class="mt-2">
+                                    <h4>{{ t('Notification overview') }}</h4>
+                                </c-col>
+
+                                <c-col [xs]="12" [md]="6" class="text-info" [hidden]="result.areContactsFromHost">
+                                    {{ t('Contacts and contact groups got inherited from') }}
+                                    <oitc-label-link
+                                        [objectId]="result.mergedHost.hosttemplate_id"
+                                        [route]="'/hosttemplates/edit'"
+                                        [permissions]="'hosttemplates.edit'"
+                                    >
+                                        {{ t('host template') }}
+                                    </oitc-label-link>
+                                    .
+                                </c-col>
+                            </c-row>
+
+                            <c-row>
+                                <!-- Contacts and Contact groups -->
+                                <c-col [xs]="12" [md]="6">
+                                    <table cTable bordered>
+                                        <tbody>
+                                            @if (result.mergedHost.contacts.length > 0) {
+                                                <tr>
+                                                    <td>{{ t('Contacts') }}</td>
+                                                    <td>
+                                                        <div *ngFor="let contact of result.mergedHost.contacts">
+                                                            @if (PermissionsService.hasPermission(['contacts', 'edit']) && contact.allowEdit) {
+                                                                <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                                                    {{ contact.name }}
+                                                                </a>
+                                                            } @else {
+                                                                {{ contact.name }}
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                            @if (result.mergedHost.contactgroups.length > 0) {
+                                                <tr>
+                                                    <td>{{ t('Contact groups') }}</td>
+                                                    <td>
+                                                        <div
+                                                            *ngFor="let contactgroup of result.mergedHost.contactgroups">
+                                                            @if (PermissionsService.hasPermission(['contactgroups', 'edit']) && contactgroup.allowEdit) {
+                                                                <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
+                                                                    {{ contactgroup.container.name }}
+                                                                </a>
+                                                            } @else {
+                                                                {{ contactgroup.container.name }}
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </c-col>
+
+                                <!-- Notification period -->
+                                <c-col [xs]="12" [md]="6">
+                                    <table cTable bordered>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ t('Notification period') }}</td>
+                                            <td>
+                                                <oitc-label-link
+                                                    [objectId]=" result.notifyPeriod.id"
+                                                    [route]="'/timeperiods/edit'"
+                                                    [permissions]="'timeperiods.edit'"
+                                                >
+                                                    {{ result?.notifyPeriod?.name }}
+                                                </oitc-label-link>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{{ t('Notification interval') }}</td>
+                                            <td>{{ result?.mergedHost?.notificationIntervalHuman }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{{ t('Notification enabled') }}</td>
+                                            <td>
+                                                @if (result?.hoststatus?.notifications_enabled) {
+                                                    <c-badge color="success">{{ t('Yes') }}</c-badge>
+                                                } @else {
+                                                    <c-badge color="danger">{{ t('No') }}</c-badge>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{{ t('Notify on') }}</td>
+                                            <td>
+                                                @if (result?.mergedHost?.notify_on_recovery) {
+                                                    <c-badge color="success" class="me-1">{{ t('Recover') }}</c-badge>
+                                                }
+                                                @if (result?.mergedHost?.notify_on_down) {
+                                                    <c-badge color="danger" class="me-1">{{ t('Down') }}</c-badge>
+                                                }
+                                                @if (result?.mergedHost?.notify_on_unreachable) {
+                                                    <c-badge color="secondary" class="me-1">{{ t('Unreachable') }}
+                                                    </c-badge>
+                                                }
+                                                @if (result?.mergedHost?.notify_on_flapping) {
+                                                    <c-badge color="primary" class="me-1">{{ t('Flapping') }}</c-badge>
+                                                }
+                                                @if (result?.mergedHost?.notify_on_downtime) {
+                                                    <c-badge color="primary" class="me-1">{{ t('Downtime') }}</c-badge>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
 
                         </c-col>
 
                         <!-- Desktop status bar -->
                         <c-col [md]="5" [lg]="3" class="d-none d-md-block"
+                               *ngIf="result?.hoststatus && result?.mergedHost"
                                [ngClass]="[result.hoststatus.cssClass, result.hoststatus.isInMonitoring ? '' : 'browser-not-monitored']">
 
                             <div class="text-center text-white">
@@ -546,19 +815,247 @@
 
                     </c-row>
 
-
                 </div>
                 <!-- Status information end -->
 
                 <!-- Device information start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.DeviceInformation">
-                    DeviceInformation
+
+                    <ng-container *ngIf="result && result.mergedHost && result.hoststatus">
+                        <c-row>
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Host overview') }}</h4>
+                            </c-col>
+
+                            <!-- Left panel -->
+                            <c-col [xs]="12" [md]="6">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <td> {{ t('IP address') }}</td>
+                                        <td>
+                                            <oitc-copy-to-clipboard
+                                                [data]="result.mergedHost.address">
+                                                {{ result.mergedHost.address }}
+                                            </oitc-copy-to-clipboard>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Flap detection enabled') }}</td>
+                                        <td>
+                                            @if (result.hoststatus.flap_detection_enabled) {
+                                                <c-badge color="danger">{{ t('Yes') }}</c-badge>
+                                            } @else {
+                                                <c-badge color="success">{{ t('No') }}</c-badge>
+                                            }
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-col>
+
+                            <!-- Right panel -->
+                            <c-col [xs]="12" [md]="6">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <td> {{ t('Priority') }}</td>
+                                        <td>
+                                            <fa-icon
+                                                *ngFor="let priority of priorities"
+                                                [ngClass]="priority"
+                                                class="me-1"
+                                                [icon]="['fas', 'fire']"></fa-icon>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('UUID') }}</td>
+                                        <td>
+                                            <oitc-copy-to-clipboard
+                                                [data]="result.mergedHost.uuid">
+                                                <code>{{ result.mergedHost.uuid }}</code>
+                                            </oitc-copy-to-clipboard>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-col>
+
+                            <!-- Container -->
+                            <c-col [xs]="12">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Container') }}</td>
+                                        <td>
+                                            @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                                <span *ngFor="let container of result.mainContainer">
+                                                    /
+                                                    <a *ngIf="container.id != null"
+                                                       [routerLink]="['/', 'browsers', 'index']"
+                                                       [queryParams]="{ containerId: container.id }">
+                                                        {{ container.name }}
+                                                    </a>
+
+                                                    <span *ngIf="container.id === null">
+                                                        {{ container.name }}
+                                                    </span>
+                                                </span>
+                                            } @else {
+                                                <span *ngFor="let container of result.mainContainer">
+                                                    /
+                                                    {{ container.name }}
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Shared containers') }}</td>
+                                        <td>
+                                            @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                                <div *ngFor="let sharing of result.sharedContainers |keyvalue">
+                                                    <span *ngFor="let container of sharing.value">
+                                                        /
+                                                        <a *ngIf="container.id != null"
+                                                           [routerLink]="['/', 'browsers', 'index']"
+                                                           [queryParams]="{ containerId: container.id }">
+                                                            {{ container.name }}
+                                                        </a>
+
+                                                        <span *ngIf="container.id === null">
+                                                            {{ container.name }}
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            } @else {
+                                                <div *ngFor="let sharing of result.sharedContainers |keyvalue">
+                                                    <span *ngFor="let container of sharing.value">
+                                                        /
+                                                        {{ container.name }}
+                                                    </span>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="tags.length > 0">
+                                        <td>{{ t('Tags') }}</td>
+                                        <td>
+                                            <c-badge
+                                                *ngFor="let tag of tags"
+                                                color="primary" class="me-1">{{ tag }}
+                                            </c-badge>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Satellite -->
+                                        @if (PermissionsService.hasModule('DistributeModule') && result.mergedHost.is_satellite_host) {
+                                            <tr>
+                                                <td>{{ t('Satellite') }}</td>
+                                                <td>
+                                                    <oitc-satellite-name
+                                                        [satelliteId]="Number(result.mergedHost.satellite_id)">
+                                                    </oitc-satellite-name>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    <!-- Master System -->
+                                    <tr *ngIf="!result.mergedHost.is_satellite_host">
+                                        <td>{{ t('Satellite') }}</td>
+                                        <td>{{ result.masterInstanceName }}</td>
+                                    </tr>
+
+                                    <tr *ngIf="result.mergedHost.notes">
+                                        <td>{{ t('Notes') }}</td>
+                                        <td>{{ result.mergedHost.notes }}</td>
+                                    </tr>
+
+                                    <tr *ngIf="result.mergedHost.description">
+                                        <td>{{ t('Description') }}</td>
+                                        <td>{{ result.mergedHost.description }}</td>
+                                    </tr>
+
+                                    <tr *ngIf="result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Hostgroups || result.objects.Instantreports || result.objects.Maps">
+                                        <td>{{ t('Used by') }}</td>
+                                        <td>
+                                            @if (PermissionsService.hasPermission(['hosts', 'usedBy'])) {
+
+                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                   *ngIf="result.objects.Instantreports.length > 0">
+                                                    <span class="badge border border-generic text-generic me-1">
+                                                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                        {{ t('Instant reports') }}
+                                                        ({{ result.objects.Instantreports.length }})
+                                                    </span>
+                                                </a>
+
+                                                @if (PermissionsService.hasModule('AutoreportModule')) {
+                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                       *ngIf="result.objects.Autoreports.length > 0">
+                                                        <span class="badge border border-generic text-generic me-1">
+                                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                            {{ t('Autoreports') }}
+                                                            ({{ result.objects.Autoreports.length }})
+                                                        </span>
+                                                    </a>
+                                                }
+
+                                                @if (PermissionsService.hasModule('EventcorrelationModule')) {
+                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                       *ngIf="result.objects.Eventcorrelations.length > 0">
+                                                        <span class="badge border border-generic text-generic me-1">
+                                                            <fa-icon [icon]="['fas', 'sitemap']"
+                                                                     [rotate]="90"></fa-icon>
+                                                            {{ t('Event Correlation') }}
+                                                            ({{ result.objects.Eventcorrelations.length }})
+                                                        </span>
+                                                    </a>
+                                                }
+
+                                                @if (PermissionsService.hasModule('MapModule')) {
+                                                    <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                       *ngIf="result.objects.Maps.length > 0">
+                                                        <span class="badge border border-generic text-generic me-1">
+                                                            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                                                            {{ t('Maps') }}
+                                                            ({{ result.objects.Maps.length }})
+                                                        </span>
+                                                    </a>
+                                                }
+
+                                                <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
+                                                   *ngIf="result.objects.Hostgroups.length > 0">
+                                                    <span class="badge border border-generic text-generic me-1">
+                                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                        {{ t('Host groups') }}
+                                                        ({{ result.objects.Hostgroups.length }})
+                                                    </span>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </c-col>
+
+                        </c-row>
+
+                    </ng-container>
+
                 </div>
                 <!-- Device information end -->
 
                 <!-- Timeline start -->
-                <div *ngIf="selectedTab == HostBrowserTabs.Timeline">
-                    Timeline
+                <div *ngIf="selectedTab == HostBrowserTabs.Timeline && result && result.mergedHost">
+                    <oitc-browser-timeline
+                        [type]="'Host'"
+                        [objectId]="result.mergedHost.id">
+                        <oitc-host-timeline-legend></oitc-host-timeline-legend>
+                    </oitc-browser-timeline>
                 </div>
                 <!-- Timeline end -->
 
@@ -587,9 +1084,15 @@
                 <!-- SLA Module end -->
 
             </c-card-body>
-            <c-card-footer>
-            </c-card-footer>
         </c-card>
+
+        <!-- List of services -->
+        <oitc-hosts-browser-services-list *ngIf="result && result.mergedHost"
+                                          [hostId]="result.mergedHost.id"
+                                          [lastUpdated]="lastUpdated">
+            
+        </oitc-hosts-browser-services-list>
+
     </ng-container>
 </oitc-coreui>
 

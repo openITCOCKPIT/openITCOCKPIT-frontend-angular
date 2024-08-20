@@ -148,6 +148,7 @@ export interface HoststatusObject {
     cssClass?: string // "bg-up"
     textClass?: string // "up"
     outputHtml?: string
+    longOutputHtml?: string
     lastHardStateChangeUser?: string, // "09:31:53 - 11.07.2024"
     last_state_change_user?: string, // "09:31:53 - 11.07.2024"
     lastCheckUser?: string, // "09:31:53 - 11.07.2024"
@@ -794,7 +795,9 @@ export interface HostBrowserResult {
     },
     satelliteId: number,
     mapModule: boolean,
-    username: string
+    username: string,
+    blurryCommandLine: boolean,
+    masterInstanceName: string
 }
 
 export interface HostBrowserSlaOverview {

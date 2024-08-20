@@ -37,6 +37,7 @@ import { ServicesService } from '../services.service';
 import { ProfileService } from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
+    getDefaultServicesIndexFilter,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
     ServiceObject,
@@ -252,47 +253,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     //Filter
     public satellites: ServicesIndexRoot['satellites'] = [];
     public serviceTypes: any[] = [];
-    public filter: ServiceIndexFilter = {
-        Servicestatus: {
-            current_state: {
-                ok: false,
-                warning: false,
-                critical: false,
-                unknown: false
-            },
-            acknowledged: false,
-            not_acknowledged: false,
-            in_downtime: false,
-            not_in_downtime: false,
-            passive: false,
-            active: false,
-            notifications_enabled: false,
-            notifications_not_enabled: false,
-            output: '',
-        },
-        Services: {
-            id: [],
-            name: '',
-            name_regex: false,
-            keywords: [],
-            not_keywords: [],
-            servicedescription: '',
-            priority: {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            },
-            service_type: []
-        },
-        Hosts: {
-            id: [],
-            name: '',
-            name_regex: false,
-            satellite_id: []
-        }
-    };
+    public filter: ServiceIndexFilter = getDefaultServicesIndexFilter();
 
     //end filter
     public params: ServiceParams = {

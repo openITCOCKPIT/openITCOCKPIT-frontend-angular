@@ -14,6 +14,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
     AlertComponent,
+    BadgeComponent,
     BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
@@ -28,10 +29,11 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
+    TableDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -84,6 +86,21 @@ import {
 } from '../../../layouts/coreui/delete-acknowledgements-modal/delete-acknowledgements-modal.component';
 import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
 import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
+import { MatSort } from '@angular/material/sort';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { HoststatusSimpleIconComponent } from '../hoststatus-simple-icon/hoststatus-simple-icon.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import {
+    SatelliteNameComponent
+} from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
+import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
+import {
+    HostTimelineLegendComponent
+} from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
+import {
+    HostsBrowserServicesListComponent
+} from '../hosts-browser-services-list/hosts-browser-services-list.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -129,7 +146,20 @@ import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-ack
         HostsSendCustomNotificationModalComponent,
         CancelHostdowntimeModalComponent,
         TrustAsHtmlPipe,
-        DeleteAcknowledgementsModalComponent
+        DeleteAcknowledgementsModalComponent,
+        MatSort,
+        TableDirective,
+        CopyToClipboardComponent,
+        BadgeComponent,
+        NgForOf,
+        HoststatusSimpleIconComponent,
+        LabelLinkComponent,
+        RequiredIconComponent,
+        KeyValuePipe,
+        SatelliteNameComponent,
+        BrowserTimelineComponent,
+        HostTimelineLegendComponent,
+        HostsBrowserServicesListComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -145,8 +175,13 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public hostBrowserConfig?: HostBrowserMenuConfig;
 
     public result?: HostBrowserResult;
+    public lastUpdated: Date = new Date(); // Used to tell child components to reload data
+
     public selectedTab: HostBrowserTabs = HostBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
+    public priorityClasses: string[] = ['ok-soft', 'ok', 'warning', 'critical-soft', 'critical'];
+    public priorities: string[] = [];
+    public tags: string[] = [];
 
     public GrafanaIframe?: GrafanaIframeUrlForDatepicker;
 
@@ -208,9 +243,23 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.getHostBrowser(this.id).subscribe((result) => {
             this.result = result;
 
+            let priority = Number(result.mergedHost.priority);
+            // Sift priority into array index
+            if (priority > 0) {
+                priority = priority - 1;
+            }
+            this.priorities = ['text-muted', 'text-muted', 'text-muted', 'text-muted', 'text-muted']; // make all icons gray
+            for (let i = 0; i <= priority; i++) {
+                this.priorities[i] = this.priorityClasses[priority]; // set color depending on priority level
+            }
+
+            this.tags = String(result.mergedHost.tags).split(',');
+
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
             this.loadSlaInformation();
+            
+            this.lastUpdated = new Date();
         }));
     }
 
@@ -446,4 +495,5 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
     protected readonly String = String;
+    protected readonly Boolean = Boolean;
 }
