@@ -138,7 +138,8 @@ export interface ServicesIndexFilterApiRequest {
     'Servicestatus.problem_has_been_acknowledged': string,
     'Servicestatus.scheduled_downtime_depth': string,
     'Servicestatus.notifications_enabled': string,
-    'Servicestatus.is_hardstate': string
+    //'Servicestatus.is_hardstate': string
+    'Servicestatus.active_checks_enabled': string
 }
 
 export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterApiRequest {
@@ -162,7 +163,8 @@ export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterAp
         'Servicestatus.problem_has_been_acknowledged': '',
         'Servicestatus.scheduled_downtime_depth': '',
         'Servicestatus.notifications_enabled': '',
-        'Servicestatus.is_hardstate': '',
+        //'Servicestatus.is_hardstate': '',
+        'Servicestatus.active_checks_enabled': '',
     }
 }
 

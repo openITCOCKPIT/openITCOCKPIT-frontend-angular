@@ -763,7 +763,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = '';
         this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = '';
         this.RequestFilter['Servicestatus.notifications_enabled'] = '';
-        this.RequestFilter['Servicestatus.is_hardstate'] = '';
+        this.RequestFilter['Servicestatus.active_checks_enabled'] = '';
 
         if (filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged) {
             this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = String(filter.Servicestatus.acknowledged === true);
@@ -778,7 +778,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
 
         if (filter.Servicestatus.passive !== filter.Servicestatus.active) {
-            this.RequestFilter['Servicestatus.is_hardstate'] = String(filter.Servicestatus.active === true);
+            this.RequestFilter['Servicestatus.active_checks_enabled'] = String(filter.Servicestatus.active === true);
         }
 
         this.filter = filter;
