@@ -103,6 +103,9 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
     HostsAddToHostgroupComponent
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import {
+    ServiceAddToServicegroupModalComponent
+} from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 
 @Component({
     selector: 'oitc-hosts-browser-services-list',
@@ -164,7 +167,8 @@ import {
         ReactiveFormsModule,
         RegexHelperTooltipComponent,
         FormsModule,
-        HostsAddToHostgroupComponent
+        HostsAddToHostgroupComponent,
+        ServiceAddToServicegroupModalComponent
     ],
     templateUrl: './hosts-browser-services-list.component.html',
     styleUrl: './hosts-browser-services-list.component.css',
