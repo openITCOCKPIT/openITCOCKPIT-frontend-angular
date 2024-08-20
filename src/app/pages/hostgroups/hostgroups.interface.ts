@@ -432,3 +432,12 @@ export interface HostgroupEntityWithJoinData {
         hostgroup_id: number,
     }
 }
+
+export interface HostgroupAppend {
+    Hostgroup: {
+        hosts: {
+            _ids: number[]
+        }
+        id: number
+    }
+}

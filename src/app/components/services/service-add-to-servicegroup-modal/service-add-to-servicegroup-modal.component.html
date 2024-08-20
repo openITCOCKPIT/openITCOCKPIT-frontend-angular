@@ -1,0 +1,35 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="serviceAddToServicegroupModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray bg-primary text-white">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                {{ t('Append services/s to service group') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            {{ t('Selected services') }}
+            <ul>
+                <li *ngFor="let item of items">{{item.value}}</li>
+            </ul>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [disabled]="isSend" cButton class="ripple" color="success" [routerLink]="['/', 'servicegroups', 'add', joinedServiceIds]">
+                {{ t('Create new service group') }}
+            </button>
+            <button [disabled]="isSend" cButton class="ripple" color="primary" [routerLink]="['/', 'servicegroups', 'append', joinedServiceIds]">
+                {{ t('Append existing service group') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+
+

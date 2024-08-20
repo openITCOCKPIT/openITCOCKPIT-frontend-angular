@@ -110,6 +110,12 @@ const coreRoutes: Routes = [{
     path: 'hostgroups/add',
     loadComponent: () => import('./pages/hostgroups/hostgroups-add/hostgroups-add.component').then(m => m.HostgroupsAddComponent)
 }, {
+    path: 'hostgroups/add/:hostids',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-add/hostgroups-add.component').then(m => m.HostgroupsAddComponent)
+}, {
+    path: 'hostgroups/append/:hostids',
+    loadComponent: () => import('./pages/hostgroups/hostgroups-append/hostgroups-append.component').then(m => m.HostgroupsAppendComponent)
+}, {
     path: 'hostgroups/copy/:ids',
     loadComponent: () => import('./pages/hostgroups/hostgroups-copy/hostgroups-copy.component').then(m => m.HostgroupsCopyComponent)
 }, {
@@ -133,6 +139,12 @@ const coreRoutes: Routes = [{
 }, {
     path: 'servicegroups/add',
     loadComponent: () => import('./pages/servicegroups/servicegroups-add/servicegroups-add.component').then(m => m.ServicegroupsAddComponent)
+}, {
+    path: 'servicegroups/add/:serviceids',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-add/servicegroups-add.component').then(m => m.ServicegroupsAddComponent)
+}, {
+    path: 'servicegroups/append/:serviceids',
+    loadComponent: () => import('./pages/servicegroups/servicegroups-append/servicegroups-append.component').then(m => m.ServicegroupsAppendComponent)
 }, {
     path: 'servicegroups/copy/:ids',
     loadComponent: () => import('./pages/servicegroups/servicegroups-copy/servicegroups-copy.component').then(m => m.ServicegroupsCopyComponent)

@@ -95,6 +95,9 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import {
+    HostsAddToHostgroupComponent
+} from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
 
 @Component({
     selector: 'oitc-hosts-not-monitored',
@@ -163,7 +166,8 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         RouterLink,
         TooltipDirective,
         HoststatusSimpleIconComponent,
-        DisableModalComponent
+        DisableModalComponent,
+        HostsAddToHostgroupComponent
     ],
     templateUrl: './hosts-not-monitored.component.html',
     styleUrl: './hosts-not-monitored.component.css',
@@ -335,6 +339,35 @@ export class HostsNotMonitoredComponent {
         this.modalService.toggle({
             show: true,
             id: 'disableModal',
+        });
+    }
+
+    protected confirmAddHostsToHostgroup(host?: HostObject) : void
+    {
+        let items: SelectKeyValue[] = [];
+
+        if (host) {
+            items = [{
+                key: Number(host.id),
+                value: String(host.hostname)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
+                return {
+                    key: item.Host.id,
+                    value: item.Host.name
+                };
+            });
+        }
+        this.selectedItems = items;
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.modalService.toggle({
+            show: true,
+            id: 'hostAddToHostgroupModal',
         });
     }
 
