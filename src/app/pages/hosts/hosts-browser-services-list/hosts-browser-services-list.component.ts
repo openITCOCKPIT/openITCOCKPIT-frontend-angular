@@ -288,7 +288,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         this.params['filter[Servicestatus.current_state][]'] = getServiceCurrentStateForApi(this.filter.Servicestatus.current_state);
         this.params['filter[Servicestatus.output]'] = this.filter.Servicestatus.output;
 
-        this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
+        this.subscriptions.add(this.ServicesService.getServicesIndexViaGet(this.params)
             .subscribe((services) => {
                 this.services = services;
                 this.userFullname = services.username;
@@ -654,7 +654,6 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             id: 'serviceAddToServicegroupModal',
         });
     }
-
 
 
     protected readonly AcknowledgementTypes = AcknowledgementTypes;

@@ -326,7 +326,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.params['filter[Hosts.id]'] = this.hostId;
 
-        this.subscriptions.add(this.ServicesService.getServicesIndex(this.params)
+        this.subscriptions.add(this.ServicesService.getServicesIndexViaGet(this.params)
             .subscribe((services) => {
                 this.services = services;
                 this.userFullname = services.username;
