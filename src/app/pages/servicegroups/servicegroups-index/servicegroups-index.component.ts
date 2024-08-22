@@ -121,13 +121,13 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
 
-    public params: ServicegroupsIndexParams = getDefaultServicegroupsIndexParams();
+    protected params: ServicegroupsIndexParams = getDefaultServicegroupsIndexParams();
 
-    public readonly route = inject(ActivatedRoute);
-    public selectedItems: DeleteAllItem[] = [];
-    public servicegroups: ServicegroupsIndexRoot = {all_servicegroups: [], _csrfToken: ''}
-    public readonly router = inject(Router);
-    public hideFilter: boolean = true;
+    protected readonly route = inject(ActivatedRoute);
+    protected selectedItems: DeleteAllItem[] = [];
+    protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: [], _csrfToken: ''}
+    private readonly router = inject(Router);
+    protected hideFilter: boolean = false;
 
     // Show or hide the filter
     public toggleFilter() {

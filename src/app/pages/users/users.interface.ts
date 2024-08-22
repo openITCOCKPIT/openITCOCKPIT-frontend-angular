@@ -1,3 +1,6 @@
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+
 export interface UserLocaleOption {
     i18n: string
     name: string
@@ -41,4 +44,162 @@ export interface UserTimezonesSelect {
 
 export interface LoadUsersByContainerIdPost {
     containerIds: number[]
+}
+
+
+// INDEX
+export interface UsersIndexRoot extends PaginateOrScroll {
+    all_users: User[]
+    myUserId: number
+}
+
+export interface User {
+    id: number
+    email: string
+    company: any
+    phone?: string
+    is_active: boolean
+    samaccountname: any
+    is_oauth: boolean
+    last_login?: string
+    full_name: string
+    usercontainerroles: any[]
+    containers: {
+        id: number
+        containertype_id: number
+        name: string
+        parent_id?: number
+        lft: number
+        rght: number
+        _joinData: {
+            id: number
+            user_id: number
+            container_id: number
+            permission_level: number
+        }
+    }[]
+    usergroup: {
+        id: number
+        name: string
+    }
+    allow_edit: boolean
+    UserTypes: {
+        title: string
+        color: string
+        class: string
+    }[]
+}
+
+export interface UsersIndexParams {
+    angular: boolean
+    direction: 'asc' | 'desc' | '', // asc or desc
+    page: number
+    scroll: boolean
+    sort: string
+    'filter[Users.company]': string
+    'filter[Users.email]': string
+    'filter[Users.phone]': string
+    'filter[full_name]': string
+}
+
+export function getDefaultUsersIndexParams(): UsersIndexParams {
+    return {
+        angular: true,
+        direction: 'asc',
+        page: 1,
+        scroll: false,
+        sort: 'full_name',
+        'filter[Users.company]': '',
+        'filter[Users.email]': '',
+        'filter[Users.phone]': '',
+        'filter[full_name]': ''
+    }
+}
+
+// ADD
+export interface UsersAddRoot {
+    User: {
+        apikeys: Apikey[]
+        company: string
+        confirm_password: string
+        ContainersUsersMemberships: {
+            [key: string]: string;
+        }
+        dashboard_tab_rotation: number
+        dateformat: string
+        email: string
+        firstname: string
+        i18n: string
+        is_active: number
+        is_oauth: number
+        lastname: string
+        paginatorlength: number
+        password: string
+        phone: string
+        position: string
+        recursive_browser: number
+        showstatsinmenu: number
+        timezone: string
+        usercontainerroles: {
+            _ids: number[]
+        }
+        usergroup_id: number
+    }
+}
+
+
+export interface Apikey {
+    apikey: string
+    description: string
+}
+
+// LoadContainerRoles
+export interface LoadContainerRolesRequest {
+    angular: boolean
+    'filter[Usercontainerroles.name]' : string
+    selected: number[]
+}
+export interface LoadContainerRolesRoot {
+    usercontainerroles: SelectKeyValue[]
+    _csrfToken: string
+}
+
+// LoadUsergroups
+export interface LoadUsergroupsRoot {
+    usercontainerroles: SelectKeyValue[]
+    _csrfToken: string
+}
+
+// LoadContainerPermissions
+export interface LoadContainerPermissionsRequest {
+    angular: boolean
+    'usercontainerRoleIds[]': number[]
+}
+export interface LoadContainerPermissionsRoot {
+    userContainerRoleContainerPermissions: UserContainerRoleContainerPermissions
+    _csrfToken: string
+}
+
+export interface UserContainerRoleContainerPermissions {
+    [key: string]: {
+        id: number
+        containertype_id: number
+        name: string
+        parent_id: number
+        lft: number
+        rght: number
+        _joinData: {
+            id: number
+            usercontainerrole_id: number
+            container_id: number
+            permission_level: number
+        }
+        path: string
+        user_roles: {
+            [key: string]: {
+                id: number
+                name: string
+            }
+        }
+    }
 }

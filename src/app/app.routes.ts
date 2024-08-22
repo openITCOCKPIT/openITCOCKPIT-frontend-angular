@@ -428,6 +428,12 @@ const coreRoutes: Routes = [{
     path: 'statehistories/service/:id',
     loadComponent: () => import('./pages/statehistories/statehistories-service/statehistories-service.component').then(m => m.StatehistoriesServiceComponent)
 }, {
+    path: 'users/add',
+    loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
+}, {
+    path: 'users/index',
+    loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
+}, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
 }, {

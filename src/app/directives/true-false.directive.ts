@@ -1,4 +1,4 @@
-import { Directive, ElementRef, forwardRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, forwardRef, HostListener, Input, Renderer2 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Directive({
@@ -21,7 +21,7 @@ export class TrueFalseDirective {
 
     @Input() trueValue: any = true;
     @Input() falseValue: any = false;
-    @Input() disabled: boolean = false;
+    @Input({transform: booleanAttribute}) disabled: boolean = false;
 
 
     constructor(private elementRef: ElementRef, private renderer: Renderer2) {

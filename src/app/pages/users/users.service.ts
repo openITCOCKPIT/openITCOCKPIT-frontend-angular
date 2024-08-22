@@ -3,14 +3,18 @@ import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
-    LoadUsersByContainerIdPost,
-    LoadUsersByContainerIdRoot,
+    LoadContainerPermissionsRequest, LoadContainerPermissionsRoot,
+    LoadContainerRolesRequest,
+    LoadContainerRolesRoot,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
+    UsersIndexParams,
+    UsersIndexRoot,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 
 @Injectable({
@@ -21,8 +25,51 @@ export class UsersService {
     constructor() {
     }
 
-    private readonly http = inject(HttpClient);
-    private readonly proxyPath = inject(PROXY_PATH);
+    private readonly http: HttpClient = inject(HttpClient);
+    private readonly proxyPath: string = inject(PROXY_PATH);
+
+    public getIndex(params: UsersIndexParams): Observable<UsersIndexRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<UsersIndexRoot>(`${proxyPath}/users/index.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: UsersIndexRoot): UsersIndexRoot => {
+                return data;
+            })
+        );
+    }
+
+    public loadContainerRoles(params: LoadContainerRolesRequest): Observable<LoadContainerRolesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public loadContainerPermissions(params: LoadContainerPermissionsRequest): Observable<LoadContainerPermissionsRoot> {
+        console.warn(params);
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadContainerPermissionsRoot>(`${proxyPath}/users/loadContainerPermissions.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/users/delete/${item.id}.json?angular=true`, {});
+    }
 
     public getLocaleOptions(): Observable<UserLocaleOption[]> {
         const proxyPath = this.proxyPath;
