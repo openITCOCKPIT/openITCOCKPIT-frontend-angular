@@ -104,6 +104,9 @@ const coreRoutes: Routes = [{
     path: 'changelogs/index',
     loadComponent: () => import('./pages/changelogs/changelogs-index/changelogs-index.component').then(m => m.ChangelogsIndexComponent)
 }, {
+    path: 'eventlogs/index',
+    loadComponent: () => import('./pages/eventlogs/eventlogs-index/eventlogs-index.component').then(m => m.EventlogsIndexComponent)
+}, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {

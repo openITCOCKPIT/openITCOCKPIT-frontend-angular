@@ -274,6 +274,17 @@
                                             {{ t('Refresh configuration') }}
                                         </label>
                                     </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Models.User" cFormCheckInput
+                                               id="user"
+                                               name="user"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="user">
+                                            {{ t('Users') }}
+                                        </label>
+                                    </c-form-check>
                                 </fieldset>
                             </c-col>
                             <c-col md="6">

@@ -105,7 +105,8 @@ export class ChangelogsIndexComponent {
             Location: true,
             Tenant: true,
             Container: true,
-            Export: true
+            Export: true,
+            User: true
         },
         Action: {
             add: true,
@@ -170,7 +171,8 @@ export class ChangelogsIndexComponent {
                 Location: true,
                 Tenant: true,
                 Container: true,
-                Export: true
+                Export: true,
+                User: true
             },
             Action: {
                 add: true,
