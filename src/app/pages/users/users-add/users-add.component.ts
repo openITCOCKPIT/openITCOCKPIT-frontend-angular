@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -88,7 +88,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css'
 })
-export class UsersAddComponent implements OnDestroy, OnInit {
+export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -130,6 +130,9 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected errors: GenericValidationError | null = null;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
 
+    public ngOnChanges() {
+        console.log(this.selectedContainerIds);
+    }
 
     public ngOnInit() {
         this.loadContainers();
@@ -160,10 +163,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
 
     protected loadContainerPermissions = (): void => {
         let params: LoadContainerPermissionsRequest = {
-            'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids.map((value) => {
-                let data: SelectKeyValue = value as unknown as SelectKeyValue;
-                return data.key
-            }),
+            'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,
             angular: true
         }
         this.subscriptions.add(this.UsersService.loadContainerPermissions(params)

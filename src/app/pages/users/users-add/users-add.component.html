@@ -50,6 +50,8 @@
                     <oitc-multi-select
                             name="post.User.usercontainerroles._ids"
                             id="post.User.usercontainerroles._ids"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="post.User.usercontainerroles._ids"
                             [searchCallback]="loadContainerRoles"
                             (onChange)="onContainerSelectChange($event)"
@@ -71,17 +73,18 @@
                             <legend class="txt-ack">
                                 {{ userContainerRole.value.path }}
                                 <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                         *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id)"/>
+                                         *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
                             </legend>
-                            <c-row [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                            <c-row>
                                 <c-col md="1">
                                 </c-col>
                                 <c-col md="1">
-                                    <c-form-check>
+                                    <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                         <input cFormCheckInput
+                                               disabled
+                                               type="radio"
                                                [name]="userContainerRole.value.id + 'PermissionLevel'"
                                                [id]="userContainerRole.value.id + 'PermissionLevelRead'"
-                                               type="radio"
                                                [value]="1"
                                                [(ngModel)]="userContainerRole.value._joinData.permission_level"
                                         />
@@ -92,11 +95,12 @@
                                     </c-form-check>
                                 </c-col>
                                 <c-col md="1">
-                                    <c-form-check>
+                                    <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                         <input cFormCheckInput
+                                               disabled
+                                               type="radio"
                                                [name]="userContainerRole.value.id + 'PermissionLevel'"
                                                [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
-                                               type="radio"
                                                [value]="2"
                                                [(ngModel)]="userContainerRole.value._joinData.permission_level"
                                         />
@@ -112,15 +116,16 @@
                                     </c-badge>
                                     <ng-container
                                             *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
-                                        <c-badge *oitcPermission="['usercontainerroles', 'edit']"
+                                        <c-button *oitcPermission="['usercontainerroles', 'edit']"
                                                  [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                 color="info">
+                                                  cButton size="xs" color="primary" variant="outline">
                                             {{ userRole.value.name }}
-                                        </c-badge>
-                                        <c-badge *oitcPermission="['usercontainerroles', 'edit'];negate:true"
-                                                 color="info">
+                                        </c-button>
+                                        <c-button *oitcPermission="['usercontainerroles', 'edit'];negate:true"
+                                                 [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
+                                                 cButton size="xs" color="primary" variant="outline">
                                             {{ userRole.value.name }}
-                                        </c-badge>
+                                        </c-button>
                                     </ng-container>
                                 </c-col>
                             </c-row>
@@ -144,8 +149,11 @@
                     <oitc-multi-select
                             name="selectedContainerIds"
                             id="selectedContainerIds"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="selectedContainerIds"
                             [options]="containers"
+                            (onChange)="ngOnChanges()"
                             oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
@@ -167,6 +175,8 @@
                     <oitc-select
                             name="post.User.usergroup_id"
                             id="post.User.usergroup_id"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="post.User.usergroup_id"
                             [options]="containers"
                             oitcFormError [errors]="errors" errorField="usergroup_id">
@@ -359,6 +369,8 @@
                     <oitc-select
                             name="post.User.dateformat"
                             id="post.User.dateformat"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="post.User.dateformat"
                             [options]="dateformats"
                             oitcFormError [errors]="errors" errorField="dateformat">
@@ -375,6 +387,8 @@
                     <oitc-select
                             name="post.User.timezone"
                             id="post.User.timezone"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="post.User.timezone"
                             [options]="timezones"
                             oitcFormError [errors]="errors" errorField="timezone">
@@ -394,6 +408,8 @@
                     <oitc-select
                             name="post.User.i18n"
                             id="post.User.i18n"
+                            optionValue="key"
+                            optionLabel="value"
                             [(ngModel)]="post.User.i18n"
                             [options]="localeOptions"
                             oitcFormError [errors]="errors" errorField="i18n">

@@ -8,3 +8,17 @@
 .d-inline-block {
     display: inline-block !important;
 }
+
+.strike {
+    position: relative;
+
+}
+
+.strike::before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #111;
+    width: 100%;
+}
