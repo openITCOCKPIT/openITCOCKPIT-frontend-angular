@@ -27,7 +27,12 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { SystemHealthUserEditGet, SystemHealthUserEditPost} from '../systemhealthusers.interface';
+import {
+    SystemHealthUserAdd,
+    SystemHealthUserDetails,
+    SystemHealthUserEditGet,
+    SystemHealthUserEditPost
+} from '../systemhealthusers.interface';
 import { SystemHealthUsersService } from '../systemhealthusers.service';
 import { Subscription } from 'rxjs';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -80,7 +85,19 @@ export class SystemHealthUsersEditComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     protected errors: GenericValidationError | null = null;
-    protected post: SystemHealthUserEditPost = {} as SystemHealthUserEditPost;
+    protected post: SystemHealthUserEditPost = {
+        SystemHealthUser: {
+            notify_on_critical: 0,
+            notify_on_recovery: 0,
+            notify_on_warning: 0
+        },
+        User: {
+            email: '',
+            firstname: '',
+            lastname: ''
+        },
+        id: 0
+    };
 
 
     public submit() {

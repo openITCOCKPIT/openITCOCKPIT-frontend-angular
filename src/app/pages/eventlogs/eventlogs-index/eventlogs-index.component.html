@@ -1,0 +1,273 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['eventlogs', 'index']"
+                       [routerLink]="['/', 'eventlogs', 'index']">
+                        <fa-icon [icon]="['fas', 'file-text']"></fa-icon>
+                        {{ t('Event Log') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Event Log') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadEventlogs()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[name]']"
+                                           [placeholder]="'Filter by name' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[user_email]']"
+                                           [placeholder]="'Filter by email' | transloco"
+                                           aria-label="name"
+                                           cFormControl
+                                           name="user_email"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                                <c-row class="my-1">
+                                    <c-col class="text-info small">
+                                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
+                                        {{ t('E-mail filter does not search for deleted users!') }}
+                                    </c-col>
+                                </c-row>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        {{ t('From') }}
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="from"
+                                           [placeholder]="'From date' | transloco"
+                                           aria-label="from"
+                                           name="from"
+                                           cFormControl
+                                           oitcDebounce
+                                           type="datetime-local"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6" class="mb-2">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        {{ t('To') }}
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="to"
+                                           [placeholder]="'From date' | transloco"
+                                           aria-label="to"
+                                           name="to"
+                                           cFormControl
+                                           oitcDebounce
+                                           type="datetime-local"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Log type') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Types.login" cFormCheckInput
+                                               id="login"
+                                               name="login"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="login">
+                                            {{ t('User Login') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Types.user_delete" cFormCheckInput
+                                               id="userDelete"
+                                               name="userDelete"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="userDelete">
+                                            {{ t('User Delete') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="tmpFilter.Types.user_password_change" cFormCheckInput
+                                               id="userPasswordChange"
+                                               name="userPAsswordChange"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="userPasswordChange">
+                                            {{ t('User Password Change') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <oitc-table-loader *ngIf="!eventlogs"></oitc-table-loader>
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th colspan="2" scope="col" mat-sort-header="Eventlogs.type">
+                            {{ t('Event Type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="user_email"
+                            *ngIf="eventlogs && (eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change'))">
+                            {{ t('Email') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Eventlogs.created">
+                            {{ t('Date') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="eventlogs">
+                    <tr *ngFor="let event of eventlogs.all_events">
+                        <td>
+                            <fa-icon [icon]="eventlogs.typeIconClasses[event.type].icon"
+                                     title="{{eventlogs.typeTranslations[event.type]}}"
+                                     class="{{eventlogs.typeIconClasses[event.type].className}}"></fa-icon>
+                        </td>
+                        <td>{{ eventlogs.typeTranslations[event.type] }}</td>
+                        <td>
+                            <span *ngIf="event.recordExists">
+                                {{ event.name }}
+                            </span>
+                            <span *ngIf="!event.recordExists">
+                                <s>{{ event.name }}</s>
+                            </span>
+                        </td>
+                        <td *ngIf="eventlogs && (eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change'))">
+                            <span *ngIf="event.recordExists">
+                                {{ event.user_email }}
+                            </span>
+                            <span *ngIf="!event.recordExists">
+                                <s>{{ event.data['user_email'] }}</s>
+                            </span>
+                        </td>
+                        <td>{{ event.time }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="eventlogs && eventlogs.all_events.length === 0"></oitc-no-records>
+
+                <ng-container *ngIf="eventlogs && eventlogs.all_events">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col md="12">
+                                <div class="btn-group d-flex flex-row-reverse" role="group">
+                                    <c-dropdown>
+                                        <button cButton cDropdownToggle color="default">
+                                            {{ t('More actions') }}
+                                        </button>
+                                        <ul cDropdownMenu>
+                                            <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                                {{ t('List as pdf') }}</a></li>
+                                            <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                                {{ t('List as csv') }}</a></li>
+                                        </ul>
+                                    </c-dropdown>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+                <c-container fluid class="mb-3 py-3">
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="eventlogs"
+                                [paginateOrScroll]="eventlogs"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
