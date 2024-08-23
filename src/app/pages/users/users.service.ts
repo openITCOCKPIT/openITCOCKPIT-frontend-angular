@@ -1,20 +1,21 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     LoadContainerPermissionsRequest, LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot,
+    LoadContainerRolesRoot, LoadUsergroupsRoot,
     UserDateformat,
     UserDateformatsRoot,
-    UserLocaleOption,
+    UserLocaleOption, UsersAddRoot,
     UsersIndexParams,
     UsersIndexRoot,
     UserTimezoneGroup,
     UserTimezonesSelect
 } from './users.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
@@ -82,6 +83,41 @@ export class UsersService {
                 return data.localeOptions;
             })
         );
+    }
+
+    public getUsergroups(): Observable<LoadUsergroupsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadUsergroupsRoot>(`${proxyPath}/users/loadUsergroups.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+
+    public addUser(user: UsersAddRoot): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, user)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
     }
 
     public getDateformats(): Observable<UserDateformatsRoot> {

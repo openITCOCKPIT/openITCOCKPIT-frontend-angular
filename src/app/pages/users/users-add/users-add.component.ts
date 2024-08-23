@@ -2,7 +2,7 @@ import { Component, inject, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
@@ -10,14 +10,17 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
+    FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -30,7 +33,7 @@ import {
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot,
+    LoadContainerRolesRoot, LoadUsergroupsRoot,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
@@ -44,8 +47,11 @@ import { ContainersLoadContainersByStringParams } from '../../containers/contain
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { Servicegroup } from '../../servicegroups/servicegroups.interface';
+import { HistoryService } from '../../../history.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-users-add',
@@ -83,7 +89,8 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
         NgIf,
         NgForOf,
         KeyValuePipe,
-        BadgeComponent
+        BadgeComponent,
+        FormDirective
     ],
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css'
@@ -92,41 +99,19 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly notyService: NotyService = inject(NotyService);
 
     protected createAnother: boolean = false;
-    protected post: UsersAddRoot = {
-        User: {
-            apikeys: [],
-            company: '',
-            confirm_password: '',
-            ContainersUsersMemberships: {},
-            dashboard_tab_rotation: 25,
-            dateformat: '',
-            email: '',
-            firstname: '',
-            i18n: '',
-            is_active: 1,
-            is_oauth: 0,
-            lastname: '',
-            paginatorlength: 25,
-            password: '',
-            phone: '',
-            position: '',
-            recursive_browser: 0,
-            showstatsinmenu: 0,
-            timezone: '',
-            usercontainerroles: {
-                _ids: []
-            },
-            usergroup_id: 0
-        },
-    };
+    protected post: UsersAddRoot = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
     protected dateformats: UserDateformat[] = [];
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
+    protected usergroups : SelectKeyValue[] = [];
     protected errors: GenericValidationError | null = null;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
 
@@ -134,11 +119,81 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
         console.log(this.selectedContainerIds);
     }
 
+    public addUser(): void {
+        this.subscriptions.add(this.UsersService.addUser(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                if (result.success) {
+                    const response: GenericIdResponse = result.data as GenericIdResponse;
+
+                    const title: string = this.TranslocoService.translate('Servicegroup');
+                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const url: (string | number)[] = ['servicegroups', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.HistoryService.navigateWithFallback(['/servicegroups/index']);
+                        return;
+                    }
+                    this.post = this.getDefaultPost();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
+                    if (typeof this.errors['container']['name'] !== 'undefined') {
+                        this.errors['name'] = <any>this.errors['container']['name'];
+                    }
+                }
+            })
+        );
+    }
+
+    private getDefaultPost(): UsersAddRoot {
+        return {
+            User: {
+                apikeys: [],
+                company: '',
+                confirm_password: '',
+                ContainersUsersMemberships: {},
+                dashboard_tab_rotation: 25,
+                dateformat: '',
+                email: '',
+                firstname: '',
+                i18n: '',
+                is_active: 1,
+                is_oauth: 0,
+                lastname: '',
+                paginatorlength: 25,
+                password: '',
+                phone: '',
+                position: '',
+                recursive_browser: 0,
+                showstatsinmenu: 0,
+                timezone: '',
+                usercontainerroles: {
+                    _ids: []
+                },
+                usergroup_id: 0
+            },
+        };
+    }
+
     public ngOnInit() {
         this.loadContainers();
         this.loadDateformats();
         this.loadLocaleOptions();
         this.loadContainerRoles('');
+        this.loadUsergroups();
     }
 
     public ngOnDestroy() {
@@ -191,6 +246,13 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
             .subscribe((result: UserLocaleOption[]) => {
                 this.localeOptions = result;
             }));
+    }
+
+    private loadUsergroups(): void {
+        this.subscriptions.add(this.UsersService.getUsergroups()
+            .subscribe((result: LoadUsergroupsRoot) => {
+                this.usergroups = result.usergroups;
+            }))
     }
 
 }

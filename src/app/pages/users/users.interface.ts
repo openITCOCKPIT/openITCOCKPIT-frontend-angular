@@ -166,7 +166,7 @@ export interface LoadContainerRolesRoot {
 
 // LoadUsergroups
 export interface LoadUsergroupsRoot {
-    usercontainerroles: SelectKeyValue[]
+    usergroups: SelectKeyValue[]
     _csrfToken: string
 }
 
