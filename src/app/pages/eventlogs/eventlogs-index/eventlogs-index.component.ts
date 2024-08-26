@@ -131,6 +131,13 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy {
             }
         }
 
+        if (this.params['types[]'].length === 0) {
+            for (let type in this.tmpFilter.Types) {
+                this.params['filter[Eventlogs.type][]'].push(type);
+                this.params['types[]'].push(type);
+            }
+        }
+
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
