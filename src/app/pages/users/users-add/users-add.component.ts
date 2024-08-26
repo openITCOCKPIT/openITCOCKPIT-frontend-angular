@@ -17,7 +17,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent,
+    FormLabelDirective,
+    InputGroupComponent,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -33,7 +34,8 @@ import {
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot, LoadUsergroupsRoot,
+    LoadContainerRolesRoot,
+    LoadUsergroupsRoot,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
@@ -117,6 +119,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     protected usergroups : SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
+    protected tabRotationIntervalText: string = '';
 
     public ngOnChanges() {
         console.log(this.selectedContainerIds);
@@ -165,7 +168,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
                 company: '',
                 confirm_password: '',
                 ContainersUsersMemberships: {},
-                dashboard_tab_rotation: 25,
+                dashboard_tab_rotation: 0,
                 dateformat: '',
                 email: '',
                 firstname: '',
@@ -189,6 +192,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     }
 
     public ngOnInit() {
+        this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();
         this.loadLocaleOptions();
@@ -261,6 +265,20 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
                 this.post.User.apikeys.push(result);
             })
         );
+    }
+
+    protected updateTabRotationInterval(): void {
+        if (this.post.User.dashboard_tab_rotation === 0) {
+            this.tabRotationIntervalText = 'disabled';
+            return;
+        }
+        let min = Math.floor(this.post.User.dashboard_tab_rotation / 60),
+            sec = Math.round(this.post.User.dashboard_tab_rotation % 60);
+        if (min > 0) {
+            this.tabRotationIntervalText = min + ' minutes, ' + sec + ' seconds';
+            return;
+        }
+        this.tabRotationIntervalText = sec + ' seconds';
     }
 
     protected deleteApiKey(index: number): void {

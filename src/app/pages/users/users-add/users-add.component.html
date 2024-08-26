@@ -406,8 +406,23 @@
                     </div>
 
                     <!-- TAB ROTATION INTERVAL SLIDER -->
-                    
-
+                    <div class="mb-3">
+                        <label cLabel for="post.User.dashboard_tab_rotation">
+                            {{ t('Tab rotation interval') }}
+                        </label>
+                        <input
+                               name="post.User.dashboard_tab_rotation"
+                               id="post.User.dashboard_tab_rotation"
+                               type="range"
+                               class="w-100"
+                               min="0" max="900" step="10"
+                               (ngModelChange)="updateTabRotationInterval()"
+                               [(ngModel)]="post.User.dashboard_tab_rotation" />
+                        <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{tabRotationIntervalText}}
+                        </div>
+                    </div>
 
                     <!-- DATE FORMAT -->
                     <div class="mb-3">
