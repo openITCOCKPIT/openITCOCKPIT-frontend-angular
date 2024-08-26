@@ -83,7 +83,7 @@
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
-                                                   [name]="userContainerRole.value.id + 'PermissionLevel'"
+                                                   [name]="userContainerRole.value.id + 'PermissionLevelRead'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelRead'"
                                                    [value]="1"
                                                    [(ngModel)]="userContainerRole.value._joinData.permission_level"
@@ -99,7 +99,7 @@
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
-                                                   [name]="userContainerRole.value.id + 'PermissionLevel'"
+                                                   [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
                                                    [value]="2"
                                                    [(ngModel)]="userContainerRole.value._joinData.permission_level"
@@ -152,7 +152,7 @@
                                 optionLabel="value"
                                 [(ngModel)]="selectedContainerIds"
                                 [options]="containers"
-                                (onChange)="ngOnChanges()"
+                                (onChange)="onSelectedContainerIdsChange()"
                                 oitcFormError [errors]="errors" errorField="containers">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
@@ -180,13 +180,14 @@
                                         <c-form-check>
                                             <input cFormCheckInput
                                                    type="radio"
-                                                   [name]="userContainerRole.key + 'PermissionLevel'"
-                                                   [id]="userContainerRole.key + 'PermissionLevelRead'"
+                                                   [disabled]="userContainerRole.key === 1"
+                                                   [name]="userContainerRole.key + 'PermissionLevelReadEditable'"
+                                                   [id]="userContainerRole.key + 'PermissionLevelReadEditable'"
                                                    [value]="1"
                                                    [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
                                             />
                                             <label cFormCheckLabel
-                                                   [for]="userContainerRole.key + 'PermissionLevelRead'">
+                                                   [for]="userContainerRole.key + 'PermissionLevelReadEditable'">
                                                 {{ t('read') }}
                                             </label>
                                         </c-form-check>
@@ -195,13 +196,14 @@
                                         <c-form-check>
                                             <input cFormCheckInput
                                                    type="radio"
-                                                   [name]="userContainerRole.key + 'PermissionLevel'"
-                                                   [id]="userContainerRole.key + 'PermissionLevelReadWrite'"
+                                                   [disabled]="userContainerRole.key === 1"
+                                                   [name]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
+                                                   [id]="userContainerRole.key + 'PermissionLevelReadWriteEditable'"
                                                    [value]="2"
                                                    [(ngModel)]="post.User.ContainersUsersMemberships[userContainerRole.key]"
                                             />
                                             <label cFormCheckLabel
-                                                   [for]="userContainerRole.key + 'PermissionLevelReadWrite'">
+                                                   [for]="userContainerRole.key + 'PermissionLevelReadWriteEditable'">
                                                 {{ t('read/write') }}
                                             </label>
                                         </c-form-check>
@@ -236,7 +238,6 @@
                                    name="post.User.is_active"
                                    id="post.User.is_active"
                                    type="checkbox"
-                                   trueFalseValue
                                    [(ngModel)]="post.User.is_active"
                                    oitcFormError [errors]="errors" errorField="is_active"/>
                             <oitc-form-feedback [errors]="errors" errorField="is_active"></oitc-form-feedback>

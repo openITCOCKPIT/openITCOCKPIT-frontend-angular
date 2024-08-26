@@ -1,4 +1,4 @@
-import { Component, inject, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -99,7 +99,7 @@ import { ProfileService } from '../../profile/profile.service';
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css'
 })
-export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
+export class UsersAddComponent implements OnDestroy, OnInit {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -121,7 +121,18 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected tabRotationIntervalText: string = '';
 
-    public ngOnChanges() {
+    public onSelectedContainerIdsChange() {
+        // Traverse all containerids and set the value to 1.
+        this.selectedContainerIds.map((id) => {
+            if (id === 1) {
+                this.post.User.ContainersUsersMemberships[id] = 2;
+                return;
+            }
+            // Only if not already set to 1 or 2.
+            if (this.post.User.ContainersUsersMemberships[id] !== 2) {
+                this.post.User.ContainersUsersMemberships[id] = 1;
+            }
+        });
         console.log(this.selectedContainerIds);
     }
 

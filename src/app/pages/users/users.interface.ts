@@ -123,7 +123,7 @@ export interface UsersAddRoot {
         company: string
         confirm_password: string
         ContainersUsersMemberships: {
-            [key: string]: string;
+            [key: string]: number;
         }
         dashboard_tab_rotation: number
         dateformat: string
