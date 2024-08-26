@@ -17,7 +17,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
+    FormLabelDirective, InputGroupComponent,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -52,6 +52,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { Servicegroup } from '../../servicegroups/servicegroups.interface';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ProfileService } from '../../profile/profile.service';
 
 @Component({
     selector: 'oitc-users-add',
@@ -90,7 +91,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         NgForOf,
         KeyValuePipe,
         BadgeComponent,
-        FormDirective
+        FormDirective,
+        InputGroupComponent
     ],
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css'
@@ -102,6 +104,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly profileService: ProfileService = inject(ProfileService);
 
     protected createAnother: boolean = false;
     protected post: UsersAddRoot = this.getDefaultPost();
@@ -112,7 +115,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
     protected usergroups : SelectKeyValue[] = [];
-    protected errors: GenericValidationError | null = null;
+    protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
 
     public ngOnChanges() {
@@ -136,7 +139,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
                         return;
                     }
                     this.post = this.getDefaultPost();
-                    this.errors = null;
+                    this.errors = {} as GenericValidationError;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
 
@@ -149,10 +152,7 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
                 if (result) {
                     this.errors = errorResponse;
 
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
+                    console.warn(this.errors);
                 }
             })
         );
@@ -253,6 +253,30 @@ export class UsersAddComponent implements OnDestroy, OnInit, OnChanges {
             .subscribe((result: LoadUsergroupsRoot) => {
                 this.usergroups = result.usergroups;
             }))
+    }
+
+    protected createApiKey(): void {
+        this.subscriptions.add(this.profileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.User.apikeys.push(result);
+            })
+        );
+    }
+
+    protected deleteApiKey(index: number): void {
+        this.post.User.apikeys.splice(index, 1);
+    }
+
+    protected trackByIndex(index: number, item: any): number {
+        return index;
+    }
+
+    protected getMacroErrors = (index: number): GenericValidationError => {
+        // No error, here.
+        if (this.errors['apikeys'] === undefined) {
+            return {} as GenericValidationError;
+        }
+        return this.errors['apikeys'][index] as unknown as GenericValidationError;
     }
 
 }

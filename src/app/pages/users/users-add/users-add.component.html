@@ -44,9 +44,8 @@
 
                 <c-card-body>
                     <div class="mb-3">
-                        <label cLabel for="post.User.usercontainerroles._ids">
+                        <label cLabel for="post.User.usercontainerroles._ids" class="hintmark">
                             {{ t('Container Roles') }}
-                            <oitc-required-icon/>
                         </label>
                         <oitc-multi-select
                                 name="post.User.usercontainerroles._ids"
@@ -133,7 +132,7 @@
                             </c-col>
                         </c-row>
                         <div class="col col-md-4 text-right div-bottom-arrow font-xs text-primary italic"
-                             ng-show="post.User.usercontainerroles._ids.length > 0 && selectedUserContainers.length > 0">
+                             *ngIf="post.User.usercontainerroles._ids.length > 0 && selectedContainerIds.length > 0">
                             {{ t('The user permissions will be extended or adapted with additional containers') }}
                         </div>
                     </ng-container>
@@ -143,9 +142,8 @@
 
 
                     <div class="mb-3">
-                        <label cLabel for="selectedContainerIds">
+                        <label cLabel for="selectedContainerIds" class="hintmark">
                             {{ t('Container') }}
-                            <oitc-required-icon/>
                         </label>
                         <oitc-multi-select
                                 name="selectedContainerIds"
@@ -250,8 +248,9 @@
 
                     <!-- EMAIL ADDRESS -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.email" class="hintmark">
+                        <label cLabel for="post.User.email">
                             {{ t('Email address') }}
+                            <oitc-required-icon />
                         </label>
                         <input cFormControl
                                required
@@ -282,8 +281,9 @@
 
                     <!-- FIRST NAME -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.firstname" class="hintmark">
+                        <label cLabel for="post.User.firstname">
                             {{ t('First name') }}
+                            <oitc-required-icon />
                         </label>
                         <input cFormControl
                                required
@@ -297,8 +297,9 @@
 
                     <!-- LAST NAME -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.lastname" class="hintmark">
+                        <label cLabel for="post.User.lastname">
                             {{ t('Last name') }}
+                            <oitc-required-icon />
                         </label>
                         <input cFormControl
                                required
@@ -312,7 +313,7 @@
 
                     <!-- COMPANY -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.company" class="hintmark">
+                        <label cLabel for="post.User.company">
                             {{ t('Company') }}
                         </label>
                         <input cFormControl
@@ -327,7 +328,7 @@
 
                     <!-- COMPANY POSITION -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.position" class="hintmark">
+                        <label cLabel for="post.User.position">
                             {{ t('Company position') }}
                         </label>
                         <input cFormControl
@@ -342,7 +343,7 @@
 
                     <!-- PHONE NUMBER -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.phone" class="hintmark">
+                        <label cLabel for="post.User.phone">
                             {{ t('Phone Number') }}
                         </label>
                         <input cFormControl
@@ -357,7 +358,7 @@
 
                     <!-- LENGTH OF LISTS -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.paginatorlength" class="hintmark">
+                        <label cLabel for="post.User.paginatorlength">
                             {{ t('Length of lists') }}
                         </label>
                         <input cFormControl
@@ -470,8 +471,9 @@
 
                     <!-- New password -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.password" class="hintmark">
+                        <label cLabel for="post.User.password">
                             {{ t('New password') }}
+                            <oitc-required-icon/>
                         </label>
                         <input cFormControl
                                required
@@ -487,8 +489,9 @@
                     </div>
                     <!-- confirm new password -->
                     <div class="mb-3">
-                        <label cLabel for="post.User.confirm_password" class="hintmark">
+                        <label cLabel for="post.User.confirm_password">
                             {{ t('New password') }}
+                            <oitc-required-icon />
                         </label>
                         <input cFormControl
                                required
@@ -501,6 +504,63 @@
                     </div>
 
                     <!-- API KEYS -->
+                    <c-row *ngFor="let apiKey of post.User.apikeys; let i = index; trackBy: trackByIndex">
+                        <c-col md="3">
+                            <div class="mb-3">
+                                <label cLabel [for]="post.User.apikeys[i].description">
+                                    {{ t('Description') }}
+                                    <oitc-required-icon/>
+                                </label>
+                                <input cFormControl
+                                       required
+                                       [id]="post.User.apikeys[i].description"
+                                       type="text"
+                                       [name]="post.User.apikeys[i].description"
+                                       [ngModelOptions]="{standalone: true}"
+                                       [(ngModel)]="post.User.apikeys[i].description"
+                                       oitcFormError [errors]="getMacroErrors(i)" errorField="description">
+                                <oitc-form-feedback [errors]="getMacroErrors(i)" errorField="description"></oitc-form-feedback>
+                            </div>
+                        </c-col>
+                        <c-col md="8">
+                            <div class="mb-3">
+                                <label cLabel [for]="post.User.apikeys[i].apikey">
+                                    {{ t('Api key') }}
+                                    <oitc-required-icon/>
+                                </label>
+
+                                <c-input-group>
+                                    <input cFormControl
+                                           required
+                                           disabled
+                                           [id]="post.User.apikeys[i].apikey"
+                                           type="text"
+                                           [name]="post.User.apikeys[i].apikey"
+                                           [ngModelOptions]="{standalone: true}"
+                                           disabled
+                                           [(ngModel)]="post.User.apikeys[i].apikey">
+                                    <button cButton color="success">
+                                        <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                        {{ t('Generate new API key') }}
+                                    </button>
+                                </c-input-group>
+                            </div>
+                        </c-col>
+                        <c-col md="1">
+                            <button cButton color="danger" (click)="deleteApiKey(i)">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            </button>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col md="12" class="text-end">
+
+                            <button cButton (click)="createApiKey()" color="success">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add ApiKey') }}
+                            </button>
+                        </c-col>
+                    </c-row>
                 </c-card-body>
 
                 <c-card-footer class="text-end">
