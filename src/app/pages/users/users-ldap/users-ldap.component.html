@@ -45,7 +45,14 @@
                             <button cButton color="danger"
                                     (click)="ngOnInit()"
                                     size="xs">
-                                {{ t('FORCE RELOAD CUZ DEM VPN IS TOO SLOW') }}
+                                {{ t('FORCE RELOAD ldap users') }}
+                            </button>
+                        </c-nav-item>
+                        <c-nav-item class="px-1">
+                            <button cButton color="danger"
+                                    (click)="onLdapUserChange(0)"
+                                    size="xs">
+                                {{ t('FORCE RELOAD ldap user details') }}
                             </button>
                         </c-nav-item>
                     </c-nav>
@@ -85,7 +92,7 @@
                                type="text"
                                disabled
                                name="dn"
-                               [(ngModel)]="dn"
+                               [(ngModel)]="post.User.ldap_dn"
                                oitcFormError [errors]="errors" errorField="email">
                         <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
                         <div class="help-block text-info">
@@ -94,15 +101,20 @@
                     </div>
 
                     <div class="mb-3">
-                        <label cLabel for="post.User.usercontainerroles._ids">
+                        <label cLabel for="ldapUserDetails.ldapgroups">
                             {{ t('LDAP Groups') }}
                         </label>
-                        <textarea
-                                rows="3"
-                                name="post_nag_command"
-                                readonly
-                                disabled
-                                cFormControl></textarea>
+                        <oitc-multi-select
+                                name="ldapUserDetails.ldapgroups"
+                                id="ldapUserDetails.ldapgroups"
+                                optionValue="dn"
+                                optionLabel="cn"
+                                [(ngModel)]="ldapUserDetails.ldapgroups"
+                                [searchCallback]="loadContainerRoles"
+                                (onChange)="onContainerSelectChange($event)"
+                                [options]="containerRoles.usercontainerroles"
+                                oitcFormError [errors]="errors" errorField="containerroles">
+                        </oitc-multi-select>
                     </div>
 
                     <c-alert color="info">

@@ -33,6 +33,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import {
+    AddFromLdapRoot,
     LdapUser,
     LdapUserDetails,
     LoadContainerPermissionsRequest,
@@ -45,7 +46,6 @@ import {
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
-    UsersAddRoot,
     UserTimezonesSelect
 } from '../users.interface';
 import { UsersService } from '../users.service';
@@ -119,7 +119,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     private readonly ContactService: ContactsService = inject(ContactsService);
 
     protected createAnother: boolean = false;
-    protected post: UsersAddRoot = this.getDefaultPost();
+    protected post: AddFromLdapRoot = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
@@ -132,7 +132,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
     protected samaccountname: string = '';
-    protected dn: string = '';
     protected ldapConfig: LdapConfig = {} as LdapConfig;
 
     public onSelectedContainerIdsChange() {
@@ -186,9 +185,11 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         );
     }
 
-    private getDefaultPost(): UsersAddRoot {
+    private getDefaultPost(): AddFromLdapRoot {
+        // Build a blank instance of AddFromLdapRoot including all nested objects.
         return {
             User: {
+// USER FIELDS
                 apikeys: [],
                 company: '',
                 confirm_password: '',
@@ -211,9 +212,15 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 usercontainerroles: {
                     _ids: []
                 },
-                usergroup_id: 0
-            },
-        };
+                usergroup_id: 0,
+//  ADDITIONAL LDAP FIELDS
+                ldap_dn: '',
+                samaccountname: '',
+                usercontainerroles_ldap: {
+                    _ids: []
+                }
+            }
+        }
     }
 
     public ngOnInit() {
@@ -293,12 +300,13 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
             }))
     }
 
-    private ldapUserDetails: LdapUserDetails = {} as LdapUserDetails;
+    protected ldapUserDetails: LdapUserDetails = {} as LdapUserDetails;
 
     private loadLdapUserDetails(samaccountname: string): void {
         this.subscriptions.add(this.UsersService.loadLdapUserDetails(samaccountname)
             .subscribe((result: LoadLdapUserDetailsRoot) => {
                 this.ldapUserDetails = result.ldapUser;
+                console.warn(this.ldapUserDetails);
                 this.post.User.firstname = this.ldapUserDetails.givenname;
                 this.post.User.lastname = this.ldapUserDetails.sn;
                 this.post.User.email = this.ldapUserDetails.email;
@@ -314,7 +322,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         if (ldapUser === undefined) {
             return;
         }
-        this.dn = ldapUser.dn;
+        this.post.User.ldap_dn = ldapUser.dn;
         this.loadLdapUserDetails(this.samaccountname);
     }
 

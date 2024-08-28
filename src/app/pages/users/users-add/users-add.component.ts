@@ -175,6 +175,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     private getDefaultPost(): UsersAddRoot {
         return {
             User: {
+// USER FIELDS
                 apikeys: [],
                 company: '',
                 confirm_password: '',
@@ -197,7 +198,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 usercontainerroles: {
                     _ids: []
                 },
-                usergroup_id: 0
+                usergroup_id: 0,
             },
         };
     }

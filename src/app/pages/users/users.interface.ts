@@ -118,33 +118,46 @@ export function getDefaultUsersIndexParams(): UsersIndexParams {
 
 // ADD
 export interface UsersAddRoot {
-    User: {
-        apikeys: Apikey[]
-        company: string
-        confirm_password: string
-        ContainersUsersMemberships: {
-            [key: string]: number;
-        }
-        dashboard_tab_rotation: number
-        dateformat: string
-        email: string
-        firstname: string
-        i18n: string
-        is_active: number
-        is_oauth: number
-        lastname: string
-        paginatorlength: number
-        password: string
-        phone: string
-        position: string
-        recursive_browser: number
-        showstatsinmenu: number
-        timezone: string
-        usercontainerroles: {
-            _ids: number[]
-        }
-        usergroup_id: number
+    User: CreateUser
+}
+
+export interface CreateUser {
+    apikeys: Apikey[]
+    company: string
+    confirm_password: string
+    ContainersUsersMemberships: {
+        [key: string]: number;
     }
+    dashboard_tab_rotation: number
+    dateformat: string
+    email: string
+    firstname: string
+    i18n: string
+    is_active: number
+    is_oauth: number
+    lastname: string
+    paginatorlength: number
+    password: string
+    phone: string
+    position: string
+    recursive_browser: number
+    showstatsinmenu: number
+    timezone: string
+    usercontainerroles: {
+        _ids: number[]
+    }
+    usergroup_id: number
+}
+export interface CreateLdapUser extends CreateUser {
+    ldap_dn: string
+    samaccountname: string
+    usercontainerroles_ldap: {
+        _ids: number[]
+    }
+}
+
+export interface AddFromLdapRoot {
+    User: CreateLdapUser
 }
 
 
