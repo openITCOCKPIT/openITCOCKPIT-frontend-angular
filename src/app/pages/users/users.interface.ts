@@ -203,3 +203,43 @@ export interface UserContainerRoleContainerPermissions {
         }
     }
 }
+
+// LoadLdapUserByString
+export interface LoadLdapUserByStringRoot {
+    ldapUsers: LdapUser[]
+    _csrfToken: string
+}
+
+export interface LdapUser {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: any[]
+    display_name: string
+}
+
+// LoadLdapUserDetails
+export interface LoadLdapUserDetailsRoot {
+    ldapUser: LdapUserDetails
+    _csrfToken: string
+}
+
+export interface LdapUserDetails {
+    givenname: string
+    sn: string
+    samaccountname: string
+    email: string
+    dn: string
+    memberof: string[]
+    display_name: string
+    ldapgroups: {
+        id: number
+        cn: string
+        dn: string
+        description: string
+    }[]
+    userContainerRoleContainerPermissionsLdap: any[]
+    usergroupLdap: any[]
+}

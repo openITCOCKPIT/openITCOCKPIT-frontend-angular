@@ -234,13 +234,19 @@
                             {{ user.company }}
                         </td>
                         <td>
-                            {{ user.is_active }}
+                            <button *ngIf="user.is_active" cButton size="xs" color="success" variant="outline">
+                                {{t('Active')}}
+                            </button>
+                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" variant="outline">
+                                {{t('Disabled')}}
+                            </button>
                         </td>
                         <td>
-                            <c-badge color="{{ user.UserTypes[0].color }}" class="{{ user.UserTypes[0].class }}">
-                                {{ user.UserTypes[0].title }}
-                            </c-badge>
 
+                            <button cButton size="xs" class="{{ user.UserTypes[0].class }} text-{{ user.UserTypes[0].color }}" color="{{ user.UserTypes[0].color }}" variant="outline">
+                                {{ user.UserTypes[0].title }}
+                                {{ user.UserTypes[0].color }}
+                            </button>
                         </td>
                         <td>
                             {{ user.usergroup.name }}

@@ -5,6 +5,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
+    AlertComponent,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -21,7 +22,8 @@ import {
     InputGroupComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent, TextColorDirective
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -31,10 +33,14 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import {
+    LdapUser,
+    LdapUserDetails,
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
     LoadContainerRolesRoot,
+    LoadLdapUserByStringRoot,
+    LoadLdapUserDetailsRoot,
     LoadUsergroupsRoot,
     UserDateformat,
     UserDateformatsRoot,
@@ -54,9 +60,11 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
+import { ContactsService } from '../../contacts/contacts.service';
+import { LdapConfig } from '../../contacts/contacts.interface';
 
 @Component({
-    selector: 'oitc-users-add',
+    selector: 'oitc-users-ldap',
     standalone: true,
     imports: [
         CoreuiComponent,
@@ -94,12 +102,13 @@ import { ProfileService } from '../../profile/profile.service';
         BadgeComponent,
         FormDirective,
         InputGroupComponent,
-        TextColorDirective
+        TextColorDirective,
+        AlertComponent
     ],
-    templateUrl: './users-add.component.html',
-    styleUrl: './users-add.component.css'
+    templateUrl: './users-ldap.component.html',
+    styleUrl: './users-ldap.component.css'
 })
-export class UsersAddComponent implements OnDestroy, OnInit {
+export class UsersLdapComponent implements OnDestroy, OnInit {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
@@ -107,6 +116,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly profileService: ProfileService = inject(ProfileService);
+    private readonly ContactService: ContactsService = inject(ContactsService);
 
     protected createAnother: boolean = false;
     protected post: UsersAddRoot = this.getDefaultPost();
@@ -116,10 +126,14 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected dateformats: UserDateformat[] = [];
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
-    protected usergroups : SelectKeyValue[] = [];
+    protected usergroups: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected tabRotationIntervalText: string = '';
+    protected samaccountnames: LdapUser[] = [];
+    protected samaccountname: string = '';
+    protected dn: string = '';
+    protected ldapConfig: LdapConfig = {} as LdapConfig;
 
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
@@ -209,6 +223,8 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.loadLocaleOptions();
         this.loadContainerRoles('');
         this.loadUsergroups();
+        this.loadLdapUsers('')
+        this.loadLdapConfig();
     }
 
     public ngOnDestroy() {
@@ -270,12 +286,51 @@ export class UsersAddComponent implements OnDestroy, OnInit {
             }))
     }
 
+    protected loadLdapUsers(search: string): void {
+        this.subscriptions.add(this.UsersService.loadLdapUserByString(search)
+            .subscribe((result: LoadLdapUserByStringRoot) => {
+                this.samaccountnames = result.ldapUsers;
+            }))
+    }
+
+    private ldapUserDetails: LdapUserDetails = {} as LdapUserDetails;
+
+    private loadLdapUserDetails(samaccountname: string): void {
+        this.subscriptions.add(this.UsersService.loadLdapUserDetails(samaccountname)
+            .subscribe((result: LoadLdapUserDetailsRoot) => {
+                this.ldapUserDetails = result.ldapUser;
+                this.post.User.firstname = this.ldapUserDetails.givenname;
+                this.post.User.lastname = this.ldapUserDetails.sn;
+                this.post.User.email = this.ldapUserDetails.email;
+            }))
+    }
+
+    protected onLdapUserChange(event: any): void {
+        // Fetch the entries from this.ldapUsers that matches this.samaccountname.
+        let ldapUser = this.samaccountnames.find((entry) => {
+            return entry.samaccountname === this.samaccountname;
+        });
+        // Earlyreturn if ldapUser is undefined.
+        if (ldapUser === undefined) {
+            return;
+        }
+        this.dn = ldapUser.dn;
+        this.loadLdapUserDetails(this.samaccountname);
+    }
+
     protected createApiKey(): void {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys.push(result);
             })
         );
+    }
+
+    private loadLdapConfig(): void {
+        this.subscriptions.add(this.ContactService.ldapConfiguration()
+            .subscribe((result) => {
+                this.ldapConfig = result.ldapConfig;
+            }))
     }
 
     protected updateTabRotationInterval(): void {

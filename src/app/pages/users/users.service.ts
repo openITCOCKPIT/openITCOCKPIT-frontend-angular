@@ -5,7 +5,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     LoadContainerPermissionsRequest, LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot, LoadUsergroupsRoot,
+    LoadContainerRolesRoot, LoadLdapUserByStringRoot, LoadLdapUserDetailsRoot, LoadUsergroupsRoot,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption, UsersAddRoot,
@@ -97,6 +97,36 @@ export class UsersService {
             })
         );
     }
+
+    public loadLdapUserByString(samaccountname: string): Observable<LoadLdapUserByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadLdapUserByStringRoot>(`${proxyPath}/users/loadLdapUserByString.json`, {
+            params: {
+                angular: true,
+                samaccountname: samaccountname
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public loadLdapUserDetails(samaccountname: string): Observable<LoadLdapUserDetailsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoadLdapUserDetailsRoot>(`${proxyPath}/users/loadLdapUserDetails.json`, {
+            params: {
+                angular: true,
+                samaccountname: samaccountname
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+
 
 
     public addUser(user: UsersAddRoot): Observable<GenericResponseWrapper> {
