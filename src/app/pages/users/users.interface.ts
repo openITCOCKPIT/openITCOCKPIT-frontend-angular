@@ -253,6 +253,35 @@ export interface LdapUserDetails {
         dn: string
         description: string
     }[]
-    userContainerRoleContainerPermissionsLdap: any[]
-    usergroupLdap: any[]
+    userContainerRoleContainerPermissionsLdap: {
+        [key: string]: {
+            id: number
+            containertype_id: number
+            name: string
+            parent_id: number
+            lft: number
+            rght: number
+            _joinData: {
+                id: number
+                usercontainerrole_id: number
+                container_id: number
+                permission_level: number
+            }
+            path: string
+            user_roles: {
+                [key: string]: {
+                    id: number
+                    name: string
+                }
+            }
+        }
+    }
+    usergroupLdap: {
+        id: number
+        name: string
+        description: string
+        created: string
+        modified: string
+    },
+    ldapgroupIds: number[]
 }

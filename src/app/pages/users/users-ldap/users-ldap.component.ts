@@ -300,16 +300,29 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
             }))
     }
 
-    protected ldapUserDetails: LdapUserDetails = {} as LdapUserDetails;
+    protected ldapUserDetails: LdapUserDetails = {
+        usergroupLdap: {
+            id: 0
+        }
+    } as LdapUserDetails;
 
     private loadLdapUserDetails(samaccountname: string): void {
         this.subscriptions.add(this.UsersService.loadLdapUserDetails(samaccountname)
             .subscribe((result: LoadLdapUserDetailsRoot) => {
                 this.ldapUserDetails = result.ldapUser;
-                console.warn(this.ldapUserDetails);
+
+                this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
+                    return entry.id;
+                });
+
+                // SET NAME AND EMAIL
                 this.post.User.firstname = this.ldapUserDetails.givenname;
                 this.post.User.lastname = this.ldapUserDetails.sn;
                 this.post.User.email = this.ldapUserDetails.email;
+
+                // SET READONLY CONTAINER ROLES THROUGH LDAP
+                // Take the key of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap as an array and set it to this.post.User.usercontainerroles_ldap._ids.
+                this.post.User.usercontainerroles_ldap._ids = Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).map(Number);
             }))
     }
 

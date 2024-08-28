@@ -43,7 +43,7 @@
                         </c-nav-item>
                         <c-nav-item class="px-1">
                             <button cButton color="danger"
-                                    (click)="ngOnInit()"
+                                    (click)="loadLdapUsers('')"
                                     size="xs">
                                 {{ t('FORCE RELOAD ldap users') }}
                             </button>
@@ -107,12 +107,11 @@
                         <oitc-multi-select
                                 name="ldapUserDetails.ldapgroups"
                                 id="ldapUserDetails.ldapgroups"
-                                optionValue="dn"
+                                optionValue="id"
                                 optionLabel="cn"
-                                [(ngModel)]="ldapUserDetails.ldapgroups"
-                                [searchCallback]="loadContainerRoles"
-                                (onChange)="onContainerSelectChange($event)"
-                                [options]="containerRoles.usercontainerroles"
+                                [disabled]="true"
+                                [(ngModel)]="ldapUserDetails.ldapgroupIds"
+                                [options]="ldapUserDetails.ldapgroups"
                                 oitcFormError [errors]="errors" errorField="containerroles">
                         </oitc-multi-select>
                     </div>
@@ -136,16 +135,16 @@
                     </c-alert>
 
                     <div class="mb-3">
-                        <label cLabel for="post.User.usercontainerroles._ids">
+                        <label cLabel for="post.User.usercontainerroles_ldap._ids">
                             {{ t('Container Roles through LDAP') }}
                             <oitc-required-icon />
                         </label>
                         <oitc-multi-select
-                                name="post.User.usercontainerroles._ids"
-                                id="post.User.usercontainerroles._ids"
+                                name="post.User.usercontainerroles_ldap._ids"
+                                id="post.User.usercontainerroles_ldap._ids"
                                 optionValue="key"
                                 optionLabel="value"
-                                [(ngModel)]="post.User.usercontainerroles._ids"
+                                [(ngModel)]="post.User.usercontainerroles_ldap._ids"
                                 [searchCallback]="loadContainerRoles"
                                 (onChange)="onContainerSelectChange($event)"
                                 [options]="containerRoles.usercontainerroles"
@@ -332,16 +331,17 @@
                     </ng-container>
 
                     <div class="mb-3">
-                        <label cLabel for="post.User.usergroup_id">
+                        <label cLabel for="ldapUserDetails.usergroupLdap.id">
                             {{ t('User role through LDAP') }}
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                                name="post.User.usergroup_id"
-                                id="post.User.usergroup_id"
+                                name="ldapUserDetails.usergroupLdap.id"
+                                id="ldapUserDetails.usergroupLdap.id"
                                 optionValue="key"
                                 optionLabel="value"
-                                [(ngModel)]="post.User.usergroup_id"
+                                [disabled]="true"
+                                [(ngModel)]="ldapUserDetails.usergroupLdap.id"
                                 [options]="usergroups"
                                 oitcFormError [errors]="errors" errorField="usergroup_id">
                         </oitc-select>
