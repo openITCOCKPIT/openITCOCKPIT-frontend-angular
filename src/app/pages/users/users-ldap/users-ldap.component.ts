@@ -129,10 +129,13 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected usergroups: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
+    protected containerRoleContainerIds: number[] = [];
     protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
     protected samaccountname: string = '';
     protected ldapConfig: LdapConfig = {} as LdapConfig;
+
+    protected usedContainerIdsBySource: { [key: string]: number[] } = {};
 
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
@@ -146,7 +149,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 this.post.User.ContainersUsersMemberships[id] = 1;
             }
         });
-        console.log(this.selectedContainerIds);
     }
 
     public addUser(): void {
@@ -250,11 +252,19 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
             }));
     }
 
-    protected onContainerSelectChange = (event: any): void => {
-        this.loadContainerPermissions();
+    protected onContainerRolesChange = (event: any): void => {
+        this.loadContainerRolesPermissions();
     }
 
-    protected loadContainerPermissions = (): void => {
+    protected loadContainerRolesPermissions = (): void => {
+        // For each containerPermissions object attach the containerId to this.containerRoleContainerIds.
+        this.containerRoleContainerIds = [];
+        this.containerPermissions = {} as LoadContainerPermissionsRoot;
+
+        if (this.post.User.usercontainerroles._ids.length === 0) {
+            return;
+        }
+
         let params: LoadContainerPermissionsRequest = {
             'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,
             angular: true
@@ -262,6 +272,11 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadContainerPermissions(params)
             .subscribe((result: LoadContainerPermissionsRoot) => {
                 this.containerPermissions = result;
+
+                // Traverse this.containerPermissions.userContainerRoleContainerPermissions and append the containerPermission.container_id to this.containerRoleContainerIds.
+                Object.keys(this.containerPermissions.userContainerRoleContainerPermissions).forEach((key) => {
+                    this.containerRoleContainerIds.push(this.containerPermissions.userContainerRoleContainerPermissions[key].id);
+                });
             }));
     }
     public loadContainers = (): void => {
@@ -293,7 +308,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
             }))
     }
 
-    protected loadLdapUsers(search: string): void {
+    protected loadLdapUsers = (search: string): void => {
         this.subscriptions.add(this.UsersService.loadLdapUserByString(search)
             .subscribe((result: LoadLdapUserByStringRoot) => {
                 this.samaccountnames = result.ldapUsers;
@@ -319,12 +334,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 this.post.User.firstname = this.ldapUserDetails.givenname;
                 this.post.User.lastname = this.ldapUserDetails.sn;
                 this.post.User.email = this.ldapUserDetails.email;
-
-                // SET READONLY CONTAINER ROLES THROUGH LDAP
-                // Take the key of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap as an array and set it to this.post.User.usercontainerroles_ldap._ids.
-                console.log(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap);
-                console.log(Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap));
-                console.log(Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).map(Number));
 
                 // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
                 this.post.User.usercontainerroles_ldap._ids = [];

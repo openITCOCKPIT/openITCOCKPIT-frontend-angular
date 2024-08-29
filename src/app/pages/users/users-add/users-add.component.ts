@@ -21,7 +21,8 @@ import {
     InputGroupComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent, TextColorDirective
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -233,6 +234,12 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     }
 
     protected loadContainerPermissions = (): void => {
+        // For each containerPermissions object attach the containerId to this.containerRoleContainerIds.
+        this.containerPermissions = {} as LoadContainerPermissionsRoot;
+
+        if (this.post.User.usercontainerroles._ids.length === 0) {
+            return;
+        }
         let params: LoadContainerPermissionsRequest = {
             'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,
             angular: true
