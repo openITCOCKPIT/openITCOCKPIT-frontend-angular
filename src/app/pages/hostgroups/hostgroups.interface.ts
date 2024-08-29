@@ -90,6 +90,8 @@ export interface HostgroupsIndexHostgroup {
     hostgroup_url: string
     container: HostgroupsIndexContainer
     allowEdit: boolean
+    hasSLAHosts: boolean
+    additionalInformationExists: boolean
 }
 
 export interface HostgroupsIndexContainer {
@@ -248,6 +250,7 @@ export interface HostgroupExtended {
         down: any
         unreachable: any
     }
+    hasSLAHosts: boolean
 }
 
 export interface HostGroupExtendedHost {
@@ -440,4 +443,9 @@ export interface HostgroupAppend {
         }
         id: number
     }
+}
+
+export interface HostgroupAdditionalInformation {
+    AdditionalInformationExists: boolean
+    _csrfToken: string
 }

@@ -149,6 +149,29 @@
                             <span *oitcPermission="['hostgroups', 'extended']; negate: true">
                                 {{ hostgroup.container.name }}
                             </span>
+                            @if (PermissionsService.hasModule('SLAModule')) {
+                                <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
+                                    <c-badge *ngIf="hostgroup.hasSLAHosts"
+                                             textColor="warning"
+                                             class="badge-border badge-clickable margin-right-5"
+                                             [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                                        <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                                        {{ t('SLA') }}
+                                    </c-badge>
+                                </span>
+                            }
+                            @if (PermissionsService.hasModule('ImportModule')) {
+                                <span
+                                    *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
+                                    <c-badge *ngIf="hostgroup.additionalInformationExists"
+                                             textColor="info"
+                                             class="badge-border badge-clickable margin-right-5"
+                                             [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroup.id]">
+                                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        {{ t('CMDB') }}
+                                    </c-badge>
+                                </span>
+                            }
                         </td>
                         <td>{{ hostgroup.description }}</td>
                         <td class="width-50">
@@ -170,6 +193,22 @@
                                     <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
                                     {{ t('Extended view') }}
                                 </oitc-actions-button-element>
+                                @if (PermissionsService.hasModule('SLAModule')) {
+                                    <oitc-actions-button-element *ngIf="hostgroup.hasSLAHosts"
+                                                                 [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
+                                                                 [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                                        <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                                        {{ t('SLA Status Overview') }}
+                                    </oitc-actions-button-element>
+                                }
+                                @if (PermissionsService.hasModule('ImportModule')) {
+                                    <oitc-actions-button-element *ngIf="hostgroup.additionalInformationExists"
+                                                                 [permission]="'importmodule.importedhostgroups.dependencytree'"
+                                                                 [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
+                                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        {{ t('CMDB') }}
+                                    </oitc-actions-button-element>
+                                }
                                 <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
                                                              [url]="'/hostgroups/usedBy/' + hostgroup.id">
                                     <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
