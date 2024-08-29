@@ -322,7 +322,23 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
 
                 // SET READONLY CONTAINER ROLES THROUGH LDAP
                 // Take the key of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap as an array and set it to this.post.User.usercontainerroles_ldap._ids.
-                this.post.User.usercontainerroles_ldap._ids = Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).map(Number);
+                console.log(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap);
+                console.log(Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap));
+                console.log(Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).map(Number));
+
+                // From every object of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap, take every key of object user_roles and attach it to this.post.User.usercontainerroles_ldap._ids.
+                this.post.User.usercontainerroles_ldap._ids = [];
+                Object.keys(this.ldapUserDetails.userContainerRoleContainerPermissionsLdap).forEach(key => {
+                    const userRoles = this.ldapUserDetails.userContainerRoleContainerPermissionsLdap[key].user_roles;
+                    const roleIds = Object.keys(userRoles).map(Number);
+
+                    // Only add the roleIds if they are not already in the array.
+                    roleIds.forEach((roleId) => {
+                        if (this.post.User.usercontainerroles_ldap._ids.indexOf(roleId) === -1) {
+                            this.post.User.usercontainerroles_ldap._ids.push(roleId);
+                        }
+                    });
+                });
             }))
     }
 

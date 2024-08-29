@@ -144,9 +144,8 @@
                                 id="post.User.usercontainerroles_ldap._ids"
                                 optionValue="key"
                                 optionLabel="value"
+                                [disabled]="true"
                                 [(ngModel)]="post.User.usercontainerroles_ldap._ids"
-                                [searchCallback]="loadContainerRoles"
-                                (onChange)="onContainerSelectChange($event)"
                                 [options]="containerRoles.usercontainerroles"
                                 oitcFormError [errors]="errors" errorField="containerroles">
                         </oitc-multi-select>
@@ -157,6 +156,78 @@
                         </div>
                     </div>
 
+                    <!-- for all the selected containerroles by ldap -->
+                    <ng-container *ngIf="this.ldapUserDetails.userContainerRoleContainerPermissionsLdap">
+                        <c-row *ngFor="let userContainerRole of this.ldapUserDetails.userContainerRoleContainerPermissionsLdap | keyvalue"
+                               class="containerRoleInheritance mb-3">
+                            <c-col md="1">
+                            </c-col>
+                            <c-col md="11">
+                                <legend class="text-success">
+                                    {{ userContainerRole.value.path }}
+                                    <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
+                                             *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
+                                </legend>
+                                <c-row>
+                                    <c-col md="1">
+                                    </c-col>
+                                    <c-col md="1">
+                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                            <input cFormCheckInput
+                                                   disabled
+                                                   type="radio"
+                                                   [name]="userContainerRole.value.id + 'PermissionLevelRead'"
+                                                   [id]="userContainerRole.value.id + 'PermissionLevelRead'"
+                                                   [value]="1"
+                                                   [(ngModel)]="userContainerRole.value._joinData.permission_level"
+                                            />
+                                            <label cFormCheckLabel
+                                                   [for]="userContainerRole.value.id + 'PermissionLevelRead'">
+                                                {{ t('read') }}
+                                            </label>
+                                        </c-form-check>
+                                    </c-col>
+                                    <c-col md="1">
+                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                            <input cFormCheckInput
+                                                   disabled
+                                                   type="radio"
+                                                   [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
+                                                   [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
+                                                   [value]="2"
+                                                   [(ngModel)]="userContainerRole.value._joinData.permission_level"
+                                            />
+                                            <label cFormCheckLabel
+                                                   [for]="userContainerRole.value.id + 'PermissionLevelReadWrite'">
+                                                {{ t('read/write') }}
+                                            </label>
+                                        </c-form-check>
+                                    </c-col>
+                                    <c-col md="9">
+                                        <ng-container
+                                                *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
+                                            <button *oitcPermission="['usercontainerroles', 'edit']"
+                                                    [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
+                                                    cButton size="xs" color="primary" variant="outline">
+                                                {{ userRole.value.name }}
+                                            </button>
+                                            <button *oitcPermission="['usercontainerroles', 'edit'];negate:true"
+                                                    [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
+                                                    cButton size="xs" color="primary" variant="outline">
+                                                {{ userRole.value.name }}
+                                            </button>
+                                        </ng-container>
+                                    </c-col>
+                                </c-row>
+                            </c-col>
+                        </c-row>
+                        <c-row *ngIf="post.User.usercontainerroles._ids.length > 0 && selectedContainerIds.length > 0">
+                            <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
+                                {{ t('The user permissions will be extended or adapted with additional containers') }}
+                                <fa-icon cTextColor="primary" [icon]="['fas', 'arrow-down']" />
+                            </c-col>
+                        </c-row>
+                    </ng-container>
 
                     <div class="mb-3">
                         <label cLabel for="post.User.usercontainerroles._ids">
