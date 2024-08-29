@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { NgClass, NgIf } from '@angular/common';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-navbar-search',
@@ -34,6 +35,8 @@ export class NavbarSearchComponent {
     public currentSelectedIndex: number = -1;
 
     private router = inject(Router);
+    private readonly PermissionService: PermissionsService = inject(PermissionsService);
+
 
     public onKeydown(event: any) {
         if (this.searchString === "") {
@@ -73,8 +76,9 @@ export class NavbarSearchComponent {
                 }
 
                 if (this.currentSelectedIndex === -1) {
-                    // todo implement host search
-                    console.log("Search for hostname: ", this.searchString);
+                    if (this.PermissionService.hasPermission(['hosts', 'index'])) {
+                        this.router.navigate(['/hosts/index'], {queryParams: {hostname: this.searchString}});
+                    }
                 }
 
                 break;

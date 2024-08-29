@@ -262,13 +262,24 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
-        this.loadHosts();
+
+        this.route.queryParams.subscribe(params => {
+            let hostname = params['hostname'] || undefined;
+            if (hostname) {
+                this.filter['Hosts.name'] = hostname;
+            }
+
+            // Process all query params first and then trigger the load function
+            this.loadHosts();
+        });
+
 
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
             })
         );
+
     }
 
     public ngOnDestroy() {
@@ -368,6 +379,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
+        // Reset query parameters
+        this.router.navigate([], {
+            queryParams: {},
+            queryParamsHandling: "",
+        });
+
         this.params = getDefaultHostsIndexParams();
         this.filter = getDefaultHostsIndexFilter();
         this.currentStateFilter = {
