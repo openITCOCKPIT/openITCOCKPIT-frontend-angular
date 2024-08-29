@@ -1,0 +1,196 @@
+<ng-container *transloco="let t">
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                {{ t('SLA Hosts Status') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadSlaHostgroupHostsStatus()" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="3">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'less-than-equal']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="determined_availability.from"
+                                       type="number" step="any"
+                                       placeholder="0" min="0" max="100"
+                                       name="determined_availability.from"
+                                       cFormControl
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="3">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'greater-than-equal']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="determined_availability.to"
+                                       type="number" step="any"
+                                       placeholder="100" min="0" max="100"
+                                       name="determined_availability.to"
+                                       cFormControl
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="container"
+                                    id="container"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[Hosts.container_id][]']"
+                                    [options]="containers"
+                                    [placeholder]="'Filter by container' | transloco"
+                                    (onChange)="onFilterChange(null)"
+                                    [debounce]="true">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <c-container fluid>
+                <c-row class="flex-row-reverse">
+                    <c-col md="12" lg="3" xs="12">
+                        <div class="mt-2 p-2 bg-warning rounded overflow-hidden position-relative text-white">
+                            <div>
+                                <h4 class="d-block l-h-n m-0 fw-500">
+                                    <span *oitcPermission="['hosts', 'index']">
+                                        <span class="pointer"
+                                              *ngIf="hostsNotInSla.ids.length > 0"
+                                              [routerLink]="['/', 'hosts', 'index', hostsNotInSla.ids]">
+                                            {{ hostsNotInSla.count }}
+                                        </span>
+                                        <span [hidden]="hostsNotInSla.ids.length > 0">
+                                            {{ hostsNotInSla.count }}
+                                        </span>
+                                    </span>
+                                    <span *oitcPermission="['hosts', 'index']; negate: true">
+                                        {{ hostsNotInSla.count }}
+                                    </span>
+
+                                    <small class="m-0 l-h-n">
+                                        {{ t('Not in SLA') }}
+                                    </small>
+                                </h4>
+                            </div>
+                            <fa-icon class="card-icon-big position-absolute pos-right pos-bottom opacity-15 mx-2"
+                                     [icon]="['fas', 'xmark']"></fa-icon>
+                        </div>
+                    </c-col>
+                    <c-col md="12" lg="3" xs="12">
+                        <div class="mt-2 p-2 bg-primary rounded overflow-hidden position-relative text-white">
+                            <div>
+                                <h4 class="d-block l-h-n m-0 fw-500">
+                                    <span *oitcPermission="['hosts', 'index']">
+                                        <span class="pointer"
+                                              *ngIf="hostsNotAvailable.ids.length > 0"
+                                              [routerLink]="['/', 'hosts', 'index', hostsNotAvailable.ids]">
+                                            {{ hostsNotAvailable.count }}
+                                        </span>
+                                        <span [hidden]="hostsNotAvailable.ids.length > 0">
+                                            {{ hostsNotAvailable.count }}
+                                        </span>
+                                    </span>
+                                    <span *oitcPermission="['hosts', 'index']; negate: true">
+                                        {{ hostsNotAvailable.count }}
+                                    </span>
+
+                                    <small class="m-0 l-h-n">
+                                        {{ t('Not calculated') }}
+                                    </small>
+                                </h4>
+                            </div>
+                            <fa-icon class="card-icon-big position-absolute pos-right pos-bottom opacity-15 mx-2"
+                                     [icon]="['fas', 'question']"></fa-icon>
+                        </div>
+                    </c-col>
+                </c-row>
+
+                <c-row class="mt-3">
+                    <c-col md="2" lg="1" xs="12" class="badge badge-success m-2 text-truncate"
+                           [ngStyle]="{'background-color': getBackgroundColorGradient(slaStatusHost.heatmapValue)}"
+                           *ngFor="let slaStatusHost of slaStatusOverview"
+                           title="{{slaStatusHost.host_name}} [{{slaStatusHost.sla_name}}]">
+                        <span *oitcPermission="['hosts', 'browser']">
+                            <a [routerLink]="['/', 'hosts', 'browser', slaStatusHost.host_id, { selectedTab: 'tab7'}]"
+                               class="text-white">
+                                {{ slaStatusHost.heatmapLabel }}
+                                <br>
+                                {{ slaStatusHost.host_name }}
+                            </a>
+                        </span>
+                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                            {{ slaStatusHost.heatmapLabel }}
+                            <br>
+                            {{ slaStatusHost.host_name }}
+                        </span>
+                    </c-col>
+                </c-row>
+            </c-container>
+            <oitc-no-records *ngIf="slaStatusOverview && slaStatusOverview.length === 0"></oitc-no-records>
+        </c-card-body>
+    </c-card>
+</ng-container>

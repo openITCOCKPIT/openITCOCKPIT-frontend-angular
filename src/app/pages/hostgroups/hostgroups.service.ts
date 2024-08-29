@@ -3,6 +3,7 @@ import { catchError, map, Observable, of } from "rxjs";
 import {
     AddHostgroupsPost,
     Hostgroup,
+    HostgroupAdditionalInformation,
     HostgroupAppend,
     HostgroupExtendedRoot,
     HostgroupsCopyGet,
@@ -213,7 +214,7 @@ export class HostgroupsService {
 
     public loadAdditionalInformation(id: number): Observable<any> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<any>(`${proxyPath}/hostgroups/loadAdditionalInformation/.json`, {
+        return this.http.get<HostgroupAdditionalInformation>(`${proxyPath}/hostgroups/loadAdditionalInformation/.json`, {
             params: {
                 angular: true,
                 id: id
