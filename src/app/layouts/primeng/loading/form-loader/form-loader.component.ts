@@ -10,6 +10,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     templateUrl: './form-loader.component.html',
     styleUrl: './form-loader.component.css'
 })
+
+// This loader mimics the optic of a generic form that is loading data
 export class FormLoaderComponent {
 
 }
