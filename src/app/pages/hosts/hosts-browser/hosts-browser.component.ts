@@ -101,6 +101,13 @@ import {
 import {
     HostsBrowserServicesListComponent
 } from '../hosts-browser-services-list/hosts-browser-services-list.component';
+import { IframeComponent } from '../../../components/iframe/iframe.component';
+import {
+    GrafanaTimepickerComponent
+} from '../../../modules/grafana_module/components/grafana-timepicker/grafana-timepicker.component';
+import {
+    GrafanaTimepickerChange
+} from '../../../modules/grafana_module/components/grafana-timepicker/grafana-timepicker.interface';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -159,7 +166,9 @@ import {
         SatelliteNameComponent,
         BrowserTimelineComponent,
         HostTimelineLegendComponent,
-        HostsBrowserServicesListComponent
+        HostsBrowserServicesListComponent,
+        IframeComponent,
+        GrafanaTimepickerComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -258,7 +267,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
             this.loadSlaInformation();
-            
+
             this.lastUpdated = new Date();
         }));
     }
@@ -269,6 +278,12 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
                 this.GrafanaIframe = result;
             }));
         }
+    }
+
+    public onGrafanaTimeRangeChange(event: GrafanaTimepickerChange): void {
+        this.selectedGrafanaTimerange = event.timerange;
+        this.selectedGrafanaAutorefresh = event.autorefresh;
+        this.loadGrafanaIframeUrl();
     }
 
     public loadAdditionalInformation(): void {

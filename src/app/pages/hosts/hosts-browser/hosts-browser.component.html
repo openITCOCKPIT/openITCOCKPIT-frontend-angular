@@ -584,7 +584,7 @@
                                             <td>{{ t('Notification period') }}</td>
                                             <td>
                                                 <oitc-label-link
-                                                    [objectId]=" result.notifyPeriod.id"
+                                                    [objectId]=" result?.notifyPeriod?.id"
                                                     [route]="'/timeperiods/edit'"
                                                     [permissions]="'timeperiods.edit'"
                                                 >
@@ -1067,7 +1067,15 @@
 
                 <!-- Grafana Module start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.Grafana">
-                    Grafana
+                    @if (PermissionsService.hasModule('GrafanaModule') && GrafanaIframe && GrafanaIframe.GrafanaDashboardExists) {
+                        <c-row>
+                            <c-col>
+                                <oitc-grafana-timepicker class="float-end mb-2"
+                                                         (change)="onGrafanaTimeRangeChange($event)"></oitc-grafana-timepicker>
+                            </c-col>
+                        </c-row>
+                        <oitc-iframe [url]="GrafanaIframe.iframeUrl"></oitc-iframe>
+                    }
                 </div>
                 <!-- Grafana Module end -->
 
@@ -1090,7 +1098,7 @@
         <oitc-hosts-browser-services-list *ngIf="result && result.mergedHost"
                                           [hostId]="result.mergedHost.id"
                                           [lastUpdated]="lastUpdated">
-            
+
         </oitc-hosts-browser-services-list>
 
     </ng-container>
