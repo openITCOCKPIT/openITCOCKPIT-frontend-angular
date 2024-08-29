@@ -79,7 +79,7 @@ export function getDefaultServicegroupsExtendedServiceListParams(): Servicegroup
 
 /** INDEX RESPONSE **/
 export interface ServicegroupsIndexRoot extends PaginateOrScroll {
-    all_servicegroups: ServicegroupsIndexServicegroup[]
+    all_servicegroups: ServicegroupsIndexServicegroup[] | undefined
     _csrfToken: string
 }
 
