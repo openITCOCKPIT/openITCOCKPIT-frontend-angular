@@ -172,7 +172,7 @@
                                     <c-col md="1">
                                     </c-col>
                                     <c-col md="1">
-                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || post.User.usercontainerroles._ids.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
@@ -188,7 +188,7 @@
                                         </c-form-check>
                                     </c-col>
                                     <c-col md="1">
-                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || post.User.usercontainerroles._ids.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
