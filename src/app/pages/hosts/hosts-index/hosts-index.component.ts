@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -120,6 +120,7 @@ import {
 import {
     HostsAddToHostgroupComponent
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import { HostBrowserTabs } from '../hosts.enum';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -194,7 +195,8 @@ import {
         JsonPipe,
         ServiceAcknowledgeModalComponent,
         HostAcknowledgeModalComponent,
-        HostsAddToHostgroupComponent
+        HostsAddToHostgroupComponent,
+        NgTemplateOutlet
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -260,13 +262,24 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
-        this.loadHosts();
+
+        this.route.queryParams.subscribe(params => {
+            let hostname = params['hostname'] || undefined;
+            if (hostname) {
+                this.filter['Hosts.name'] = hostname;
+            }
+
+            // Process all query params first and then trigger the load function
+            this.loadHosts();
+        });
+
 
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
             })
         );
+
     }
 
     public ngOnDestroy() {
@@ -366,6 +379,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
+        // Reset query parameters
+        this.router.navigate([], {
+            queryParams: {},
+            queryParamsHandling: "",
+        });
+
         this.params = getDefaultHostsIndexParams();
         this.filter = getDefaultHostsIndexFilter();
         this.currentStateFilter = {
@@ -690,8 +709,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    protected confirmAddHostsToHostgroup(host?: HostObject) : void
-    {
+    protected confirmAddHostsToHostgroup(host?: HostObject): void {
         let items: SelectKeyValue[] = [];
 
         if (host) {
@@ -720,4 +738,5 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected readonly String = String;
+    protected readonly HostBrowserTabs = HostBrowserTabs;
 }

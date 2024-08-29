@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -15,7 +15,9 @@ import {
     DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective, FormCheckInputDirective, FormCheckLabelDirective,
+    DropdownToggleDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -24,7 +26,8 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent, RowDirective,
+    RowComponent,
+    RowDirective,
     TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -45,6 +48,7 @@ import { HostgroupsService } from '../hostgroups.service';
 import {
     getDefaultHostgroupsExtendedParams,
     getDefaultHostgroupsExtendedServiceListParams,
+    HostgroupAdditionalInformation,
     HostgroupExtended,
     HostGroupExtendedHost,
     HostgroupExtendedRoot,
@@ -109,6 +113,11 @@ import {
 } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { HostgroupExtendedTabs } from '../hostgroups.enum';
+import {
+    SlaHostgroupHostsStatusOverviewComponent
+} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -176,7 +185,9 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent,
         RowDirective,
         FormCheckInputDirective,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        NgClass,
+        SlaHostgroupHostsStatusOverviewComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css'
@@ -191,6 +202,8 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
+    public readonly PermissionsService = inject(PermissionsService);
+    public selectedTab: HostgroupExtendedTabs = HostgroupExtendedTabs.Hosts;
     private userFullname: string = '';
 
     protected hostgroupId: number = 0;
@@ -211,16 +224,18 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 lft: 0,
                 rght: 0,
             },
-            allowEdit: false
+            allowEdit: false,
         },
         StatusSummary: {
             up: 0,
             down: 0,
             unreachable: 0
-        }
+        },
+        hasSLAHosts: false,
     } as HostgroupExtended;
     protected hostgroupExtendedRoot: HostgroupExtendedRoot = {} as HostgroupExtendedRoot;
     protected timezone!: TimezoneObject;
+    protected AdditionalInformationExists: boolean = false;
 
     protected filter: any = {
         Host: {
@@ -250,6 +265,11 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         // Fetch the id from the URL
         this.hostgroupId = Number(this.route.snapshot.paramMap.get('id'));
         this.hostParams.selected = this.hostgroupId;
+
+        let selectedTab: string | null = this.route.snapshot.paramMap.get('selectedTab');
+        if (selectedTab !== null) {
+            this.changeTab(selectedTab as HostgroupExtendedTabs);
+        }
 
         // Fetch the users timezone
         this.getUserTimezone();
@@ -339,7 +359,8 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     private loadAdditionalInformation(): void {
         this.subscriptions.add(this.HostgroupsService.loadAdditionalInformation(this.hostgroupId)
-            .subscribe((result: any) => {
+            .subscribe((result: HostgroupAdditionalInformation) => {
+                this.AdditionalInformationExists = result.AdditionalInformationExists;
             }));
     }
 
@@ -553,4 +574,10 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             id: 'hostAcknowledgeModal',
         });
     }
+
+    public changeTab(newTab: HostgroupExtendedTabs): void {
+        this.selectedTab = newTab;
+    }
+
+    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
 }

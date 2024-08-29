@@ -22,8 +22,12 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownComponent,
-    DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -50,13 +54,15 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
+    getDefaultHostgroupsIndexParams,
     HostgroupsIndexHostgroup,
     HostgroupsIndexParams,
-    HostgroupsIndexRoot,
-    getDefaultHostgroupsIndexParams
+    HostgroupsIndexRoot
 } from '../hostgroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { HostgroupExtendedTabs } from '../hostgroups.enum';
 
 @Component({
     selector: 'oitc-hostgroups-index',
@@ -120,6 +126,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();
     private HostgroupsService: HostgroupsService = inject(HostgroupsService);
+    public readonly PermissionsService = inject(PermissionsService);
 
     public params: HostgroupsIndexParams = getDefaultHostgroupsIndexParams();
 
@@ -253,4 +260,6 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
         return baseUrl + stringParams.toString();
 
     }
+
+    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
 }

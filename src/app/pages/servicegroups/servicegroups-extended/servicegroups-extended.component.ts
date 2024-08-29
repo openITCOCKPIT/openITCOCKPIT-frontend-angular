@@ -44,7 +44,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ServicegroupsService } from '../servicegroups.service';
 import {
     getDefaultServicegroupsExtendedParams,
-    getDefaultServicegroupsExtendedServiceListParams,
     ServiceGroupExtendedRoot,
     ServicegroupsExtendedParams,
     ServicegroupsExtendedServiceListParams,
@@ -98,7 +97,12 @@ import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-
 import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { ServicesService } from '../../services/services.service';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-servicegroups-extended',
@@ -165,10 +169,15 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         FormCheckLabelDirective,
         HoststatusIconComponent,
         ServicestatusSimpleIconComponent,
+        DisableModalComponent,
         DeleteAllModalComponent
     ],
     templateUrl: './servicegroups-extended.component.html',
-    styleUrl: './servicegroups-extended.component.css'
+    styleUrl: './servicegroups-extended.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}
+    ]
 })
 export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
 
@@ -270,8 +279,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
             .subscribe((result: ServiceGroupExtendedRoot) => {
                 // Then put post where it belongs. Also unpack that bullshit
                 this.servicegroupExtended = result;
-
-
                 this.userFullname = result.username;
             }));
     }
@@ -329,6 +336,36 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.modalService.toggle({
             show: true,
             id: 'deleteAllModal',
+        });
+    }
+
+    public toggleDisableModal(service?: ServiceObject) {
+        let items: DisableItem[] = [];
+
+        if (service) {
+            // User just want to delete a single command
+            items = [{
+                id: service.id,
+                displayName: service.hostname + '/' + service.servicename
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
+                return {
+                    id: item.Service.id,
+                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                };
+            });
+        }
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+
+        this.modalService.toggle({
+            show: true,
+            id: 'disableModal',
         });
     }
 
@@ -518,67 +555,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     protected onMassActionComplete(event: boolean): void {
-
+        this.loadServicegroupExtended()
     }
 
-    /*
-
-
-
-
-        public toggleDisableModal(service?: ServiceObject) {
-            let items: DisableItem[] = [];
-
-            if (service) {
-                // User just want to delete a single command
-                items = [{
-                    id: service.id,
-                    displayName: service.hostname + '/' + service.servicename
-                }];
-            } else {
-                items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
-                    return {
-                        id: item.Service.id,
-                        displayName: item.Service.hostname + '/' + item.Service.servicename
-                    };
-                });
-            }
-            if (items.length === 0) {
-                const message = this.TranslocoService.translate('No items selected!');
-                this.notyService.genericError(message);
-                return;
-            }
-            this.selectedItems = items;
-
-            this.modalService.toggle({
-                show: true,
-                id: 'disableModal',
-            });
-        }
-
-        public acknowledgeStatus() {
-            let items: ServiceAcknowledgeItem[] = [];
-            items = this.SelectionServiceService.getSelectedItems().map((item): ServiceAcknowledgeItem => {
-                return {
-                    command: ExternalCommandsEnum.submitServicestateAck,
-                    hostUuid: item.Host.uuid,
-                    serviceUuid: item.Service.uuid,
-                    sticky: 0,
-                    notify: false,
-                    author: this.userFullname,
-                    comment: '',
-                };
-            });
-            this.selectedItems = items;
-            if (items.length === 0) {
-                const message = this.TranslocoService.translate('No items selected!');
-                this.notyService.genericError(message);
-                return;
-            }
-            this.modalService.toggle({
-                show: true,
-                id: 'serviceAcknowledgeModal',
-            });
-        }
-    */
 }

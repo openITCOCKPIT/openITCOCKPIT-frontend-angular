@@ -341,11 +341,10 @@
                                         {{ t('Edit') }}
                                     </oitc-actions-button-element>
 
-                                    <oitc-actions-button-element [permission]="'services.deactivate'"
-                                                                 *ngIf="service.Service.allow_edit">
+                                    <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
+                                                                 [permission]="'services.deactivate'">
                                         <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                         {{ t('Disable') }}
-                                        <!-- todo implement -->
                                     </oitc-actions-button-element>
 
                                     <oitc-actions-button-element [permission]="'changelogs.index'"
@@ -403,3 +402,5 @@
                                 [items]="selectedItems"></oitc-service-maintenance-modal>
 <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
                                 [items]="selectedItems"></oitc-service-acknowledge-modal>
+<oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

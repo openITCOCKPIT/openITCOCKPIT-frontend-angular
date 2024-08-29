@@ -13,6 +13,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     templateUrl: './browser-menu-loader.component.html',
     styleUrl: './browser-menu-loader.component.css'
 })
+
+// This loader mimics the optic of the menu used on /hosts/browser and /services/browser pages
 export class BrowserMenuLoaderComponent {
 
 }

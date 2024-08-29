@@ -125,7 +125,7 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy {
 
     protected readonly route = inject(ActivatedRoute);
     protected selectedItems: DeleteAllItem[] = [];
-    protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: [], _csrfToken: ''}
+    protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: undefined, _csrfToken: ''}
     private readonly router = inject(Router);
     protected hideFilter: boolean = false;
 

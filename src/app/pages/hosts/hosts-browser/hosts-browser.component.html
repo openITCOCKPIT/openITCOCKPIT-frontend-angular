@@ -1061,7 +1061,13 @@
 
                 <!-- ServiceNow Module start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.ServiceNow">
-                    ServiceNow
+                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                        <oitc-servicenow-host-browser-tab
+                            *ngIf="result && result.mergedHost"
+                            [hostUuid]="String(result.mergedHost.uuid)"
+                            [allowEdit]="Boolean(result.mergedHost.allowEdit)"
+                            [lastUpdated]="lastUpdated"></oitc-servicenow-host-browser-tab>
+                    }
                 </div>
                 <!-- ServiceNow Module end -->
 

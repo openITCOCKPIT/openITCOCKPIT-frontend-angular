@@ -108,6 +108,9 @@ import {
 import {
     GrafanaTimepickerChange
 } from '../../../modules/grafana_module/components/grafana-timepicker/grafana-timepicker.interface';
+import {
+    ServicenowHostBrowserTabComponent
+} from '../../../modules/servicenow_module/components/servicenow-host-browser-tab/servicenow-host-browser-tab.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -168,7 +171,8 @@ import {
         HostTimelineLegendComponent,
         HostsBrowserServicesListComponent,
         IframeComponent,
-        GrafanaTimepickerComponent
+        GrafanaTimepickerComponent,
+        ServicenowHostBrowserTabComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -232,6 +236,14 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.id = Number(idOrUuid);
             this.loadHost();
         }
+
+        this.route.queryParams.subscribe(params => {
+            let selectedTab = params['selectedTab'] || undefined;
+            if (selectedTab) {
+                this.changeTab(selectedTab);
+            }
+        });
+
     }
 
     public ngOnDestroy(): void {
