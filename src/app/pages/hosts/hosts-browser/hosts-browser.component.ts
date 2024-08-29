@@ -236,6 +236,14 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.id = Number(idOrUuid);
             this.loadHost();
         }
+
+        this.route.queryParams.subscribe(params => {
+            let selectedTab = params['selectedTab'] || undefined;
+            if (selectedTab) {
+                this.changeTab(selectedTab);
+            }
+        });
+
     }
 
     public ngOnDestroy(): void {

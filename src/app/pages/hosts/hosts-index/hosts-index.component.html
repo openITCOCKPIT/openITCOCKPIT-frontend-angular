@@ -797,6 +797,7 @@
                                       [hidden]="!host.Host.additionalInformationExists">
                                     <!-- todo fix link to tab6 -->
                                     <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
+                                       [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
                                        class="text-info">
                                         <fa-icon [icon]="['fas', 'database']"></fa-icon>
                                         {{ t('CMDB') }}
@@ -920,7 +921,8 @@
                                     {{ t('Allocate service template group') }}
                                 </oitc-actions-button-element>
 
-                                <oitc-actions-button-element [permission]="'hostgroups.add'" (click)="confirmAddHostsToHostgroup()">
+                                <oitc-actions-button-element [permission]="'hostgroups.add'"
+                                                             (click)="confirmAddHostsToHostgroup()">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                     {{ t('Add to host group') }}
                                 </oitc-actions-button-element>

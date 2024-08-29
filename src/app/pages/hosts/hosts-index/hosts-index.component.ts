@@ -120,6 +120,7 @@ import {
 import {
     HostsAddToHostgroupComponent
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import { HostBrowserTabs } from '../hosts.enum';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -690,8 +691,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         });
     }
 
-    protected confirmAddHostsToHostgroup(host?: HostObject) : void
-    {
+    protected confirmAddHostsToHostgroup(host?: HostObject): void {
         let items: SelectKeyValue[] = [];
 
         if (host) {
@@ -720,4 +720,5 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected readonly String = String;
+    protected readonly HostBrowserTabs = HostBrowserTabs;
 }
