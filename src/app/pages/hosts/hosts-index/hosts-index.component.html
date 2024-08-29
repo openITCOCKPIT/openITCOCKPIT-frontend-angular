@@ -795,7 +795,6 @@
                             @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
                                 <span class="badge border border-info"
                                       [hidden]="!host.Host.additionalInformationExists">
-                                    <!-- todo fix link to tab6 -->
                                     <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
                                        [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
                                        class="text-info">
@@ -901,12 +900,12 @@
                                 </oitc-actions-button-element>
 
                                 @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) && host.Host.additionalInformationExists) {
-                                    <oitc-actions-button-element [permission]="'hosts.browser'"
-                                                                 [url]="'/hosts/browser/' + host.Host.id">
+                                    <li><a cDropdownItem [routerLink]="'/hosts/browser/' + host.Host.id"
+                                           [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
+                                           *oitcPermission="['hosts', 'browser']">
                                         <fa-icon [icon]="['fas', 'database']"></fa-icon>
                                         {{ t('CMDB') }}
-                                        <!-- todo open tab6 -->
-                                    </oitc-actions-button-element>
+                                    </a></li>
                                 }
 
                                 <oitc-actions-button-element [permission]="'services.serviceList'"
