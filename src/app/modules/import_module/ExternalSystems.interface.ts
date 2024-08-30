@@ -1,4 +1,5 @@
 export interface AdditionalHostInformationResult {
+
     response: {
         result?: null // only null if the CMDB is offline - does not exist in successful for itop or idoit responses
         status: boolean // true = online, false = offline
@@ -16,12 +17,21 @@ export interface AdditionalHostInformationResult {
             description: string
             changed_by: string
         }
+        location?: { // idoit only
+            location_path: string
+            title: string
+            type_title: string
+            option: string
+            insertion: string
+        }
         ipv4Address?: { // idoit only
             hostname: string
             title: string
             ip: string
             description: string
-        }
+            manufacturer?: string
+        },
+        contractAssignments: IdoitContractAssignment[],
         applications?: IdoitApplication[]
         memory?: IdoitMemory[]
         cpu?: IdoitCpu[]
@@ -33,9 +43,10 @@ export interface AdditionalHostInformationResult {
         network_component?: ItopNetworkComponent
         network_other_information?: ItopNetworkOtherInformation
         location_information?: ItopLocationInformation
-        accounting?: ItopAccounting
         operations?: ItopOperations
         contacts_list?: ItopContact[]
+
+        accounting?: ItopAccountingIdoitAccounting
 
         // all CMDB types
         externalLink?: string
@@ -43,6 +54,7 @@ export interface AdditionalHostInformationResult {
     },
     data_source: 'itop' | 'idoit',
 }
+
 
 /*******************
  * i-doit          *
@@ -56,6 +68,59 @@ export interface IdoitObjectInformation {
     created: string
     updated: string
     image: string
+}
+
+export interface IdoitContractAssignment {
+    objID: string
+    connected_contract_id: string
+    connection_id: string
+    title: string
+    contract_start: string
+    contract_end: string
+    reaction_rate: any
+    description: string
+    details: {
+        contract: {
+            id: number
+            title: string
+            type_title: string
+            status: number
+            cmdb_status_title: any
+            created: any
+            updated: any
+            image: any
+        },
+        contract_details: {
+            costs: string
+            cost_calculation: string
+            product: string
+            reaction_rate: string
+            contract_status: string
+            start_date: string
+            end_date: string
+            end_type: string
+            payment_period: string
+        },
+        contact?: {
+            contact: any
+            website: any
+            type_title: string
+            role: string
+        }
+    }
+}
+
+export interface IdoitAccounting {
+    inventory_no?: string
+    acquirementdate?: string
+    operation_expense?: string
+    operation_expense_interval?: string
+    invoice_no?: string
+    order_no?: string
+    guarantee_period?: string
+    guarantee_period_unit?: string
+    guarantee_period_status?: string
+    guarantee_period_base?: string
 }
 
 export interface IdoitApplication {
@@ -151,13 +216,17 @@ export interface ItopLocationInformation {
     rack_units: ItopDefaultValue
 }
 
+// TypeScript sucks
+export interface ItopAccountingIdoitAccounting extends ItopAccounting, IdoitAccounting {
+}
+
 
 export interface ItopAccounting {
-    provider_hw: ItopDefaultValue
-    provider_os: ItopDefaultValue
-    psp_operations_department: ItopDefaultValue
-    provider_contract: ItopDefaultValue
-    provider_sla: ItopDefaultValue
+    provider_hw?: ItopDefaultValue
+    provider_os?: ItopDefaultValue
+    psp_operations_department?: ItopDefaultValue
+    provider_contract?: ItopDefaultValue
+    provider_sla?: ItopDefaultValue
 }
 
 export interface ItopOperations {

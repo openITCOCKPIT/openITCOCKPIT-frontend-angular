@@ -10,13 +10,16 @@ import {
     ColComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { HostgroupExtendedTabs } from '../../../../../../pages/hostgroups/hostgroups.enum';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
+import { IdoitStatus } from '../idoit.enum';
+import { HostBrowserTabs } from '../../../../../../pages/hosts/hosts.enum';
 
 @Component({
     selector: 'oitc-idoit-overview',
@@ -35,7 +38,9 @@ import { PermissionDirective } from '../../../../../../permissions/permission.di
         NavComponent,
         NavItemComponent,
         PermissionDirective,
-        CardBodyComponent
+        CardBodyComponent,
+        TableDirective,
+        NgForOf
     ],
     templateUrl: './idoit-overview.component.html',
     styleUrl: './idoit-overview.component.css'
@@ -45,4 +50,6 @@ export class IdoitOverviewComponent {
     @Input() public result!: AdditionalHostInformationResult;
 
     protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
+    protected readonly IdoitStatus = IdoitStatus;
+    protected readonly HostBrowserTabs = HostBrowserTabs;
 }
