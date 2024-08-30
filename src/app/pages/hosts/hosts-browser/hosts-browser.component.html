@@ -1087,7 +1087,9 @@
 
                 <!-- Import Module start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.CMDB">
-                    CMDB
+                    <oitc-additional-host-information
+                        [hostId]="result.mergedHost.id"
+                        [lastUpdated]="lastUpdated"></oitc-additional-host-information>
                 </div>
                 <!-- Import Module end -->
 
