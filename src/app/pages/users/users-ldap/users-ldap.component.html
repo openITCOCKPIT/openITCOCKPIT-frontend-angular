@@ -117,12 +117,11 @@
                     </div>
 
                     <c-alert color="info">
-                        <div class="d-flex flex-align-items-center">
-                            <div class="alert-icon">
-                                <fa-icon [icon]="['fas', 'info-circle']" class="text-info" size="2xl"></fa-icon>
-                            </div>
-                        </div>
-                        <div class="flex-1">
+                        <h4 cAlertHeading>
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('LDAP Configuration') }}
+                        </h4>
+                        <p class="mb-0">
                             {{ t('Connected LDAP server') }}:
                             <b>{{ ldapConfig.host }}</b>
                             <br>
@@ -131,7 +130,7 @@
                             <br>
                             {{ t('Base DN') }}:
                             <b>{{ ldapConfig.base_dn }}</b>
-                        </div>
+                        </p>
                     </c-alert>
 
                     <div class="mb-3">

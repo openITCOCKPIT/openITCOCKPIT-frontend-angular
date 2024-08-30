@@ -5,7 +5,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-    AlertComponent,
+    AlertComponent, AlertHeadingDirective,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -103,7 +103,8 @@ import { LdapConfig } from '../../contacts/contacts.interface';
         FormDirective,
         InputGroupComponent,
         TextColorDirective,
-        AlertComponent
+        AlertComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './users-ldap.component.html',
     styleUrl: './users-ldap.component.css'
