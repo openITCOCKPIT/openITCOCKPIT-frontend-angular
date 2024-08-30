@@ -25,9 +25,10 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -36,14 +37,14 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { HttpParams } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-sla-hostgroup-hosts-status-overview',
@@ -58,15 +59,8 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
         DebounceDirective,
         FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
         NavComponent,
@@ -74,13 +68,19 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         NgForOf,
         NoRecordsComponent,
         PermissionDirective,
-        ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
         MultiSelectComponent,
-        NgStyle
+        NgStyle,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FormDirective,
+        FormControlDirective,
+        FormsModule
     ],
     templateUrl: './sla-hostgroup-hosts-status-overview.component.html',
     styleUrl: './sla-hostgroup-hosts-status-overview.component.css'
@@ -106,6 +106,7 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
         legendCsvHeader: ''
     }
     public hideFilter: boolean = true;
+    public isLoading: boolean = true;
 
     public determined_availability = {
         from: null,
@@ -151,12 +152,15 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
 
     public loadSlaHostgroupHostsStatus() {
 
+        this.isLoading = true;
+
         if (this.hostgroupId > 0) {
 
             this.params['filter[determined_availability][]'] = [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100];
 
             this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadSlaHostgroupHostsStatusOverview(this.hostgroupId, this.params)
                 .subscribe((result: SlaHostgroupHostsStatusOverviewRoot) => {
+                    this.isLoading = false;
                     this.slaStatusOverview = result.slaStatusOverview;
                     this.hostsNotAvailable = result.hostsNotAvailable;
                     this.hostsNotInSla = result.hostsNotInSla;
@@ -171,6 +175,27 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
             }))
+    }
+
+    public linkFor(type: string) {
+        let baseUrl: string = '/sla_module/slas/slaHostgroupHostsStatusToPdf.pdf?';
+        if (type === 'csv') {
+            baseUrl = '/sla_module/slas/slaHostgroupHostsStatusToCsv?';
+        }
+
+        let urlParams = {
+            'angular': true,
+            'hostgroupId': this.hostgroupId,
+            'filter[Hosts.name]': this.params['filter[Hosts.name]'],
+            'filter[Hosts.container_id][]': this.params['filter[Hosts.container_id][]'],
+            'filter[determined_availability][]': [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100]
+        };
+
+        let stringParams: HttpParams = new HttpParams();
+
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
+
     }
 
     public getBackgroundColorGradient(availabilityDifference: number) {
