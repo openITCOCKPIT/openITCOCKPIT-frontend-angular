@@ -3,7 +3,7 @@ import { AdditionalHostInformationResult } from '../../../../ExternalSystems.int
 import { ColComponent, RowComponent } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { JsonPipe, NgIf, NgSwitch } from '@angular/common';
+import { JsonPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { NetworkDeviceComponent } from '../network-device/network-device.component';
 import { VirtualMachineComponent } from '../virtual-machine/virtual-machine.component';
 import { ServerComponent } from '../server/server.component';
@@ -27,7 +27,9 @@ import { CustomClassComponent } from '../custom-class/custom-class.component';
         ServerComponent,
         DefaultComponent,
         WanLineComponent,
-        CustomClassComponent
+        CustomClassComponent,
+        NgSwitchCase,
+        NgSwitchDefault
     ],
     templateUrl: './itop-overview.component.html',
     styleUrl: './itop-overview.component.css'
