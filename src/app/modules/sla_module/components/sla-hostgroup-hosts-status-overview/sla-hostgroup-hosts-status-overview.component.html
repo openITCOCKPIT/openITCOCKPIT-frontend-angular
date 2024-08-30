@@ -142,7 +142,8 @@
                                         <span *oitcPermission="['hosts', 'index']">
                                             <span class="badge-clickable"
                                                   *ngIf="hostsNotInSla.ids.length > 0"
-                                                  [routerLink]="['/', 'hosts', 'index', hostsNotInSla.ids]">
+                                                  [routerLink]="['/', 'hosts', 'index']"
+                                                  [queryParams]="{'filter.Hosts.id': hostsNotInSla.ids}">
                                                 {{ hostsNotInSla.count }}
                                             </span>
                                             <span [hidden]="hostsNotInSla.ids.length > 0">
@@ -170,7 +171,8 @@
                                         <span *oitcPermission="['hosts', 'index']">
                                             <span class="badge-clickable"
                                                   *ngIf="hostsNotAvailable.ids.length > 0"
-                                                  [routerLink]="['/', 'hosts', 'index', hostsNotAvailable.ids]">
+                                                  [routerLink]="['/', 'hosts', 'index']"
+                                                  [queryParams]="{'filter.Hosts.id': hostsNotAvailable.ids}">
                                                 {{ hostsNotAvailable.count }}
                                             </span>
                                             <span [hidden]="hostsNotAvailable.ids.length > 0">
