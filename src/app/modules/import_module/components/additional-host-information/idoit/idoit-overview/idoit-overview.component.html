@@ -8,7 +8,44 @@
         </c-col>
     </c-row>
 
-    <p>idoit-overview works!</p>
+    <c-row *ngIf="result.response.status">
+        <c-col [xs]="12">
 
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Configuration item') }}
+                        <small class="fw-300">
+                            {{ t('details') }}
+                        </small>
+                    </h5>
+
+                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                        <c-nav-item>
+                            <a
+                                *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
+                                class="nav-link active">
+                                <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
+                                {{ t('Information') }}
+                            </a>
+                        </c-nav-item>
+                        <c-nav-item>
+                            <a
+                                *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
+                                class="nav-link">
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                {{ t('iTop Dependency tree') }}
+                            </a>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+
+                    context
+
+                </c-card-body>
+            </c-card>
+        </c-col>
+
+    </c-row>
 
 </ng-container>

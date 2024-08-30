@@ -1,11 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { BadgeComponent, ColComponent, RowComponent } from '@coreui/angular';
+import {
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
+} from '@coreui/angular';
 import { HostgroupExtendedTabs } from '../../../../../../pages/hostgroups/hostgroups.enum';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
+import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-idoit-overview',
@@ -17,7 +28,14 @@ import { OnlineOfflineComponent } from '../../online-offline/online-offline.comp
         BadgeComponent,
         FaIconComponent,
         NgIf,
-        OnlineOfflineComponent
+        OnlineOfflineComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        CardBodyComponent
     ],
     templateUrl: './idoit-overview.component.html',
     styleUrl: './idoit-overview.component.css'
