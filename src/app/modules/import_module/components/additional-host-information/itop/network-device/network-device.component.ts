@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
 
 @Component({
   selector: 'oitc-network-device',
@@ -8,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './network-device.component.css'
 })
 export class NetworkDeviceComponent {
+    @Input() result!: AdditionalHostInformationResult;
 
 }

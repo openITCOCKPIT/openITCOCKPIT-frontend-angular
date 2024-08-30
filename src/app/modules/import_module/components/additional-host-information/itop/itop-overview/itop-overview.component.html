@@ -3,13 +3,23 @@
         <c-col [xs]="12">
             <h4>
                 {{ t('iTop overview') }}
-                <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                <sup class="fw-lighter">
+                    <small>
+                        <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                    </small>
+                </sup>
             </h4>
         </c-col>
     </c-row>
+    <c-row *ngIf="!result.response.customClass" [ngSwitch]="result.response.general_information?.finalclass?.value">
+        <oitc-virtual-machine *ngSwitchCase="'VirtualMachine'" [result]="result"></oitc-virtual-machine>
+        <oitc-network-device *ngSwitchCase="'NetworkDevice'" [result]="result"></oitc-network-device>
+        <oitc-server *ngSwitchCase="'Server'" [result]="result"></oitc-server>
+        <oitc-default *ngSwitchDefault [result]="result"></oitc-default>
+    </c-row>
 
-    <p>itop-overview works!</p>
-
-
+    <c-row *ngIf="result.response.customClass" [ngSwitch]="result.response.general_information?.finalclass?.value">
+        <oitc-wan-line *ngSwitchCase="'WANLine'" [result]="result"></oitc-wan-line>
+        <oitc-custom-class *ngSwitchDefault [result]="result"></oitc-custom-class>
+    </c-row>
 </ng-container>
-

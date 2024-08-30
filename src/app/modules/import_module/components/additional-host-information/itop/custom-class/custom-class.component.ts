@@ -2,13 +2,13 @@ import { Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
 
 @Component({
-  selector: 'oitc-server',
+  selector: 'oitc-custom-class',
   standalone: true,
   imports: [],
-  templateUrl: './server.component.html',
-  styleUrl: './server.component.css'
+  templateUrl: './custom-class.component.html',
+  styleUrl: './custom-class.component.css'
 })
-export class ServerComponent {
+export class CustomClassComponent {
     @Input() result!: AdditionalHostInformationResult;
 
 }
