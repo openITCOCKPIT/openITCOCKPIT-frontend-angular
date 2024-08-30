@@ -70,7 +70,7 @@
                                 id="samaccountname"
                                 optionValue="samaccountname"
                                 optionLabel="display_name"
-                                [(ngModel)]="samaccountname"
+                                [(ngModel)]="this.post.User.samaccountname"
                                 [searchCallback]="loadLdapUsers"
                                 (onChange)="onLdapUserChange($event)"
                                 [options]="samaccountnames"
@@ -166,7 +166,7 @@
                                 <legend class="text-success">
                                     {{ userContainerRole.value.path }}
                                     <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                             *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
+                                             *ngIf="selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1"/>
                                 </legend>
                                 <c-row>
                                     <c-col md="1">
@@ -222,9 +222,9 @@
                                 </c-row>
                             </c-col>
                         </c-row>
-                        <c-row *ngIf="post.User.usercontainerroles._ids.length > 0 && selectedContainerIds.length > 0">
+                        <c-row *ngIf="post.User.usercontainerroles._ids.length > 0 && (selectedContainerIds.length > 0 || post.User.usercontainerroles._ids.length > 0 )">
                             <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
-                                {{ t('The user permissions will be extended or adapted with additional containers') }}
+                                {{ t('The user permissions will be extended or adapted with additional user roles or containers') }}
                                 <fa-icon cTextColor="primary" [icon]="['fas', 'arrow-down']" />
                             </c-col>
                         </c-row>

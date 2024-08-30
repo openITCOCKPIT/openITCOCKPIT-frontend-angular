@@ -149,6 +149,26 @@ export class UsersService {
             );
 
     }
+    public addFromLdap(user: UsersAddRoot): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, user)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
+    }
 
     public getDateformats(): Observable<UserDateformatsRoot> {
         const proxyPath = this.proxyPath;

@@ -132,7 +132,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected containerRoleContainerIds: number[] = [];
     protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
-    protected samaccountname: string = '';
     protected ldapConfig: LdapConfig = {} as LdapConfig;
 
     protected usedContainerIdsBySource: { [key: string]: number[] } = {};
@@ -152,7 +151,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     }
 
     public addUser(): void {
-        this.subscriptions.add(this.UsersService.addUser(this.post)
+        this.subscriptions.add(this.UsersService.addFromLdap(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
@@ -321,8 +320,8 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         }
     } as LdapUserDetails;
 
-    private loadLdapUserDetails(samaccountname: string): void {
-        this.subscriptions.add(this.UsersService.loadLdapUserDetails(samaccountname)
+    private loadLdapUserDetails(): void {
+        this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
             .subscribe((result: LoadLdapUserDetailsRoot) => {
                 this.ldapUserDetails = result.ldapUser;
 
@@ -354,14 +353,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected onLdapUserChange(event: any): void {
         // Fetch the entries from this.ldapUsers that matches this.samaccountname.
         let ldapUser = this.samaccountnames.find((entry) => {
-            return entry.samaccountname === this.samaccountname;
+            return entry.samaccountname === this.post.User.samaccountname;
         });
         // Earlyreturn if ldapUser is undefined.
         if (ldapUser === undefined) {
             return;
         }
         this.post.User.ldap_dn = ldapUser.dn;
-        this.loadLdapUserDetails(this.samaccountname);
+        this.loadLdapUserDetails();
     }
 
     protected createApiKey(): void {
