@@ -1,1 +1,14 @@
-<p>idoit-overview works!</p>
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col [xs]="12">
+            <h4>
+                {{ t('i-doit overview') }}
+                <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+            </h4>
+        </c-col>
+    </c-row>
+
+    <p>idoit-overview works!</p>
+
+
+</ng-container>
