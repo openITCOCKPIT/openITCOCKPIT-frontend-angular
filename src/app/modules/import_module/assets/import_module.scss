@@ -47,3 +47,14 @@
 .iTop-class-label {
     letter-spacing: 7px;
 }
+
+.text-primary-light {
+    color: lighten($primary, 10%);
+}
+
+.white-glow {
+    /*
+    filter: drop-shadow(0px 3px 3px rgba(255, 0, 0, 0.4));
+
+     */
+}
