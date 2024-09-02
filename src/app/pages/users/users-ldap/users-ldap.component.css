@@ -28,6 +28,17 @@
     padding: 0;
 }
 
+.div-bottom-arrow::after {
+    font: var(--fa-font-solid);
+    content: '\f0ab';
+
+    padding-left: 0px;
+    color: #4285F4;
+    font-size: 140%;
+    font-style: normal;
+    margin-right: -2px;
+}
+
 .alert-icon {
     width: 2.5rem;
 }
