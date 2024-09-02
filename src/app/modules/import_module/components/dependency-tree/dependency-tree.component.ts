@@ -9,7 +9,7 @@ import { DependencyTreeApiResult, VisObject, VisRelation } from '../../ExternalS
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { Edge, Network, Node, NodeOptions, Options } from 'vis-network';
+import { Edge, Network, Node, Options } from 'vis-network';
 
 interface InOnit {
 }
@@ -262,7 +262,15 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
         };
 
         resultNodes.forEach(node => {
-            let visNode: NodeOptions = node as NodeOptions;
+            let visNode: Node = {
+                //class: node.class,
+                id: node.id,
+                title: node.title,
+                group: node.group,
+                label: node.label,
+                //identifier: node.identifier,
+                //external_link: node.external_link,
+            };
 
             if (sourceId == node.id) {
                 visNode.borderWidth = 5;
@@ -328,7 +336,15 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
         });
 
         resultEdges.forEach(edge => {
-            edges.push(edge);
+
+            let visEdge: Edge = {
+                from: edge.from,
+                to: edge.to,
+                color: edge.color,
+                arrows: edge.arrows,
+            };
+
+            edges.push(visEdge);
         });
 
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);

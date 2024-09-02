@@ -26,23 +26,27 @@
                     <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                         <c-nav-item>
                             <a
+                                (click)="setSelectedTab('information')"
                                 *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
-                                class="nav-link active">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == 'information'}">
                                 <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
                                 {{ t('Information') }}
                             </a>
                         </c-nav-item>
                         <c-nav-item>
                             <a
+                                (click)="setSelectedTab('dependencyTree')"
                                 *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
-                                class="nav-link">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == 'dependencyTree'}">
                                 <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
                                 {{ t('i-doit Dependency tree') }}
                             </a>
                         </c-nav-item>
                     </c-nav>
                 </c-card-header>
-                <c-card-body>
+                <c-card-body *ngIf="selectedTab == 'information'">
 
                     <table cTable bordered hover>
                         <tbody>
@@ -426,6 +430,14 @@
                     </table>
 
                 </c-card-body>
+
+                <c-card-body *ngIf="selectedTab == 'dependencyTree'">
+                    <oitc-dependency-tree
+                        [objectId]="hostId"
+                        [type]="'host'"
+                        [name]="hostname"></oitc-dependency-tree>
+                </c-card-body>
+
             </c-card>
         </c-col>
 

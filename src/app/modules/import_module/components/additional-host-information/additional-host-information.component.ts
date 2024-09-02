@@ -27,6 +27,7 @@ interface InOnit {
 export class AdditionalHostInformationComponent implements InOnit, OnChanges, OnDestroy {
 
     @Input() public hostId: number = 0;
+    @Input() public hostname: string = '';
     @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
 
     public result?: AdditionalHostInformationResult;

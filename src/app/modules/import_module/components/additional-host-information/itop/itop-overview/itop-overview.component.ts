@@ -60,6 +60,7 @@ export class ItopOverviewComponent {
 
     @Input() public result!: AdditionalHostInformationResult;
     @Input() public hostId: number = 0;
+    @Input() public hostname: string = '';
 
     public selectedTab: 'information' | 'dependencyTree' = 'information';
 

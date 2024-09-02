@@ -15,11 +15,12 @@ import {
 } from '@coreui/angular';
 import { HostgroupExtendedTabs } from '../../../../../../pages/hostgroups/hostgroups.enum';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 import { IdoitStatus } from '../idoit.enum';
 import { HostBrowserTabs } from '../../../../../../pages/hosts/hosts.enum';
+import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tree.component';
 
 @Component({
     selector: 'oitc-idoit-overview',
@@ -40,7 +41,9 @@ import { HostBrowserTabs } from '../../../../../../pages/hosts/hosts.enum';
         PermissionDirective,
         CardBodyComponent,
         TableDirective,
-        NgForOf
+        NgForOf,
+        DependencyTreeComponent,
+        NgClass
     ],
     templateUrl: './idoit-overview.component.html',
     styleUrl: './idoit-overview.component.css'
@@ -49,8 +52,15 @@ export class IdoitOverviewComponent {
 
     @Input() public result!: AdditionalHostInformationResult;
     @Input() public hostId: number = 0;
+    @Input() public hostname: string = '';
 
     protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
     protected readonly IdoitStatus = IdoitStatus;
     protected readonly HostBrowserTabs = HostBrowserTabs;
+
+    public selectedTab: 'information' | 'dependencyTree' = 'information';
+
+    public setSelectedTab(newTab: 'information' | 'dependencyTree'): void {
+        this.selectedTab = newTab;
+    }
 }
