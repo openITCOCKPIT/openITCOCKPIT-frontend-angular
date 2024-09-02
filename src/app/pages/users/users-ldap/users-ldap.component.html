@@ -169,10 +169,9 @@
                                 </legend>
                                 <c-row>
                                     <c-col md="1">
-                                        containerId #{{userContainerRole.value._joinData.container_id}}
                                     </c-col>
-                                    <c-col md="1">
-                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                    <c-col md="2">
+                                        <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
@@ -186,9 +185,7 @@
                                                 {{ t('read') }}
                                             </label>
                                         </c-form-check>
-                                    </c-col>
-                                    <c-col md="1">
-                                        <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
+                                        <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled
                                                    type="radio"
@@ -266,7 +263,7 @@
                                 <c-row>
                                     <c-col md="1">
                                     </c-col>
-                                    <c-col md="1">
+                                    <c-col md="2">
                                         <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled
@@ -281,8 +278,6 @@
                                                 {{ t('read') }}
                                             </label>
                                         </c-form-check>
-                                    </c-col>
-                                    <c-col md="1">
                                         <c-form-check [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
                                                    disabled

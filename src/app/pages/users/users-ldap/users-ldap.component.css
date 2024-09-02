@@ -31,3 +31,8 @@
 .alert-icon {
     width: 2.5rem;
 }
+
+.formCheckInline {
+    display: inline-block;
+    width: 40%;
+}
