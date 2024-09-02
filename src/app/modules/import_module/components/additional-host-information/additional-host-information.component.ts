@@ -1,4 +1,4 @@
-import { Component, inject, Input, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../external-systems.service';
 import { AdditionalHostInformationResult } from '../../ExternalSystems.interface';
@@ -7,6 +7,9 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 import { NgIf } from '@angular/common';
 import { IdoitOverviewComponent } from './idoit/idoit-overview/idoit-overview.component';
 import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.component';
+
+interface InOnit {
+}
 
 @Component({
     selector: 'oitc-additional-host-information',
@@ -21,7 +24,7 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
     templateUrl: './additional-host-information.component.html',
     styleUrl: './additional-host-information.component.css'
 })
-export class AdditionalHostInformationComponent {
+export class AdditionalHostInformationComponent implements InOnit, OnChanges, OnDestroy {
 
     @Input() public hostId: number = 0;
     @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component

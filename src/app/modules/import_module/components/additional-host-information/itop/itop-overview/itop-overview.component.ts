@@ -12,7 +12,7 @@ import {
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { JsonPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { JsonPipe, NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { NetworkDeviceComponent } from '../network-device/network-device.component';
 import { VirtualMachineComponent } from '../virtual-machine/virtual-machine.component';
 import { ServerComponent } from '../server/server.component';
@@ -21,6 +21,7 @@ import { WanLineComponent } from '../wan-line/wan-line.component';
 import { CustomClassComponent } from '../custom-class/custom-class.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
+import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tree.component';
 
 @Component({
     selector: 'oitc-itop-overview',
@@ -48,7 +49,9 @@ import { PermissionDirective } from '../../../../../../permissions/permission.di
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        PermissionDirective
+        PermissionDirective,
+        NgClass,
+        DependencyTreeComponent
     ],
     templateUrl: './itop-overview.component.html',
     styleUrl: './itop-overview.component.css'
@@ -56,4 +59,11 @@ import { PermissionDirective } from '../../../../../../permissions/permission.di
 export class ItopOverviewComponent {
 
     @Input() public result!: AdditionalHostInformationResult;
+    @Input() public hostId: number = 0;
+
+    public selectedTab: 'information' | 'dependencyTree' = 'information';
+
+    public setSelectedTab(newTab: 'information' | 'dependencyTree'): void {
+        this.selectedTab = newTab;
+    }
 }
