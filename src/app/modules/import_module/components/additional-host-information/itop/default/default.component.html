@@ -1,43 +1,33 @@
 <ng-container *transloco="let t">
-
-    <div class="row">
-        <div class="col">
-
-            <fa-stack>
-                <fa-icon [icon]="['fas', 'square']" [stackItemSize]="'2x'" class="text-primary"></fa-icon>
-                <fa-icon [icon]="['fas', 'server']" [inverse]="true" [stackItemSize]="'1x'"></fa-icon>
-            </fa-stack>
-
-
-        </div>
-    </div>
-
-
     <table cTable bordered hover>
         <tbody>
         <tr>
             <td colspan="6">
-
-
-                <span class="fa-stack fa-2x">
-                    <i class="fas fa-square fa-stack-2x text-primary"></i>
-                    <i class="fas fa-server icon-stack-2x position-absolute text-white"></i>
-                </span>
-                <span class="iTop-class-label">
-                    {{ result.response.general_information?.finalclass?.value }}
-                </span>
+                <div class="d-flex flex-align-items-center">
+                    <div>
+                        <fa-layers [fixedWidth]="true" size="4x">
+                            <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
+                            <fa-icon [icon]="['fas', 'server']" [inverse]="true" [transform]="'shrink-10'"></fa-icon>
+                        </fa-layers>
+                    </div>
+                    <div class="iTop-class-label flex-1">
+                        {{ result.response.general_information?.finalclass?.value }}
+                    </div>
+                </div>
             </td>
         </tr>
 
         <tr class="border-primary-top">
             <th colspan="2" class="col-4">
-                <i class="fa-solid fa-circle-info text-primary width-15"> </i> {{ t('General information') }}
+                <fa-icon [icon]="['fas', 'info-circle']" class="text-primary"></fa-icon>
+                {{ t('General information') }}
             </th>
             <td class="bold">
                 {{ t('Status') }}
             </td>
             <th colspan="2" class="col-4">
-                <i class="fa-solid fa-network-wired text-primary width-15"> </i> {{ t('Network component') }}
+                <fa-icon [icon]="['fas', 'network-wired']" class="text-primary"></fa-icon>
+                {{ t('Network component') }}
             </th>
             <td class="bold">
                 {{ t('Production Critical') }}
@@ -52,22 +42,26 @@
                 {{ result.response.general_information?.name?.value }}
             </td>
             <td class="col-lg-1 col-md-1">
-                <div ng-switch="result.response.general_information?.status?.value">
-                    <span ng-switch-when="implementation"
+                <div [ngSwitch]="result.response.general_information?.status?.value">
+                    <span *ngSwitchCase="'implementation'"
                           class="badge border-info border text-info w-100">
-                        <i class="fas fa-archive text-info"></i> {{ t('implementation') }}
+                        <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
+                        {{ t('implementation') }}
                     </span>
-                    <span ng-switch-when="production"
+                    <span *ngSwitchCase="'production'"
                           class="badge border-success border text-success w-100">
-                        <i class="fas fa-power-off text-success"> </i> {{ t('production') }}
+                        <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
+                        {{ t('production') }}
                     </span>
-                    <span ng-switch-when="stock"
+                    <span *ngSwitchCase="'stock'"
                           class="badge border-primary border text-primary w-100">
-                        <i class="fas fa-archive text-primary"></i> {{ t('stock') }}
+                        <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
+                        {{ t('stock') }}
                     </span>
-                    <span ng-switch-when="obsolete"
+                    <span *ngSwitchCase="'obsolete'"
                           class="badge border-danger border text-danger w-100">
-                        <i class="fas fa-archive text-danger"></i>  {{ t('obsolete') }}
+                        <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
+                        {{ t('obsolete') }}
                     </span>
                 </div>
             </td>
@@ -127,16 +121,18 @@
                 {{ result.response.network_component?.scope?.value }}
             </td>
             <td rowspan="3" class="text-center align-middle">
-                <span ng-switch="result.response.general_information?.business_criticity?.value">
-                    <i class="fa fa-solid fa-bars fa-4x business-criticity-low helptext"
-                       ng-switch-when="low"
-                       title="{{ t('No Production relevance') }}"></i>
-                    <i class="fa fa-solid fa-bars fa-4x business-criticity-medium helptext"
-                       ng-switch-when="medium"
-                       title="{{ t('Production relevant') }}"></i>
-                    <i class="fa fa-solid fa-bars fa-4x business-criticity-high helptext"
-                       ng-switch-when="high"
-                       title="{{ t('Production relevance high') }}"></i>
+                <span [ngSwitch]="result.response.general_information?.business_criticity?.value">
+
+                    <!-- Gradient colored icons -->
+                    <i class="fas fa-bars fa-4x business-criticity-low helptext"
+                       *ngSwitchCase="'low'"
+                       [title]="'No Production relevance' | transloco"></i>
+                    <i class="fas fa-bars fa-4x business-criticity-medium helptext"
+                       *ngSwitchCase="'medium'"
+                       [title]="'Production relevant' | transloco"></i>
+                    <i class="fas fa-bars fa-4x business-criticity-high helptext"
+                       *ngSwitchCase="'high'"
+                       [title]="'Production relevance high' | transloco"></i>
                 </span>
             </td>
         </tr>
@@ -149,7 +145,7 @@
                 {{ result.response.general_information?.id?.value }}
                 <span *ngIf="result.response.externalLink" class="ng-scope">
                     <a target="_blank" [href]="result.response.externalLink">
-                        <i class="fas fa-external-link-alt padding-left-5"></i>
+                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
                     </a>
                 </span>
             </td>
@@ -183,7 +179,8 @@
             <td colspan="2">
                 {{ result.response.location_information?.location_name?.value }}
                 <span *ngIf="result.response.location_information?.buildingroom?.value">
-                    <i class="fa-solid fa-chevron-right text-primary"> </i> {{ result.response.location_information?.buildingroom?.value }}
+                    <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
+                    {{ result.response.location_information?.buildingroom?.value }}
                 </span>
             </td>
             <th>
@@ -217,7 +214,8 @@
 
         <tr class="border-primary-top">
             <th colspan="6">
-                <i class="fa-solid fa-server text-primary width-15"> </i> {{ t('Server details') }}
+                <fa-icon [icon]="['fas', 'server']" class="text-primary"></fa-icon>
+                {{ t('Server details') }}
             </th>
         </tr>
 
@@ -256,7 +254,9 @@
         <tr>
             <th>
                 {{ t('Cpu type') }}
-                <sub><i class="fas fa-microchip text-primary"></i></sub>
+                <sub>
+                    <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
+                </sub>
             </th>
             <td colspan="5">
                 {{ result.response.server_details?.cpu_type?.value }}
@@ -281,7 +281,9 @@
         <tr>
             <th>
                 {{ t('RAM') }}
-                <sub><i class="fas fa-memory text-primary"></i></sub>
+                <sub>
+                    <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
+                </sub>
             </th>
             <td colspan="5">
                 {{ result.response.server_details?.ram?.value }}
