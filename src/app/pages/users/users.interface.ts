@@ -9,7 +9,9 @@ export interface UserLocaleOption {
 export interface UserDateformatsRoot {
     dateformats: UserDateformat[]
     defaultDateFormat: string,
-    timezones: UserTimezonesSelect[]
+    timezones: UserTimezonesSelect[],
+    serverTime: string,
+    serverTimeZone: string
 }
 
 export interface LoadUsersByContainerIdRoot {
@@ -124,7 +126,7 @@ export interface UsersAddRoot {
 export interface CreateUser {
     apikeys: Apikey[]
     company: string
-    confirm_password: string
+    confirm_password: string | undefined
     ContainersUsersMemberships: {
         [key: string]: number;
     }
@@ -137,7 +139,7 @@ export interface CreateUser {
     is_oauth: number
     lastname: string
     paginatorlength: number
-    password: string
+    password: string | undefined
     phone: string
     position: string
     recursive_browser: number

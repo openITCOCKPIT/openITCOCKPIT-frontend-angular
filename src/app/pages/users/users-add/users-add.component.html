@@ -445,18 +445,29 @@
                             {{ t('Timezone') }}
                             <oitc-required-icon/>
                         </label>
-                        <oitc-select
-                                name="post.User.timezone"
-                                id="post.User.timezone"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.User.timezone"
-                                [options]="timezones"
-                                oitcFormError [errors]="errors" errorField="timezone">
-                        </oitc-select>
+                        <ng-select id="post.User.timezone"
+                                   name="post.User.timezone"
+                                   [items]="timezones"
+                                   groupBy="group"
+                                   bindLabel="name"
+                                   bindValue="value"
+                                   [clearable]="false"
+                                   [(ngModel)]="post.User.timezone"
+                                   oitcFormError [errors]="errors" errorField="timezone">
+                            <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            </ng-template>
+                        </ng-select>
                         <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
                         <div class="help-block">
-                            Server timezone is: Europe/Berlin Current server time: 21.08.2024 15:52:39
+                            {{ t('Server timezone is:') }}
+                            <b>
+                                {{serverTimeZone}}
+                            </b>
+                            {{ t('Current server time:') }}
+                            <b>
+                                {{serverTime}}
+                            </b>
                         </div>
                     </div>
 
@@ -556,7 +567,7 @@
                                            [ngModelOptions]="{standalone: true}"
                                            disabled
                                            [(ngModel)]="post.User.apikeys[i].apikey">
-                                    <button cButton color="success">
+                                    <button cButton color="success" (click)="refreshApiKey(i)">
                                         <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                         {{ t('Generate new API key') }}
                                     </button>

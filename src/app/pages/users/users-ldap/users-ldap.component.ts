@@ -5,7 +5,8 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-    AlertComponent, AlertHeadingDirective,
+    AlertComponent,
+    AlertHeadingDirective,
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
@@ -62,6 +63,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
 import { ContactsService } from '../../contacts/contacts.service';
 import { LdapConfig } from '../../contacts/contacts.interface';
+import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-users-ldap',
@@ -104,7 +107,10 @@ import { LdapConfig } from '../../contacts/contacts.interface';
         InputGroupComponent,
         TextColorDirective,
         AlertComponent,
-        AlertHeadingDirective
+        AlertHeadingDirective,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective
     ],
     templateUrl: './users-ldap.component.html',
     styleUrl: './users-ldap.component.css'
@@ -134,6 +140,8 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected tabRotationIntervalText: string = '';
     protected samaccountnames: LdapUser[] = [];
     protected ldapConfig: LdapConfig = {} as LdapConfig;
+    protected serverTime: string = '';
+    protected serverTimeZone: string = '';
 
     protected usedContainerIdsBySource: { [key: string]: number[] } = {};
 
@@ -169,6 +177,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                     }
                     this.post = this.getDefaultPost();
                     this.errors = {} as GenericValidationError;
+
+                    this.ldapUserDetails = {
+                        usergroupLdap: {
+                            id: 0
+                        }
+                    } as LdapUserDetails;
+                    this.containerPermissions = {} as LoadContainerPermissionsRoot;
+                    this.containerRoles = {} as LoadContainerRolesRoot;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
 
@@ -197,10 +213,10 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 confirm_password: '',
                 ContainersUsersMemberships: {},
                 dashboard_tab_rotation: 0,
-                dateformat: '',
+                dateformat: 'H:i:s - d.m.Y',
                 email: '',
                 firstname: '',
-                i18n: '',
+                i18n: 'en_US',
                 is_active: 1,
                 is_oauth: 0,
                 lastname: '',
@@ -210,7 +226,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 position: '',
                 recursive_browser: 0,
                 showstatsinmenu: 0,
-                timezone: '',
+                timezone: 'Europe/Berlin',
                 usercontainerroles: {
                     _ids: []
                 },
@@ -291,6 +307,9 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
             .subscribe((result: UserDateformatsRoot) => {
                 this.dateformats = result.dateformats;
                 this.timezones = result.timezones;
+
+                this.serverTimeZone = result.serverTimeZone;
+                this.serverTime = result.serverTime;
             }));
     }
 
@@ -395,6 +414,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
 
     protected deleteApiKey(index: number): void {
         this.post.User.apikeys.splice(index, 1);
+    }
+
+    protected refreshApiKey(index: number): void {
+        this.subscriptions.add(this.profileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.User.apikeys[index].apikey = result.apikey;
+            })
+        );
     }
 
     protected trackByIndex(index: number, item: any): number {

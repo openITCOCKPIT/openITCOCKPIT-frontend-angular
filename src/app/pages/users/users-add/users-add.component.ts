@@ -32,6 +32,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import {
+    LdapUserDetails,
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
@@ -55,6 +56,8 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
+import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-users-add',
@@ -95,7 +98,10 @@ import { ProfileService } from '../../profile/profile.service';
         BadgeComponent,
         FormDirective,
         InputGroupComponent,
-        TextColorDirective
+        TextColorDirective,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective
     ],
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css'
@@ -121,6 +127,8 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected tabRotationIntervalText: string = '';
+    protected serverTime: string = '';
+    protected serverTimeZone: string = '';
 
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
@@ -156,6 +164,8 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                     this.post = this.getDefaultPost();
                     this.errors = {} as GenericValidationError;
                     this.ngOnInit();
+                    this.containerPermissions = {} as LoadContainerPermissionsRoot;
+                    this.containerRoles = {} as LoadContainerRolesRoot;
                     this.notyService.scrollContentDivToTop();
 
                     return;
@@ -182,10 +192,10 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 confirm_password: '',
                 ContainersUsersMemberships: {},
                 dashboard_tab_rotation: 0,
-                dateformat: '',
+                dateformat: 'H:i:s - d.m.Y',
                 email: '',
                 firstname: '',
-                i18n: '',
+                i18n: 'en_US',
                 is_active: 1,
                 is_oauth: 0,
                 lastname: '',
@@ -195,7 +205,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 position: '',
                 recursive_browser: 0,
                 showstatsinmenu: 0,
-                timezone: '',
+                timezone: 'Europe/Berlin',
                 usercontainerroles: {
                     _ids: []
                 },
@@ -261,8 +271,12 @@ export class UsersAddComponent implements OnDestroy, OnInit {
             .subscribe((result: UserDateformatsRoot) => {
                 this.dateformats = result.dateformats;
                 this.timezones = result.timezones;
+
+                this.serverTimeZone = result.serverTimeZone;
+                this.serverTime = result.serverTime;
             }));
     }
+
 
     public loadLocaleOptions = (): void => {
         this.subscriptions.add(this.UsersService.getLocaleOptions()
@@ -302,6 +316,14 @@ export class UsersAddComponent implements OnDestroy, OnInit {
 
     protected deleteApiKey(index: number): void {
         this.post.User.apikeys.splice(index, 1);
+    }
+
+    protected refreshApiKey(index: number): void {
+        this.subscriptions.add(this.profileService.generateNewApiKey()
+            .subscribe((result) => {
+                this.post.User.apikeys[index].apikey = result.apikey;
+            })
+        );
     }
 
     protected trackByIndex(index: number, item: any): number {

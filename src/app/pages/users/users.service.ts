@@ -175,7 +175,9 @@ export class UsersService {
         return this.http.get<{
             dateformats: UserDateformat[],
             defaultDateFormat: string,
-            timezones: UserTimezoneGroup
+            timezones: UserTimezoneGroup,
+            serverTime: string,
+            serverTimeZone: string
         }>(`${proxyPath}/users/loadDateformats.json`, {
             params: {
                 angular: true
@@ -199,7 +201,9 @@ export class UsersService {
                 let result: UserDateformatsRoot = {
                     dateformats: data.dateformats,
                     defaultDateFormat: data.defaultDateFormat,
-                    timezones: timezones
+                    timezones: timezones,
+                    serverTime: data.serverTime,
+                    serverTimeZone: data.serverTimeZone
                 };
                 return result;
             })
