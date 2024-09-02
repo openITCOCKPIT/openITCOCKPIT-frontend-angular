@@ -146,7 +146,9 @@
                             <c-col [xs]="6">
                                 {{ result.hoststatus.currentState | hostStatusName }}
                             </c-col>
+                        </c-row>
 
+                        <c-row *ngIf="result.hoststatus.isInMonitoring">
                             <c-col [xs]="6">
                                 {{ 'State since' }}
                             </c-col>
@@ -190,7 +192,8 @@
                         </c-row>
 
                         <!-- External Commands Mobile View -->
-                        <c-row *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit">
+                        <c-row
+                            *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring">
                             <c-button-toolbar role="group" class="justify-content-center pt-2">
                                 <c-button-group role="group">
                                     <button cButton color="default"
@@ -705,8 +708,9 @@
                             </c-row>
 
                             <!-- External Command Buttons -->
-                            <c-row *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit"
-                                   class="text-white">
+                            <c-row
+                                *ngIf="result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring"
+                                class="text-white">
 
                                 <div class="browser-action d-flex p-0"
                                      (click)="resetChecktime(result.mergedHost)">
@@ -1087,7 +1091,10 @@
 
                 <!-- Import Module start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.CMDB">
-                    CMDB
+                    <oitc-additional-host-information
+                        *ngIf="result && result.mergedHost"
+                        [hostId]="result.mergedHost.id"
+                        [lastUpdated]="lastUpdated"></oitc-additional-host-information>
                 </div>
                 <!-- Import Module end -->
 

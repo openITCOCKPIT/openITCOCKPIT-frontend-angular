@@ -111,6 +111,9 @@ import {
 import {
     ServicenowHostBrowserTabComponent
 } from '../../../modules/servicenow_module/components/servicenow-host-browser-tab/servicenow-host-browser-tab.component';
+import {
+    AdditionalHostInformationComponent
+} from '../../../modules/import_module/components/additional-host-information/additional-host-information.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -172,7 +175,8 @@ import {
         HostsBrowserServicesListComponent,
         IframeComponent,
         GrafanaTimepickerComponent,
-        ServicenowHostBrowserTabComponent
+        ServicenowHostBrowserTabComponent,
+        AdditionalHostInformationComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
