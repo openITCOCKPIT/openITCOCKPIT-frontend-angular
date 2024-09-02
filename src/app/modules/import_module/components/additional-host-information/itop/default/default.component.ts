@@ -1,12 +1,23 @@
 import { Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { TableDirective } from '@coreui/angular';
+import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
-  selector: 'oitc-default',
-  standalone: true,
-  imports: [],
-  templateUrl: './default.component.html',
-  styleUrl: './default.component.css'
+    selector: 'oitc-default',
+    standalone: true,
+    imports: [
+        TranslocoDirective,
+        TableDirective,
+        NgIf,
+        NgSwitch,
+        FaIconComponent,
+        NgSwitchCase
+    ],
+    templateUrl: './default.component.html',
+    styleUrl: './default.component.css'
 })
 export class DefaultComponent {
     @Input() result!: AdditionalHostInformationResult;
