@@ -3,7 +3,11 @@
         <c-col [xs]="12">
             <h4>
                 {{ t('i-doit overview') }}
-                <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                <sup>
+                    <small>
+                        <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                    </small>
+                </sup>
             </h4>
         </c-col>
     </c-row>
