@@ -1,0 +1,12 @@
+<ng-container *transloco="let t">
+    <c-badge *ngIf="isOnline"
+             textColor="success"
+             class="badge-border margin-left-5 fw-lighter">
+        {{ t('Online') }}
+    </c-badge>
+    <c-badge *ngIf="!isOnline"
+             textColor="danger"
+             class="badge-border margin-left-5 fw-lighter">
+        {{ t('Offline') }}
+    </c-badge>
+</ng-container>

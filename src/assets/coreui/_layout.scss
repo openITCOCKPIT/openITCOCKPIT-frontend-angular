@@ -110,3 +110,13 @@
 .pos-bottom {
     bottom: 0;
 }
+
+
+.border-primary-top {
+    border-top: 2px solid rgba(var(--cui-primary-rgb), 1) !important;
+}
+
+.border-primary-bottom {
+    border-bottom: 2px solid rgba(var(--cui-primary-rgb), 1) !important;
+}
+
