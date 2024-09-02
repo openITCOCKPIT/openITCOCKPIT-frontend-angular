@@ -1,6 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
-import { ColComponent, RowComponent } from '@coreui/angular';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
+} from '@coreui/angular';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { JsonPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
@@ -10,6 +19,8 @@ import { ServerComponent } from '../server/server.component';
 import { DefaultComponent } from '../default/default.component';
 import { WanLineComponent } from '../wan-line/wan-line.component';
 import { CustomClassComponent } from '../custom-class/custom-class.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-itop-overview',
@@ -29,7 +40,15 @@ import { CustomClassComponent } from '../custom-class/custom-class.component';
         WanLineComponent,
         CustomClassComponent,
         NgSwitchCase,
-        NgSwitchDefault
+        NgSwitchDefault,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective
     ],
     templateUrl: './itop-overview.component.html',
     styleUrl: './itop-overview.component.css'
