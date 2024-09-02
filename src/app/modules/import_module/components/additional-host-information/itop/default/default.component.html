@@ -1,12 +1,25 @@
 <ng-container *transloco="let t">
 
+    <div class="row">
+        <div class="col">
+            <fa-stack>
+                <fa-icon [icon]="['fas', 'square']" [stackItemSize]="'2x'" class="text-primary"></fa-icon>
+                <fa-icon [icon]="['fas', 'server']" [inverse]="true" [stackItemSize]="'1x'"></fa-icon>
+            </fa-stack>
+
+        </div>
+    </div>
+
+
     <table cTable bordered hover>
         <tbody>
         <tr>
             <td colspan="6">
+
+
                 <span class="fa-stack fa-2x">
-                    <i class="fa-solid fa-square fa-stack-2x color-primary-900"></i>
-                    <i class="fas fa-server icon-stack-2x text-white position-absolute dark-shadow-minus-bottom-1"></i>
+                    <i class="fas fa-square fa-stack-2x text-primary"></i>
+                    <i class="fas fa-server icon-stack-2x position-absolute text-white"></i>
                 </span>
                 <span class="iTop-class-label">
                     {{ result.response.general_information?.finalclass?.value }}
@@ -97,23 +110,12 @@
             </td>
             <td rowspan="3" class="text-center align-middle">
                 <span [ngSwitch]="result.response.general_information?.status?.value">
-                    <fa-icon *ngSwitchCase="'implementation'"
-                             [mask]="['fas', 'square-full']"
-                             [icon]="['fas', 'file-circle-check']"
-                             [size]="'4x'"
-                             class="status-implementation"></fa-icon>
-
+                    <!-- Gradient colored icons -->
+                    <i class="fas fa-file-circle-check fa-4x status-implementation"
+                       *ngSwitchCase="'implementation'"></i>
                     <i class="fas fa-plug-circle-check fa-4x status-production" *ngSwitchCase="'production'"></i>
-
-                    <fa-icon *ngSwitchCase="'stock'"
-                             [icon]="['fas', 'boxes-packing']"
-                             [size]="'4x'"
-                             class="status-stock"></fa-icon>
-
-                    <fa-icon *ngSwitchCase="'obsolete'"
-                             [icon]="['fas', 'plug-circle-bolt']"
-                             [size]="'4x'"
-                             class="status-obsolete"></fa-icon>
+                    <i class="fas fa-boxes-packing fa-4x status-stock" *ngSwitchCase="'stock'"></i>
+                    <i class="fas fa-plug-circle-bolt fa-4x status-obsolete" *ngSwitchCase="'obsolete'"></i>
                 </span>
             </td>
             <th>
