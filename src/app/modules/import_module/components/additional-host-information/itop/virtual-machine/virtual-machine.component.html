@@ -20,13 +20,15 @@
         </tr>
         <tr class="border-primary-top">
             <th colspan="2" class="col-4">
-                <i class="fa-solid fa-circle-info text-primary width-15"> </i>  {{ t('General information') }}
+                <fa-icon [icon]="['fas', 'circle-info']" class="text-primary width-15"></fa-icon>
+                {{ t('General information') }}
             </th>
             <td class="bold">
                 {{ t('Status') }}
             </td>
             <th colspan="2" class="col-4">
-                <i class="fa-solid fa-gears text-primary width-15"> </i>  {{ t('Operations') }}
+                <fa-icon [icon]="['fas', 'gears']" class="text-primary width-15"></fa-icon>
+                {{ t('Operations') }}
             </th>
             <td class="bold">
                 {{ t('Production Critical') }}
@@ -116,7 +118,6 @@
             </td>
             <td rowspan="3" class="text-center align-middle">
                 <span [ngSwitch]="result.response.general_information?.business_criticity?.value">
-
                     <!-- Gradient colored icons -->
                     <i class="fas fa-bars fa-4x business-criticity-low helptext"
                        *ngSwitchCase="'low'"
@@ -192,7 +193,7 @@
                 {{ t('Last OS Patching') }}
             </th>
             <td colspan="2">
-                <i class="fa-solid fa-calendar-day text-primary"> </i>
+                <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
                 {{ result.response.operations?.lastospatch?.value }}
             </td>
         </tr>
@@ -212,7 +213,7 @@
                 {{ t('Next OS Patching') }}
             </th>
             <td colspan="2">
-                <i class="fa-solid fa-calendar-day text-primary"> </i>
+                <fa-icon [icon]="['fas', 'calendar-day']" class="text-primary"></fa-icon>
                 {{ result.response.operations?.nextospatch?.value }}
             </td>
         </tr>
@@ -224,8 +225,9 @@
             <td colspan="2">
                 <ul class="no-padding inside-list">
                     <li *ngFor="let contact of result.response.contacts_list">
-                        <i class="fa-regular fa-user text-primary"></i> {{ contact.name.value }}
-                        <i class="fa-regular fa-envelope text-primary"></i>
+                        <fa-icon [icon]="['fas', 'user']" class="text-primary"></fa-icon>
+                        {{ contact.name.value }}
+                        <fa-icon [icon]="['far', 'envelope']" class="text-primary"></fa-icon>
                         {{ contact.email.value }}
                     </li>
                 </ul>
@@ -236,7 +238,8 @@
 
         <tr class="border-primary-top">
             <th colspan="6" class="border-primary-top">
-                <i class="fa-solid fa-server text-primary width-15"> </i>  {{ t('Server details') }}
+                <fa-icon [icon]="['fas', 'server']" class="text-primary width-15"></fa-icon>
+                {{ t('Server details') }}
             </th>
         </tr>
         <tr>
@@ -269,7 +272,9 @@
         <tr>
             <th>
                 {{ t('Cpu type') }}
-                <sub><i class="fas fa-microchip text-primary"></i></sub>
+                <sub>
+                    <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
+                </sub>
             </th>
             <td colspan="5">
                 {{ result.response.server_details?.cpu_type?.value }}
@@ -294,7 +299,9 @@
         <tr>
             <th>
                 {{ t('RAM') }}
-                <sub><i class="fas fa-memory text-primary"></i></sub>
+                <sub>
+                    <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
+                </sub>
             </th>
             <td colspan="5">
                 {{ result.response.server_details?.ram?.value }}
@@ -302,7 +309,8 @@
         </tr>
         <tr>
             <th colspan="6" class="border-primary-top">
-                <i class="fa-solid fa-file-invoice text-primary width-15"> </i>  {{ t('Accounting') }}
+                <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary width-15"></fa-icon>
+                {{ t('Accounting') }}
             </th>
         </tr>
         <tr>
