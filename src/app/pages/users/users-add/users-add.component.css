@@ -30,7 +30,7 @@
 
 .div-bottom-arrow::after {
     font: var(--fa-font-solid);
-    content: '\f0ab';
+    content: '\f175';
 
     padding-left: 0px;
     color: #4285F4;

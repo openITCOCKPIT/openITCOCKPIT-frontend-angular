@@ -112,13 +112,13 @@
                                         <ng-container
                                                 *ngFor="let userRole of userContainerRole.value.user_roles | keyvalue">
                                             <button *oitcPermission="['usercontainerroles', 'edit']"
-                                                     [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                      cButton size="xs" color="primary" variant="outline">
+                                                    [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
+                                                    cButton size="xs" color="primary" variant="outline">
                                                 {{ userRole.value.name }}
                                             </button>
                                             <button *oitcPermission="['usercontainerroles', 'edit'];negate:true"
-                                                     [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
-                                                     cButton size="xs" color="primary" variant="outline">
+                                                    [routerLink]="['/', 'usercontainerroles', 'edit', userRole.value.id]"
+                                                    cButton size="xs" color="primary" variant="outline">
                                                 {{ userRole.value.name }}
                                             </button>
                                         </ng-container>
@@ -129,7 +129,6 @@
                         <c-row *ngIf="post.User.usercontainerroles._ids.length > 0 && selectedContainerIds.length > 0">
                             <c-col md="4" class="text-end div-bottom-arrow font-xs text-primary italic">
                                 {{ t('The user permissions will be extended or adapted with additional containers') }}
-                                <fa-icon cTextColor="primary" [icon]="['fas', 'arrow-down']" />
                             </c-col>
                         </c-row>
                     </ng-container>
@@ -409,13 +408,13 @@
                             {{ t('Tab rotation interval') }}
                         </label>
                         <input
-                               name="post.User.dashboard_tab_rotation"
-                               id="post.User.dashboard_tab_rotation"
-                               type="range"
-                               class="w-100"
-                               min="0" max="900" step="10"
-                               (ngModelChange)="updateTabRotationInterval()"
-                               [(ngModel)]="post.User.dashboard_tab_rotation" />
+                                name="post.User.dashboard_tab_rotation"
+                                id="post.User.dashboard_tab_rotation"
+                                type="range"
+                                class="w-100"
+                                min="0" max="900" step="10"
+                                (ngModelChange)="updateTabRotationInterval()"
+                                [(ngModel)]="post.User.dashboard_tab_rotation" />
                         <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_rotation"></oitc-form-feedback>
                         <div class="help-block">
                             {{tabRotationIntervalText}}
@@ -578,7 +577,6 @@
                         </c-col>
                     </c-row>
                 </c-card-body>
-
                 <c-card-footer class="text-end">
                     <label class="me-2">
                         <input cFormCheckInput type="checkbox" name="createAnother"
