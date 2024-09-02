@@ -247,3 +247,93 @@ export interface ItopContact {
     email: ItopDefaultValue,
     name: ItopDefaultValue
 }
+
+/***********************
+ *   Dependency Tree   *
+ ***********************/
+export interface DependencyTreeApiResult {
+    treeData: DependencyTreeTreeData
+    connected: {
+        status: boolean
+        result?: any
+        msg?: { // Connection error messages
+            [key: string]: string
+        }
+    }
+    external_system: ExternalSystemEntity
+}
+
+export interface DependencyTreeTreeData {
+    result?: any, // null if not connected - otherwise not present
+    status?: boolean, // false if not connected - otherwise not present
+    objects: VisObject[]
+    relations: VisRelation[]
+    identifiers_to_resolve?: string[]
+    source?: string
+    direction?: string
+}
+
+export interface VisObject {
+    class: string
+    id: string
+    title: string
+    group: string
+    label: string
+    identifier: string
+    external_link: string
+
+    host?: {
+        id: number
+        uuid: string
+        name: string
+        disabled: number,
+        hoststatus: VisHiststatus
+    }
+    hostgroup?: {
+        identifier: string
+        Hostgroups: {
+            id: number
+            uuid: string
+        }
+        Containers: {
+            name: string
+        }
+        hoststatus: VisHiststatus
+    }
+}
+
+export interface VisRelation {
+    from: string
+    to: string
+    color: {
+        inherit: string
+    }
+    arrows: string
+}
+
+export interface VisHiststatus {
+    summary_state: 'text-primary' | 'bg-primary' | 'up' | 'bg-up' | 'ok' | 'bg-ok' | 'warning' | 'bg-warning' | 'down' | 'bg-down' | 'critical' | 'bg-critical' | 'unreachable' | 'bg-unreachable' | 'unknown' | 'bg-unknown' | 'disabled' | 'info'
+    summary_state_name: string
+    in_downtime: boolean
+    is_acknowledged: boolean
+    is_disabled: boolean
+}
+
+export interface ExternalSystemEntity {
+    id: number
+    name: string
+    description: string
+    container_id: number
+    api_url?: string
+    api_user?: string
+    api_password?: string
+    api_key?: string
+    use_https: number
+    use_proxy: number
+    ignore_ssl_certificate: number
+    system_type: string
+    json_data: string
+    custom_data: string
+    created: string
+    modified: string
+}

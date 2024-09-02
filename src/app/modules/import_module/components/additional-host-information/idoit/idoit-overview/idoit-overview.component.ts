@@ -48,6 +48,7 @@ import { HostBrowserTabs } from '../../../../../../pages/hosts/hosts.enum';
 export class IdoitOverviewComponent {
 
     @Input() public result!: AdditionalHostInformationResult;
+    @Input() public hostId: number = 0;
 
     protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
     protected readonly IdoitStatus = IdoitStatus;
