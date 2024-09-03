@@ -306,10 +306,53 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
         this.route.queryParams.subscribe(params => {
-            let hostId: number = parseInt(params['host_id']);
+            let hostId = params['host_id']
             if (hostId) {
-                this.filter.Hosts.id = [hostId];
+                if (Array.isArray(hostId)) {
+                    // host_id is an array of ids
+                    this.filter.Hosts.id = hostId;
+                } else {
+                    // host_id is a single id
+                    this.filter.Hosts.id = [hostId];
+                }
             }
+
+            let acknowledged = params['acknowledged'];
+            if (acknowledged === true) {
+                this.filter.Servicestatus.acknowledged = true;
+            }
+
+            let not_acknowledged = params['not_acknowledged'];
+            if (not_acknowledged === true) {
+                this.filter.Servicestatus.not_acknowledged = true;
+            }
+
+            let in_downtime = params['in_downtime'];
+            if (in_downtime === true) {
+                this.filter.Servicestatus.in_downtime = true;
+            }
+
+            let not_in_downtime = params['not_in_downtime'];
+            if (not_in_downtime === true) {
+                this.filter.Servicestatus.not_in_downtime = true;
+            }
+
+            let passive = params['passive'];
+            if (passive === true) {
+                this.filter.Servicestatus.passive = true;
+            }
+            
+            let direction = params['direction'];
+            if (direction && direction === 'asc' || direction === 'desc') {
+                this.params.direction = direction;
+            }
+
+            let sort = params['sort'];
+            if (sort) {
+                this.params.sort = sort;
+            }
+
+
             switch (parseInt(params['servicestate'] || -1)) {
                 case 0:
                     this.filter.Servicestatus.current_state.ok = true;

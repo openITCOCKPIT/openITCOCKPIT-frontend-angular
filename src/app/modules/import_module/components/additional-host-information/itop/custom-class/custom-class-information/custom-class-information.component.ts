@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-custom-class-information',
     standalone: true,
     imports: [
         NgIf,
-        NgForOf
+        NgForOf,
+        NgClass
     ],
     templateUrl: './custom-class-information.component.html',
     styleUrl: './custom-class-information.component.css'
