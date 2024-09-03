@@ -47,7 +47,13 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../users.service';
-import { getDefaultUsersIndexParams, User, UsersIndexParams, UsersIndexRoot } from '../users.interface';
+import {
+    getDefaultUsersIndexParams,
+    LoadUsergroupsRoot,
+    User,
+    UsersIndexParams,
+    UsersIndexRoot
+} from '../users.interface';
 import { RouterLink } from '@angular/router';
 import {
     getDefaultServicegroupsIndexParams,
@@ -57,6 +63,7 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 
 @Component({
     selector: 'oitc-users-index',
@@ -124,6 +131,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
     protected selectedItems: DeleteAllItem[] = [];
     protected result: UsersIndexRoot = {all_users: [], _csrfToken: '', myUserId: 0} as UsersIndexRoot;
     protected hideFilter: boolean = true;
+    protected usergroups : SelectKeyValue[] = [];
 
 
     public loadUsers() {
@@ -136,6 +144,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.loadUsergroups();
         this.loadUsers();
     }
 
@@ -148,8 +157,15 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
         this.hideFilter = !this.hideFilter;
     }
 
+    private loadUsergroups(): void {
+        this.subscriptions.add(this.UsersService.getUsergroups()
+            .subscribe((result: LoadUsergroupsRoot) => {
+                this.usergroups = result.usergroups;
+            }))
+    }
+
     // Callback when a filter has changed
-    protected onFilterChange(event: Event) {
+    protected onFilterChange(event: any) {
         this.params.page = 1;
         this.loadUsers();
     }

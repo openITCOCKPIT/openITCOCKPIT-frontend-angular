@@ -102,6 +102,7 @@ export interface UsersIndexParams {
     'filter[Users.email]': string
     'filter[Users.phone]': string
     'filter[full_name]': string
+    'filter[Users.usergroup_id][]': number[]
 }
 
 export function getDefaultUsersIndexParams(): UsersIndexParams {
@@ -114,7 +115,8 @@ export function getDefaultUsersIndexParams(): UsersIndexParams {
         'filter[Users.company]': '',
         'filter[Users.email]': '',
         'filter[Users.phone]': '',
-        'filter[full_name]': ''
+        'filter[full_name]': '',
+        'filter[Users.usergroup_id][]': []
     }
 }
 

@@ -145,18 +145,23 @@
                             </c-col>
                         </c-row>
                         <c-row class="mt-2">
-                            <c-col md="12">
+                            <c-col [xs]="12" [lg]="12" class="ui-fluid">
                                 <c-input-group>
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'users']"></fa-icon>
                                     </span>
 
                                     <oitc-multi-select
-                                            class="w-100"
-                                            name="HostSharingContainer"
-                                            id="HostSharingContainer"
+                                            name="UserRoleFilter"
+                                            id="UserRoleFilter"
                                             optionValue="key"
-                                            optionLabel="value">
+                                            optionLabel="value"
+                                            [(ngModel)]="params['filter[Users.usergroup_id][]']"
+                                            [options]="usergroups"
+                                            [debounce]="true"
+                                            [placeholder]="'Filter by user role' | transloco"
+                                            (onChange)="onFilterChange(true)"
+                                    >
                                     </oitc-multi-select>
                                 </c-input-group>
                             </c-col>
@@ -234,18 +239,17 @@
                             {{ user.company }}
                         </td>
                         <td>
-                            <button *ngIf="user.is_active" cButton size="xs" color="success" variant="outline">
+                            <button *ngIf="user.is_active" cButton size="xs" color="success" class="btnNoHover" variant="outline">
                                 {{t('Active')}}
                             </button>
-                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" variant="outline">
+                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" class="btnNoHover" variant="outline">
                                 {{t('Disabled')}}
                             </button>
                         </td>
                         <td>
 
-                            <button cButton size="xs" class="{{ user.UserTypes[0].class }} text-{{ user.UserTypes[0].color }}" color="{{ user.UserTypes[0].color }}" variant="outline">
+                            <button cButton size="xs" class="btnNoHover {{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}" color="{{ user.UserTypes[0].color }}" variant="outline">
                                 {{ user.UserTypes[0].title }}
-                                {{ user.UserTypes[0].color }}
                             </button>
                         </td>
                         <td>

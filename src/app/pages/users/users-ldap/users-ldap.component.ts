@@ -183,8 +183,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                             id: 0
                         }
                     } as LdapUserDetails;
-                    this.containerPermissions = {} as LoadContainerPermissionsRoot;
-                    this.containerRoles = {} as LoadContainerRolesRoot;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
 
@@ -242,6 +240,10 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit() {
+        this.selectedContainerIds = [];
+        this.containerPermissions = {} as LoadContainerPermissionsRoot;
+        this.containerRoles = {} as LoadContainerRolesRoot;
+
         this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();

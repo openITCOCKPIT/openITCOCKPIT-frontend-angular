@@ -164,8 +164,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                     this.post = this.getDefaultPost();
                     this.errors = {} as GenericValidationError;
                     this.ngOnInit();
-                    this.containerPermissions = {} as LoadContainerPermissionsRoot;
-                    this.containerRoles = {} as LoadContainerRolesRoot;
                     this.notyService.scrollContentDivToTop();
 
                     return;
@@ -215,6 +213,10 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit() {
+        this.selectedContainerIds = [];
+        this.containerPermissions = {} as LoadContainerPermissionsRoot;
+        this.containerRoles = {} as LoadContainerRolesRoot;
+
         this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();
