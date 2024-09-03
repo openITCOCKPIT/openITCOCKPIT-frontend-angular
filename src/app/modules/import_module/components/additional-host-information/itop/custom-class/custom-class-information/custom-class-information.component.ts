@@ -1,73 +1,36 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SelectKeyValue } from '../../../../../../../layouts/primeng/select.interface';
-import { GenericKeyValue } from '../../../../../../../generic.interfaces';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-custom-class-information',
     standalone: true,
-    imports: [],
+    imports: [
+        NgIf,
+        NgForOf
+    ],
     templateUrl: './custom-class-information.component.html',
     styleUrl: './custom-class-information.component.css'
 })
-export class CustomClassInformationComponent implements OnInit{
+export class CustomClassInformationComponent implements OnInit {
     @Input() customInfo!: any;
 
-    public dataForView: GenericKeyValue[] = [];
-
-     public ngOnInit() :void{
-         this.dataForView = this.makeAnyAnArray(this.customInfo);
-         console.log(this.dataForView);
+    ngOnInit(): void {
     }
 
-    private getDataType(data:any): string {
-        if(Array.isArray(data)) {
-            return 'array';
-        }
-        if(typeof data === 'object') {
-            return 'object';
-        }
-
-        // Not too important is really a string, but we can print it
-        return 'string';
+    isPrintable(data: any): boolean {
+        return !this.isArray(data) && !this.isObject(data);
     }
 
-    private makeAnyAnArray(data:any){
-        let result = [];
+    isObject(data: any): boolean {
+        return data && typeof data === 'object' && !Array.isArray(data);
+    }
 
-        switch (this.getDataType(data)) {
-            case 'string':
-                result.push({key: '', value: data});
-                break;
+    isArray(data: any): boolean {
+        return Array.isArray(data);
+    }
 
-            case 'array':
-                data.forEach((element: any) => {
-                    if(this.getDataType(element) !== 'string') {
-                        const subData = this.makeAnyAnArray(element);
-                        subData.forEach((subElement: any) => {
-                            result.push(subElement);
-                        });
-                    }
-
-                    result.push({key: '', value: element});
-                });
-                break;
-
-            case 'object':
-                for (const [key, value] of Object.entries(data)) {
-                    if(this.getDataType(value) !== 'string') {
-                        const subData = this.makeAnyAnArray(value);
-                        subData.forEach((subElement: any) => {
-                            result.push(subElement);
-                        });
-                    }
-
-                    result.push({key: key, value: value});
-                }
-                break;
-        }
-
-        return result;
-
+    objectEntries(obj: any): { key: string, value: any }[] {
+        return Object.entries(obj).map(([key, value]) => ({key, value}));
     }
 
 }
