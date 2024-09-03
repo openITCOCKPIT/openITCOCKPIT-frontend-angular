@@ -53,10 +53,36 @@
                  (timer)="onToastTimerChange($event)"
                  (visibleChange)="onToastVisibleChange($event)"
                  [visible]="toastVisible"
+                 [delay]="5000"
                  class="align-items-center">
             <div class="d-flex">
+                <c-toast-header>
+                    <c-progress thin>
+                        <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                    </c-progress>
+                </c-toast-header>
                 <c-toast-body>
                     <span>Hello, world! This is a toast message.</span>
+
+                    <div *ngIf="hostSummaryState">
+                        <span class="ok">Das ist ein Host</span>
+                        {{ hostSummaryState|json }}
+                    </div>
+
+                    <div *ngIf="hostgroupSummeryState">
+                        <span class="text-primary">Das ist eine Hostgruppe</span>
+                        {{ hostgroupSummeryState|json }}
+                    </div>
+
+                    <div *ngIf="!hostSummaryState && !hostgroupSummeryState">
+                        <span class="text-danger">Weder host noch hostgruppe</span>
+                    </div>
+
+
+                    <c-progress thin>
+                        <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                    </c-progress>
+
                 </c-toast-body>
                 <button aria-label="close" cButtonClose class="me-2 m-auto" (click)="toast.visible=false"></button>
             </div>

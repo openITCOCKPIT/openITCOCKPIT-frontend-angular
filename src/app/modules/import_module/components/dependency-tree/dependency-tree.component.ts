@@ -2,23 +2,49 @@ import { Component, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, S
 import {
     ButtonCloseDirective,
     ColComponent,
+    ProgressBarComponent,
     ProgressComponent,
     RowComponent,
     ToastBodyComponent,
     ToastComponent,
-    ToasterComponent
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
+import { DecimalPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../external-systems.service';
-import { DependencyTreeApiResult, VisObject, VisRelation } from '../../ExternalSystems.interface';
+import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../ExternalSystems.interface';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
+import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
+
+// We extend the default node interface with hostgroup and host fields to have the data available
+// is a user clicks on a node
+export interface NodeExtended extends Node {
+    host?: {
+        id: number
+        uuid: string
+        name: string
+        disabled: number,
+        hoststatus: VisHiststatus
+    }
+    hostgroup?: {
+        identifier: string
+        Hostgroups: {
+            id: number
+            uuid: string
+        }
+        Containers: {
+            name: string
+        }
+        hoststatus: VisHiststatus
+    }
+}
 
 @Component({
     selector: 'oitc-dependency-tree',
@@ -38,7 +64,10 @@ import { DataSet } from 'vis-data/peer';
         ToastComponent,
         ButtonCloseDirective,
         ToastBodyComponent,
-        ToasterComponent
+        ToasterComponent,
+        ToastHeaderComponent,
+        ProgressBarComponent,
+        JsonPipe
     ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css'
@@ -68,6 +97,9 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
 
     public toastVisible: boolean = false;
     public toastPercentage: number = 0;
+
+    public hostSummaryState?: SummaryState;
+    public hostgroupSummeryState?: HostgroupSummaryState;
 
     private isFullscreen: boolean = false;
     private subscriptions: Subscription = new Subscription();
@@ -136,7 +168,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
 
-        let nodes: DataSet<Node> = new DataSet<Node>();
+        let nodes: DataSet<NodeExtended> = new DataSet<NodeExtended>();
         let edges: DataSet<Edge> = new DataSet<Edge>();
 
         nodes.clear();
@@ -296,7 +328,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         };
 
         resultNodes.forEach(node => {
-            let visNode: Node = {
+            let visNode: NodeExtended = {
                 //class: node.class,
                 id: node.id,
                 title: node.title,
@@ -321,6 +353,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             if (node.host) {
+                visNode.host = node.host;
+
                 if (node.host.disabled == 0) {
                     visNode.image = this.getIconImageByClassName(node.class);
                     // @ts-ignore
@@ -351,6 +385,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             if (node.hostgroup) {
+                visNode.hostgroup = node.hostgroup;
+
                 visNode.image = this.getIconImageByClassName(node.class);
                 // @ts-ignore
                 visNode.color = this.statusColors[node.hostgroup.hoststatus.summary_state];
@@ -420,7 +456,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            let selectedNode = nodes.get(nodeId);
+            let selectedNode: NodeExtended = nodes.get(nodeId) as NodeExtended;
             this.toggleToast(selectedNode);
             // shared $scope with HostSummaryDirective
             console.log("loadSummaryState for node: ", selectedNode);
@@ -484,9 +520,29 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         return this.imageDirectoryPath + image;
     }
 
-    public toggleToast(node: any) {
-        console.log(node);
-        this.toastVisible = true
+    public toggleToast(node: NodeExtended) {
+        if (this.toastVisible) {
+            // Close any open toast
+            this.toastVisible = false;
+        }
+
+        this.hostSummaryState = undefined;
+        this.hostgroupSummeryState = undefined;
+
+        if (node.host) {
+            this.ExternalSystemsService.getHostSummary(node.host.id).subscribe(data => {
+                this.hostSummaryState = data;
+                this.toastVisible = true; // Show toast
+            });
+        } else if (node.hostgroup) {
+            this.ExternalSystemsService.getHostgroupSummary(node.hostgroup.Hostgroups.id).subscribe(data => {
+                this.hostgroupSummeryState = data;
+                this.toastVisible = true; // Show toast
+            });
+        } else {
+            // Not in monitoring
+            this.toastVisible = true; // Show toast
+        }
     }
 
     public onToastTimerChange($event: number) {

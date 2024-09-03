@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { AdditionalHostInformationResult, DependencyTreeApiResult } from './ExternalSystems.interface';
+import { HostgroupSummaryState, SummaryState } from '../../pages/hosts/summary_state.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -44,6 +45,36 @@ export class ExternalSystemsService {
         }).pipe(
             map(data => {
                 return data;
+            })
+        );
+    }
+
+    public getHostSummary(hostId: number): Observable<SummaryState> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            summaryState: SummaryState
+        }>(`${proxyPath}/import_module/ExternalSystems/hostsummary/${hostId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.summaryState;
+            })
+        );
+    }
+
+    public getHostgroupSummary(hostgroupId: number): Observable<HostgroupSummaryState> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            summaryState: HostgroupSummaryState
+        }>(`${proxyPath}/import_module/ExternalSystems/hostgroupsummary/${hostgroupId}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.summaryState;
             })
         );
     }
