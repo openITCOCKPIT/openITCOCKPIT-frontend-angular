@@ -7,3 +7,8 @@ export interface GenericIdAndName {
     id: number;
     name: string;
 }
+
+export interface GenericKeyValue {
+    key: any,
+    value: any
+}

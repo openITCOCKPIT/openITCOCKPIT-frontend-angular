@@ -138,7 +138,7 @@
             </th>
             <td class="text-primary">
                 {{ result.response.general_information?.id?.value }}
-                <span ng-if="result.response.externalLink" class="ng-scope">
+                <span *ngIf="result.response.externalLink" class="ng-scope">
                     <a target="_blank" [href]="result.response.externalLink">
                         <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
                     </a>
