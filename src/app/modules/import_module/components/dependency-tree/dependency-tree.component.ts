@@ -1,5 +1,13 @@
-import { Component, HostListener, inject, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { ColComponent, ProgressComponent, RowComponent } from '@coreui/angular';
+import { Component, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ButtonCloseDirective,
+    ColComponent,
+    ProgressComponent,
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent
+} from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
@@ -11,9 +19,6 @@ import { BackButtonDirective } from '../../../../directives/back-button.directiv
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
-
-interface InOnit {
-}
 
 @Component({
     selector: 'oitc-dependency-tree',
@@ -29,12 +34,16 @@ interface InOnit {
         FaIconComponent,
         TranslocoPipe,
         ProgressComponent,
-        DecimalPipe
+        DecimalPipe,
+        ToastComponent,
+        ButtonCloseDirective,
+        ToastBodyComponent,
+        ToasterComponent
     ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css'
 })
-export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
+export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public objectId: number = 0;
 
     @Input() public type: 'host' | 'hostgroup' = 'host';
@@ -56,6 +65,9 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
     // Progress is only necessary if physics is enabled
     public showProgressbar: boolean = false;
     public progress: number = 0;
+
+    public toastVisible: boolean = false;
+    public toastPercentage: number = 0;
 
     private isFullscreen: boolean = false;
     private subscriptions: Subscription = new Subscription();
@@ -408,7 +420,8 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
                 return;
             }
 
-            var selectedNode = nodes.get(nodeId);
+            let selectedNode = nodes.get(nodeId);
+            this.toggleToast(selectedNode);
             // shared $scope with HostSummaryDirective
             console.log("loadSummaryState for node: ", selectedNode);
         });
@@ -469,6 +482,22 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
                 return this.imageDirectoryPath + image;
         }
         return this.imageDirectoryPath + image;
+    }
+
+    public toggleToast(node: any) {
+        console.log(node);
+        this.toastVisible = true
+    }
+
+    public onToastTimerChange($event: number) {
+        this.toastPercentage = $event * 25;
+    }
+
+    public onToastVisibleChange($event: boolean) {
+        this.toastVisible = $event;
+        if (!this.toastVisible) {
+            this.toastPercentage = 0;
+        }
     }
 
 }
