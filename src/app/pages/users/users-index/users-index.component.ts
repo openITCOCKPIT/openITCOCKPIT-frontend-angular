@@ -129,7 +129,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
 
     protected params: UsersIndexParams = getDefaultUsersIndexParams();
     protected selectedItems: DeleteAllItem[] = [];
-    protected result: UsersIndexRoot = {all_users: [], _csrfToken: '', myUserId: 0} as UsersIndexRoot;
+    protected result: UsersIndexRoot = {all_users: [], _csrfToken: '', myUserId: 0, isLdapAuth: false} as UsersIndexRoot;
     protected hideFilter: boolean = true;
     protected usergroups : SelectKeyValue[] = [];
 

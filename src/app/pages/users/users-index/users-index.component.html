@@ -45,7 +45,7 @@
                             {{ t('New local user') }}
                         </button>
                     </c-nav-item>
-                    <c-nav-item class="px-1">
+                    <c-nav-item class="px-1" *ngIf="result.all_users && result.isLdapAuth">
                         <button *oitcPermission="['users', 'add']" [routerLink]="['/', 'users', 'ldap']"
                                 cButton
                                 class="ripple"

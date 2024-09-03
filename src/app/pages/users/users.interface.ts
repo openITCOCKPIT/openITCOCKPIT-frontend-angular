@@ -52,6 +52,7 @@ export interface LoadUsersByContainerIdPost {
 // INDEX
 export interface UsersIndexRoot extends PaginateOrScroll {
     all_users: User[]
+    isLdapAuth: boolean
     myUserId: number
 }
 
