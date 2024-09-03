@@ -22,6 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
 import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
+import { HostSummaryComponent } from './host-summary/host-summary.component';
 
 // We extend the default node interface with hostgroup and host fields to have the data available
 // is a user clicks on a node
@@ -44,6 +45,9 @@ export interface NodeExtended extends Node {
         }
         hoststatus: VisHiststatus
     }
+    external_link?: string
+    id?: string,
+    key?: string
 }
 
 @Component({
@@ -67,7 +71,8 @@ export interface NodeExtended extends Node {
         ToasterComponent,
         ToastHeaderComponent,
         ProgressBarComponent,
-        JsonPipe
+        JsonPipe,
+        HostSummaryComponent
     ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css'
@@ -80,6 +85,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public name: string = '';
 
     @Input() public showOnlineOffline: boolean = false;
+
+    selectedNode!: NodeExtended;
 
     @HostListener('fullscreenchange', ['$event'])
     handleFullscreenchangeEvent(Event: Event) {
@@ -334,8 +341,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
                 title: node.title,
                 group: node.group,
                 label: node.label,
-                //identifier: node.identifier,
-                //external_link: node.external_link,
+                external_link: node.external_link,
+                key: node.key,
             };
 
             if (sourceId == node.id) {
@@ -521,6 +528,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleToast(node: NodeExtended) {
+        this.selectedNode = node;
         if (this.toastVisible) {
             // Close any open toast
             this.toastVisible = false;

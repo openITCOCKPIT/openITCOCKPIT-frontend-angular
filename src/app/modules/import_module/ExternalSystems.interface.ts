@@ -277,6 +277,7 @@ export interface DependencyTreeTreeData {
 }
 
 export interface VisObject {
+    key: any
     class: string
     id: string
     title: string

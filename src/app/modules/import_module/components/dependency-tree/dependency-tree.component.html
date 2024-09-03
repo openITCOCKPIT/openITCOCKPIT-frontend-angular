@@ -48,25 +48,23 @@
     </c-row>
 
 
-    <c-toaster [placement]="'top-end'" class="p-3" position="fixed">
+    <c-toaster [placement]="'top-end'" class="p-3 w-25" position="fixed">
         <c-toast #toast="cToast"
                  (timer)="onToastTimerChange($event)"
                  (visibleChange)="onToastVisibleChange($event)"
                  [visible]="toastVisible"
                  [delay]="5000"
-                 class="align-items-center">
+                 class="align-items-center w-100">
             <div class="d-flex">
                 <c-toast-header>
                     <c-progress thin>
                         <c-progress-bar [value]="toastPercentage"></c-progress-bar>
                     </c-progress>
                 </c-toast-header>
-                <c-toast-body>
-                    <span>Hello, world! This is a toast message.</span>
-
-                    <div *ngIf="hostSummaryState">
-                        <span class="ok">Das ist ein Host</span>
-                        {{ hostSummaryState|json }}
+                <c-toast-body class="w-100">
+                    <div *ngIf="hostSummaryState && selectedNode">
+                        <oitc-host-summary [hostSummaryStat]="hostSummaryState" [selectedNode]="selectedNode">
+                        </oitc-host-summary>
                     </div>
 
                     <div *ngIf="hostgroupSummeryState">
@@ -84,7 +82,6 @@
                     </c-progress>
 
                 </c-toast-body>
-                <button aria-label="close" cButtonClose class="me-2 m-auto" (click)="toast.visible=false"></button>
             </div>
         </c-toast>
     </c-toaster>
