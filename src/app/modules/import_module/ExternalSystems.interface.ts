@@ -175,6 +175,9 @@ export interface ItopGeneralInformation {
         default: boolean,
         value: string[]
     }
+
+
+    [key: string]: any
 }
 
 export interface ItopServerDetails {

@@ -3,7 +3,7 @@ import { AdditionalHostInformationResult } from '../../../../ExternalSystems.int
 import { FaIconComponent, FaLayersComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { NgForOf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 @Component({
   selector: 'oitc-virtual-machine',
@@ -17,7 +17,8 @@ import { NgForOf, NgSwitch, NgSwitchCase } from '@angular/common';
         NgSwitch,
         TranslocoPipe,
         NgForOf,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        NgIf
     ],
   templateUrl: './virtual-machine.component.html',
   styleUrl: './virtual-machine.component.css'
