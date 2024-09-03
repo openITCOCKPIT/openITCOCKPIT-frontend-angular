@@ -9,7 +9,7 @@
         </c-col>
     </c-row>
 
-    <c-row *ngIf="dependencyTree">
+    <c-row *ngIf="dependencyTree" id="fullscreenDependencyTree">
         <c-col [xs]="12">
 
             <c-row class="fieldset-legend-border-bottom">
@@ -41,6 +41,9 @@
     </c-row>
 
     <c-row>
+        <c-col xs="12" *ngIf="showProgressbar">
+            <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+        </c-col>
         <c-col xs="12" id="dependencyTreeOverview"></c-col>
     </c-row>
 

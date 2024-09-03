@@ -1,8 +1,8 @@
 import { Component, HostListener, inject, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { ColComponent, RowComponent } from '@coreui/angular';
+import { ColComponent, ProgressComponent, RowComponent } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DOCUMENT, NgIf } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../external-systems.service';
 import { DependencyTreeApiResult, VisObject, VisRelation } from '../../ExternalSystems.interface';
@@ -10,6 +10,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
+import { DataSet } from 'vis-data/peer';
 
 interface InOnit {
 }
@@ -26,7 +27,9 @@ interface InOnit {
         XsButtonDirective,
         BackButtonDirective,
         FaIconComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        ProgressComponent,
+        DecimalPipe
     ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css'
@@ -49,6 +52,10 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
 
     public isOnline: boolean = false;
     public dependencyTree?: DependencyTreeApiResult;
+
+    // Progress is only necessary if physics is enabled
+    public showProgressbar: boolean = false;
+    public progress: number = 0;
 
     private isFullscreen: boolean = false;
     private subscriptions: Subscription = new Subscription();
@@ -117,10 +124,25 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
             return;
         }
 
-        let nodes: Node[] = [];
-        let edges: Edge[] = [];
+        let nodes: DataSet<Node> = new DataSet<Node>();
+        let edges: DataSet<Edge> = new DataSet<Edge>();
+
+        nodes.clear();
+        edges.clear();
+
+        const rect = elem.getBoundingClientRect();
+        const offset = {
+            top: rect.top + window.scrollY,
+            left: rect.left + window.scrollX
+        };
+        if (offset.top < 0) {
+            offset.top = 0;
+        }
 
         let options: Options = {
+            autoResize: true,
+            height: String(window.innerHeight - offset.top) + 'px', // I can't stress enough how important the height parameter is!
+            width: "100%",
             clickToUse: false,
             groups: {
                 useDefaultGroups: false,
@@ -237,7 +259,7 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
             layout: {
                 hierarchical: {
                     enabled: true,
-                    direction: this.dependencyTree?.treeData.direction || 'UD',
+                    direction: this.dependencyTree?.treeData.direction || 'UD',  // UD, DU, LR, RL
                     sortMethod: 'directed'
                 }
             },
@@ -331,7 +353,7 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
                 }
             }
 
-            nodes.push(visNode);
+            nodes.add(visNode);
 
         });
 
@@ -344,9 +366,13 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
                 arrows: edge.arrows,
             };
 
-            edges.push(visEdge);
+            edges.add(visEdge);
         });
 
+        if (options.physics) {
+            this.showProgressbar = true;
+            this.progress = 0;
+        }
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);
         network.fit({
             animation: {
@@ -355,14 +381,16 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
             }
         });
 
-        network.on('stabilizationProgress', (params) => {
-            var currentPercentage = Math.round(params.iterations / params.total * 100);
-            //$('#visProgressbarLoader .progress-bar:first').css('width', currentPercentage + '%');
-        });
-        network.once('stabilizationIterationsDone', () => {
-            //$('#visProgressbarLoader').hide(); //AngularJS is too slow
-            network.setOptions({physics: false});
-        });
+        if (options.physics) {
+            network.on('stabilizationProgress', (params) => {
+                let currentPercentage = Math.round(params.iterations / params.total * 100);
+                this.progress = currentPercentage;
+            });
+            network.once('stabilizationIterationsDone', () => {
+                this.showProgressbar = false;
+                network.setOptions({physics: false});
+            });
+        }
 
 
     }
