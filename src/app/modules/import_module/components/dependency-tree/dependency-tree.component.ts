@@ -392,6 +392,26 @@ export class DependencyTreeComponent implements InOnit, OnChanges, OnDestroy {
             });
         }
 
+        network.on('click', (properties) => {
+            if (properties.nodes.length === 0) {
+                network.fit({
+                    animation: {
+                        duration: 500,
+                        easingFunction: 'linear'
+                    }
+                });
+                return;
+            }
+
+            const nodeId = properties.nodes[0];
+            if (nodeId === 0) {
+                return;
+            }
+
+            var selectedNode = nodes.get(nodeId);
+            // shared $scope with HostSummaryDirective
+            console.log("loadSummaryState for node: ", selectedNode);
+        });
 
     }
 
