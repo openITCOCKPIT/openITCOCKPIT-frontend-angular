@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Pipe, PipeTransform } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
@@ -26,4 +26,20 @@ import { CustomClassInformationComponent } from './custom-class-information/cust
 })
 export class CustomClassComponent {
     @Input() result!: AdditionalHostInformationResult;
+    protected readonly keepOrder = keepOrder;
+}
+
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'defaultOrderKeyvalue'
+})
+export class DefaultOrderKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
+    }
+
 }

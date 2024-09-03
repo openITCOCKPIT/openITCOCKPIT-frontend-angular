@@ -23,7 +23,6 @@
                 {{ t('External link') }}
             </th>
             <td class="text-primary" colspan="3">
-                {{ result.response.general_information?.id?.value }}
                 <span *ngIf="result.response.externalLink" class="ng-scope">
                     <a target="_blank" [href]="result.response.externalLink">
                         <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
@@ -32,7 +31,7 @@
             </td>
         </tr>
             @if (result.response?.general_information) {
-                <tr *ngFor="let item of result.response.general_information| keyvalue ">
+                <tr *ngFor="let item of result.response.general_information| keyvalue: keepOrder ">
                     <th colspan="3">
                         {{ item.key }}
                     </th>
