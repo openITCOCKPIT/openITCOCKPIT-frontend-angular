@@ -1,7 +1,10 @@
 <ng-container *transloco="let t">
     <header>
-        <h4 class="border-bottom border-primary border-3 text-primary">
-            {{ t('External ID') }} {{ selectedNode.key }}
+        <h4 class="border-bottom border-primary border-3">
+            {{ t('External ID') }}
+            <span class="text-primary">
+                {{ selectedNode.key }}
+            </span>
             <span *ngIf="selectedNode.external_link" class="ng-scope">
                 <a target="_blank" [href]="selectedNode.external_link">
                     <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>

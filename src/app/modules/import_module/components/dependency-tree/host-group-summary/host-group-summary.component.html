@@ -1,1 +1,81 @@
-<p>host-group-summary works!</p>
+<ng-container *transloco="let t">
+    <header>
+        <h4 class="border-bottom border-primary border-3">
+            {{ t('External ID') }}
+            <span class="text-primary">
+                {{ selectedNode.key }}
+            </span>
+            <span *ngIf="selectedNode.external_link" class="ng-scope">
+                <a target="_blank" [href]="selectedNode.external_link">
+                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                </a>
+            </span>
+        </h4>
+    </header>
+    <h5 class="pt-1">
+        <fa-icon [icon]="['fas', 'server']" class="ps-1"></fa-icon>
+        <span *oitcPermission="['hostgroups', 'extended']">
+            <a [routerLink]="['/', 'hostgroups', 'extended',123]">
+                {{ selectedNode }}
+            </a>
+        </span>
+        <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+            {{ selectedNode }}
+        </span>
+    </h5>
+    <table cTable bordered hover small [striped]="true" class="small">
+        <tbody>
+        <tr>
+            <td></td>
+            <th class="text-center">
+                <c-badge color="success">{{ t('Up') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="danger">{{ t('Down') }}
+                </c-badge>
+            </th>
+            <th class="text-center" colspan="2">
+                <c-badge color="secondary">{{ t('Unreachable') }}
+                </c-badge>
+            </th>
+        </tr>
+        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
+            <th>{{ hostSummaryRowLabel.label }}</th>
+            <td *ngFor="let index of Object.keys(hostgroupSummeryState['hosts'][hostSummaryRowLabel.key])">
+                @if(index !== 'hostIds'){
+                    <!-- @ts-ignore -->
+                    {{hostgroupSummeryState['hosts'][hostSummaryRowLabel.key]["0"]}}
+                    {{index}}
+                }
+
+            </td>
+
+        </tr>
+        <tr>
+            <th colspan="5" class="text-end">{{ t('TOTAL:') }}
+                {{ hostgroupSummeryState['hosts']['total'] }}
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <th class="text-center">
+                <c-badge color="success">{{ t('Ok') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="warning">{{ t('Warning') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="danger">{{ t('Critical') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="secondary">{{ t('Unknown') }}
+                </c-badge>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</ng-container>
