@@ -42,15 +42,13 @@
         </tr>
         <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
             <th>{{ hostSummaryRowLabel.label }}</th>
-            <td *ngFor="let index of Object.keys(hostgroupSummeryState['hosts'][hostSummaryRowLabel.key])">
-                @if(index !== 'hostIds'){
-                    <!-- @ts-ignore -->
-                    {{hostgroupSummeryState['hosts'][hostSummaryRowLabel.key]["0"]}}
-                    {{index}}
-                }
-
-            </td>
-
+            @if (hostSummaryRowLabel.key !== 'total') {
+                <td *ngFor="let key of HostgroupSummaryStatesHostsKeys">
+                    @if (key !== 'hostIds') {
+                        ***{{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}***
+                    }
+                </td>
+            }
         </tr>
         <tr>
             <th colspan="5" class="text-end">{{ t('TOTAL:') }}
