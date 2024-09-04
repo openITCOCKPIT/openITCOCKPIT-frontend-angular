@@ -280,6 +280,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
                 this.filter['Hosts.name'] = hostname;
             }
 
+
+            let address = params['address'] || undefined;
+            if (address) {
+                this.filter['Hosts.address'] = address;
+            }
+
             let acknowledged = params['acknowledged'];
             if (acknowledged === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;

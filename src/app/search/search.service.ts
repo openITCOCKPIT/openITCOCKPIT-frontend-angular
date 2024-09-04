@@ -50,7 +50,7 @@ export class SearchService {
     }
 
     private searchAddress(query: string): void {
-        this.router.navigate(['/#!/hosts/index'], {
+        this.router.navigate(['/hosts/index'], {
             queryParams: {
                 address: query,
             },
