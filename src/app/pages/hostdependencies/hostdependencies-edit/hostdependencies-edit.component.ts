@@ -48,6 +48,7 @@ import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 
 @Component({
@@ -87,7 +88,8 @@ import { HistoryService } from '../../../history.service';
         XsButtonDirective,
         FormCheckComponent,
         BadgeComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './hostdependencies-edit.component.html',
     styleUrl: './hostdependencies-edit.component.css'
@@ -122,6 +124,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
                 this.get = result.hostdependency;
                 this.post = {
                     id: this.get.id,
+                    uuid: this.get.uuid,
                     container_id: this.get.container_id,
                     inherits_parent: this.get.inherits_parent,
                     timeperiod_id: this.get.timeperiod_id,

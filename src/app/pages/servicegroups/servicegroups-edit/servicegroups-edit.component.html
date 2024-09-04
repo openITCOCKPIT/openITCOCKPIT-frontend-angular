@@ -34,6 +34,10 @@
                     </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
+                    <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
@@ -53,14 +57,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                                name="post.container.parent_id"
-                                id="post.container.parent_id"
-                                [(ngModel)]="post.container.parent_id"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="containers"
-                                (onChange)="onContainerChange()"
-                                oitcFormError [errors]="errors" errorField="parent_id">
+                            name="post.container.parent_id"
+                            id="post.container.parent_id"
+                            [(ngModel)]="post.container.parent_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="parent_id">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                         <div *ngIf="post.container.parent_id === null" class="text-warning-glow pt-1">
@@ -114,14 +118,14 @@
                             {{ t('Services') }}
                         </label>
                         <oitc-multi-select
-                                name="post.services._ids"
-                                id="post.services._ids"
-                                [(ngModel)]="post.services._ids"
-                                optionValue="key"
-                                optionLabel="value.servicename"
-                                [searchCallback]="loadServices"
-                                [options]="services"
-                                oitcFormError [errors]="errors" errorField="services">
+                            name="post.services._ids"
+                            id="post.services._ids"
+                            [(ngModel)]="post.services._ids"
+                            optionValue="key"
+                            optionLabel="value.servicename"
+                            [searchCallback]="loadServices"
+                            [options]="services"
+                            oitcFormError [errors]="errors" errorField="services">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>
@@ -131,14 +135,14 @@
                             {{ t('Service templates') }}
                         </label>
                         <oitc-multi-select
-                                name="post.servicetemplates._ids"
-                                id="post.servicetemplates._ids"
-                                [(ngModel)]="post.servicetemplates._ids"
-                                optionValue="key"
-                                optionLabel="value"
-                                [searchCallback]="loadServicetemplates"
-                                [options]="servicetemplates"
-                                oitcFormError [errors]="errors" errorField="servicetemplates">
+                            name="post.servicetemplates._ids"
+                            id="post.servicetemplates._ids"
+                            [(ngModel)]="post.servicetemplates._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServicetemplates"
+                            [options]="servicetemplates"
+                            oitcFormError [errors]="errors" errorField="servicetemplates">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
                     </div>

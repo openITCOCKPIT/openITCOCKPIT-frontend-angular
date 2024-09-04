@@ -135,6 +135,7 @@ export interface HostescalationContainerResult {
 
 export interface HostescalationPost {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     first_notification: number
     last_notification: number
@@ -165,6 +166,7 @@ export interface HostescalationPost {
 
 export interface HostescalationGet {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     first_notification: number
     last_notification: number

@@ -282,6 +282,17 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.getUserTimezone();
 
         this.route.queryParams.subscribe(params => {
+            let serviceId = params['service_id'] || params['id']
+            if (serviceId) {
+                if (Array.isArray(serviceId)) {
+                    // service_id is an array of ids
+                    this.filter.Services.id = serviceId;
+                } else {
+                    // host_id is a single id
+                    this.filter.Services.id = [serviceId];
+                }
+            }
+
             let hostId = params['host_id']
             if (hostId) {
                 if (Array.isArray(hostId)) {

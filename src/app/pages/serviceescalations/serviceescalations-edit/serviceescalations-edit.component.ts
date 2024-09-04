@@ -54,6 +54,7 @@ import {
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-serviceescalations-edit',
@@ -92,7 +93,8 @@ import { HistoryService } from '../../../history.service';
         TrueFalseDirective,
         CardFooterComponent,
         MultiSelectOptgroupComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './serviceescalations-edit.component.html',
     styleUrl: './serviceescalations-edit.component.css'
@@ -134,6 +136,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                 this.get = result.serviceescalation;
                 this.post = {
                     id: this.get.id,
+                    uuid: this.get.uuid,
                     container_id: this.get.container_id,
                     first_notification: this.get.first_notification,
                     last_notification: this.get.last_notification,

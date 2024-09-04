@@ -43,6 +43,7 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -80,7 +81,8 @@ import { HistoryService } from '../../../history.service';
         FormCheckInputDirective,
         TrueFalseDirective,
         CardFooterComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './hostescalations-edit.component.html',
     styleUrl: './hostescalations-edit.component.css'
@@ -118,6 +120,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
                 this.get = result.hostescalation;
                 this.post = {
                     id: this.get.id,
+                    uuid: this.get.uuid,
                     container_id: this.get.container_id,
                     first_notification: this.get.first_notification,
                     last_notification: this.get.last_notification,

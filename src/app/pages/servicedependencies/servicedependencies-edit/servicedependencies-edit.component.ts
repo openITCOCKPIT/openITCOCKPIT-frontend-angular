@@ -55,6 +55,7 @@ import {
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 
 @Component({
@@ -95,7 +96,8 @@ import { HistoryService } from '../../../history.service';
         FormCheckComponent,
         BadgeComponent,
         MultiSelectOptgroupComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './servicedependencies-edit.component.html',
     styleUrl: './servicedependencies-edit.component.css'
@@ -133,6 +135,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
                 this.get = result.servicedependency;
                 this.post = {
                     id: this.get.id,
+                    uuid: this.get.uuid,
                     container_id: this.get.container_id,
                     inherits_parent: this.get.inherits_parent,
                     timeperiod_id: this.get.timeperiod_id,
