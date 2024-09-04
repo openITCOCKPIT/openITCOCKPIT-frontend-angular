@@ -389,7 +389,8 @@
                                         </oitc-actions-button-element>
 
                                         <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                                                                     *ngIf="host.Host.allow_edit">
+                                                                     *ngIf="host.Host.allow_edit"
+                                                                     (click)="toggleDisableModal(host.Host)">
                                             <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                             {{ t('Disable') }}
                                             <!-- todo implement -->
@@ -694,3 +695,4 @@
                                         [items]="selectedItems"></oitc-hosts-disable-notifications-modal>
 <oitc-host-acknowledge-modal (completed)="onResetChecktime($event)"
                              [items]="selectedItems"></oitc-host-acknowledge-modal>
+<oitc-disable-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-disable-modal>

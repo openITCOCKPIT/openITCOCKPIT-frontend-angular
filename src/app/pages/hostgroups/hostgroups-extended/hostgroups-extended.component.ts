@@ -118,6 +118,9 @@ import { HostgroupExtendedTabs } from '../hostgroups.enum';
 import {
     SlaHostgroupHostsStatusOverviewComponent
 } from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
+import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
+import { HostsService } from '../../hosts/hosts.service';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -190,7 +193,10 @@ import {
         SlaHostgroupHostsStatusOverviewComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
-    styleUrl: './hostgroups-extended.component.css'
+    styleUrl: './hostgroups-extended.component.css',
+    providers: [
+        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
+    ]
 })
 export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
@@ -550,6 +556,36 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
+
+    public toggleDisableModal(host?: HostObject) {
+        let items: DisableItem[] = [];
+
+        if (host) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(host.id),
+                displayName: String(host.name)
+            }];
+        } else {
+            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
+                return {
+                    id: item.Host.id,
+                    displayName: item.Host.name
+                };
+            });
+        }
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+        this.selectedItems = items;
+
+        this.modalService.toggle({
+            show: true,
+            id: 'disableModal',
+        });
+    }
 
     public acknowledgeStatus() {
         let items: HostAcknowledgeItem[] = this.hostgroupExtended.Hosts.map((host: HostGroupExtendedHost): HostAcknowledgeItem => {
