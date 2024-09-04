@@ -32,8 +32,7 @@ export class HostSummaryComponent {
     @Input() selectedNode!: NodeExtended;
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
-
-    public hostSummaryRowLabels = [
+    public hostSummaryRowLabels: { key: keyof SummaryState, label: string }[] = [
         {
             key: 'state',
             label: this.TranslocoService.translate('State')
@@ -51,6 +50,5 @@ export class HostSummaryComponent {
             label: this.TranslocoService.translate('Passive')
         }
     ];
-
 
 }
