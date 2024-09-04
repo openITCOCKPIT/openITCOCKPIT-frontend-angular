@@ -141,7 +141,7 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Hostescalations.id][]'] = [id];
+                this.params['filter[Hostescalations.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadHostescalations();

@@ -131,7 +131,7 @@ export class ServicetemplatesIndexComponent {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Servicetemplates.id][]'] = [id];
+                this.params['filter[Servicetemplates.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadServicetemplates();

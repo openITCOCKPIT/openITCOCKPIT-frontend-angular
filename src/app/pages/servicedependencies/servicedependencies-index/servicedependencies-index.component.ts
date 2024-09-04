@@ -141,7 +141,7 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Servicedependencies.id][]'] = [id];
+                this.params['filter[Servicedependencies.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadServicedependencies();

@@ -146,7 +146,7 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Servicegroups.id][]'] = [id];
+                this.params['filter[Servicegroups.id][]'] = [].concat(id); // make sure we always get an array
             }
 
 

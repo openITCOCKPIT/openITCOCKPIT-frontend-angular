@@ -137,7 +137,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Contacts.id][]'] = [id];
+                this.params['filter[Contacts.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadContacts();

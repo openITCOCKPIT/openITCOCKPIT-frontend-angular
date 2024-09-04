@@ -156,7 +156,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Hosttemplates.id][]'] = [id];
+                this.params['filter[Hosttemplates.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadHosttemplates();
