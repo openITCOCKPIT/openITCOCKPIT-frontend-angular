@@ -1640,6 +1640,7 @@
     "Import from LDAP": "Importiere von LDAP",
     "Import contact from LDAP": "Importiere Kontakt von LDAP",
     "SAM-Account-Name": "SAM-Account-Name",
+    "LDAP Configuration": "LDAP Konfiguration",
     "Connected LDAP server": "Verbundener LDAP Server",
     "Used filter query": "Verwendete Filterabfrage",
     "Base DN": "Basis-DN",
