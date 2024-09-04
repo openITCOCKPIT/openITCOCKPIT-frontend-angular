@@ -170,6 +170,27 @@ export class UsersService {
 
     }
 
+    public resetPassword(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/resetPassword/${id}.json?angular=true`, {})
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
+    }
+
     public getDateformats(): Observable<UserDateformatsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
