@@ -80,7 +80,7 @@ td.fc-day-other {
 
 .no-events:before {
     content: "\f273";
-    font-family: FontAwesome;
+    font: var(--fa-font-regular);
     font-size: 50px;
     position: absolute;
     white-space: pre;
@@ -89,7 +89,7 @@ td.fc-day-other {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    background-image: radial-gradient(closest-side at 50% 59%, #C00 0, #C00 46%, #4285F4 30%);
+    background-image: radial-gradient(closest-side at 50% 63%, #C00 0, #C00 58%, #4285F4 30%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -112,4 +112,27 @@ td.fc-day-other {
     border-width: 1px;
     border-style: solid;
     box-shadow: 0 1px 5px 0 transparentize(#6a11cb, 0.5);
+}
+
+.fc .fc-bg-event {
+    /* default look for background events */
+    background: transparent;
+}
+
+.fc-highlight {
+    /* when user is selecting cells */
+    background: #bce8f1 !important;
+    opacity: 0.3;
+}
+
+.fc-bgevent {
+    /* default look for background events */
+    background: #8fdf82 !important;
+    opacity: 0.3;
+}
+
+.fc-nonbusiness {
+    /* default look for non-business-hours areas */
+    /* will inherit .fc-bgevent's styles */
+    background: #d7d7d7 !important;
 }
