@@ -141,7 +141,7 @@ export class ServiceescalationsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Serviceescalations.id][]'] = [id];
+                this.params['filter[Serviceescalations.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadServiceescalations();

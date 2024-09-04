@@ -181,7 +181,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Commands.id][]'] = [id];
+                this.params['filter[Commands.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadCommands();

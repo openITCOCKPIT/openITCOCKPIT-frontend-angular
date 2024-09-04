@@ -141,7 +141,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Hostdependencies.id][]'] = [id];
+                this.params['filter[Hostdependencies.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadHostdependencies();

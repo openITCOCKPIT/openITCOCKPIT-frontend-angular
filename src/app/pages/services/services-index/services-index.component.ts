@@ -284,24 +284,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             let serviceId = params['service_id'] || params['id']
             if (serviceId) {
-                if (Array.isArray(serviceId)) {
-                    // service_id is an array of ids
-                    this.filter.Services.id = serviceId;
-                } else {
-                    // host_id is a single id
-                    this.filter.Services.id = [serviceId];
-                }
+                this.filter.Services.id = [].concat(serviceId); // make sure we always get an array
             }
 
             let hostId = params['host_id']
             if (hostId) {
-                if (Array.isArray(hostId)) {
-                    // host_id is an array of ids
-                    this.filter.Hosts.id = hostId;
-                } else {
-                    // host_id is a single id
-                    this.filter.Hosts.id = [hostId];
-                }
+                this.filter.Hosts.id = [].concat(hostId); // make sure we always get an array
             }
 
             let servicename = params['servicename'] || undefined;
