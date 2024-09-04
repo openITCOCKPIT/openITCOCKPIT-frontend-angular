@@ -86,6 +86,7 @@ export interface HostdependencyEditApiResult {
 
 export interface HostdependencyGet {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     inherits_parent: number
     timeperiod_id?: null | number
@@ -142,6 +143,7 @@ export interface HostdependenciesIndexParams {
 
 export interface HostdependencyPost {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     inherits_parent: number
     timeperiod_id?: null | number

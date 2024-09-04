@@ -446,6 +446,9 @@ const coreRoutes: Routes = [{
     path: 'acknowledgements/service/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
 }, {
+    path: 'error/403',
+    loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
+}, {
     path: 'error/404',
     loadComponent: () => import('./layouts/coreui/errors/error404/error404.component').then(m => m.Error404Component)
 }, {

@@ -10,7 +10,7 @@ export interface ServicegroupsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-
+    'filter[Servicegroups.id][]': number[],
     'filter[Servicegroups.description]': string,
     'filter[Containers.name]': string,
 }
@@ -22,6 +22,7 @@ export function getDefaultServicegroupsIndexParams(): ServicegroupsIndexParams {
         sort: 'Containers.name',
         page: 1,
         direction: 'asc',
+        'filter[Servicegroups.id][]': [],
         'filter[Servicegroups.description]': "",
         'filter[Containers.name]': ""
     }
@@ -227,6 +228,7 @@ export interface ServicegroupsLoadServicegroupsByStringParams {
     'filter[Containers.name]': string,
     'selected[]'?: number[]
 }
+
 // EXTENDED VIEW
 export interface ServiceGroupExtendedRoot extends PaginateOrScroll {
     servicegroup: {
@@ -255,7 +257,7 @@ export interface Service {
         priority: number
         has_graph: boolean
     }
-    Host:  {
+    Host: {
         id: number
         uuid: string
         hostname: string
@@ -342,7 +344,6 @@ export interface Service {
         outputHtml: string
     }
 }
-
 
 
 export interface StatusSummary {

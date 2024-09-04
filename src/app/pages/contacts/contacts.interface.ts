@@ -11,9 +11,7 @@ export interface ContactsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-
-    //   'filter[Commands.id][]': [],  Brauche ich das hier auch?
-
+    'filter[Contacts.id][]': number[],
     'filter[Contacts.name]': string,
     'filter[Contacts.email]': string,
     'filter[Contacts.phone]': string,
@@ -26,6 +24,7 @@ export function getDefaultContactsIndexParams(): ContactsIndexParams {
         sort: 'Contacts.name',
         page: 1,
         direction: 'asc',
+        'filter[Contacts.id][]': [],
         'filter[Contacts.email]': "",
         'filter[Contacts.name]': "",
         'filter[Contacts.phone]': "",

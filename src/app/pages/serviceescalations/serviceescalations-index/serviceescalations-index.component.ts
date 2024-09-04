@@ -134,10 +134,22 @@ export class ServiceescalationsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     public ngOnInit(): void {
-        this.loadServiceescalations();
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Serviceescalations.id][]'] = [id];
+            }
+
+            this.loadServiceescalations();
+        }));
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadServiceescalations() {

@@ -92,6 +92,7 @@ export interface ServicedependencyEditApiResult {
 
 export interface ServicedependencyGet {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     inherits_parent: number
     timeperiod_id?: null | number
@@ -152,6 +153,7 @@ export interface ServicedependenciesIndexParams {
 
 export interface ServicedependencyPost {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     inherits_parent: number
     timeperiod_id?: null | number

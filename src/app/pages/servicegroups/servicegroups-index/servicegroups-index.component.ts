@@ -22,8 +22,12 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownComponent,
-    DropdownDividerDirective, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -50,10 +54,10 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import {
-    ServicegroupsIndexServicegroup,
+    getDefaultServicegroupsIndexParams,
     ServicegroupsIndexParams,
     ServicegroupsIndexRoot,
-    getDefaultServicegroupsIndexParams
+    ServicegroupsIndexServicegroup
 } from '../servicegroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
@@ -139,6 +143,13 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Servicegroups.id][]'] = [id];
+            }
+
+
             this.loadServicegroups();
         }));
     }

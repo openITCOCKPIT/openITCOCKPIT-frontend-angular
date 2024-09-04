@@ -134,10 +134,23 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     public ngOnInit(): void {
-        this.loadHostescalations();
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Hostescalations.id][]'] = [id];
+            }
+
+            this.loadHostescalations();
+        }));
+
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadHostescalations() {

@@ -1,0 +1,8 @@
+.top-search-dropdown {
+    color: var(--cui-body-color);
+    box-shadow: none;
+}
+
+.top-search-dropdown:active {
+    color: var(--cui-body-color);
+}
