@@ -233,6 +233,7 @@ export interface HostsIndexFilter {
     'Hoststatus.scheduled_downtime_depth': string,
     'Hoststatus.notifications_enabled': string,
     'Hoststatus.is_hardstate': string,
+    'Hoststatus.active_checks_enabled': string,
     'hostpriority': string[]
 }
 
@@ -276,6 +277,7 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'Hoststatus.scheduled_downtime_depth': '',
         'Hoststatus.notifications_enabled': '',
         'Hoststatus.is_hardstate': '',
+        'Hoststatus.active_checks_enabled': '',
         'hostpriority': []
     }
 }

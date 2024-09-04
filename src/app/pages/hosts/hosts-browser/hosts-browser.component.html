@@ -1094,6 +1094,7 @@
                     <oitc-additional-host-information
                         *ngIf="result && result.mergedHost"
                         [hostId]="result.mergedHost.id"
+                        [hostname]="String(result.mergedHost.name)"
                         [lastUpdated]="lastUpdated"></oitc-additional-host-information>
                 </div>
                 <!-- Import Module end -->
