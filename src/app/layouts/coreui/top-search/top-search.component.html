@@ -5,9 +5,13 @@
 
             <c-input-group>
                 <c-dropdown>
-                    <button cButton cDropdownToggle color="secondary"
+                    <button cButton cDropdownToggle color="secondary" [disabled]="isSearching"
                             class="border-0 bg-body-secondary input-group-text top-search-dropdown">
-                        {{ currentSearchTypeTranslation }}
+                        @if (isSearching) {
+                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"></fa-icon>
+                        } @else {
+                            {{ currentSearchTypeTranslation }}
+                        }
                     </button>
                     <div cDropdownMenu>
                         <span cDropdownItem *oitcPermission="['hosts', 'index']"
@@ -63,6 +67,7 @@
                        [placeholder]="'Type to search'|transloco"
                        name="top-search"
                        [(ngModel)]="searchStr"
+                       [disabled]="isSearching"
                        class="bg-body-secondary border-0 form-control"/>
             </c-input-group>
         </form>

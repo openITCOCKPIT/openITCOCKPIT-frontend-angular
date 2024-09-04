@@ -2,8 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { SearchType } from "./search-type.enum";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { take } from "rxjs";
+import { map, Observable } from "rxjs";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
+import { TopSearchResponse } from './search.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class SearchService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public search(type: SearchType, query: string): void {
+    public redirectSearch(type: SearchType, query: string): void {
         switch (type) {
             case SearchType.Host:
                 this.searchHost(query);
@@ -24,9 +25,6 @@ export class SearchService {
                 break;
             case SearchType.Service:
                 this.searchService(query);
-                break;
-            case SearchType.UUID:
-                this.searchUUID(type, query);
                 break;
             case SearchType.TagsHost:
                 this.searchTagsHost(query);
@@ -65,16 +63,16 @@ export class SearchService {
         });
     }
 
-    private searchUUID(type: SearchType, query: string): void {
+    public searchUUID(query: string): Observable<TopSearchResponse> {
         const proxyPath = this.proxyPath;
-        this.http.post(`${proxyPath}/angular/topSearch.json?angular=true`, {
-            type,
+        return this.http.post<TopSearchResponse>(`${proxyPath}/angular/topSearch.json?angular=true`, {
+            type: 'uuid',
             searchStr: query,
         }).pipe(
-            take(1),
-        ).subscribe({
-            next: (data) => console.info('search uuid result', data),
-        })
+            map(data => {
+                return data;
+            })
+        );
     }
 
     private searchTagsHost(query: string): void {

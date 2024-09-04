@@ -51,6 +51,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public submitSearch() {
         const {type, query} = this.form.value;
 
-        this.searchService.search(type as SearchType, query as string);
+        this.searchService.redirectSearch(type as SearchType, query as string);
     }
 }

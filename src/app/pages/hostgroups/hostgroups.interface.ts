@@ -11,7 +11,7 @@ export interface HostgroupsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-
+    'filter[Hostgroups.id][]': number[],
     'filter[Hostgroups.description]': string,
     'filter[Containers.name]': string,
 }
@@ -23,6 +23,7 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         sort: 'Containers.name',
         page: 1,
         direction: 'asc',
+        'filter[Hostgroups.id][]': [],
         'filter[Hostgroups.description]': "",
         'filter[Containers.name]': ""
     }

@@ -264,7 +264,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         this.hostTypes = this.HostsService.getHostTypes();
 
         this.route.queryParams.subscribe(params => {
-            let hostId = params['host_id']
+            let hostId = params['host_id'] || params['id']
             if (hostId) {
                 if (Array.isArray(hostId)) {
                     // host_id is an array of ids

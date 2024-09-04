@@ -10,6 +10,7 @@ export interface ContactgroupsIndexParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
 
+    'filter[Contactgroups.id][]': number[],
     'filter[Contactgroups.description]': string,
     'filter[Containers.name]': string,
 }
@@ -21,6 +22,7 @@ export function getDefaultContactgroupsIndexParams(): ContactgroupsIndexParams {
         sort: 'Containers.name',
         page: 1,
         direction: 'asc',
+        'filter[Contactgroups.id][]': [],
         'filter[Contactgroups.description]': "",
         'filter[Containers.name]': ""
     }
