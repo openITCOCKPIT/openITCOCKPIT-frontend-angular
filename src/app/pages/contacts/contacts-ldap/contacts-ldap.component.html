@@ -77,17 +77,22 @@
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
 
-                    <div class="text-info display-inline-block margin-left-20">
-                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                        {{ t('Connected LDAP server') }}:
-                        <b>{{ ldapConfig.host }}</b>
-                        <br>
-                        {{ t('Used filter query') }}:
-                        <b>{{ ldapConfig.query }}</b>
-                        <br>
-                        {{ t('Base DN') }}:
-                        <b>{{ ldapConfig.base_dn }}</b>
-                    </div>
+                    <c-alert color="info">
+                        <h4 cAlertHeading>
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('LDAP Configuration') }}
+                        </h4>
+                        <p class="mb-0">
+                            {{ t('Connected LDAP server') }}:
+                            <b>{{ ldapConfig.host }}</b>
+                            <br>
+                            {{ t('Used filter query') }}:
+                            <b>{{ ldapConfig.query }}</b>
+                            <br>
+                            {{ t('Base DN') }}:
+                            <b>{{ ldapConfig.base_dn }}</b>
+                        </p>
+                    </c-alert>
 
 
                     <div *ngIf="ldapUser !== null" class="mb-3">
