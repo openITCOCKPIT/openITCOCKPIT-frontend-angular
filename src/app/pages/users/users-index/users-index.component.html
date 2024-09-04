@@ -267,7 +267,8 @@
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'changelogs.index'">
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             (click)="resetPasswordModal(user)">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
@@ -330,3 +331,4 @@
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-reset-password-modal (completed)="onMassActionComplete($event)" [user]="resetPasswordUser"></oitc-reset-password-modal>
