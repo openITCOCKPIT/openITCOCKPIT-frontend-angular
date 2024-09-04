@@ -8,7 +8,8 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
 import {
     HostgroupSummaryState,
     HostgroupSummaryStateHosts,
-    HostgroupSummaryStatesHosts
+    HostgroupSummaryStatesHosts,
+    HostgroupSummaryStatesServices
 } from '../../../../../pages/hosts/summary_state.interface';
 import { NodeExtended } from '../dependency-tree.component';
 
@@ -37,6 +38,7 @@ export class HostGroupSummaryComponent {
 
     // By the love of god - how the fuck can we do this the right way?
     public HostgroupSummaryStatesHostsKeys = Array<keyof HostgroupSummaryStatesHosts>('0', '1', '2', 'hostIds');
+    public HostgroupSummaryStatesServicesKeys = Array<keyof HostgroupSummaryStatesServices>('0', '1', '2', '3', 'serviceIds');
 
 
     public hostSummaryRowLabels: { key: keyof HostgroupSummaryStateHosts, label: string, queryParams: {} }[] = [
