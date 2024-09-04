@@ -305,6 +305,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
+
         this.route.queryParams.subscribe(params => {
             let hostId = params['host_id']
             if (hostId) {
@@ -317,31 +318,32 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 }
             }
 
-            let acknowledged = params['acknowledged'];
+            let acknowledged = params['acknowledged'] ? JSON.parse(params['acknowledged']) : false;
             if (acknowledged === true) {
                 this.filter.Servicestatus.acknowledged = true;
             }
-
-            let not_acknowledged = params['not_acknowledged'];
+            let not_acknowledged = params['not_acknowledged'] ? JSON.parse(params['not_acknowledged']) : false;
             if (not_acknowledged === true) {
                 this.filter.Servicestatus.not_acknowledged = true;
             }
-
-            let in_downtime = params['in_downtime'];
+            let in_downtime = params['in_downtime'] ? JSON.parse(params['in_downtime']) : false;
             if (in_downtime === true) {
                 this.filter.Servicestatus.in_downtime = true;
             }
-
-            let not_in_downtime = params['not_in_downtime'];
+            let not_in_downtime = params['not_in_downtime'] ? JSON.parse(params['not_in_downtime']) : false;
             if (not_in_downtime === true) {
                 this.filter.Servicestatus.not_in_downtime = true;
             }
-
-            let passive = params['passive'];
+            let passive = params['passive'] ? JSON.parse(params['passive']) : false;
             if (passive === true) {
                 this.filter.Servicestatus.passive = true;
             }
-            
+            let unhandled = params['unhandled'] ? JSON.parse(params['unhandled']) : false;
+            if (unhandled === true) {
+                this.filter.Servicestatus.not_acknowledged = true;
+                this.filter.Servicestatus.not_in_downtime = true;
+            }
+
             let direction = params['direction'];
             if (direction && direction === 'asc' || direction === 'desc') {
                 this.params.direction = direction;
