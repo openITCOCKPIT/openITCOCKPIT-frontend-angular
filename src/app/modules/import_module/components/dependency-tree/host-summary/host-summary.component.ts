@@ -32,23 +32,40 @@ export class HostSummaryComponent {
     @Input() selectedNode!: NodeExtended;
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
-    public hostSummaryRowLabels: { key: keyof SummaryState, label: string }[] = [
+    public hostSummaryRowLabels: { key: keyof SummaryState, label: string, queryParams: {} }[] = [
         {
             key: 'state',
-            label: this.TranslocoService.translate('State')
+            label: this.TranslocoService.translate('State'),
+            queryParams: {
+            }
         }, {
             key: 'acknowledged',
-            label: this.TranslocoService.translate('Acknowledged')
+            label: this.TranslocoService.translate('Acknowledged'),
+            queryParams: {
+                'acknowledged': true,
+
+            }
         }, {
             key: 'in_downtime',
-            label: this.TranslocoService.translate('In downtime')
+            label: this.TranslocoService.translate('In downtime'),
+            queryParams: {
+                'in_downtime': true
+            }
         }, {
             key: 'not_handled',
-            label: this.TranslocoService.translate('Not handled')
+            label: this.TranslocoService.translate('Not handled'),
+            queryParams: {
+                'not_acknowledged': true,
+                'not_in_downtime': true
+            }
         }, {
             key: 'passive',
-            label: this.TranslocoService.translate('Passive')
+            label: this.TranslocoService.translate('Passive'),
+            queryParams: {
+                'passive': true
+            }
         }
     ];
 
+    protected readonly Object = Object;
 }
