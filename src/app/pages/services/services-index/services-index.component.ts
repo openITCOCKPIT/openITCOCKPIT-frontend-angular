@@ -318,6 +318,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 }
             }
 
+            let servicename = params['servicename'] || undefined;
+            if (servicename) {
+                this.filter.Services.name = servicename;
+            }
+
             let acknowledged = params['acknowledged'];
             if (acknowledged === 'true') {
                 this.filter.Servicestatus.acknowledged = true;
@@ -326,7 +331,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (not_acknowledged === 'true') {
                 this.filter.Servicestatus.not_acknowledged = true;
             }
-            let in_downtime = params['in_downtime'] ;
+            let in_downtime = params['in_downtime'];
             if (in_downtime === 'true') {
                 this.filter.Servicestatus.in_downtime = true;
             }
@@ -342,6 +347,16 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
             if (unhandled === 'true') {
                 this.filter.Servicestatus.not_acknowledged = true;
                 this.filter.Servicestatus.not_in_downtime = true;
+            }
+
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter.Services.keywords = [keywords];
+            }
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter.Services.not_keywords = [not_keywords];
             }
 
             let direction = params['direction'];

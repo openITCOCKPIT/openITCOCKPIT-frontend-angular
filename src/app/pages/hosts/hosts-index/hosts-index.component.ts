@@ -281,35 +281,51 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             }
 
             let acknowledged = params['acknowledged'];
-            if (acknowledged === true) {
+            if (acknowledged === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
             }
 
             let not_acknowledged = params['not_acknowledged'];
-            if (not_acknowledged === true) {
+            if (not_acknowledged === 'true') {
                 this.acknowledgementsFilter.not_acknowledged = true;
             }
 
             let in_downtime = params['in_downtime'];
-            if (in_downtime === true) {
+            if (in_downtime === 'true') {
                 this.downtimeFilter.in_downtime = true;
             }
 
             let not_in_downtime = params['not_in_downtime'];
-            if (not_in_downtime === true) {
+            if (not_in_downtime === 'true') {
                 this.downtimeFilter.not_in_downtime = true;
             }
 
             let passive = params['passive'];
-            if (passive === true) {
+            if (passive === 'true') {
                 this.filter['Hoststatus.active_checks_enabled'] = 'false';
+            }
+
+            let unhandled = params['unhandled'];
+            if (unhandled === 'true') {
+                this.acknowledgementsFilter.not_acknowledged = true;
+                this.downtimeFilter.not_in_downtime = true;
+            }
+
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter['Hosts.keywords'] = [keywords];
+            }
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter['Hosts.not_keywords'] = [not_keywords];
             }
 
             let direction = params['direction'];
             if (direction && direction === 'asc' || direction === 'desc') {
                 this.params.direction = direction;
             }
-            
+
             let sort = params['sort'];
             if (sort) {
                 this.params.sort = sort;

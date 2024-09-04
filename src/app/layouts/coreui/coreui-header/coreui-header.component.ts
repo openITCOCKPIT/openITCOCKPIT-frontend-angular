@@ -24,6 +24,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { ChangeLanguageComponent } from '../change-language/change-language.component';
 import { SidebarService } from '../coreui-navbar/sidebar.service';
 import { Subscription } from 'rxjs';
+import { TopSearchComponent } from '../top-search/top-search.component';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -46,7 +47,8 @@ import { Subscription } from 'rxjs';
         DropdownMenuDirective,
         DropdownToggleDirective,
         IconDirective,
-        ChangeLanguageComponent
+        ChangeLanguageComponent,
+        TopSearchComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css'

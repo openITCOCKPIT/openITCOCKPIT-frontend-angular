@@ -34,12 +34,11 @@ export class SearchService {
             case SearchType.TagsService:
                 this.searchTagsService(query);
                 break;
-        }
-    }
 
-    public isUUID(value: string): boolean {
-        const RegExObject = new RegExp('([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', 'i');
-        return value.match(RegExObject) !== null;
+            default:
+                console.log('Unknown search type', type);
+                break;
+        }
     }
 
     private searchHost(query: string): void {
