@@ -466,7 +466,6 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             let selectedNode: NodeExtended = nodes.get(nodeId) as NodeExtended;
             this.toggleToast(selectedNode);
             // shared $scope with HostSummaryDirective
-            console.log("loadSummaryState for node: ", selectedNode);
         });
 
     }
