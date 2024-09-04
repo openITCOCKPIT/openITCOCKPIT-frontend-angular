@@ -384,7 +384,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     // Open the Delete All Modal
     public toggleDeleteAllHostsModal(host?: HostObject) {
         let items: DeleteAllItem[] = [];
-        // Override the used service to be ServicesService.
+        // Override the used service to be HostsService.
         this.deleteService = this.HostsService;
 
         if (host) {
