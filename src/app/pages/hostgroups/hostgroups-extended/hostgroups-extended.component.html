@@ -411,7 +411,7 @@
                                         </oitc-actions-button-element>
 
                                         <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
-                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                        <oitc-actions-button-element (click)="toggleDeleteAllHostsModal(host.Host)"
                                                                      [permission]="'hosts.delete'">
                                             <span class="text-danger">
                                                 <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -633,6 +633,15 @@
                                                                  flip="horizontal"></fa-icon>
                                                         {{ t('Used By') }}
                                                     </oitc-actions-button-element>
+                                                    <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
+                                                    <oitc-actions-button-element [permission]="'services.delete'"
+                                                                                 *ngIf="service.Service.allow_edit"
+                                                                                 (click)="toggleDeleteAllServicesModal(service)">
+                                                        <span class="text-danger">
+                                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                            {{ t('Delete') }}
+                                                        </span>
+                                                    </oitc-actions-button-element>
                                                 </oitc-actions-button>
                                             </td>
                                         </tr>
@@ -697,4 +706,4 @@
                              [items]="selectedItems"></oitc-host-acknowledge-modal>
 <oitc-disable-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-disable-modal>
 
-<oitc-delete-all-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-delete-all-modal (completed)="onResetChecktime($event)" [items]="selectedItems" [overrideDeleteService]="deleteService"></oitc-delete-all-modal>

@@ -55,7 +55,8 @@ import {
     HostgroupsExtendedParams,
     HostgroupsExtendedServiceListParams,
     HostgroupsLoadHostgroupsByStringParams,
-    LoadServicesForHosts
+    LoadServicesForHosts,
+    ServicesList
 } from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -69,7 +70,6 @@ import {
     ServiceResetChecktimeModalComponent
 } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
-    ExternalCommandsService,
     HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
@@ -123,6 +123,7 @@ import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { HostsService } from '../../hosts/hosts.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ServicesService } from '../../services/services.service';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -211,7 +212,9 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
+    private readonly ServicesService: ServicesService = inject(ServicesService);
+    private readonly HostsService: HostsService = inject(HostsService);
+    protected deleteService: any = undefined;
     public readonly PermissionsService = inject(PermissionsService);
     public selectedTab: HostgroupExtendedTabs = HostgroupExtendedTabs.Hosts;
     private userFullname: string = '';
@@ -379,8 +382,10 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     // Open the Delete All Modal
-    public toggleDeleteAllModal(host?: HostObject) {
+    public toggleDeleteAllHostsModal(host?: HostObject) {
         let items: DeleteAllItem[] = [];
+        // Override the used service to be ServicesService.
+        this.deleteService = this.HostsService;
 
         if (host) {
             // User just want to delete a single command
@@ -408,6 +413,36 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         // Pass selection to the modal
         this.selectedItems = items;
         // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAllModal',
+        });
+    }
+
+    public toggleDeleteAllServicesModal(service?: ServicesList) {
+        let items: DeleteAllItem[] = [];
+        // Override the used service to be ServicesService.
+        this.deleteService = this.ServicesService;
+
+        if (service) {
+            // User just want to delete a single command
+            items = [{
+                id: Number(service.Service.id),
+                displayName: String(service.Service.servicename)
+            }];
+        }
+
+
+        if (items.length === 0) {
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
+        }
+
+        // Pass selection to the modal
+        this.selectedItems = items;
+        // open modal
+
         this.modalService.toggle({
             show: true,
             id: 'deleteAllModal',

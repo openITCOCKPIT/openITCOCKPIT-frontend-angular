@@ -48,6 +48,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: DeleteAllItem[] = [];
     @Input({required: false}) public deleteMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
+    @Input({required: false}) public overrideDeleteService: any = undefined;
     @Output() completed = new EventEmitter<boolean>();
 
 
@@ -99,11 +100,17 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
         // Delete any old errors
         this.errors = [];
 
+        let deleteService: any = this.deleteService;
+
+        // If you have multiple delete modals on one page, you may want to pass overrideDeleteService to the component.
+        if (this.overrideDeleteService) {
+            deleteService = this.overrideDeleteService;
+        }
 
         for (let i in this.items) {
             const item = this.items[i];
 
-            this.deleteService.delete(item).subscribe({
+            deleteService.delete(item).subscribe({
                 next: (value: any) => {
                     responseCount++
                     this.percentage = Math.round((responseCount / count) * 100);
