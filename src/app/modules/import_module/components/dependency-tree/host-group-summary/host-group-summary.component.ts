@@ -5,12 +5,16 @@ import { RouterLink } from '@angular/router';
 import { JsonPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
-import { HostgroupSummaryState, SummaryState } from '../../../../../pages/hosts/summary_state.interface';
+import {
+    HostgroupSummaryState,
+    HostgroupSummaryStateHosts,
+    HostgroupSummaryStatesHosts
+} from '../../../../../pages/hosts/summary_state.interface';
 import { NodeExtended } from '../dependency-tree.component';
 
 @Component({
-  selector: 'oitc-host-group-summary',
-  standalone: true,
+    selector: 'oitc-host-group-summary',
+    standalone: true,
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -23,20 +27,23 @@ import { NodeExtended } from '../dependency-tree.component';
         TableDirective,
         KeyValuePipe
     ],
-  templateUrl: './host-group-summary.component.html',
-  styleUrl: './host-group-summary.component.css'
+    templateUrl: './host-group-summary.component.html',
+    styleUrl: './host-group-summary.component.css'
 })
 export class HostGroupSummaryComponent {
     @Input() hostgroupSummeryState!: HostgroupSummaryState;
     @Input() selectedNode!: NodeExtended;
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
-    public hostSummaryRowLabels: { key: keyof SummaryState, label: string, queryParams: {} }[] = [
+    // By the love of god - how the fuck can we do this the right way?
+    public HostgroupSummaryStatesHostsKeys = Array<keyof HostgroupSummaryStatesHosts>('0', '1', '2', 'hostIds');
+
+
+    public hostSummaryRowLabels: { key: keyof HostgroupSummaryStateHosts, label: string, queryParams: {} }[] = [
         {
             key: 'state',
             label: this.TranslocoService.translate('State'),
-            queryParams: {
-            }
+            queryParams: {}
         }, {
             key: 'acknowledged',
             label: this.TranslocoService.translate('Acknowledged'),
@@ -66,4 +73,5 @@ export class HostGroupSummaryComponent {
         }
     ];
     protected readonly Object = Object;
+
 }

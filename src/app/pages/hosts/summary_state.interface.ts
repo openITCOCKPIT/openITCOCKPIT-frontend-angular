@@ -12,40 +12,22 @@ export interface HostgroupSummaryState {
     services: HostgroupSummaryStateServices
 }
 
+export interface HostgroupSummaryStatesHosts {
+    "0": number
+    "1": number
+    "2": number
+    hostIds: number[][]
+}
 
 export interface HostgroupSummaryStateHosts {
-    state: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    acknowledged: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    in_downtime: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    not_handled: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    passive: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
+    state: HostgroupSummaryStatesHosts
+    acknowledged: HostgroupSummaryStatesHosts
+    in_downtime: HostgroupSummaryStatesHosts
+    not_handled: HostgroupSummaryStatesHosts
+    passive: HostgroupSummaryStatesHosts
     total: number
 }
+
 
 export interface HostgroupSummaryStateServices {
     state: {
