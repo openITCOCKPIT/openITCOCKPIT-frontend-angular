@@ -47,80 +47,16 @@
                 </c-badge>
             </th>
         </tr>
-        <tr>
-            <th>{{ t('State') }}</th>
+        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
+            <th>{{ hostSummaryRowLabel.label }}</th>
             <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat['state'][stateIndex] > 0) {
+                @if (hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
                     <a *oitcPermission="['services', 'index']"
                        [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
-                        {{ hostSummaryStat['state'][stateIndex] }}
+                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
                     </a>
                     <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat['state'][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>{{ t('Acknowledged') }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat['acknowledged'][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
-                        {{ hostSummaryStat['acknowledged'][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat['acknowledged'][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>{{ t('In downtime') }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat['in_downtime'][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
-                        {{ hostSummaryStat['in_downtime'][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat['in_downtime'][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>{{ t('Not handled') }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat['not_handled'][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
-                        {{ hostSummaryStat['not_handled'][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat['not_handled'][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>{{ t('Passive') }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat['passive'][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
-                        {{ hostSummaryStat['passive'][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat['passive'][stateIndex] }}
+                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
                     </span>
                 } @else {
                     ---

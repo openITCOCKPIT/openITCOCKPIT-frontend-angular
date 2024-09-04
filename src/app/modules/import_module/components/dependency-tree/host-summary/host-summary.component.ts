@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { SummaryState } from '../../../../../pages/hosts/summary_state.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { JsonPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NodeExtended } from '../dependency-tree.component';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
+
 
 @Component({
     selector: 'oitc-host-summary',
@@ -20,7 +21,8 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
         JsonPipe,
         BadgeComponent,
         NgForOf,
-        TableDirective
+        TableDirective,
+        KeyValuePipe
     ],
     templateUrl: './host-summary.component.html',
     styleUrl: './host-summary.component.css'
@@ -28,5 +30,26 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
 export class HostSummaryComponent {
     @Input() hostSummaryStat!: SummaryState;
     @Input() selectedNode!: NodeExtended;
+    public TranslocoService: TranslocoService = inject(TranslocoService);
+
+    public hostSummaryRowLabels = [
+        {
+            key: 'state',
+            label: this.TranslocoService.translate('State')
+        }, {
+            key: 'acknowledged',
+            label: this.TranslocoService.translate('Acknowledged')
+        }, {
+            key: 'downtime',
+            label: this.TranslocoService.translate('In downtime')
+        }, {
+            key: 'not_handled',
+            label: this.TranslocoService.translate('Not handled')
+        }, {
+            key: 'passive',
+            label: this.TranslocoService.translate('Passive')
+        }
+    ];
+
 
 }
