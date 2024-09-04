@@ -32,6 +32,7 @@ export class HostSummaryComponent {
     @Input() selectedNode!: NodeExtended;
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
+
     public hostSummaryRowLabels = [
         {
             key: 'state',
@@ -40,7 +41,7 @@ export class HostSummaryComponent {
             key: 'acknowledged',
             label: this.TranslocoService.translate('Acknowledged')
         }, {
-            key: 'downtime',
+            key: 'in_downtime',
             label: this.TranslocoService.translate('In downtime')
         }, {
             key: 'not_handled',
