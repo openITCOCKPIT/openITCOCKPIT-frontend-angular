@@ -50,7 +50,7 @@
         <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
             <th>{{ hostSummaryRowLabel.label }}</th>
             <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
+                @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
                     <a *oitcPermission="['services', 'index']"
                        [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
                         {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
