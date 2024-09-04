@@ -1,1 +1,280 @@
-<p>wan-line works!</p>
+<ng-container *transloco="let t">
+    <table cTable bordered hover *ngIf="result.response.general_information">
+        <tbody>
+        <tr>
+            <td colspan="6">
+                <div class="d-flex flex-align-items-center">
+                    <div>
+                        <fa-layers [fixedWidth]="true" size="4x">
+                            <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
+                            <fa-icon [icon]="['fas', 'circle-nodes']" [inverse]="true"
+                                     [transform]="'shrink-10'"></fa-icon>
+                        </fa-layers>
+                    </div>
+                    <div class="iTop-class-label flex-1">
+                        {{ result.response.general_information.finalclass }}
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="border-primary-top">
+            <th colspan="2" class="col-4">
+                <fa-icon [icon]="['fas', 'info-circle']" class="text-primary width-15"></fa-icon>
+                {{ t('General information') }}
+            </th>
+            <td class="bold">
+                {{ t('Status') }}
+            </td>
+            <th colspan="3" class="col-4">
+                <fa-icon [icon]="['fas', 'cogs']" class="text-primary width-15"></fa-icon>
+                {{ t('Operations') }}
+            </th>
+        </tr>
+
+        <tr>
+            <th class="col-lg-2 col-md-2">
+                {{ t('man_wan_id') }}
+            </th>
+            <td>
+                @if (result.response.general_information['man_wan_id']) {
+                    {{ result.response.general_information['man_wan_id'] }}
+                }
+            </td>
+            <td class="col-lg-1 col-md-1">
+                <div [ngSwitch]="result.response.general_information.status">
+                    <span *ngSwitchCase="'implementation'"
+                          class="badge border-info border text-info w-100">
+                        <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
+                        {{ t('implementation') }}
+                    </span>
+                    <span *ngSwitchCase="'active'"
+                          class="badge border-success border text-success w-100">
+                        <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
+                        {{ t('active') }}
+                    </span>
+                    <span *ngSwitchCase="'stock'"
+                          class="badge border-primary border text-primary w-100">
+                        <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
+                        {{ t('stock') }}
+                    </span>
+                    <span *ngSwitchCase="'obsolete'"
+                          class="badge border-danger border text-danger w-100">
+                        <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
+                        {{ t('obsolete') }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="col-lg-1 col-md-1">
+                {{ t('finalclass') }}
+            </th>
+            <td colspan="2">
+                {{ result.response.general_information.finalclass }}
+            </td>
+        </tr>
+        <tr>
+            <th class="col-lg-1 col-md-1">
+                {{ t('hostname') }}
+            </th>
+            <td>
+                {{ result.response.general_information.hostname }}
+            </td>
+            <td rowspan="4" class="text-center align-middle">
+                <span [ngSwitch]="result.response.general_information.status">
+                    <!-- Gradient colored icons -->
+                    <i class="fas fa-file-circle-check fa-4x status-implementation"
+                       *ngSwitchCase="'implementation'"></i>
+                    <i class="fas fa-plug-circle-check fa-4x status-production" *ngSwitchCase="'active'"></i>
+                    <i class="fas fa-boxes-packing fa-4x status-stock" *ngSwitchCase="'stock'"></i>
+                    <i class="fas fa-plug-circle-bolt fa-4x status-obsolete" *ngSwitchCase="'obsolete'"></i>
+                </span>
+            </td>
+            <th>
+                {{ t('monitoring_template') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['monitoring_template']) {
+                    {{ result.response.general_information['monitoring_template'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                {{ t('External ID') }}
+            </th>
+            <td class="text-primary">
+                {{ result.response.general_information.id }}
+                <span *ngIf="result.response.externalLink" class="ng-scope">
+                    <a target="_blank" [href]="result.response.externalLink">
+                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                    </a>
+                </span>
+            </td>
+
+            <th>{{ t('wan_interface') }}</th>
+            <td colspan="2">
+                @if (result.response.general_information['wan_interface']) {
+                    {{ result.response.general_information['wan_interface'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                {{ t('org_id_friendlyname') }}
+            </th>
+            <td>
+                @if (result.response.general_information['org_id_friendlyname']) {
+                    {{ result.response.general_information['org_id_friendlyname'] }}
+                }
+            </td>
+            <th>
+                {{ t('loopback_ip') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['loopback_ip']) {
+                    {{ result.response.general_information['loopback_ip'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                {{ t('organization_name') }}
+            </th>
+            <td>
+                {{ result.response.general_information.organization_name }}
+            </td>
+            <th>
+                {{ t('location_name') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['location_name']) {
+                    {{ result.response.general_information['location_name'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                {{ t('wan_scope') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['wan_scope']) {
+                    {{ result.response.general_information['wan_scope'] }}
+                }
+            </td>
+            <th colspan="3">
+            </th>
+
+        </tr>
+
+
+        <tr class="border-primary-top">
+            <th colspan="6" class="border-primary-top">
+                <fa-icon [icon]="['fas', 'info-circle']" class="text-primary width-15"></fa-icon>
+                {{ t('WANLine details') }}
+            </th>
+        </tr>
+        <tr>
+            <th>
+                {{ t('router_asset_id') }}
+            </th>
+            <td colspan="5">
+                @if (result.response.general_information['router_asset_id']) {
+                    {{ result.response.general_information['router_asset_id'] }}
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {{ t('topsite') }}
+            </th>
+            <td colspan="5">
+                @if (result.response.general_information['topsite']) {
+                    {{ result.response.general_information['topsite'] }}
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {{ t('linetype') }}
+            </th>
+            <td colspan="5">
+                @if (result.response.general_information['linetype']) {
+                    {{ result.response.general_information['linetype'] }}
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {{ t('wan_edge_type') }}
+            </th>
+            <td colspan="5">
+                @if (result.response.general_information['wan_edge_type']) {
+                    {{ result.response.general_information['wan_edge_type'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="6" class="border-primary-top">
+                <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary width-15"></fa-icon>
+                {{ t('Accounting') }}
+            </th>
+        </tr>
+        <tr>
+            <th>
+                {{ t('provider_id_friendlyname') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['provider_id_friendlyname']) {
+                    {{ result.response.general_information['provider_id_friendlyname'] }}
+                }
+            </td>
+            <th>
+                {{ t('wan_serviceclass') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['wan_serviceclass']) {
+                    {{ result.response.general_information['wan_serviceclass'] }}
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                {{ t('provider_linenumber') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['provider_linenumber']) {
+                    {{ result.response.general_information['provider_linenumber'] }}
+                }
+            </td>
+            <th>
+                {{ t('wan_risk_class') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['wan_risk_class']) {
+                    {{ result.response.general_information['wan_risk_class'] }}
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {{ t('service_number') }}
+            </th>
+            <td colspan="2">
+                @if (result.response.general_information['service_number']) {
+                    {{ result.response.general_information['service_number'] }}
+                }
+            </td>
+            <th colspan="3">
+            </th>
+        </tr>
+
+        </tbody>
+    </table>
+</ng-container>

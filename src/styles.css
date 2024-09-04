@@ -48,7 +48,8 @@
  * https://docs.fontawesome.com/web/dig-deeper/webfont-vs-svg
  * https://github.com/FortAwesome/angular-fontawesome/issues/173#issuecomment-2321811742
  */
-@import "@fortawesome/fontawesome-free/css/all.css";
+/* This breaks FontAwesome stacked icons so we have moved this into the style.scss */
+/*@import "@fortawesome/fontawesome-free/css/all.css";*/
 
 /*
 *, *::before, *::after {

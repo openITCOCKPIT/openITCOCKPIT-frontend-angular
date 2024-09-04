@@ -18,6 +18,32 @@
 @import 'ngx-toastr/toastr';
 @import "toast";
 
+/*
+ * Importing FontAwesome globally that we can Web Fonts which support gradients
+ * and can also be used within libraries like Vis-Timeline
+ * and CSS referenced by its unique unicode
+ *
+ * Use the Angular-FontAwesome <fa-icon> component whenever possible
+ * https://docs.fontawesome.com/web/dig-deeper/webfont-vs-svg
+ * https://github.com/FortAwesome/angular-fontawesome/issues/173#issuecomment-2321811742
+ */
+@import "@fortawesome/fontawesome-free/scss/functions";
+@import "@fortawesome/fontawesome-free/scss/variables";
+@import "@fortawesome/fontawesome-free/scss/mixins";
+@import "@fortawesome/fontawesome-free/scss/core";
+@import "@fortawesome/fontawesome-free/scss/sizing";
+@import "@fortawesome/fontawesome-free/scss/fixed-width";
+@import "@fortawesome/fontawesome-free/scss/list";
+@import "@fortawesome/fontawesome-free/scss/bordered-pulled";
+@import "@fortawesome/fontawesome-free/scss/animated";
+@import "@fortawesome/fontawesome-free/scss/rotated-flipped";
+/* Stacked icons breaks angular-fontawesome  */
+/*@import "@fortawesome/fontawesome-free/scss/stacked";*/
+@import "@fortawesome/fontawesome-free/scss/icons";
+@import "@fortawesome/fontawesome-free/scss/screen-reader";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+
 @import "theme";
 @import "card";
 @import "fonts";

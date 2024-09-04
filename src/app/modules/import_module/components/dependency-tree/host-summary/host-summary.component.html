@@ -1,0 +1,73 @@
+<ng-container *transloco="let t">
+    <header>
+        <h4 class="border-bottom border-primary border-3 text-primary">
+            {{ t('External ID') }} {{ selectedNode.key }}
+            <span *ngIf="selectedNode.external_link" class="ng-scope">
+                <a target="_blank" [href]="selectedNode.external_link">
+                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                </a>
+            </span>
+        </h4>
+    </header>
+    <h5 class="pt-1">
+        <fa-icon [icon]="['fas', 'desktop']" class="ps-1"></fa-icon>
+        <span *oitcPermission="['hosts', 'browser']">
+            <a [routerLink]="['/', 'hosts', 'browser',selectedNode.host?.id]">
+                {{ selectedNode.host?.name }}
+            </a>
+        </span>
+        <span *oitcPermission="['hosts', 'browser']; negate: true">
+            {{ selectedNode.host?.name }}
+        </span>
+        <span *ngIf="selectedNode.host?.disabled == 1" class="italic text-danger fw-lighter small">
+            [
+            <fa-icon [icon]="['fas', 'plug']" class="text-danger italic fw-lighter small"></fa-icon>
+            ]
+            {{ t('disabled') }}
+        </span>
+    </h5>
+    <table cTable bordered hover small [striped]="true" class="small">
+        <tbody>
+        <tr>
+            <td></td>
+            <th class="text-center">
+                <c-badge color="success">{{ t('Ok') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="warning">{{ t('Warning') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="danger">{{ t('Critical') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="secondary">{{ t('Unknown') }}
+                </c-badge>
+            </th>
+        </tr>
+        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
+            <th>{{ hostSummaryRowLabel.label }}</th>
+            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
+                @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
+                    <a *oitcPermission="['services', 'index']"
+                       [routerLink]="['/', 'services', 'index', selectedNode.host?.id, 'services']">
+                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                    </a>
+                    <span *oitcPermission="['services', 'index']; negate: true">
+                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                    </span>
+                } @else {
+                    ---
+                }
+            </td>
+        </tr>
+        <tr>
+            <th colspan="5" class="text-end">{{ t('TOTAL:') }}
+                {{ hostSummaryStat['total'] }}
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</ng-container>

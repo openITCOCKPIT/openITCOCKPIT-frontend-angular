@@ -1,4 +1,4 @@
-import { Component, inject, Input, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../external-systems.service';
 import { AdditionalHostInformationResult } from '../../ExternalSystems.interface';
@@ -21,9 +21,10 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
     templateUrl: './additional-host-information.component.html',
     styleUrl: './additional-host-information.component.css'
 })
-export class AdditionalHostInformationComponent {
+export class AdditionalHostInformationComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public hostId: number = 0;
+    @Input() public hostname: string = '';
     @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
 
     public result?: AdditionalHostInformationResult;

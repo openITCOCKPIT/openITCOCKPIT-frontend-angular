@@ -5,10 +5,10 @@
     @if (result) {
         @switch (result.data_source) {
             @case ('idoit') {
-                <oitc-idoit-overview [result]="result"></oitc-idoit-overview>
+                <oitc-idoit-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-idoit-overview>
             }
             @case ('itop') {
-                <oitc-itop-overview [result]="result"></oitc-itop-overview>
+                <oitc-itop-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-itop-overview>
             }
 
         }
