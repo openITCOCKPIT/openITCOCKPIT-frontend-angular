@@ -55,15 +55,12 @@ import {
     UsersIndexRoot
 } from '../users.interface';
 import { RouterLink } from '@angular/router';
-import {
-    getDefaultServicegroupsIndexParams,
-    ServicegroupsIndexServicegroup
-} from '../../servicegroups/servicegroups.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { ResetPasswordModalComponent } from '../../../components/reset-password-modal/reset-password-modal.component';
 
 @Component({
     selector: 'oitc-users-index',
@@ -113,7 +110,8 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
         RouterLink,
         FormErrorDirective,
         MultiSelectComponent,
-        BadgeComponent
+        BadgeComponent,
+        ResetPasswordModalComponent
     ],
     templateUrl: './users-index.component.html',
     styleUrl: './users-index.component.css',
@@ -132,7 +130,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
     protected result: UsersIndexRoot = {all_users: [], _csrfToken: '', myUserId: 0, isLdapAuth: false} as UsersIndexRoot;
     protected hideFilter: boolean = true;
     protected usergroups : SelectKeyValue[] = [];
-
+    protected resetPasswordUser: User = {} as User;
 
     public loadUsers() {
         this.SelectionServiceService.deselectAll();
@@ -221,6 +219,13 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
         });
     }
 
+    public resetPasswordModal(user: User) {
+        this.resetPasswordUser = user;
+        this.modalService.toggle({
+            show: true,
+            id: 'resetPasswordModal',
+        });
+    }
 
     // Generic callback whenever a mass action (like delete all) has been finished
     public onMassActionComplete(success: boolean) {
