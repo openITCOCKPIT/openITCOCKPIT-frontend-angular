@@ -121,6 +121,8 @@ import {
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { HostsService } from '../../hosts/hosts.service';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -190,12 +192,14 @@ import { HostsService } from '../../hosts/hosts.service';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         NgClass,
-        SlaHostgroupHostsStatusOverviewComponent
+        SlaHostgroupHostsStatusOverviewComponent,
+        DeleteAllModalComponent
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}
     ]
 })
 export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
