@@ -1,4 +1,15 @@
-import { Component, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    EventEmitter,
+    SimpleChanges
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -90,6 +101,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public showOnlineOffline: boolean = false;
 
+    @Output() public externalSystemConnected = new EventEmitter<boolean>();
+
     selectedNode!: NodeExtended;
 
     @HostListener('fullscreenchange', ['$event'])
@@ -162,7 +175,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         this.ExternalSystemsService.getDependencyTree(this.objectId, this.type).subscribe(data => {
             this.dependencyTree = data;
             this.isOnline = data.connected.status;
-
+            this.externalSystemConnected.emit(this.isOnline);
             this.renderVisNetwork(
                 this.dependencyTree.treeData.source,
                 this.dependencyTree.treeData.objects,
