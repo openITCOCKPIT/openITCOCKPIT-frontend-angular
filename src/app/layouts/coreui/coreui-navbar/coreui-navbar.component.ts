@@ -1,10 +1,10 @@
-import { booleanAttribute, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, inject, Input, OnInit, Renderer2 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 import { MenuHeadline, NavigationInterface } from '../../../components/navigation/navigation.interface';
-import { JsonPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
@@ -12,6 +12,7 @@ import { NgScrollbar } from 'ngx-scrollbar';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
+import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-coreui-navbar',
@@ -25,7 +26,8 @@ import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
         NgScrollbar,
         NgIf,
         TranslocoPipe,
-        NavbarSearchComponent
+        NavbarSearchComponent,
+        AsyncPipe
     ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css'
@@ -55,7 +57,8 @@ export class CoreuiNavbarComponent implements OnInit {
     public isUnfoldable: boolean = true; // disabled on mobile devices
 
 
-    private subscriptions: Subscription = new Subscription()
+    private subscriptions: Subscription = new Subscription();
+    public readonly SystemnameService = inject(SystemnameService);
 
     public menu: MenuHeadline[] = [];
 
