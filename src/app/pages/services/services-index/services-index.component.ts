@@ -34,11 +34,9 @@ import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/route
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { Subscription } from 'rxjs';
 import { ServicesService } from '../services.service';
-import { ProfileService } from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getDefaultServicesIndexFilter,
-    getDefaultServiceIndexParams,
     getDefaultServicesIndexFilterApiRequest,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
@@ -126,7 +124,6 @@ import {
     ServiceResetItem
 } from '../../../services/external-commands.service';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
@@ -232,7 +229,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     private ServicesService: ServicesService = inject(ServicesService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public readonly PermissionsService = inject(PermissionsService);
-    private ProfileService: ProfileService = inject(ProfileService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
@@ -265,32 +261,13 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     private RequestFilter: ServicesIndexFilterApiRequest = getDefaultServicesIndexFilterApiRequest();
 
     //end filter
-    public params: ServiceParams = getDefaultServiceIndexParams();
-     /*   {
+    public params: ServiceParams = {
         angular: true,
         scroll: true,
         sort: 'Servicestatus.current_state',
         page: 1,
-        direction: 'desc',
-        //'filter[Hosts.id]': [],
-        //'filter[Hosts.name]': '',
-        //'filter[Hosts.name_regex]': '',
-        //'filter[Hosts.satellite_id][]': [],
-        //'filter[Services.id][]': [],
-        //'filter[Services.service_type][]': [],
-        //'filter[servicename]': '',
-        //'filter[servicename_regex]': '',
-        //'filter[servicedescription]': '',
-        //'filter[Servicestatus.output]': '',
-        //'filter[Servicestatus.current_state][]': [],
-        //'filter[keywords][]': [],
-        //'filter[not_keywords][]': [],
-        //'filter[Servicestatus.problem_has_been_acknowledged]': '',
-        //'filter[Servicestatus.scheduled_downtime_depth]': '',
-        //'filter[Servicestatus.active_checks_enabled]': '',
-        //'filter[Servicestatus.notifications_enabled]': '',
-        //'filter[servicepriority][]': []
-    };*/
+        direction: 'desc'
+    };
 
     public hideFilter: boolean = true;
     public showColumnConfig: boolean = false;
@@ -299,51 +276,68 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     public selectedItems: any[] = [];
     public userFullname: string = '';
 
-    constructor(private _liveAnnouncer: LiveAnnouncer) {
-    }
-
-
     ngOnInit() {
         this.loadColumns();
         this.serviceTypes = this.ServicesService.getServiceTypes();
         this.getUserTimezone();
+
         this.route.queryParams.subscribe(params => {
+            let serviceId = params['service_id'] || params['id']
+            if (serviceId) {
+                this.filter.Services.id = [].concat(serviceId); // make sure we always get an array
+            }
+
             let hostId = params['host_id']
             if (hostId) {
-                if (Array.isArray(hostId)) {
-                    // host_id is an array of ids
-                    this.filter.Hosts.id = hostId;
-                } else {
-                    // host_id is a single id
-                    this.filter.Hosts.id = [hostId];
-                }
+                this.filter.Hosts.id = [].concat(hostId); // make sure we always get an array
+            }
+
+            let servicename = params['servicename'] || undefined;
+            if (servicename) {
+                this.filter.Services.name = servicename;
+            }
+
+            let servicedescription = params['servicedescription'] || undefined;
+            if (servicedescription) {
+                this.filter.Services.servicedescription = servicedescription;
             }
 
             let acknowledged = params['acknowledged'];
-            if (acknowledged === true) {
+            if (acknowledged === 'true') {
                 this.filter.Servicestatus.acknowledged = true;
             }
-
             let not_acknowledged = params['not_acknowledged'];
-            if (not_acknowledged === true) {
+            if (not_acknowledged === 'true') {
                 this.filter.Servicestatus.not_acknowledged = true;
             }
-
             let in_downtime = params['in_downtime'];
-            if (in_downtime === true) {
+            if (in_downtime === 'true') {
                 this.filter.Servicestatus.in_downtime = true;
             }
-
             let not_in_downtime = params['not_in_downtime'];
-            if (not_in_downtime === true) {
+            if (not_in_downtime === 'true') {
+                this.filter.Servicestatus.not_in_downtime = true;
+            }
+            let passive = params['passive'];
+            if (passive === 'true') {
+                this.filter.Servicestatus.passive = true;
+            }
+            let unhandled = params['unhandled'];
+            if (unhandled === 'true') {
+                this.filter.Servicestatus.not_acknowledged = true;
                 this.filter.Servicestatus.not_in_downtime = true;
             }
 
-            let passive = params['passive'];
-            if (passive === true) {
-                this.filter.Servicestatus.passive = true;
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter.Services.keywords = [keywords];
             }
-            
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter.Services.not_keywords = [not_keywords];
+            }
+
             let direction = params['direction'];
             if (direction && direction === 'asc' || direction === 'desc') {
                 this.params.direction = direction;
@@ -354,22 +348,27 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 this.params.sort = sort;
             }
 
-
-            switch (parseInt(params['servicestate'] || -1)) {
-                case 0:
-                    this.filter.Servicestatus.current_state.ok = true;
-                    break;
-                case 1:
-                    this.filter.Servicestatus.current_state.warning = true;
-                    break;
-                case 2:
-                    this.filter.Servicestatus.current_state.critical = true;
-                    break;
-                case 3:
-                    this.filter.Servicestatus.current_state.unknown = true;
-                    break;
-                default:
-                    break;
+            let servicestate = params['servicestate'] || undefined;
+            if (servicestate) {
+                servicestate = [].concat(servicestate); // make sure we always get an array
+                servicestate.forEach((state: any) => {
+                    switch (parseInt(state, 10)) {
+                        case 0:
+                            this.filter.Servicestatus.current_state.ok = true;
+                            break;
+                        case 1:
+                            this.filter.Servicestatus.current_state.warning = true;
+                            break;
+                        case 2:
+                            this.filter.Servicestatus.current_state.critical = true;
+                            break;
+                        case 3:
+                            this.filter.Servicestatus.current_state.unknown = true;
+                            break;
+                        default:
+                            break;
+                    }
+                });
             }
         });
         this.setFilterAndLoad(this.filter);
@@ -789,41 +788,39 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
         this.RequestFilter['Hosts.id'] = filter.Hosts.id;
         this.RequestFilter['Hosts.name'] = filter.Hosts.name;
-        this.RequestFilter['Hosts.name_regex'] = (filter.Hosts.name_regex) ? true : false;
+        this.RequestFilter['Hosts.name_regex'] = !!(filter.Hosts.name_regex);
         this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
 
         this.RequestFilter['Services.id'] = filter.Services.id;
-        this.RequestFilter['Services.name'] = filter.Services.name;
-        this.RequestFilter['Services.name_regex'] = (filter.Services.name_regex ? true : false);
-        this.RequestFilter['Services.keywords'] = filter.Services.keywords;
-        this.RequestFilter['Services.not_keywords'] = filter.Services.not_keywords;
+        this.RequestFilter['servicename'] = filter.Services.name;
+        this.RequestFilter['servicename_regex'] = (!!filter.Services.name_regex);
+        this.RequestFilter['keywords'] = filter.Services.keywords;
+        this.RequestFilter['not_keywords'] = filter.Services.not_keywords;
         this.RequestFilter['servicedescription'] = filter.Services.servicedescription;
         this.RequestFilter['servicepriority'] = priorityFilter
         this.RequestFilter['Services.service_type'] = filter.Services.service_type;
 
-
         this.RequestFilter['Servicestatus.current_state'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
-
-
+        this.RequestFilter['Servicestatus.output'] = filter.Servicestatus.output;
         this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = '';
         this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = '';
         this.RequestFilter['Servicestatus.notifications_enabled'] = '';
         this.RequestFilter['Servicestatus.active_checks_enabled'] = '';
 
         if (filter.Servicestatus.acknowledged !== filter.Servicestatus.not_acknowledged) {
-            this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = String(filter.Servicestatus.acknowledged === true);
+            this.RequestFilter['Servicestatus.problem_has_been_acknowledged'] = String(filter.Servicestatus.acknowledged);
         }
 
         if (filter.Servicestatus.in_downtime !== filter.Servicestatus.not_in_downtime) {
-            this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = String(filter.Servicestatus.in_downtime === true);
+            this.RequestFilter['Servicestatus.scheduled_downtime_depth'] = String(filter.Servicestatus.in_downtime);
         }
 
         if (filter.Servicestatus.notifications_enabled !== filter.Servicestatus.notifications_not_enabled) {
-            this.RequestFilter['Servicestatus.notifications_enabled'] = String(filter.Servicestatus.notifications_enabled === true);
+            this.RequestFilter['Servicestatus.notifications_enabled'] = String(filter.Servicestatus.notifications_enabled);
         }
 
         if (filter.Servicestatus.passive !== filter.Servicestatus.active) {
-            this.RequestFilter['Servicestatus.active_checks_enabled'] = String(filter.Servicestatus.active === true);
+            this.RequestFilter['Servicestatus.active_checks_enabled'] = String(filter.Servicestatus.active);
         }
 
         this.filter = filter;
@@ -859,10 +856,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     //filter
     public resetFilter() {
-        this.params = getDefaultServiceIndexParams();
-        this.filter = getDefaultServicesIndexFilter();
-        //this.load();
-          /*  {
+        this.filter = {
             Servicestatus: {
                 current_state: {
                     ok: false,
@@ -902,7 +896,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 name_regex: false,
                 satellite_id: []
             }
-        };*/
+        };
+        this.load();
     }
 
     public onFilterChange(event: Event | null) {

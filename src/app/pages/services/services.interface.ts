@@ -14,26 +14,7 @@ export interface ServiceParams {
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | '',
-    // ITC-3349 Change load function to use POST
-    //'filter[Hosts.id]': number[],
-    //'filter[Hosts.name]': string,
-    //'filter[Hosts.name_regex]': boolean | string,
-    //'filter[Hosts.satellite_id][]': number[],
-    //'filter[Services.id][]': number[],
-    //'filter[Services.service_type][]': number[],
-    //'filter[servicename]': string,
-    //'filter[servicename_regex]': boolean | string,
-    //'filter[servicedescription]': string,
-    //'filter[Servicestatus.output]': string,
-    //'filter[Servicestatus.current_state][]': string[],
-    //'filter[keywords][]': string[],
-    //'filter[not_keywords][]': string[],
-    //'filter[Servicestatus.problem_has_been_acknowledged]': boolean | string,
-    //'filter[Servicestatus.scheduled_downtime_depth]': boolean | string,
-    //'filter[Servicestatus.active_checks_enabled]': boolean | string,
-    //'filter[Servicestatus.notifications_enabled]': boolean | string,
-    //'filter[servicepriority][]': number[]
+    direction: 'asc' | 'desc' | ''
 }
 
 export function getDefaultServiceIndexParams(): ServiceParams {
@@ -131,25 +112,24 @@ export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
 export interface ServicesIndexFilterApiRequest {
     'Hosts.id': number[]
     'Hosts.name': string
-    'Hosts.name_regex': boolean
+    'Hosts.name_regex': boolean | string
     'Hosts.satellite_id': number[]
 
     'Services.id': number[]
-    'Services.name': string
-    'Services.name_regex': boolean
-    'Services.keywords': string[]
-    'Services.not_keywords': string[]
-    'servicedescription': string
-    'servicepriority': string[]
     'Services.service_type': ServiceTypesEnum[]
+    'servicename': string
+    'servicename_regex': boolean | string
+    'servicedescription': string
+    'keywords':  string[]
+    'not_keywords':  string[]
+    'servicepriority': string[]
 
-    'Servicestatus.output': string
     'Servicestatus.current_state': string[]
-    'Servicestatus.problem_has_been_acknowledged': string,
-    'Servicestatus.scheduled_downtime_depth': string,
-    'Servicestatus.notifications_enabled': string,
-    //'Servicestatus.is_hardstate': string
+    'Servicestatus.output': string
+    'Servicestatus.problem_has_been_acknowledged': string
+    'Servicestatus.scheduled_downtime_depth': string
     'Servicestatus.active_checks_enabled': string
+    'Servicestatus.notifications_enabled': string
 }
 
 export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterApiRequest {
@@ -160,13 +140,13 @@ export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterAp
         'Hosts.satellite_id': [],
 
         'Services.id': [],
-        'Services.name': '',
-        'Services.name_regex': false,
-        'Services.keywords': [],
-        'Services.not_keywords': [],
-        'servicedescription': '',
-        'servicepriority': [],
         'Services.service_type': [],
+        'servicename': '',
+        'servicename_regex': '',
+        'servicedescription': '',
+        'keywords': [],
+        'not_keywords': [],
+        'servicepriority': [],
 
         'Servicestatus.output': '',
         'Servicestatus.current_state': [],

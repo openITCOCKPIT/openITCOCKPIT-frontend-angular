@@ -178,6 +178,12 @@ export class CommandsIndexComponent implements OnInit, OnDestroy {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Commands.id][]'] = [].concat(id); // make sure we always get an array
+            }
+
             this.loadCommands();
         }));
     }

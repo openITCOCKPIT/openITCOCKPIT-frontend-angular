@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MenuHeadline, MenuLink } from '../../../../components/navigation/navigation.interface';
@@ -7,6 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { NgClass, NgIf } from '@angular/common';
 import { PermissionsService } from '../../../../permissions/permissions.service';
+import { UUID } from '../../../../classes/UUID';
+import { SearchService } from '../../../../search/search.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-navbar-search',
@@ -23,7 +26,7 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
     templateUrl: './navbar-search.component.html',
     styleUrl: './navbar-search.component.css'
 })
-export class NavbarSearchComponent {
+export class NavbarSearchComponent implements OnDestroy {
 
     @Input({required: true}) public menu: MenuHeadline[] = [];
     public searchString: string = '';
@@ -34,9 +37,17 @@ export class NavbarSearchComponent {
     // or if a user searched for "command" and hit an arrow key to select the menu record
     public currentSelectedIndex: number = -1;
 
+    public isSearching: boolean = false;
+
     private router = inject(Router);
     private readonly PermissionService: PermissionsService = inject(PermissionsService);
+    private readonly SearchService = inject(SearchService);
 
+    private subscriptions: Subscription = new Subscription();
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
 
     public onKeydown(event: any) {
         if (this.searchString === "") {
@@ -76,8 +87,30 @@ export class NavbarSearchComponent {
                 }
 
                 if (this.currentSelectedIndex === -1) {
-                    if (this.PermissionService.hasPermission(['hosts', 'index'])) {
-                        this.router.navigate(['/hosts/index'], {queryParams: {hostname: this.searchString}});
+                    const uuid = new UUID();
+                    if (uuid.isUuid(this.searchString)) {
+                        // We have a UUID
+                        this.isSearching = true;
+                        
+                        this.subscriptions.add(this.SearchService.searchUUID(this.searchString)
+                            .subscribe((result) => {
+                                this.isSearching = false;
+                                if (result.hasPermission) {
+                                    this.router.navigate(result.url, {
+                                        queryParams: {
+                                            id: result.id
+                                        }
+                                    });
+                                } else {
+                                    this.router.navigate(['/error/403']);
+                                }
+                            })
+                        );
+                    } else {
+                        // Search for host name
+                        if (this.PermissionService.hasPermission(['hosts', 'index'])) {
+                            this.router.navigate(['/hosts/index'], {queryParams: {hostname: this.searchString}});
+                        }
                     }
                 }
 

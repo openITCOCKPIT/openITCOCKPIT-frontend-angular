@@ -1,0 +1,77 @@
+<ng-container *transloco="let t">
+
+    @if (this.PermissionsService.hasPermission(['hosts', 'index']) || this.PermissionsService.hasPermission(['services', 'index'])) {
+        <form cForm class="d-none d-sm-flex" (ngSubmit)="doSearch()">
+
+            <c-input-group>
+                <c-dropdown>
+                    <button cButton cDropdownToggle color="secondary" [disabled]="isSearching"
+                            class="border-0 bg-body-secondary input-group-text top-search-dropdown">
+                        @if (isSearching) {
+                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"></fa-icon>
+                        } @else {
+                            {{ currentSearchTypeTranslation }}
+                        }
+                    </button>
+                    <div cDropdownMenu>
+                        <span cDropdownItem *oitcPermission="['hosts', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.Host}"
+                              (click)="setSearchType(SearchType.Host, t('Hosts'))">
+                            <fa-icon [icon]="['fas', 'check']" *ngIf=" currentSearchType === SearchType.Host"></fa-icon>
+                            {{ t('Hosts') }}
+                        </span>
+
+                        <span cDropdownItem *oitcPermission="['services', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.Service}"
+                              (click)="setSearchType(SearchType.Service, t('Services'))">
+                            <fa-icon [icon]="['fas', 'check']"
+                                     *ngIf=" currentSearchType === SearchType.Service"></fa-icon>
+                            {{ t('Services') }}
+                        </span>
+
+                        <span cDropdownItem *oitcPermission="['hosts', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.UUID}"
+                              (click)="setSearchType(SearchType.UUID, t('UUID'))">
+                            <fa-icon [icon]="['fas', 'check']" *ngIf=" currentSearchType ===SearchType.UUID"></fa-icon>
+                            {{ t('UUID') }}
+                        </span>
+
+                        <span cDropdownItem *oitcPermission="['hosts', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.Address}"
+                              (click)="setSearchType(SearchType.Address, t('IP address'))">
+                            <fa-icon [icon]="['fas', 'check']"
+                                     *ngIf=" currentSearchType === SearchType.Address"></fa-icon>
+                            {{ t('IP address') }}
+                        </span>
+
+                        <span cDropdownItem *oitcPermission="['hosts', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.TagsHost}"
+                              (click)="setSearchType(SearchType.TagsHost, t('Tags (Host)'))">
+                            <fa-icon [icon]="['fas', 'check']"
+                                     *ngIf=" currentSearchType === SearchType.TagsHost"></fa-icon>
+                            {{ t('Tags (Host)') }}
+                        </span>
+
+                        <span cDropdownItem *oitcPermission="['services', 'index']"
+                              [ngClass]="{'text-primary': currentSearchType === SearchType.TagsService}"
+                              (click)="setSearchType(SearchType.TagsService,t('Tags (Service)'))">
+                            <fa-icon [icon]="['fas', 'check']"
+                                     *ngIf=" currentSearchType ===SearchType.TagsService"></fa-icon>
+                            {{ t('Tags (Service)') }}
+                        </span>
+
+                    </div>
+                </c-dropdown>
+                <input aria-label="Top search bar" cFormControl
+                       type="text"
+                       [placeholder]="'Type to search'|transloco"
+                       name="top-search"
+                       [(ngModel)]="searchStr"
+                       [disabled]="isSearching"
+                       class="bg-body-secondary border-0 form-control"/>
+            </c-input-group>
+        </form>
+    }
+
+
+</ng-container>

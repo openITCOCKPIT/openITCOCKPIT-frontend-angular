@@ -134,10 +134,23 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
 
     public ngOnInit(): void {
-        this.loadHostdependencies();
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Hostdependencies.id][]'] = [].concat(id); // make sure we always get an array
+            }
+
+            this.loadHostdependencies();
+        }));
+
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadHostdependencies() {
