@@ -5,13 +5,9 @@ import { RouterLink } from '@angular/router';
 import { JsonPipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
-import {
-    HostgroupSummaryState,
-    HostgroupSummaryStateHosts,
-    HostgroupSummaryStatesHosts,
-    HostgroupSummaryStatesServices
-} from '../../../../../pages/hosts/summary_state.interface';
+import { HostgroupSummaryState, HostgroupSummaryStateHosts } from '../../../../../pages/hosts/summary_state.interface';
 import { NodeExtended } from '../dependency-tree.component';
+import { GetKeys } from '../../../../../classes/GetKeys';
 
 @Component({
     selector: 'oitc-host-group-summary',
@@ -37,8 +33,9 @@ export class HostGroupSummaryComponent {
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
     // By the love of god - how the fuck can we do this the right way?
-    public HostgroupSummaryStatesHostsKeys = Array<keyof HostgroupSummaryStatesHosts>('0', '1', '2', 'hostIds');
-    public HostgroupSummaryStatesServicesKeys = Array<keyof HostgroupSummaryStatesServices>('0', '1', '2', '3', 'serviceIds');
+    // Use GetKeys - this is for reference
+    //public HostgroupSummaryStatesHostsKeys = Array<keyof HostgroupSummaryStatesHosts>('0', '1', '2', 'hostIds');
+    //public HostgroupSummaryStatesServicesKeys = Array<keyof HostgroupSummaryStatesServices>('0', '1', '2', '3', 'serviceIds');
 
 
     public hostSummaryRowLabels: { key: keyof HostgroupSummaryStateHosts, label: string, queryParams: {} }[] = [
@@ -76,4 +73,5 @@ export class HostGroupSummaryComponent {
     ];
     protected readonly Object = Object;
 
+    protected readonly GetKeys = GetKeys;
 }
