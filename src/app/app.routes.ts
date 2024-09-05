@@ -434,6 +434,9 @@ const coreRoutes: Routes = [{
     path: 'users/add',
     loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
 }, {
+    path: 'users/edit/:id',
+    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
+}, {
     path: 'users/index',
     loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
 }, {

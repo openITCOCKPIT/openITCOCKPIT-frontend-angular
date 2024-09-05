@@ -3,12 +3,18 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
-    LoadContainerPermissionsRequest, LoadContainerPermissionsRoot,
+    EditUser, EditUserGet,
+    LoadContainerPermissionsRequest,
+    LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot, LoadLdapUserByStringRoot, LoadLdapUserDetailsRoot, LoadUsergroupsRoot,
+    LoadContainerRolesRoot,
+    LoadLdapUserByStringRoot,
+    LoadLdapUserDetailsRoot,
+    LoadUsergroupsRoot, UpdateUser,
     UserDateformat,
     UserDateformatsRoot,
-    UserLocaleOption, UsersAddRoot,
+    UserLocaleOption,
+    UsersAddRoot,
     UsersIndexParams,
     UsersIndexRoot,
     UserTimezoneGroup,
@@ -152,6 +158,36 @@ export class UsersService {
     public addFromLdap(user: UsersAddRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, user)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<EditUserGet> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<EditUserGet>(`${proxyPath}/users/edit/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
+    }
+
+    public updateUser(user: UpdateUser): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/edit/${user.User.id}.json?angular=true`, user)
             .pipe(
                 map(data => {
                     return {

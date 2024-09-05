@@ -161,6 +161,36 @@ export interface CreateLdapUser extends CreateUser {
     }
 }
 
+export interface EditUser extends CreateUser {
+    id: number
+    containers: {
+        _ids: number[]
+    }
+    usercontainerroles_containerids: {
+        _ids: number[]
+    }
+    ldap_dn: string
+    samaccountname: string
+    usercontainerroles_ldap: {
+        _ids: number[]
+    }
+}
+
+export interface EditUserGet {
+    user: EditUser,
+    isLdapUser: boolean,
+    UserTypes: {
+        title: string
+        color: string
+        class: string
+    }[],
+    notPermittedContainerIds: number[]
+}
+
+export interface UpdateUser {
+    User: EditUser
+}
+
 export interface AddFromLdapRoot {
     User: CreateLdapUser
 }
