@@ -321,7 +321,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.loadBookmarks(null);
             this.showEdit = false
             this.selected.emit('');
-            this.router.navigate(['services', 'index']);
+            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()]);
         }
         if (!$result) {
             this.notyService.genericError();

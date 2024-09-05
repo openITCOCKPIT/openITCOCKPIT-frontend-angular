@@ -801,11 +801,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
 
         if (filterstring && filterstring.length > 0) {
             //resetFilter
-          /*  this.router.navigate([], {
-                queryParams: {},
-                queryParamsHandling: "",
-            }); */
-
             this.params = getDefaultHostsIndexParams();
             this.filter = getDefaultHostsIndexFilter();
             this.currentStateFilter = {
@@ -841,55 +836,54 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
             console.log(bookmarkfilter);
-            if(bookmarkfilter.Host) {
-                this.filter['Hosts.name'] = bookmarkfilter.Host.name;
-                this.filter['Hosts.name_regex'] = bookmarkfilter.Host.name_regex;
-                this.filter['Hosts.address'] = bookmarkfilter.Host.address;
-                this.filter['Hosts.address_regex'] = bookmarkfilter.Host.address_regex;
-                this.filter['hostdescription'] = bookmarkfilter.Host.hostdescription;
-                this.filter['Hosts.host_type'] = bookmarkfilter.Host.host_type;
-                this.filter['Hosts.keywords'] = bookmarkfilter.Host.keywords;
-                this.filter['Hosts.not_keywords'] = bookmarkfilter.Host.not_keywords;
-                this.filter['Hoststatus.output'] = bookmarkfilter.Hoststatus.output;
-                this.currentStateFilter = bookmarkfilter.Hoststatus.current_state;
-                this.acknowledgementsFilter.acknowledged = bookmarkfilter.Hoststatus.acknowledged;
-                this.acknowledgementsFilter.not_acknowledged = bookmarkfilter.Hoststatus.not_acknowledged;
-                this.downtimeFilter.in_downtime = bookmarkfilter.Hoststatus.in_downtime;
-                this.downtimeFilter.not_in_downtime = bookmarkfilter.Hoststatus.not_in_downtime;
-                this.state_typesFilter = bookmarkfilter.Hoststatus.state_types;
-                this.notificationsFilter.enabled = bookmarkfilter.Hoststatus.notifications_enabled;
-                this.notificationsFilter.not_enabled = bookmarkfilter.Hoststatus.notifications_not_enabled;
-                this.priorityFilter = bookmarkfilter.Host.priority;
+            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'];
+            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'];
+            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'];
+            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'];
+            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'];
+            this.filter['hostdescription'] = bookmarkfilter['hostdescription'];
+            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'];
+            this.filter['Hosts.keywords'] =  bookmarkfilter['Hosts.keywords'];
+            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'];
+            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'];
+            this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'], 'currentStateFilter');
+            if(bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
+                this.acknowledgementsFilter.acknowledged = true;
             }
-            if(bookmarkfilter.Hosts) {
-                this.filter['Hosts.name'] = bookmarkfilter.Hosts.name;
-                this.filter['Hosts.name_regex'] = bookmarkfilter.Hosts.name_regex;
-                this.filter['Hosts.address'] = bookmarkfilter.Hosts.address;
-                this.filter['Hosts.address_regex'] = bookmarkfilter.Hosts.address_regex;
-                this.filter['hostdescription'] = bookmarkfilter.Hosts.hostdescription;
-                this.filter['Hosts.host_type'] = bookmarkfilter.Hosts.host_type;
-                this.filter['Hosts.keywords'] =  bookmarkfilter.Hosts.keywords;
-                this.filter['Hosts.not_keywords'] = bookmarkfilter.Hosts.not_keywords;
-                this.filter['Hoststatus.output'] = bookmarkfilter.Hoststatus.output;
-                this.convert2currentStateFilter(bookmarkfilter.Hoststatus.current_state);
-                this.acknowledgementsFilter.acknowledged = bookmarkfilter.Hoststatus.acknowledged;
-                this.acknowledgementsFilter.not_acknowledged = bookmarkfilter.Hoststatus.not_acknowledged;
-                this.downtimeFilter.in_downtime = bookmarkfilter.Hoststatus.in_downtime;
-                this.downtimeFilter.not_in_downtime = bookmarkfilter.Hoststatus.not_in_downtime;
-                this.state_typesFilter = bookmarkfilter.Hoststatus.state_types;
-                this.notificationsFilter.enabled = bookmarkfilter.Hoststatus.notifications_enabled;
-                this.notificationsFilter.not_enabled = bookmarkfilter.Hoststatus.notifications_not_enabled;
-                this.priorityFilter = bookmarkfilter.Hosts.priority;
+            if(bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'false') {
+                this.acknowledgementsFilter.not_acknowledged = true;
             }
+            if(bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'true') {
+                this.downtimeFilter.in_downtime = true;
+            }
+            if(bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'false') {
+                this.downtimeFilter.not_in_downtime = true;
+            }
+            if(bookmarkfilter['Hoststatus.notifications_enabled'] === 'true') {
+                this.notificationsFilter.enabled = true;
+            }
+            if(bookmarkfilter['Hoststatus.notifications_enabled'] === 'false') {
+                this.notificationsFilter.not_enabled = true;
+            }
+            //Hoststatus.is_hardstate
+            if(bookmarkfilter['Hoststatus.is_hardstate'] === '0') {
+                this.state_typesFilter.soft = true;
+            }
+            if(bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
+                this.state_typesFilter.hard = true;
+            }
+            this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
+            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'];
             this.loadHosts();
 
         }
     }
 
-    private convert2currentStateFilter(state_array: string[] ): void {
+    protected convert2currentStateFilter(state_array: string[], filter: string ): void {
+
         state_array.forEach((state) => {
             // @ts-ignore
-            this.currentStateFilter[state] = true;
+            this[filter][state] = true;
         });
     }
 
