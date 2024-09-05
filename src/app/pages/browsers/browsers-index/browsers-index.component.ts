@@ -118,6 +118,7 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BrowsersContainer, BrowsersIndexResponse, StatuscountResponse } from '../browsers.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { HostPieChartComponent } from '../../../components/charts/host-pie-chart/host-pie-chart.component';
 
 
 @Component({
@@ -190,7 +191,8 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         RouterLink,
         NgClass,
         TooltipDirective,
-        BlockLoaderComponent
+        BlockLoaderComponent,
+        HostPieChartComponent
     ],
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',

@@ -120,9 +120,15 @@
 
                             <div class="w-100 text-center"
                                  *ngIf="statusCounts && statusCounts.hoststatusCount.length === 3">
+
+                                <oitc-host-pie-chart
+                                    [statusDataPercentage]="statusCounts.hoststatusCountPercentage"></oitc-host-pie-chart>
+
+                                <!--
                                 <img
                                     alt="hoststatus_summary"
                                     [src]="'/angular/getPieChart/'+statusCounts.hoststatusCount[0]+'/'+statusCounts.hoststatusCount[1]+'/'+statusCounts.hoststatusCount[2]+'.png'">
+                                -->
 
                                 <div class="row text-center font-xs">
                                     <div class="col-xs-12 col-md-4 no-padding">
