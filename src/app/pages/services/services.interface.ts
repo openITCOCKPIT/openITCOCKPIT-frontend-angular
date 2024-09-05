@@ -1,4 +1,4 @@
-import { HostEntity, HostObject, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import {HostEntity, HostObject, HostOrServiceType, HostsIndexParams, HoststatusObject} from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -34,6 +34,16 @@ export interface ServiceParams {
     //'filter[Servicestatus.active_checks_enabled]': boolean | string,
     //'filter[Servicestatus.notifications_enabled]': boolean | string,
     //'filter[servicepriority][]': number[]
+}
+
+export function getDefaultServiceIndexParams(): ServiceParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Servicestatus.current_state',
+        page: 1,
+        direction: 'desc',
+    }
 }
 
 

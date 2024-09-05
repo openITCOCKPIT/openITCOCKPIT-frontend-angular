@@ -51,6 +51,7 @@ import {
 import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
 import { DeleteBookmarkModalComponent } from '../delete-bookmark-modal/delete-bookmark-modal.component';
 import { ServiceIndexFilter } from "../../pages/services/services.interface";
+import { HostsIndexFilter } from "../../pages/hosts/hosts.interface";
 import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
 import { BookmarksObject, BookmarksParams } from './bookmarks.interface';
 import { Subscription } from 'rxjs';
@@ -114,9 +115,9 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 })
 export class FilterBookmarkComponent implements OnInit, OnDestroy {
     @Input({required: true}) public plugin: string = '';
-    @Input({required: false}) public controller: string = '';
-    @Input({required: false}) public action: string = '';
-    @Input({required: false}) public filter!: ServiceIndexFilter;
+    @Input({required: true}) public controller: string = '';
+    @Input({required: true}) public action: string = '';
+    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter;
     @Output() selected = new EventEmitter<string>();
     public bookmarks: BookmarksObject[] = [];
     public selectedBookmarkId: Number | null = null;
@@ -127,8 +128,8 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     public params: BookmarksParams = {
         angular: true,
         plugin: '',
-        controller: 'Services',
-        action: 'index'
+        controller: '',
+        action: ''
     };
     public actionType: string = '';
     public deleteItems: any[] = [];
@@ -154,6 +155,9 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         if (this.filterUuid != null) {
             this.params['queryFilter'] = this.filterUuid;
         }
+        this.params.plugin = this.plugin;
+        this.params.controller = this.controller;
+        this.params.action = this.action;
         this.subscriptions.add(this.BookmarksService.getBookmarksIndex(this.params)
             .subscribe((result) => {
                 this.bookmarks = result.bookmarks || [];
@@ -231,7 +235,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
         this.showEdit = true;
         if (this.filterUuid != null && selectedBookmark != null) {
-            this.router.navigate(['services', 'index'], {
+            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: selectedBookmark.uuid},
                 queryParamsHandling: 'merge',
             });

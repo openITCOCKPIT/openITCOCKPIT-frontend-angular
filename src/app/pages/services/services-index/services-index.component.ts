@@ -38,6 +38,7 @@ import { ProfileService } from '../../profile/profile.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getDefaultServicesIndexFilter,
+    getDefaultServiceIndexParams,
     getDefaultServicesIndexFilterApiRequest,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
@@ -264,7 +265,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     private RequestFilter: ServicesIndexFilterApiRequest = getDefaultServicesIndexFilterApiRequest();
 
     //end filter
-    public params: ServiceParams = {
+    public params: ServiceParams = getDefaultServiceIndexParams();
+     /*   {
         angular: true,
         scroll: true,
         sort: 'Servicestatus.current_state',
@@ -288,7 +290,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         //'filter[Servicestatus.active_checks_enabled]': '',
         //'filter[Servicestatus.notifications_enabled]': '',
         //'filter[servicepriority][]': []
-    };
+    };*/
 
     public hideFilter: boolean = true;
     public showColumnConfig: boolean = false;
@@ -857,7 +859,10 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     //filter
     public resetFilter() {
-        this.filter = {
+        this.params = getDefaultServiceIndexParams();
+        this.filter = getDefaultServicesIndexFilter();
+        //this.load();
+          /*  {
             Servicestatus: {
                 current_state: {
                     ok: false,
@@ -897,7 +902,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 name_regex: false,
                 satellite_id: []
             }
-        };
+        };*/
     }
 
     public onFilterChange(event: Event | null) {

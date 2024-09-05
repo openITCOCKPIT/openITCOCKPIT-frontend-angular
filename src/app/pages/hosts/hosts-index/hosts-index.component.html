@@ -93,16 +93,22 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
+                <c-card>
+                <!--<c-card-header>-->
+                <oitc-filter-bookmark [plugin]="''" [controller]="'Hosts'" [action]="'index'"
+                                      [filter]="filter"
+                                      (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                <!--</c-card-header>-->
 
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
-                    <c-row>
+                <c-card-body [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                   <!-- <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
                                 <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 {{ t('Filter') }}
                             </h6>
                         </c-col>
-                    </c-row>
+                    </c-row>-->
                     <form cForm>
 
                         <c-row class="mb-2">
@@ -610,7 +616,8 @@
                         </c-row>
 
                     </form>
-                </c-container>
+                </c-card-body>
+                </c-card>
                 <!-- End Filter -->
 
                 <oitc-table-loader *ngIf="!hosts"></oitc-table-loader>
