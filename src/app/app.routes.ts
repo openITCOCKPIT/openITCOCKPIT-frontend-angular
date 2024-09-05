@@ -257,6 +257,9 @@ const coreRoutes: Routes = [{
     path: 'servicetemplates/usedBy/:id',
     loadComponent: () => import('./pages/servicetemplates/servicetemplates-used-by/servicetemplates-used-by.component').then(m => m.ServicetemplatesUsedByComponent)
 }, {
+    path: 'browsers/index',
+    loadComponent: () => import('./pages/browsers/browsers-index/browsers-index.component').then(m => m.BrowsersIndexComponent)
+}, {
     path: 'hosts/index',
     loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
 }, {

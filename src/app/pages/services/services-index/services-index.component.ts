@@ -292,6 +292,11 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 this.filter.Hosts.id = [].concat(hostId); // make sure we always get an array
             }
 
+            let containerId = params['BrowserContainerId'] || undefined
+            if (containerId) {
+                this.params.BrowserContainerId = parseInt(containerId, 10);
+            }
+
             let servicename = params['servicename'] || undefined;
             if (servicename) {
                 this.filter.Services.name = servicename;
