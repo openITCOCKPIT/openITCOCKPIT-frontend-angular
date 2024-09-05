@@ -25,14 +25,20 @@ export class BrowsersService {
         );
     }
 
-    public getStatusCountsByContainer(containerIds: number[], recursive: boolean = false): Observable<StatuscountResponse> {
+    public getStatusCountsByContainer(containerIds: number[], recursive?: boolean): Observable<StatuscountResponse> {
         const proxyPath = this.proxyPath;
+
+        let params: any = {
+            angular: true,
+            'containerIds[]': containerIds
+        };
+
+        if (recursive !== undefined) {
+            params['recursive'] = recursive;
+        }
+
         return this.http.get<StatuscountResponse>(`${proxyPath}/angular/statuscount.json`, {
-            params: {
-                angular: true,
-                'containerIds[]': containerIds,
-                recursive: recursive
-            }
+            params: params
         }).pipe(
             map(data => {
                 return data

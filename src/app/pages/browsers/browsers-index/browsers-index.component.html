@@ -269,11 +269,13 @@
                         <div class="me-3"
                              [ngClass]="{'text-primary': containers.recursiveBrowser, 'text-muted': !containers.recursiveBrowser}">
                             {{ t('Recursive Browser is') }}
-                            @if (containers.recursiveBrowser) {
-                                {{ t('enabled') }}
-                            } @else {
-                                {{ t('disabled') }}
-                            }
+                            <a [routerLink]="['/', 'profile', 'edit']">
+                                @if (containers.recursiveBrowser) {
+                                    {{ t('enabled') }}
+                                } @else {
+                                    {{ t('disabled') }}
+                                }
+                            </a>
                         </div>
                     </c-nav>
 

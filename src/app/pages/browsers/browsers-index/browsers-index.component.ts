@@ -272,12 +272,15 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.BrowsersService.getIndex(this.containerId)
                 .subscribe((result) => {
                     this.containers = result;
-                    this.loadStatusCounts(this.containerId, result.recursiveBrowser);
                 })
             );
 
-            this.loadHosts();
 
+            // ITC-3258 isRecursiveBrowserEnabled is now also hardcoded in the AngularController
+            this.loadStatusCounts(this.containerId);
+
+            // If isRecursiveBrowserEnabled is enabled or not is hardcoded in the HostsController
+            this.loadHosts();
         });
 
     }
@@ -290,8 +293,8 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy {
 
     }
 
-    private loadStatusCounts(containerId: number, recursive: boolean) {
-        this.subscriptions.add(this.BrowsersService.getStatusCountsByContainer([containerId], recursive)
+    private loadStatusCounts(containerId: number) {
+        this.subscriptions.add(this.BrowsersService.getStatusCountsByContainer([containerId])
             .subscribe((result) => {
                 this.statusCounts = result;
             })
