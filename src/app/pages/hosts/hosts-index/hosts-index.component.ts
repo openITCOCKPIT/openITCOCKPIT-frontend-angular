@@ -331,6 +331,26 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
                 this.params.sort = sort;
             }
 
+            let hoststate = params['hoststate'] || undefined;
+            if (hoststate) {
+                hoststate = [].concat(hoststate); // make sure we always get an array
+                hoststate.forEach((state: any) => {
+                    switch (parseInt(state, 10)) {
+                        case 0:
+                            this.currentStateFilter.up = true;
+                            break;
+                        case 1:
+                            this.currentStateFilter.down = true;
+                            break;
+                        case 2:
+                            this.currentStateFilter.unreachable = true;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            }
+
             // Process all query params first and then trigger the load function
             this.loadHosts();
         });

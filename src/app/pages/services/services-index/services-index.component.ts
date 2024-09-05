@@ -348,22 +348,27 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
                 this.params.sort = sort;
             }
 
-
-            switch (parseInt(params['servicestate'] || -1)) {
-                case 0:
-                    this.filter.Servicestatus.current_state.ok = true;
-                    break;
-                case 1:
-                    this.filter.Servicestatus.current_state.warning = true;
-                    break;
-                case 2:
-                    this.filter.Servicestatus.current_state.critical = true;
-                    break;
-                case 3:
-                    this.filter.Servicestatus.current_state.unknown = true;
-                    break;
-                default:
-                    break;
+            let servicestate = params['servicestate'] || undefined;
+            if (servicestate) {
+                servicestate = [].concat(servicestate); // make sure we always get an array
+                servicestate.forEach((state: any) => {
+                    switch (parseInt(state, 10)) {
+                        case 0:
+                            this.filter.Servicestatus.current_state.ok = true;
+                            break;
+                        case 1:
+                            this.filter.Servicestatus.current_state.warning = true;
+                            break;
+                        case 2:
+                            this.filter.Servicestatus.current_state.critical = true;
+                            break;
+                        case 3:
+                            this.filter.Servicestatus.current_state.unknown = true;
+                            break;
+                        default:
+                            break;
+                    }
+                });
             }
         });
         this.setFilterAndLoad(this.filter);
