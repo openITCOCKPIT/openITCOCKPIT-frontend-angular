@@ -12,81 +12,36 @@ export interface HostgroupSummaryState {
     services: HostgroupSummaryStateServices
 }
 
+export interface HostgroupSummaryStatesHosts {
+    "0": number
+    "1": number
+    "2": number
+    hostIds: number[][]
+}
 
 export interface HostgroupSummaryStateHosts {
-    state: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    acknowledged: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    in_downtime: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    not_handled: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
-    passive: {
-        "0": number
-        "1": number
-        "2": number
-        hostIds: number[][]
-    }
+    state: HostgroupSummaryStatesHosts
+    acknowledged: HostgroupSummaryStatesHosts
+    in_downtime: HostgroupSummaryStatesHosts
+    not_handled: HostgroupSummaryStatesHosts
+    passive: HostgroupSummaryStatesHosts
     total: number
 }
 
+export interface HostgroupSummaryStatesServices {
+    "0": number
+    "1": number
+    "2": number
+    "3": number
+    serviceIds: number[][]
+}
+
+
 export interface HostgroupSummaryStateServices {
-    state: {
-        "0": number
-        "1": number
-        "2": number
-        "3": number
-        serviceIds: number[][]
-    }
-    acknowledged: {
-        "0": number
-        "1": number
-        "2": number
-        "3": number
-        serviceIds: number[][]
-    }
-    in_downtime: {
-        "0": number
-        "1": number
-        "2": number
-        "3": number
-        serviceIds: number[][]
-    }
-    not_handled: {
-        "0": number
-        "1": number
-        "2": number
-        "3": number
-        serviceIds: number[][]
-    }
-    passive: {
-        "0": number
-        "1": number
-        "2": number
-        "3": number
-        "serviceIds": { // yes - this is an object for some reason
-            "0": number[],
-            "1": number[],
-            "3": number[],
-            "2": number[]
-        }
-    }
+    state: HostgroupSummaryStatesServices
+    acknowledged: HostgroupSummaryStatesServices
+    in_downtime: HostgroupSummaryStatesServices
+    not_handled: HostgroupSummaryStatesServices
+    passive: HostgroupSummaryStatesServices
     total: number
 }

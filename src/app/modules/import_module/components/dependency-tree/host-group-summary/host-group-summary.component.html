@@ -1,1 +1,119 @@
-<p>host-group-summary works!</p>
+<ng-container *transloco="let t">
+    <header>
+        <h4 class="border-bottom border-primary border-3">
+            {{ t('External ID') }}
+            <span class="text-primary">
+                {{ selectedNode.key }}
+            </span>
+            <span *ngIf="selectedNode.external_link" class="ng-scope">
+                <a target="_blank" [href]="selectedNode.external_link">
+                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                </a>
+            </span>
+        </h4>
+    </header>
+    <h5 class="pt-1" *ngIf="selectedNode.hostgroup">
+        <fa-icon [icon]="['fas', 'server']" class="ps-1"></fa-icon>
+        <span *oitcPermission="['hostgroups', 'extended']">
+            <a [routerLink]="['/', 'hostgroups', 'extended',selectedNode.hostgroup.Hostgroups?.id]">
+                {{ selectedNode.hostgroup.Containers?.name }}
+            </a>
+        </span>
+        <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+            {{ selectedNode.hostgroup.Containers?.name }}
+        </span>
+    </h5>
+    <table cTable bordered hover small [striped]="true" class="small">
+        <tbody>
+        <tr>
+            <td class="w-25"></td>
+            <th class="text-center w-25">
+                <c-badge color="success">{{ t('Up') }}
+                </c-badge>
+            </th>
+            <th class="text-center w-25">
+                <c-badge color="danger">{{ t('Down') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="secondary">{{ t('Unreachable') }}
+                </c-badge>
+            </th>
+        </tr>
+        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
+            <th>{{ hostSummaryRowLabel.label }}</th>
+            @if (hostSummaryRowLabel.key !== 'total') {
+                <td *ngFor="let key of HostgroupSummaryStatesHostsKeys" class="text-center">
+                    @if (key !== 'hostIds') {
+                        @if (hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] > 0) {
+                            <a *oitcPermission="['hosts', 'index']"
+                               [routerLink]="['/', 'hosts', 'index']"
+
+                               [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+                        {hoststate: key, id: hostgroupSummeryState['hosts'][hostSummaryRowLabel.key]['hostIds'][key]})">
+                                {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
+                            </a>
+                            <span *oitcPermission="['hosts', 'index']; negate: true">
+                                {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
+                            </span>
+                        } @else {
+                            ---
+                        }
+                    }
+                </td>
+            }
+        </tr>
+        <tr>
+            <th colspan="5" class="text-end">{{ t('TOTAL:') }}
+                {{ hostgroupSummeryState['hosts']['total'] }}
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <th class="text-center">
+                <c-badge color="success">{{ t('Ok') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="warning">{{ t('Warning') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="danger">{{ t('Critical') }}
+                </c-badge>
+            </th>
+            <th class="text-center">
+                <c-badge color="secondary">{{ t('Unknown') }}
+                </c-badge>
+            </th>
+        </tr>
+        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
+            <th>{{ hostSummaryRowLabel.label }}</th>
+            @if (hostSummaryRowLabel.key !== 'total') {
+                <td *ngFor="let key of HostgroupSummaryStatesServicesKeys" class="text-center">
+                    @if (key !== 'serviceIds') {
+                        @if (hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] > 0) {
+                            <a *oitcPermission="['services', 'index']"
+                               [routerLink]="['/', 'services', 'index']"
+                               [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+                        {servicestate: key, id: hostgroupSummeryState['services'][hostSummaryRowLabel.key]['serviceIds'][key]})">
+                                {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
+                            </a>
+                            <span *oitcPermission="['services', 'index']; negate: true">
+                                {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
+                            </span>
+                        } @else {
+                            ---
+                        }
+                    }
+                </td>
+            }
+        </tr>
+        <tr>
+            <th colspan="5" class="text-end">{{ t('TOTAL:') }}
+                {{ hostgroupSummeryState['services']['total'] }}
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</ng-container>

@@ -140,7 +140,7 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Timeperiods.id][]'] = [id];
+                this.params['filter[Timeperiods.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadTimeperiods();

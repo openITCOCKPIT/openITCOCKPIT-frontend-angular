@@ -137,7 +137,7 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Contactgroups.id][]'] = [id];
+                this.params['filter[Contactgroups.id][]'] = [].concat(id); // make sure we always get an array
             }
 
             this.loadContactgroups();

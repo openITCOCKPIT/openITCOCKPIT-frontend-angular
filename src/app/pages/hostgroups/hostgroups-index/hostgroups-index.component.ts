@@ -149,7 +149,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy {
 
             let id = params['id'];
             if (id) {
-                this.params['filter[Hostgroups.id][]'] = [id];
+                this.params['filter[Hostgroups.id][]'] = [].concat(id); // make sure we always get an array
             }
 
 
