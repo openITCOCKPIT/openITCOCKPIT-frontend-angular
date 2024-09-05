@@ -68,12 +68,12 @@
                     </div>
 
                     <div *ngIf="hostgroupSummeryState">
-                        <span class="text-primary">Das ist eine Hostgruppe</span>
-                        {{ hostgroupSummeryState|json }}
+                        <oitc-host-group-summary [hostgroupSummeryState]="hostgroupSummeryState"
+                                                 [selectedNode]="selectedNode"></oitc-host-group-summary>
                     </div>
 
                     <div *ngIf="!hostSummaryState && !hostgroupSummeryState">
-                        <span class="text-danger">Weder host noch hostgruppe</span>
+                        <oitc-not-in-monitoring [selectedNode]="selectedNode"></oitc-not-in-monitoring>
                     </div>
 
 

@@ -142,6 +142,7 @@ export interface ServiceescalationContainerResult {
 
 export interface ServiceescalationPost {
     id?: null | number
+    uuid?: string,
     container_id?: null | number
     first_notification: number
     last_notification: number
@@ -173,6 +174,7 @@ export interface ServiceescalationPost {
 
 export interface ServiceescalationGet {
     id?: null | number
+    uuid?: string
     container_id?: null | number
     first_notification: number
     last_notification: number

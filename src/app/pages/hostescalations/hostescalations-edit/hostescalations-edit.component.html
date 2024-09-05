@@ -25,6 +25,11 @@
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
                     <h5 cCardTitle>{{ t('Edit host escalation') }}</h5>
+
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['hostescalations', 'index']" cButton class="ripple" color="default"

@@ -264,15 +264,9 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         this.hostTypes = this.HostsService.getHostTypes();
 
         this.route.queryParams.subscribe(params => {
-            let hostId = params['host_id']
+            let hostId = params['host_id'] || params['id'];
             if (hostId) {
-                if (Array.isArray(hostId)) {
-                    // host_id is an array of ids
-                    this.filter['Hosts.id'] = hostId;
-                } else {
-                    // host_id is a single id
-                    this.filter['Hosts.id'] = [hostId];
-                }
+                this.filter['Hosts.id'] = [].concat(hostId); // make sure we always get an array
             }
 
             let hostname = params['hostname'] || undefined;
@@ -280,39 +274,81 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
                 this.filter['Hosts.name'] = hostname;
             }
 
+
+            let address = params['address'] || undefined;
+            if (address) {
+                this.filter['Hosts.address'] = address;
+            }
+
             let acknowledged = params['acknowledged'];
-            if (acknowledged === true) {
+            if (acknowledged === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
             }
 
             let not_acknowledged = params['not_acknowledged'];
-            if (not_acknowledged === true) {
+            if (not_acknowledged === 'true') {
                 this.acknowledgementsFilter.not_acknowledged = true;
             }
 
             let in_downtime = params['in_downtime'];
-            if (in_downtime === true) {
+            if (in_downtime === 'true') {
                 this.downtimeFilter.in_downtime = true;
             }
 
             let not_in_downtime = params['not_in_downtime'];
-            if (not_in_downtime === true) {
+            if (not_in_downtime === 'true') {
                 this.downtimeFilter.not_in_downtime = true;
             }
 
             let passive = params['passive'];
-            if (passive === true) {
+            if (passive === 'true') {
                 this.filter['Hoststatus.active_checks_enabled'] = 'false';
+            }
+
+            let unhandled = params['unhandled'];
+            if (unhandled === 'true') {
+                this.acknowledgementsFilter.not_acknowledged = true;
+                this.downtimeFilter.not_in_downtime = true;
+            }
+
+            let keywords = params['keywords'] || undefined;
+            if (keywords) {
+                this.filter['Hosts.keywords'] = [keywords];
+            }
+
+            let not_keywords = params['not_keywords'] || undefined;
+            if (not_keywords) {
+                this.filter['Hosts.not_keywords'] = [not_keywords];
             }
 
             let direction = params['direction'];
             if (direction && direction === 'asc' || direction === 'desc') {
                 this.params.direction = direction;
             }
-            
+
             let sort = params['sort'];
             if (sort) {
                 this.params.sort = sort;
+            }
+
+            let hoststate = params['hoststate'] || undefined;
+            if (hoststate) {
+                hoststate = [].concat(hoststate); // make sure we always get an array
+                hoststate.forEach((state: any) => {
+                    switch (parseInt(state, 10)) {
+                        case 0:
+                            this.currentStateFilter.up = true;
+                            break;
+                        case 1:
+                            this.currentStateFilter.down = true;
+                            break;
+                        case 2:
+                            this.currentStateFilter.unreachable = true;
+                            break;
+                        default:
+                            break;
+                    }
+                });
             }
 
             // Process all query params first and then trigger the load function

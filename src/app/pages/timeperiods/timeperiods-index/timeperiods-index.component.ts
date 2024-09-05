@@ -122,10 +122,6 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
     public timeperiods?: TimeperiodIndexRoot;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
-    public tmpFilter = {
-        name: '',
-        description: ''
-    }
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private TimeperiodsService = inject(TimeperiodsService);
@@ -141,6 +137,12 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Timeperiods.id][]'] = [].concat(id); // make sure we always get an array
+            }
+
             this.loadTimeperiods();
         }));
     }
@@ -160,10 +162,6 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
 
     public resetFilter() {
         this.params = getDefaultTimeperiodsIndexParams();
-        this.tmpFilter = {
-            name: '',
-            description: ''
-        }
         this.loadTimeperiods();
     }
 

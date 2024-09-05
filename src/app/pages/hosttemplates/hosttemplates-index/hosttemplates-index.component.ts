@@ -148,7 +148,19 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.hosttemplateTypes = this.HosttemplatesService.getHosttemplateTypes();
-        this.loadHosttemplates();
+
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            let id = params['id'];
+            if (id) {
+                this.params['filter[Hosttemplates.id][]'] = [].concat(id); // make sure we always get an array
+            }
+
+            this.loadHosttemplates();
+        }));
     }
 
     public ngOnDestroy() {

@@ -4,7 +4,7 @@ import { AuthService } from "../../auth/auth.service";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { SearchService } from "../../search/search.service";
 import { SearchType } from "../../search/search-type.enum";
-import { filter, map, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'oitc-header',
@@ -28,13 +28,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     public ngOnInit() {
+
+        // This was a test to see if the search query was a UUID, but it was removed
+        /*
         this.subscription.add(this.form.get('query')?.valueChanges.pipe(
             filter(value => !!value),
             map(value => `${value}`),
             filter(value => this.searchService.isUUID(value)),
         ).subscribe({
             next: () => this.form.get('type')?.setValue(SearchType.UUID), // TestID: c36b8048-93ce-4385-ac19-ab5c90574b77
-        }))
+        }))*/
     }
 
     public ngOnDestroy() {
@@ -48,6 +51,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public submitSearch() {
         const {type, query} = this.form.value;
 
-        this.searchService.search(type as SearchType, query as string);
+        this.searchService.redirectSearch(type as SearchType, query as string);
     }
 }

@@ -23,6 +23,8 @@ import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
 import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { HostSummaryComponent } from './host-summary/host-summary.component';
+import { NotInMonitoringComponent } from './not-in-monitoring/not-in-monitoring.component';
+import { HostGroupSummaryComponent } from './host-group-summary/host-group-summary.component';
 
 // We extend the default node interface with hostgroup and host fields to have the data available
 // is a user clicks on a node
@@ -72,7 +74,9 @@ export interface NodeExtended extends Node {
         ToastHeaderComponent,
         ProgressBarComponent,
         JsonPipe,
-        HostSummaryComponent
+        HostSummaryComponent,
+        NotInMonitoringComponent,
+        HostGroupSummaryComponent
     ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css'

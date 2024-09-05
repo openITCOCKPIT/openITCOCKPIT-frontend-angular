@@ -229,7 +229,7 @@ export class ServicesEditComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadElements(hostId)
+        this.subscriptions.add(this.ServicesService.loadElements(hostId, serviceId)
             .subscribe((result) => {
                 this.servicetemplates = result.servicetemplates;
                 this.servicegroups = result.servicegroups;

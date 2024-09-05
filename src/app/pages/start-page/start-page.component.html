@@ -16,6 +16,20 @@
             {{ t('Create Service - History Test') }}
         </button>
 
+        <button cButton class="ripple" color="secondary" size="xs"
+                [routerLink]="['/', 'hosts', 'index']"
+                [queryParams]="{id:[1,2,500]}">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            {{ t('Hosts-index mit id array test') }}
+        </button>
+
+        <button cButton class="ripple" color="warning" size="xs"
+                [routerLink]="['/', 'commands', 'index']"
+                [queryParams]="{id:2}">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            {{ t('commands-index mit id array test') }}
+        </button>
+
         <c-card>
             <c-card-header>
                 <c-nav class="card-header-pills float-end">
