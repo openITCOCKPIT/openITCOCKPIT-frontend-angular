@@ -488,13 +488,15 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleFullscreenMode() {
-        const elem = this.document.getElementById('dependencyTreeOverview');
+        const elem = this.document.getElementById('fullscreenDependencyTree');
 
         if (this.isFullscreen) {
             if (document.exitFullscreen) {
+                this.isFullscreen = false;
                 document.exitFullscreen();
             }
         } else {
+            this.isFullscreen = true;
             if (elem && elem.requestFullscreen) {
                 elem.requestFullscreen();
             }

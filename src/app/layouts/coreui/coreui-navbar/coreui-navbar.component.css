@@ -5,3 +5,9 @@
 .sidebar-static {
     position: static;
 }
+
+.page-logo-text {
+    margin-left: 0.5rem;
+    font-weight: 300;
+    font-size: 1rem;
+}
