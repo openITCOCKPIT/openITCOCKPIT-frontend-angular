@@ -43,6 +43,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BookmarksService } from '../filter-bookmark/bookmarks.service';
 import { ServiceIndexFilter } from '../../pages/services/services.interface';
+import { HostsIndexFilter } from "../../pages/hosts/hosts.interface";
 import { BookmarkPost, BookmarkResponse, BookmarksObject } from '../filter-bookmark/bookmarks.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -90,7 +91,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public plugin: string = '';
     @Input({required: false}) public controller: string = '';
     @Input({required: false}) public action: string = '';
-    @Input({required: false}) public filter!: ServiceIndexFilter;
+    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter;
     @Output() saved = new EventEmitter<string>();
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();

@@ -7,6 +7,7 @@ import { distributeModuleRoutes } from './modules/distribute_module/distribute_m
 import { msteamsModuleRoutes } from './modules/msteams_module/msteams_module.routes';
 import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes';
 import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
+import { importModuleRoutes } from './modules/import_module/import_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -36,7 +37,8 @@ const moduleRoutes: Routes = [
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
     ...nagiosModuleRoutes,
-    ...pagerdutyModuleRoutes
+    ...pagerdutyModuleRoutes,
+    ...importModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
