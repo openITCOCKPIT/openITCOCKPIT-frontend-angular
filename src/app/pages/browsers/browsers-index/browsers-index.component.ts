@@ -119,6 +119,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { BrowsersContainer, BrowsersIndexResponse, StatuscountResponse } from '../browsers.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { HostPieChartComponent } from '../../../components/charts/host-pie-chart/host-pie-chart.component';
+import { ServicePieChartComponent } from '../../../components/charts/service-pie-chart/service-pie-chart.component';
 
 
 @Component({
@@ -192,7 +193,8 @@ import { HostPieChartComponent } from '../../../components/charts/host-pie-chart
         NgClass,
         TooltipDirective,
         BlockLoaderComponent,
-        HostPieChartComponent
+        HostPieChartComponent,
+        ServicePieChartComponent
     ],
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',

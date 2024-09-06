@@ -154,7 +154,7 @@
                                                 ({{ statusCounts.hoststatusCountPercentage[1] }} %)
                                             </a>
                                         } @else {
-                                            <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
                                             {{ statusCounts.hoststatusCount[1] }} ({{ statusCounts.hoststatusCountPercentage[1] }} %)
                                         }
                                     </div>
@@ -168,7 +168,7 @@
                                                 ({{ statusCounts.hoststatusCountPercentage[2] }} %)
                                             </a>
                                         } @else {
-                                            <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
                                             {{ statusCounts.hoststatusCount[2] }} ({{ statusCounts.hoststatusCountPercentage[2] }} %)
                                         }
                                     </div>
@@ -195,16 +195,21 @@
 
                             <div class="w-100 text-center"
                                  *ngIf="statusCounts && statusCounts.servicestatusCount.length === 4">
+                                <!--
                                 <img
                                     alt="servicestatus_summary"
                                     [src]="'/angular/getPieChart/'+statusCounts.servicestatusCount[0]+'/'+statusCounts.servicestatusCount[1]+'/'+statusCounts.servicestatusCount[2]+'/'+statusCounts.servicestatusCount[3]+'.png'">
+                                 -->
+
+                                <oitc-service-pie-chart
+                                    [statusDataPercentage]="statusCounts.servicestatusCountPercentage"></oitc-service-pie-chart>
 
                                 <div class="row text-center font-xs">
                                     <div class="col-xs-12 col-md-3 no-padding">
                                         @if (PermissionsService.hasPermission(['services', 'index'])) {
                                             <a [routerLink]="['/', 'services', 'index']"
                                                [queryParams]="{servicestate: 0, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
-                                                <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
                                                 {{ statusCounts.servicestatusCount[0] }}
                                                 ({{ statusCounts.servicestatusCountPercentage[0] }} %)
                                             </a>
@@ -223,7 +228,7 @@
                                                 ({{ statusCounts.servicestatusCountPercentage[1] }} %)
                                             </a>
                                         } @else {
-                                            <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
                                             {{ statusCounts.servicestatusCount[1] }} ({{ statusCounts.servicestatusCountPercentage[1] }} %)
                                         }
                                     </div>
@@ -232,7 +237,7 @@
                                         @if (PermissionsService.hasPermission(['services', 'index'])) {
                                             <a [routerLink]="['/', 'services', 'index']"
                                                [queryParams]="{servicestate: 2, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
-                                                <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
                                                 {{ statusCounts.servicestatusCount[2] }}
                                                 ({{ statusCounts.servicestatusCountPercentage[2] }} %)
                                             </a>
@@ -246,7 +251,7 @@
                                         @if (PermissionsService.hasPermission(['services', 'index'])) {
                                             <a [routerLink]="['/', 'services', 'index']"
                                                [queryParams]="{servicestate: 3, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
-                                                <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
                                                 {{ statusCounts.servicestatusCount[3] }}
                                                 ({{ statusCounts.servicestatusCountPercentage[3] }} %)
                                             </a>
