@@ -25,7 +25,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValue, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -53,7 +53,8 @@ import {
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
-    UserTimezonesSelect
+    UserTimezonesSelect,
+    UserType
 } from '../users.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
@@ -165,7 +166,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
                     const title: string = this.TranslocoService.translate('User');
-                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
                     const url: (string | number)[] = ['users', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
@@ -245,20 +246,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit() {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        //First, load shit into the component.
         this.loadContainers();
-        this.subscriptions.add(this.UsersService.getEdit(id)
-            .subscribe((result: EditUserGet) => {
-                console.warn(result);
-                this.post.User = result.user;
-                this.isLdapUser = result.isLdapUser;
-                this.notPermittedContainerIds = result.notPermittedContainerIds;
-            }));
-        this.selectedContainerIds = [];
-        this.containerPermissions = {} as LoadContainerPermissionsRoot;
-        this.containerRoles = {} as LoadContainerRolesRoot;
-
         this.updateTabRotationInterval();
         this.loadContainers();
         this.loadDateformats();
@@ -267,6 +255,32 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.loadUsergroups();
         this.loadLdapUsers('')
         this.loadLdapConfig();
+        this.loadEditUser();
+    }
+
+    protected UserType: UserType = {} as UserType;
+
+    private loadEditUser(): void {
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.UsersService.getEdit(id)
+            .subscribe((result: EditUserGet) => {
+                console.warn(result.user);
+                this.post.User = result.user;
+                this.UserType = result.UserTypes[0];
+                // Add empty passwords field, otherwise they are undefined.
+                this.post.User.password = '';
+                this.post.User.confirm_password = '';
+
+                // Put the containerIds into this.selectedContainerIds.
+                this.selectedContainerIds = this.post.User.containers._ids;
+                this.onSelectedContainerIdsChange();
+
+                this.isLdapUser = result.isLdapUser;
+                this.notPermittedContainerIds = result.notPermittedContainerIds;
+            }));
+        this.selectedContainerIds = [];
+        this.containerPermissions = {} as LoadContainerPermissionsRoot;
+        this.containerRoles = {} as LoadContainerRolesRoot;
     }
 
     public ngOnDestroy() {

@@ -39,6 +39,12 @@
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
+
+                            <button cButton size="xs" class="btnNoHover {{ UserType.class }} {{ UserType.color }}" color="{{ UserType.color }}" variant="outline">
+                                {{ UserType.title }}
+                            </button>
+                        </c-nav-item>
+                        <c-nav-item class="px-1">
                             <button [fallbackUrl]="['users', 'index']" cButton class="ripple" color="default"
                                     oitcBackButton
                                     size="xs">
@@ -85,7 +91,7 @@
                                required
                                id="dn"
                                type="text"
-                               disabled
+                               [disabled]="isLdapUser"
                                name="dn"
                                [(ngModel)]="post.User.ldap_dn"
                                oitcFormError [errors]="errors" errorField="email">
@@ -104,7 +110,7 @@
                                 id="ldapUserDetails.ldapgroups"
                                 optionValue="id"
                                 optionLabel="cn"
-                                [disabled]="true"
+                                [disabled]="isLdapUser"
                                 [(ngModel)]="ldapUserDetails.ldapgroupIds"
                                 [options]="ldapUserDetails.ldapgroups"
                                 oitcFormError [errors]="errors" errorField="containerroles">
@@ -138,7 +144,7 @@
                                 id="post.User.usercontainerroles_ldap._ids"
                                 optionValue="key"
                                 optionLabel="value"
-                                [disabled]="true"
+                                [disabled]="isLdapUser"
                                 [(ngModel)]="post.User.usercontainerroles_ldap._ids"
                                 [options]="containerRoles.usercontainerroles"
                                 oitcFormError [errors]="errors" errorField="containerroles">
@@ -167,7 +173,8 @@
                                     <c-col md="2">
                                         <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
-                                                   disabled
+
+                                                   [disabled]="isLdapUser"
                                                    type="radio"
                                                    [name]="userContainerRole.value.id + 'PermissionLevelRead'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelRead'"
@@ -181,7 +188,8 @@
                                         </c-form-check>
                                         <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1 || containerRoleContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
-                                                   disabled
+
+                                                   [disabled]="isLdapUser"
                                                    type="radio"
                                                    [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
@@ -238,7 +246,12 @@
                         <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
                         <div class="help-block text-info">
                             <fa-icon [icon]="['fas', 'info-circle']"/>
-                            {{ t('Container Roles are handy to grant the same permissions to multiple users. Container Roles will overwrite automatically assignments via LDAP groups.') }}
+                            <span *ngIf="isLdapUser">
+                                {{ t('Container Roles will overwrite automatically assignments via LDAP groups.') }}
+                            </span>
+                            <span *ngIf="!isLdapUser">
+                                {{ t('Container Roles are handy to grant the same permissions to multiple users. Container Roles will overwrite automatically assignments via LDAP groups.') }}
+                            </span>
                         </div>
                     </div>
 
@@ -246,6 +259,7 @@
                         <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
                                class="containerRoleInheritance mb-3">
                             <c-col md="1">
+                                HIÄ
                             </c-col>
                             <c-col md="11">
                                 <legend class="txt-ack">
@@ -259,7 +273,8 @@
                                     <c-col md="2">
                                         <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
-                                                   disabled
+
+                                                   [disabled]="isLdapUser"
                                                    type="radio"
                                                    [name]="userContainerRole.value.id + 'PermissionLevelRead'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelRead'"
@@ -273,7 +288,8 @@
                                         </c-form-check>
                                         <c-form-check class="formCheckInline" [class]="{'strike' : selectedContainerIds.indexOf(userContainerRole.value._joinData.container_id) !== -1}">
                                             <input cFormCheckInput
-                                                   disabled
+
+                                                   [disabled]="isLdapUser"
                                                    type="radio"
                                                    [name]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
                                                    [id]="userContainerRole.value.id + 'PermissionLevelReadWrite'"
@@ -398,7 +414,7 @@
                                 id="ldapUserDetails.usergroupLdap.id"
                                 optionValue="key"
                                 optionLabel="value"
-                                [disabled]="true"
+                                [disabled]="isLdapUser"
                                 [(ngModel)]="ldapUserDetails.usergroupLdap.id"
                                 [options]="usergroups"
                                 oitcFormError [errors]="errors" errorField="usergroup_id">
@@ -463,7 +479,8 @@
                                required
                                id="post.User.email"
                                type="text"
-                               disabled
+
+                               [disabled]="isLdapUser"
                                name="post.User.email"
                                [(ngModel)]="post.User.email"
                                oitcFormError [errors]="errors" errorField="email">
@@ -501,7 +518,8 @@
                         </label>
                         <input cFormControl
                                required
-                               disabled
+
+                               [disabled]="isLdapUser"
                                id="post.User.firstname"
                                type="text"
                                name="post.User.firstname"
@@ -523,7 +541,8 @@
                             {{ t('Last name') }}
                         </label>
                         <input cFormControl
-                               disabled
+
+                               [disabled]="isLdapUser"
                                id="post.User.lastname"
                                type="text"
                                name="post.User.lastname"
@@ -721,6 +740,43 @@
                         </div>
                     </div>
 
+                    <!-- New password -->
+                    <div class="mb-3">
+                        <label cLabel for="post.User.password">
+                            {{ t('New password') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.User.password"
+                               type="password"
+                               name="post.User.password"
+                               [(ngModel)]="post.User.password"
+                               oitcFormError [errors]="errors" errorField="password">
+                        <oitc-form-feedback [errors]="errors" errorField="password"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('The password must consist of 6 alphanumeric characters and must contain at least one digit') }}
+                        </div>
+                    </div>
+                    <!-- confirm new password -->
+                    <div class="mb-3">
+                        <label cLabel for="post.User.confirm_password">
+                            {{ t('New password') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.User.confirm_password"
+                               type="password"
+                               name="post.User.confirm_password"
+                               [(ngModel)]="post.User.confirm_password"
+                               oitcFormError [errors]="errors" errorField="confirm_password">
+                        <oitc-form-feedback [errors]="errors" errorField="confirm_password"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Please leave the password fields blank if you don\'t want to change the password.') }}
+                        </div>
+                    </div>
+
                     <!-- API KEYS -->
                     <h4>
                         {{ t('Api keys') }}
@@ -758,7 +814,6 @@
                                            type="text"
                                            [name]="post.User.apikeys[i].apikey"
                                            [ngModelOptions]="{standalone: true}"
-                                           disabled
                                            [(ngModel)]="post.User.apikeys[i].apikey">
                                     <button cButton color="success" (click)="refreshApiKey(i)">
                                         <fa-icon [icon]="['fas', 'key']"></fa-icon>

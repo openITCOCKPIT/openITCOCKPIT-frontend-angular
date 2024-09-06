@@ -86,11 +86,7 @@ export interface User {
         name: string
     }
     allow_edit: boolean
-    UserTypes: {
-        title: string
-        color: string
-        class: string
-    }[]
+    UserTypes: UserType[]
 }
 
 export interface UsersIndexParams {
@@ -176,14 +172,16 @@ export interface EditUser extends CreateUser {
     }
 }
 
+export interface UserType {
+    title: string
+    color: string
+    class: string
+}
+
 export interface EditUserGet {
     user: EditUser,
     isLdapUser: boolean,
-    UserTypes: {
-        title: string
-        color: string
-        class: string
-    }[],
+    UserTypes: UserType[],
     notPermittedContainerIds: number[]
 }
 

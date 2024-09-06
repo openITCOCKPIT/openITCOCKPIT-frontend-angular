@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -51,7 +51,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValue, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
@@ -337,6 +337,32 @@ export class UsersAddComponent implements OnDestroy, OnInit {
             return {} as GenericValidationError;
         }
         return this.errors['apikeys'][index] as unknown as GenericValidationError;
+    }
+
+
+
+    // Order by descending property key
+    orderObjectBy = (a: KeyValue<any, any>, b: KeyValue<any, any>): number => {
+        console.log(a);
+        console.log(b);
+        console.log(b.value.name.localeCompare(a.value.name));
+        return a.value.name.localeCompare(b.value.name);
+    }
+
+}
+
+
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'sortKeyValue'
+})
+export class SortKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
     }
 
 }
