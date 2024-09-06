@@ -280,7 +280,7 @@
                         <div class="me-3"
                              [ngClass]="{'text-primary': containers.recursiveBrowser, 'text-muted': !containers.recursiveBrowser}">
                             {{ t('Recursive Browser is') }}
-                            <a [routerLink]="['/', 'profile', 'edit']">
+                            <a [routerLink]="['/', 'profile', 'edit']" class="text-decoration-underline">
                                 @if (containers.recursiveBrowser) {
                                     {{ t('enabled') }}
                                 } @else {
