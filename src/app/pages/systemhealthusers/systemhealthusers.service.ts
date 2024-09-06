@@ -96,7 +96,7 @@ export class SystemHealthUsersService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.systemHealthUser as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
