@@ -114,6 +114,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly profileService: ProfileService = inject(ProfileService);
 
+    protected readonly keepOrder = keepOrder;
     protected createAnother: boolean = false;
     protected post: UsersAddRoot = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
@@ -338,19 +339,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         }
         return this.errors['apikeys'][index] as unknown as GenericValidationError;
     }
-
-
-
-    // Order by descending property key
-    orderObjectBy = (a: KeyValue<any, any>, b: KeyValue<any, any>): number => {
-        console.log(a);
-        console.log(b);
-        console.log(b.value.name.localeCompare(a.value.name));
-        return a.value.name.localeCompare(b.value.name);
-    }
-
 }
-
 
 const keepOrder = (a: any, b: any) => a;
 

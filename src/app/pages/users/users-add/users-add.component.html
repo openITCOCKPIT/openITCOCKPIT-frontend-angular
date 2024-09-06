@@ -65,9 +65,10 @@
                     </div>
 
                     <ng-container *ngIf="containerPermissions">
-                        <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | sortKeyValue"
+                        <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue:keepOrder"
                                class="containerRoleInheritance mb-3">
                             <c-col md="1">
+                                dit hiä
                             </c-col>
                             <c-col md="11">
                                 <legend class="txt-ack">
