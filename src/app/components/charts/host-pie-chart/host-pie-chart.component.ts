@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import {
     ApexChart,
     ApexGrid,
@@ -12,6 +12,9 @@ import {
 import { NgIf } from '@angular/common';
 
 import { TranslocoService } from '@jsverse/transloco';
+import { ColorModeService } from '@coreui/angular';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
 
 
 export type ChartOptions = {
@@ -34,35 +37,60 @@ export type ChartOptions = {
     templateUrl: './host-pie-chart.component.html',
     styleUrl: './host-pie-chart.component.css'
 })
-export class HostPieChartComponent implements OnInit, OnChanges {
+export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
 
     @ViewChild("chart") chart!: ChartComponent;
     public chartOptions!: Partial<ChartOptions>;
 
     @Input() public statusDataPercentage: number[] = [0, 0, 0];
 
+    private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly ColorModeService = inject(ColorModeService);
 
-    public apexGridOptions: ApexGrid = {
-        padding: {
-            top: 0,
-            bottom: -15
-        }
+    public apexGridOptions: ApexGrid = {};
 
-    };
+    constructor() {
+        const colorMode$ = toObservable(this.ColorModeService.colorMode);
 
-    public ngOnInit() {
-        this.initializeChartOptions();
+        // Subscribe to the color mode changes (drop down menu in header)
+        this.subscription.add(colorMode$.subscribe((theme) => {
+            //console.log('Change in theme detected', theme);
+            if (this.chart && this.chartOptions) {
 
+                // Read the background color value from the CSS variable and update the chart
+                let cuiSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
+
+                //this.chartOptions.plotOptions?.radialBar?.track?.background = cuiSecondaryBg;
+                this.chart.updateOptions({
+                    plotOptions: {
+                        radialBar: {
+                            track: {
+                                background: cuiSecondaryBg
+                            }
+                        }
+                    }
+                });
+            }
+
+        }));
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
+    public ngOnInit(): void {
+        this.initializeChartOptions();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes['statusDataPercentage'] && this.chart) {
             this.chartOptions.series = this.statusDataPercentage;
             this.chart.updateOptions({
                 series: this.statusDataPercentage
             });
         }
+    }
+
+    public ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     private initializeChartOptions() {
@@ -72,6 +100,7 @@ export class HostPieChartComponent implements OnInit, OnChanges {
             this.TranslocoService.translate('Unreachable'),
         ];
 
+        let cuiSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
         this.chartOptions = {
             series: this.statusDataPercentage,
             chart: {
@@ -98,12 +127,14 @@ export class HostPieChartComponent implements OnInit, OnChanges {
                     },
                     track: {
                         show: true,
+                        background: cuiSecondaryBg,
+                        opacity: 0.5,
                         dropShadow: {
-                            enabled: true,
+                            enabled: false,
                             top: 2,
                             left: 0,
-                            color: '#999',
-                            opacity: 1,
+                            color: '#999999',
+                            opacity: 0.2,
                             blur: 2
                         }
                     },
