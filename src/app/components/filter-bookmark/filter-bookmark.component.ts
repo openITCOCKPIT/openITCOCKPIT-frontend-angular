@@ -222,7 +222,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.selected.emit('');
             this.showEdit = false;
             this.selectedBookmark = null;
-            this.router.navigate(['services', 'index'], {
+            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: null},
                 queryParamsHandling: 'merge',
             });
