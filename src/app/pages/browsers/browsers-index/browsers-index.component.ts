@@ -120,7 +120,13 @@ import { BrowsersContainer, BrowsersIndexResponse, StatuscountResponse } from '.
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { HostPieChartComponent } from '../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { ServicePieChartComponent } from '../../../components/charts/service-pie-chart/service-pie-chart.component';
-
+import {
+    ColumnsConfigExportModalComponent
+} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
+import {
+    ColumnsConfigImportModalComponent
+} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
     selector: 'oitc-browsers-index',
@@ -194,7 +200,9 @@ import { ServicePieChartComponent } from '../../../components/charts/service-pie
         TooltipDirective,
         BlockLoaderComponent,
         HostPieChartComponent,
-        ServicePieChartComponent
+        ServicePieChartComponent,
+        ColumnsConfigExportModalComponent,
+        ColumnsConfigImportModalComponent
     ],
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',
@@ -249,6 +257,31 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy {
     public selectedItems: any[] = [];
     public userFullname: string = '';
 
+    public columnsTableKey: string = 'HostsBrowserColumns';
+    public showColumnConfig: boolean = false;
+    public configString: string = ''
+    public fields: boolean[] = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false]; //default fields to show
+    //fields for column configuration
+    public fieldNames: string[] = [
+        'Hoststatus',
+        'is acknowledged',
+        'is in downtime',
+        'Notifications enabled',
+        'Shared',
+        'Passively transferred host',
+        'Priority',
+        'Host name',
+        'Host description',
+        'IP address',
+        'Last state change',
+        'Last check',
+        'Host output',
+        'Instance',
+        'Service Summary ',
+        'Host notes',
+        'Host type'
+    ];
+
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private readonly HostsService = inject(HostsService);
@@ -258,12 +291,13 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private readonly LocalStorageService = inject(LocalStorageService);
 
     private subscriptions: Subscription = new Subscription();
 
 
     public ngOnInit(): void {
-
+        this.loadColumns();
         this.route.queryParams.subscribe(params => {
             let containerId = params['containerId'] || ROOT_CONTAINER
             if (containerId) {
@@ -762,6 +796,49 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy {
         return this.containers.containers.filter((container: any) =>
             container.value.name.toLowerCase().includes(this.containerFilter.toLowerCase())
         );
+    }
+
+    public togglecolumnConfiguration() {
+        this.showColumnConfig = !this.showColumnConfig;
+    }
+
+    public toggleColumnsConfigExport() {
+        const exportConfigObject = {
+            key: this.columnsTableKey,
+            value: this.fields
+        };
+        this.configString = JSON.stringify(exportConfigObject);
+        this.modalService.toggle({
+            show: true,
+            id: 'columnsConfigExportModal',
+        });
+    }
+
+    public loadColumns() {
+        if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
+            this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
+        }
+    }
+
+    public toggleColumnsConfigImport() {
+        this.modalService.toggle({
+            show: true,
+            id: 'columnsConfigImportModal',
+        });
+    }
+
+    public getDefaultColumns() {
+        this.fields = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false];
+        this.LocalStorageService.removeItem(this.columnsTableKey)
+    };
+
+    public saveColumnsConfig() {
+        this.LocalStorageService.removeItem(this.columnsTableKey);
+        this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
+    }
+
+    public setColumnConfig(fieldsConfig: boolean[]) {
+        this.fields = fieldsConfig;
     }
 
     protected readonly String = String;
