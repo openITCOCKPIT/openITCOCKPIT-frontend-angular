@@ -25,3 +25,39 @@ export interface Importedhostgroup {
     hostgroup?: Hostgroup
     external_system?: ExternalSystemEntity
 }
+
+export interface ImportedhostgroupsIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[ImportedHostgroups.id][]': [],
+    'filter[ImportedHostgroups.name]': string
+    'filter[ImportedHostgroups.description]': string
+    'filter[ImportedHostgroups.imported]': string
+    'filter[ImportedHostgroups.not_imported]': string
+}
+
+export interface ImportedHostgroupIndex {
+    id: number
+    name: string
+    description: string
+    container_id: number
+    allowEdit: boolean
+}
+
+export function getDefaultImportedHostgroupsIndexParams(): ImportedhostgroupsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'ImportedHostgroups.name',
+        page: 1,
+        direction: 'asc',
+        'filter[ImportedHostgroups.id][]': [],
+        'filter[ImportedHostgroups.name]': '',
+        'filter[ImportedHostgroups.description]': '',
+        'filter[ImportedHostgroups.imported]': '',
+        'filter[ImportedHostgroups.not_imported]': '',
+    }
+}

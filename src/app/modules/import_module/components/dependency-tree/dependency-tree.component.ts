@@ -1,5 +1,6 @@
 import {
     Component,
+    EventEmitter,
     HostListener,
     inject,
     Input,
@@ -7,7 +8,6 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    EventEmitter,
     SimpleChanges
 } from '@angular/core';
 import {
@@ -176,11 +176,13 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             this.dependencyTree = data;
             this.isOnline = data.connected.status;
             this.externalSystemConnected.emit(this.isOnline);
-            this.renderVisNetwork(
-                this.dependencyTree.treeData.source,
-                this.dependencyTree.treeData.objects,
-                this.dependencyTree.treeData.relations
-            );
+            if (this.dependencyTree.treeData.objects) {
+                this.renderVisNetwork(
+                    this.dependencyTree.treeData.source,
+                    this.dependencyTree.treeData.objects,
+                    this.dependencyTree.treeData.relations
+                );
+            }
         });
     }
 
