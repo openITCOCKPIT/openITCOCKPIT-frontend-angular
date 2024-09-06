@@ -1,0 +1,347 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['slamodule', 'slas', 'index']"
+                       [routerLink]="['/', 'slamodule', 'slas', 'index']">
+                        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                        {{ t('Service Level Agreement Module') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                    {{ t('Service Level Agreements') }}
+                </li>
+            </ol>
+        </nav>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Service Level Agreements') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadSlas()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['slamodule', 'slas', 'add']"
+                                [routerLink]="['/', 'slamodule', 'slas', 'add']" cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Slas.name]']"
+                                           [placeholder]="'Filter by sla name' | transloco"
+                                           aria-label="Sla Name"
+                                           cFormControl
+                                           name="slas.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Slas.description]']"
+                                           [placeholder]="'Filter by sla description' | transloco"
+                                           aria-label="Sla Description"
+                                           cFormControl
+                                           name="slas.description"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset Filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+
+                <oitc-table-loader *ngIf="!slas"></oitc-table-loader>
+                <table *ngIf="slas" bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Slas.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Slas.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Slas.evaluation_interval">
+                            {{ t('Evaluation interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Timeperiod') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Slas.start_date">
+                            {{ t('Start date') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Thresholds') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Achieved') }}(%)
+                        </th>
+                        <th scope="col">
+                            {{ t('Status') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let sla of slas.slas">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['slamodule', 'slas', 'delete']"
+                                [disabled]="false"
+                                [item]="sla"></oitc-item-select>
+
+                        </td>
+                        <td>
+                            <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
+                               [routerLink]="['/', 'slamodule', 'slas', 'viewdetails', sla.id]">
+                                {{ sla.name }}
+                            </a>
+                            <span *oitcPermission="['slamodule', 'slas', 'viewdetails']; negate: true">
+                                {{ sla.name }}
+                            </span>
+                        </td>
+                        <td>{{ sla.description }}</td>
+
+
+                        <td>
+                            {{ sla.evaluation_interval }}
+                        </td>
+                        <td>
+                            <a *oitcPermission="['timeperiods', 'edit']"
+                               [routerLink]="['/', 'timeperiods', 'edit', sla.timeperiod_id]">
+                                {{ sla.timeperiod.name }}
+                            </a>
+                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                {{ sla.timeperiod.name }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ sla.start_date }}
+                        </td>
+                        <td>
+                            {{ sla.container }}
+                        </td>
+
+                        <td>
+                            <c-badge *ngIf="sla.warning_threshold"
+                                     textColor="warning"
+                                     class="badge-border margin-right-5">
+                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                {{ sla.warning_threshold }} %
+                            </c-badge>
+                            <c-badge *ngIf="sla.minimal_availability"
+                                     textColor="danger"
+                                     class="badge-border">
+                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                {{ sla.minimal_availability }} %
+                            </c-badge>
+                        </td>
+
+                        <td>
+                            <span [hidden]="sla.status_percent === null"
+                                  [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
+                                <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
+                                   [routerLink]="['/', 'slamodule', 'slas', 'viewdetails', sla.id]"
+                                   class="pointer"
+                                   [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
+                                    {{ sla.status_percent }}%
+                                </a>
+                                <span *oitcPermission="['slamodule', 'slas', 'viewdetails']; negate: true">
+                                    {{ sla.status_percent }}%
+                                </span>
+                            </span>
+                            <div [hidden]="sla.status_percent !== null" class="w-100 text-center">
+                                <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div [hidden]="sla.status_percent === null">
+                                <c-badge *ngIf="sla.fulfill"
+                                         textColor="success"
+                                         class="badge-border w-100">
+                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                    {{ t('PASSED') }}
+                                </c-badge>
+                                <c-badge [hidden]="sla.fulfill"
+                                         textColor="danger"
+                                         class="badge-border w-100">
+                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                    {{ t('FAILED') }}
+                                </c-badge>
+                            </div>
+                            <div [hidden]="sla.status_percent !== null" class="w-100 text-center">
+                                <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                            </div>
+                        </td>
+                        <td class="width-50">
+                            <oitc-actions-button *ngIf="sla.allowEdit"
+                                                 [permission]="'slamodules.slas.edit'"
+                                                 [url]="'/sla_modules/slas/edit/' + sla.id">
+                                <oitc-actions-button-element *ngIf="sla.allowEdit" [permission]="'slamodule.slas.edit'"
+                                                             [url]="'/sla_modules/slas/edit/' + sla.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'slamodule.slas.viewdetails'"
+                                                             [url]="'/sla_modules/slas/viewDetails/' + sla.id">
+                                    <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                                    {{ t('View details') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element *ngIf="sla.allowEdit"
+                                                             [permission]="'slamodule.hostmappingrules.assignToHosts'"
+                                                             [url]="'/sla_module/host_mapping_rules/assignToHosts/' + sla.id">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'desktop']"
+                                                 stackItemSize="1x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-8 right-3 down-7"></fa-icon>
+                                    </fa-stack>
+                                    {{ t('Assign to hosts') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'slamodule.slas.hosts'"
+                                                             [url]="'/sla_module/slas/hosts/' + sla.id">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'desktop']"
+                                                 stackItemSize="1x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'award']" class="text-warning"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-8 right-3 down-7"></fa-icon>
+                                    </fa-stack>
+                                    {{ t('Affected hosts') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider *oitcPermission="['slamodule', 'slas', 'generate']"></li>
+                                <oitc-actions-button-element [permission]="'slamodule.slas.generate'"
+                                                             [url]="'/sla_module/slas/generate/' + sla.id">
+                                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                    {{ t('Generate report') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider *oitcPermission="['slamodule', 'slas', 'delete']"></li>
+                                <oitc-actions-button-element *ngIf="sla.allowEdit" (click)="toggleDeleteAllModal(sla)"
+                                                             [permission]="'slamodule.slas.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records *ngIf="slas && slas.slas.length === 0"></oitc-no-records>
+                <ng-container *ngIf="slas && slas.slas">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="slas.slas.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group d-flex flex-row" role="group">
+                                    <button (click)="toggleDeleteAllModal()"
+                                            class="btn btn-outline-danger col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container fluid>
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="slas"
+                                [paginateOrScroll]="slas"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
