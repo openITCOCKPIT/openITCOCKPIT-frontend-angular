@@ -122,6 +122,13 @@ import {
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
 import { HostBrowserTabs } from '../hosts.enum';
 import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import {
+    ColumnsConfigExportModalComponent
+} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
+import {
+    ColumnsConfigImportModalComponent
+} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import {forEach} from 'lodash';
 
 @Component({
@@ -199,7 +206,9 @@ import {forEach} from 'lodash';
         HostAcknowledgeModalComponent,
         HostsAddToHostgroupComponent,
         NgTemplateOutlet,
-        FilterBookmarkComponent
+        FilterBookmarkComponent,
+        ColumnsConfigExportModalComponent,
+        ColumnsConfigImportModalComponent
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
@@ -261,11 +270,35 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
-
+    private readonly LocalStorageService = inject(LocalStorageService);
+    public fields: boolean[] = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false]; //default fields to show
+    //fields for column configuration
+    public fieldNames: string[] = [
+        'Hoststatus',
+        'is acknowledged',
+        'is in downtime',
+        'Notifications enabled',
+        'Shared',
+        'Passively transferred host',
+        'Priority',
+        'Host name',
+        'Host description',
+        'IP address',
+        'Last state change',
+        'Last check',
+        'Host output',
+        'Instance',
+        'Service Summary ',
+        'Host notes',
+        'Host type'
+    ];
+    public columnsTableKey: string = 'HostsIndexColumns';
+    public showColumnConfig: boolean = false;
+    public configString: string = ''
 
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
-
+        this.loadColumns();
         this.route.queryParams.subscribe(params => {
             let hostId = params['host_id'] || params['id'];
             if (hostId) {
@@ -913,6 +946,49 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             show: true,
             id: 'hostAddToHostgroupModal',
         });
+    }
+
+    public togglecolumnConfiguration() {
+        this.showColumnConfig = !this.showColumnConfig;
+    }
+
+    public toggleColumnsConfigExport() {
+        const exportConfigObject = {
+            key: this.columnsTableKey,
+            value: this.fields
+        };
+        this.configString = JSON.stringify(exportConfigObject);
+        this.modalService.toggle({
+            show: true,
+            id: 'columnsConfigExportModal',
+        });
+    }
+
+    public loadColumns() {
+        if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
+            this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
+        }
+    }
+
+    public toggleColumnsConfigImport() {
+        this.modalService.toggle({
+            show: true,
+            id: 'columnsConfigImportModal',
+        });
+    }
+
+    public getDefaultColumns() {
+        this.fields = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false];
+        this.LocalStorageService.removeItem(this.columnsTableKey)
+    };
+
+    public saveColumnsConfig() {
+        this.LocalStorageService.removeItem(this.columnsTableKey);
+        this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
+    }
+
+    public setColumnConfig(fieldsConfig: boolean[]) {
+        this.fields = fieldsConfig;
     }
 
     protected readonly String = String;
