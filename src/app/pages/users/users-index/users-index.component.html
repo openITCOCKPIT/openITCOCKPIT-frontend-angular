@@ -268,7 +268,8 @@
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'users.edit'"
-                                                             (click)="resetPasswordModal(user)">
+                                                             (click)="resetPasswordModal(user)"
+                                *ngIf="!user.samaccountname">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
