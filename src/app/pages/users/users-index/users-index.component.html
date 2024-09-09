@@ -177,7 +177,7 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="result.all_users.length === 0"></oitc-table-loader>
+                <oitc-table-loader *ngIf="result.myUserId === 0"></oitc-table-loader>
 
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
