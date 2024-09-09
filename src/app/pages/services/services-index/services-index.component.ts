@@ -37,6 +37,7 @@ import { ServicesService } from '../services.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
     getDefaultServicesIndexFilter,
+    getDefaultServiceIndexParams,
     getDefaultServicesIndexFilterApiRequest,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
@@ -141,6 +142,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
+import {getDefaultHostsIndexFilter, getDefaultHostsIndexParams} from '../../hosts/hosts.interface';
 
 @Component({
     selector: 'oitc-services-index',
@@ -422,7 +424,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
     }
 
     public problemsOnly() {
-        this.resetFilter();
+        //this.resetFilter();
+        this.params = getDefaultServiceIndexParams();
+        this.filter = getDefaultServicesIndexFilter();
 
         this.filter.Servicestatus.current_state = {
             ok: false,
@@ -490,10 +494,18 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
 
         let priorityFilter = [];
-        for (var key in this.filter.Services.priority) {
+       /* for (var key in this.filter.Services.priority) {
             // @ts-ignore
             if (this.filter.Services.priority[key] === true) {
                 priorityFilter.push(key);
+            }
+        } */
+        for (const key in this.filter.Services.priority) {
+            if (this.filter.Services.priority.hasOwnProperty(key)) {
+                // @ts-ignore
+                if (this.filter.Services.priority[key] === true) {
+                    priorityFilter.push(key);
+                }
             }
         }
 
@@ -749,45 +761,23 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-
-            if (bookmarkfilter.Hosts.name === '' && !bookmarkfilter.Hosts.name_regex) {
-                bookmarkfilter.Hosts.name_regex = false;
-            }
-
-            if (bookmarkfilter.Services.name === '' && !bookmarkfilter.Services.name_regex) {
-                bookmarkfilter.Services.name_regex = false;
-            }
-            if (!bookmarkfilter.Services.service_type) {
-                bookmarkfilter.Services.service_type = [];
-            }
-            if (typeof (bookmarkfilter.Services.keywords) === 'string' && bookmarkfilter.Services.keywords.length > 0) {
-                bookmarkfilter.Services.keywords = bookmarkfilter.Services.keywords.split(',');
-            }
-            if (typeof (bookmarkfilter.Services.not_keywords) === 'string' && bookmarkfilter.Services.not_keywords.length > 0) {
-                bookmarkfilter.Services.not_keywords = bookmarkfilter.Services.not_keywords.split(','); //in old bookmarks this is a comma separated string
-            }
-            if (bookmarkfilter.Hosts.satellite_id) {
-                bookmarkfilter.Hosts.satellite_id = bookmarkfilter.Hosts.satellite_id.map(Number);
-            }
-            if (bookmarkfilter.Services.service_type) {
-                bookmarkfilter.Services.service_type = bookmarkfilter.Services.service_type.map(Number);
-            }
-            if (bookmarkfilter.Servicestatus.notifications_enabled === false && bookmarkfilter.Servicestatus.notifications_not_enabled === undefined) {
-                bookmarkfilter.Servicestatus.notifications_not_enabled = false;
-            }
-
-            this.setFilterAndLoad(bookmarkfilter);
+            this.params = getDefaultServiceIndexParams();
+            this.filter = bookmarkfilter;
+            this.setFilterAndLoad(this.filter);
         }
     }
 
     private setFilterAndLoad(filter: ServiceIndexFilter) {
         this.params.page = 1;
 
-        let priorityFilter = [];
-        for (var key in this.filter.Services.priority) {
-            // @ts-ignore
-            if (this.filter.Services.priority[key] === true) {
-                priorityFilter.push(key);
+        let priorityFilter: string[] = [];
+        for (const key in filter.Services.priority) {
+            if (filter.Services.priority.hasOwnProperty(key)) {
+               // console.log(key); // Logs the key
+                // @ts-ignore
+                if (filter.Services.priority[key] === true) {
+                    priorityFilter.push(key);
+                }
             }
         }
 
@@ -861,48 +851,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
 
     //filter
     public resetFilter() {
-        this.filter = {
-            Servicestatus: {
-                current_state: {
-                    ok: false,
-                    warning: false,
-                    critical: false,
-                    unknown: false
-                },
-                acknowledged: false,
-                not_acknowledged: false,
-                in_downtime: false,
-                not_in_downtime: false,
-                passive: false,
-                active: false,
-                notifications_enabled: false,
-                notifications_not_enabled: false,
-                output: '',
-            },
-            Services: {
-                id: [],
-                name: '',
-                name_regex: false,
-                keywords: [],
-                not_keywords: [],
-                servicedescription: '',
-                priority: {
-                    1: false,
-                    2: false,
-                    3: false,
-                    4: false,
-                    5: false
-                },
-                service_type: []
-            },
-            Hosts: {
-                id: [],
-                name: '',
-                name_regex: false,
-                satellite_id: []
-            }
-        };
-        this.load();
+        this.params = getDefaultServiceIndexParams();
+        this.filter = getDefaultServicesIndexFilter();
+        this.setFilterAndLoad(this.filter);
     }
 
     public onFilterChange(event: Event | null) {
