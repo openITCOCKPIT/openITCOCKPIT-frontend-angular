@@ -14,7 +14,8 @@ export interface ServiceParams {
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | ''
+    direction: 'asc' | 'desc' | '',
+    BrowserContainerId?: number
 }
 
 export function getDefaultServiceIndexParams(): ServiceParams {
@@ -120,8 +121,8 @@ export interface ServicesIndexFilterApiRequest {
     'servicename': string
     'servicename_regex': boolean | string
     'servicedescription': string
-    'keywords':  string[]
-    'not_keywords':  string[]
+    'keywords': string[]
+    'not_keywords': string[]
     'servicepriority': string[]
 
     'Servicestatus.current_state': string[]
