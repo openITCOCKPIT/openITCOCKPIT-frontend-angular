@@ -22,7 +22,8 @@
         </nav>
 
 
-        <form cForm (ngSubmit)="updateUser()">
+        <oitc-form-loader *ngIf="post.User.id === 0"></oitc-form-loader>
+        <form cForm (ngSubmit)="updateUser()" *ngIf="post.User.id !== 0">
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>
@@ -57,7 +58,6 @@
 
 
                 <c-card-body>
-                    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
                     <div class="mb-3" *ngIf="isLdapUser">
                         <label cLabel for="samaccountname">
                             {{ t('SAM-Account-Name') }}
@@ -259,7 +259,6 @@
                         <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
                                class="containerRoleInheritance mb-3">
                             <c-col md="1">
-                                HIÄ
                             </c-col>
                             <c-col md="11">
                                 <legend class="txt-ack">
@@ -444,11 +443,9 @@
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                         <div class="help-block text-info">
-                            <fa-icon [icon]="['fas', 'info-circle']"/>
                             <span *ngIf="isLdapUser">
+                                <fa-icon [icon]="['fas', 'info-circle']"/>
                                 {{ t('Fall back user role that is used by the system, when no user role assignment through LDAP is possible.') }}
-                            </span>
-                            <span *ngIf="!isLdapUser">
                             </span>
                         </div>
                     </div>
