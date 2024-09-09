@@ -10,7 +10,7 @@ import {
     LoadContainerRolesRoot,
     LoadLdapUserByStringRoot,
     LoadLdapUserDetailsRoot,
-    LoadUsergroupsRoot, UpdateUser,
+    LoadUsergroupsRoot, LoginGetRoot, UpdateUser,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
@@ -53,6 +53,15 @@ export class UsersService {
         return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {
             params: params as {}
         }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public getLoginDetails(): Observable<LoginGetRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoginGetRoot>(`${proxyPath}/users/login.json`).pipe(
             map(data => {
                 return data;
             })

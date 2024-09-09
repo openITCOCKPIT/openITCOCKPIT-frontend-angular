@@ -21,6 +21,11 @@
     left: 0;
     border-bottom: 1px solid #C00;
     width: 100%;
+    animation-name: strike;
+    animation-duration: 250ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 .div-bottom-arrow {

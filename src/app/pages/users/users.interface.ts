@@ -318,3 +318,23 @@ export interface LdapUserDetails {
     },
     ldapgroupIds: number[]
 }
+
+// LOGIN
+export interface LoginGetRoot {
+    _csrfToken: string
+    images: {
+        description: string
+        particles: string
+        images: LoginImage[]
+    }
+    hasValidSslCertificate: boolean
+    isLoggedIn: boolean
+    isSsoEnabled: boolean
+    forceRedirectSsousersToLoginScreen: boolean
+    errorMessages: any[]
+}
+
+export interface LoginImage {
+    image: string
+    credit: string
+}

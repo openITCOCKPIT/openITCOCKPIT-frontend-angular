@@ -44,9 +44,6 @@ const coreRoutes: Routes = [{
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
 }, {
-    path: 'login',
-    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
-}, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {
@@ -442,6 +439,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'users/ldap',
     loadComponent: () => import('./pages/users/users-ldap/users-ldap.component').then(m => m.UsersLdapComponent)
+}, {
+    path: 'users/login',
+    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
 }, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)

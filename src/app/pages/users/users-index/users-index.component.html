@@ -259,22 +259,29 @@
                             {{ user.last_login }}
                         </td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="user.allow_edit"
-                                                 [permission]="'users.edit'"
+                            <oitc-actions-button [permission]="'users.edit'"
                                                  [url]="'/users/edit/' + user.id">
                                 <oitc-actions-button-element [permission]="'users.edit'"
-                                                             [url]="'/users/edit/' + user.id">
+                                                             [url]="'/users/edit/' + user.id"
+                                                             *ngIf="user.allow_edit">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             *ngIf="!user.allow_edit">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'users.edit'"
                                                              (click)="resetPasswordModal(user)"
-                                *ngIf="!user.samaccountname">
+                                *ngIf="!user.samaccountname && user.allow_edit">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
+                                <li cDropdownDivider
+                                    *ngIf="user.allow_edit"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(user)"
+                                                             *ngIf="user.allow_edit"
                                                              [permission]="'users.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>

@@ -27,7 +27,7 @@ export class AuthService {
 
     public login(email: string, password: string, rememberMe = true): Observable<boolean> {
         const proxyPath = this.proxyPath;
-        return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json`).pipe(
+        return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json?angular=true`).pipe(
             switchMap(data => {
 
                 const csrfToken = data['_csrfToken'];
@@ -37,7 +37,7 @@ export class AuthService {
                 searchParams.set('_csrfToken', csrfToken);
                 searchParams.set('remember_me', rememberMe ? '1' : '0');
 
-                return this.http.post(`${proxyPath}/users/login`, searchParams.toString(), {
+                return this.http.post(`${proxyPath}/users/login?angular=true`, searchParams.toString(), {
                     responseType: 'text',
                     withCredentials: true,
                     headers: {
