@@ -248,7 +248,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     public ngOnInit() {
         this.loadContainers();
         this.updateTabRotationInterval();
-        this.loadContainers();
         this.loadDateformats();
         this.loadLocaleOptions();
         this.loadContainerRoles('');
@@ -264,7 +263,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.UsersService.getEdit(id)
             .subscribe((result: EditUserGet) => {
-                console.warn(result.user);
                 this.post.User = result.user;
                 this.UserType = result.UserTypes[0];
                 // Add empty passwords field, otherwise they are undefined.
@@ -274,6 +272,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 // Put the containerIds into this.selectedContainerIds.
                 this.selectedContainerIds = this.post.User.containers._ids;
                 this.onSelectedContainerIdsChange();
+                this.onContainerRolesChange(null);
 
                 this.isLdapUser = result.isLdapUser;
                 this.notPermittedContainerIds = result.notPermittedContainerIds;
