@@ -31,6 +31,7 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceBrowserMenu,
+    ServiceBrowserResult,
     ServiceCommandArgument,
     ServiceCopyGet,
     ServiceCopyPost,
@@ -447,6 +448,17 @@ export class ServicesService {
             .pipe(
                 map(data => {
                     return data.config;
+                })
+            )
+    }
+
+    public getServiceBrowser(id: number): Observable<ServiceBrowserResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<ServiceBrowserResult>(`${proxyPath}/services/browser/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }

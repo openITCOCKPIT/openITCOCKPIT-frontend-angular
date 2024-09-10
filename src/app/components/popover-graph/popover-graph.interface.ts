@@ -53,7 +53,17 @@ export interface PerfParams {
     service_uuid: string,
     start: number,
     end: number,
-    jsTimestamp: number,
+    jsTimestamp: number, // 1 or 0 // if 1 set isoTimestamp to 0
+    isoTimestamp?: number, // 1 or 0 // if 1 set jsTimestamp to 0
+}
+
+export interface ServiceBrowserPerfParams extends PerfParams {
+    aggregation: 'min' | 'max' | 'avg',
+    gauge: string, // rta
+    hours?: number,
+    scale?: boolean,
+    forcedUnit?: string,
+    debug?: boolean,
 }
 
 export interface Gauges {
