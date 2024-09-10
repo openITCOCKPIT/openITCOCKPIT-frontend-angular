@@ -157,4 +157,5 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     }
 
     protected readonly String = String;
+    protected readonly Number = Number;
 }

@@ -97,6 +97,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     @Input() public serviceUuid: string = '';
     @Input() public availableDataSources: SelectKeyValueString[] = [];
     @Input() public timezone!: TimezoneObject;
+    @Input() public autoRefreshInterval: number = 0; // value in seconds
+
+    private autoRefreshIntervalId: any = null;
 
     public selectedDatasource: string = '';
 
@@ -145,6 +148,11 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     private zoomEnabled: boolean = false;
 
+    // Contains the last time stamp in ISO format which contains data
+    // This timestamp is used by the auto refresh, to only load new data.
+    private lastTimestampWithData: Date = new Date();
+    private ServerTime: Date = new Date();
+
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
 
@@ -178,9 +186,16 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.config.showDataPoint = this.LocalStorageService.getItemWithDefault('ServiceBrowerChartShowPoints', 'false') === 'true';
 
         this.loadPerfdata();
+
+        if (this.config.autoRefresh && this.autoRefreshInterval > 1) {
+            this.startAutoRefresh();
+        }
+
     }
 
     public ngOnDestroy(): void {
+        this.zoomEnabled = false;
+        this.cancelAutoRefresh();
         this.subscriptions.unsubscribe();
     }
 
@@ -188,6 +203,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.echartsInstance = ec;
     }
 
+    // Called on page load, on zoom, on data source change, on timerange change
+    // Called basically on every change - except the AutoRefresh !!
     public loadPerfdata() {
         if (this.availableDataSources.length === 0) {
             // This service has no datasources
@@ -231,7 +248,89 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     this.currentGraphUnit = perfdata.performance_data[0].datasource.unit;
                 }
 
+                // Store the last timestamp with data
+                // This is used by the auto refresh to only load new data
+                for (const isoTimestamp in perfdata.performance_data[0].data) {
+                    let timestamp = new Date(isoTimestamp);
+                    if (timestamp > this.lastTimestampWithData) {
+                        this.lastTimestampWithData = timestamp;
+                    }
+                }
+
                 this.renderChart(perfdata);
+            })
+        );
+    }
+
+    // Gets called by the Auto Refresh Timer - will only load new perfdata and append to the existing data
+    public updateAndAppendPerfdata(start: number, end: number) {
+        if (this.availableDataSources.length === 0) {
+            // This service has no datasources
+            this.cancelAutoRefresh();
+            return;
+        }
+
+        if (this.selectedDatasource === '') {
+            // No data source selected - something is wrong
+            this.cancelAutoRefresh();
+            return;
+        }
+
+
+        let params: ServiceBrowserPerfParams = {
+            aggregation: this.selectedAggregation,
+            host_uuid: this.hostUuid,
+            service_uuid: this.serviceUuid,
+            gauge: this.selectedDatasource,
+            jsTimestamp: 0,
+            isoTimestamp: 1,
+            angular: true,
+            start: start,
+            end: end,
+        };
+
+        if (this.currentGraphUnit !== null) {
+            // Append new data in the same unit
+            params.forcedUnit = this.currentGraphUnit;
+        }
+
+        this.isLoading = true;
+        this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
+            .subscribe((perfdata) => {
+                this.isLoading = false;
+
+                if (this.currentGraphUnit === null) {
+                    // First load of data - save the unit we got
+                    this.currentGraphUnit = perfdata.performance_data[0].datasource.unit;
+                }
+
+                if (Object.keys(perfdata.performance_data[0].data).length === 0) {
+                    // No new data available
+                    return;
+                }
+
+                // Store the last timestamp with data
+                // This is used by the auto refresh to only load new data
+                let data = [];
+                for (const isoTimestamp in perfdata.performance_data[0].data) {
+                    const value = perfdata.performance_data[0].data[isoTimestamp];
+                    data.push([isoTimestamp, value]);
+
+                    let timestamp = new Date(isoTimestamp);
+                    if (timestamp > this.lastTimestampWithData) {
+                        this.lastTimestampWithData = timestamp;
+                    }
+                }
+
+                // Append new data
+                this.echartsInstance.setOption({
+                    dataset: {
+                        source: [...this.echartsInstance.getOption().dataset[0].source, ...data]
+                    }
+                });
+
+                // Store the new Timestamp for end time
+                this.currentTimerange.end = Math.floor(this.lastTimestampWithData.getTime() / 1000);
             })
         );
     }
@@ -250,6 +349,29 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.chartOption = {
             tooltip: {
                 trigger: 'axis',
+                formatter: (params: any) => {
+                    //console.log(params);
+
+                    // Maybe add a loop if we want to support multiple gauges in one chart
+                    const gauge = params[0];
+                    const dateTime = DateTime.fromISO(gauge.data[0]);
+                    const value = gauge.data[1];
+                    const seriesName = gauge.seriesName;
+                    const color = gauge.color;
+                    const marker = params[0].marker;
+
+                    const html = `<div class="row">
+                        <div class="col-12">
+                            ${dateTime.toFormat('dd.MM.yyyy HH:mm:ss')}
+                        </div>
+                        <div class="col-12">
+                            ${marker} ${seriesName} <span class="float-end bold" style="color:${color};">${value} ${this.currentGraphUnit ? this.currentGraphUnit : ''}</span>
+                        </div>
+                        </div>`;
+
+                    return html;
+                }
+
             },
             xAxis: {
                 type: 'time',
@@ -270,7 +392,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             },
             yAxis: {
                 type: 'value',
-                name: gauge.datasource.setup.metric.unit,
+                axisLabel: {
+                    formatter: (value) => {
+                        return `${value} ${this.currentGraphUnit ? this.currentGraphUnit : ''}`
+                    }
+                },
+                //name: gauge.datasource.setup.metric.unit,
                 minorTick: {
                     show: true
                 },
@@ -282,7 +409,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             grid: {
                 left: 80,
                 right: 50,
-                top: 50,
+                top: 25,
                 bottom: 50
             },
 
@@ -399,6 +526,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public reloadChart() {
         this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
+        this.currentGraphUnit = null; // Reset the unit to get the new one from the API
         this.loadPerfdata();
     }
 
@@ -412,10 +540,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             return {start, end};
         }
 
-        const serverTime = new Date(this.timezone.server_time_iso);
+        this.ServerTime = new Date(this.timezone.server_time_iso);
 
-        const start = (Math.floor(serverTime.getTime() / 1000) - (this.selectedTimerange * 3600));
-        const end = Math.floor(serverTime.getTime() / 1000);
+        const start = (Math.floor(this.ServerTime.getTime() / 1000) - (this.selectedTimerange * 3600));
+        const end = Math.floor(this.ServerTime.getTime() / 1000);
 
         return {start, end};
     }
@@ -624,8 +752,18 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         const duration = end - start;
         this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
 
+
+        const currentTimestamp = Math.floor(this.ServerTime.getTime() / 1000);
+        //Only enable auto refresh, if graphEnd timestamp is near to now
+        //We don't need to auto refresh data from yesterday
+        if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
+            this.cancelAutoRefresh();
+        }
+
+
         // Reload detailed data
-        this.reloadChart();
+        this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
+        this.loadPerfdata();
     }
 
     public onChartFinished(event: any) {
@@ -672,6 +810,34 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
         // Example: 13.09.2023 16:00 - 05.09.2024 10:09
         return dateTime.toFormat('dd.MM.yyyy HH:mm');
+    }
+
+    private startAutoRefresh() {
+        if (this.autoRefreshIntervalId === null) {
+            this.autoRefreshIntervalId = setInterval(() => {
+
+
+                let start = this.lastTimestampWithData.getTime() / 1000;
+                this.ServerTime = new Date(this.ServerTime.getTime() + (this.autoRefreshInterval * 1000));
+
+                let end = Math.floor(this.ServerTime.getTime() / 1000);
+
+                // Get back to server time
+                if (start > 0) {
+                    this.updateAndAppendPerfdata(start, end);
+                }
+
+
+            }, this.autoRefreshInterval * 1000);
+        }
+    }
+
+    private cancelAutoRefresh() {
+        this.config.autoRefresh = false;
+        if (this.autoRefreshIntervalId) {
+            clearInterval(this.autoRefreshIntervalId);
+            this.autoRefreshIntervalId = null;
+        }
     }
 
 }
