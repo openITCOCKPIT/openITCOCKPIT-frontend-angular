@@ -328,6 +328,7 @@ export interface LoginGetRoot {
         images: LoginImage[]
     }
     hasValidSslCertificate: boolean
+    logoUrl: string
     isLoggedIn: boolean
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
