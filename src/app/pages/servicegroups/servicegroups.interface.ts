@@ -437,3 +437,16 @@ export interface ServicegroupAppend {
         id: number
     }
 }
+
+export interface ServicegroupEntityWithJoinData {
+    id: number
+    uuid: string
+    container_id: number
+    description: string
+    servicegroup_url: string
+    _joinData: {
+        id: number
+        service_id: number
+        servicegroup_id: number
+    }
+}

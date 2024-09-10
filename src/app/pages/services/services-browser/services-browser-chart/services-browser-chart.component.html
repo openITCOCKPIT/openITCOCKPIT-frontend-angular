@@ -1,0 +1,113 @@
+<ng-container *transloco="let t">
+
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service') }}
+                <small class="fw-300">
+                    {{ t('graphs') }}:
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <c-form-check>
+                        <input
+                            id="SmoothCheckbox"
+                            name="SmoothCheckbox"
+                            cFormCheckInput
+                            type="checkbox"
+                            [(ngModel)]="config.smooth"
+                            (change)="updateChart()"/>
+                        <label cFormCheckLabel
+                               for="SmoothCheckbox">{{ t('Smooth') }}</label>
+                    </c-form-check>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <c-form-check>
+                        <input
+                            id="ShowDataPointsCheckbox"
+                            name="ShowDataPointsCheckbox"
+                            cFormCheckInput
+                            type="checkbox"
+                            [(ngModel)]="config.showDataPoint"
+                            (change)="updateChart()"/>
+                        <label cFormCheckLabel
+                               for="ShowDataPointsCheckbox">{{ t('Show data points') }}</label>
+                    </c-form-check>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <c-form-check>
+                        <input
+                            id="AutoRefreshCheckbox"
+                            name="AutoRefreshCheckbox"
+                            cFormCheckInput
+                            type="checkbox"
+                            [(ngModel)]="config.autoRefresh"
+                            (change)="updateChart()"/>
+                        <label cFormCheckLabel
+                               for="AutoRefreshCheckbox">{{ t('Auto refresh') }}</label>
+                    </c-form-check>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <oitc-select
+                        name="timerange"
+                        id="timerange"
+                        optionValue="key"
+                        optionLabel="value"
+                        [placeholder]="timerangePlaceholder"
+                        [(ngModel)]="selectedTimerange"
+                        [options]="availableTimeranges"
+                        (onChange)="reloadChart()">
+                    </oitc-select>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <oitc-select
+                        name="datasource"
+                        id="datasource"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="selectedDatasource"
+                        [options]="availableDataSources"
+                        (onChange)="reloadChart()">
+                    </oitc-select>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <oitc-select
+                        name="aggregation"
+                        id="aggregation"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="selectedAggregation"
+                        [options]="availableAggregation"
+                        (onChange)="reloadChart()">
+                    </oitc-select>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+
+            </c-nav>
+        </c-card-header>
+
+        <c-card-body>
+            <div echarts [options]="chartOption"
+                 [loading]="isLoading"
+                 [theme]="theme"
+                 (chartInit)="onChartInit($event)"
+                 (chartDataZoom)="onChartDataZoom($event)"
+                 (chartFinished)="onChartFinished($event)"
+                 class="w-100"></div>
+        </c-card-body>
+
+    </c-card>
+</ng-container>
