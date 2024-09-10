@@ -12,6 +12,9 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -57,6 +60,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 import { ExternalSystemEntity } from '../../../ExternalSystems.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 
 @Component({
@@ -101,7 +105,15 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
         XsButtonDirective,
         RouterLink,
         BadgeComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
@@ -146,6 +158,18 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
 
     public load() {
         this.SelectionServiceService.deselectAll();
+        let imported = null;
+
+        const importedFilter = this.params['filter[ImportedHostgroups.imported]'] ? 1 : 0;
+        const notImportedFilter = this.params['filter[ImportedHostgroups.not_imported]'] ? 1 : 0;
+
+        if (importedFilter ^ notImportedFilter) {
+            imported = importedFilter === 1;
+            this.params['filter[imported]'] = imported ? 'true' : 'false';
+        } else {
+            this.params['filter[imported]'] = imported;
+        }
+
         this.subscriptions.add(this.ImportedhostgroupsService.getIndex(this.params)
             .subscribe((result) => {
                 this.allImportedGroups = result;

@@ -115,6 +115,49 @@
                                 </c-input-group>
                             </c-col>
                         </c-row>
+                        <c-row class="my-3">
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Already synchronized') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            name="filter.ImportedHostgroups.imported"
+                                            id="filter.ImportedHostgroups.imported"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="params['filter[ImportedHostgroups.imported]']"/>
+                                        <label cFormCheckLabel
+                                               for="filter.ImportedHostgroups.imported">
+                                            <c-badge color="info">
+                                                {{ t('In monitoring') }}
+                                            </c-badge>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            name="filter.ImportedHostgroups.not_imported"
+                                            id="filter.ImportedHostgroups.not_imported"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="params['filter[ImportedHostgroups.not_imported]']"/>
+                                        <label cFormCheckLabel
+                                               for="filter.ImportedHostgroups.not_imported">
+                                            <c-badge color="success">
+                                                {{ t('NEW') }}
+                                            </c-badge>
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
                         <c-row class="mt-2">
                             <c-col class="text-end">
                                 <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">

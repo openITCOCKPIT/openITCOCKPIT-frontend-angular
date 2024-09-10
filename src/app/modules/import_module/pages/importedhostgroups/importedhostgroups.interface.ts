@@ -36,8 +36,9 @@ export interface ImportedhostgroupsIndexParams {
     'filter[ImportedHostgroups.id][]': [],
     'filter[ImportedHostgroups.name]': string
     'filter[ImportedHostgroups.description]': string
-    'filter[ImportedHostgroups.imported]': string
-    'filter[ImportedHostgroups.not_imported]': string
+    'filter[ImportedHostgroups.imported]': boolean
+    'filter[ImportedHostgroups.not_imported]': boolean,
+    'filter[imported]': string | null
 }
 
 export interface ImportedHostgroupIndex {
@@ -58,7 +59,8 @@ export function getDefaultImportedHostgroupsIndexParams(): ImportedhostgroupsInd
         'filter[ImportedHostgroups.id][]': [],
         'filter[ImportedHostgroups.name]': '',
         'filter[ImportedHostgroups.description]': '',
-        'filter[ImportedHostgroups.imported]': '',
-        'filter[ImportedHostgroups.not_imported]': '',
+        'filter[ImportedHostgroups.imported]': false,
+        'filter[ImportedHostgroups.not_imported]': false,
+        'filter[imported]': ''
     }
 }
