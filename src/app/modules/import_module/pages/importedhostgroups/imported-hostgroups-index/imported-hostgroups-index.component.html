@@ -33,22 +33,34 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['ImportModule', 'ImportedHostgroups', 'add']" cButton
-                                class="ripple"
+                                class="ripple me-1"
                                 color="success"
                                 size="xs">
                             <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
                             {{ t('Start import') }}
                         </button>
-                        <button *oitcPermission="['importedhostgroups', 'add']"
-                                [routerLink]="['/', 'importedhostgroups', 'add']" cButton
-                                class="ripple"
+                        <button *oitcPermission="['hostgroups', 'add']"
+                                cButton
+                                class="ripple me-1"
                                 color="success"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('New') }}
+                                size="xs"
+                                (click)="synchronizeWithMonitoring()"
+                                [disabled]="showSynchronizingSpinner || showSpinner">
+                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
+                                     *ngIf="showSynchronizingSpinner"></fa-icon>
+                            <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                            {{ t('Synchronize with monitoring') }}
                         </button>
                     </c-nav-item>
-                    <c-nav-item class="px-1">
+                    <c-nav-item>
+                        <div class="pe-2">
+                            <c-badge color="danger" *ngIf="externalSystems.length===0">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ t('No supported external systems defined') }}
+                            </c-badge>
+                        </div>
+                    </c-nav-item>
+                    <c-nav-item>
                         <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
@@ -113,7 +125,7 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
-
+                <oitc-table-loader *ngIf="!allImportedGroups"></oitc-table-loader>
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -140,10 +152,10 @@
                     </tr>
                     </thead>
                     <tbody *ngIf="importedhostgroups">
-                    <tr *ngFor="let importedhostgroup of importedhostgroups.importedhostgroups">
+                    <tr *ngFor="let importedhostgroup of importedhostgroups">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['importedhostgroups', 'delete']"
+                                *oitcPermission="['ImportModule','importedhostgroups', 'delete']"
                                 [disabled]="!importedhostgroup.allowEdit"
                                 [item]="importedhostgroup"></oitc-item-select>
 
@@ -165,19 +177,24 @@
 
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'importedhostgroups.edit'"
-                                                 [allowEdit]="importedhostgroup.allowEdit"
-                                                 [url]="'/importedhostgroups/edit/' + importedhostgroup.id">
-                                <oitc-actions-button-element [permission]="'importedhostgroups.edit'"
-                                                             *ngIf="importedhostgroup.allowEdit"
-                                                             [url]="'/importedhostgroups/edit/' + importedhostgroup.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
+                            <oitc-actions-button [permission]="'ImportModule.importedhostgroups.view'"
+                                                 [icon]="['fas', 'eye']"
+                                                 [url]="'/importedhostgroups/view/' + importedhostgroup.id">
+                                <oitc-actions-button-element [permission]="'ImportModule.importedhostgroups.view'"
+                                                             *ngIf="importedhostgroup.allowView"
+                                                             [url]="'/import_module/view/' + importedhostgroup.id">
+                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                    {{ t('View') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
+                                                             [url]="'/import_module/import_changelogs/entity/importedHostgroup/' + importedhostgroup.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhostgroup)"
                                                              *ngIf="importedhostgroup.allowEdit"
-                                                             [permission]="'importedhostgroups.delete'">
+                                                             [permission]="'ImportModule.importedhostgroups.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
@@ -190,13 +207,13 @@
                 </table>
 
                 <oitc-no-records
-                    *ngIf="importedhostgroups && importedhostgroups.importedhostgroups.length === 0"></oitc-no-records>
-                <ng-container *ngIf="importedhostgroups && importedhostgroups.importedhostgroups">
+                    *ngIf="importedhostgroups && importedhostgroups.length === 0"></oitc-no-records>
+                <ng-container *ngIf="importedhostgroups">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="importedhostgroups.importedhostgroups.length"></oitc-select-all>
+                                    [itemsCount]="importedhostgroups.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group d-flex flex-row" role="group">
@@ -217,8 +234,7 @@
                         <c-col>
                             <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="importedhostgroups"
-                                [paginateOrScroll]="importedhostgroups"></oitc-paginate-or-scroll>
+                                [paginateOrScroll]="allImportedGroups"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

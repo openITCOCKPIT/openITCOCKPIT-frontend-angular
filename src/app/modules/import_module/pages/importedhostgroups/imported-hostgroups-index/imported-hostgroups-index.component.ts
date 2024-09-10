@@ -24,6 +24,7 @@ import {
 } from '@coreui/angular';
 import {
     getDefaultImportedHostgroupsIndexParams,
+    Importedhostgroup,
     ImportedHostgroupIndex,
     ImportedhostgroupsIndexParams,
     ImportedhostgroupsIndexRoot
@@ -49,10 +50,13 @@ import {
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { ExternalSystemEntity } from '../../../ExternalSystems.interface';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 
 @Component({
@@ -96,7 +100,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        BadgeComponent
+        BadgeComponent,
+        TableLoaderComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
@@ -108,13 +113,20 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: ImportedhostgroupsIndexParams = getDefaultImportedHostgroupsIndexParams()
-    public importedhostgroups?: ImportedhostgroupsIndexRoot;
+
+    public importedhostgroups: Importedhostgroup[] = [];
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     private readonly ImportedhostgroupsService = inject(ImportedhostgroupsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    public showSynchronizingSpinner: boolean = false;
+    public showSpinner: boolean = false;
+    public externalSystems: ExternalSystemEntity[] = [];
+    public allImportedGroups?: ImportedhostgroupsIndexRoot;
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly notyService = inject(NotyService);
 
     constructor() {
     }
@@ -136,7 +148,9 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.ImportedhostgroupsService.getIndex(this.params)
             .subscribe((result) => {
-                this.importedhostgroups = result;
+                this.allImportedGroups = result;
+                this.importedhostgroups = result.importedhostgroups;
+                this.externalSystems = result.externalSystems;
             })
         );
     }
@@ -150,9 +164,9 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
         this.load();
     }
 
-    public onPaginatorChange(calendar: PaginatorChangeEvent): void {
-        this.params.page = calendar.page;
-        this.params.scroll = calendar.scroll;
+    public onPaginatorChange(importedhostgroup: PaginatorChangeEvent): void {
+        this.params.page = importedhostgroup.page;
+        this.params.scroll = importedhostgroup.scroll;
         this.load();
     }
 
@@ -206,4 +220,16 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public synchronizeWithMonitoring() {
+        this.subscriptions.add(this.ImportedhostgroupsService.synchronizeWithMonitoring()
+            .subscribe((result) => {
+                if (result.success) {
+                    this.notyService.genericSuccess(result.message);
+                    return;
+                }
+                // Error
+                this.notyService.genericError(result.message);
+            })
+        );
+    }
 }

@@ -5,6 +5,7 @@ import { ExternalSystemEntity } from '../../ExternalSystems.interface';
 
 export interface ImportedhostgroupsIndexRoot extends PaginateOrScroll {
     importedhostgroups: Importedhostgroup[]
+    externalSystems: ExternalSystemEntity[]
     _csrfToken: string
 }
 

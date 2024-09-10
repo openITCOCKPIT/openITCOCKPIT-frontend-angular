@@ -35,6 +35,7 @@ import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
     selector: 'oitc-actions-button',
@@ -56,6 +57,7 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
 export class ActionsButtonComponent {
 
     @Input({transform: booleanAttribute}) allowEdit: boolean = true;
+    @Input({required: false}) icon: IconProp = ['fas', 'gear'];
     @Input({required: true}) url: string = '';
     @Input({required: true}) permission: string = '';
 

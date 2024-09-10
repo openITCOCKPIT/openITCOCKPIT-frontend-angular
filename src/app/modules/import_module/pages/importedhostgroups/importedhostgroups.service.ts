@@ -7,6 +7,7 @@ import {
     ImportedhostgroupsIndexParams,
     ImportedhostgroupsIndexRoot
 } from './importedhostgroups.interface';
+import { GenericSuccessAndMessageResponse } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -41,6 +42,19 @@ export class ImportedhostgroupsService {
         }).pipe(
             map(data => {
                 return data.importedhostgroup;
+            })
+        );
+    }
+
+    public synchronizeWithMonitoring(): Observable<GenericSuccessAndMessageResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<GenericSuccessAndMessageResponse>(`${proxyPath}/import_module/imported_hosts/synchronizeWithMonitoring/.json?angular=true.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
             })
         );
     }
