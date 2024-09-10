@@ -1,8 +1,9 @@
 <ng-container *transloco="let t">
     <ngx-particles
-            id="particles"
-            [options]="particlesConfig"
-     />
+            id="prtcls"
+            [options]="particlesOptions"
+            (particlesLoaded)="particlesLoaded($event)"
+    ></ngx-particles>
     <c-row class="w-100 h-100" style="background:rgba(255,255,0,0.8)">
         <c-col md="8"></c-col>
         <c-col md="4" class="p-4" style="background:rgba(0,0,0,0.5)">

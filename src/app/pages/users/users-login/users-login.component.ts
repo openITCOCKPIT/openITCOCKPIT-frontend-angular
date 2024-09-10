@@ -1,12 +1,12 @@
-//import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { NgxParticlesModule } from "@tsparticles/angular";
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AlertComponent, ColComponent,
+    AlertComponent,
+    ColComponent,
     FormCheckComponent,
     FormControlDirective,
-    FormLabelDirective, InputGroupComponent,
+    FormLabelDirective,
+    InputGroupComponent,
     RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,15 @@ import { Subscription } from 'rxjs';
 import { LoginImage } from '../users.interface';
 import { AuthService } from '../../../auth/auth.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+// PRTCLS
+import {
+    Container,
+    Engine,
+    MoveDirection,
+    OutMode,
+} from "@tsparticles/engine";
+import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
+import { NgParticlesService } from "@tsparticles/angular";
 
 @Component({
     selector: 'oitc-users-login',
@@ -35,16 +44,15 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         FormFeedbackComponent,
         FormLabelDirective,
         RequiredIconComponent,
-        NgxParticlesModule,
         FormCheckComponent,
         RowComponent,
         ColComponent,
-        InputGroupComponent
+        InputGroupComponent,
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css'
 })
-export class UsersLoginComponent {
+export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
     protected logoUrl: string = '';
 
@@ -62,14 +70,85 @@ export class UsersLoginComponent {
         remember_me: false
     };
 
-    protected particlesConfig: any = null;
+    protected particlesOptions: any = {
+        background: {
+            color: {
+                value: "#0d47a1",
+            },
+        },
+        fpsLimit: 120,
+        interactivity: {
+            modes: {
+                push: {
+                    quantity: 4,
+                },
+                repulse: {
+                    distance: 200,
+                    duration: 0.4,
+                },
+            },
+        },
+        particles: {
+            color: {
+                value: "#ffffff",
+            },
+            links: {
+                color: "#ffffff",
+                distance: 150,
+                enable: true,
+                opacity: 0.5,
+                width: 1,
+            },
+            move: {
+                direction: MoveDirection.none,
+                enable: true,
+                outModes: {
+                    default: OutMode.bounce,
+                },
+                random: false,
+                speed: 6,
+                straight: false,
+            },
+            number: {
+                density: {
+                    enable: true,
+                    area: 800,
+                },
+                value: 80,
+            },
+            opacity: {
+                value: 0.5,
+            },
+            shape: {
+                type: "circle",
+            },
+            size: {
+                value: {min: 1, max: 5},
+            },
+        },
+        detectRetina: true,
+    };
+
     protected images: LoginImage[] = [];
     private readonly NotyService: NotyService = inject(NotyService);
     private _csrfToken: string = '';
 
-    constructor() {
+    constructor(private readonly ngParticlesService: NgParticlesService) {
         localStorage.removeItem('browserUuid');
 
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        this.ngParticlesService.init(async (engine: Engine) => {
+            await loadFull(engine);
+        });
+
+    }
+    ngOnInit1(): void {
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
@@ -82,19 +161,19 @@ export class UsersLoginComponent {
                     break;
 
                 case 'snow':
-                    this.particlesConfig = this.getSnowConfig();
+                    // this.particlesOptions = this.getSnowConfig();
                     break;
 
                 case 'stars':
-                    this.particlesConfig = this.getStarsConfig();
+                    //   this.particlesOptions = this.getStarsConfig();
                     break;
 
                 case 'bubble':
-                    this.particlesConfig = this.getBubbleConfig();
+                    //   this.particlesOptions = this.getBubbleConfig();
                     break;
 
                 default:
-                    this.particlesConfig = this.getDefaultConfig();
+                    //     this.particlesOptions = this.getDefaultConfig();
                     break;
             }
 
@@ -122,6 +201,19 @@ export class UsersLoginComponent {
                 }
             }
         }));
+        this.ngParticlesService.init(async () => {
+            //     console.log(engine);
+
+            // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
+            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+            // starting from v2 you can add only the features you need reducing the bundle size
+            //await loadFull(engine);
+            //      await loadSlim(engine);
+        });
+    }
+
+    particlesLoaded(container: Container): void {
+        console.log(container);
     }
 
     private readonly AuthService: AuthService = inject(AuthService);
@@ -141,7 +233,7 @@ export class UsersLoginComponent {
             if (data) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
-                // window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
+                window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
                 return;
             }
 
@@ -191,7 +283,7 @@ export class UsersLoginComponent {
             this.NotyService.genericSuccess('Login successful');
 
             console.log(this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/'));
-            window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
+            window.location.href = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
         }
 
     };
