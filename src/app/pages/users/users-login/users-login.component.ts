@@ -21,14 +21,9 @@ import { LoginImage } from '../users.interface';
 import { AuthService } from '../../../auth/auth.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 // PRTCLS
-import {
-    Container,
-    Engine,
-    MoveDirection,
-    OutMode,
-} from "@tsparticles/engine";
+import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { NgParticlesService } from "@tsparticles/angular";
+import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 
 @Component({
     selector: 'oitc-users-login',
@@ -48,6 +43,7 @@ import { NgParticlesService } from "@tsparticles/angular";
         RowComponent,
         ColComponent,
         InputGroupComponent,
+        NgxParticlesModule,
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css'
@@ -143,12 +139,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.ngParticlesService.init(async (engine: Engine) => {
-            await loadFull(engine);
-        });
-
-    }
-    ngOnInit1(): void {
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
@@ -161,21 +151,24 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     break;
 
                 case 'snow':
-                    // this.particlesOptions = this.getSnowConfig();
+                    this.particlesOptions = this.getSnowConfig();
                     break;
 
                 case 'stars':
-                    //   this.particlesOptions = this.getStarsConfig();
+                    this.particlesOptions = this.getStarsConfig();
                     break;
 
                 case 'bubble':
-                    //   this.particlesOptions = this.getBubbleConfig();
+                    this.particlesOptions = this.getBubbleConfig();
                     break;
 
                 default:
-                    //     this.particlesOptions = this.getDefaultConfig();
+                    this.particlesOptions = this.getDefaultConfig();
                     break;
             }
+            this.ngParticlesService.init(async (engine: Engine) => {
+                await loadFull(engine);
+            });
 
 
             this._csrfToken = data._csrfToken;
@@ -201,15 +194,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 }
             }
         }));
-        this.ngParticlesService.init(async () => {
-            //     console.log(engine);
-
-            // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
-            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-            // starting from v2 you can add only the features you need reducing the bundle size
-            //await loadFull(engine);
-            //      await loadSlim(engine);
-        });
     }
 
     particlesLoaded(container: Container): void {
