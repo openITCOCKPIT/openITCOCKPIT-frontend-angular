@@ -53,6 +53,14 @@
             </div>
         </c-header-nav>
 
+        <c-header-nav>
+            <a cButton class="ripple" color="default" size="xs" type="button" href="/users/logout">
+                <fa-icon [icon]="['fas', 'right-from-bracket']" size="2x"></fa-icon>
+            </a>
+            <div class="nav-item py-1">
+                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+            </div>
+        </c-header-nav>
 
         <c-header-nav class="mx-0">
             <ng-container *ngTemplateOutlet="userDropdown"/>
@@ -155,8 +163,8 @@
                 </a>
             </li>
             <li>
-                <a cDropdownItem routerLink="">
-                    <svg cIcon class="me-2" name="cilAccountLogout"></svg>
+                <a cDropdownItem  href="/users/logout">
+                    <fa-icon [icon]="['fas', 'sign-out-alt']" class="me-2"></fa-icon>
                     Logout
                 </a>
             </li>
