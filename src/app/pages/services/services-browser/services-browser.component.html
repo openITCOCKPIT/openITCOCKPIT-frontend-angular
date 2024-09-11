@@ -27,7 +27,7 @@
         </c-card>
 
         <oitc-services-browser-chart
-            *ngIf="result"
+            *ngIf="result && result.mergedService.has_graph"
             [hostUuid]="String(result.host.Host.uuid)"
             [serviceUuid]="String(result.mergedService.uuid)"
             [availableDataSources]="availableDataSources"

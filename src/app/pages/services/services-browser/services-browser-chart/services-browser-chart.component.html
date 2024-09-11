@@ -46,7 +46,7 @@
                             cFormCheckInput
                             type="checkbox"
                             [(ngModel)]="config.autoRefresh"
-                            (change)="updateChart()"/>
+                            (change)="onAutorefreshChange()"/>
                         <label cFormCheckLabel
                                for="AutoRefreshCheckbox">{{ t('Auto refresh') }}</label>
                     </c-form-check>
@@ -90,7 +90,7 @@
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
-                    <button cButton class="ripple" color="default" size="xs">
+                    <button cButton class="ripple" color="default" size="xs" (click)="reloadChart()">
                         <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>

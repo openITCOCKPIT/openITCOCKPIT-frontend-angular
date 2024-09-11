@@ -365,7 +365,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
                     // Maybe add a loop if we want to support multiple gauges in one chart
                     const gauge = params[0];
-                    const dateTime = DateTime.fromISO(gauge.data[0]);
+                    const dateTime = DateTime.fromISO(gauge.data[0]).setZone(this.timezone.user_timezone);
                     const value = gauge.data[1];
                     const seriesName = gauge.seriesName;
                     const color = gauge.color;
@@ -388,7 +388,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 type: 'time',
                 min: new Date(this.currentTimerange.start * 1000).toISOString(),
                 axisLabel: {
-                    formatter: '{dd}.{MM}.{yyyy} {HH}:{mm}:{ss}',
+                    formatter: (value) => {
+                        const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
+                        return dateTime.toFormat('dd.LL.yyyy HH:mm:ss');
+                    }
                 },
                 splitLine: {
                     show: true,
@@ -852,6 +855,14 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         if (this.autoRefreshIntervalId) {
             clearInterval(this.autoRefreshIntervalId);
             this.autoRefreshIntervalId = null;
+        }
+    }
+
+    public onAutorefreshChange() {
+        if (this.config.autoRefresh) {
+            this.startAutoRefresh();
+        } else {
+            this.cancelAutoRefresh();
         }
     }
 
