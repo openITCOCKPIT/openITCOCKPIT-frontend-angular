@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SlasIndexComponent } from './slas-index.component';
+import { SlasAddComponent } from './slas-add.component';
 
-describe('SlasIndexComponent', () => {
-    let component: SlasIndexComponent;
-    let fixture: ComponentFixture<SlasIndexComponent>;
+describe('SlasAddComponent', () => {
+    let component: SlasAddComponent;
+    let fixture: ComponentFixture<SlasAddComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SlasIndexComponent]
+            imports: [SlasAddComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(SlasIndexComponent);
+        fixture = TestBed.createComponent(SlasAddComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -10,7 +10,7 @@
                     </a></li>
                 <li class="breadcrumb-item">
                     <a *oitcPermission="['slamodule', 'slas', 'index']"
-                       [routerLink]="['/', 'slamodule', 'slas', 'index']">
+                       [routerLink]="['/', 'sla_module', 'slas', 'index']">
                         <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                         {{ t('Service Level Agreement Module') }}
                     </a>
@@ -38,7 +38,7 @@
                     </c-nav-item>
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['slamodule', 'slas', 'add']"
-                                [routerLink]="['/', 'slamodule', 'slas', 'add']" cButton
+                                [routerLink]="['/', 'sla_module', 'slas', 'add']" cButton
                                 class="ripple"
                                 color="success"
                                 size="xs">
@@ -165,7 +165,7 @@
                         </td>
                         <td>
                             <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
-                               [routerLink]="['/', 'slamodule', 'slas', 'viewdetails', sla.id]">
+                               [routerLink]="['/', 'sla_module', 'slas', 'viewdetails', sla.id]">
                                 {{ sla.name }}
                             </a>
                             <span *oitcPermission="['slamodule', 'slas', 'viewdetails']; negate: true">
@@ -213,7 +213,7 @@
                             <span [hidden]="sla.status_percent === null"
                                   [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
                                 <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
-                                   [routerLink]="['/', 'slamodule', 'slas', 'viewdetails', sla.id]"
+                                   [routerLink]="['/', 'sla_module', 'slas', 'viewdetails', sla.id]"
                                    class="pointer"
                                    [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
                                     {{ sla.status_percent }}%

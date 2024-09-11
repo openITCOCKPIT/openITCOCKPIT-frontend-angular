@@ -1,4 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { GenericIdResponse } from '../../../../generic-responses';
 
 export interface SlasIndexRoot extends PaginateOrScroll {
     slas: Sla[]
@@ -61,4 +63,59 @@ export interface Timeperiod {
     id: number
     name: string
 }
+
+/***************************
+ *    Add / Edit action    *
+ ***************************/
+
+export interface SlaPost {
+    container_id: null | number
+    timeperiod_id: null | number
+    name: string
+    description: string
+    minimal_availability: null | string
+    warning_threshold: null | string
+    start_date: null | string
+    evaluation_interval: string
+    consider_downtimes: number
+    hard_state_only: number
+    report_send_interval: string
+    report_format: number
+    report_evaluation: number
+    users: Users
+}
+
+export interface Users {
+    _ids: number[]
+}
+
+export interface LoadContainersRoot {
+    containers: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface LoadUsersRoot {
+    users: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface LoadUsersParams {
+    containerId: number,
+    'selected[]': number[]
+}
+
+export interface LoadTimeperiodsRoot {
+    timeperiods: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface LoadTimeperiodsParams {
+    containerId: number,
+}
+
+
+export interface SlaAddResponse extends GenericIdResponse {
+    sla: Sla
+}
+
 
