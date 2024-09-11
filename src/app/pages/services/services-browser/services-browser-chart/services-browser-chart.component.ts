@@ -193,6 +193,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.config.smooth = this.LocalStorageService.getItemWithDefault('ServiceBrowerChartSmooth', 'false') === 'true';
         this.config.showDataPoint = this.LocalStorageService.getItemWithDefault('ServiceBrowerChartShowPoints', 'false') === 'true';
 
+        // Save the current server time on load and never overwrite it again
+        this.ServerTime = new Date(this.timezone.server_time_iso);
+
         this.loadPerfdata();
 
         if (this.config.autoRefresh && this.autoRefreshInterval > 1) {
@@ -544,19 +547,26 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     }
 
     private getStartEndEndTimestampsBySelectedTimerange(): TimeRange {
+        const now = new Date();
+
         if (!this.timezone) {
             console.log('No timezone initialized - using defaults');
-            const now = new Date();
 
             const end = Math.floor(now.getTime() / 1000);
             const start = Math.floor((end - (this.selectedTimerange * 3600)));
             return {start, end};
         }
 
-        this.ServerTime = new Date(this.timezone.server_time_iso);
+        // On load, we get the current server time (12:00:00)
+        // If we want to refresh the data, we need to add the seconds since the last reload to now (12:00:30)
+        // to also get the latest data
+        let offset = now.getTime() - this.ServerTime.getTime();
+        if (offset < 0) {
+            offset = 0;
+        }
 
         const start = (Math.floor(this.ServerTime.getTime() / 1000) - (this.selectedTimerange * 3600));
-        const end = Math.floor(this.ServerTime.getTime() / 1000);
+        const end = Math.floor((this.ServerTime.getTime() + offset) / 1000);
 
         return {start, end};
     }
@@ -771,7 +781,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
 
 
-        const currentTimestamp = Math.floor(this.ServerTime.getTime() / 1000);
+        const now = new Date();
+        const currentTimestamp = Math.floor(now.getTime() / 1000);
         //Only enable auto refresh, if graphEnd timestamp is near to now
         //We don't need to auto refresh data from yesterday
         if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
@@ -834,14 +845,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         if (this.autoRefreshIntervalId === null) {
             this.autoRefreshIntervalId = setInterval(() => {
 
-
+                const now = new Date();
                 let start = this.lastTimestampWithData.getTime() / 1000;
-                this.ServerTime = new Date(this.ServerTime.getTime() + (this.autoRefreshInterval * 1000));
-
-                let end = Math.floor(this.ServerTime.getTime() / 1000);
+                let end = Math.floor(now.getTime() / 1000);
 
                 // Get back to server time
-                if (start > 0) {
+                if ((end - start) > 0) {
                     this.updateAndAppendPerfdata(start, end);
                 }
 
