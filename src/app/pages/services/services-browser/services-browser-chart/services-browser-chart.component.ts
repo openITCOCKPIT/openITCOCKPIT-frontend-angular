@@ -434,6 +434,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {
                     type: 'time',
                     //min: new Date(this.currentTimerange.start * 1000).toISOString(),
+                    min: new Date('2024-07-11T15:30:08+02:00').toISOString(),
                     axisLabel: {
                         formatter: (value) => {
                             const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
@@ -453,8 +454,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 },
                 {
                     type: 'category',
-                    boundaryGap: false,
                     show: false,
+                    data: this.archivePerfdataForMiniatureChart
+
                 }
             ],
             yAxis: {
@@ -481,11 +483,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             },
 
             dataZoom: [
-                {
-                    type: 'inside',
-                    start: 0,
-                    end: 100
-                },
+
                 {
                     type: 'slider',
                     xAxisIndex: [1, 0],
@@ -543,16 +541,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 },
             },
 
-            dataset: [
-                {
-                    source: data,
-                    dimensions: ['timestamp', gauge.datasource.name],
-                },
-                {
-                    source: this.archivePerfdataForMiniatureChart,
-                    dimensions: ['timestamp', 'langzeit'], //todo change me
-                },
-            ],
+            // dataset: [
+            //     {
+            //         source: data,
+            //         dimensions: ['timestamp', gauge.datasource.name],
+            //     }
+            // ],
 
             legend: {
                 show: true
@@ -577,7 +571,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                         //color: 'rgb(88,86,214)',
                     },
 
-                    datasetIndex: 0,
+                    data: data,
 
                     smooth: this.config.smooth, // Smooth the line
                     showSymbol: this.config.showDataPoint, // Show/hide the dots on the line
@@ -588,19 +582,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                         x: 'timestamp',
                         y: gauge.datasource.name // refer gauge (rta) value
                     }
-                }, {
-
-                    datasetIndex: 1,
-                    xAxisIndex: 1,
-                    //yAxisIndex: 1,
-
-                    name: "langzeit",
+                },
+                {
+                    name: 'langzeit',
                     type: 'line',
-                    lineStyle: {
-                        width: 3,
-                        color: 'transparent',
-                    },
-                    showSymbol: false,
+                    xAxisIndex: 1,
+                    data: this.archivePerfdataForMiniatureChart
                 }
             ],
         };
