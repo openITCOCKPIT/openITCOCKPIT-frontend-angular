@@ -11,16 +11,19 @@ import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ColorModeService,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
@@ -74,7 +77,10 @@ interface TimeRange {
         FormErrorDirective,
         SelectComponent,
         CardBodyComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        AlertComponent
     ],
     templateUrl: './services-browser-chart.component.html',
     styleUrl: './services-browser-chart.component.css',
@@ -153,6 +159,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     private lastTimestampWithData: Date = new Date();
     private ServerTime: Date = new Date();
 
+    public hasEnoughData: boolean = true;
+
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
 
@@ -184,6 +192,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.config.smooth = this.LocalStorageService.getItemWithDefault('ServiceBrowerChartSmooth', 'false') === 'true';
         this.config.showDataPoint = this.LocalStorageService.getItemWithDefault('ServiceBrowerChartShowPoints', 'false') === 'true';
+
+        // Save the current server time on load and never overwrite it again
+        this.ServerTime = new Date(this.timezone.server_time_iso);
 
         this.loadPerfdata();
 
@@ -256,6 +267,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                         this.lastTimestampWithData = timestamp;
                     }
                 }
+
+                // ECharts needs at least 2 data points to render the chart
+                this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
 
                 this.renderChart(perfdata);
             })
@@ -354,7 +368,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
                     // Maybe add a loop if we want to support multiple gauges in one chart
                     const gauge = params[0];
-                    const dateTime = DateTime.fromISO(gauge.data[0]);
+                    const dateTime = DateTime.fromISO(gauge.data[0]).setZone(this.timezone.user_timezone);
                     const value = gauge.data[1];
                     const seriesName = gauge.seriesName;
                     const color = gauge.color;
@@ -377,7 +391,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 type: 'time',
                 min: new Date(this.currentTimerange.start * 1000).toISOString(),
                 axisLabel: {
-                    formatter: '{dd}.{MM}.{yyyy} {HH}:{mm}:{ss}',
+                    formatter: (value) => {
+                        const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
+                        return dateTime.toFormat('dd.LL.yyyy HH:mm:ss');
+                    }
                 },
                 splitLine: {
                     show: true,
@@ -472,7 +489,6 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             //    pieces: [],
             //},
 
-
             // https://stackoverflow.com/a/76809216
             // https://echarts.apache.org/examples/en/editor.html?c=line-sections&code=MYewdgzgLgBAJgQygmBeGBtAUDGBvADwC4YAGAGhgE8SBmU0gX0sJIEZKaYAmADiZbEenEtwCsA_ENoieANkmsYAFlncA7IqFjZ9LSTmyxE5lJLqjDZjjMxes5VcEkAnLpf6YbCtTr9TSmwcvjC0HgFCbNwOTrZsMiESnmyqIQrJOiHqJuQ2gYYh_MkWWbGB9mllkW4hjkxYALoA3FhYoJCwEACmAE4All0QADJ90GiYzW3gYwBmfQA2UL1dcAAiSAjdUBDjGJNYMwCuYMBQfeAwwD1dSF0Ayr0Dw6NQABSIyACU-DYzID0wV7zLqwPpgOBdAjjUhNGBgiFQgA88A2ADpgWAAOZQAAWMAAtF5YfDIQBqUnfPA2XDtMYfTYggCScHGAHJ6VsAPqsmCkuHgyEtXA06awDkgu7zPrAFbjemoiBSmWvEkESiq3k8T5C4VzRbLNYbLYQVEAB0OEBxrypwuFfTgJHFUGZuVtuAgIEOPRljqNEqVK2pMEY2qDfRmgI1yLkMAAPrH-QiYAA-Lwx-ORgVQ1PqGAAMjzichMGRKU-lKD7segxG0DNFqtNrduCgVFNXRIrKlYC6rNdzZRyC2zN9Q6ZcH7zdA83-ncx1y6YD7leFCGuCDureBJDwlxAM56nalmJxUHnXUXPMYK5DOtwjBgXXm3R-ze6_RrL3rlutK5bbY7GAuzBXtJzdJ0R0HBlnQnP89wPTtrjgZcBxgNcbk3Kht3weDZyAnpMQAIwQV5xEyNh1ASCj1E-K8b1DW1r3vLBryuG4lgeD9nmgd4NlDLAQFNM4LnQJsnRIPUliQ9Yx22fszigbCmxbSEoE7VYXn6QjDmEsAYBACMAFFgVOfpgD6VsUOFCBDkIpYCDUoCADEEAAay6GAZIQVkbGsFsQH3M5TR3IMoH6TFMV6TsEAIUYrNwGLRgABRAMEpJC5tW3bTsrhACAIB8xjfPkgL5kIkAhGUmBLRAAB3EgwsOLowJmdivUAqr3QQAA3LoAEEIEZABbBBIp3JjhQmvyYAIPrYogDLhSywDWWAW5MX-Kh4pgcrjkQHoqAAcQQYKYBmBBn2aoMAHprpgU1rigM5enxPpMTAf4uiDekSAwVkGCIBg-yA0g2CINgxGB_7uCIegodIWgiGUSHKH-sRAdIeG5HBlGQfUWHMdR0heCR3HWW8DGoaCHGqZhuHUfiUmqfRoGGexiGqfx-mgLYEnkah7hSEp1HuDBjmRbpwmgO4RH-YaYqbCoObRkW_9sqA7qLqa7bEuGBBCKfVXdX-EanqioC8E1-YmofAB1QrJrA3WUrS83OuqsAToanomqDKb-3fJ4SEDz9oBYpogA&lang=ts
             series: [
@@ -531,19 +547,26 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     }
 
     private getStartEndEndTimestampsBySelectedTimerange(): TimeRange {
+        const now = new Date();
+
         if (!this.timezone) {
             console.log('No timezone initialized - using defaults');
-            const now = new Date();
 
             const end = Math.floor(now.getTime() / 1000);
             const start = Math.floor((end - (this.selectedTimerange * 3600)));
             return {start, end};
         }
 
-        this.ServerTime = new Date(this.timezone.server_time_iso);
+        // On load, we get the current server time (12:00:00)
+        // If we want to refresh the data, we need to add the seconds since the last reload to now (12:00:30)
+        // to also get the latest data
+        let offset = now.getTime() - this.ServerTime.getTime();
+        if (offset < 0) {
+            offset = 0;
+        }
 
         const start = (Math.floor(this.ServerTime.getTime() / 1000) - (this.selectedTimerange * 3600));
-        const end = Math.floor(this.ServerTime.getTime() / 1000);
+        const end = Math.floor((this.ServerTime.getTime() + offset) / 1000);
 
         return {start, end};
     }
@@ -721,12 +744,17 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         }
 
 
+        let cssSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
+        // Add some transparency to the background color
+        cssSecondaryBg += '66';
+
         if (pieces.length > 0) {
             let visualMap: VisualMapComponentOption = {
                 show: true,
                 top: 50,
                 right: 10,
                 pieces: pieces,
+                backgroundColor: cssSecondaryBg,
                 outOfRange: {
                     //color: 'rgba(86, 166, 75, 1)'
                     color: 'rgba(204, 204, 204, 0.6)'
@@ -753,7 +781,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
 
 
-        const currentTimestamp = Math.floor(this.ServerTime.getTime() / 1000);
+        const now = new Date();
+        const currentTimestamp = Math.floor(now.getTime() / 1000);
         //Only enable auto refresh, if graphEnd timestamp is near to now
         //We don't need to auto refresh data from yesterday
         if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
@@ -816,14 +845,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         if (this.autoRefreshIntervalId === null) {
             this.autoRefreshIntervalId = setInterval(() => {
 
-
+                const now = new Date();
                 let start = this.lastTimestampWithData.getTime() / 1000;
-                this.ServerTime = new Date(this.ServerTime.getTime() + (this.autoRefreshInterval * 1000));
-
-                let end = Math.floor(this.ServerTime.getTime() / 1000);
+                let end = Math.floor(now.getTime() / 1000);
 
                 // Get back to server time
-                if (start > 0) {
+                if ((end - start) > 0) {
                     this.updateAndAppendPerfdata(start, end);
                 }
 
@@ -837,6 +864,14 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         if (this.autoRefreshIntervalId) {
             clearInterval(this.autoRefreshIntervalId);
             this.autoRefreshIntervalId = null;
+        }
+    }
+
+    public onAutorefreshChange() {
+        if (this.config.autoRefresh) {
+            this.startAutoRefresh();
+        } else {
+            this.cancelAutoRefresh();
         }
     }
 
