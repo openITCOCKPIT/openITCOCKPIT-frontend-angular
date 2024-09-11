@@ -451,6 +451,11 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     }
 
                 },
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    show: false,
+                }
             ],
             yAxis: {
                 type: 'value',
@@ -477,8 +482,13 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
             dataZoom: [
                 {
+                    type: 'inside',
+                    start: 0,
+                    end: 100
+                },
+                {
                     type: 'slider',
-                    xAxisIndex: 0,
+                    xAxisIndex: [1, 0],
 
                     //endValue: 200,
                     //realtime: false
@@ -581,13 +591,16 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 }, {
 
                     datasetIndex: 1,
+                    xAxisIndex: 1,
+                    //yAxisIndex: 1,
 
                     name: "langzeit",
                     type: 'line',
                     lineStyle: {
                         width: 3,
-                        color: 'rgb(0,0,0)',
+                        color: 'transparent',
                     },
+                    showSymbol: false,
                 }
             ],
         };
