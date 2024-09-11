@@ -161,6 +161,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public hasEnoughData: boolean = true;
 
+    private archivePerfdataForMiniatureChart: any[] = [];
+
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
 
@@ -196,7 +198,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         // Save the current server time on load and never overwrite it again
         this.ServerTime = new Date(this.timezone.server_time_iso);
 
-        this.loadPerfdata();
+        this.loadPerfdataForMiniatureChart();
+        //this.loadPerfdata();
 
         if (this.config.autoRefresh && this.autoRefreshInterval > 1) {
             this.startAutoRefresh();
@@ -273,6 +276,44 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
 
                 this.renderChart(perfdata);
+            })
+        );
+    }
+
+    private loadPerfdataForMiniatureChart() {
+        if (this.availableDataSources.length === 0) {
+            // This service has no datasources
+            return;
+        }
+
+        if (this.selectedDatasource === '') {
+            // Select the first datasource
+            this.selectedDatasource = this.availableDataSources[0].key;
+        }
+
+        let params: ServiceBrowserPerfParams = {
+            aggregation: this.selectedAggregation,
+            host_uuid: this.hostUuid,
+            service_uuid: this.serviceUuid,
+            gauge: this.selectedDatasource,
+            jsTimestamp: 0,
+            isoTimestamp: 1,
+            angular: true,
+            hours: 8760, //todo fix me
+            disableGlobalLoader: true,
+            start: 0,
+            end: 0,
+        };
+
+
+        this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
+            .subscribe((perfdata) => {
+                this.archivePerfdataForMiniatureChart = [];
+                for (let isoTimestamp in perfdata.performance_data[0].data) {
+                    this.archivePerfdataForMiniatureChart.push([isoTimestamp, perfdata.performance_data[0].data[isoTimestamp]]);
+                }
+
+                this.loadPerfdata(); //todo fix me
             })
         );
     }
@@ -389,26 +430,28 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 }
 
             },
-            xAxis: {
-                type: 'time',
-                min: new Date(this.currentTimerange.start * 1000).toISOString(),
-                axisLabel: {
-                    formatter: (value) => {
-                        const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
-                        return dateTime.toFormat('dd.LL.yyyy HH:mm:ss');
+            xAxis: [
+                {
+                    type: 'time',
+                    //min: new Date(this.currentTimerange.start * 1000).toISOString(),
+                    axisLabel: {
+                        formatter: (value) => {
+                            const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
+                            return dateTime.toFormat('dd.LL.yyyy HH:mm:ss');
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                    },
+                    axisTick: {
+                        show: true,
+                    },
+                    minorSplitLine: {
+                        show: true
                     }
-                },
-                splitLine: {
-                    show: true,
-                },
-                axisTick: {
-                    show: true,
-                },
-                minorSplitLine: {
-                    show: true
-                }
 
-            },
+                },
+            ],
             yAxis: {
                 type: 'value',
                 axisLabel: {
@@ -431,6 +474,16 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 top: 25,
                 bottom: 50
             },
+
+            dataZoom: [
+                {
+                    type: 'slider',
+                    xAxisIndex: 0,
+
+                    //endValue: 200,
+                    //realtime: false
+                }
+            ],
 
             /*
             toolbox: {
@@ -480,9 +533,19 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 },
             },
 
-            dataset: {
-                source: data,
-                dimensions: ['timestamp', gauge.datasource.name],
+            dataset: [
+                {
+                    source: data,
+                    dimensions: ['timestamp', gauge.datasource.name],
+                },
+                {
+                    source: this.archivePerfdataForMiniatureChart,
+                    dimensions: ['timestamp', 'langzeit'], //todo change me
+                },
+            ],
+
+            legend: {
+                show: true
             },
 
             // thresholds
@@ -497,10 +560,14 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {
                     name: gauge.datasource.name,
                     type: 'line',
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
                     lineStyle: {
                         width: 2,
                         //color: 'rgb(88,86,214)',
                     },
+
+                    datasetIndex: 0,
 
                     smooth: this.config.smooth, // Smooth the line
                     showSymbol: this.config.showDataPoint, // Show/hide the dots on the line
@@ -511,7 +578,17 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                         x: 'timestamp',
                         y: gauge.datasource.name // refer gauge (rta) value
                     }
-                },
+                }, {
+
+                    datasetIndex: 1,
+
+                    name: "langzeit",
+                    type: 'line',
+                    lineStyle: {
+                        width: 3,
+                        color: 'rgb(0,0,0)',
+                    },
+                }
             ],
         };
 
@@ -770,31 +847,37 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     }
 
     public onChartDataZoom(event: any) {
-        const start = Math.floor(event.batch[0].startValue / 1000);
-        const end = Math.floor(event.batch[0].endValue / 1000);
+        if (event.batch) {
+            // Zoom via drag and drop in the chart itself
+            const start = Math.floor(event.batch[0].startValue / 1000);
+            const end = Math.floor(event.batch[0].endValue / 1000);
 
-        // Set selectedTimerange to zero to get the placeholder displayed in the select
-        // and to tell the loadPerfdata() method that we want to use the provided start/end timestamps
-        this.selectedTimerange = 0;
+            // Set selectedTimerange to zero to get the placeholder displayed in the select
+            // and to tell the loadPerfdata() method that we want to use the provided start/end timestamps
+            this.selectedTimerange = 0;
 
-        this.currentTimerange = {start, end};
+            this.currentTimerange = {start, end};
 
-        const duration = end - start;
-        this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
+            const duration = end - start;
+            this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
 
 
-        const now = new Date();
-        const currentTimestamp = Math.floor(now.getTime() / 1000);
-        //Only enable auto refresh, if graphEnd timestamp is near to now
-        //We don't need to auto refresh data from yesterday
-        if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
-            this.cancelAutoRefresh();
+            const now = new Date();
+            const currentTimestamp = Math.floor(now.getTime() / 1000);
+            //Only enable auto refresh, if graphEnd timestamp is near to now
+            //We don't need to auto refresh data from yesterday
+            if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
+                this.cancelAutoRefresh();
+            }
+
+
+            // Reload detailed data
+            this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
+            this.loadPerfdata();
+        } else {
+            // Zoom via miniature
+            console.log(event);
         }
-
-
-        // Reload detailed data
-        this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
-        this.loadPerfdata();
     }
 
     public onChartFinished(event: any) {
