@@ -242,6 +242,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             angular: true,
             start: this.currentTimerange.start,
             end: this.currentTimerange.end,
+            disableGlobalLoader: true
         };
 
         if (this.currentGraphUnit !== null) {
@@ -301,6 +302,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             angular: true,
             start: start,
             end: end,
+            disableGlobalLoader: true
         };
 
         if (this.currentGraphUnit !== null) {
