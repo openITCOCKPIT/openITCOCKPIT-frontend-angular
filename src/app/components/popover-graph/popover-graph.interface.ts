@@ -64,6 +64,7 @@ export interface ServiceBrowserPerfParams extends PerfParams {
     scale?: boolean,
     forcedUnit?: string,
     debug?: boolean,
+    disableGlobalLoader?: boolean,
 }
 
 export interface Gauges {
