@@ -11,7 +11,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -45,7 +49,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -57,11 +61,12 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
-import { ExternalSystemEntity } from '../../../ExternalSystems.interface';
+import { ExternalSystemEntity } from '../../../external-systems.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-
+import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
+import { ExternalSystemsService } from '../../../external-systems.service';
 
 @Component({
     selector: 'oitc-imported-hostgroups-index',
@@ -113,7 +118,13 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        FormControlDirective
+        FormControlDirective,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        JsonPipe,
+        ImportITopDataComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
@@ -139,6 +150,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public allImportedGroups?: ImportedhostgroupsIndexRoot;
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private readonly ExternalSystemsService = inject(ExternalSystemsService);
 
     constructor() {
     }
@@ -254,6 +266,12 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
                 // Error
                 this.notyService.genericError(result.message);
             })
+        );
+    }
+
+    public loadExternalSystem(externalSystem: ExternalSystemEntity) {
+        this.subscriptions.add(this.ExternalSystemsService.loadExternalSystem(externalSystem)
+
         );
     }
 }

@@ -32,13 +32,36 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['ImportModule', 'ImportedHostgroups', 'add']" cButton
-                                class="ripple me-1"
-                                color="success"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                            {{ t('Start import') }}
-                        </button>
+                        <c-dropdown *ngIf="externalSystems.length > 0">
+                            <button *oitcPermission="['ImportModule', 'ImportedHostgroups', 'add']"
+                                    cButton cDropdownToggle
+                                    [disabled]="externalSystems.length===0"
+                                    color="success"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                {{ t('Start import') }}
+                            </button>
+                            <ul cDropdownMenu>
+                                <li *ngFor="let externalSystem of externalSystems">
+                                    <button (click)="loadExternalSystem(externalSystem)"
+                                            cDropdownItem
+                                            class="ripple"
+                                            [disabled]="showSpinner">
+                                        @switch (externalSystem.system_type) {
+                                            @case ("itop") {
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            }
+                                            @default {
+                                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                            }
+                                        }
+                                        {{ externalSystem.name }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </c-dropdown>
+                    </c-nav-item>
+                    <c-nav-item>
                         <button *oitcPermission="['hostgroups', 'add']"
                                 cButton
                                 class="ripple me-1"
@@ -288,6 +311,7 @@
         </c-card>
     </ng-container>
 </oitc-coreui>
+<oitc-import-itop-data id="importITopData"></oitc-import-itop-data>
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

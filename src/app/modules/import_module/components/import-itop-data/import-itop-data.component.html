@@ -1,0 +1,31 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="importITopData"
+        size="lg">
+        <c-modal-header>
+            <h5 cModalTitle class="text-white">
+                <fa-stack>
+                    <fa-icon [icon]="['fas', 'envelope']"
+                             stackItemSize="1x" pull="right"></fa-icon>
+                    <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                             stackItemSize="1x"
+                             transform="shrink-3 right-3 down-7"></fa-icon>
+                </fa-stack>
+                {{ t('Import host group data from iTop system!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+
+            </c-row>
+
+
+        </c-modal-body>
+        <c-modal-footer>
+
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

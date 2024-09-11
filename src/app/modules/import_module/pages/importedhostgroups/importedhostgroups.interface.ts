@@ -1,6 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { Hostgroup } from '../../../../pages/hostgroups/hostgroups.interface';
-import { ExternalSystemEntity } from '../../ExternalSystems.interface';
+import { ExternalSystemEntity } from '../../external-systems.interface';
 
 
 export interface ImportedhostgroupsIndexRoot extends PaginateOrScroll {
