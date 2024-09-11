@@ -100,6 +100,16 @@
         </c-card-header>
 
         <c-card-body>
+
+            <c-row *ngIf="!hasEnoughData">
+                <c-col [xs]="12">
+                    <c-alert [color]="'info'">
+                        <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+                        {{ t('Not enough data to display chart.') }}
+                    </c-alert>
+                </c-col>
+            </c-row>
+
             <div echarts [options]="chartOption"
                  [loading]="isLoading"
                  [theme]="theme"

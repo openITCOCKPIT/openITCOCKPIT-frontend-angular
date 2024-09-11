@@ -11,16 +11,19 @@ import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ColorModeService,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
@@ -74,7 +77,10 @@ interface TimeRange {
         FormErrorDirective,
         SelectComponent,
         CardBodyComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        AlertComponent
     ],
     templateUrl: './services-browser-chart.component.html',
     styleUrl: './services-browser-chart.component.css',
@@ -152,6 +158,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     // This timestamp is used by the auto refresh, to only load new data.
     private lastTimestampWithData: Date = new Date();
     private ServerTime: Date = new Date();
+
+    public hasEnoughData: boolean = true;
 
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
@@ -256,6 +264,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                         this.lastTimestampWithData = timestamp;
                     }
                 }
+
+                // ECharts needs at least 2 data points to render the chart
+                this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
 
                 this.renderChart(perfdata);
             })
@@ -471,7 +482,6 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             //    show: false,
             //    pieces: [],
             //},
-
 
             // https://stackoverflow.com/a/76809216
             // https://echarts.apache.org/examples/en/editor.html?c=line-sections&code=MYewdgzgLgBAJgQygmBeGBtAUDGBvADwC4YAGAGhgE8SBmU0gX0sJIEZKaYAmADiZbEenEtwCsA_ENoieANkmsYAFlncA7IqFjZ9LSTmyxE5lJLqjDZjjMxes5VcEkAnLpf6YbCtTr9TSmwcvjC0HgFCbNwOTrZsMiESnmyqIQrJOiHqJuQ2gYYh_MkWWbGB9mllkW4hjkxYALoA3FhYoJCwEACmAE4All0QADJ90GiYzW3gYwBmfQA2UL1dcAAiSAjdUBDjGJNYMwCuYMBQfeAwwD1dSF0Ayr0Dw6NQABSIyACU-DYzID0wV7zLqwPpgOBdAjjUhNGBgiFQgA88A2ADpgWAAOZQAAWMAAtF5YfDIQBqUnfPA2XDtMYfTYggCScHGAHJ6VsAPqsmCkuHgyEtXA06awDkgu7zPrAFbjemoiBSmWvEkESiq3k8T5C4VzRbLNYbLYQVEAB0OEBxrypwuFfTgJHFUGZuVtuAgIEOPRljqNEqVK2pMEY2qDfRmgI1yLkMAAPrH-QiYAA-Lwx-ORgVQ1PqGAAMjzichMGRKU-lKD7segxG0DNFqtNrduCgVFNXRIrKlYC6rNdzZRyC2zN9Q6ZcH7zdA83-ncx1y6YD7leFCGuCDureBJDwlxAM56nalmJxUHnXUXPMYK5DOtwjBgXXm3R-ze6_RrL3rlutK5bbY7GAuzBXtJzdJ0R0HBlnQnP89wPTtrjgZcBxgNcbk3Kht3weDZyAnpMQAIwQV5xEyNh1ASCj1E-K8b1DW1r3vLBryuG4lgeD9nmgd4NlDLAQFNM4LnQJsnRIPUliQ9Yx22fszigbCmxbSEoE7VYXn6QjDmEsAYBACMAFFgVOfpgD6VsUOFCBDkIpYCDUoCADEEAAay6GAZIQVkbGsFsQH3M5TR3IMoH6TFMV6TsEAIUYrNwGLRgABRAMEpJC5tW3bTsrhACAIB8xjfPkgL5kIkAhGUmBLRAAB3EgwsOLowJmdivUAqr3QQAA3LoAEEIEZABbBBIp3JjhQmvyYAIPrYogDLhSywDWWAW5MX-Kh4pgcrjkQHoqAAcQQYKYBmBBn2aoMAHprpgU1rigM5enxPpMTAf4uiDekSAwVkGCIBg-yA0g2CINgxGB_7uCIegodIWgiGUSHKH-sRAdIeG5HBlGQfUWHMdR0heCR3HWW8DGoaCHGqZhuHUfiUmqfRoGGexiGqfx-mgLYEnkah7hSEp1HuDBjmRbpwmgO4RH-YaYqbCoObRkW_9sqA7qLqa7bEuGBBCKfVXdX-EanqioC8E1-YmofAB1QrJrA3WUrS83OuqsAToanomqDKb-3fJ4SEDz9oBYpogA&lang=ts
@@ -721,12 +731,17 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         }
 
 
+        let cssSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
+        // Add some transparency to the background color
+        cssSecondaryBg += '66';
+
         if (pieces.length > 0) {
             let visualMap: VisualMapComponentOption = {
                 show: true,
                 top: 50,
                 right: 10,
                 pieces: pieces,
+                backgroundColor: cssSecondaryBg,
                 outOfRange: {
                     //color: 'rgba(86, 166, 75, 1)'
                     color: 'rgba(204, 204, 204, 0.6)'
