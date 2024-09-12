@@ -43,7 +43,7 @@
                                 color="success"
                                 size="xs">
                             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('New user') }}
+                            {{ t('New system health user') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
@@ -139,9 +139,9 @@
                     <tr *ngFor="let systemHealthUser of systemHealthUsers.all_users">
                         <td class="text-center">
                             <oitc-item-select
-                                    *oitcPermission="['systemhealthusers', 'delete']"
-                                    [disabled]="false"
-                                    [item]="systemHealthUser"></oitc-item-select>
+                                *oitcPermission="['systemhealthusers', 'delete']"
+                                [disabled]="false"
+                                [item]="systemHealthUser"></oitc-item-select>
                         </td>
                         <td>
                             {{ systemHealthUser.full_name }}
@@ -150,9 +150,18 @@
                             {{ systemHealthUser.email }}
                         </td>
                         <td>
-                            <c-badge class="margin-right-5" *ngIf="systemHealthUser.system_health_user.notify_on_recovery === 1" [title]="'recovery' | transloco" color="success">R</c-badge>
-                            <c-badge class="margin-right-5 text-dark" *ngIf="systemHealthUser.system_health_user.notify_on_warning === 1" [title]="'warning' | transloco" color="warning">W</c-badge>
-                            <c-badge class="margin-right-5" *ngIf="systemHealthUser.system_health_user.notify_on_critical === 1" [title]="'critical' | transloco" color="danger">C</c-badge>
+                            <c-badge class="margin-right-5"
+                                     *ngIf="systemHealthUser.system_health_user.notify_on_recovery === 1"
+                                     [title]="'recovery' | transloco" color="success">R
+                            </c-badge>
+                            <c-badge class="margin-right-5 text-dark"
+                                     *ngIf="systemHealthUser.system_health_user.notify_on_warning === 1"
+                                     [title]="'warning' | transloco" color="warning">W
+                            </c-badge>
+                            <c-badge class="margin-right-5"
+                                     *ngIf="systemHealthUser.system_health_user.notify_on_critical === 1"
+                                     [title]="'critical' | transloco" color="danger">C
+                            </c-badge>
                         </td>
                         <td class="width-50">
                             <oitc-actions-button *ngIf="systemHealthUser.allow_edit"
@@ -178,14 +187,14 @@
                 </table>
 
                 <oitc-no-records
-                        *ngIf="systemHealthUsers && systemHealthUsers.all_users.length === 0"></oitc-no-records>
+                    *ngIf="systemHealthUsers && systemHealthUsers.all_users.length === 0"></oitc-no-records>
 
                 <ng-container *ngIf="systemHealthUsers && systemHealthUsers.all_users">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                        [itemsCount]="systemHealthUsers.all_users.length"></oitc-select-all>
+                                    [itemsCount]="systemHealthUsers.all_users.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div *oitcPermission="['systemhealthusers', 'delete']"
@@ -205,9 +214,9 @@
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                    (paginatorChange)="onPaginatorChange($event)"
-                                    *ngIf="systemHealthUsers"
-                                    [paginateOrScroll]="systemHealthUsers"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="systemHealthUsers"
+                                [paginateOrScroll]="systemHealthUsers"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

@@ -9,8 +9,8 @@
         <oitc-query-handler-checker></oitc-query-handler-checker>
 
 
-        <oitc-browser-loader></oitc-browser-loader>
-        <c-card class="mb-3 mt-3">
+        <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
+        <c-card class="mb-3 mt-3" *ngIf="result">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Host:') }}
                     <small class="fw-300">
@@ -25,6 +25,15 @@
             <c-card-footer>
             </c-card-footer>
         </c-card>
+
+        <oitc-services-browser-chart
+            *ngIf="result && result.mergedService.has_graph"
+            [hostUuid]="String(result.host.Host.uuid)"
+            [serviceUuid]="String(result.mergedService.uuid)"
+            [availableDataSources]="availableDataSources"
+            [autoRefreshInterval]="Number(result.mergedService.check_interval)"
+            [timezone]="timezone"></oitc-services-browser-chart>
+
     </ng-container>
 </oitc-coreui>
 

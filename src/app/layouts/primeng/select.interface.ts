@@ -18,3 +18,8 @@ export interface SelectItemOptionGroup {
     disabled?: boolean
     items: SelectItem[];
 }
+
+export interface SelectKeyValueString {
+    key: string,
+    value: string
+}

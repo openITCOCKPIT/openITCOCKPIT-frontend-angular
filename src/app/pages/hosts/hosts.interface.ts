@@ -203,6 +203,7 @@ export interface HostsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | ''
+    BrowserContainerId?: number
     // Filters are handled by POST data
 }
 

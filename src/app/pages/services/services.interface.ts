@@ -1,10 +1,17 @@
-import { HostEntity, HostObject, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import { HostEntity, HostObject, HostObjectCake2, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { Customvariable } from '../contacts/contacts.interface';
+import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { ServicetemplateEntity, ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
+import { GenericIdAndName } from '../../generic.interfaces';
+import { AcknowledgementObject } from '../acknowledgements/acknowledgement.interface';
+import { DowntimeObject } from '../downtimes/downtimes.interface';
+import { CheckCommandCake2 } from '../commands/commands.interface';
+import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
+import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import { ServicegroupEntityWithJoinData } from '../servicegroups/servicegroups.interface';
 
 /**********************
  *    Index action    *
@@ -14,7 +21,18 @@ export interface ServiceParams {
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | ''
+    direction: 'asc' | 'desc' | '',
+    BrowserContainerId?: number
+}
+
+export function getDefaultServiceIndexParams(): ServiceParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Servicestatus.current_state',
+        page: 1,
+        direction: 'desc',
+    }
 }
 
 
@@ -110,8 +128,8 @@ export interface ServicesIndexFilterApiRequest {
     'servicename': string
     'servicename_regex': boolean | string
     'servicedescription': string
-    'keywords':  string[]
-    'not_keywords':  string[]
+    'keywords': string[]
+    'not_keywords': string[]
     'servicepriority': string[]
 
     'Servicestatus.current_state': string[]
@@ -688,3 +706,66 @@ export interface ServiceBrowserMenu {
 /**************************
  * Service Browser action  *
  ***************************/
+
+export interface ServiceBrowserPerfdata {
+    current: string
+    unit: string
+    warning: string
+    critical: string
+    min: string
+    max: any
+    metric: string
+}
+
+export interface MergedService extends ServiceEntity {
+    servicecommandargumentvalues: ServiceCommandArgument[],
+    serviceeventcommandargumentvalues: ServiceCommandArgument[],
+    customvariables: Customvariable[],
+    servicegroups: ServicegroupEntityWithJoinData[]
+    contacts: ContactEntity[],
+    contactgroups: ContactgroupEntity[],
+    service_url_replaced: string
+    serviceCommandLine: string
+    checkIntervalHuman: string
+    retryIntervalHuman: string
+    notificationIntervalHuman: string
+    allowEdit: boolean
+    has_graph: boolean
+    Perfdata: {
+        [key: string]: ServiceBrowserPerfdata
+    }
+}
+
+
+export interface ServiceBrowserResult {
+    mergedService: MergedService
+    serviceType: HostOrServiceType
+    host: HostObjectCake2
+    areContactsFromService: boolean
+    areContactsInheritedFromHosttemplate: boolean
+    areContactsInheritedFromHost: boolean
+    areContactsInheritedFromServicetemplate: boolean
+    hoststatus: HoststatusObject
+    servicestatus: ServicestatusObject
+    acknowledgement?: AcknowledgementObject
+    downtime?: DowntimeObject
+    hostDowntime?: DowntimeObject
+    hostAcknowledgement?: AcknowledgementObject
+    checkCommand: CheckCommandCake2
+    checkPeriod: TimeperiodEnity
+    notifyPeriod: TimeperiodEnity
+    canSubmitExternalCommands: boolean
+    mainContainer: GenericIdAndName[],
+    sharedContainers: {
+        [key: number]: GenericIdAndName[]
+    },
+    objects: {
+        Servicegroups: GenericIdAndName[],
+        Instantreports: GenericIdAndName[],
+        Autoreports: GenericIdAndName[],
+        Eventcorrelations: GenericIdAndName[],
+        Maps: GenericIdAndName[],
+    },
+    usageFlag: number
+    _csrfToken: string
+}

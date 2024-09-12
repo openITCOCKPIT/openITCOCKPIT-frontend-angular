@@ -97,8 +97,9 @@ export class SystemHealthUsersAddComponent implements OnInit, OnDestroy {
 
                     const title = this.TranslocoService.translate('System health Users');
                     const msg = this.TranslocoService.translate(' created successfully');
+                    const url = ['/', 'systemHealthUsers', 'edit', response.id];
 
-                    this.notyService.genericSuccess(msg, title);
+                    this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/systemHealthUsers/index']);

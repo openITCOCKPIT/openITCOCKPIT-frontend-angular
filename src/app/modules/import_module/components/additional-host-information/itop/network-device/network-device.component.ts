@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
+import { AdditionalHostInformationResult } from '../../../../external-systems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';

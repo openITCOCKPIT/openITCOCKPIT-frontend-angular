@@ -4891,5 +4891,6 @@
     "VMware Host": "VMware Host",
     "VMware Snapshot services": "VMware Snapshot Services",
     "No items selected!": "Keine Elemente ausgewählt",
-    "Downtimes added": "Wartugszeiten hinzugefügt"
+    "Downtimes added": "Wartugszeiten hinzugefügt",
+    "This object is currently not monitored by {0}": "Dieses Object wird aktuell nicht von {{0}} überwacht"
 }

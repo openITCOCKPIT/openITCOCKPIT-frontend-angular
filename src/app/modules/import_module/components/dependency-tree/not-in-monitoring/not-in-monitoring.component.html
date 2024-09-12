@@ -12,4 +12,15 @@
             </span>
         </h4>
     </header>
+
+    <div class="row">
+        <div class="col-xs-12">
+            {{
+                t('This object is currently not monitored by {0}', {
+                    '0': SystemnameService.systemName$ | async
+                })
+            }}
+        </div>
+    </div>
+
 </ng-container>

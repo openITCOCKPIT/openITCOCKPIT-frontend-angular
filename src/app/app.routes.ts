@@ -8,6 +8,7 @@ import { msteamsModuleRoutes } from './modules/msteams_module/msteams_module.rou
 import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes';
 import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
 import { slaModuleRoutes } from './modules/sla_module/sla_module.routes';
+import { importModuleRoutes } from './modules/import_module/import_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -38,7 +39,8 @@ const moduleRoutes: Routes = [
     ...msteamsModuleRoutes,
     ...nagiosModuleRoutes,
     ...pagerdutyModuleRoutes,
-    ...slaModuleRoutes
+    ...slaModuleRoutes,
+    ...importModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -259,6 +261,9 @@ const coreRoutes: Routes = [{
     path: 'servicetemplates/usedBy/:id',
     loadComponent: () => import('./pages/servicetemplates/servicetemplates-used-by/servicetemplates-used-by.component').then(m => m.ServicetemplatesUsedByComponent)
 }, {
+    path: 'browsers/index',
+    loadComponent: () => import('./pages/browsers/browsers-index/browsers-index.component').then(m => m.BrowsersIndexComponent)
+}, {
     path: 'hosts/index',
     loadComponent: () => import('./pages/hosts/hosts-index/hosts-index.component').then(m => m.HostsIndexComponent)
 }, {
@@ -447,6 +452,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'acknowledgements/service/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
+}, {
+    path: 'exports/index',
+    loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AdditionalHostInformationResult } from '../../../../ExternalSystems.interface';
+import { AdditionalHostInformationResult } from '../../../../external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     BadgeComponent,

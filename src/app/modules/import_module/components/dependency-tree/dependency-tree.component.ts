@@ -1,4 +1,15 @@
-import { Component, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    HostListener,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -15,7 +26,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DecimalPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../external-systems.service';
-import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../ExternalSystems.interface';
+import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../external-systems.interface';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -90,6 +101,8 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public showOnlineOffline: boolean = false;
 
+    @Output() public externalSystemConnected = new EventEmitter<boolean>();
+
     selectedNode!: NodeExtended;
 
     @HostListener('fullscreenchange', ['$event'])
@@ -162,12 +175,14 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         this.ExternalSystemsService.getDependencyTree(this.objectId, this.type).subscribe(data => {
             this.dependencyTree = data;
             this.isOnline = data.connected.status;
-
-            this.renderVisNetwork(
-                this.dependencyTree.treeData.source,
-                this.dependencyTree.treeData.objects,
-                this.dependencyTree.treeData.relations
-            );
+            this.externalSystemConnected.emit(this.isOnline);
+            if (this.dependencyTree.treeData.objects) {
+                this.renderVisNetwork(
+                    this.dependencyTree.treeData.source,
+                    this.dependencyTree.treeData.objects,
+                    this.dependencyTree.treeData.relations
+                );
+            }
         });
     }
 
@@ -475,13 +490,15 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleFullscreenMode() {
-        const elem = this.document.getElementById('dependencyTreeOverview');
+        const elem = this.document.getElementById('fullscreenDependencyTree');
 
         if (this.isFullscreen) {
             if (document.exitFullscreen) {
+                this.isFullscreen = false;
                 document.exitFullscreen();
             }
         } else {
+            this.isFullscreen = true;
             if (elem && elem.requestFullscreen) {
                 elem.requestFullscreen();
             }
