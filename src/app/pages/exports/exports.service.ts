@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    ExportSatelliteSelectionPost,
     ExportsBroadcastResult,
     ExportsIndexResult,
     ExportValidationResult,
@@ -84,5 +85,18 @@ export class ExportsService {
                     return data
                 })
             );
+    }
+
+    public saveSatelliteSelection(data: ExportSatelliteSelectionPost[]): Observable<GenericSuccessResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<GenericSuccessResponse>(`${proxyPath}/exports/saveInstanceConfigSyncSelection.json?angular=true`, {
+            satellites: data
+        })
+            .pipe(
+                map(data => {
+                    return data
+                })
+            );
+
     }
 }

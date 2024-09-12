@@ -58,6 +58,66 @@
                 </c-alert>
 
                 <c-row>
+                    <c-col [xs]="12" class="mb-3" *ngIf="useSingleInstanceSync && satellites.length > 0">
+                        <oitc-ui-blocker [blocked]="isExportRunning">
+                            <c-card>
+                                <c-card-header>
+                                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                                    {{ t('Select instances which the new configuration should get pushed.') }}
+                                </c-card-header>
+                                <c-card-body class="p-0">
+                                    <table *ngIf="satellites" bordered cTable class="m-0 table table-fit" hover
+                                           striped>
+                                        <thead>
+                                        <tr>
+                                            <th class="width-15 text-center">
+                                                <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
+                                            </th>
+                                            <th>
+                                                {{ t('Instances name') }}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let satellite of satellites">
+                                            <td>
+                                                <oitc-item-select
+                                                    [disabled]="false"
+                                                    [item]="satellite"></oitc-item-select>
+                                            </td>
+                                            <td>
+                                                {{ satellite.name }}
+                                                <c-badge color="info" [shape]="'rounded-pill'">
+                                                    {{ t('ID') }} {{ satellite.id }}
+                                                </c-badge>
+                                            </td>
+                                        </tbody>
+                                    </table>
+                                    <c-container
+                                        class="bg-secondary bg-opacity-10 py-2 rounded-bottom border border-top-0"
+                                        fluid>
+                                        <c-row>
+                                            <c-col>
+                                                <oitc-select-all
+                                                    [itemsCount]="satellites.length"></oitc-select-all>
+                                            </c-col>
+                                            <c-col md="3">
+                                                <div class="btn-group d-flex flex-row" role="group">
+                                                    <button class="btn btn-outline-success col-3 border-0" type="button"
+                                                            (click)="saveSatelliteSelection()">
+                                                        <fa-icon [icon]="['fas', 'floppy-disk']"></fa-icon>
+                                                        {{ t('Save selection') }}
+                                                    </button>
+                                                </div>
+                                            </c-col>
+                                        </c-row>
+                                    </c-container>
+
+                                </c-card-body>
+                            </c-card>
+                        </oitc-ui-blocker>
+                    </c-col>
+
                     <c-col [xs]="12">
                         <c-card [cBorder]="{top: {color: 'primary', width: 3}}"
                                 *ngIf="isExportRunning || showLog"
@@ -67,7 +127,6 @@
                                 {{ t('Tasks') }}
                             </c-card-header>
                             <c-card-body>
-
                                 <c-row *ngIf="!exportSuccessfully">
                                     <c-col [xs]="12" class="mb-2">
                                         <c-alert [color]="'danger'">

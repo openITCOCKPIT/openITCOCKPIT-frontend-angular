@@ -33,12 +33,13 @@ export interface ExportTask {
 export interface LaunchExportPost {
     empty: true,
     create_backup: number // 1 / 0,
-    satellites?: {
-        id: number,
-        sync_instance: number // 1 / 0
-    }[]
+    satellites: ExportSatelliteSelectionPost[]
 }
 
+export interface ExportSatelliteSelectionPost {
+    id: number,
+    sync_instance: number // 1 / 0
+}
 
 export interface ExportValidationResult {
     result: {
@@ -69,4 +70,4 @@ export function resetExportValidation(): ExportValidationResult {
         },
         _csrfToken: ''
     }
-};
+}

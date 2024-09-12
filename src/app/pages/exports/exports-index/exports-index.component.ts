@@ -9,6 +9,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
     AlertComponent,
+    BadgeComponent,
     BorderDirective,
     CardBodyComponent,
     CardComponent,
@@ -16,8 +17,15 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
     FormCheckInputDirective,
-    RowComponent
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { NgForOf, NgIf } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -27,11 +35,22 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ExportsService } from '../exports.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ExportTask, ExportValidationResult, resetExportValidation } from '../exports.interface';
+import {
+    ExportSatelliteSelectionPost,
+    ExportTask,
+    ExportValidationResult,
+    resetExportValidation
+} from '../exports.interface';
 import {
     SatelliteEntityWithSatelliteStatus
 } from '../../../modules/distribute_module/pages/satellites/satellites.interface';
 import { GenericResponseWrapper } from '../../../generic-responses';
+import { MatSort } from '@angular/material/sort';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
+import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
+import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 
 
 @Component({
@@ -59,7 +78,20 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         RowComponent,
         ColComponent,
         BorderDirective,
-        NgForOf
+        NgForOf,
+        MatSort,
+        TableDirective,
+        FormCheckComponent,
+        TrueFalseDirective,
+        ItemSelectComponent,
+        ContainerComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        SelectAllComponent,
+        UiBlockerComponent,
+        BadgeComponent
     ],
     templateUrl: './exports-index.component.html',
     styleUrl: './exports-index.component.css'
@@ -84,6 +116,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private broadcastIntervalId: any = null;
     private subscriptions: Subscription = new Subscription();
     private readonly ExportsService = inject(ExportsService);
+    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
 
@@ -101,6 +134,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.cancelBroadcastInterval();
         this.subscriptions.unsubscribe();
     }
 
@@ -112,6 +146,15 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
 
             this.useSingleInstanceSync = data.useSingleInstanceSync;
             this.satellites = data.satellites;
+
+            if (this.useSingleInstanceSync) {
+                // mark already selected satellite systems
+                for (let satellite of this.satellites) {
+                    if (satellite.sync_instance) {
+                        this.SelectionServiceService.selectItem(satellite);
+                    }
+                }
+            }
 
             if (this.isExportRunning) {
                 this.broadcastIntervalId = setInterval(() => {
@@ -146,9 +189,11 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
         this.cancelBroadcastInterval();
         this.notyService.scrollTop();
 
+
         this.subscriptions.add(this.ExportsService.launchExport({
             empty: true,
-            create_backup: this.createBackup ? 1 : 0
+            create_backup: this.createBackup ? 1 : 0,
+            satellites: this.getSelectedSatellitesForPost(),
         }).subscribe((result: GenericResponseWrapper) => {
             if (result.success) {
 
@@ -192,6 +237,21 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
+    public saveSatelliteSelection() {
+        const post = this.getSelectedSatellitesForPost();
+        if (post.length > 0) {
+            this.subscriptions.add(this.ExportsService.saveSatelliteSelection(post).subscribe((result) => {
+                if (result.success) {
+                    this.notyService.genericSuccess();
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
+            }));
+        }
+    }
+
     private cancelBroadcastInterval() {
         if (this.broadcastIntervalId !== null) {
             clearInterval(this.broadcastIntervalId);
@@ -205,6 +265,51 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExportsService.verifyConfig().subscribe(data => {
             this.exportValidation = data;
         }));
+    }
+
+    private getSelectedSatellitesForPost(): ExportSatelliteSelectionPost[] {
+        if (!this.useSingleInstanceSync || this.satellites.length === 0) {
+            return [];
+        }
+
+        const selectedSatellites = this.SelectionServiceService.getSelectedItems();
+        let result: ExportSatelliteSelectionPost[] = [];
+
+        // Have all satellites been deselected?
+        if (selectedSatellites.length === 0 && this.satellites.length > 0) {
+            for (let satellite of this.satellites) {
+                result.push({
+                    id: satellite.id,
+                    sync_instance: 0
+                });
+            }
+
+            return result;
+        }
+
+
+        // We have selected Satellite Systems
+        // Mark all satellites as not selected first, then only pick the selected ones
+        for (let satellite of this.satellites) {
+            const id = satellite.id;
+            let selectedSatellite = selectedSatellites.find((item) => item.id === id);
+
+            if (selectedSatellite) {
+                // Sattelite is selected
+                result.push({
+                    id: satellite.id,
+                    sync_instance: 1
+                });
+            } else {
+                // Satellite is not selected
+                result.push({
+                    id: satellite.id,
+                    sync_instance: 0
+                });
+            }
+        }
+
+        return result;
     }
 
 }
