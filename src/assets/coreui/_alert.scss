@@ -1,0 +1,85 @@
+.alert.border-faded {
+    border: 1px solid rgba(var(--cui-body-color-rgb), 0.07);
+}
+
+.icon-stack {
+    position: relative;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.icon-stack-1x,
+.icon-stack-2x,
+.icon-stack-3x {
+    position: absolute;
+    left: 0;
+    /*bottom: 0;*/
+    width: 100%;
+    text-align: center;
+    line-height: inherit !important;
+}
+
+.icon-stack-1x {
+    font-size: 0.5em;
+}
+
+.icon-stack-2x {
+    font-size: 0.70em;
+    /*padding-right: 0.025em;*/
+}
+
+.icon-stack-3x {
+    font-size: 1em;
+}
+
+.icon-stack-xl {
+    font-size: 3.125rem;
+}
+
+.icon-stack-lg {
+    font-size: 2.5rem;
+}
+
+.icon-stack-md {
+    font-size: 2.125rem;
+}
+
+.icon-stack-sm {
+    font-size: 1.875rem;
+}
+
+/* FontAwesome icon bases to stack other icons on top, like a Square, Circle, Shield, Message, Comment */
+.base-square-full::after, .base-1::after {
+    font: var(--fa-font-solid);
+    content: '\f45c';
+}
+
+.base-square::after, .base-5::after {
+    font: var(--fa-font-solid);
+    content: '\f0c8';
+}
+
+.base-circle::after, .base-7::after, .base-10::after {
+    font: var(--fa-font-solid);
+    content: '\f111';
+}
+
+.base-shield::after, .base-2::after, .base-9::after {
+    font: var(--fa-font-solid);
+    content: '\f132';
+}
+
+.base-message::after, .base-6::after {
+    font: var(--fa-font-solid);
+    content: '\f27a';
+}
+
+.base-comment::after, .base-12::after {
+    font: var(--fa-font-solid);
+    content: '\f075';
+}
+

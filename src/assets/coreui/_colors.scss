@@ -1,0 +1,29 @@
+// Mixin to generate text color classes
+@mixin generate-color-classes($colors) {
+    @each $name, $color in $colors {
+        .text-#{$name} {
+            color: $color;
+        }
+
+        .bg-#{$name} {
+            background-color: $color;
+        }
+    }
+}
+
+
+// Generate text- and bg- classes for all CoreUI colors
+// Example: text-cyan-500 or bg-cyan-500
+// https://coreui.io/bootstrap/docs/customize/color/#all-colors
+
+// Generate the classes
+@include generate-color-classes($blues);
+@include generate-color-classes($indigos);
+@include generate-color-classes($purples);
+@include generate-color-classes($reds);
+@include generate-color-classes($oranges);
+@include generate-color-classes($yellows);
+@include generate-color-classes($greens);
+@include generate-color-classes($blues);
+@include generate-color-classes($teals);
+@include generate-color-classes($cyans);

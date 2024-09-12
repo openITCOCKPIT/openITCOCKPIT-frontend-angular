@@ -59,7 +59,7 @@ export function getDefaultSatelliteSystemdowntimesParams(): SatelliteSystemdownt
 export interface SatelliteEntity {
     id: number
     name: string
-    description: string
+    description?: string
     address: string
     container_id: number
     sync_instance: number
@@ -84,4 +84,19 @@ export interface SatelliteEntity {
 
 export interface SatelliteEntityCake2 {
     Satellite: SatelliteEntity
+}
+
+export interface SatelliteEntityWithSatelliteStatus extends SatelliteEntity {
+    satellite_status: SatelliteStatus
+}
+
+export interface SatelliteStatus {
+    id: number
+    status: number
+    last_error: string
+    last_export?: string
+    last_seen: string
+    satellite_id: number
+    last_error_time: any
+    status_human: string
 }
