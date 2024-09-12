@@ -74,6 +74,9 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { SlasReportFormatEnum } from '../slas.enum';
+import {
+    TimeperiodDetailsTooltipComponent
+} from '../../../components/timeperiod-details-tooltip/timeperiod-details-tooltip.component';
 
 @Component({
     selector: 'oitc-slas-index',
@@ -137,7 +140,8 @@ import { SlasReportFormatEnum } from '../slas.enum';
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        TimeperiodDetailsTooltipComponent
     ],
     templateUrl: './slas-add.component.html',
     styleUrl: './slas-add.component.css',

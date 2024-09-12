@@ -210,6 +210,8 @@
                                     <!--<oitc-timeperiod-details-tooltip timeperiod-id="post.timeperiod_id"
                                                                      *ngIf="post.timeperiod_id != null">
                                     </oitc-timeperiod-details-tooltip>-->
+                                    <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id"
+                                                                     *ngIf="post.timeperiod_id != null"></oitc-timeperiod-details-tooltip>
                                     <fa-icon [icon]="['fas', 'clock']"
                                              [hidden]="post.timeperiod_id && post.timeperiod_id > 0"></fa-icon>
                                 } @else {
