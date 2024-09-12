@@ -18,8 +18,8 @@
                         <th>{{ t("Monday") }}</th>
                         <th>{{ t("Tuesday") }}</th>
                         <th>{{ t("Wednesday") }}</th>
-                        <th>{{ ( "Thursday" ) }}</th>
-                        <th>{{ ( "Friday" ) }}</th>
+                        <th>{{ t("Thursday") }}</th>
+                        <th>{{ t("Friday") }}</th>
                         <th>{{ t("Saturday") }}</th>
                         <th>{{ t("Sunday") }}</th>
                     </tr>
@@ -45,8 +45,7 @@
                                     </li>
                                 </ul>
                             } @else {
-                                <fa-icon [icon]="['fas', 'minus']" class="text-danger"
-                                         style="background-color: transparent;"></fa-icon>
+                                <fa-icon [icon]="['fas', 'minus']" class="text-danger bg-transparent"></fa-icon>
                             }
                         </td>
                     </tr>

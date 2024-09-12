@@ -11,3 +11,7 @@
     filter: drop-shadow(0px 0px 3px #FFE205); /* new Font Awesome icons are svg images */
     color: #FFE205;
 }
+
+.bg-transparent {
+    background-color: transparent;
+}
