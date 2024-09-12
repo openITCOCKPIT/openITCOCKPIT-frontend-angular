@@ -272,4 +272,9 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public loadExternalSystem(externalSystem: ExternalSystemEntity) {
         this.ExternalSystemsService.openImportedHostGroupDataModal(externalSystem);
     }
+
+    public onImportIsCompleted($event: boolean) {
+        this.load();
+
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -24,7 +24,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { Subscription } from 'rxjs';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Application, Applications, ExternalSystemEntity } from '../../external-systems.interface';
 import { ExternalSystemsService } from '../../external-systems.service';
 import { GenericMessageResponse, GenericResponseWrapper } from '../../../../generic-responses';
@@ -72,6 +72,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ImportITopDataComponent implements OnInit, OnDestroy {
     @ViewChild('modal') private modal!: ModalComponent;
+    @Output() completed = new EventEmitter<boolean>();
+
+    public readonly router = inject(Router);
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private readonly ExternalSystemService = inject(ExternalSystemsService);
@@ -143,6 +146,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                 this.showSpinner = false;
                 if (data.success) {
                     this.hideModal();
+                    this.completed.emit(true);
                 } else {
                     this.errors = data;
                 }
