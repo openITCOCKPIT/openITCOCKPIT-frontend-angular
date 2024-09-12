@@ -50,11 +50,11 @@
                 </c-alert>
 
                 <c-alert color="info" *ngIf="!isExportRunning">
-                    <h4 class="alert-heading">
+                    <h5 class="alert-heading">
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Information') }}
-                    </h4>
-                    {{ t('Updates and applies the latest configuration to the monitoring engine, including new hosts and modified contacts.') }}
+                        {{ t('Refresh monitoring configuration') }}
+                    </h5>
+                    {{ t('Updates and applies the latest configuration to the monitoring engine, including new hosts and modified contacts and so on.') }}
                 </c-alert>
 
                 <c-row>
@@ -67,6 +67,43 @@
                                 {{ t('Tasks') }}
                             </c-card-header>
                             <c-card-body>
+
+                                <c-row *ngIf="!exportSuccessfully">
+                                    <c-col [xs]="12" class="mb-2">
+                                        <c-alert [color]="'danger'">
+                                            <h5 class="alert-heading">
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                {{ t('Error') }}
+                                            </h5>
+                                            {{ t('Error while refreshing monitoring configuration.') }}
+                                        </c-alert>
+                                    </c-col>
+
+                                    <c-col [xs]="12" class="mb-2" *ngIf="exportValidation.result.nagios.hasError">
+                                        <c-alert color="danger">
+                                            <h5 class="alert-heading">
+                                                <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+                                                {{ t('New configuration is invalid') }}
+                                            </h5>
+                                            <div>
+                                                <pre>{{ exportValidation.result.nagios.output.join("\n") }}</pre>
+                                            </div>
+                                        </c-alert>
+                                    </c-col>
+
+                                    <c-col [xs]="12" class="mb-2" *ngIf="exportValidation.result.prometheus.hasError">
+                                        <c-alert color="danger">
+                                            <h5 class="alert-heading">
+                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                {{ t('New Prometheus configuration is invalid') }}
+                                            </h5>
+                                            <div>
+                                                <pre>{{ exportValidation.result.prometheus.output.join("\n") }}</pre>
+                                            </div>
+                                        </c-alert>
+                                    </c-col>
+
+                                </c-row>
 
                                 <c-row>
                                     <c-col [xs]="12" *ngFor="let task of tasks" class="mb-1">

@@ -1,9 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { ExportsBroadcastResult, ExportsIndexResult, LaunchExportPost } from './exports.interface';
-import { GenericSuccessResponse } from '../../generic-responses';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+    ExportsBroadcastResult,
+    ExportsIndexResult,
+    ExportValidationResult,
+    LaunchExportPost
+} from './exports.interface';
+import { GenericResponseWrapper, GenericSuccessResponse } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -33,14 +38,24 @@ export class ExportsService {
         )
     }
 
-    public launchExport(params: LaunchExportPost): Observable<GenericSuccessResponse> {
+    public launchExport(params: LaunchExportPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<GenericSuccessResponse>(`${proxyPath}/exports/launchExport.json?angular=true`,
             params as {}
         )
             .pipe(
                 map(data => {
-                    return data;
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: {}
+                    };
+                }),
+                catchError((error: any) => {
+                    return of({
+                        success: false,
+                        data: error.message
+                    });
                 })
             );
     }
@@ -57,5 +72,17 @@ export class ExportsService {
                 return data;
             })
         )
+    }
+
+    public verifyConfig(): Observable<ExportValidationResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ExportValidationResult>(`${proxyPath}/exports/verifyConfig.json?angular=true`, {
+            empty: true
+        })
+            .pipe(
+                map(data => {
+                    return data
+                })
+            );
     }
 }

@@ -38,3 +38,35 @@ export interface LaunchExportPost {
         sync_instance: number // 1 / 0
     }[]
 }
+
+
+export interface ExportValidationResult {
+    result: {
+        nagios: {
+            hasError: boolean
+            output: string[]
+        },
+        prometheus: {
+            hasError: boolean
+            output: string[]
+        }
+    },
+    _csrfToken: string
+}
+
+
+export function resetExportValidation(): ExportValidationResult {
+    return {
+        result: {
+            nagios: {
+                hasError: false,
+                output: []
+            },
+            prometheus: {
+                hasError: false,
+                output: []
+            }
+        },
+        _csrfToken: ''
+    }
+};
