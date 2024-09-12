@@ -41,6 +41,27 @@ export class ItemSelectComponent implements OnInit, OnDestroy {
                 this.selection.selectItem(this.item);
             }
         }));
+
+        // Subscript to SelectionService in case .selectItem() get called.
+        // Only supports "id" field for now
+        this.subscriptions.add(this.selection.selection$.subscribe(items => {
+            if (this.disabled) {
+                // Do not allow selection if the checkbox is disabled
+                return;
+            }
+
+            for (let item of items) {
+                if (item.hasOwnProperty('id') && this.item.hasOwnProperty('id')) {
+                    if (item.id === this.item.id) {
+                        this.checked = true;
+                        return;
+                    }
+                }
+            }
+
+            // We are not in the current selection :(
+            this.checked = false;
+        }));
     }
 
     public ngOnDestroy() {

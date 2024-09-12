@@ -451,6 +451,9 @@ const coreRoutes: Routes = [{
     path: 'acknowledgements/service/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
 }, {
+    path: 'exports/index',
+    loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {

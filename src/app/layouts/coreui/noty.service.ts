@@ -47,7 +47,7 @@ export class NotyService {
         }
 
         const toast = this.toastr.error(message, title, {
-            timeOut: 500,
+            timeOut: 5000,
             progressBar: true,
             enableHtml: true
         });
@@ -91,7 +91,7 @@ export class NotyService {
         const toast = this.toastr.info(message, title, {
             timeOut: 5000,
             progressBar: true,
-            enableHtml: true
+            enableHtml: true,
         });
 
         if (url) {
