@@ -4,7 +4,7 @@ import {
     PopoverGraphInterface,
     ServiceBrowserPerfParams
 } from '../../../../components/popover-graph/popover-graph.interface';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
@@ -111,6 +111,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public theme: null | 'dark' = null;
 
+    public selectedTimerange: number = 3;
+    public timerangePlaceholder: string = this.TranslocoService.translate('Custom'); // Is displayed when the user zooms in/out
     public availableTimeranges: SelectKeyValue[] = [
         {key: 1, value: this.TranslocoService.translate('1 hour')},
         {key: 2, value: this.TranslocoService.translate('2 hours')},
@@ -126,8 +128,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         {key: 4464, value: this.TranslocoService.translate('6 months')},
         {key: 8760, value: this.TranslocoService.translate('1 year')},
     ];
-    public selectedTimerange: number = 3;
-    public timerangePlaceholder: string = this.TranslocoService.translate('Custom'); // Is displayed when the user zooms in/out
+
+    // Max amount of data shown in the miniature chart
+    private readonly MAX_LONGTERM_HOURS = 8760;
 
     public availableAggregation: SelectKeyValueString[] = [
         {key: 'min', value: this.TranslocoService.translate('Minimum')},
@@ -138,18 +141,19 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public isLoading: boolean = false;
 
+    // Currently displayed time range in the main chart as unix timestamp
     public currentTimerange: TimeRange = {start: 0, end: 0};
 
+    // Currently used unit (ms or % or GB, etc.)
     public currentGraphUnit: string | null = null;
 
-    private PopoverGraphService = inject(PopoverGraphService);
+    private readonly PopoverGraphService = inject(PopoverGraphService);
     private readonly ColorModeService = inject(ColorModeService);
-
     private subscriptions: Subscription = new Subscription();
 
     public chartOption: EChartsOption = {};
 
-    // any :(
+    // eCharts instance if available
     public echartsInstance: any;
 
     private zoomEnabled: boolean = false;
@@ -157,17 +161,19 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     // Contains the last time stamp in ISO format which contains data
     // This timestamp is used by the auto refresh, to only load new data.
     private lastTimestampWithData: Date = new Date();
+
+    // Current server time - will be overwritten with the real server time on load
     private ServerTime: Date = new Date();
 
     public hasEnoughData: boolean = true;
 
+    // Low-resolution data for the miniature chart of the last MAX_LONGTERM_HOURS
     private archivePerfdataForMiniatureChart: any[] = [];
 
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
 
         this.subscriptions.add(colorMode$.subscribe((theme) => {
-            this.isLoading = false;
             //console.log('Change in theme detected', theme);
             const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
             switch (theme) {
@@ -187,7 +193,6 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     }
                     break;
             }
-
         }));
     }
 
@@ -198,13 +203,11 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         // Save the current server time on load and never overwrite it again
         this.ServerTime = new Date(this.timezone.server_time_iso);
 
-        this.loadPerfdataForMiniatureChart();
-        //this.loadPerfdata();
+        this.onPageLoad();
 
         if (this.config.autoRefresh && this.autoRefreshInterval > 1) {
             this.startAutoRefresh();
         }
-
     }
 
     public ngOnDestroy(): void {
@@ -213,11 +216,92 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    onChartInit(ec: any) {
+    public onChartInit(ec: any) {
         this.echartsInstance = ec;
     }
 
-    // Called on page load, on zoom, on data source change, on timerange change
+    public onPageLoad() {
+        if (this.availableDataSources.length === 0) {
+            // This service has no datasources
+            return;
+        }
+
+        if (this.selectedDatasource === '') {
+            // Select the first datasource
+            this.selectedDatasource = this.availableDataSources[0].key;
+        }
+
+        if (this.selectedTimerange > 0) {
+            // Initial value or the user selected a timerange from the dropdown
+            this.currentTimerange = this.getStartAndEndTimestampsBySelectedTimerange();
+        }
+
+        // Params for the main chart
+        let params: ServiceBrowserPerfParams = {
+            aggregation: this.selectedAggregation,
+            host_uuid: this.hostUuid,
+            service_uuid: this.serviceUuid,
+            gauge: this.selectedDatasource,
+            jsTimestamp: 0,
+            isoTimestamp: 1,
+            angular: true,
+            start: this.currentTimerange.start,
+            end: this.currentTimerange.end,
+            disableGlobalLoader: true
+        };
+
+        // Params for the miniature chart
+        let archiveParams: ServiceBrowserPerfParams = {
+            aggregation: this.selectedAggregation,
+            host_uuid: this.hostUuid,
+            service_uuid: this.serviceUuid,
+            gauge: this.selectedDatasource,
+            jsTimestamp: 0,
+            isoTimestamp: 1,
+            angular: true,
+            hours: this.MAX_LONGTERM_HOURS,
+            disableGlobalLoader: true,
+            start: 0,
+            end: 0,
+        };
+
+        let request = {
+            mainPerfdata: this.PopoverGraphService.getPerfdata(params),
+            archivePerfdata: this.PopoverGraphService.getPerfdata(archiveParams)
+        };
+
+        this.isLoading = true;
+        forkJoin(request).subscribe(
+            (result) => {
+                this.isLoading = false;
+                // Process and store archive perfdata
+                this.archivePerfdataForMiniatureChart = [];
+                for (let isoTimestamp in result.archivePerfdata.performance_data[0].data) {
+                    this.archivePerfdataForMiniatureChart.push([isoTimestamp, result.archivePerfdata.performance_data[0].data[isoTimestamp]]);
+                }
+
+                // Create the main chart
+                // Save the unit we got so we can append data in the same unit
+                this.currentGraphUnit = result.mainPerfdata.performance_data[0].datasource.unit;
+
+                // Store the last timestamp with data
+                // This is used by the auto refresh to only load new data
+                for (const isoTimestamp in result.mainPerfdata.performance_data[0].data) {
+                    let timestamp = new Date(isoTimestamp);
+                    if (timestamp > this.lastTimestampWithData) {
+                        this.lastTimestampWithData = timestamp;
+                    }
+                }
+
+                // ECharts needs at least 2 data points to render the chart
+                this.hasEnoughData = (Object.keys(result.mainPerfdata.performance_data[0].data).length >= 2);
+
+                // Finally, we can create the chart
+                this.chartOption = this.getInitialEChartsOptions(result.mainPerfdata);
+            });
+    }
+
+    // Called , on zoom, on data source change, on timerange change
     // Called basically on every change - except the AutoRefresh !!
     public loadPerfdata() {
         if (this.availableDataSources.length === 0) {
@@ -232,7 +316,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
         if (this.selectedTimerange > 0) {
             // Initial value or the user selected a timerange from the dropdown
-            this.currentTimerange = this.getStartEndEndTimestampsBySelectedTimerange();
+            this.currentTimerange = this.getStartAndEndTimestampsBySelectedTimerange();
         }
 
         let params: ServiceBrowserPerfParams = {
@@ -275,64 +359,21 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 // ECharts needs at least 2 data points to render the chart
                 this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
 
-                this.renderChart(perfdata);
+                this.chartOption = this.getInitialEChartsOptions(perfdata);
             })
         );
     }
 
-    private loadPerfdataForMiniatureChart() {
-        if (this.availableDataSources.length === 0) {
-            // This service has no datasources
-            return;
-        }
-
-        if (this.selectedDatasource === '') {
-            // Select the first datasource
-            this.selectedDatasource = this.availableDataSources[0].key;
-        }
-
-        let params: ServiceBrowserPerfParams = {
-            aggregation: this.selectedAggregation,
-            host_uuid: this.hostUuid,
-            service_uuid: this.serviceUuid,
-            gauge: this.selectedDatasource,
-            jsTimestamp: 0,
-            isoTimestamp: 1,
-            angular: true,
-            hours: 8760, //todo fix me
-            disableGlobalLoader: true,
-            start: 0,
-            end: 0,
-        };
-
-
-        this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
-            .subscribe((perfdata) => {
-                this.archivePerfdataForMiniatureChart = [];
-                for (let isoTimestamp in perfdata.performance_data[0].data) {
-                    this.archivePerfdataForMiniatureChart.push([isoTimestamp, perfdata.performance_data[0].data[isoTimestamp]]);
-                }
-
-                this.loadPerfdata(); //todo fix me
-            })
-        );
-    }
 
     // Gets called by the Auto Refresh Timer - will only load new perfdata and append to the existing data
-    public updateAndAppendPerfdata(start: number, end: number) {
-        if (this.availableDataSources.length === 0) {
-            // This service has no datasources
+    public updatePerfdata(start: number, end: number, append: boolean) {
+        if (this.availableDataSources.length === 0 || this.selectedDatasource === '') {
+            // This service has no data sources or no data source is selected - something is wrong
             this.cancelAutoRefresh();
             return;
         }
 
-        if (this.selectedDatasource === '') {
-            // No data source selected - something is wrong
-            this.cancelAutoRefresh();
-            return;
-        }
-
-
+        // Params for the main chart - as we do not update the archive data
         let params: ServiceBrowserPerfParams = {
             aggregation: this.selectedAggregation,
             host_uuid: this.hostUuid,
@@ -356,14 +397,14 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             .subscribe((perfdata) => {
                 this.isLoading = false;
 
-                if (this.currentGraphUnit === null) {
-                    // First load of data - save the unit we got
-                    this.currentGraphUnit = perfdata.performance_data[0].datasource.unit;
-                }
-
                 if (Object.keys(perfdata.performance_data[0].data).length === 0) {
                     // No new data available
                     return;
+                }
+
+                if (this.currentGraphUnit === null) {
+                    // First time we got some data - save the unit
+                    this.currentGraphUnit = perfdata.performance_data[0].datasource.unit;
                 }
 
                 // Store the last timestamp with data
@@ -380,19 +421,33 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 }
 
                 // Append new data
+                const newStart = DateTime.fromSeconds(start).toISO();
+                console.log(start);
+                console.log(newStart);
                 this.echartsInstance.setOption({
-                    dataset: {
-                        source: [...this.echartsInstance.getOption().dataset[0].source, ...data]
-                    }
+                    xAxis: [
+                        {
+                            min: newStart
+                        }
+                    ],
+                    series: [
+                        {
+                            data: append ? [...this.echartsInstance.getOption().series[0].data, ...data] : data
+                        }
+                    ]
                 });
 
                 // Store the new Timestamp for end time
+                if (!append) {
+                    this.currentTimerange.start = start;
+                }
                 this.currentTimerange.end = Math.floor(this.lastTimestampWithData.getTime() / 1000);
             })
         );
     }
 
-    private renderChart(perfdata: PopoverGraphInterface) {
+
+    private getInitialEChartsOptions(perfdata: PopoverGraphInterface): EChartsOption {
         let gauge = perfdata.performance_data[0];
         let data = [];
 
@@ -403,7 +458,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         }
 
 
-        this.chartOption = {
+        let chartOption: EChartsOption = {
             tooltip: {
                 trigger: 'axis',
                 formatter: (params: any) => {
@@ -434,7 +489,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {
                     type: 'time',
                     //min: new Date(this.currentTimerange.start * 1000).toISOString(),
-                    min: new Date('2024-07-11T15:30:08+02:00').toISOString(),
+                    //min: new Date('2024-07-11T15:30:08+02:00').toISOString(),
+                    min: this.archivePerfdataForMiniatureChart[0][0], // Force the chart to start at the earliest data point (~12 month ago)
                     axisLabel: {
                         formatter: (value) => {
                             const dateTime = DateTime.fromMillis(value).setZone(this.timezone.user_timezone);
@@ -450,12 +506,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     minorSplitLine: {
                         show: true
                     }
-
                 },
                 {
                     type: 'category',
                     show: false,
-                    data: this.archivePerfdataForMiniatureChart
+                    //data: [] // important - this will hide the low-resolution long term chart from the main plot
+                    //data: this.archivePerfdataForMiniatureChart
 
                 }
             ],
@@ -483,13 +539,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             },
 
             dataZoom: [
-
                 {
                     type: 'slider',
                     xAxisIndex: [1, 0],
-
-                    //endValue: 200,
-                    //realtime: false
+                    start: this.getSelectedZoomStartByTimerange(),
+                    end: 100,
+                    realtime: false
                 }
             ],
 
@@ -578,10 +633,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     areaStyle: {
                         opacity: 0.2
                     },
-                    encode: {
-                        x: 'timestamp',
-                        y: gauge.datasource.name // refer gauge (rta) value
-                    }
+                    //encode: {
+                    //    x: 'timestamp',
+                    //    y: gauge.datasource.name // refer gauge (rta) value
+                    //}
                 },
                 {
                     name: 'langzeit',
@@ -594,12 +649,14 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
         let thresholds = this.getThresholds(gauge);
         if (thresholds) {
-            this.chartOption.visualMap = thresholds;
+            chartOption.visualMap = thresholds;
         } else {
             // Set default line color to primary
             // @ts-ignore
-            this.chartOption.series[0].lineStyle.color = 'rgb(88,86,214)';
+            chartOption.series[0].lineStyle.color = 'rgb(88,86,214)';
         }
+
+        return chartOption;
     }
 
     public updateChart() {
@@ -622,10 +679,11 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     public reloadChart() {
         this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
         this.currentGraphUnit = null; // Reset the unit to get the new one from the API
-        this.loadPerfdata();
+        //this.loadPerfdata();
+        console.log("Handle call to loadPerfdata"); //todo fix me
     }
 
-    private getStartEndEndTimestampsBySelectedTimerange(): TimeRange {
+    private getStartAndEndTimestampsBySelectedTimerange(): TimeRange {
         const now = new Date();
 
         if (!this.timezone) {
@@ -853,10 +911,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             const end = Math.floor(event.batch[0].endValue / 1000);
 
             // Set selectedTimerange to zero to get the placeholder displayed in the select
-            // and to tell the loadPerfdata() method that we want to use the provided start/end timestamps
             this.selectedTimerange = 0;
 
-            this.currentTimerange = {start, end};
+            //this.currentTimerange = {start, end}; //todo remove
 
             const duration = end - start;
             this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
@@ -873,10 +930,47 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
             // Reload detailed data
             this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
-            this.loadPerfdata();
+            console.log(start, end);
+            this.updatePerfdata(start, end, false);
         } else {
             // Zoom via miniature
             console.log(event);
+
+            // https://stackoverflow.com/questions/42503988/echarts-datazoom-event-does-not-return-timestamp-but-only-percentages
+            // start and end from the event is a percentage value -.-
+            // So we need to do some math to get from 90% of the chart time is selected to a unix timestamp
+            const startPercentage = event.start;
+            const endPercentage = event.end;
+
+            const firstIsoDateInLongTermData = this.archivePerfdataForMiniatureChart[0][0];
+            const firstDate = new Date(firstIsoDateInLongTermData);
+            const now = new Date();
+
+            let chartDurationInSeconds = (now.getTime() - firstDate.getTime()) / 1000;
+            let start = (firstDate.getTime() / 1000) + (chartDurationInSeconds / 100 * startPercentage);
+            let end = (firstDate.getTime() / 1000) + (chartDurationInSeconds / 100 * endPercentage);
+
+
+            // Set selectedTimerange to zero to get the placeholder displayed in the select
+            this.selectedTimerange = 0;
+
+            //this.currentTimerange = {start, end}; // todo remove
+
+            const duration = end - start;
+            this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
+
+
+            const currentTimestamp = Math.floor(now.getTime() / 1000);
+            //Only enable auto refresh, if graphEnd timestamp is near to now
+            //We don't need to auto refresh data from yesterday
+            if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
+                this.cancelAutoRefresh();
+            }
+
+
+            // Reload detailed data
+            this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
+            this.updatePerfdata(start, end, false);
         }
     }
 
@@ -936,7 +1030,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
                 // Get back to server time
                 if ((end - start) > 0) {
-                    this.updateAndAppendPerfdata(start, end);
+                    this.updatePerfdata(start, end, true);
                 }
 
 
@@ -958,6 +1052,20 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         } else {
             this.cancelAutoRefresh();
         }
+    }
+
+    private getSelectedZoomStartByTimerange(): number {
+        //return 100 - (this.selectedTimerange / this.MAX_LONGTERM_HOURS * 100);
+
+        const firstIsoDateInLongTermData = this.archivePerfdataForMiniatureChart[0][0];
+
+        const now = new Date();
+        const firstDate = new Date(firstIsoDateInLongTermData);
+
+        const duration = (now.getTime() - firstDate.getTime()) / (3600 * 1000);
+
+        console.log(100 - (this.selectedTimerange / duration * 100));
+        return 100 - (this.selectedTimerange / duration * 100);
     }
 
 }
