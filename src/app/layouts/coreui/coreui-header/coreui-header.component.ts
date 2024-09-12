@@ -25,6 +25,9 @@ import { ChangeLanguageComponent } from '../change-language/change-language.comp
 import { SidebarService } from '../coreui-navbar/sidebar.service';
 import { Subscription } from 'rxjs';
 import { TopSearchComponent } from '../top-search/top-search.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -48,7 +51,10 @@ import { TopSearchComponent } from '../top-search/top-search.component';
         DropdownToggleDirective,
         IconDirective,
         ChangeLanguageComponent,
-        TopSearchComponent
+        TopSearchComponent,
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css'
