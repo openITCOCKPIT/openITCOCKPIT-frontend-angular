@@ -8,6 +8,7 @@ import {
     ImportedhostgroupsIndexRoot
 } from './importedhostgroups.interface';
 import { GenericSuccessAndMessageResponse } from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -57,5 +58,11 @@ export class ImportedhostgroupsService {
                 return data;
             })
         );
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/imported_hostgroups/delete/${item.id}.json?angular=true`, {});
     }
 }

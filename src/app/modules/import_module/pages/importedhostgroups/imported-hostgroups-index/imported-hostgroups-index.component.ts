@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
@@ -270,8 +270,6 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public loadExternalSystem(externalSystem: ExternalSystemEntity) {
-        this.subscriptions.add(this.ExternalSystemsService.loadExternalSystem(externalSystem)
-
-        );
+        this.ExternalSystemsService.openImportedHostGroupDataModal(externalSystem);
     }
 }

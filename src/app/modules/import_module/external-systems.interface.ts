@@ -348,6 +348,7 @@ export interface Applications {
         success: boolean
         message: string
     }
+    message: string
     _csrfToken: any
 }
 
