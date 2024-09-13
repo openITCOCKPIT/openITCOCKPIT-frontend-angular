@@ -348,6 +348,7 @@ export interface Applications {
         success: boolean
         message: string
     }
+    hasRootPrivileges: boolean
     message: string
     _csrfToken: any
 }

@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
@@ -57,7 +57,7 @@ import {
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
@@ -148,7 +148,6 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public showSpinner: boolean = false;
     public externalSystems: ExternalSystemEntity[] = [];
     public allImportedGroups?: ImportedhostgroupsIndexRoot;
-    private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
 
