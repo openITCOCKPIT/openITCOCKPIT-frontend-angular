@@ -1,23 +1,39 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { PermissionsService } from '../../permissions/permissions.service';
-import { AdditionalHostInformationResult, DependencyTreeApiResult } from './ExternalSystems.interface';
+import {
+    AdditionalHostInformationResult,
+    Applications,
+    DependencyTreeApiResult,
+    ExternalSystemEntity
+} from './external-systems.interface';
 import { HostgroupSummaryState, SummaryState } from '../../pages/hosts/summary_state.interface';
+import { ModalService } from '@coreui/angular';
+import {
+    GenericIdResponse,
+    GenericMessageResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ExternalSystemsService {
-
     constructor() {
     }
+
+    public modalExternalSystem$$: Subject<ExternalSystemEntity> = new Subject();
+    public modalExternalSystem$ = this.modalExternalSystem$$.asObservable();
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
     private readonly PermissionsService = inject(PermissionsService);
+    private readonly modalService = inject(ModalService);
+
 
     /**********************
      *    Hosts browser    *
@@ -79,4 +95,87 @@ export class ExternalSystemsService {
         );
     }
 
+    public loadExternalSystem(externalSystem: ExternalSystemEntity) {
+        if (!externalSystem.id) {
+            return;
+        }
+        switch (externalSystem.system_type) {
+            case 'itop':
+                // open modal
+                this.modalService.toggle({
+                    show: true,
+                    id: 'importITopData',
+                });
+                this.loadDataFromITop(externalSystem).subscribe(data => {
+
+                    console.log(data);
+                });
+
+                break;
+            default:
+                console.log('External System not supported yet')
+                return;
+        }
+    }
+
+    public loadDataFromITop(externalSystem: ExternalSystemEntity): Observable<{
+        success: boolean;
+        data: Applications | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            applications: Applications
+        }>(`${proxyPath}/import_module/imported_hostgroups/loadDataFromITop/${externalSystem.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data.applications
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
+    public openImportedHostGroupDataModal(externalSystem: ExternalSystemEntity) {
+        this.modalExternalSystem$$.next(externalSystem);
+
+        this.modalService.toggle({
+            show: true,
+            id: 'importITopData',
+        });
+    }
+
+    public startDataImport(externalSystem: ExternalSystemEntity, ignoreExternalSystem: boolean = false): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/imported_hostgroups/importHostgroups/.json?angular=true`, {
+            externalSystemId: externalSystem.id,
+            ignoreExternalSystem: ignoreExternalSystem
+        }).pipe(map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data as GenericIdResponse
+                };
+            }),
+            catchError((error: any) => {
+                console.log(error.error.error);
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
 }
