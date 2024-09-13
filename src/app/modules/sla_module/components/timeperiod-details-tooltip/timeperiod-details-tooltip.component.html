@@ -14,6 +14,7 @@
                 <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
                 {{ timeperiod.name }}
                 <table bordered cTable class="mt-2">
+                    <thead>
                     <tr class="bg-primary text-white text-center small">
                         <th>{{ t("Monday") }}</th>
                         <th>{{ t("Tuesday") }}</th>
@@ -23,6 +24,8 @@
                         <th>{{ t("Saturday") }}</th>
                         <th>{{ t("Sunday") }}</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr *ngIf="weekDays">
                         <td *ngFor="let day of weekDays | keyvalue" class="pl-1 pb-1 pt-1 pr-1 text-center">
                             @if (day.value.length > 0) {
@@ -49,6 +52,7 @@
                             }
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
 
