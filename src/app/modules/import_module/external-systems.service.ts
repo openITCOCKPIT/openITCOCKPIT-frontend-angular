@@ -14,7 +14,7 @@ import { ModalService } from '@coreui/angular';
 import {
     GenericIdResponse,
     GenericMessageResponse,
-    GenericResponseWithNotValidDataWrapper,
+    GenericResponseWrapper,
     GenericValidationError
 } from '../../generic-responses';
 
@@ -156,7 +156,7 @@ export class ExternalSystemsService {
         });
     }
 
-    public startDataImport(externalSystem: ExternalSystemEntity, ignoreExternalSystem: boolean = false): Observable<GenericResponseWithNotValidDataWrapper> {
+    public startDataImport(externalSystem: ExternalSystemEntity, ignoreExternalSystem: boolean = false): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/imported_hostgroups/importHostgroups/.json?angular=true`, {
             externalSystemId: externalSystem.id,
@@ -169,7 +169,6 @@ export class ExternalSystemsService {
                 };
             }),
             catchError((error: any) => {
-                console.log(error.error.error);
                 const err = error.error.error as GenericValidationError;
                 return of({
                     success: false,

@@ -49,4 +49,5 @@ export interface GenericResponseWithNotValidDataWrapper {
     } | any
     success: boolean
     data: GenericValidationError | GenericIdResponse | GenericSuccessResponse | GenericMessageResponse | any
+    message?: string
 }

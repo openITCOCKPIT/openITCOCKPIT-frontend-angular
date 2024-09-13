@@ -153,7 +153,6 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                     this.completed.emit(true);
                 } else {
                     this.errors = data;
-
                 }
             });
         }
