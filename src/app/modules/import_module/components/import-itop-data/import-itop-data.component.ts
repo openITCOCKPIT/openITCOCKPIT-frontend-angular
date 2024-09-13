@@ -27,7 +27,11 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 import { Router, RouterLink } from '@angular/router';
 import { Application, Applications, ExternalSystemEntity } from '../../external-systems.interface';
 import { ExternalSystemsService } from '../../external-systems.service';
-import { GenericMessageResponse, GenericResponseWrapper } from '../../../../generic-responses';
+import {
+    GenericMessageResponse,
+    GenericResponseWithNotValidDataWrapper,
+    GenericResponseWrapper
+} from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
@@ -85,7 +89,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
     public ignoreExternalSystem: boolean = false;
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public errors: GenericResponseWrapper | null = null;
+    public errors: GenericResponseWithNotValidDataWrapper | null = null;
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -149,6 +153,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                     this.completed.emit(true);
                 } else {
                     this.errors = data;
+
                 }
             });
         }
