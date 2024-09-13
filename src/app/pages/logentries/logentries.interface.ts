@@ -28,7 +28,6 @@ export interface LogentryIndexParams {
 }
 
 export function getDefaultLogentriesParams(): LogentryIndexParams {
-    let now = new Date();
     return {
         angular: true,
         scroll: true,
