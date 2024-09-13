@@ -1,0 +1,17 @@
+.inside-list {
+    list-style-position: inside;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.light-on:hover {
+    text-shadow: 0 0 3px #FFE205, 0 0 7px #FFE205, 0 0 20px #EDD205; /* old Font Awesome icons where text */
+    filter: drop-shadow(0px 0px 3px #FFE205); /* new Font Awesome icons are svg images */
+    color: #FFE205;
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
