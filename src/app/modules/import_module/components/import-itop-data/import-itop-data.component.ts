@@ -27,11 +27,7 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 import { Router, RouterLink } from '@angular/router';
 import { Application, Applications, ExternalSystemEntity } from '../../external-systems.interface';
 import { ExternalSystemsService } from '../../external-systems.service';
-import {
-    GenericMessageResponse,
-    GenericResponseWithNotValidDataWrapper,
-    GenericResponseWrapper
-} from '../../../../generic-responses';
+import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
@@ -84,12 +80,15 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
     private readonly ExternalSystemService = inject(ExternalSystemsService);
 
     public externalSystem?: ExternalSystemEntity;
-    protected iTopData: { success: boolean; data: Applications | GenericMessageResponse; } | undefined;
+    protected iTopData: {
+        success: boolean; data: Applications | GenericMessageResponse;
+    } | undefined;
     public applications: Application[] = [];
     public ignoreExternalSystem: boolean = false;
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
-    public errors: GenericResponseWithNotValidDataWrapper | null = null;
+    public errors: GenericMessageResponse | null = null;
+    public hasRootPrivileges: boolean = false;
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -116,7 +115,17 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                                 for (let application of this.iTopData.data<Application>) {
                                     this.applications.push(application);
                                 }
+                                // @ts-ignore
+                                this.hasRootPrivileges = this.iTopData.hasRootPrivileges;
+
                             }
+                            if (!this.iTopData.success) {
+                                if (this.iTopData.hasOwnProperty('error')) {
+                                    // @ts-ignore
+                                    this.errors = this.iTopData.error;
+                                }
+                            }
+
                         });
                         break;
 
@@ -151,11 +160,8 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                 if (data.success) {
                     this.hideModal();
                     this.completed.emit(true);
-                } else {
-                    this.errors = data;
                 }
             });
         }
-
     }
 }

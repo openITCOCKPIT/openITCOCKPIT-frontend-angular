@@ -41,13 +41,3 @@ export interface GenericSuccessAndMessageResponse {
     success: boolean
     message: string
 }
-
-export interface GenericResponseWithNotValidDataWrapper {
-    notValidRawData?: {
-        description: string
-        error: string
-    } | any
-    success: boolean
-    data: GenericValidationError | GenericIdResponse | GenericSuccessResponse | GenericMessageResponse | any
-    message?: string
-}

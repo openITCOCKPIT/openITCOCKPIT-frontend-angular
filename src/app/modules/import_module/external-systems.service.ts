@@ -125,6 +125,7 @@ export class ExternalSystemsService {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             applications: Applications
+            hasRootPrivileges: boolean
         }>(`${proxyPath}/import_module/imported_hostgroups/loadDataFromITop/${externalSystem.id}.json`, {
             params: {
                 angular: true
@@ -134,7 +135,8 @@ export class ExternalSystemsService {
                 // Return true on 200 Ok
                 return {
                     success: true,
-                    data: data.applications
+                    data: data.applications,
+                    hashRootPrivileges: data.hasRootPrivileges
                 };
             }),
             catchError((error: any) => {
