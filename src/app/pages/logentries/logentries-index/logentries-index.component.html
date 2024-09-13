@@ -85,7 +85,7 @@
                                         [options]="hosts"
                                         [(ngModel)]="params['filter[Host.id][]']"
                                         [searchCallback]="loadHosts"
-                                        (ngModelChange)="loadLogentries()"
+                                        (onChange)="loadLogentries()"
                                         class="flex-1">
                                     </oitc-multi-select>
                                 </c-input-group>
