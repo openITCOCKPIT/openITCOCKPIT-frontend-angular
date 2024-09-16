@@ -8,6 +8,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import {
+    LoadContainersRoot,
     LoadTimeperiodsParams,
     LoadTimeperiodsRoot,
     LoadUsersParams,
@@ -15,7 +16,6 @@ import {
     SlaPost,
     SlaPostResponse
 } from '../Slas.interface';
-import { LoadContainersRoot } from '../../../../../pages/contacts/contacts.interface';
 import { HistoryService } from '../../../../../history.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
