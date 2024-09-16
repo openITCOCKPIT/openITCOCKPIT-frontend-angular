@@ -1,12 +1,22 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { Hostgroup } from '../../../../pages/hostgroups/hostgroups.interface';
 import { ExternalSystemEntity } from '../../external-systems.interface';
+import { Container } from '../../../../pages/containers/containers.interface';
 
 
 export interface ImportedhostgroupsIndexRoot extends PaginateOrScroll {
     importedhostgroups: Importedhostgroup[]
     externalSystems: ExternalSystemEntity[]
     _csrfToken: string
+}
+
+export interface ImportedhostgroupView {
+    importedhostgroup: ImportedhostgroupGet
+    containerPath: string
+}
+
+export interface ImportedhostgroupGet {
+    ImportedHostgroup: Importedhostgroup
 }
 
 export interface Importedhostgroup {
@@ -25,7 +35,33 @@ export interface Importedhostgroup {
     allowView: boolean
     hostgroup?: Hostgroup
     external_system?: ExternalSystemEntity
+    container?: Container
+    imported_hosts?: ImportedHost[]
 }
+
+export interface ImportedHost {
+    id: number
+    importer_id: number
+    user_id: number
+    host_id: number
+    identifier: string
+    name: string
+    description: string
+    address: string
+    container_id: number
+    hosttemplate_id: number
+    satellite_id: number
+    importedfile_id: any
+    flags: number
+    created: string
+    modified: string
+    _joinData: {
+        id: number
+        importedhost_id: number
+        importedhostgroup_id: number
+    }
+}
+
 
 export interface ImportedhostgroupsIndexParams {
     angular: true,
