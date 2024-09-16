@@ -42,7 +42,7 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
     };
 
     ngOnChanges(changes: SimpleChanges): void {
-        //this is necessary to update the component if the hostgroupId was changed
+        //this is necessary to update the component if the timeperiodId was changed
         this.loadTimeperiodDetails();
     }
 

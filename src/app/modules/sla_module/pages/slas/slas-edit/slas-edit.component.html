@@ -20,16 +20,18 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add SLA') }}
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                    {{ t('Edit SLA') }}
                 </li>
             </ol>
         </nav>
 
-        <form cForm (ngSubmit)="submit()">
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
+        <form cForm (ngSubmit)="updateSla()" *ngIf="post">
             <c-card class="mb-3">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create Service Level Agreement') }}</h5>
+                    <h5 cCardTitle>{{ t('Update Service Level Agreement') }}</h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
@@ -207,6 +209,9 @@
                             </oitc-select>
                             <span cInputGroupText>
                                 @if (this.PermissionsService.hasPermission(['timeperiods', 'viewdetails'])) {
+                                    <!--<oitc-timeperiod-details-tooltip timeperiod-id="post.timeperiod_id"
+                                                                     *ngIf="post.timeperiod_id != null">
+                                    </oitc-timeperiod-details-tooltip>-->
                                     <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id"
                                                                      *ngIf="post.timeperiod_id != null"></oitc-timeperiod-details-tooltip>
                                     <fa-icon [icon]="['fas', 'clock']"
@@ -226,8 +231,8 @@
                             name="ConsiderDowntimes"
                             type="checkbox"
                             trueFalseValue
-                            [trueValue]="1"
-                            [falseValue]="0"
+                            [trueValue]="true"
+                            [falseValue]="false"
                             [(ngModel)]="post.consider_downtimes"/>
                         <label cFormCheckLabel
                                for="ConsiderDowntimes">{{ t('Consider downtimes') }}</label>
@@ -392,7 +397,7 @@
 
                     <c-dropdown direction="center" variant="btn-group" class="ms-1">
                         <button cButton color="primary" type="submit" class="ripple">
-                            {{ t('Save SLA') }}
+                            {{ t('Update SLA') }}
                         </button>
                         @if (this.PermissionsService.hasPermission(['slamodule', 'hostmappingrules', 'assignToHosts'])) {
                             <button [split]="true" cButton cDropdownToggle color="primary">
@@ -401,7 +406,7 @@
                             <ul cDropdownMenu>
                                 <li>
                                     <button cDropdownItem type="button"
-                                            (click)="submit(true)">
+                                            (click)="updateSla(true)">
                                         <fa-stack>
                                             <fa-icon [icon]="['fas', 'desktop']"
                                                      stackItemSize="1x"></fa-icon>
@@ -409,7 +414,7 @@
                                                      stackItemSize="1x"
                                                      transform="shrink-8 right-3 down-7"></fa-icon>
                                         </fa-stack>
-                                        {{ t('Save and go to host assignments') }}
+                                        {{ t('Update and go to host assignments') }}
                                     </button>
                                 </li>
                             </ul>

@@ -3,7 +3,6 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -12,7 +11,7 @@ import {
     LoadTimeperiodsRoot,
     LoadUsersParams,
     LoadUsersRoot,
-    SlaPost,
+    Sla,
     SlaPostResponse
 } from '../Slas.interface';
 import { LoadContainersRoot } from '../../../../../pages/contacts/contacts.interface';
@@ -22,6 +21,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { SlasReportFormatEnum } from '../slas.enum';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -43,21 +43,22 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
+import { FormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule } from '@angular/forms';
 import {
     TimeperiodDetailsTooltipComponent
 } from '../../../components/timeperiod-details-tooltip/timeperiod-details-tooltip.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
-    selector: 'oitc-slas-add',
+    selector: 'oitc-slas-edit',
     standalone: true,
     imports: [
         TranslocoDirective,
@@ -98,11 +99,12 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
         FaStackComponent,
         FaStackItemSizeDirective,
         PermissionDirective,
+        FormLoaderComponent,
     ],
-    templateUrl: './slas-add.component.html',
-    styleUrl: './slas-add.component.css',
+    templateUrl: './slas-edit.component.html',
+    styleUrl: './slas-edit.component.css',
 })
-export class SlasAddComponent implements OnInit, OnDestroy {
+export class SlasEditComponent implements OnInit, OnDestroy {
 
     private readonly SlasService: SlasService = inject(SlasService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -115,7 +117,8 @@ export class SlasAddComponent implements OnInit, OnDestroy {
 
     public readonly route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
-    public post: SlaPost = {} as SlaPost;
+    public post!: Sla;
+    protected slaId: number = 0;
     protected createAnother: boolean = false;
     protected containers: SelectKeyValue[] = [];
     protected users: SelectKeyValue[] = [];
@@ -153,46 +156,42 @@ export class SlasAddComponent implements OnInit, OnDestroy {
         zip: 1 << 2
     };
 
-    constructor() {
-        this.post = this.getDefaultPost();
-    }
-
-    private getDefaultPost(): SlaPost {
-        return {
-            container_id: null,
-            timeperiod_id: null,
-            name: '',
-            description: '',
-            minimal_availability: null,
-            warning_threshold: null,
-            start_date: null,
-            evaluation_interval: 'MONTH',
-            consider_downtimes: 1,
-            hard_state_only: 0,
-            report_send_interval: 'MONTH',
-            report_format: 0,
-            report_evaluation: 2,
-            users: {
-                _ids: []
-            }
-        };
-    }
-
     public ngOnInit() {
-        this.loadContainers();
+        //this.loadContainers();
+        this.slaId = Number(this.route.snapshot.paramMap.get('id'));
+        this.subscriptions.add(this.SlasService.getEdit(this.slaId)
+            .subscribe((result) => {
+                this.post = result.sla;
+                this.send_zip = this.post.report_format & this.filetypes.zip;
+                if (this.post.report_format & this.filetypes.pdf) {
+                    this.files.push(this.filetypes.pdf);
+                }
+                if (this.post.report_format & this.filetypes.csv) {
+                    this.files.push(this.filetypes.csv);
+                }
+                if (this.post.start_date) {
+                    this.post.start_date = String(new Date(this.post.start_date));
+                }
+
+                this.loadContainers();
+                this.loadTimeperiods();
+                this.loadUsers();
+                this.onReportSendInterval();
+                this.onSendZipOrFileChange();
+            }));
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    public submit(redirectToHostMappingRules: boolean = false): void {
-        this.subscriptions.add(this.SlasService.add(this.post)
+    public updateSla(redirectToHostMappingRules: boolean = false): void {
+        this.subscriptions.add(this.SlasService.updateSla(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as SlaPostResponse;
                     const title = this.TranslocoService.translate('SLA');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const msg = this.TranslocoService.translate('updated successfully');
                     const url = ['sla_module', 'slas', 'edit', response.sla.id];
 
                     this.notyService.genericSuccess(msg, title, url);

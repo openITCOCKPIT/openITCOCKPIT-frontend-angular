@@ -7,6 +7,11 @@ export interface SlasIndexRoot extends PaginateOrScroll {
     _csrfToken: any
 }
 
+export interface SlasEditRoot {
+    sla: Sla
+    _csrfToken: string;
+}
+
 export interface SlasIndexParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
@@ -57,6 +62,7 @@ export interface Sla {
     allowEdit: boolean
     status_percent?: number
     fulfill: boolean
+    users: Users
 }
 
 export interface Timeperiod {
@@ -69,20 +75,25 @@ export interface Timeperiod {
  ***************************/
 
 export interface SlaPost {
+    id?: number
     container_id: null | number
     timeperiod_id: null | number
     name: string
     description: string
-    minimal_availability: null | string
-    warning_threshold: null | string
-    start_date: null | string
+    minimal_availability: null | string | number
+    warning_threshold: null | string | number
+    start_date?: null | string
     evaluation_interval: string
-    consider_downtimes: number
+    consider_downtimes: number | boolean
     hard_state_only: number
     report_send_interval: string
     report_format: number
     report_evaluation: number
+    last_send_date?: string
+    created?: string
+    modified?: string
     users: Users
+    allowEdit?: boolean
 }
 
 export interface Users {
@@ -114,7 +125,7 @@ export interface LoadTimeperiodsParams {
 }
 
 
-export interface SlaAddResponse extends GenericIdResponse {
+export interface SlaPostResponse extends GenericIdResponse {
     sla: Sla
 }
 
