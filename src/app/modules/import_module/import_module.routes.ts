@@ -9,5 +9,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/ImportedHostgroups/view/:id',
     loadComponent: () => import('./pages/importedhostgroups/imported-hostgroups-view/imported-hostgroups-view.component').then(m => m.ImportedHostgroupsViewComponent)
+}, {
+    path: 'import_module/import_changelogs/entity/:type/:id',
+    loadComponent: () => import('./pages/importchangelogs/import-changelogs-entity/import-changelogs-entity.component').then(m => m.ImportChangelogsEntityComponent)
 }
 ];

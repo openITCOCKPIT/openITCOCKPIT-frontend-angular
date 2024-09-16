@@ -1,9 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,76 +18,78 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/changelogs-entry/changelogs-entry.component';
+import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityParams } from '../changelogs.interface';
-import { Subscription } from 'rxjs';
-import { ChangelogsService } from '../changelogs.service';
-import { ObjectTypesEnum } from '../object-types.enum';
-import { DatePipe, DecimalPipe, formatDate, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
+import { ChangelogIndexRoot } from '../../../../../pages/changelogs/changelogs.interface';
+import { Subscription } from 'rxjs';
+import { ImportChangelogsService } from '../importchangelogs.service';
+import { ImportObjectTypesEnum } from '../import-object-types.enum';
+import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } from '../importchangelogs.interface';
 
 @Component({
-    selector: 'oitc-changelogs-entity',
+    selector: 'oitc-import-changelogs-entity',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        TranslocoDirective,
-        RouterLink,
-        FaIconComponent,
-        PermissionDirective,
+        BackButtonDirective,
+        CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
-        NavComponent,
-        NavItemComponent,
         CardTitleDirective,
-        XsButtonDirective,
-        CardBodyComponent,
+        ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        RowComponent,
+        CoreuiComponent,
         DebounceDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
+        FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        DatePipe,
-        NgIf,
-        JsonPipe,
-        DecimalPipe,
-        PaginateOrScrollComponent,
-        ChangelogsEntryComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
         NgForOf,
-        BackButtonDirective,
-        NoRecordsComponent
+        NgIf,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink
     ],
-    templateUrl: './changelogs-entity.component.html',
-    styleUrl: './changelogs-entity.component.css'
+    templateUrl: './import-changelogs-entity.component.html',
+    styleUrl: './import-changelogs-entity.component.css'
 })
-export class ChangelogsEntityComponent implements OnInit, OnDestroy {
+export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
     public hideFilter: boolean = true;
-    public params: ChangelogsEntityParams = getDefaultChangelogsEntityParams();
+    public params: ImportChangelogsEntityParams = getDefaultImportChangelogsEntityParams();
     private subscriptions: Subscription = new Subscription();
-    private ChangelogsService = inject(ChangelogsService)
+    private ImportChangelogsService = inject(ImportChangelogsService)
     public changes?: ChangelogIndexRoot;
     public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
-    protected readonly ObjectTypesEnum = ObjectTypesEnum;
+    protected readonly ImportObjectTypesEnum = ImportObjectTypesEnum;
 
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -102,10 +100,7 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
         Action: {
             add: true,
             edit: true,
-            copy: true,
-            delete: true,
-            activate: true,
-            deactivate: true
+            delete: true
         }
     }
 
@@ -127,7 +122,7 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
 
         if (id && this.entityType) {
             this.params['filter[Changelogs.object_id]'] = id;
-            this.params['filter[Changelogs.objecttype_id]'] = [ObjectTypesEnum[this.entityType as keyof typeof ObjectTypesEnum]];
+            this.params['filter[Changelogs.objecttype_id]'] = [ImportObjectTypesEnum[this.entityType as keyof typeof ImportObjectTypesEnum]];
 
             this.params['filter[Changelogs.action][]'] = [];
 
@@ -140,7 +135,7 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
             this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
             this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-            this.subscriptions.add(this.ChangelogsService.getEntity(this.params)
+            this.subscriptions.add(this.ImportChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
                 })
@@ -153,17 +148,14 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     }
 
     public resetFilter() {
-        this.params = getDefaultChangelogsEntityParams();
+        this.params = getDefaultImportChangelogsEntityParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
             Action: {
                 add: true,
                 edit: true,
-                copy: true,
-                delete: true,
-                activate: true,
-                deactivate: true
+                delete: true
             }
         }
         this.loadChanges();
