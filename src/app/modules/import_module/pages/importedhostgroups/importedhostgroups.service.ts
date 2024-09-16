@@ -4,8 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     Importedhostgroup,
+    ImportedhostgroupGet,
     ImportedhostgroupsIndexParams,
-    ImportedhostgroupsIndexRoot
+    ImportedhostgroupsIndexRoot,
+    ImportedhostgroupView
 } from './importedhostgroups.interface';
 import { GenericSuccessAndMessageResponse } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -64,5 +66,17 @@ export class ImportedhostgroupsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/imported_hostgroups/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public getView(id: number): Observable<ImportedhostgroupView> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            importedhostgroup: ImportedhostgroupGet
+            containerPath: string
+        }>(`${proxyPath}/import_module/imported_hostgroups/view/${id}.json?angular=true`).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

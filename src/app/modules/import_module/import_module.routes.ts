@@ -6,5 +6,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/ImportedHostgroups/index',
     loadComponent: () => import('./pages/importedhostgroups/imported-hostgroups-index/imported-hostgroups-index.component').then(m => m.ImportedHostgroupsIndexComponent)
+}, {
+    path: 'import_module/ImportedHostgroups/view/:id',
+    loadComponent: () => import('./pages/importedhostgroups/imported-hostgroups-view/imported-hostgroups-view.component').then(m => m.ImportedHostgroupsViewComponent)
 }
 ];

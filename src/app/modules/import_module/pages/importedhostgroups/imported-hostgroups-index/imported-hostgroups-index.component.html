@@ -235,7 +235,7 @@
                             @if (importedhostgroup.imported === 1) {
                                 <c-badge color="info" *oitcPermission="['hostgroups', 'edit']"
                                          [routerLink]="['/', 'hostgroups', 'edit', importedhostgroup.hostgroup_id]"
-                                         class="pointer">
+                                         class="cursor-pointer">
                                     <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                     {{ t('In monitoring') }}
                                 </c-badge>
@@ -253,10 +253,10 @@
                         <td class="width-50">
                             <oitc-actions-button [permission]="'ImportModule.importedhostgroups.view'"
                                                  [icon]="['fas', 'eye']"
-                                                 [url]="'/importedhostgroups/view/' + importedhostgroup.id">
+                                                 [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
                                 <oitc-actions-button-element [permission]="'ImportModule.importedhostgroups.view'"
                                                              *ngIf="importedhostgroup.allowView"
-                                                             [url]="'/import_module/view/' + importedhostgroup.id">
+                                                             [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
                                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                     {{ t('View') }}
                                 </oitc-actions-button-element>
