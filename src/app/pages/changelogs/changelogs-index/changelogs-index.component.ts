@@ -155,6 +155,8 @@ export class ChangelogsIndexComponent {
 
     public resetFilter() {
         this.params = getDefaultChangelogsIndexParams();
+        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
             Models: {
                 Command: true,
