@@ -9,6 +9,7 @@ import {
     LoadUsersParams,
     LoadUsersRoot,
     SlaPost,
+    SlasEditRoot,
     SlasIndexParams,
     SlasIndexRoot
 } from './Slas.interface';
@@ -73,6 +74,36 @@ export class SlasService {
     public add(sla: SlaPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/sla_module/slas/add.json?angular=true`, sla)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<SlasEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasEditRoot>(`${proxyPath}/sla_module/slas/edit/${id}.json?angular=true`).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public updateSla(sla: SlaPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/sla_module/slas/edit/${sla.id}.json?angular=true`, sla)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

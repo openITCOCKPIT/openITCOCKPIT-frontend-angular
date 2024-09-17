@@ -248,15 +248,15 @@
                         </td>
                         <td class="width-50">
                             <oitc-actions-button *ngIf="sla.allowEdit"
-                                                 [permission]="'slamodules.slas.edit'"
-                                                 [url]="'/sla_modules/slas/edit/' + sla.id">
+                                                 [permission]="'slamodule.slas.edit'"
+                                                 [url]="'/sla_module/slas/edit/' + sla.id">
                                 <oitc-actions-button-element *ngIf="sla.allowEdit" [permission]="'slamodule.slas.edit'"
-                                                             [url]="'/sla_modules/slas/edit/' + sla.id">
+                                                             [url]="'/sla_module/slas/edit/' + sla.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'slamodule.slas.viewdetails'"
-                                                             [url]="'/sla_modules/slas/viewDetails/' + sla.id">
+                                                             [url]="'/sla_module/slas/viewDetails/' + sla.id">
                                     <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
                                     {{ t('View details') }}
                                 </oitc-actions-button-element>
