@@ -1,19 +1,27 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import {
+    ButtonGroupComponent,
+    ButtonToolbarComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective
+    CardTitleDirective,
+    ColComponent,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,8 +35,58 @@ import {
 } from '../services-browser-menu/services-browser-menu.component';
 import { ServicesBrowserChartComponent } from './services-browser-chart/services-browser-chart.component';
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
-import { ServiceBrowserResult } from '../services.interface';
+import { MergedService, ServiceBrowserResult, ServiceBrowserSlaOverview } from '../services.interface';
 import { SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { ServiceBrowserTabs } from '../services.enum';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
+import { ServiceStatusNamePipe } from '../../../pipes/service-status-name.pipe';
+import { HostObjectCake2 } from '../../hosts/hosts.interface';
+import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import {
+    ExternalCommandsService,
+    ServiceNotifcationItem,
+    ServiceProcessCheckResultItem,
+    ServiceResetItem
+} from '../../../services/external-commands.service';
+import { CancelAllItem } from '../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime.interface';
+import { DeleteAcknowledgementItem } from '../../acknowledgements/acknowledgement.interface';
+import { DowntimeObject } from '../../downtimes/downtimes.interface';
+import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN } from '../../../tokens/delete-acknowledgement-injection.token';
+import { DowntimesService } from '../../downtimes/downtimes.service';
+import { AcknowledgementsService } from '../../acknowledgements/acknowledgements.service';
+import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
+import {
+    ServiceAcknowledgeModalComponent
+} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import {
+    ServiceMaintenanceModalComponent
+} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import {
+    ServiceResetChecktimeModalComponent
+} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import {
+    HostsDisableFlapdetectionModalComponent
+} from '../../../components/hosts/hosts-disable-flapdetection-modal/hosts-disable-flapdetection-modal.component';
+import {
+    HostsEnableFlapdetectionModalComponent
+} from '../../../components/hosts/hosts-enable-flapdetection-modal/hosts-enable-flapdetection-modal.component';
+import {
+    HostsSendCustomNotificationModalComponent
+} from '../../../components/hosts/hosts-send-custom-notification-modal/hosts-send-custom-notification-modal.component';
+import {
+    DeleteAcknowledgementsModalComponent
+} from '../../../layouts/coreui/delete-acknowledgements-modal/delete-acknowledgements-modal.component';
+import {
+    ServicesProcessCheckresultModalComponent
+} from '../../../components/services/services-process-checkresult-modal/services-process-checkresult-modal.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -46,10 +104,40 @@ import { SelectKeyValueString } from '../../../layouts/primeng/select.interface'
         QueryHandlerCheckerComponent,
         TranslocoDirective,
         ServicesBrowserMenuComponent,
-        ServicesBrowserChartComponent
+        ServicesBrowserChartComponent,
+        BackButtonDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        PermissionDirective,
+        NgClass,
+        ButtonGroupComponent,
+        ButtonToolbarComponent,
+        ColComponent,
+        HostStatusNamePipe,
+        RowComponent,
+        TranslocoPipe,
+        ServiceStatusNamePipe,
+        TooltipDirective,
+        DeleteAllModalComponent,
+        DisableModalComponent,
+        EnableModalComponent,
+        ServiceAcknowledgeModalComponent,
+        ServiceMaintenanceModalComponent,
+        ServiceResetChecktimeModalComponent,
+        HostsDisableFlapdetectionModalComponent,
+        HostsEnableFlapdetectionModalComponent,
+        HostsSendCustomNotificationModalComponent,
+        DeleteAcknowledgementsModalComponent,
+        ServicesProcessCheckresultModalComponent
     ],
     templateUrl: './services-browser.component.html',
-    styleUrl: './services-browser.component.css'
+    styleUrl: './services-browser.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
+        {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
+    ]
 })
 export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
@@ -62,18 +150,31 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public lastUpdated: Date = new Date(); // Used to tell child components to reload data
     public availableDataSources: SelectKeyValueString[] = []; // The API result is not as good
 
+    public selectedTab: ServiceBrowserTabs = ServiceBrowserTabs.StatusInformation;
+    public selectedItems: any[] = [];
+
     public priorityClasses: string[] = ['ok-soft', 'ok', 'warning', 'critical-soft', 'critical'];
     public priorities: string[] = [];
     public tags: string[] = [];
+
+    public CustomalertsExists: boolean = false;
+
+    public SlaOverview: false | ServiceBrowserSlaOverview = false;
 
     private subscriptions: Subscription = new Subscription();
     private readonly HostsService = inject(HostsService);
     private readonly ServicesService = inject(ServicesService);
     private readonly notyService = inject(NotyService);
     private readonly TimezoneService = inject(TimezoneService);
+    public readonly PermissionsService = inject(PermissionsService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly ExternalCommandsService = inject(ExternalCommandsService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly modalService = inject(ModalService);
+    private readonly DowntimesService = inject(DowntimesService);
+    private readonly AcknowledgementsService = inject(AcknowledgementsService);
 
     constructor() {
     }
@@ -95,6 +196,13 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.id = Number(idOrUuid);
             this.loadService();
         }
+
+        this.route.queryParams.subscribe(params => {
+            let selectedTab = params['selectedTab'] || undefined;
+            if (selectedTab) {
+                this.changeTab(selectedTab);
+            }
+        });
     }
 
     public ngOnDestroy(): void {
@@ -149,13 +257,264 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     }
 
     public loadCustomalerts() {
-        console.log("TODO: Implement loadCustomalerts")
+        if (this.result?.mergedService && this.result.mergedService.id) {
+            this.subscriptions.add(this.ServicesService.loadCustomAlertExists(this.result.mergedService.id).subscribe((result) => {
+                this.CustomalertsExists = result;
+            }));
+        }
     }
 
     public loadSlaInformation() {
-        console.log("TODO: Implement loadSlaInformation")
+        if (this.result?.mergedService && this.result.mergedService.id) {
+            this.subscriptions.add(this.ServicesService.loadSlaInformation(this.result.mergedService.id).subscribe((result) => {
+                this.SlaOverview = result;
+            }));
+        }
+    }
+
+    public changeTab(newTab: ServiceBrowserTabs): void {
+        this.selectedTab = newTab;
+    }
+
+    public onMassActionComplete(success: boolean) {
+        if (success) {
+            this.loadService();
+        }
+    }
+
+    public resetChecktime(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const commands: ServiceResetItem[] = [
+            {
+                command: ExternalCommandsEnum.rescheduleService,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid),
+                satelliteId: Number(host.Host.satelliteId)
+            }
+        ];
+
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Reschedule');
+                this.notyService.genericSuccess(result.message, title);
+            } else {
+                this.notyService.genericError();
+            }
+        }));
+
+        setTimeout(() => {
+            this.loadService()
+        }, 5000);
+    }
+
+    public toggleDowntimeModal(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        if (this.result) {
+            this.selectedItems.push({
+                command: ExternalCommandsEnum.submitServiceDowntime,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid),
+                start: 0,
+                end: 0,
+                author: this.result.username,
+                comment: '',
+            });
+
+            this.modalService.toggle({
+                show: true,
+                id: 'serviceMaintenanceModal',
+            });
+        }
+    }
+
+    public acknowledgeStatus(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        if (this.result) {
+            this.selectedItems.push({
+                command: ExternalCommandsEnum.submitServicestateAck,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid),
+                sticky: 0,
+                notify: false,
+                author: this.result.username,
+                comment: '',
+            });
+
+            this.modalService.toggle({
+                show: true,
+                id: 'serviceAcknowledgeModal',
+            });
+        }
+
+        setTimeout(() => {
+            this.loadService()
+        }, 5000);
+    }
+
+    public enableNotifications(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const commands: ServiceNotifcationItem[] = [
+            {
+                command: ExternalCommandsEnum.submitEnableServiceNotifications,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid)
+            }
+        ];
+
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Enable Notifications');
+                this.notyService.genericSuccess(result.message, title);
+            } else {
+                this.notyService.genericError();
+            }
+        }));
+
+        setTimeout(() => {
+            this.loadService()
+        }, 5000);
+    }
+
+    public disableNotifications(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const commands: ServiceNotifcationItem[] = [
+            {
+                command: ExternalCommandsEnum.submitDisableServiceNotifications,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid)
+            }
+        ];
+
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Disable Notifications');
+                this.notyService.genericSuccess(result.message, title);
+            } else {
+                this.notyService.genericError();
+            }
+        }));
+
+        setTimeout(() => {
+            this.loadService()
+        }, 5000);
+    }
+
+    public processCheckResult(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const item: ServiceProcessCheckResultItem = {
+            command: ExternalCommandsEnum.commitPassiveServiceResult,
+            maxCheckAttempts: Number(service.max_check_attempts),
+            hostUuid: String(host.Host.uuid),
+            serviceUuid: String(service.uuid),
+            status_code: 0, // Will be overwritten with the modals default value
+            plugin_output: '', // Will be overwritten with the modals default value
+            forceHardstate: false, // Will be overwritten with the modals default value
+            long_output: ''
+        };
+
+        this.selectedItems.push(item);
+
+        this.modalService.toggle({
+            show: true,
+            id: 'serviceProcessCheckresultModal',
+        });
+    }
+
+    public enableFlapdetection(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        this.selectedItems.push({
+            command: ExternalCommandsEnum.enableOrDisableServiceFlapdetection,
+            hostUuid: String(host.Host.uuid),
+            serviceUuid: String(service.uuid),
+            condition: 1
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostEnableFlapdetectionModal',
+        });
+    }
+
+    public disableFlapdetection(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        this.selectedItems.push({
+            command: ExternalCommandsEnum.enableOrDisableServiceFlapdetection,
+            hostUuid: String(host.Host.uuid),
+            serviceUuid: String(service.uuid),
+            condition: 0
+        });
+
+        this.modalService.toggle({
+            show: true,
+            id: 'hostDisableFlapdetectionModal',
+        });
+    }
+
+    public sendCustomNotification(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        if (this.result) {
+            this.selectedItems.push({
+                command: ExternalCommandsEnum.sendCustomServiceNotification,
+                hostUuid: String(host.Host.uuid),
+                serviceUuid: String(service.uuid),
+                options: 0, // will be overwritten by modal
+                comment: '', // will be overwritten by modal
+                author: this.result.username,
+            });
+
+            this.modalService.toggle({
+                show: true,
+                id: 'hostSendCustomNotificationModal',
+            });
+        }
+    }
+
+    public toggleCancelDowntimeModal(serviceDowntime: DowntimeObject) {
+        this.selectedItems = [];
+
+        const item: CancelAllItem[] = [{
+            id: serviceDowntime.internalDowntimeId
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'cancelAllModal',
+        });
+    }
+
+    public toggleDeleteAcknowledgementModal(service: MergedService, host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const item: DeleteAcknowledgementItem[] = [{
+            displayName: `${host.Host.name}/${service.name}`,
+            hostId: Number(host.Host.id),
+            serviceId: Number(service.id)
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAcknowledgements',
+        });
     }
 
     protected readonly String = String;
     protected readonly Number = Number;
+    protected readonly ServiceBrowserTabs = ServiceBrowserTabs;
 }

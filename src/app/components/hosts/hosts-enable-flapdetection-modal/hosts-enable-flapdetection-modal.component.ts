@@ -20,10 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    EnableOrDisableHostFlapDetectionItem,
-    ExternalCommandsService
-} from '../../../services/external-commands.service';
+import { EnableOrDisableFlapDetectionItem, ExternalCommandsService } from '../../../services/external-commands.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 
@@ -55,7 +52,7 @@ import { Subscription } from 'rxjs';
     styleUrl: './hosts-enable-flapdetection-modal.component.css'
 })
 export class HostsEnableFlapdetectionModalComponent implements OnInit, OnDestroy {
-    @Input({required: true}) public items: EnableOrDisableHostFlapDetectionItem[] = [];
+    @Input({required: true}) public items: EnableOrDisableFlapDetectionItem[] = [];
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public isSend: boolean = false;

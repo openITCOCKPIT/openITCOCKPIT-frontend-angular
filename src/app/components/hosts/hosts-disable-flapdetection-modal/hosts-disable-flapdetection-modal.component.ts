@@ -1,8 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import {
-    EnableOrDisableHostFlapDetectionItem,
-    ExternalCommandsService
-} from '../../../services/external-commands.service';
+import { EnableOrDisableFlapDetectionItem, ExternalCommandsService } from '../../../services/external-commands.service';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -45,7 +42,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     styleUrl: './hosts-disable-flapdetection-modal.component.css'
 })
 export class HostsDisableFlapdetectionModalComponent implements OnInit, OnDestroy {
-    @Input({required: true}) public items: EnableOrDisableHostFlapDetectionItem[] = [];
+    @Input({required: true}) public items: EnableOrDisableFlapDetectionItem[] = [];
     @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
     public hasErrors: boolean = false;
     public isSend: boolean = false;

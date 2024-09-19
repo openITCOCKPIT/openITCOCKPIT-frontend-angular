@@ -32,6 +32,7 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceBrowserMenu,
     ServiceBrowserResult,
+    ServiceBrowserSlaOverview,
     ServiceCommandArgument,
     ServiceCopyGet,
     ServiceCopyPost,
@@ -459,6 +460,40 @@ export class ServicesService {
             .pipe(
                 map(data => {
                     return data;
+                })
+            )
+    }
+
+    public loadSlaInformation(id: number): Observable<false | ServiceBrowserSlaOverview> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{
+                slaOverview: false | ServiceBrowserSlaOverview
+            }>(`${proxyPath}/services/loadSlaInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id,
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.slaOverview;
+                })
+            )
+    }
+
+    public loadCustomAlertExists(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ CustomalertsExists: boolean }>(`${proxyPath}/services/loadCustomalerts/.json`, {
+                params: {
+                    angular: true,
+                    id: id,
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.CustomalertsExists;
                 })
             )
     }

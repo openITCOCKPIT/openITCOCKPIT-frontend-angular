@@ -8,7 +8,11 @@
         <c-modal-header class="text-bg-gray">
             <h5 cModalTitle>
                 <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                {{ t('Disable host flap detection') }}
+                @if (items[0] && items[0].hasOwnProperty('serviceUuid')) {
+                    {{ t('Disable service flap detection') }}
+                } @else {
+                    {{ t('Disable host flap detection') }}
+                }
             </h5>
             <button (click)="hideModal()" cButtonClose></button>
         </c-modal-header>

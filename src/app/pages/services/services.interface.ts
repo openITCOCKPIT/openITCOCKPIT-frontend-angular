@@ -1,4 +1,11 @@
-import { HostEntity, HostObject, HostObjectCake2, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import {
+    HostBrowserSlaOverview,
+    HostEntity,
+    HostObject,
+    HostObjectCake2,
+    HostOrServiceType,
+    HoststatusObject
+} from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -347,8 +354,8 @@ export interface ServicestatusObject {
     isFlapping?: boolean
     problemHasBeenAcknowledged?: boolean
     scheduledDowntimeDepth?: number
-    lastCheck?: string
-    nextCheck?: string
+    lastCheck?: string // "5 minutes ago"
+    nextCheck?: string // "1 hour, 54 minutes"
     activeChecksEnabled?: number
     lastHardStateChange?: string
     last_state_change?: string
@@ -366,14 +373,19 @@ export interface ServicestatusObject {
     last_time_ok?: string
     lastHardStateChangeInWords?: string
     last_state_change_in_words?: string
-    lastCheckInWords?: string
-    nextCheckInWords?: string
+    lastCheckInWords?: string // "5 minutes ago"
+    nextCheckInWords?: string // "1 hour, 54 minutes"
     isHardstate?: boolean
     isInMonitoring?: boolean
-    humanState?: string
-    cssClass?: string
-    textClass?: string
+    humanState?: string // "ok"
+    cssClass?: string // "bg-ok"
+    textClass?: string // "ok"
     outputHtml?: string
+    longOutputHtml?: string
+    lastHardStateChangeUser?: string, // "09:31:53 - 11.07.2024"
+    last_state_change_user?: string, // "09:31:53 - 11.07.2024"
+    lastCheckUser?: string, // "09:31:53 - 11.07.2024"
+    nextCheckUser?: string, // "09:31:53 - 11.07.2024"
 }
 
 /**********************
@@ -767,5 +779,11 @@ export interface ServiceBrowserResult {
         Maps: GenericIdAndName[],
     },
     usageFlag: number
+    username: string
     _csrfToken: string
+}
+
+// Both are the same
+export interface ServiceBrowserSlaOverview extends HostBrowserSlaOverview {
+
 }

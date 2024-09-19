@@ -12,14 +12,240 @@
         <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
         <c-card class="mb-3 mt-3" *ngIf="result">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Host:') }}
+                <h5 cCardTitle>{{ t('Service') }}:
                     <small class="fw-300">
-                        Display Hostname and Servicename
+                        {{ result.host.Host.name }} / {{ result.mergedService.name }}
                     </small>
                 </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadService()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.StatusInformation}"
+                            (click)="changeTab(ServiceBrowserTabs.StatusInformation)">
+                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                            {{ t('Status information') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceInformation}"
+                            (click)="changeTab(ServiceBrowserTabs.ServiceInformation)">
+                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                            {{ t('Service information') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            *oitcPermission="['hosts', 'timeline']" class="nav-link"
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.Timeline}"
+                            (click)="changeTab(ServiceBrowserTabs.Timeline)">
+                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                            {{ t('Timeline') }}
+                        </button>
+                    </c-nav-item>
+
+                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceNow}"
+                                (click)="changeTab(ServiceBrowserTabs.ServiceNow)">
+                                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                                {{ t('ServiceNow') }}
+                            </button>
+                        </c-nav-item>
+                    }
+
+                    @if (PermissionsService.hasModule('CustomalertModule') && CustomalertsExists) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == ServiceBrowserTabs.CustomAlerts}"
+                                (click)="changeTab(ServiceBrowserTabs.CustomAlerts)">
+                                <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+                                {{ t('Custom alerts') }}
+                            </button>
+                        </c-nav-item>
+                    }
+
+                    @if (PermissionsService.hasModule('SLAModule') && SlaOverview) {
+                        <c-nav-item>
+                            @if (SlaOverview.state === 'not_available') {
+                                <button
+                                    class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
+                                    (click)="changeTab(ServiceBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                    </span> {{ t('Not available') }}
+                                </button>
+                            } @else {
+                                <button
+                                    class="btn btn-labeled btn-xs btn-w-m ripple"
+                                    [ngClass]="'btn-'+SlaOverview.state"
+                                    (click)="changeTab(ServiceBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'check']"
+                                                 *ngIf="SlaOverview.state == 'success'"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                 *ngIf="SlaOverview.state == 'warning'"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'bolt']"
+                                                 *ngIf="SlaOverview.state == 'danger'"></fa-icon>
+                                    </span> {{ SlaOverview.determined_availability_percent }} %
+                                </button>
+                            }
+
+                        </c-nav-item>
+                    }
+
+                </c-nav>
+
             </c-card-header>
             <c-card-body>
-                <p>service-browser works!</p>
+
+                <!-- Status information start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.StatusInformation">
+
+                    <!-- Status for small resolution (mobile) -->
+                    <div class="d-md-none p-2 text-white" [ngClass]="result.servicestatus.cssClass">
+                        <c-row>
+                            <c-col [xs]="6">
+                                {{ 'State' }}
+                            </c-col>
+                            <c-col [xs]="6">
+                                {{ result.servicestatus.currentState | serviceStatusName }}
+                            </c-col>
+                        </c-row>
+
+                        <c-row *ngIf="result.servicestatus.isInMonitoring">
+                            <c-col [xs]="6">
+                                {{ 'State since' }}
+                            </c-col>
+                            <c-col [xs]="6" [title]="result.servicestatus.last_state_change_user">
+                                {{ result.servicestatus.last_state_change }}
+                            </c-col>
+
+                            <c-col [xs]="6">
+                                {{ 'Last check' }}
+                            </c-col>
+                            <c-col [xs]="6" [title]="result.servicestatus.lastCheckUser">
+                                {{ result.servicestatus.lastCheck }}
+                            </c-col>
+
+                            <c-col [xs]="6">
+                                {{ 'Next check' }}
+                            </c-col>
+                            @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
+                                <c-col [xs]="6" [title]="result.servicestatus.nextCheckUser">
+                                    {{ result.servicestatus.nextCheck }}
+                                </c-col>
+                            } @else {
+                                <c-col [xs]="6">
+                                    {{ t('n/a') }}
+                                </c-col>
+                            }
+
+                            <c-col [xs]="6">
+                                {{ 'State type' }}
+                            </c-col>
+                            <c-col [xs]="6">
+                                @if (result.servicestatus.isHardstate) {
+                                    {{ t('Hard state') }}
+                                } @else {
+                                    {{ t('Soft state') }}
+                                }
+                                ({{ result.servicestatus.current_check_attempt }}
+                                /{{ result.servicestatus.max_check_attempts }})
+                            </c-col>
+
+                        </c-row>
+
+                        <!-- External Commands Mobile View -->
+                        <c-row
+                            *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring">
+                            <c-button-toolbar role="group" class="justify-content-center pt-2">
+                                <c-button-group role="group">
+                                    <button cButton color="default"
+                                            [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
+                                            (click)="resetChecktime(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default"
+                                            [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
+                                            (click)="toggleDowntimeModal(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default"
+                                            *ngIf="Number(result.servicestatus.currentState) > 0"
+                                            [cTooltip]="'Acknowledge host status' | transloco" cTooltipPlacement="top"
+                                            (click)="acknowledgeStatus(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default"
+                                            [cTooltip]="'Passive transfer check result' | transloco"
+                                            cTooltipPlacement="top"
+                                            (click)="processCheckResult(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="!result.servicestatus.flap_detection_enabled"
+                                            [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
+                                            (click)="enableFlapdetection(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="result.servicestatus.flap_detection_enabled"
+                                            [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
+                                            (click)="disableFlapdetection(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="!result.servicestatus.notifications_enabled"
+                                            [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
+                                            (click)="enableNotifications(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </button>
+
+                                    <button cButton color="default" *ngIf="result.servicestatus.notifications_enabled"
+                                            [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
+                                            (click)="disableNotifications(result.mergedService, result.host)">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </button>
+
+                                </c-button-group>
+                            </c-button-toolbar>
+                        </c-row>
+
+
+                    </div>
+                    <!-- End of mobile status view -->
+
+                </div>
+                <!-- Status information end -->
+
 
             </c-card-body>
             <c-card-footer>
@@ -37,3 +263,28 @@
     </ng-container>
 </oitc-coreui>
 
+<oitc-service-reset-checktime-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
+
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+<oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-maintenance-modal>
+<oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-acknowledge-modal>
+
+<oitc-services-process-checkresult-modal [items]="selectedItems"
+                                         (completed)="onMassActionComplete($event)"></oitc-services-process-checkresult-modal>
+
+<oitc-hosts-enable-flapdetection-modal [items]="selectedItems"
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-flapdetection-modal>
+
+<oitc-hosts-disable-flapdetection-modal [items]="selectedItems"
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>
+
+<oitc-hosts-send-custom-notification-modal [items]="selectedItems"
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
+
+<oitc-delete-acknowledgements-modal [items]="selectedItems"
+                                    (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
