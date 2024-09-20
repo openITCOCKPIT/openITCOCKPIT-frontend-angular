@@ -13,6 +13,9 @@ import {
     CardTextDirective,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     ModalService,
     NavComponent,
     NavItemComponent,
@@ -110,6 +113,9 @@ import {
 import {
     ServiceTimelineLegendComponent
 } from '../../../components/timeline/service-timeline-legend/service-timeline-legend.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormsModule } from '@angular/forms';
+import { GenericUnixtimerange } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -169,7 +175,12 @@ import {
         BrowserTimelineComponent,
         HostTimelineLegendComponent,
         ServicenowHostBrowserTabComponent,
-        ServiceTimelineLegendComponent
+        ServiceTimelineLegendComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormsModule
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
@@ -191,6 +202,10 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
     public selectedTab: ServiceBrowserTabs = ServiceBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
+
+    public syncTimelineAndGraphTimestamps: boolean = false;
+    private timelineTimerange: GenericUnixtimerange = {start: 0, end: 0};
+    private graphTimerange: GenericUnixtimerange = {start: 0, end: 0};
 
     public priorityClasses: string[] = ['ok-soft', 'ok', 'warning', 'critical-soft', 'critical'];
     public priorities: string[] = [];
@@ -318,6 +333,13 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public onMassActionComplete(success: boolean) {
         if (success) {
             this.loadService();
+        }
+    }
+
+    public onTimelineTimerangeChange(timerange: GenericUnixtimerange) {
+        this.timelineTimerange = timerange;
+        if (this.syncTimelineAndGraphTimestamps) {
+            // Timeline has moved - sync chart with timeline
         }
     }
 

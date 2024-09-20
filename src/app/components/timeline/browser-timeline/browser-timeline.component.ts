@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { DOCUMENT, NgIf } from '@angular/common';
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
+import { GenericUnixtimerange } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-browser-timeline',
@@ -26,6 +27,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
     @Input() objectId: number = 0;
+    @Output() onTimerangeChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
 
     private visTimelineStart: number = -1;
     private visTimelineEnd: number = -1;
@@ -274,6 +276,13 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         var timeRange = this.timeline.getWindow();
                         var visTimelineStartAsTimestamp = new Date(timeRange.start).getTime();
                         var visTimelineEndAsTimestamp = new Date(timeRange.end).getTime();
+
+                        // Emit event that we change our range
+                        this.onTimerangeChange.emit({
+                            start: visTimelineStartAsTimestamp,
+                            end: visTimelineEndAsTimestamp
+                        });
+
                         //@ts-ignore for itemsData
                         var criticalItems = this.timeline.itemsData.get({
                             fields: ['start', 'end', 'className', 'group'],    // output the specified fields only

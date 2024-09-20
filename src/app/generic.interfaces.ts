@@ -12,3 +12,8 @@ export interface GenericKeyValue {
     key: any,
     value: any
 }
+
+export interface GenericUnixtimerange {
+    start: number,
+    end: number,
+}

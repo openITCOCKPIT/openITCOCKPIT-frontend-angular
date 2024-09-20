@@ -989,8 +989,20 @@
                 <div *ngIf="selectedTab == ServiceBrowserTabs.Timeline && result && result.mergedService">
                     <oitc-browser-timeline
                         [type]="'Service'"
-                        [objectId]="Number(result.mergedService.id)">
+                        [objectId]="Number(result.mergedService.id)"
+                        (onTimerangeChange)="onTimelineTimerangeChange($event)">
                         <oitc-service-timeline-legend></oitc-service-timeline-legend>
+
+                        <div class="mt-2 mb-2">
+                            <c-form-check>
+                                <input cFormCheckInput id="sync_timeline_and_graph" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       [(ngModel)]="syncTimelineAndGraphTimestamps"/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="sync_timeline_and_graph">{{ t('Synchronize times for timeline and service graph') }}</label>
+                            </c-form-check>
+                        </div>
+
                     </oitc-browser-timeline>
                 </div>
                 <!-- Timeline end -->
@@ -1016,8 +1028,7 @@
                 <!-- SLA Module end -->
 
             </c-card-body>
-            <c-card-footer>
-            </c-card-footer>
+
         </c-card>
 
         <oitc-services-browser-chart
