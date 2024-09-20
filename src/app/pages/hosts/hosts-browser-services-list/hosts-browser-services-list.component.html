@@ -69,6 +69,28 @@
 
         </c-card-header>
         <c-card-body>
+
+            @if (hoststatus) {
+                <c-alert [color]="'warning'" *ngIf="Number(hoststatus.currentState) > 0">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-2">
+                            <span class="icon-stack icon-stack-md">
+                                <i class="base-circle icon-stack-3x text-yellow-500"></i>
+                                <i class="fa-regular fa-bell icon-stack-1x text-white"></i>
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="bold">
+                                {{ t('Problem with host detected.') }}
+                            </span>
+                            <span
+                                class="text-decoration-underline">{{ t('Services output may not as expected!') }}</span>
+                        </div>
+                    </div>
+                </c-alert>
+            }
+
+
             <!-- ACTIVE TAB START -->
             <ng-container *ngIf="activeTab === 'active'">
                 <oitc-table-loader *ngIf="!services"></oitc-table-loader>
@@ -406,7 +428,8 @@
                                         </button>
                                         <ul cDropdownMenu>
                                             <li *oitcPermission="['servicegroups', 'add']">
-                                                <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
+                                                <a href="javascript:void(0);" cDropdownItem
+                                                   (click)="confirmAddServicesToServicegroup()">
                                                     <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                     {{ t('Add to service group') }}
                                                 </a>
@@ -833,5 +856,5 @@
                                 [items]="selectedItems"></oitc-service-maintenance-modal>
 <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
                                 [items]="selectedItems"></oitc-service-acknowledge-modal>
-<oitc-service-add-to-servicegroup-modal  (completed)="onMassActionComplete($event)"
-                                [items]="selectedItems"></oitc-service-add-to-servicegroup-modal>
+<oitc-service-add-to-servicegroup-modal (completed)="onMassActionComplete($event)"
+                                        [items]="selectedItems"></oitc-service-add-to-servicegroup-modal>

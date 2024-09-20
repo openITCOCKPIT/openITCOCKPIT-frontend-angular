@@ -1110,6 +1110,7 @@
 
         <!-- List of services -->
         <oitc-hosts-browser-services-list *ngIf="result && result.mergedHost"
+                                          [hoststatus]="result.hoststatus"
                                           [hostId]="result.mergedHost.id"
                                           [lastUpdated]="lastUpdated">
 
