@@ -536,7 +536,7 @@
                                 </c-col>
                             </c-row>
 
-                            <c-row>
+                            <c-row *ngIf="result">
                                 <!-- Contacts and Contact groups -->
                                 <c-col [xs]="12" [md]="6">
                                     <table cTable bordered>
@@ -587,24 +587,24 @@
                                             <td>{{ t('Notification period') }}</td>
                                             <td>
                                                 <oitc-label-link
-                                                    [objectId]=" result?.notifyPeriod?.id"
+                                                    [objectId]=" result.notifyPeriod.id"
                                                     [route]="'/timeperiods/edit'"
                                                     [permissions]="'timeperiods.edit'"
                                                 >
-                                                    {{ result?.notifyPeriod?.name }}
+                                                    {{ result.notifyPeriod.name }}
                                                 </oitc-label-link>
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td>{{ t('Notification interval') }}</td>
-                                            <td>{{ result?.mergedHost?.notificationIntervalHuman }}</td>
+                                            <td>{{ result.mergedHost.notificationIntervalHuman }}</td>
                                         </tr>
 
                                         <tr>
                                             <td>{{ t('Notification enabled') }}</td>
                                             <td>
-                                                @if (result?.hoststatus?.notifications_enabled) {
+                                                @if (result.hoststatus.notifications_enabled) {
                                                     <c-badge color="success">{{ t('Yes') }}</c-badge>
                                                 } @else {
                                                     <c-badge color="danger">{{ t('No') }}</c-badge>
@@ -615,20 +615,20 @@
                                         <tr>
                                             <td>{{ t('Notify on') }}</td>
                                             <td>
-                                                @if (result?.mergedHost?.notify_on_recovery) {
+                                                @if (result.mergedHost.notify_on_recovery) {
                                                     <c-badge color="success" class="me-1">{{ t('Recover') }}</c-badge>
                                                 }
-                                                @if (result?.mergedHost?.notify_on_down) {
+                                                @if (result.mergedHost.notify_on_down) {
                                                     <c-badge color="danger" class="me-1">{{ t('Down') }}</c-badge>
                                                 }
-                                                @if (result?.mergedHost?.notify_on_unreachable) {
+                                                @if (result.mergedHost.notify_on_unreachable) {
                                                     <c-badge color="secondary" class="me-1">{{ t('Unreachable') }}
                                                     </c-badge>
                                                 }
-                                                @if (result?.mergedHost?.notify_on_flapping) {
+                                                @if (result.mergedHost.notify_on_flapping) {
                                                     <c-badge color="primary" class="me-1">{{ t('Flapping') }}</c-badge>
                                                 }
-                                                @if (result?.mergedHost?.notify_on_downtime) {
+                                                @if (result.mergedHost.notify_on_downtime) {
                                                     <c-badge color="primary" class="me-1">{{ t('Downtime') }}</c-badge>
                                                 }
                                             </td>
