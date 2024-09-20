@@ -523,7 +523,7 @@
                                     <h4>{{ t('Notification overview') }}</h4>
                                 </c-col>
 
-                                <c-col [xs]="12" [md]="6" class="text-info" [hidden]="result.areContactsFromHost">
+                                <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromHost">
                                     {{ t('Contacts and contact groups got inherited from') }}
                                     <oitc-label-link
                                         [objectId]="result.mergedHost.hosttemplate_id"

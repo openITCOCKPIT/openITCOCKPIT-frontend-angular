@@ -1,30 +1,35 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import {
+    AlertComponent,
+    BadgeComponent,
+    BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
+    CardTextDirective,
     CardTitleDirective,
     ColComponent,
     ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent,
+    TableDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UUID } from '../../../classes/UUID';
 import { HostsService } from '../../hosts/hosts.service';
 import { ServicesService } from '../services.service';
@@ -41,7 +46,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { ServiceBrowserTabs } from '../services.enum';
+import { ServiceBrowserTabs, ServiceTypesEnum } from '../services.enum';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
 import { ServiceStatusNamePipe } from '../../../pipes/service-status-name.pipe';
@@ -87,12 +92,20 @@ import {
 import {
     ServicesProcessCheckresultModalComponent
 } from '../../../components/services/services-process-checkresult-modal/services-process-checkresult-modal.component';
+import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import {
+    PrometheusServiceBrowserComponent
+} from '../../../modules/prometheus_module/components/prometheus-service-browser/prometheus-service-browser.component';
+import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 
 @Component({
     selector: 'oitc-services-browser',
     standalone: true,
     imports: [
         BrowserLoaderComponent,
+        BorderDirective,
         CardBodyComponent,
         CardComponent,
         CardFooterComponent,
@@ -130,7 +143,18 @@ import {
         HostsEnableFlapdetectionModalComponent,
         HostsSendCustomNotificationModalComponent,
         DeleteAcknowledgementsModalComponent,
-        ServicesProcessCheckresultModalComponent
+        ServicesProcessCheckresultModalComponent,
+        CardTextDirective,
+        TrustAsHtmlPipe,
+        AlertComponent,
+        RouterLink,
+        BadgeComponent,
+        CopyToClipboardComponent,
+        LabelLinkComponent,
+        TableDirective,
+        PrometheusServiceBrowserComponent,
+        HoststatusSimpleIconComponent,
+        NgForOf
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
@@ -514,7 +538,27 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         });
     }
 
+    public toggleDeleteHostAcknowledgementModal(host: HostObjectCake2) {
+        this.selectedItems = [];
+
+        const item: DeleteAcknowledgementItem[] = [{
+            displayName: String(host.Host.name),
+            hostId: Number(host.Host.id),
+            serviceId: null
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'deleteAcknowledgements',
+        });
+    }
+
     protected readonly String = String;
     protected readonly Number = Number;
     protected readonly ServiceBrowserTabs = ServiceBrowserTabs;
+    protected readonly ServiceTypesEnum = ServiceTypesEnum;
 }

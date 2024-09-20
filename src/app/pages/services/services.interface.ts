@@ -780,6 +780,9 @@ export interface ServiceBrowserResult {
     },
     usageFlag: number
     username: string
+    blurryCommandLine: boolean
+    masterInstanceName: string
+
     _csrfToken: string
 }
 
