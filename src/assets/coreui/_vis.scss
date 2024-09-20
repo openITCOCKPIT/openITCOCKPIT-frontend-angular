@@ -70,3 +70,8 @@
     color: white;
     z-index: 2;
 }
+
+
+body.dark-theme .vis-labelset .vis-label, body.dark-theme .vis-time-axis .vis-text {
+    color: var(--cui-card-color);
+}
