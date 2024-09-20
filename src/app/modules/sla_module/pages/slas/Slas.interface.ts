@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { GenericIdResponse } from '../../../../generic-responses';
+import { HostMappingRulesPost } from './HostMappingRules.interface';
 
 export interface SlasIndexRoot extends PaginateOrScroll {
     slas: Sla[]
@@ -63,6 +64,7 @@ export interface Sla {
     status_percent?: number
     fulfill: boolean
     users: Users
+    host_mapping_rule: null | HostMappingRulesPost
 }
 
 export interface Timeperiod {
