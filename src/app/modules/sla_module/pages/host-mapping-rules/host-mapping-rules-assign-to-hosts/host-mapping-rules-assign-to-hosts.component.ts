@@ -38,7 +38,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { HostMappingRulesService } from '../../slas/HostMappingRules.service';
+import { HostMappingRulesService } from '../HostMappingRules.service';
 import {
     getDefaultHostMappingRulesLoadHostsParams,
     getDefaultHostMappingRulesPost,
@@ -46,7 +46,7 @@ import {
     HostMappingRulesLoadHostsParams,
     HostMappingRulesPost,
     LoadHostsRoot
-} from '../../slas/HostMappingRules.interface';
+} from '../HostMappingRules.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { Sla } from '../../slas/Slas.interface';

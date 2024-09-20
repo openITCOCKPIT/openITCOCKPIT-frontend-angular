@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { GenericIdResponse } from '../../../../generic-responses';
-import { HostMappingRulesPost } from './HostMappingRules.interface';
+import { HostMappingRulesPost } from '../host-mapping-rules/HostMappingRules.interface';
 
 export interface SlasIndexRoot extends PaginateOrScroll {
     slas: Sla[]
