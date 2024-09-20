@@ -796,6 +796,183 @@
                             </c-row>
 
                         </c-col>
+
+                        <!-- Desktop status bar -->
+                        <c-col [md]="5" [lg]="3" class="d-none d-md-block"
+                               *ngIf="result?.servicestatus && result?.mergedService"
+                               [ngClass]="[result.servicestatus.cssClass, result.servicestatus.isInMonitoring ? '' : 'browser-not-monitored']">
+
+                            <div class="text-center text-white">
+                                <div class="display-5">
+                                    {{ result.servicestatus.currentState | serviceStatusName }}
+                                </div>
+                            </div>
+
+                            <!-- State information -->
+                            <c-row *ngIf="result.servicestatus.isInMonitoring" class="pt-2">
+                                <c-col [xs]="12" class="text-center text-white">
+                                    <div>{{ t('State since') }}</div>
+                                    <div class="h3"
+                                         [cTooltip]=" result.servicestatus.last_state_change_user"
+                                         cTooltipPlacement="top">
+                                        {{ result.servicestatus.last_state_change }}
+                                    </div>
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('Last check') }}</div>
+                                    <div class="h3"
+                                         [cTooltip]=" result.servicestatus.lastCheckUser" cTooltipPlacement="top">
+                                        {{ result.servicestatus.lastCheck }}
+                                    </div>
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('Next check') }}</div>
+                                    @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
+                                        <div class="h3"
+                                             [cTooltip]="result.servicestatus.nextCheckUser" cTooltipPlacement="top">
+                                            {{ result.servicestatus.nextCheck }}
+                                        </div>
+                                        <div [hidden]="Number(result.servicestatus.latency) < 1"
+                                             [cTooltip]="'Latency' | transloco"
+                                             cTooltipPlacement="top">
+                                            <small class="text-muted">(+ {{ result.servicestatus.latency }})</small>
+                                        </div>
+                                    } @else {
+                                        <div class="h3">
+                                            {{ t('n/a') }}
+                                        </div>
+                                    }
+                                </c-col>
+
+                                <c-col [xs]="12" class="text-center text-white pt-1">
+                                    <div>{{ t('State type') }}</div>
+                                    @if (result.servicestatus.isHardstate) {
+                                        <div class="h3">
+                                            {{ t('Hard state') }}
+                                            ({{ result.servicestatus.current_check_attempt }}
+                                            /{{ result.servicestatus.max_check_attempts }})
+                                        </div>
+                                    } @else {
+                                        <div class="h3">
+                                            {{ t('Soft state') }}
+                                            ({{ result.servicestatus.current_check_attempt }}
+                                            /{{ result.servicestatus.max_check_attempts }})
+                                        </div>
+                                    }
+                                </c-col>
+                            </c-row>
+
+                            <!-- External Command Buttons -->
+                            <c-row
+                                *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring"
+                                class="text-white">
+
+                                <div class="browser-action d-flex p-0"
+                                     (click)="resetChecktime(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Reset check time ') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="toggleDowntimeModal(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Schedule maintenance') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="Number(result.servicestatus.currentState) > 0"
+                                     (click)="acknowledgeStatus(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Acknowledge host status') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="processCheckResult(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Passive transfer check result') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="!result.servicestatus.flap_detection_enabled"
+                                     (click)="enableFlapdetection(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Enable flap detection') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="result.servicestatus.flap_detection_enabled"
+                                     (click)="disableFlapdetection(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Disable flap detection') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="!result.servicestatus.notifications_enabled"
+                                     (click)="enableNotifications(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Enable notifications') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     *ngIf="result.servicestatus.notifications_enabled"
+                                     (click)="disableNotifications(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Disable notifications') }}
+                                    </div>
+                                </div>
+
+                                <div class="browser-action d-flex p-0 mt-2"
+                                     (click)="sendCustomNotification(result.mergedService, result.host)">
+                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                                    </div>
+                                    <div class="flex-1 browser-action-padding-top">
+                                        {{ t('Send custom service notification ') }}
+                                    </div>
+                                </div>
+
+                            </c-row>
+
+                            <c-row class="mb-2">
+                                <!-- spacer -->
+                            </c-row>
+
+                        </c-col>
+                        <!-- End of desktop status bar -->
+
                     </c-row>
 
 
