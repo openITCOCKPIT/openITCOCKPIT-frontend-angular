@@ -979,6 +979,41 @@
                 </div>
                 <!-- Status information end -->
 
+                <!-- Service information start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceInformation">
+                    ServiceInformation Tab
+                </div>
+                <!-- Service information end -->
+
+                <!-- Timeline start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.Timeline && result && result.mergedService">
+                    <oitc-browser-timeline
+                        [type]="'Service'"
+                        [objectId]="Number(result.mergedService.id)">
+                        <oitc-service-timeline-legend></oitc-service-timeline-legend>
+                    </oitc-browser-timeline>
+                </div>
+                <!-- Timeline end -->
+
+                <!-- ServiceNow Module start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceNow">
+                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                        ServicenowModule
+                    }
+                </div>
+                <!-- ServiceNow Module end -->
+
+                <!-- CustomAlerts Module start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.CustomAlerts">
+                    CustomAlerts
+                </div>
+                <!-- CustomAlerts Module end -->
+
+                <!-- SLA Module start -->
+                <div *ngIf="selectedTab == ServiceBrowserTabs.SLA">
+                    SLA
+                </div>
+                <!-- SLA Module end -->
 
             </c-card-body>
             <c-card-footer>

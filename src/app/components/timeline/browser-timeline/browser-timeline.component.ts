@@ -59,6 +59,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public loadData(startTimestamp: number, endTimestamp: number): void {
+        if (this.type === 'Host') {
+            this.loadHostData(startTimestamp, endTimestamp);
+        } else {
+            this.loadServiceData(startTimestamp, endTimestamp);
+        }
+    }
+
+    private loadHostData(startTimestamp: number, endTimestamp: number): void {
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
                 //Zoom in data we already have
@@ -129,6 +137,86 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 this.renderTimeline(items, groups, timelineOptions);
             }));
     }
+
+    private loadServiceData(startTimestamp: number, endTimestamp: number): void {
+        if (startTimestamp !== -1 || endTimestamp !== -1) {
+            if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
+                //Zoom in data we already have
+                return;
+            }
+        }
+
+        this.isLoading = true;
+
+        this.subscriptions.add(this.ServicesService.loadTimeline(this.objectId, startTimestamp, endTimestamp)
+            .subscribe((result) => {
+                this.isLoading = false;
+                this.data = result;
+
+                if (!result.servicestatehistory) {
+                    console.log('Error: No servicestatehistory records');
+                    return;
+                }
+
+
+                let items = new DataSet<DataItem>(result.servicestatehistory);
+                items.add(result.statehistory);
+                items.add(result.downtimes);
+                items.add(result.notifications);
+                items.add(result.acknowledgements);
+                items.add(result.timeranges);
+
+                let groups = new DataSet<TimelineGroup>(result.groups);
+
+                this.visTimelineStart = result.start;
+                this.visTimelineEnd = result.end;
+
+                let timelineOptions: TimelineOptions = {
+                    orientation: "both",
+                    xss: {
+                        disabled: false,
+                        filterOptions: {
+                            whiteList: {
+                                i: ['class', 'not-xss-filtered-html'],
+                                b: ['class', 'not-xss-filtered-html']
+                            },
+                        },
+                    },
+                    start: new Date(result.start * 1000),
+                    end: new Date(result.end * 1000),
+                    min: new Date(new Date(result.start * 1000).setFullYear(new Date(result.start * 1000).getFullYear() - 1)),
+                    max: new Date(result.end * 1000),
+                    zoomMin: 1000 * 10 * 60 * 5,
+                    format: {
+                        minorLabels: {
+                            millisecond: 'SSS',
+                            second: 's',
+                            minute: 'H:mm',
+                            hour: 'H:mm',
+                            weekday: 'ddd D',
+                            day: 'D',
+                            week: 'w',
+                            month: 'MMM',
+                            year: 'YYYY'
+                        },
+                        majorLabels: {
+                            millisecond: 'H:mm:ss',
+                            second: 'D MMMM H:mm',
+                            minute: 'DD.MM.YYYY',
+                            hour: 'DD.MM.YYYY',
+                            weekday: 'MMMM YYYY',
+                            day: 'MMMM YYYY',
+                            week: 'MMMM YYYY',
+                            month: 'YYYY',
+                            year: ''
+                        }
+                    }
+                };
+
+                this.renderTimeline(items, groups, timelineOptions);
+            }));
+    }
+
 
     private renderTimeline(items: DataSet<DataItem>, groups: DataSet<TimelineGroup>, timelineOptions: TimelineOptions) {
         const container = this.document.getElementById('visualization');

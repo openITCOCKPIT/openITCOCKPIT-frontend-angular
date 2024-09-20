@@ -6,6 +6,7 @@ export interface BrowserTimelineApiResult {
     end: number
     groups: TimelineGroup[]
     statehistory: DataItem[]
+    servicestatehistory?: DataItem[]
     downtimes: DataItem[]
     notifications: DataItem[]
     acknowledgements: DataItem[]

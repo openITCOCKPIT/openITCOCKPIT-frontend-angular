@@ -99,6 +99,17 @@ import {
     PrometheusServiceBrowserComponent
 } from '../../../modules/prometheus_module/components/prometheus-service-browser/prometheus-service-browser.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
+import { HostBrowserTabs } from '../../hosts/hosts.enum';
+import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
+import {
+    HostTimelineLegendComponent
+} from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
+import {
+    ServicenowHostBrowserTabComponent
+} from '../../../modules/servicenow_module/components/servicenow-host-browser-tab/servicenow-host-browser-tab.component';
+import {
+    ServiceTimelineLegendComponent
+} from '../../../components/timeline/service-timeline-legend/service-timeline-legend.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -154,7 +165,11 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
         TableDirective,
         PrometheusServiceBrowserComponent,
         HoststatusSimpleIconComponent,
-        NgForOf
+        NgForOf,
+        BrowserTimelineComponent,
+        HostTimelineLegendComponent,
+        ServicenowHostBrowserTabComponent,
+        ServiceTimelineLegendComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
@@ -561,4 +576,6 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     protected readonly Number = Number;
     protected readonly ServiceBrowserTabs = ServiceBrowserTabs;
     protected readonly ServiceTypesEnum = ServiceTypesEnum;
+    protected readonly HostBrowserTabs = HostBrowserTabs;
+    protected readonly Boolean = Boolean;
 }

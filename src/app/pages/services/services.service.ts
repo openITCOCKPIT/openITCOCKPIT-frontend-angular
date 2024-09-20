@@ -57,6 +57,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
 import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
+import { BrowserTimelineApiResult } from '../../components/timeline/browser-timeline/browser-timeline.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -494,6 +495,23 @@ export class ServicesService {
             .pipe(
                 map(data => {
                     return data.CustomalertsExists;
+                })
+            )
+    }
+
+    public loadTimeline(id: number, startTimestamp: number, endTimetamp: number): Observable<BrowserTimelineApiResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<BrowserTimelineApiResult>(`${proxyPath}/services/timeline/${id}.json`, {
+                params: {
+                    angular: true,
+                    start: startTimestamp,
+                    end: endTimetamp
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }
