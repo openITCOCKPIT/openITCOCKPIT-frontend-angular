@@ -53,7 +53,7 @@ export class HostMappingRulesService {
 
     public loadHosts(params: HostMappingRulesLoadHostsParams): Observable<LoadHostsRoot> {
         const proxyPath: string = this.proxyPath;
-        return this.http.get<LoadHostsRoot>(`${proxyPath}/sla_module/host_mapping_rules/loadHostsBySlaId.json?angular=true`, {
+        return this.http.get<LoadHostsRoot>(`${proxyPath}/sla_module/host_mapping_rules/loadHostsBySlaId.json`, {
             params: params as {}
         }).pipe(
             map((data: LoadHostsRoot) => {

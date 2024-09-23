@@ -27,12 +27,12 @@ import { Sla } from '../slas/Slas.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
 export interface HostMappingRulesPost {
-    host_keywords: null | string[]
-    host_not_keywords: null | string[]
+    host_keywords: null | string | string[]
+    host_not_keywords: null | string | string[]
     hostname_regex: string
     description: string
-    service_keywords: null | string[]
-    service_not_keywords: null | string[]
+    service_keywords: null | string | string[]
+    service_not_keywords: null | string | string[]
     servicename_regex: string
     save_options: boolean
     sla_id: number
@@ -42,11 +42,11 @@ export interface HostMappingRulesPost {
 
 export interface Filter {
     'Hosts.name': string
-    'Hosts.keywords': any[]
-    'Hosts.not_keywords': any[]
+    'Hosts.keywords': null | string | string[]
+    'Hosts.not_keywords': null | string | string[]
     'servicename': string
-    'Services.keywords': any[]
-    'Services.not_keywords': any[]
+    'Services.keywords': null | string | string[]
+    'Services.not_keywords': null | string | string[]
 }
 
 export interface HostMappingRulesAssignToHostsRoot {
@@ -79,11 +79,11 @@ export interface HostMappingRulesLoadHostsParams {
     slaId: number
     'filter[Hosts.name]': string
     'filter[hostdescription]': string
-    'filter[Hosts.keywords][]': string[]
-    'filter[Hosts.not_keywords][]': string[]
+    'filter[Hosts.keywords][]': null | string | string[]
+    'filter[Hosts.not_keywords][]': null | string | string[]
     'filter[servicename]': string
-    'filter[Services.keywords][]': string[]
-    'filter[Services.not_keywords][]': string[]
+    'filter[Services.keywords][]': null | string | string[]
+    'filter[Services.not_keywords][]': null | string | string[]
     resolveContainerIds: true
     onlyUnassigned: boolean
 }

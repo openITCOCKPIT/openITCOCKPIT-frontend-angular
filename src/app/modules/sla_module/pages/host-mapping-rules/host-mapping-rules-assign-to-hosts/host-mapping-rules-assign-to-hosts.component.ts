@@ -169,6 +169,26 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             .subscribe((result: HostMappingRulesAssignToHostsRoot) => {
                 this.sla = result.sla;
                 if (result.sla.host_mapping_rule !== null) {
+                    if (result.sla.host_mapping_rule.host_keywords !== null && typeof result.sla.host_mapping_rule.host_keywords === 'string' && result.sla.host_mapping_rule.host_keywords.length > 0) {
+                        result.sla.host_mapping_rule.host_keywords = result.sla.host_mapping_rule.host_keywords.split(',');
+                    } else {
+                        result.sla.host_mapping_rule.host_keywords = [];
+                    }
+                    if (result.sla.host_mapping_rule.host_not_keywords !== null && typeof result.sla.host_mapping_rule.host_not_keywords === 'string' && result.sla.host_mapping_rule.host_not_keywords.length > 0) {
+                        result.sla.host_mapping_rule.host_not_keywords = result.sla.host_mapping_rule.host_not_keywords.split(',');
+                    } else {
+                        result.sla.host_mapping_rule.host_not_keywords = [];
+                    }
+                    if (result.sla.host_mapping_rule.service_keywords !== null && typeof result.sla.host_mapping_rule.service_keywords === 'string' && result.sla.host_mapping_rule.service_keywords.length > 0) {
+                        result.sla.host_mapping_rule.service_keywords = result.sla.host_mapping_rule.service_keywords.split(',');
+                    } else {
+                        result.sla.host_mapping_rule.service_keywords = [];
+                    }
+                    if (result.sla.host_mapping_rule.service_not_keywords !== null && typeof result.sla.host_mapping_rule.service_not_keywords === 'string' && result.sla.host_mapping_rule.service_not_keywords.length > 0) {
+                        result.sla.host_mapping_rule.service_not_keywords = result.sla.host_mapping_rule.service_not_keywords.split(',');
+                    } else {
+                        result.sla.host_mapping_rule.service_not_keywords = [];
+                    }
                     this.post = result.sla.host_mapping_rule;
                 }
                 this.loadHosts();
@@ -185,6 +205,11 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             'Services.keywords': (this.post.service_keywords !== null ? this.post.service_keywords : []),
             'Services.not_keywords': (this.post.service_not_keywords !== null ? this.post.service_not_keywords : []),
         };
+        this.post.host_keywords = (Array.isArray(this.post.host_keywords)) ? this.post.host_keywords.join(',') : this.post.host_keywords;
+        this.post.host_not_keywords = (Array.isArray(this.post.host_not_keywords)) ? this.post.host_not_keywords.join(',') : this.post.host_not_keywords;
+        this.post.service_keywords = (Array.isArray(this.post.service_keywords)) ? this.post.service_keywords.join(',') : this.post.service_keywords;
+        this.post.service_not_keywords = (Array.isArray(this.post.service_not_keywords)) ? this.post.service_not_keywords.join(',') : this.post.service_not_keywords;
+
         this.subscriptions.add(this.HostMappingRulesService.assignToHosts(this.post, this.slaId)
             .subscribe((result) => {
                 if (result.success) {

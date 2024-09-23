@@ -13,7 +13,7 @@
         <c-col md="6">
             <c-pagination *ngIf="paging" class="float-end">
                 <li [disabled]="!paging.prevPage" cPageItem>
-                    <button (click)="firstPage()"
+                    <button type="button" (click)="firstPage()"
                             [title]="'First page' | transloco"
                             cPageLink
                             class="ripple">
@@ -21,7 +21,7 @@
                     </button>
                 </li>
                 <li [disabled]="!paging.prevPage" cPageItem>
-                    <button (click)="prevPage()"
+                    <button type="button" (click)="prevPage()"
                             [title]="'Previous page' | transloco"
                             cPageLink
                             class="ripple"
@@ -32,7 +32,7 @@
 
 
                 <li *ngFor="let page of pages" [active]="page === paging.page" cPageItem>
-                    <button (click)="changePage(page)"
+                    <button type="button" (click)="changePage(page)"
                             cPageLink
                             class="ripple">
                         {{ page }}
@@ -41,7 +41,7 @@
 
 
                 <li [disabled]="!paging.nextPage" cPageItem>
-                    <button (click)="nextPage()"
+                    <button type="button" (click)="nextPage()"
                             [title]="'Next page' | transloco"
                             cPageLink
                             class="ripple"
@@ -50,7 +50,7 @@
                     </button>
                 </li>
                 <li [disabled]="!paging.nextPage" cPageItem>
-                    <button (click)="lastPage()"
+                    <button type="button" (click)="lastPage()"
                             [title]="'Last page' | transloco"
                             cPageLink
                             class="ripple"

@@ -279,10 +279,11 @@
                                 id="OnlyUnassigned"
                                 name="OnlyUnassigned"
                                 type="checkbox"
+                                (debouncedValue)="onPostChange()"
                                 trueFalseValue
                                 [trueValue]="true"
                                 [falseValue]="false"
-                                (ngModelChange)="onPostChange()"
+                                oitcDebounce
                                 [(ngModel)]="post.only_unassigned"/>
                             <label cFormCheckLabel
                                    for="OnlyUnassigned">{{ t('Only unassigned hosts') }}</label>
@@ -327,7 +328,7 @@
                                     <th scope="col" mat-sort-header="Hosts.address">
                                         {{ t('Address') }}
                                     </th>
-                                    <th scope="col" mat-sort-header="Hosts.hostdescription">
+                                    <th scope="col" mat-sort-header="hostdescription">
                                         {{ t('Description') }}
                                     </th>
                                     <th scope="col">
@@ -373,7 +374,7 @@
                                             <div [hidden]="host.sla !== null" class="text-center">
                                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                             </div>
-                                            @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
+                                            @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit']) && host.sla !== null) {
                                                 <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
                                                    class="text-white" *ngIf="sla.allowEdit">
                                                     {{ host.sla.name }}

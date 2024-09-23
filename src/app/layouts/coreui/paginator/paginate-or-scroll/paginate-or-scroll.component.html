@@ -16,7 +16,7 @@
     </c-row>
     <c-row>
         <c-col>
-            <button (click)="changeMode()" cButton class="ripple" color="primary" size="xs">
+            <button type="button" (click)="changeMode()" cButton class="ripple" color="primary" size="xs">
                 <span [hidden]="!isScrollMode">{{ t('Switch to Paginator Mode') }}</span>
                 <span [hidden]="isScrollMode">{{ t('Switch to Scroll Mode') }}</span>
             </button>
