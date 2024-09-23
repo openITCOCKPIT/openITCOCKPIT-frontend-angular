@@ -12,5 +12,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/import_changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/importchangelogs/import-changelogs-entity/import-changelogs-entity.component').then(m => m.ImportChangelogsEntityComponent)
+}, {
+    path: 'import_module/import_changelogs/index',
+    loadComponent: () => import('./pages/importchangelogs/import-changelogs-index/import-changelogs-index.component').then(m => m.ImportChangelogsIndexComponent)
 }
 ];
