@@ -36,3 +36,8 @@ export interface GenericActionErrorResponse {
     id: string
     message: string
 }
+
+export interface GenericSuccessAndMessageResponse {
+    success: boolean
+    message: string
+}

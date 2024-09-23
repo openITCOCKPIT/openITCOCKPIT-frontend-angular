@@ -2,6 +2,7 @@ import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -106,6 +107,7 @@ import {
 import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
+import { HoststatusObject } from '../hosts.interface';
 
 @Component({
     selector: 'oitc-hosts-browser-services-list',
@@ -168,7 +170,8 @@ import {
         RegexHelperTooltipComponent,
         FormsModule,
         HostsAddToHostgroupComponent,
-        ServiceAddToServicegroupModalComponent
+        ServiceAddToServicegroupModalComponent,
+        AlertComponent
     ],
     templateUrl: './hosts-browser-services-list.component.html',
     styleUrl: './hosts-browser-services-list.component.css',
@@ -181,8 +184,8 @@ import {
 export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() hostId: number = 0;
+    @Input() hoststatus?: HoststatusObject;
     @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
-
 
     public activeTab: string = 'active';
 
@@ -657,4 +660,5 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
 
 
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
+    protected readonly Number = Number;
 }

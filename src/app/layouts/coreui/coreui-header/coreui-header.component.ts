@@ -25,6 +25,9 @@ import { ChangeLanguageComponent } from '../change-language/change-language.comp
 import { SidebarService } from '../coreui-navbar/sidebar.service';
 import { Subscription } from 'rxjs';
 import { TopSearchComponent } from '../top-search/top-search.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
@@ -51,7 +54,9 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         IconDirective,
         ChangeLanguageComponent,
         TopSearchComponent,
+        TranslocoDirective,
         FaIconComponent,
+        PermissionDirective,
         XsButtonDirective
     ],
     templateUrl: './coreui-header.component.html',

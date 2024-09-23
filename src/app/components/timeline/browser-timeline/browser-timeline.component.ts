@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { DOCUMENT, NgIf } from '@angular/common';
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
+import { GenericUnixtimerange } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-browser-timeline',
@@ -26,6 +27,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
     @Input() objectId: number = 0;
+    @Output() onTimerangeChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
 
     private visTimelineStart: number = -1;
     private visTimelineEnd: number = -1;
@@ -59,6 +61,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public loadData(startTimestamp: number, endTimestamp: number): void {
+        if (this.type === 'Host') {
+            this.loadHostData(startTimestamp, endTimestamp);
+        } else {
+            this.loadServiceData(startTimestamp, endTimestamp);
+        }
+    }
+
+    private loadHostData(startTimestamp: number, endTimestamp: number): void {
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
                 //Zoom in data we already have
@@ -130,6 +140,86 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
             }));
     }
 
+    private loadServiceData(startTimestamp: number, endTimestamp: number): void {
+        if (startTimestamp !== -1 || endTimestamp !== -1) {
+            if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
+                //Zoom in data we already have
+                return;
+            }
+        }
+
+        this.isLoading = true;
+
+        this.subscriptions.add(this.ServicesService.loadTimeline(this.objectId, startTimestamp, endTimestamp)
+            .subscribe((result) => {
+                this.isLoading = false;
+                this.data = result;
+
+                if (!result.servicestatehistory) {
+                    console.log('Error: No servicestatehistory records');
+                    return;
+                }
+
+
+                let items = new DataSet<DataItem>(result.servicestatehistory);
+                items.add(result.statehistory);
+                items.add(result.downtimes);
+                items.add(result.notifications);
+                items.add(result.acknowledgements);
+                items.add(result.timeranges);
+
+                let groups = new DataSet<TimelineGroup>(result.groups);
+
+                this.visTimelineStart = result.start;
+                this.visTimelineEnd = result.end;
+
+                let timelineOptions: TimelineOptions = {
+                    orientation: "both",
+                    xss: {
+                        disabled: false,
+                        filterOptions: {
+                            whiteList: {
+                                i: ['class', 'not-xss-filtered-html'],
+                                b: ['class', 'not-xss-filtered-html']
+                            },
+                        },
+                    },
+                    start: new Date(result.start * 1000),
+                    end: new Date(result.end * 1000),
+                    min: new Date(new Date(result.start * 1000).setFullYear(new Date(result.start * 1000).getFullYear() - 1)),
+                    max: new Date(result.end * 1000),
+                    zoomMin: 1000 * 10 * 60 * 5,
+                    format: {
+                        minorLabels: {
+                            millisecond: 'SSS',
+                            second: 's',
+                            minute: 'H:mm',
+                            hour: 'H:mm',
+                            weekday: 'ddd D',
+                            day: 'D',
+                            week: 'w',
+                            month: 'MMM',
+                            year: 'YYYY'
+                        },
+                        majorLabels: {
+                            millisecond: 'H:mm:ss',
+                            second: 'D MMMM H:mm',
+                            minute: 'DD.MM.YYYY',
+                            hour: 'DD.MM.YYYY',
+                            weekday: 'MMMM YYYY',
+                            day: 'MMMM YYYY',
+                            week: 'MMMM YYYY',
+                            month: 'YYYY',
+                            year: ''
+                        }
+                    }
+                };
+
+                this.renderTimeline(items, groups, timelineOptions);
+            }));
+    }
+
+
     private renderTimeline(items: DataSet<DataItem>, groups: DataSet<TimelineGroup>, timelineOptions: TimelineOptions) {
         const container = this.document.getElementById('visualization');
         if (container) {
@@ -186,6 +276,13 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         var timeRange = this.timeline.getWindow();
                         var visTimelineStartAsTimestamp = new Date(timeRange.start).getTime();
                         var visTimelineEndAsTimestamp = new Date(timeRange.end).getTime();
+
+                        // Emit event that we change our range
+                        this.onTimerangeChange.emit({
+                            start: visTimelineStartAsTimestamp,
+                            end: visTimelineEndAsTimestamp
+                        });
+
                         //@ts-ignore for itemsData
                         var criticalItems = this.timeline.itemsData.get({
                             fields: ['start', 'end', 'className', 'group'],    // output the specified fields only

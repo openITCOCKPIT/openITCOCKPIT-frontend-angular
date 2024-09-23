@@ -40,10 +40,13 @@
                                 <fa-icon [icon]="['fas', 'question-circle']" class="fa-lg"></fa-icon>
                                 {{ t('What is this API for?') }}
                             </h4>
-                            <p>
+                            <p class="mb-0">
                                 {{ t('This API can be used by third party application to send commands to the monitoring backend.') }}
                                 <br>
                                 {{ t('This could be useful to transfer passive check results or to acknowledge host or service states.') }}
+                                <br/>
+                                <code>hostUuid</code> {{ t('and') }} <code>serviceUuid</code>
+                                {{ t('can also be passed by their name, e.g. "localhost" or "Ping". It is recommended to use the UUIDs when possible.') }}
                             </p>
                         </c-alert>
                     </div>

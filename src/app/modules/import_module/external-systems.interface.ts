@@ -341,3 +341,30 @@ export interface ExternalSystemEntity {
     created: string
     modified: string
 }
+
+export interface Applications {
+    applications: Application[]
+    response: {
+        success: boolean
+        message: string
+    }
+    hasRootPrivileges: boolean
+    message: string
+    _csrfToken: any
+}
+
+export interface Application {
+    identifier: string
+    id: string
+    class: string
+    name: string
+    description: string
+    CIs: Ci[]
+}
+
+export interface Ci {
+    identifier: string
+    id: string
+    class: string
+    name: string
+}

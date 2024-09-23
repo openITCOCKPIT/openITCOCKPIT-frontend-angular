@@ -155,6 +155,7 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public getEntryTypes() {

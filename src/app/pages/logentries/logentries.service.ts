@@ -15,11 +15,6 @@ export class LogentriesService {
     }
 
     public getIndex(params: LogentryIndexParams): Observable<LogentriesRoot> {
-        /*
-          if($scope.filter.Logentries.logentry_type.length > 0){
-                  params['filter[Logentries.logentry_type][]'] = $scope.filter.Logentries.logentry_type;
-              }
-         */
         const proxyPath = this.proxyPath;
         return this.http.get<LogentriesRoot>(`${proxyPath}/logentries/index.json`, {
             params: params as {}

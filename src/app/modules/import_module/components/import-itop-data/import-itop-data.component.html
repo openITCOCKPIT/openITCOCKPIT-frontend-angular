@@ -1,0 +1,153 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="importITopData"
+        size="xl">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-stack class="me-1">
+                    <fa-icon [icon]="['fas', 'database']"
+                             stackItemSize="2x" pull="left" class="text-info"></fa-icon>
+                    <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                             stackItemSize="1x" pull="right" transform="right-5 down-15"
+                    ></fa-icon>
+                </fa-stack>
+                {{ t('Import host group data from iTop system!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <c-row class="fieldset-legend-border-bottom">
+                <c-col>
+                    <fieldset>
+                        <legend>
+                            <h5>
+                                {{ t('Overview external system configuration') }}
+                                <span *ngIf="externalSystem">
+                                    <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
+                                       [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
+                                        {{ externalSystem.name }}
+                                    </a>
+                                    <span *oitcPermission="['ImportModule','ExternalSystems', 'edit']; negate: true">
+                                        {{ externalSystem.name }}
+                                    </span>
+                                </span>
+                                <span *ngIf="externalSystem" class="float-end">
+                                    <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
+                                       class="btn btn-outline-primary btn-sm ripple"
+                                       [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
+                                        {{ t('Go to "External System configuration"') }}
+                                    </a>
+                                </span>
+                            </h5>
+                        </legend>
+                    </fieldset>
+                </c-col>
+            </c-row>
+            <oitc-table-loader *ngIf="!iTopData"></oitc-table-loader>
+            <c-row *ngIf="iTopData">
+                <c-col *ngIf="!iTopData.success">
+                    <c-alert color="danger" class="my-3 p-1">
+                        <h5 cAlertHeading> {{ t('Error!') }}</h5>
+                        <p *ngIf="iTopData.data.message">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                            {{ iTopData.data.message }}
+                        </p>
+                    </c-alert>
+                </c-col>
+            </c-row>
+            <ng-container *ngIf="iTopData && iTopData.success">
+                <c-row class="mt-3">
+                    <c-col>
+                        <h5>
+                            {{ t('iTop Data preview!') }}
+                        </h5>
+                        <div class="help-block text-info pb-2 small">
+                            {{ t('This preview shows maximal 10 first valid records from iTop system.') }}
+                            <span>
+                                {{ t('Furthermore are all objects displayed and no filter rules get applied.') }}
+                            </span>
+                            <span class="text-warning italic text-decoration-underline">
+                                {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                            </span>
+                        </div>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col>
+                        <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
+                            <thead>
+                            <tr>
+                                <th>
+                                    {{ t('UID') }}
+                                </th>
+                                <th>
+                                    {{ t('Name') }}
+                                </th>
+                                <th>
+                                    {{ t('Description') }}
+                                </th>
+                                <th class="text-center">
+                                    {{ t('# CIs') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if (applications) {
+                                    <tr *ngFor="let application of applications" class="word-break">
+                                        <td>
+                                            {{ application.identifier }}
+                                        </td>
+                                        <td>
+                                            {{ application.name }}
+                                        </td>
+                                        <td>
+                                            {{ application.description }}
+                                        </td>
+                                        <td class="text-center">
+                                            <code>{{ application.CIs.length }}</code>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </c-col>
+                </c-row>
+                <c-row class="mt-3" *ngIf="!hasRootPrivileges">
+                    <c-col>
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    [(ngModel)]="ignoreExternalSystem" cFormCheckInput
+                                    id="ignoreExternalSystem"
+                                    class="checkbox-lg me-2 mt-0"
+                                    name="ignoreExternalSystem"
+                                    oitcDebounce
+                                    type="checkbox"/>
+                                <label cFormCheckLabel for="ignoreExternalSystem">
+                                    {{ t('Ignore External System') }}
+                                </label>
+                            </c-form-check>
+                            <div class="help-block">
+                                {{ t('Determines if the import will ignore which external system had imported the host. This can be useful if you need to import hosts from different external systems into one host group.') }}
+                            </div>
+                        </div>
+                    </c-col>
+                </c-row>
+            </ng-container>
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton class="ripple" color="primary" *ngIf="applications.length > 0"
+                    [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
+                    (click)="startDataImport()">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>
+                {{ t('Start data import') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

@@ -97,15 +97,19 @@ export interface ServiceProcessCheckResultItem {
     maxCheckAttempts: number,
 }
 
-export interface EnableOrDisableHostFlapDetectionItem {
+// This can be used for hosts and services
+export interface EnableOrDisableFlapDetectionItem {
     command: string,
     hostUuid: string,
+    serviceUuid?: string,
     condition: 0 | 1, // 0 - disable, 1 - enable
 }
 
-export interface HostSendCustomNotificationItem {
+// This can be used for hosts and services
+export interface SendCustomNotificationItem {
     command: string,
     hostUuid: string,
+    serviceUuid?: string,
     options: 0 | 1 | 2 | 3, // 1 = force, 2 = broadcast, 3 = force and broadcast
     author: string,
     comment: string,
@@ -133,8 +137,8 @@ type Commands =
     | HostDisableNotificationsItem[]
     | HostProcessCheckResultItem[]
     | ServiceProcessCheckResultItem[]
-    | EnableOrDisableHostFlapDetectionItem[]
-    | HostSendCustomNotificationItem[]
+    | EnableOrDisableFlapDetectionItem[]
+    | SendCustomNotificationItem[]
     | ServiceSendCustomNotificationItem[]
 
 @Injectable({

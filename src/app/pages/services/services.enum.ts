@@ -9,3 +9,13 @@ export enum ServiceTypesEnum {
     PROMETHEUS_SERVICE = 1 << 5,    // 32
     EXTERNAL_SERVICE = 1 << 6,      // 64
 }
+
+
+export enum ServiceBrowserTabs {
+    StatusInformation = 'StatusInformation',
+    ServiceInformation = 'ServiceInformation',
+    Timeline = 'Timeline',
+    ServiceNow = 'ServiceNow',
+    CustomAlerts = 'CustomAlerts',
+    SLA = 'SLA',
+}

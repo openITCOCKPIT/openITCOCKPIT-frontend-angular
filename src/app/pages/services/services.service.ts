@@ -31,6 +31,8 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceBrowserMenu,
+    ServiceBrowserResult,
+    ServiceBrowserSlaOverview,
     ServiceCommandArgument,
     ServiceCopyGet,
     ServiceCopyPost,
@@ -55,6 +57,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../permissions/permissions.service';
 import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
 import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
+import { BrowserTimelineApiResult } from '../../components/timeline/browser-timeline/browser-timeline.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -447,6 +450,68 @@ export class ServicesService {
             .pipe(
                 map(data => {
                     return data.config;
+                })
+            )
+    }
+
+    public getServiceBrowser(id: number): Observable<ServiceBrowserResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<ServiceBrowserResult>(`${proxyPath}/services/browser/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+    public loadSlaInformation(id: number): Observable<false | ServiceBrowserSlaOverview> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{
+                slaOverview: false | ServiceBrowserSlaOverview
+            }>(`${proxyPath}/services/loadSlaInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id,
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.slaOverview;
+                })
+            )
+    }
+
+    public loadCustomAlertExists(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ CustomalertsExists: boolean }>(`${proxyPath}/services/loadCustomalerts/.json`, {
+                params: {
+                    angular: true,
+                    id: id,
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.CustomalertsExists;
+                })
+            )
+    }
+
+    public loadTimeline(id: number, startTimestamp: number, endTimetamp: number): Observable<BrowserTimelineApiResult> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<BrowserTimelineApiResult>(`${proxyPath}/services/timeline/${id}.json`, {
+                params: {
+                    angular: true,
+                    start: startTimestamp,
+                    end: endTimetamp
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }

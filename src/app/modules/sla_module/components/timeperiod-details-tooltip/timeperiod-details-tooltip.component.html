@@ -1,0 +1,61 @@
+<ng-container *transloco="let t">
+
+    <fa-icon [icon]="['far', 'lightbulb']" class="light-on timeperiodDetails" title="{{ t('Timeperiod details') }}"
+             [cPopoverTrigger]="'hover'"
+             [cPopover]="popoverHtml"></fa-icon>
+
+    <ng-template #popoverHtml>
+        <h3 class="popover-header">
+            {{ t('Timeperiod details') }}
+        </h3>
+        <div class="popover-body">
+
+            <div class="container table-responsive">
+                <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
+                {{ timeperiod.name }}
+                <table bordered cTable class="mt-2">
+                    <thead>
+                    <tr class="bg-primary text-white text-center small">
+                        <th>{{ t("Monday") }}</th>
+                        <th>{{ t("Tuesday") }}</th>
+                        <th>{{ t("Wednesday") }}</th>
+                        <th>{{ t("Thursday") }}</th>
+                        <th>{{ t("Friday") }}</th>
+                        <th>{{ t("Saturday") }}</th>
+                        <th>{{ t("Sunday") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="weekDays">
+                        <td *ngFor="let day of weekDays | keyvalue" class="pl-1 pb-1 pt-1 pr-1 text-center">
+                            @if (day.value.length > 0) {
+                                <c-badge class="width-90" color="success" textColor="white">
+                                    {{ label.messageExists }}
+                                </c-badge>
+                            } @else {
+                                <c-badge class="width-90" color="danger" textColor="white">
+                                    {{ label.messageNotExists }}
+                                </c-badge>
+                            }
+                        </td>
+                    </tr>
+                    <tr *ngIf="weekDays">
+                        <td *ngFor="let day of weekDays | keyvalue" class="text-center pl-1 pb-1 pt-1 pr-1">
+                            @if (day.value.length > 0) {
+                                <ul class="inside-list">
+                                    <li *ngFor="let timerange of day.value">
+                                        {{ timerange.start + ' - ' + timerange.end }}
+                                    </li>
+                                </ul>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'minus']" class="text-danger bg-transparent"></fa-icon>
+                            }
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </ng-template>
+</ng-container>

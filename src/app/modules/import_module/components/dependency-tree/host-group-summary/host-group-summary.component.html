@@ -43,7 +43,8 @@
         <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
             <th>{{ hostSummaryRowLabel.label }}</th>
             @if (hostSummaryRowLabel.key !== 'total') {
-                <td *ngFor="let key of HostgroupSummaryStatesHostsKeys" class="text-center">
+                <td *ngFor="let key of GetKeys(hostgroupSummeryState['hosts'][hostSummaryRowLabel.key])"
+                    class="text-center">
                     @if (key !== 'hostIds') {
                         @if (hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] > 0) {
                             <a *oitcPermission="['hosts', 'index']"
@@ -90,7 +91,8 @@
         <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
             <th>{{ hostSummaryRowLabel.label }}</th>
             @if (hostSummaryRowLabel.key !== 'total') {
-                <td *ngFor="let key of HostgroupSummaryStatesServicesKeys" class="text-center">
+                <td *ngFor="let key of GetKeys(hostgroupSummeryState['services'][hostSummaryRowLabel.key])"
+                    class="text-center">
                     @if (key !== 'serviceIds') {
                         @if (hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] > 0) {
                             <a *oitcPermission="['services', 'index']"

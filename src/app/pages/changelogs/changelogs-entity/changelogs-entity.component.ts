@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -81,7 +81,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
     templateUrl: './changelogs-entity.component.html',
     styleUrl: './changelogs-entity.component.css'
 })
-export class ChangelogsEntityComponent implements OnInit {
+export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
@@ -109,6 +109,18 @@ export class ChangelogsEntityComponent implements OnInit {
         }
     }
 
+    public ngOnInit() {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+            this.loadChanges();
+        }));
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
 
     loadChanges() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -142,6 +154,8 @@ export class ChangelogsEntityComponent implements OnInit {
 
     public resetFilter() {
         this.params = getDefaultChangelogsEntityParams();
+        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
             Action: {
                 add: true,
@@ -153,15 +167,6 @@ export class ChangelogsEntityComponent implements OnInit {
             }
         }
         this.loadChanges();
-    }
-
-    public ngOnInit() {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.loadChanges();
-        }));
     }
 
     public onPaginatorChange(change: PaginatorChangeEvent): void {

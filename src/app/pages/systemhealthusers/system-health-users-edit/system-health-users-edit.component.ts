@@ -27,12 +27,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import {
-    SystemHealthUserAdd,
-    SystemHealthUserDetails,
-    SystemHealthUserEditGet,
-    SystemHealthUserEditPost
-} from '../systemhealthusers.interface';
+import { SystemHealthUserEditGet, SystemHealthUserEditPost } from '../systemhealthusers.interface';
 import { SystemHealthUsersService } from '../systemhealthusers.service';
 import { Subscription } from 'rxjs';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -108,8 +103,9 @@ export class SystemHealthUsersEditComponent implements OnInit, OnDestroy {
 
                     const title = this.TranslocoService.translate('System health Users');
                     const msg = this.TranslocoService.translate('saved successfully');
+                    const url = ['/', 'systemHealthUsers', 'edit', this.post.id];
 
-                    this.notyService.genericSuccess(msg, title);
+                    this.notyService.genericSuccess(msg, title, url);
 
                     this.HistoryService.navigateWithFallback(['/systemHealthUsers/index']);
 

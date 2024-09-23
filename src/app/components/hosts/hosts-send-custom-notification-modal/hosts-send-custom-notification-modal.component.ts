@@ -23,7 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ExternalCommandsService, HostSendCustomNotificationItem } from '../../../services/external-commands.service';
+import { ExternalCommandsService, SendCustomNotificationItem } from '../../../services/external-commands.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 
@@ -59,7 +59,7 @@ import { Subscription } from 'rxjs';
     styleUrl: './hosts-send-custom-notification-modal.component.css'
 })
 export class HostsSendCustomNotificationModalComponent implements OnDestroy {
-    @Input({required: true}) public items: HostSendCustomNotificationItem[] = [];
+    @Input({required: true}) public items: SendCustomNotificationItem[] = [];
     @Output() completed = new EventEmitter<boolean>();
     public isSend: boolean = false;
     public error: boolean = false;
@@ -103,7 +103,7 @@ export class HostsSendCustomNotificationModalComponent implements OnDestroy {
             options = 3;
         }
 
-        this.items.forEach((element: HostSendCustomNotificationItem) => {
+        this.items.forEach((element: SendCustomNotificationItem) => {
             element.comment = this.sentNotificationModal.comment;
             element.options = options;
         });

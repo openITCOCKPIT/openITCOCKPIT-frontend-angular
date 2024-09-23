@@ -1,10 +1,24 @@
-import { HostEntity, HostObject, HostOrServiceType, HoststatusObject } from '../hosts/hosts.interface';
+import {
+    HostBrowserSlaOverview,
+    HostEntity,
+    HostObject,
+    HostObjectCake2,
+    HostOrServiceType,
+    HoststatusObject
+} from '../hosts/hosts.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
-import { Customvariable } from '../contacts/contacts.interface';
+import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { ServicetemplateEntity, ServicetemplatePost } from '../servicetemplates/servicetemplates.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
+import { GenericIdAndName } from '../../generic.interfaces';
+import { AcknowledgementObject } from '../acknowledgements/acknowledgement.interface';
+import { DowntimeObject } from '../downtimes/downtimes.interface';
+import { CheckCommandCake2 } from '../commands/commands.interface';
+import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
+import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import { ServicegroupEntityWithJoinData } from '../servicegroups/servicegroups.interface';
 
 /**********************
  *    Index action    *
@@ -14,7 +28,18 @@ export interface ServiceParams {
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | ''
+    direction: 'asc' | 'desc' | '',
+    BrowserContainerId?: number
+}
+
+export function getDefaultServiceIndexParams(): ServiceParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Servicestatus.current_state',
+        page: 1,
+        direction: 'desc',
+    }
 }
 
 
@@ -110,8 +135,8 @@ export interface ServicesIndexFilterApiRequest {
     'servicename': string
     'servicename_regex': boolean | string
     'servicedescription': string
-    'keywords':  string[]
-    'not_keywords':  string[]
+    'keywords': string[]
+    'not_keywords': string[]
     'servicepriority': string[]
 
     'Servicestatus.current_state': string[]
@@ -329,8 +354,8 @@ export interface ServicestatusObject {
     isFlapping?: boolean
     problemHasBeenAcknowledged?: boolean
     scheduledDowntimeDepth?: number
-    lastCheck?: string
-    nextCheck?: string
+    lastCheck?: string // "5 minutes ago"
+    nextCheck?: string // "1 hour, 54 minutes"
     activeChecksEnabled?: number
     lastHardStateChange?: string
     last_state_change?: string
@@ -348,14 +373,19 @@ export interface ServicestatusObject {
     last_time_ok?: string
     lastHardStateChangeInWords?: string
     last_state_change_in_words?: string
-    lastCheckInWords?: string
-    nextCheckInWords?: string
+    lastCheckInWords?: string // "5 minutes ago"
+    nextCheckInWords?: string // "1 hour, 54 minutes"
     isHardstate?: boolean
     isInMonitoring?: boolean
-    humanState?: string
-    cssClass?: string
-    textClass?: string
+    humanState?: string // "ok"
+    cssClass?: string // "bg-ok"
+    textClass?: string // "ok"
     outputHtml?: string
+    longOutputHtml?: string
+    lastHardStateChangeUser?: string, // "09:31:53 - 11.07.2024"
+    last_state_change_user?: string, // "09:31:53 - 11.07.2024"
+    lastCheckUser?: string, // "09:31:53 - 11.07.2024"
+    nextCheckUser?: string, // "09:31:53 - 11.07.2024"
 }
 
 /**********************
@@ -688,3 +718,75 @@ export interface ServiceBrowserMenu {
 /**************************
  * Service Browser action  *
  ***************************/
+
+export interface ServiceBrowserPerfdata {
+    current: string
+    unit: string
+    warning: string
+    critical: string
+    min: string
+    max: any
+    metric: string
+}
+
+export interface MergedService extends ServiceEntity {
+    servicecommandargumentvalues: ServiceCommandArgument[],
+    serviceeventcommandargumentvalues: ServiceCommandArgument[],
+    customvariables: Customvariable[],
+    servicegroups: ServicegroupEntityWithJoinData[]
+    contacts: ContactEntity[],
+    contactgroups: ContactgroupEntity[],
+    service_url_replaced: string
+    serviceCommandLine: string
+    checkIntervalHuman: string
+    retryIntervalHuman: string
+    notificationIntervalHuman: string
+    allowEdit: boolean
+    has_graph: boolean
+    Perfdata: {
+        [key: string]: ServiceBrowserPerfdata
+    }
+}
+
+
+export interface ServiceBrowserResult {
+    mergedService: MergedService
+    serviceType: HostOrServiceType
+    host: HostObjectCake2
+    areContactsFromService: boolean
+    areContactsInheritedFromHosttemplate: boolean
+    areContactsInheritedFromHost: boolean
+    areContactsInheritedFromServicetemplate: boolean
+    hoststatus: HoststatusObject
+    servicestatus: ServicestatusObject
+    acknowledgement?: AcknowledgementObject
+    downtime?: DowntimeObject
+    hostDowntime?: DowntimeObject
+    hostAcknowledgement?: AcknowledgementObject
+    checkCommand: CheckCommandCake2
+    checkPeriod: TimeperiodEnity
+    notifyPeriod: TimeperiodEnity
+    canSubmitExternalCommands: boolean
+    mainContainer: GenericIdAndName[],
+    sharedContainers: {
+        [key: number]: GenericIdAndName[]
+    },
+    objects: {
+        Servicegroups: GenericIdAndName[],
+        Instantreports: GenericIdAndName[],
+        Autoreports: GenericIdAndName[],
+        Eventcorrelations: GenericIdAndName[],
+        Maps: GenericIdAndName[],
+    },
+    usageFlag: number
+    username: string
+    blurryCommandLine: boolean
+    masterInstanceName: string
+
+    _csrfToken: string
+}
+
+// Both are the same
+export interface ServiceBrowserSlaOverview extends HostBrowserSlaOverview {
+
+}

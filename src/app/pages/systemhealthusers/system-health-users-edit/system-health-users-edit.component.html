@@ -30,13 +30,14 @@
                     <h5 cCardTitle>
                         {{ t('Edit system health user:') }}
                         <small class="fw-300">
-                            {{post.User.firstname}} {{post.User.lastname}} ({{post.User.email}})
+                            {{ post.User.firstname }} {{ post.User.lastname }} ({{ post.User.email }})
                         </small>
                     </h5>
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['systemHealthUsers', 'index']" cButton class="ripple" color="default"
+                            <button [fallbackUrl]="['systemHealthUsers', 'index']" cButton class="ripple"
+                                    color="default"
                                     oitcBackButton
                                     size="xs">
                                 <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -51,7 +52,7 @@
                     <div class="mb-3">
                         <label cLabel>
                             {{ t('System health notification options') }}
-                            <oitc-required-icon />
+                            <oitc-required-icon/>
                         </label>
 
                         <oitc-form-feedback [errors]="errors"
@@ -61,16 +62,16 @@
                         <div class="mb-3">
                             <c-form-check>
                                 <input
-                                        type="checkbox"
-                                        id="notify_on_recovery"
-                                        [(ngModel)]="post.SystemHealthUser.notify_on_recovery"
-                                        (ngModelChange)="post.SystemHealthUser.notify_on_recovery = $event ? 1 : 0"
-                                        cFormCheckInput
-                                        name="notify_on_recovery"
+                                    type="checkbox"
+                                    id="notify_on_recovery"
+                                    [(ngModel)]="post.SystemHealthUser.notify_on_recovery"
+                                    (ngModelChange)="post.SystemHealthUser.notify_on_recovery = $event ? 1 : 0"
+                                    cFormCheckInput
+                                    name="notify_on_recovery"
                                 />
                                 <label
-                                        cFormCheckLabel
-                                        for="notify_on_recovery">
+                                    cFormCheckLabel
+                                    for="notify_on_recovery">
                                     <c-badge class="notify-label"
                                              color="success">{{ t('Recovery') }}
                                     </c-badge>
@@ -81,16 +82,16 @@
                         <div class="mb-3">
                             <c-form-check>
                                 <input
-                                        type="checkbox"
-                                        id="notify_on_warning"
-                                        [(ngModel)]="post.SystemHealthUser.notify_on_warning"
-                                        (ngModelChange)="post.SystemHealthUser.notify_on_warning = $event ? 1 : 0"
-                                        cFormCheckInput
-                                        name="notify_on_warning"
+                                    type="checkbox"
+                                    id="notify_on_warning"
+                                    [(ngModel)]="post.SystemHealthUser.notify_on_warning"
+                                    (ngModelChange)="post.SystemHealthUser.notify_on_warning = $event ? 1 : 0"
+                                    cFormCheckInput
+                                    name="notify_on_warning"
                                 />
                                 <label
-                                        cFormCheckLabel
-                                        for="notify_on_warning">
+                                    cFormCheckLabel
+                                    for="notify_on_warning">
                                     <c-badge class="notify-label text-dark"
                                              color="warning">{{ t('Warning') }}
                                     </c-badge>
@@ -101,16 +102,16 @@
                         <div class="mb-3">
                             <c-form-check>
                                 <input
-                                        type="checkbox"
-                                        id="notify_on_critical"
-                                        [(ngModel)]="post.SystemHealthUser.notify_on_critical"
-                                        (ngModelChange)="post.SystemHealthUser.notify_on_critical = $event ? 1 : 0"
-                                        cFormCheckInput
-                                        name="notify_on_critical"
+                                    type="checkbox"
+                                    id="notify_on_critical"
+                                    [(ngModel)]="post.SystemHealthUser.notify_on_critical"
+                                    (ngModelChange)="post.SystemHealthUser.notify_on_critical = $event ? 1 : 0"
+                                    cFormCheckInput
+                                    name="notify_on_critical"
                                 />
                                 <label
-                                        cFormCheckLabel
-                                        for="notify_on_critical">
+                                    cFormCheckLabel
+                                    for="notify_on_critical">
                                     <c-badge class="notify-label"
                                              color="danger">{{ t('Critical') }}
                                     </c-badge>
@@ -125,7 +126,7 @@
                 <c-card-footer class="text-end">
 
                     <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Update user') }}
+                        {{ t('Update system health user') }}
                     </button>
                     <button [fallbackUrl]="['systemHealthUsers', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton

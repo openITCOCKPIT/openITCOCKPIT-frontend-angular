@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SlaHostgroupHostsStatusOverviewComponent } from './sla-hostgroup-hosts-status-overview.component';
 
-describe('BrowserTimelineComponent', () => {
+describe('SlaHostgroupHostsStatusOverviewComponent', () => {
     let component: SlaHostgroupHostsStatusOverviewComponent;
     let fixture: ComponentFixture<SlaHostgroupHostsStatusOverviewComponent>;
 
