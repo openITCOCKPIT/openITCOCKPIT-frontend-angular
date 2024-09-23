@@ -119,6 +119,9 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
 import {
     SatelliteNameComponent
 } from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
+import {
+    ServicenowServiceBrowserTabComponent
+} from '../../../modules/servicenow_module/components/servicenow-service-browser-tab/servicenow-service-browser-tab.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -185,7 +188,8 @@ import {
         FormCheckLabelDirective,
         FormsModule,
         KeyValuePipe,
-        SatelliteNameComponent
+        SatelliteNameComponent,
+        ServicenowServiceBrowserTabComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
