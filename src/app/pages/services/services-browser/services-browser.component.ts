@@ -25,7 +25,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -116,6 +116,9 @@ import {
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { GenericUnixtimerange } from '../../../generic.interfaces';
+import {
+    SatelliteNameComponent
+} from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -180,7 +183,9 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        FormsModule
+        FormsModule,
+        KeyValuePipe,
+        SatelliteNameComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
