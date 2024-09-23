@@ -6,12 +6,6 @@
     cursor: help;
 }
 
-.fieldset-legend-border-bottom-thin {
-    border-bottom: 2px solid;
-    border-image-source: linear-gradient(45deg, #4285F4, transparent);
-    border-image-slice: 1;
-}
-
 .select-input-group oitc-select {
     flex-grow: 1;
 }
