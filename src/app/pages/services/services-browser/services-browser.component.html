@@ -990,17 +990,23 @@
                     <oitc-browser-timeline
                         [type]="'Service'"
                         [objectId]="Number(result.mergedService.id)"
+                        [timerange$]="timerange$"
                         (onTimerangeChange)="onTimelineTimerangeChange($event)">
                         <oitc-service-timeline-legend></oitc-service-timeline-legend>
 
                         <div class="mt-2 mb-2">
-                            <c-form-check>
-                                <input cFormCheckInput id="sync_timeline_and_graph" type="checkbox"
-                                       class="checkbox-lg checkbox-primary"
-                                       [(ngModel)]="syncTimelineAndGraphTimestamps"/>
-                                <label cFormCheckLabel class="ms-1 mt-1"
-                                       for="sync_timeline_and_graph">{{ t('Synchronize times for timeline and service graph') }}</label>
-                            </c-form-check>
+                            <c-alert color="light">
+                                <c-form-check>
+                                    <input cFormCheckInput id="sync_timeline_and_graph" type="checkbox"
+                                           class="checkbox-lg checkbox-primary"
+                                           [(ngModel)]="syncTimelineAndGraphTimestamps"
+                                           (change)="onSyncTimelineAndGraphTimestampsChange($event)"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="sync_timeline_and_graph">
+                                        {{ t('Synchronize times for timeline and service graph') }}
+                                    </label>
+                                </c-form-check>
+                            </c-alert>
                         </div>
 
                     </oitc-browser-timeline>
@@ -1037,7 +1043,9 @@
             [serviceUuid]="String(result.mergedService.uuid)"
             [availableDataSources]="availableDataSources"
             [autoRefreshInterval]="Number(result.mergedService.check_interval)"
-            [timezone]="timezone"></oitc-services-browser-chart>
+            [timezone]="timezone"
+            (onGraphChange)="onGraphTimerangeChange($event)"
+            [timerange$]="timerange$"></oitc-services-browser-chart>
 
     </ng-container>
 </oitc-coreui>

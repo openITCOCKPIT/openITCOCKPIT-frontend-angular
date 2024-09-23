@@ -1,10 +1,10 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
     PerformanceData,
     PopoverGraphInterface,
     ServiceBrowserPerfParams
 } from '../../../../components/popover-graph/popover-graph.interface';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
@@ -41,16 +41,12 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { DateTime } from "luxon";
 import { LocalStorageService } from '../../../../services/local-storage.service';
+import { GenericUnixtimerange } from '../../../../generic.interfaces';
 
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
     smooth: boolean,
     autoRefresh: boolean
-}
-
-interface TimeRange {
-    start: number,
-    end: number
 }
 
 @Component({
@@ -104,6 +100,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     @Input() public availableDataSources: SelectKeyValueString[] = [];
     @Input() public timezone!: TimezoneObject;
     @Input() public autoRefreshInterval: number = 0; // value in seconds
+    @Input() public timerange$?: Observable<GenericUnixtimerange>;
+    @Output() onGraphChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
 
     private autoRefreshIntervalId: any = null;
 
@@ -138,7 +136,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     public isLoading: boolean = false;
 
-    public currentTimerange: TimeRange = {start: 0, end: 0};
+    public currentTimerange: GenericUnixtimerange = {start: 0, end: 0};
 
     public currentGraphUnit: string | null = null;
 
@@ -200,6 +198,19 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
         if (this.config.autoRefresh && this.autoRefreshInterval > 1) {
             this.startAutoRefresh();
+        }
+
+        if (this.timerange$) {
+            // We have an observable for the timerange.
+            // We subscribe to it and update the chart when the timeline changes
+            this.subscriptions.add(this.timerange$.subscribe((timerange) => {
+                if (timerange.start > 0 && timerange.end > 0) {
+                    if (timerange.start !== this.currentTimerange.start || timerange.end !== this.currentTimerange.end) {
+                        //console.log("External timerange change detected", timerange);
+                        this.syncChartWithTimeline(timerange.start, timerange.end);
+                    }
+                }
+            }));
         }
 
     }
@@ -271,6 +282,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
                 // ECharts needs at least 2 data points to render the chart
                 this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
+
+                // Emit the new end time to the parent component
+                this.onGraphChange.emit(this.currentTimerange);
 
                 this.renderChart(perfdata);
             })
@@ -347,6 +361,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
                 // Store the new Timestamp for end time
                 this.currentTimerange.end = Math.floor(this.lastTimestampWithData.getTime() / 1000);
+
+                // Emit the new end time to the parent component
+                this.onGraphChange.emit(this.currentTimerange);
             })
         );
     }
@@ -548,7 +565,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.loadPerfdata();
     }
 
-    private getStartEndEndTimestampsBySelectedTimerange(): TimeRange {
+    private getStartEndEndTimestampsBySelectedTimerange(): GenericUnixtimerange {
         const now = new Date();
 
         if (!this.timezone) {
@@ -773,6 +790,31 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         const start = Math.floor(event.batch[0].startValue / 1000);
         const end = Math.floor(event.batch[0].endValue / 1000);
 
+        // Set selectedTimerange to zero to get the placeholder displayed in the select
+        // and to tell the loadPerfdata() method that we want to use the provided start/end timestamps
+        this.selectedTimerange = 0;
+
+        this.currentTimerange = {start, end};
+
+        const duration = end - start;
+        this.timerangePlaceholder = `${this.getDateFormatted(start, duration)} - ${this.getDateFormatted(end, duration)}`;
+
+
+        const now = new Date();
+        const currentTimestamp = Math.floor(now.getTime() / 1000);
+        //Only enable auto refresh, if graphEnd timestamp is near to now
+        //We don't need to auto refresh data from yesterday
+        if ((end + this.autoRefreshInterval + 120) < currentTimestamp) {
+            this.cancelAutoRefresh();
+        }
+
+
+        // Reload detailed data
+        this.zoomEnabled = false; // After a re-render we have to re-enable the zoom
+        this.loadPerfdata();
+    }
+
+    private syncChartWithTimeline(start: number, end: number) {
         // Set selectedTimerange to zero to get the placeholder displayed in the select
         // and to tell the loadPerfdata() method that we want to use the provided start/end timestamps
         this.selectedTimerange = 0;

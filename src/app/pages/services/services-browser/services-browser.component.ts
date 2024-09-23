@@ -30,7 +30,7 @@ import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UUID } from '../../../classes/UUID';
@@ -203,6 +203,8 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public selectedTab: ServiceBrowserTabs = ServiceBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
 
+    private readonly timerange$$ = new BehaviorSubject<GenericUnixtimerange>({start: 0, end: 0});
+    public readonly timerange$ = this.timerange$$.asObservable();
     public syncTimelineAndGraphTimestamps: boolean = false;
     private timelineTimerange: GenericUnixtimerange = {start: 0, end: 0};
     private graphTimerange: GenericUnixtimerange = {start: 0, end: 0};
@@ -336,10 +338,29 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onSyncTimelineAndGraphTimestampsChange(ev: Event) {
+        // Gets called when the user toggles the sync checkbox
+        if (this.syncTimelineAndGraphTimestamps) {
+            // When the checkbox get checked, sync the timeline with the graph
+            this.timerange$$.next(this.timelineTimerange);
+        }
+    }
+
     public onTimelineTimerangeChange(timerange: GenericUnixtimerange) {
         this.timelineTimerange = timerange;
+        console.log("onTimelineTimerangeChange", timerange);
         if (this.syncTimelineAndGraphTimestamps) {
             // Timeline has moved - sync chart with timeline
+            this.timerange$$.next(timerange);
+        }
+    }
+
+    public onGraphTimerangeChange(timerange: GenericUnixtimerange) {
+        this.graphTimerange = timerange;
+        console.log("onGraphTimerangeChange", timerange);
+        if (this.syncTimelineAndGraphTimestamps) {
+            // Graph has moved - sync timeline with chart
+            this.timerange$$.next(timerange);
         }
     }
 

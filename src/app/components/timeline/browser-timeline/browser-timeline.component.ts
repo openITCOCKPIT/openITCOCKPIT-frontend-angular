@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BrowserTimelineApiResult, VisTimelineRangechangedProperties } from './browser-timeline.interface';
 import { DataSet } from "vis-data/peer";
 import { DataItem, Timeline, TimelineGroup, TimelineItem, TimelineOptions } from "vis-timeline/peer";
@@ -27,6 +27,7 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
 export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
     @Input() objectId: number = 0;
+    @Input() public timerange$?: Observable<GenericUnixtimerange>;
     @Output() onTimerangeChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
 
     private visTimelineStart: number = -1;
@@ -49,7 +50,19 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
 
     public ngOnInit() {
-        //this.loadData(-1, -1);
+        if (this.timerange$) {
+            // We have an observable for the timerange.
+            // We subscribe to it and update the timeline when the chart changes
+            this.subscriptions.add(this.timerange$.subscribe((timerange) => {
+                console.log(timerange, Math.floor(this.visTimelineStart), Math.floor(this.visTimelineEnd));
+                if (timerange.start > 0 && timerange.end > 0) {
+                    if (timerange.start !== Math.floor(this.visTimelineStart) || timerange.end !== Math.floor(this.visTimelineEnd)) {
+                        console.log("External timerange change detected", timerange);
+                        //this.syncChartWithTimeline(timerange.start, timerange.end);
+                    }
+                }
+            }));
+        }
     }
 
     public ngAfterViewInit() {
@@ -71,7 +84,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     private loadHostData(startTimestamp: number, endTimestamp: number): void {
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
-                //Zoom in data we already have
+                // Zoom in data we already have
+                // Emit event that we change our range
+                this.onTimerangeChange.emit({
+                    start: Math.floor(startTimestamp),
+                    end: Math.floor(endTimestamp)
+                });
+
+                // No loading needed as we already have the data
                 return;
             }
         }
@@ -93,6 +113,12 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;
+
+                // Emit event that we change our range
+                this.onTimerangeChange.emit({
+                    start: Math.floor(result.start),
+                    end: Math.floor(result.end)
+                });
 
                 let timelineOptions: TimelineOptions = {
                     orientation: "both",
@@ -143,7 +169,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     private loadServiceData(startTimestamp: number, endTimestamp: number): void {
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
-                //Zoom in data we already have
+                // Zoom in data we already have
+                // Emit event that we change our range
+                this.onTimerangeChange.emit({
+                    start: Math.floor(startTimestamp),
+                    end: Math.floor(endTimestamp)
+                });
+
+                // No loading needed as we already have the data
                 return;
             }
         }
@@ -172,6 +205,12 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;
+
+                // Emit event that we change our range
+                this.onTimerangeChange.emit({
+                    start: Math.floor(result.start),
+                    end: Math.floor(result.end)
+                });
 
                 let timelineOptions: TimelineOptions = {
                     orientation: "both",
@@ -272,36 +311,62 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                         const HOSTSTATEHISTORY = 5;
+                        const SERVICESTATEHISTORY = 4;
 
-                        var timeRange = this.timeline.getWindow();
-                        var visTimelineStartAsTimestamp = new Date(timeRange.start).getTime();
-                        var visTimelineEndAsTimestamp = new Date(timeRange.end).getTime();
+                        let timeRange = this.timeline.getWindow();
+                        let visTimelineStartAsTimestamp = new Date(timeRange.start).getTime();
+                        let visTimelineEndAsTimestamp = new Date(timeRange.end).getTime();
 
                         // Emit event that we change our range
-                        this.onTimerangeChange.emit({
-                            start: visTimelineStartAsTimestamp,
-                            end: visTimelineEndAsTimestamp
-                        });
+                        //this.onTimerangeChange.emit({
+                        //    start: visTimelineStartAsTimestamp,
+                        //    end: visTimelineEndAsTimestamp
+                        //});
 
-                        //@ts-ignore for itemsData
-                        var criticalItems = this.timeline.itemsData.get({
-                            fields: ['start', 'end', 'className', 'group'],    // output the specified fields only
-                            type: {
-                                start: 'Date',
-                                end: 'Date'
-                            },
-                            filter: (item: TimelineItem) => {
-                                return (item.group == HOSTSTATEHISTORY &&
-                                    (item.className === 'bg-down' || item.className === 'bg-down-soft') &&
-                                    this.CheckIfItemInRange(
-                                        visTimelineStartAsTimestamp,
-                                        visTimelineEndAsTimestamp,
-                                        item
-                                    )
-                                );
+                        let criticalItems: any = [];
+                        if (this.type === 'Host') {
+                            //@ts-ignore for itemsData
+                            criticalItems = this.timeline.itemsData.get({
+                                fields: ['start', 'end', 'className', 'group'],    // output the specified fields only
+                                type: {
+                                    start: 'Date',
+                                    end: 'Date'
+                                },
+                                filter: (item: TimelineItem) => {
+                                    return (item.group == HOSTSTATEHISTORY &&
+                                        (item.className === 'bg-down' || item.className === 'bg-down-soft') &&
+                                        this.CheckIfItemInRange(
+                                            visTimelineStartAsTimestamp,
+                                            visTimelineEndAsTimestamp,
+                                            item
+                                        )
+                                    );
 
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            //@ts-ignore for itemsData
+                            criticalItems = this.timeline.itemsData.get({
+                                fields: ['start', 'end', 'className', 'group'],    // output the specified fields only
+                                type: {
+                                    start: 'Date',
+                                    end: 'Date'
+                                },
+                                filter: (item: TimelineItem) => {
+                                    return (item.group == SERVICESTATEHISTORY &&
+                                        (item.className === 'bg-critical' || item.className === 'bg-critical-soft') &&
+                                        this.CheckIfItemInRange(
+                                            visTimelineStartAsTimestamp,
+                                            visTimelineEndAsTimestamp,
+                                            item
+                                        )
+                                    );
+
+                                }
+                            });
+                        }
+
+
                         this.failureDurationInPercent = this.calculateFailures(
                             (visTimelineEndAsTimestamp - visTimelineStartAsTimestamp), //visible time range
                             criticalItems,
