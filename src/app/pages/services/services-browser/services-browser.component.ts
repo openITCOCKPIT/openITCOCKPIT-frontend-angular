@@ -205,7 +205,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
     private readonly timerange$$ = new BehaviorSubject<GenericUnixtimerange>({start: 0, end: 0});
     public readonly timerange$ = this.timerange$$.asObservable();
-    public syncTimelineAndGraphTimestamps: boolean = false;
+    public syncTimelineAndGraphTimestamps: boolean = true;
     private timelineTimerange: GenericUnixtimerange = {start: 0, end: 0};
     private graphTimerange: GenericUnixtimerange = {start: 0, end: 0};
 
@@ -348,7 +348,6 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
     public onTimelineTimerangeChange(timerange: GenericUnixtimerange) {
         this.timelineTimerange = timerange;
-        console.log("onTimelineTimerangeChange", timerange);
         if (this.syncTimelineAndGraphTimestamps) {
             // Timeline has moved - sync chart with timeline
             this.timerange$$.next(timerange);
@@ -357,7 +356,6 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
     public onGraphTimerangeChange(timerange: GenericUnixtimerange) {
         this.graphTimerange = timerange;
-        console.log("onGraphTimerangeChange", timerange);
         if (this.syncTimelineAndGraphTimestamps) {
             // Graph has moved - sync timeline with chart
             this.timerange$$.next(timerange);

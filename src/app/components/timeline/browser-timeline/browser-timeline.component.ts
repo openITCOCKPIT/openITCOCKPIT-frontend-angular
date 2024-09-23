@@ -30,8 +30,13 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public timerange$?: Observable<GenericUnixtimerange>;
     @Output() onTimerangeChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
 
+    // Start and end timestamps of all available data
+    // If you zoom in, this timestamp will not change - only if you load data for a new timerange
     private visTimelineStart: number = -1;
     private visTimelineEnd: number = -1;
+
+    // The timerange of the currently visible data
+    private timerange: GenericUnixtimerange = {start: -1, end: -1};
 
     public data?: BrowserTimelineApiResult;
 
@@ -54,11 +59,10 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
             // We have an observable for the timerange.
             // We subscribe to it and update the timeline when the chart changes
             this.subscriptions.add(this.timerange$.subscribe((timerange) => {
-                console.log(timerange, Math.floor(this.visTimelineStart), Math.floor(this.visTimelineEnd));
                 if (timerange.start > 0 && timerange.end > 0) {
-                    if (timerange.start !== Math.floor(this.visTimelineStart) || timerange.end !== Math.floor(this.visTimelineEnd)) {
-                        console.log("External timerange change detected", timerange);
-                        //this.syncChartWithTimeline(timerange.start, timerange.end);
+                    if (timerange.start !== this.timerange.start || timerange.end !== this.timerange.end) {
+                        //console.log("External timerange change detected", timerange);
+                        this.syncTimelineWithChart(timerange);
                     }
                 }
             }));
@@ -85,13 +89,13 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
                 // Zoom in data we already have
-                // Emit event that we change our range
-                this.onTimerangeChange.emit({
-                    start: Math.floor(startTimestamp),
-                    end: Math.floor(endTimestamp)
-                });
-
                 // No loading needed as we already have the data
+
+                // Save the timerange of the currently visible data
+                this.timerange = {start: Math.floor(startTimestamp), end: Math.floor(endTimestamp)};
+                // Emit event that we change our range
+                this.onTimerangeChange.emit(this.timerange);
+
                 return;
             }
         }
@@ -111,14 +115,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
                 let groups = new DataSet<TimelineGroup>(result.groups);
 
+                // Save the timerange of the total available data in the timeline
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;
 
+                // Save the timerange of the currently visible data
+                this.timerange = {start: Math.floor(result.start), end: Math.floor(result.end)};
                 // Emit event that we change our range
-                this.onTimerangeChange.emit({
-                    start: Math.floor(result.start),
-                    end: Math.floor(result.end)
-                });
+                this.onTimerangeChange.emit(this.timerange);
 
                 let timelineOptions: TimelineOptions = {
                     orientation: "both",
@@ -170,13 +174,13 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
         if (startTimestamp !== -1 || endTimestamp !== -1) {
             if (startTimestamp > this.visTimelineStart && endTimestamp < this.visTimelineEnd) {
                 // Zoom in data we already have
-                // Emit event that we change our range
-                this.onTimerangeChange.emit({
-                    start: Math.floor(startTimestamp),
-                    end: Math.floor(endTimestamp)
-                });
-
                 // No loading needed as we already have the data
+
+                // Save the timerange of the currently visible data
+                this.timerange = {start: Math.floor(startTimestamp), end: Math.floor(endTimestamp)};
+                // Emit event that we change our range
+                this.onTimerangeChange.emit(this.timerange);
+
                 return;
             }
         }
@@ -206,11 +210,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;
 
+                // Save the timerange of the total available data in the timeline
+                this.visTimelineStart = result.start;
+                this.visTimelineEnd = result.end;
+
+                // Save the timerange of the currently visible data
+                this.timerange = {start: Math.floor(result.start), end: Math.floor(result.end)};
                 // Emit event that we change our range
-                this.onTimerangeChange.emit({
-                    start: Math.floor(result.start),
-                    end: Math.floor(result.end)
-                });
+                this.onTimerangeChange.emit(this.timerange);
 
                 let timelineOptions: TimelineOptions = {
                     orientation: "both",
@@ -258,6 +265,29 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
             }));
     }
 
+    private syncTimelineWithChart(timerange: GenericUnixtimerange): void {
+        if (!this.timeline) {
+            return;
+        }
+
+        let start = new Date(timerange.start * 1000);
+        let end = new Date(timerange.end * 1000);
+
+        if (timerange.start >= this.visTimelineStart && timerange.end <= this.visTimelineEnd) {
+            // Timerange is already loaded
+            // Just zoom in
+            this.timerange = {
+                start: timerange.start,
+                end: timerange.end
+            };
+            this.timeline.setWindow(start, end);
+        } else {
+            // Timerange is not loaded
+            // Load the data and set start and end position in timeline
+            this.loadData(timerange.start, timerange.end);
+            this.timeline.setWindow(start, end);
+        }
+    }
 
     private renderTimeline(items: DataSet<DataItem>, groups: DataSet<TimelineGroup>, timelineOptions: TimelineOptions) {
         const container = this.document.getElementById('visualization');

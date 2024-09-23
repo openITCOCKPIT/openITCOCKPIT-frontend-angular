@@ -505,8 +505,8 @@ export class ServicesService {
             .http.get<BrowserTimelineApiResult>(`${proxyPath}/services/timeline/${id}.json`, {
                 params: {
                     angular: true,
-                    start: startTimestamp,
-                    end: endTimetamp
+                    start: Math.floor(startTimestamp),
+                    end: Math.floor(endTimetamp)
                 }
             })
             .pipe(
