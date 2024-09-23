@@ -52,7 +52,7 @@
 
             <c-card-header>
                 <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
-                {{ t('Edit Host-Specific Settings') }}
+                {{ t('Edit Service-Specific Settings') }}
             </c-card-header>
 
             <c-card-body>
@@ -65,7 +65,7 @@
                     <select aria-label="Default select example" cSelect id="IncidentImpact"
                             name="IncidentImpact"
                             oitcFormError [errors]="errors" errorField="impact"
-                            [(ngModel)]="result.settings.ServicenowHostspecificSettings.impact">>
+                            [(ngModel)]="result.settings.ServicenowServicespecificSettings.impact">>
                         <option value="1">{{ t('1 - High') }}</option>
                         <option value="2">{{ t('2 - Medium') }}</option>
                         <option value="3">{{ t('3 - Low') }}</option>
@@ -88,7 +88,7 @@
                     <select aria-label="Default select example" cSelect id="IncidentUrgency"
                             name="IncidentUrgency"
                             oitcFormError [errors]="errors" errorField="urgency"
-                            [(ngModel)]="result.settings.ServicenowHostspecificSettings.urgency">>
+                            [(ngModel)]="result.settings.ServicenowServicespecificSettings.urgency">>
                         <option value="1">{{ t('1 - High') }}</option>
                         <option value="2">{{ t('2 - Medium') }}</option>
                         <option value="3">{{ t('3 - Low') }}</option>
@@ -109,7 +109,7 @@
                     <input cFormControl id="AssignmentGroup" required type="text"
                            name="AssignmentGroup"
                            oitcFormError [errors]="errors" errorField="assignment_group"
-                           [(ngModel)]="result.settings.ServicenowHostspecificSettings.assignment_group">
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.assignment_group">
                     <oitc-form-feedback [errors]="errors" errorField="assignment_group"></oitc-form-feedback>
                 </div>
                 <div class="help-block">
@@ -123,7 +123,7 @@
                     <input cFormControl id="AssignedTo" required type="text"
                            name="AssignedTo"
                            oitcFormError [errors]="errors" errorField="assigned_to"
-                           [(ngModel)]="result.settings.ServicenowHostspecificSettings.assigned_to">
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.assigned_to">
                     <oitc-form-feedback [errors]="errors" errorField="assigned_to"></oitc-form-feedback>
                 </div>
                 <div class="help-block">
@@ -137,7 +137,7 @@
                     <input cFormControl id="BusinessService" required type="text"
                            name="BusinessService"
                            oitcFormError [errors]="errors" errorField="business_service"
-                           [(ngModel)]="result.settings.ServicenowHostspecificSettings.business_service">
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.business_service">
                     <oitc-form-feedback [errors]="errors" errorField="business_service"></oitc-form-feedback>
                 </div>
                 <div class="help-block">

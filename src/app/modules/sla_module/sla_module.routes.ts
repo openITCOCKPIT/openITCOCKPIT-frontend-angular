@@ -13,4 +13,8 @@ export const slaModuleRoutes: Routes = [
         path: 'sla_module/slas/edit/:id',
         loadComponent: () => import('./pages/slas/slas-edit/slas-edit.component').then(m => m.SlasEditComponent)
     },
+    {
+        path: 'sla_module/host_mapping_rules/assignToHosts/:id',
+        loadComponent: () => import('./pages/host-mapping-rules/host-mapping-rules-assign-to-hosts/host-mapping-rules-assign-to-hosts.component').then(m => m.HostMappingRulesAssignToHostsComponent)
+    },
 ];

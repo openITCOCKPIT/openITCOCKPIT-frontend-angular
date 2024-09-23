@@ -7,7 +7,7 @@
             <c-pagination *ngIf="scroll" class="float-end">
                 <li *ngIf="scroll.current > 1"
                     cPageItem> <!-- ngIf in this case so that the CSS makes round borders -->
-                    <button (click)="firstPage()"
+                    <button type="button" (click)="firstPage()"
                             [title]="'First page' | transloco"
                             cPageLink
                             class="ripple">
@@ -15,7 +15,7 @@
                     </button>
                 </li>
                 <li [disabled]="!scroll.hasPrevPage" cPageItem>
-                    <button (click)="prevPage()"
+                    <button type="button" (click)="prevPage()"
                             [title]="'Previous page' | transloco"
                             cPageLink
                             class="ripple"
@@ -24,13 +24,13 @@
                     </button>
                 </li>
                 <li [active]="true" cPageItem>
-                    <button [title]="'Current page' | transloco"
+                    <button type="button" [title]="'Current page' | transloco"
                             cPageLink>
                         {{ scroll.current }}
                     </button>
                 </li>
                 <li [disabled]="!scroll.hasNextPage" cPageItem>
-                    <button (click)="nextPage()"
+                    <button type="button" (click)="nextPage()"
                             [title]="'Next page' | transloco"
                             cPageLink
                             class="ripple"

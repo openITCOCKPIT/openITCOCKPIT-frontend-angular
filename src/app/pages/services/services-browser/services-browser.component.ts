@@ -25,12 +25,12 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UUID } from '../../../classes/UUID';
@@ -116,6 +116,12 @@ import {
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { GenericUnixtimerange } from '../../../generic.interfaces';
+import {
+    SatelliteNameComponent
+} from '../../../modules/distribute_module/components/satellite-name/satellite-name.component';
+import {
+    ServicenowServiceBrowserTabComponent
+} from '../../../modules/servicenow_module/components/servicenow-service-browser-tab/servicenow-service-browser-tab.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -180,7 +186,10 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        FormsModule
+        FormsModule,
+        KeyValuePipe,
+        SatelliteNameComponent,
+        ServicenowServiceBrowserTabComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
@@ -203,7 +212,9 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public selectedTab: ServiceBrowserTabs = ServiceBrowserTabs.StatusInformation;
     public selectedItems: any[] = [];
 
-    public syncTimelineAndGraphTimestamps: boolean = false;
+    private readonly timerange$$ = new BehaviorSubject<GenericUnixtimerange>({start: 0, end: 0});
+    public readonly timerange$ = this.timerange$$.asObservable();
+    public syncTimelineAndGraphTimestamps: boolean = true;
     private timelineTimerange: GenericUnixtimerange = {start: 0, end: 0};
     private graphTimerange: GenericUnixtimerange = {start: 0, end: 0};
 
@@ -293,7 +304,9 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
                 this.priorities[i] = this.priorityClasses[priority]; // set color depending on priority level
             }
 
-            this.tags = String(result.mergedService.tags).split(',');
+            if (String(result.mergedService.tags) !== "") {
+                this.tags = String(result.mergedService.tags).split(',');
+            }
 
             for (let key in result.mergedService.Perfdata) {
                 const gauge = result.mergedService.Perfdata[key];
@@ -336,10 +349,27 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onSyncTimelineAndGraphTimestampsChange(ev: Event) {
+        // Gets called when the user toggles the sync checkbox
+        if (this.syncTimelineAndGraphTimestamps) {
+            // When the checkbox get checked, sync the timeline with the graph
+            this.timerange$$.next(this.timelineTimerange);
+        }
+    }
+
     public onTimelineTimerangeChange(timerange: GenericUnixtimerange) {
         this.timelineTimerange = timerange;
         if (this.syncTimelineAndGraphTimestamps) {
             // Timeline has moved - sync chart with timeline
+            this.timerange$$.next(timerange);
+        }
+    }
+
+    public onGraphTimerangeChange(timerange: GenericUnixtimerange) {
+        this.graphTimerange = timerange;
+        if (this.syncTimelineAndGraphTimestamps) {
+            // Graph has moved - sync timeline with chart
+            this.timerange$$.next(timerange);
         }
     }
 

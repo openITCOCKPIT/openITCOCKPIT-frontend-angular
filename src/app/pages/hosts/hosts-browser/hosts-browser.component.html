@@ -64,7 +64,7 @@
                         </button>
                     </c-nav-item>
 
-                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                    @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'host_configuration'])) {
                         <c-nav-item>
                             <button
                                 class="nav-link"
@@ -1065,7 +1065,7 @@
 
                 <!-- ServiceNow Module start -->
                 <div *ngIf="selectedTab == HostBrowserTabs.ServiceNow">
-                    @if (PermissionsService.hasModule('ServicenowModule')) {
+                    @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'host_configuration'])) {
                         <oitc-servicenow-host-browser-tab
                             *ngIf="result && result.mergedHost"
                             [hostUuid]="String(result.mergedHost.uuid)"
