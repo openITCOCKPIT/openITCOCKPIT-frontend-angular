@@ -300,7 +300,9 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
                 this.priorities[i] = this.priorityClasses[priority]; // set color depending on priority level
             }
 
-            this.tags = String(result.mergedService.tags).split(',');
+            if (String(result.mergedService.tags) !== "") {
+                this.tags = String(result.mergedService.tags).split(',');
+            }
 
             for (let key in result.mergedService.Perfdata) {
                 const gauge = result.mergedService.Perfdata[key];
