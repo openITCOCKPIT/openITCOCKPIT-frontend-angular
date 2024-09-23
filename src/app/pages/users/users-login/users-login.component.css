@@ -120,6 +120,7 @@ canvas {
 
 .login-side-bg {
     background: rgba(25, 33, 49, 0.4);
+    position:fixed;
 }
 
 /** fix button with icons **/
