@@ -1,11 +1,9 @@
 <ng-container *transloco="let t" class="peers">
     <!-- IMAGES -->
     <div class="login-screen">
-        <ng-container *ngFor="let image of images">
-            <figure [ngStyle]="{'background-image': getBackgroundUrl(image.image)}">
-                <figcaption>{{ image.credit }} {{ description }}</figcaption>
-            </figure>
-        </ng-container>
+        <figure *ngFor="let image of images" [ngStyle]="{'background-image': getBackgroundUrl(image.image)}">
+            <figcaption>{{ image.credit }} {{ description }}</figcaption>
+        </figure>
     </div>
     <!-- PRTCLS -->
     <ngx-particles
