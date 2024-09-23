@@ -1,4 +1,4 @@
-import { Component, inject, model, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -17,34 +17,33 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/changelogs-entry/changelogs-entry.component';
+import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexParams } from '../changelogs.interface';
-import { Subscription } from 'rxjs';
-import { ChangelogsService } from '../changelogs.service';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { HostgroupExtendedTabs } from '../../hostgroups/hostgroups.enum';
-import { PermissionsService } from '../../../permissions/permissions.service';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
 import {
-    SlaHostgroupHostsStatusOverviewComponent
-} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
-import { result } from 'lodash';
+    ChangelogIndexRoot,
+    ChangelogsIndexParams,
+    getDefaultChangelogsIndexParams
+} from '../../../../../pages/changelogs/changelogs.interface';
+import { Subscription } from 'rxjs';
+import { ImportChangelogsService } from '../importchangelogs.service';
+import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 
 
 @Component({
-    selector: 'oitc-changelogs-index',
+    selector: 'oitc-import-changelogs-index',
     standalone: true,
     imports: [
         CardBodyComponent,
@@ -69,6 +68,7 @@ import { result } from 'lodash';
         NavItemComponent,
         NgForOf,
         NgIf,
+        NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
         ReactiveFormsModule,
@@ -76,23 +76,19 @@ import { result } from 'lodash';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink,
-        NoRecordsComponent,
-        NgClass,
-        SlaHostgroupHostsStatusOverviewComponent
+        RouterLink
     ],
-    templateUrl: './changelogs-index.component.html',
-    styleUrl: './changelogs-index.component.css'
+    templateUrl: './import-changelogs-index.component.html',
+    styleUrl: './import-changelogs-index.component.css'
 })
-export class ChangelogsIndexComponent implements OnInit, OnDestroy{
+export class ImportChangelogsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-
+    public readonly PermissionsService = inject(PermissionsService);
     public hideFilter: boolean = true;
     public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
     private subscriptions: Subscription = new Subscription();
-    private ChangelogsService = inject(ChangelogsService)
-    public readonly PermissionsService = inject(PermissionsService);
+    private ImportChangelogsService = inject(ImportChangelogsService);
 
     public changes?: ChangelogIndexRoot;
 
@@ -100,34 +96,27 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy{
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public tmpFilter = {
+        ImportChangelogs: {
+            name: ''
+        },
         Models: {
-            Command: true,
-            Contact: true,
-            Contactgroup: true,
-            Host: true,
-            Hostgroup: true,
-            Hosttemplate: true,
-            Service: true,
-            Servicegroup: true,
-            Servicetemplate: true,
-            Servicetemplategroup: true,
-            Timeperiod: true,
-            Location: true,
-            Tenant: true,
-            Container: true,
-            Export: true,
-            User: true
+            Hostdefault: true,
+            Importer: true,
+            ImportedHost: true,
+            ImportedHostgroup: true,
+            ExternalSystem: true,
+            ExternalMonitoring: true,
+            StartImportData: true,
+            SynchronizeWithMonitoring: true
         },
         Action: {
             add: true,
             edit: true,
-            copy: true,
             delete: true,
-            activate: true,
-            deactivate: true,
-            export: true
+            import: true,
+            synchronization: true
         }
-    }
+    };
 
     public loadChanges() {
         this.params['filter[Changelogs.action][]'] = [];
@@ -147,7 +136,7 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy{
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
-        this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
+        this.subscriptions.add(this.ImportChangelogsService.getIndex(this.params)
             .subscribe((result: ChangelogIndexRoot) => {
                 this.changes = result;
             })
@@ -169,32 +158,25 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy{
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.tmpFilter = {
+            ImportChangelogs: {
+                name: ''
+            },
             Models: {
-                Command: true,
-                Contact: true,
-                Contactgroup: true,
-                Host: true,
-                Hostgroup: true,
-                Hosttemplate: true,
-                Service: true,
-                Servicegroup: true,
-                Servicetemplate: true,
-                Servicetemplategroup: true,
-                Timeperiod: true,
-                Location: true,
-                Tenant: true,
-                Container: true,
-                Export: true,
-                User: true
+                Hostdefault: true,
+                Importer: true,
+                ImportedHost: true,
+                ImportedHostgroup: true,
+                ExternalSystem: true,
+                ExternalMonitoring: true,
+                StartImportData: true,
+                SynchronizeWithMonitoring: true
             },
             Action: {
                 add: true,
                 edit: true,
-                copy: true,
                 delete: true,
-                activate: true,
-                deactivate: true,
-                export: true
+                import: true,
+                synchronization: true
             }
         }
         this.loadChanges();
@@ -214,8 +196,6 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy{
         this.params.scroll = change.scroll;
         this.loadChanges();
     }
-
-    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
