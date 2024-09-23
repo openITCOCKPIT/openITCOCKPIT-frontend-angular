@@ -11,7 +11,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgIf } from '@angular/common';
+import { NgForOf, NgIf, NgStyle } from '@angular/common';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -44,6 +44,8 @@ import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
         ColComponent,
         InputGroupComponent,
         NgxParticlesModule,
+        NgForOf,
+        NgStyle,
     ],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css'
@@ -196,6 +198,11 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         }));
     }
 
+    protected description: string = 'Lorem ipsum dolor sit amet';
+
+    getBackgroundUrl(image: string): string {
+        return `url('/img/login/${image}')`;
+    }
     particlesLoaded(container: Container): void {
         console.log(container);
     }

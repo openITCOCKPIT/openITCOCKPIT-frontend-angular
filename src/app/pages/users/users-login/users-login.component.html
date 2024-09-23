@@ -1,10 +1,21 @@
-<ng-container *transloco="let t">
+<ng-container *transloco="let t" class="peers">
+    <!-- IMAGES -->
+    <div class="login-screen">
+        <ng-container *ngFor="let image of images">
+            <figure [ngStyle]="{'background-image': getBackgroundUrl(image.image)}">
+                <figcaption>{{ image.credit }} {{ description }}</figcaption>
+            </figure>
+        </ng-container>
+    </div>
+    <!-- PRTCLS -->
     <ngx-particles
             id="prtcls"
             [options]="particlesOptions"
             (particlesLoaded)="particlesLoaded($event)"
     ></ngx-particles>
-    <c-row class="w-100 h-100" style="background:rgba(255,255,0,0.8)">
+
+    <!-- FORM -->
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg ng-scope">
         <c-col md="8"></c-col>
         <c-col md="4" class="p-4" style="background:rgba(0,0,0,0.5)">
 
