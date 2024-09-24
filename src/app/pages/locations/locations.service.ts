@@ -2,9 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { LocationsIndexParams, LocationsIndexRoot } from './locations.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { LocationPost, LocationsIndexParams, LocationsIndexRoot } from './locations.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -34,4 +36,39 @@ export class LocationsService {
 
         return this.http.post(`${proxyPath}/locations/delete/${item.id}.json`, {});
     }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/locations/loadContainers.json`, {
+            params: {
+                angular: true,
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
+
+    public add(location: LocationPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/locations/add.json?angular=true`, location)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }
