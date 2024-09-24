@@ -52,6 +52,8 @@ import { UsersService } from '../../users/users.service';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../history.service';
+import { VectormapComponent } from '../../../components/vectormap/vectormap.component';
+import { VectormapMarker } from '../../../components/vectormap/vactormap.interface';
 
 @Component({
     selector: 'oitc-locations-add',
@@ -100,7 +102,8 @@ import { HistoryService } from '../../../history.service';
         NgSelectComponent,
         SelectComponent,
         NgOptionTemplateDirective,
-        NgOptionHighlightDirective
+        NgOptionHighlightDirective,
+        VectormapComponent
     ],
     templateUrl: './locations-add.component.html',
     styleUrl: './locations-add.component.css'
@@ -112,6 +115,9 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
     public timezones: UserTimezonesSelect[] = [];
     public post: LocationPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
+
+    // For the map only
+    public markers: VectormapMarker[] = [];
 
     private subscriptions: Subscription = new Subscription();
     private readonly LocationsService = inject(LocationsService);
@@ -160,7 +166,7 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service');
+                    const title = this.TranslocoService.translate('Location');
                     const msg = this.TranslocoService.translate('created successfully');
                     const url = ['locations', 'edit', response.id];
 
@@ -171,6 +177,7 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.post = this.getDefaultPost();
+                    this.markers = [];
                     this.notyService.scrollContentDivToTop();
                     this.errors = null;
                     return;
@@ -183,6 +190,26 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
                 }
             }));
+    }
+
+    public updateMarker() {
+        const latitude = Number(this.post.latitude);
+        const longitude = Number(this.post.longitude);
+
+        // If we pass wrong values to the map, the marker of the map will fail
+        if (latitude <= 90 && latitude >= -90 && longitude <= 180 && longitude >= -180) {
+            const marker: VectormapMarker = {
+                name: this.post.container.name,
+                coords: [latitude, longitude],
+                style: {
+                    initial: {
+                        fill: '#6261cc'
+                    }
+                }
+            };
+
+            this.markers = [marker];
+        }
     }
 
 }
