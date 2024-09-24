@@ -71,4 +71,38 @@ export class LocationsService {
             );
     }
 
+    public getLocationEdit(id: number): Observable<LocationPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ location: LocationPost }>(`${proxyPath}/locations/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.location;
+            })
+        );
+    }
+
+    public saveLocationEdit(location: LocationPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/locations/edit/${location.id}.json?angular=true`, location)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }

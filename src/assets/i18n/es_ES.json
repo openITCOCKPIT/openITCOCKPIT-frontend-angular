@@ -1665,7 +1665,7 @@
     "Location name": "Nombre de ubicación",
     "Optional fields for location": "Campos opcionales para la ubicación",
     "Latitude": "Latitud",
-    " Latitude must be a number between -90 and 90 degree inclusive.": "La latitud debe ser un número entre -90 y 90 grados inclusive.",
+    "Latitude must be a number between -90 and 90 degree inclusive.": "La latitud debe ser un número entre -90 y 90 grados inclusive.",
     "Longitude": "Longitud",
     "Longitude must be a number -180 and 180 degree inclusive.": "La longitud debe ser un número entre -180 y 180 grados inclusive.",
     "Timezone": "Zona horaria",

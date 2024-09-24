@@ -93,7 +93,7 @@
                                (blur)="updateMarker()">
                         <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
                         <div class="help-block">
-                            {{ t(' Latitude must be a number between -90 and 90 degree inclusive.') }}
+                            {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@
                                (blur)="updateMarker()">
                         <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
                         <div class="help-block">
-                            {{ t(' Longitude must be a number between -180 and 180 degree inclusive.') }}
+                            {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
                         </div>
                     </div>
 
@@ -148,7 +148,7 @@
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Create location') }}
                     </button>
-                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                    <button [fallbackUrl]="['locations', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">
                         {{ t('Cancel') }}

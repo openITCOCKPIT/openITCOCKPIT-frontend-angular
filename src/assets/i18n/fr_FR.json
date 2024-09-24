@@ -1027,7 +1027,7 @@
     "Location name": "Nom de la localisation",
     "Optional fields for location": "Champs facultatifs pour la localisation",
     "Latitude": "Latitude",
-    " Latitude must be a number between -90 and 90 degree inclusive.": " La latitude doit être un nombre compris entre -90 et 90 degrés inclus.",
+    "Latitude must be a number between -90 and 90 degree inclusive.": "La latitude doit être un nombre compris entre -90 et 90 degrés inclus.",
     "Longitude": "Longitude",
     "Longitude must be a number -180 and 180 degree inclusive.": "La longitude doit être comprise entre -180 et 180 degrés inclus.",
     "Timezone": "Fuseau horaire",
