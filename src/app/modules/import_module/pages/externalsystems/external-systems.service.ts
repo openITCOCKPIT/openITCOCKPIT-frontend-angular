@@ -1,22 +1,25 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { PermissionsService } from '../../permissions/permissions.service';
+import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 import {
     AdditionalHostInformationResult,
     Applications,
     DependencyTreeApiResult,
-    ExternalSystemEntity
+    ExternalSystemEntity,
+    ExternalSystemsIndexParams,
+    ExternalSystemsIndexRoot
 } from './external-systems.interface';
-import { HostgroupSummaryState, SummaryState } from '../../pages/hosts/summary_state.interface';
+import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { ModalService } from '@coreui/angular';
 import {
     GenericIdResponse,
     GenericMessageResponse,
     GenericResponseWrapper,
     GenericValidationError
-} from '../../generic-responses';
+} from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -178,5 +181,22 @@ export class ExternalSystemsService {
                 });
             })
         );
+    }
+
+    public getIndex(params: ExternalSystemsIndexParams): Observable<ExternalSystemsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ExternalSystemsIndexRoot>(`${proxyPath}/import_module/external_systems/index.json`, {
+            params: params as {} // cast ExternalSystemsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/external_systems/delete/${item.id}.json?angular=true`, {});
     }
 }

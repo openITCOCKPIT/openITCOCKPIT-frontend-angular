@@ -1,3 +1,5 @@
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+
 export interface AdditionalHostInformationResult {
 
     response: {
@@ -367,4 +369,53 @@ export interface Ci {
     id: string
     class: string
     name: string
+}
+
+export interface ExternalSystemsIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[ExternalSystems.id][]': [],
+    'filter[ExternalSystems.name]': string
+    'filter[ExternalSystems.description]': string
+    'filter[ExternalSystems.api_url]': boolean
+}
+
+export function getDefaultExternalSystemsIndexParams(): ExternalSystemsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'ExternalSystems.name',
+        page: 1,
+        direction: 'asc',
+        'filter[ExternalSystems.id][]': [],
+        'filter[ExternalSystems.name]': '',
+        'filter[ExternalSystems.description]': '',
+        'filter[ExternalSystems.api_url]': false
+    }
+}
+
+export interface ExternalSystemsIndexRoot extends PaginateOrScroll {
+    externalSystems: ExternalSystem[]
+    _csrfToken: any
+}
+
+export interface ExternalSystem {
+    id: number
+    name: string
+    api_url: string
+    use_https: number
+    use_proxy: number
+    ignore_ssl_certificate: number
+    container_id: number
+    description: string
+    system_type: string
+    container: string
+    allowEdit: boolean
+    connected: {
+        status: boolean
+        message: string
+    }
 }

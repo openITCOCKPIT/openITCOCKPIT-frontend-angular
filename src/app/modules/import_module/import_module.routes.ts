@@ -15,5 +15,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/import_changelogs/index',
     loadComponent: () => import('./pages/importchangelogs/import-changelogs-index/import-changelogs-index.component').then(m => m.ImportChangelogsIndexComponent)
+}, {
+    path: 'import_module/ExternalSystems/index',
+    loadComponent: () => import('./pages/externalsystems/external-systems-index/external-systems-index.component').then(m => m.ExternalSystemsIndexComponent)
 }
 ];
