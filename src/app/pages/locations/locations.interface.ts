@@ -48,3 +48,20 @@ export function getDefaultLocationsIndexParams(): LocationsIndexParams {
         'filter[Locations.description]': ''
     }
 }
+
+/**********************
+ *     Add action     *
+ **********************/
+export interface LocationPost {
+    id?: number
+    description: string
+    latitude: null | number
+    longitude: null | number
+    timezone: string
+    container: {
+        name: string
+        parent_id: number
+    }
+    created?: string
+    modified?: string
+}
