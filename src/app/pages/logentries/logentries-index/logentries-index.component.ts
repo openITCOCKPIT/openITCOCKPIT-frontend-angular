@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -99,7 +99,8 @@ import _ from 'lodash';
         TrustAsHtmlPipe,
         ServerLinkComponent,
         FormErrorDirective,
-        MultiSelectComponent
+        MultiSelectComponent,
+        CardFooterComponent
     ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css'

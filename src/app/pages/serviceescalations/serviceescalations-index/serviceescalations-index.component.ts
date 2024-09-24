@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -103,7 +103,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CardFooterComponent
     ],
     templateUrl: './serviceescalations-index.component.html',
     styleUrl: './serviceescalations-index.component.css',

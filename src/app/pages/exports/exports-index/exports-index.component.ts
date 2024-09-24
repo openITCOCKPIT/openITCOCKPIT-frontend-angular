@@ -151,7 +151,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
                 // mark already selected satellite systems
                 for (let satellite of this.satellites) {
                     if (satellite.sync_instance) {
-                        this.SelectionServiceService.selectItem(satellite);
+                        //   this.SelectionServiceService.selectItem(satellite);
                     }
                 }
             }

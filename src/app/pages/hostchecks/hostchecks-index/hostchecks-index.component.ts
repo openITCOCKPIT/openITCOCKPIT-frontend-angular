@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -91,7 +92,8 @@ import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-se
         RouterLink,
         TrustAsHtmlPipe,
         NgClass,
-        FakeSelectComponent
+        FakeSelectComponent,
+        CardFooterComponent
     ],
     templateUrl: './hostchecks-index.component.html',
     styleUrl: './hostchecks-index.component.css'

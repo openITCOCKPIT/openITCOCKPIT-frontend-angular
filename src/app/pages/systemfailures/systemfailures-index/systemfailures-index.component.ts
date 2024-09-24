@@ -5,6 +5,7 @@ import {
     ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -111,7 +112,8 @@ import { Statistics } from '../../statistics/statistics.enum';
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        CardFooterComponent
     ],
     templateUrl: './systemfailures-index.component.html',
     styleUrl: './systemfailures-index.component.css',

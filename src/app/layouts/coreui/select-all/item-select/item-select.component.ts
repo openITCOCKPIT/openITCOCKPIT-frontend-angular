@@ -19,6 +19,7 @@ export class ItemSelectComponent implements OnInit, OnDestroy {
 
     @Input() item: any;
     @Input() public disabled: boolean = true;
+    @Input() initialChecked: boolean = false;
 
     public checked = false;
     private subscriptions: Subscription = new Subscription();
@@ -42,26 +43,12 @@ export class ItemSelectComponent implements OnInit, OnDestroy {
             }
         }));
 
-        // Subscript to SelectionService in case .selectItem() get called.
-        // Only supports "id" field for now
-        this.subscriptions.add(this.selection.selection$.subscribe(items => {
-            if (this.disabled) {
-                // Do not allow selection if the checkbox is disabled
-                return;
+        if (this.initialChecked) {
+            if (!this.disabled) {
+                this.checked = true;
+                this.selection.selectItem(this.item);
             }
-
-            for (let item of items) {
-                if (item.hasOwnProperty('id') && this.item.hasOwnProperty('id')) {
-                    if (item.id === this.item.id) {
-                        this.checked = true;
-                        return;
-                    }
-                }
-            }
-
-            // We are not in the current selection :(
-            this.checked = false;
-        }));
+        }
     }
 
     public ngOnDestroy() {

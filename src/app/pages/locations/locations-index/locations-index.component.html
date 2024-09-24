@@ -8,10 +8,9 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['systemfailures', 'index']"
-                       [routerLink]="['/', 'systemfailures', 'index']">
-                        <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
-                        {{ t('System Failure') }}
+                    <a *oitcPermission="['locations', 'index']" [routerLink]="['/', 'locations', 'index']">
+                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                        {{ t('Locations') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -21,9 +20,11 @@
             </ol>
         </nav>
 
+        <oitc-query-handler-checker></oitc-query-handler-checker>
+
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('System failures') }}
+                <h5 cCardTitle>{{ t('Locations') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
@@ -31,14 +32,14 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadSystemfailures()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadLocations()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['systemfailures', 'add']"
-                                [routerLink]="['/', 'systemfailures', 'add']" cButton
+                        <button *oitcPermission="['locations', 'add']" [routerLink]="['/', 'locations', 'add']"
+                                cButton
                                 class="ripple"
                                 color="success"
                                 size="xs">
@@ -54,7 +55,9 @@
                     </c-nav-item>
                 </c-nav>
             </c-card-header>
+
             <c-card-body>
+
                 <!-- Filter -->
                 <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
                     <c-row>
@@ -67,39 +70,38 @@
                     </c-row>
                     <form cForm>
                         <c-row>
-                            <c-col md="6" class="mb-2">
+                            <c-col [xs]="12" [md]="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Systemfailures.comment]']"
-                                           [placeholder]="'Filter by comment' | transloco"
-                                           aria-label="name"
+                                           [(ngModel)]="params['filter[Containers.name]']"
+                                           [placeholder]="'Filter by name' | transloco"
+                                           aria-label="Location name"
                                            cFormControl
-                                           name="Systemfailures.comment"
+                                           name="Location.name"
                                            oitcDebounce
                                            type="text"
                                     />
                                 </c-input-group>
                             </c-col>
-                            <c-col md="6" class="mb-2">
+                            <c-col [xs]="12" [md]="6">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[full_name]']"
-                                           [placeholder]="'Filter by first and last name' | transloco"
-                                           aria-label="name"
+                                           [(ngModel)]="params['filter[Locations.description]']"
+                                           [placeholder]="'Filter by description' | transloco"
+                                           aria-label="Location description"
                                            cFormControl
-                                           name="full_name"
+                                           name="Location.description"
                                            oitcDebounce
                                            type="text"
                                     />
                                 </c-input-group>
                             </c-col>
-
                         </c-row>
                         <c-row class="mt-2">
                             <c-col class="text-end">
@@ -111,75 +113,86 @@
                     </form>
                 </c-container>
                 <!-- End Filter -->
-                <oitc-table-loader *ngIf="!systemfailures"></oitc-table-loader>
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+
+                <oitc-table-loader *ngIf="!locations"></oitc-table-loader>
+                <table *ngIf="locations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <th class="width-50 text-center" scope="col">
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
-                        <th scope="col" mat-sort-header="Systemfailures.start_time">
-                            {{ t('Start time') }}
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Location name') }}
                         </th>
-                        <th scope="col" mat-sort-header="Systemfailures.end_time">
-                            {{ t('End time') }}
+                        <th scope="col" mat-sort-header="Locations.description">
+                            {{ t('Description') }}
                         </th>
-                        <th scope="col" mat-sort-header="full_name">
-                            {{ t('User') }}
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
-                        <th scope="col" mat-sort-header="Systemfailures.comment">
-                            {{ t('Comment') }}
-                        </th>
-                        <th scope="col" class="text-center">
-                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        </th>
-
                     </tr>
                     </thead>
-                    <tbody *ngIf="systemfailures">
-                    <tr *ngFor="let systemfailure of systemfailures.all_systemfailures">
+                    <tbody>
+                    <tr *ngFor="let location of locations.all_locations">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['systemfailures', 'delete']"
-                                [disabled]="false"
-                                [item]="systemfailure"></oitc-item-select>
+                                *oitcPermission="['locations', 'delete']"
+                                [disabled]="!Boolean(location.Location.allowEdit)"
+                                [item]="location"></oitc-item-select>
                         </td>
-                        <td>
-                            {{ systemfailure.start_time }}
-                        </td>
-                        <td>
-                            {{ systemfailure.end_time }}
-                        </td>
-                        <td>
-                            {{ systemfailure.full_name }}
-                        </td>
-                        <td>
-                            {{ systemfailure.comment }}
-                        </td>
-                        <td class="text-center">
-                            <button (click)="toggleDeleteAllModal(systemfailure)"
-                                    *oitcPermission="['systemfailures', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            </button>
+
+                        <td>{{ location.Container.name }}</td>
+
+                        <td>{{ location.Location.description }}</td>
+
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'locations.edit'"
+                                                 [url]="'/locations/edit/' + location.Location.id"
+                                                 [allowEdit]="location.Location.allowEdit">
+                                <oitc-actions-button-element [permission]="'locations.edit'"
+                                                             [url]="'/locations/edit/' + location.Location.id">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                             [url]="'/changelogs/entity/location/' + location.Location.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'containers.showDetails'"
+                                                             [url]="'/containers/showDetails/' + location.Location.container_id">
+                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                    {{ t('Show details') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider *ngIf="location.Location.allowEdit"></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(location)"
+                                                             [permission]="'locations.delete'"
+                                                             *ngIf="location.Location.allowEdit">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
+
                 <oitc-no-records
-                    *ngIf="systemfailures && systemfailures.all_systemfailures.length === 0"></oitc-no-records>
-                <ng-container *ngIf="systemfailures && systemfailures.all_systemfailures">
+                    *ngIf="locations && locations.all_locations.length === 0"></oitc-no-records>
+                <ng-container *ngIf="locations && locations.all_locations">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="systemfailures.all_systemfailures.length"></oitc-select-all>
+                                    [itemsCount]="locations.all_locations.length"></oitc-select-all>
                             </c-col>
-                            <c-col md="3">
-                                <div *oitcPermission="['systemfailures', 'delete']"
-                                     class="btn-group d-flex flex-row" role="group">
+                            <c-col md="6">
+                                <div class="btn-group d-flex flex-row" role="group">
                                     <button (click)="toggleDeleteAllModal()"
                                             class="btn btn-outline-danger col-3 border-0"
                                             type="button">
@@ -190,21 +203,25 @@
                             </c-col>
                         </c-row>
                     </c-container>
+
+                    <c-container fluid>
+                        <c-row>
+                            <c-col>
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    *ngIf="locations"
+                                    [paginateOrScroll]="locations"></oitc-paginate-or-scroll>
+                            </c-col>
+                        </c-row>
+                    </c-container>
                 </ng-container>
-                <c-container fluid class="mb-3 py-3">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="systemfailures"
-                                [paginateOrScroll]="systemfailures"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
+
             </c-card-body>
+
             <c-card-footer>
                 &nbsp;
             </c-card-footer>
+
         </c-card>
     </ng-container>
 </oitc-coreui>

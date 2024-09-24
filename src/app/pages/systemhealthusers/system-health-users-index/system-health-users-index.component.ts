@@ -3,10 +3,12 @@ import {
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownDividerDirective,
+    ContainerComponent,
+    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -40,7 +42,8 @@ import { Subscription } from 'rxjs';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { SystemHealthUsersService } from '../systemhealthusers.service';
 import {
-    getDefaultSystemHealthUsersParams, SystemHealthUser,
+    getDefaultSystemHealthUsersParams,
+    SystemHealthUser,
     SystemHealthUsersIndex,
     SystemHealthUsersIndexParams
 } from '../systemhealthusers.interface';
@@ -53,8 +56,8 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 
 @Component({
-  selector: 'oitc-system-health-users-index',
-  standalone: true,
+    selector: 'oitc-system-health-users-index',
+    standalone: true,
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -92,10 +95,11 @@ import {
         RouterLink,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        DropdownDividerDirective
+        DropdownDividerDirective,
+        CardFooterComponent
     ],
-  templateUrl: './system-health-users-index.component.html',
-  styleUrl: './system-health-users-index.component.css',
+    templateUrl: './system-health-users-index.component.html',
+    styleUrl: './system-health-users-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemHealthUsersService}
     ]

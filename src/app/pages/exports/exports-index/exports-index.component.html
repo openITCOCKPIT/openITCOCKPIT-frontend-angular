@@ -83,7 +83,8 @@
                                             <td>
                                                 <oitc-item-select
                                                     [disabled]="false"
-                                                    [item]="satellite"></oitc-item-select>
+                                                    [item]="satellite"
+                                                    [initialChecked]="satellite.sync_instance == 1"></oitc-item-select>
                                             </td>
                                             <td>
                                                 {{ satellite.name }}
