@@ -164,6 +164,7 @@
                                 {{ t('ONLINE') }}
                             </span>
                             <span class="badge border border-danger text-danger"
+                                  title="{{externalSystem.connected.msg.message}}"
                                   *ngIf="!externalSystem.connected.status">
                                 {{ t('OFFLINE') }}
                             </span>

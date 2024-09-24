@@ -416,6 +416,8 @@ export interface ExternalSystem {
     allowEdit: boolean
     connected: {
         status: boolean
-        message: string
+        msg: {
+            message: string
+        }
     }
 }
