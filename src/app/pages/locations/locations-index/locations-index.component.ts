@@ -139,6 +139,8 @@ export class LocationsIndexComponent implements OnInit, OnDestroy {
     }
 
     public loadLocations(): void {
+        this.SelectionServiceService.deselectAll();
+        
         this.subscriptions.add(
             this.LocationsService.getIndex(this.params).subscribe((locations) => {
                 this.locations = locations;
