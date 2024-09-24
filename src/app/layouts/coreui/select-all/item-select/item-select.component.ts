@@ -19,6 +19,7 @@ export class ItemSelectComponent implements OnInit, OnDestroy {
 
     @Input() item: any;
     @Input() public disabled: boolean = true;
+    @Input() initialChecked: boolean = false;
 
     public checked = false;
     private subscriptions: Subscription = new Subscription();
@@ -41,6 +42,13 @@ export class ItemSelectComponent implements OnInit, OnDestroy {
                 this.selection.selectItem(this.item);
             }
         }));
+
+        if (this.initialChecked) {
+            if (!this.disabled) {
+                this.checked = true;
+                this.selection.selectItem(this.item);
+            }
+        }
     }
 
     public ngOnDestroy() {
