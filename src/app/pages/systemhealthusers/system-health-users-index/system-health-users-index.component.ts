@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     BadgeComponent,
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -92,7 +92,8 @@ import {
         RouterLink,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        DropdownDividerDirective
+        DropdownDividerDirective,
+        CardFooterComponent
     ],
   templateUrl: './system-health-users-index.component.html',
   styleUrl: './system-health-users-index.component.css',

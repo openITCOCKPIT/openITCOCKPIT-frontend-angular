@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -83,7 +84,8 @@ import { HttpParams } from '@angular/common/http';
         DropdownComponent,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        CardFooterComponent
     ],
     templateUrl: './eventlogs-index.component.html',
     styleUrl: './eventlogs-index.component.css',

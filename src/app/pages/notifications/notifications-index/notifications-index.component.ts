@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -95,7 +95,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         HoststatusSimpleIconComponent,
         ContainerComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CardFooterComponent
     ],
     templateUrl: './notifications-index.component.html',
     styleUrl: './notifications-index.component.css'
