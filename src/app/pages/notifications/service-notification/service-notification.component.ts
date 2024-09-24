@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -104,7 +105,8 @@ import {
         ContainerComponent,
         TableLoaderComponent,
         ServicesBrowserMenuComponent,
-        HostsBrowserMenuComponent
+        HostsBrowserMenuComponent,
+        CardFooterComponent
     ],
     templateUrl: './service-notification.component.html',
     styleUrl: './service-notification.component.css'

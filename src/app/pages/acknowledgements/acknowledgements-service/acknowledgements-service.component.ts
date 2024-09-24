@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -91,7 +92,8 @@ import {
         TrustAsHtmlPipe,
         XsButtonDirective,
         ServicesBrowserMenuComponent,
-        ServicestatusSimpleIconComponent
+        ServicestatusSimpleIconComponent,
+        CardFooterComponent
     ],
     templateUrl: './acknowledgements-service.component.html',
     styleUrl: './acknowledgements-service.component.css'
