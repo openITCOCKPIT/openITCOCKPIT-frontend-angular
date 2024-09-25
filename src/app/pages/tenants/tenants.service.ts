@@ -2,9 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { TenantsIndexParams, TenantsIndexRoot } from './tenant.interface';
+import { TenantPost, TenantsIndexParams, TenantsIndexRoot } from './tenant.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -33,5 +34,60 @@ export class TenantsService {
         const proxyPath = this.proxyPath;
 
         return this.http.post(`${proxyPath}/tenants/delete/${item.id}.json`, {});
+    }
+
+    public add(tenant: TenantPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/tenants/add.json?angular=true`, tenant)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getTenantEdit(id: number): Observable<TenantPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ tenant: TenantPost }>(`${proxyPath}/tenants/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.tenant;
+            })
+        );
+    }
+
+    public saveTenantEdit(tenant: TenantPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/tenants/edit/${tenant.id}.json?angular=true`, tenant)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

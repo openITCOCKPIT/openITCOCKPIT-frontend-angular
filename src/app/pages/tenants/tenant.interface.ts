@@ -54,3 +54,32 @@ export interface TenantEnitity {
     modified?: string
     allowEdit?: boolean
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface TenantPost {
+    id?: number
+    container_id?: number
+    description: string
+    is_active?: number
+    number_users?: number
+    max_users?: number
+    number_hosts?: number
+    number_services?: number
+    firstname: string
+    lastname: string
+    street: string
+    zipcode: null | number
+    city: string
+    created?: string
+    modified?: string
+    container: {
+        id?: number
+        containertype_id?: number
+        name: string
+        parent_id?: number
+        lft?: number
+        rght?: number
+    }
+}
