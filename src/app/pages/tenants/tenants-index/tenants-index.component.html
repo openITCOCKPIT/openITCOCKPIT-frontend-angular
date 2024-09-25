@@ -8,9 +8,9 @@
                         {{ t('Home') }}
                     </a></li>
                 <li class="breadcrumb-item">
-                    <a *oitcPermission="['locations', 'index']" [routerLink]="['/', 'locations', 'index']">
-                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
-                        {{ t('Locations') }}
+                    <a *oitcPermission="['tenants', 'index']" [routerLink]="['/', 'tenants', 'index']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Tenants') }}
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
@@ -19,10 +19,10 @@
                 </li>
             </ol>
         </nav>
-        
+
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Locations') }}
+                <h5 cCardTitle>{{ t('Tenants') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
@@ -30,13 +30,13 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button (click)="loadLocations()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadTenants()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button *oitcPermission="['locations', 'add']" [routerLink]="['/', 'locations', 'add']"
+                        <button *oitcPermission="['tenants', 'add']" [routerLink]="['/', 'tenants', 'add']"
                                 cButton
                                 class="ripple"
                                 color="success"
@@ -76,9 +76,9 @@
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Containers.name]']"
                                            [placeholder]="'Filter by name' | transloco"
-                                           aria-label="Location name"
+                                           aria-label="Tenant name"
                                            cFormControl
-                                           name="Location.name"
+                                           name="Tenant.name"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -90,11 +90,11 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Locations.description]']"
+                                           [(ngModel)]="params['filter[Tenants.description]']"
                                            [placeholder]="'Filter by description' | transloco"
-                                           aria-label="Location description"
+                                           aria-label="Tenant description"
                                            cFormControl
-                                           name="Location.description"
+                                           name="Tenant.description"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -112,8 +112,8 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="!locations"></oitc-table-loader>
-                <table *ngIf="locations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                <oitc-table-loader *ngIf="!tenants"></oitc-table-loader>
+                <table *ngIf="tenants" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
@@ -122,9 +122,9 @@
                             <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                         </th>
                         <th scope="col" mat-sort-header="Containers.name">
-                            {{ t('Location name') }}
+                            {{ t('Tenant name') }}
                         </th>
-                        <th scope="col" mat-sort-header="Locations.description">
+                        <th scope="col" mat-sort-header="Tenants.description">
                             {{ t('Description') }}
                         </th>
                         <th class="text-center width-50" scope="col">
@@ -133,41 +133,41 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let location of locations.all_locations">
+                    <tr *ngFor="let tenant of tenants.all_tenants">
                         <td class="text-center">
                             <oitc-item-select
-                                *oitcPermission="['locations', 'delete']"
-                                [disabled]="!Boolean(location.Location.allowEdit)"
-                                [item]="location"></oitc-item-select>
+                                *oitcPermission="['tenants', 'delete']"
+                                [disabled]="!Boolean(tenant.Tenant.allowEdit)"
+                                [item]="tenant"></oitc-item-select>
                         </td>
 
-                        <td>{{ location.Container.name }}</td>
+                        <td>{{ tenant.Container.name }}</td>
 
-                        <td>{{ location.Location.description }}</td>
+                        <td>{{ tenant.Tenant.description }}</td>
 
                         <td class="width-50">
-                            <oitc-actions-button [permission]="'locations.edit'"
-                                                 [url]="'/locations/edit/' + location.Location.id"
-                                                 [allowEdit]="location.Location.allowEdit">
-                                <oitc-actions-button-element [permission]="'locations.edit'"
-                                                             [url]="'/locations/edit/' + location.Location.id">
+                            <oitc-actions-button [permission]="'tenants.edit'"
+                                                 [url]="'/tenants/edit/' + tenant.Tenant.id"
+                                                 [allowEdit]="tenant.Tenant.allowEdit">
+                                <oitc-actions-button-element [permission]="'tenants.edit'"
+                                                             [url]="'/tenants/edit/' + tenant.Tenant.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                             [url]="'/changelogs/entity/location/' + location.Location.id">
+                                                             [url]="'/changelogs/entity/tenant/' + tenant.Tenant.id">
                                     <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                                     {{ t('Changelog') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'containers.showDetails'"
-                                                             [url]="'/containers/showDetails/' + location.Location.container_id">
+                                                             [url]="'/containers/showDetails/' + tenant.Tenant.container_id">
                                     <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                                     {{ t('Show details') }}
                                 </oitc-actions-button-element>
-                                <li cDropdownDivider *ngIf="location.Location.allowEdit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(location)"
-                                                             [permission]="'locations.delete'"
-                                                             *ngIf="location.Location.allowEdit">
+                                <li cDropdownDivider *ngIf="tenant.Tenant.allowEdit"></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(tenant)"
+                                                             [permission]="'tenants.delete'"
+                                                             *ngIf="tenant.Tenant.allowEdit">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         {{ t('Delete') }}
@@ -181,13 +181,13 @@
 
 
                 <oitc-no-records
-                    *ngIf="locations && locations.all_locations.length === 0"></oitc-no-records>
-                <ng-container *ngIf="locations && locations.all_locations">
+                    *ngIf="tenants && tenants.all_tenants.length === 0"></oitc-no-records>
+                <ng-container *ngIf="tenants && tenants.all_tenants">
                     <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                    [itemsCount]="locations.all_locations.length"></oitc-select-all>
+                                    [itemsCount]="tenants.all_tenants.length"></oitc-select-all>
                             </c-col>
                             <c-col md="6">
                                 <div class="btn-group d-flex flex-row" role="group">
@@ -207,8 +207,8 @@
                             <c-col>
                                 <oitc-paginate-or-scroll
                                     (paginatorChange)="onPaginatorChange($event)"
-                                    *ngIf="locations"
-                                    [paginateOrScroll]="locations"></oitc-paginate-or-scroll>
+                                    *ngIf="tenants"
+                                    [paginateOrScroll]="tenants"></oitc-paginate-or-scroll>
                             </c-col>
                         </c-row>
                     </c-container>
