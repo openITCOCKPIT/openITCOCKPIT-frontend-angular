@@ -48,7 +48,7 @@ export interface Sla {
     timeperiod_id: number
     start_date?: string
     evaluation_interval: string
-    consider_downtimes: number
+    consider_downtimes: number | boolean
     hard_state_only: number
     minimal_availability: number
     warning_threshold: number
@@ -131,4 +131,90 @@ export interface SlaPostResponse extends GenericIdResponse {
     sla: Sla
 }
 
+/***************************
+ *    hosts action         *
+ ***************************/
+
+export interface SlasHostsRoot extends PaginateOrScroll {
+    sla: Sla
+    hosts: Host[]
+    success: boolean
+    _csrfToken: any
+}
+
+export interface Host {
+    id: number
+    name: string
+    address: string
+    sla_id: number
+    container_id: number
+    container: string
+    primary_container: string
+    services: Service[]
+    hosttemplate: Hosttemplate
+    hosts_to_containers_sharing: HostsToContainersSharing[]
+    allowEdit: boolean
+}
+
+export interface Service {
+    id: number
+    host_id: number
+    servicename: string
+    disabled: number
+    sla_relevant?: number
+    is_sla_relevant: number
+    servicetemplate: Servicetemplate
+}
+
+export interface Servicetemplate {
+    id: number
+    template_name: string
+    container_id: number
+    sla_relevant: number
+    allowEdit: boolean
+}
+
+export interface Hosttemplate {
+    id: number
+    name: string
+    sla_id: any
+    container_id: number
+    allowEdit: boolean
+}
+
+export interface HostsToContainersSharing {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id?: number
+    lft: number
+    rght: number
+    _joinData: JoinData
+}
+
+export interface JoinData {
+    id: number
+    host_id: number
+    container_id: number
+}
+
+export interface SlasHostsParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+}
+
+export function getDefaultSlasHostsParams(): SlasHostsParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': "",
+    }
+}
 
