@@ -6,8 +6,9 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 import {
     AdditionalHostInformationResult,
     Applications,
-    DependencyTreeApiResult,
+    DependencyTreeApiResult, ExternalSystemConnect,
     ExternalSystemEntity,
+    ExternalSystemPost,
     ExternalSystemsIndexParams,
     ExternalSystemsIndexRoot
 } from './external-systems.interface';
@@ -198,5 +199,16 @@ export class ExternalSystemsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/external_systems/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public testConnection(params: ExternalSystemPost): Observable<ExternalSystemConnect> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ExternalSystemConnect>(`${proxyPath}/import_module/external_systems/testConnection.json?angular=true`,
+            params // cast ExternalSystemsIndexParams into object
+        ).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

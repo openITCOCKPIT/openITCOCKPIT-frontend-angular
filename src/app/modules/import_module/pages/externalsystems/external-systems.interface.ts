@@ -421,3 +421,34 @@ export interface ExternalSystem {
         }
     }
 }
+
+export interface ExternalSystemPost {
+    id?: number
+    container_id: number | null
+    name: string
+    description: string
+    api_url: string
+    api_key: string
+    api_user: string
+    api_password: string
+    use_https: number
+    use_proxy: number
+    ignore_ssl_certificate: number
+    system_type: string
+    object_type_ids: number[],
+    custom_data: {
+        custom_mappings: number[],
+        hostgroup_mappings: number[]
+    }
+}
+
+export interface ExternalSystemConnect {
+    status: ExternalSystemConnectStatus
+}
+
+export interface ExternalSystemConnectStatus {
+    status: boolean
+    msg: {
+        message: string
+    }
+}
