@@ -119,7 +119,6 @@ canvas {
 /** login side panel */
 
 .login-side-bg {
-    background: rgba(25, 33, 49, 0.4);
     position:fixed;
 }
 
