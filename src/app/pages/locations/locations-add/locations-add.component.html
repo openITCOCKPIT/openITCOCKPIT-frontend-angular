@@ -64,7 +64,8 @@
                         <input cFormControl id="Name" type="text"
                                name="Name"
                                oitcFormError [errors]="errors" errorField="container.name"
-                               [(ngModel)]="post.container.name">
+                               [(ngModel)]="post.container.name"
+                               (blur)="updateMarker()">
                         <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
                     </div>
 
@@ -88,10 +89,11 @@
                                name="Latitude"
                                [placeholder]="50.5558095"
                                oitcFormError [errors]="errors" errorField="latitude"
-                               [(ngModel)]="post.latitude">
+                               [(ngModel)]="post.latitude"
+                               (blur)="updateMarker()">
                         <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
                         <div class="help-block">
-                            {{ t(' Latitude must be a number between -90 and 90 degree inclusive.') }}
+                            {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
                         </div>
                     </div>
 
@@ -103,10 +105,11 @@
                                name="Longitude"
                                [placeholder]="9.6808449"
                                oitcFormError [errors]="errors" errorField="longitude"
-                               [(ngModel)]="post.longitude">
+                               [(ngModel)]="post.longitude"
+                               (blur)="updateMarker()">
                         <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
                         <div class="help-block">
-                            {{ t(' Longitude must be a number between -180 and 180 degree inclusive.') }}
+                            {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
                         </div>
                     </div>
 
@@ -131,6 +134,10 @@
                         <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
                     </div>
 
+                    <div class="mb-3">
+                        <oitc-vectormap [markers]="markers"></oitc-vectormap>
+                    </div>
+
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <label class="me-2">
@@ -141,7 +148,7 @@
                     <button cButton class="ripple" color="primary" type="submit">
                         {{ t('Create location') }}
                     </button>
-                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                    <button [fallbackUrl]="['locations', 'index']" cButton class="ms-1 ripple" color="default"
                             oitcBackButton
                             type="button">
                         {{ t('Cancel') }}
