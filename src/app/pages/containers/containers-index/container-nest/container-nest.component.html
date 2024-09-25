@@ -1,0 +1,62 @@
+<ng-container *transloco="let t">
+    @for (container of nestedContainers; track $index) {
+        <ol class="dd-list">
+            <li class="dd-item">
+
+                <div class="dd-handle">
+                    <button
+                        *ngIf="container.children.length > 0"
+                        type="button" class="dd-collapse-button" (click)="toggleCollapsed($index)">
+                        <fa-icon [icon]="['fas', 'angle-down']" *ngIf="!collapsed[$index]"></fa-icon>
+                        <fa-icon [icon]="['fas', 'angle-right']" *ngIf="collapsed[$index]"></fa-icon>
+                    </button>
+
+                    <fa-icon [icon]="getIconByContainerType(container.Container.containertype_id)"></fa-icon>
+
+                    {{ container.Container.name }}
+
+                    <div class="btn-group btn-group-xs">
+                        @if (PermissionsService.hasPermission(['containers', 'add']) && container.Container.allowEdit) {
+                            <button type="button" class="btn btn-outline-success ripple">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add') }}
+                            </button>
+                        }
+
+                        @if (PermissionsService.hasPermission(['containers', 'edit']) && container.Container.allowEdit) {
+                            <button type="button" class="btn btn-outline-secondary ripple">
+                                <fa-icon [icon]="['fas', 'pen-alt']"></fa-icon>
+                                {{ t('Edit') }}
+                            </button>
+                        }
+
+                        @if (PermissionsService.hasPermission(['containers', 'showDetails'])) {
+                            <button type="button" class="btn btn-outline-primary ripple">
+                                <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                                {{ t('Show details') }}
+                            </button>
+                        }
+
+                        @if (PermissionsService.hasPermission(['containers', 'delete']) && container.Container.allowEdit) {
+                            <button type="button" class="btn btn-outline-danger ripple">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                {{ t('Delete') }}
+                            </button>
+                        }
+
+
+                    </div>
+
+                </div>
+
+                <oitc-container-nest *ngIf="container.children.length > 0"
+                                     [hidden]="collapsed[$index]"
+                                     [nestedContainers]="container.children"
+                                     [level]="(level+1)"></oitc-container-nest>
+
+            </li>
+        </ol>
+    }
+</ng-container>
+
+

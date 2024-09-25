@@ -471,6 +471,12 @@ const coreRoutes: Routes = [{
     path: 'tenants/edit/:id',
     loadComponent: () => import('./pages/tenants/tenants-edit/tenants-edit.component').then(m => m.TenantsEditComponent)
 }, {
+    path: 'containers/index',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
+    path: 'containers/index/:id',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
