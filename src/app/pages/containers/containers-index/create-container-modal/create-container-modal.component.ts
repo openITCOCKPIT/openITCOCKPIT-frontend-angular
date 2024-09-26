@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
     ButtonCloseDirective,
@@ -38,6 +48,7 @@ import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-sele
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { NodePost } from '../../containers.interface';
 import { ContainersService } from '../../containers.service';
+import { UserTimezonesSelect } from '../../../users/users.interface';
 
 @Component({
     selector: 'oitc-create-container-modal',
@@ -75,7 +86,7 @@ import { ContainersService } from '../../containers.service';
     templateUrl: './create-container-modal.component.html',
     styleUrl: './create-container-modal.component.css'
 })
-export class CreateContainerModalComponent implements OnChanges, OnDestroy {
+export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public parentContainerId: number = 0;
     @Input() public parentContainerTypeId: ContainerTypesEnum = ContainerTypesEnum.CT_GLOBAL;
@@ -91,6 +102,8 @@ export class CreateContainerModalComponent implements OnChanges, OnDestroy {
     public errors: GenericValidationError | null = null;
     public isSaving: boolean = false;
 
+    public timezones: UserTimezonesSelect[] = [];
+
     private subscriptions: Subscription = new Subscription();
     private readonly LocationsService = inject(LocationsService);
     private readonly TenantsService = inject(TenantsService);
@@ -99,6 +112,13 @@ export class CreateContainerModalComponent implements OnChanges, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
+
+    public ngOnInit() {
+        // Timezones are required for locations
+        this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
+            this.timezones = data.timezones;
+        }));
+    }
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes['parentContainerTypeId']) {
@@ -170,6 +190,34 @@ export class CreateContainerModalComponent implements OnChanges, OnDestroy {
 
     public submitLocation() {
         this.isSaving = true;
+
+        this.locationPost.container.parent_id = this.parentContainerId;
+
+        this.subscriptions.add(this.LocationsService.add(this.locationPost)
+            .subscribe((result) => {
+                this.isSaving = false;
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('Location');
+                    const msg = this.TranslocoService.translate('created successfully');
+                    const url = ['locations', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    this.locationPost = this.getDefaultLocationPost();
+                    this.errors = null;
+                    this.completed.emit(true);
+                    this.hideModal();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
 
     }
 

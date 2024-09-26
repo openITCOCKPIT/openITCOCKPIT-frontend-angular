@@ -167,6 +167,103 @@
             </form>
             <!-- End of nodes form -->
 
+            <!-- Locations form -->
+            <form (submit)="submitLocation()" name="location"
+                  *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_LOCATION">
+
+                <label cLabel for="LocationName" class="mt-3">
+                    {{ t('Name') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                    </span>
+                    <input cFormControl id="LocationName" type="text"
+                           name="LocationName"
+                           [placeholder]="'Location name' | transloco"
+                           oitcFormError [errors]="errors" errorField="container.name"
+                           [(ngModel)]="locationPost.container.name">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+
+                <label cLabel for="LocationDescription" class="mt-3">
+                    {{ t('Description') }}
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                    </span>
+                    <input cFormControl id="LocationDescription" type="text"
+                           name="LocationDescription"
+                           [placeholder]="'Description' | transloco"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="locationPost.description">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+
+                <label cLabel for="LocationLatitude" class="mt-3">
+                    {{ t('Latitude') }}
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    </span>
+                    <input cFormControl id="LocationLatitude" type="text"
+                           name="LocationLatitude"
+                           [placeholder]="50.5558095"
+                           oitcFormError [errors]="errors" errorField="latitude"
+                           [(ngModel)]="locationPost.latitude">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
+                <div class="help-block">
+                    {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
+                </div>
+
+                <label cLabel for="LocationLongitude" class="mt-3">
+                    {{ t('Longitude') }}
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    </span>
+                    <input cFormControl id="LocationLongitude" type="text"
+                           name="LocationLongitude"
+                           [placeholder]="9.6808449"
+                           oitcFormError [errors]="errors" errorField="longitude"
+                           [(ngModel)]="locationPost.longitude">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
+                <div class="help-block">
+                    {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
+                </div>
+
+                <label cLabel for="LocationTimezone" class="mt-3">
+                    {{ t('Timezone') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'hourglass-end']"></fa-icon>
+                    </span>
+                    <ng-select id="LocationTimezone"
+                               name="LocationTimezone"
+                               [items]="timezones"
+                               groupBy="group"
+                               bindLabel="name"
+                               bindValue="value"
+                               [clearable]="false"
+                               [(ngModel)]="locationPost.timezone"
+                               oitcFormError [errors]="errors" errorField="timezone">
+                        <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                        </ng-template>
+                    </ng-select>
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
+            </form>
+            <!-- End of locations form -->
+
         </c-modal-body>
         <c-modal-footer>
             <button cButton class="ripple" color="primary"
