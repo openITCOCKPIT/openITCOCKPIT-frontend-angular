@@ -25,7 +25,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { KeyValue, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -45,7 +45,7 @@ import {
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot,
+    LoadContainerRolesRoot, LoadContainersResponse,
     LoadLdapUserByStringRoot,
     LoadLdapUserDetailsRoot,
     LoadUsergroupsRoot,
@@ -252,7 +252,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.loadLocaleOptions();
         this.loadContainerRoles('');
         this.loadUsergroups();
-        this.loadLdapUsers('')
         this.loadLdapConfig();
         this.loadEditUser();
     }
@@ -275,6 +274,9 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 this.onContainerRolesChange(null);
 
                 this.isLdapUser = result.isLdapUser;
+                if (this.isLdapUser) {
+                    this.loadLdapUsers('');
+                }
                 this.notPermittedContainerIds = result.notPermittedContainerIds;
             }));
         this.selectedContainerIds = [];
@@ -326,11 +328,14 @@ export class UsersEditComponent implements OnDestroy, OnInit {
             }));
     }
     public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
-                this.containers = result;
+        this.subscriptions.add(this.UsersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
+            .subscribe((result: LoadContainersResponse) => {
+                this.containers = result.containers;
+                this.containerIdsWithWritePermissions = result.containerIdsWithWritePermissions;
             }));
     }
+
+    protected containerIdsWithWritePermissions: number[] = [];
 
     public loadDateformats = (): void => {
         this.subscriptions.add(this.UsersService.getDateformats()

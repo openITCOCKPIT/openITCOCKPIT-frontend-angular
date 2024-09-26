@@ -3,14 +3,17 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
-    EditUser, EditUserGet,
+    EditUserGet,
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
     LoadContainerRolesRoot,
+    LoadContainersResponse,
     LoadLdapUserByStringRoot,
     LoadLdapUserDetailsRoot,
-    LoadUsergroupsRoot, LoginGetRoot, UpdateUser,
+    LoadUsergroupsRoot,
+    LoginGetRoot,
+    UpdateUser,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
@@ -22,6 +25,7 @@ import {
 } from './users.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { ContainersLoadContainersByStringParams } from '../containers/containers.interface';
 
 
 @Injectable({
@@ -48,6 +52,17 @@ export class UsersService {
         );
     }
 
+    public loadContainersByString(params: ContainersLoadContainersByStringParams): Observable<LoadContainersResponse> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<LoadContainersResponse>(`${proxyPath}/users/loadContainersForAngular.json?angular=true`, {
+            params: params as {}
+        }).pipe(
+            map((data: LoadContainersResponse) => {
+                return data;
+            })
+        );
+    }
     public loadContainerRoles(params: LoadContainerRolesRequest): Observable<LoadContainerRolesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {

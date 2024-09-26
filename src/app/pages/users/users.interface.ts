@@ -339,3 +339,8 @@ export interface LoginImage {
     image: string
     credit: string
 }
+
+export interface LoadContainersResponse {
+    containers: SelectKeyValue[]
+    containerIdsWithWritePermissions: number[]
+}
