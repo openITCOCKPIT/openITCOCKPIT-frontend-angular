@@ -13,31 +13,34 @@
         </c-modal-header>
         <c-modal-body>
 
+            <div class="mb-3">
+                <label cLabel for="container_type">
+                    {{ t('Select container type') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <!-- I used ng-select because our oitc-select killed my browser performance for some reason -->
+                <ng-select id="container_type"
+                           name="container_type"
+                           bindValue="key"
+                           bindLabel="value"
+                           [items]="availableContainerTypes"
+                           [clearable]="false"
+                           [(ngModel)]="currentContainerTypeId">
+                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                        <div [ngOptionHighlight]="search">{{ item.value }}</div>
+                    </ng-template>
+                </ng-select>
+            </div>
 
             <!-- Tenants form -->
-            <form (submit)="submitTenant()">
+            <form (submit)="submitTenant()" name="tenant"
+                  *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_TENANT">
 
-                <div class="mb-3">
-                    <label cLabel for="container_type">
-                        {{ t('Select container type') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="container_type"
-                        id="container_type"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="currentContainerTypeId"
-                        [options]="availableContainerTypes">
-                    </oitc-select>
-                </div>
-
-                <label cLabel for="Name">
+                <label cLabel for="Name" class="mt-3">
                     {{ t('Name') }}
                     <oitc-required-icon></oitc-required-icon>
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'folder']"></fa-icon>
                     </span>
@@ -46,13 +49,14 @@
                            [placeholder]="'Tenant name' | transloco"
                            oitcFormError [errors]="errors" errorField="container.name"
                            [(ngModel)]="tenantPost.container.name">
-                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
 
-                <label cLabel for="description">
+
+                <label cLabel for="description" class="mt-3">
                     {{ t('Description') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'info']"></fa-icon>
                     </span>
@@ -61,13 +65,13 @@
                            [placeholder]="'Description' | transloco"
                            oitcFormError [errors]="errors" errorField="description"
                            [(ngModel)]="tenantPost.description">
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
 
-                <label cLabel for="firstname">
+                <label cLabel for="firstname" class="mt-3">
                     {{ t('First name') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                     </span>
@@ -76,13 +80,13 @@
                            [placeholder]="'John' | transloco"
                            oitcFormError [errors]="errors" errorField="firstname"
                            [(ngModel)]="tenantPost.firstname">
-                    <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
 
-                <label cLabel for="lastname">
+                <label cLabel for="lastname" class="mt-3">
                     {{ t('Last name') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                     </span>
@@ -91,13 +95,13 @@
                            [placeholder]="'Doe' | transloco"
                            oitcFormError [errors]="errors" errorField="lastname"
                            [(ngModel)]="tenantPost.lastname">
-                    <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
 
-                <label cLabel for="Street">
+                <label cLabel for="Street" class="mt-3">
                     {{ t('Street') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'folder']"></fa-icon>
                     </span>
@@ -106,13 +110,13 @@
                            [placeholder]="'Any street' | transloco"
                            oitcFormError [errors]="errors" errorField="street"
                            [(ngModel)]="tenantPost.street">
-                    <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
 
-                <label cLabel for="zipcode">
+                <label cLabel for="zipcode" class="mt-3">
                     {{ t('Zip code') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'building']"></fa-icon>
                     </span>
@@ -121,13 +125,13 @@
                            [placeholder]="'12345'"
                            oitcFormError [errors]="errors" errorField="zipcode"
                            [(ngModel)]="tenantPost.zipcode">
-                    <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
 
-                <label cLabel for="city">
+                <label cLabel for="city" class="mt-3">
                     {{ t('City') }}
                 </label>
-                <c-input-group class="mb-3">
+                <c-input-group>
                     <span cInputGroupText>
                         <fa-icon [icon]="['fas', 'tree-city']"></fa-icon>
                     </span>
@@ -136,28 +140,56 @@
                            [placeholder]="'Any city' | transloco"
                            oitcFormError [errors]="errors" errorField="city"
                            [(ngModel)]="tenantPost.city">
-                    <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
                 </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
             </form>
             <!-- End of tenants form -->
 
+            <!-- Nodes form -->
+            <form (submit)="submitNode()" name="node"
+                  *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_NODE">
+
+                <label cLabel for="NodeName" class="mt-3">
+                    {{ t('Name') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                    </span>
+                    <input cFormControl id="NodeName" type="text"
+                           name="NodeName"
+                           [placeholder]="'Node name' | transloco"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="nodePost.name">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+            </form>
+            <!-- End of nodes form -->
+
         </c-modal-body>
         <c-modal-footer>
-
-            {{ currentContainerTypeId }}
-            <button cButton class="ripple" color="primary"
-                    *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_NODE">
-                {{ t('Create new node') }}
-            </button>
-
             <button cButton class="ripple" color="primary"
                     (click)="submitTenant()"
+                    [disabled]="isSaving"
                     *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_TENANT">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="isSaving"></fa-icon>
                 {{ t('Create new tenant') }}
             </button>
 
             <button cButton class="ripple" color="primary"
+                    (click)="submitNode();"
+                    [disabled]="isSaving"
+                    *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_NODE">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="isSaving"></fa-icon>
+                {{ t('Create new node') }}
+            </button>
+
+            <button cButton class="ripple" color="primary"
+                    (click)="submitLocation()"
+                    [disabled]="isSaving"
                     *ngIf="currentContainerTypeId === ContainerTypesEnum.CT_LOCATION">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="isSaving"></fa-icon>
                 {{ t('Create new location') }}
             </button>
 

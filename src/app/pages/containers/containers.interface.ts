@@ -66,3 +66,13 @@ export interface DataForCreateContainerModal {
     parentContainerId: number
     parentContainerTypeId: ContainerTypesEnum
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface NodePost {
+    id?: number
+    containertype_id: ContainerTypesEnum
+    parent_id?: number
+    name: string
+}
