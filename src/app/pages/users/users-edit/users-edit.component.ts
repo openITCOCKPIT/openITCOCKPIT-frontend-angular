@@ -45,7 +45,8 @@ import {
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
-    LoadContainerRolesRoot, LoadContainersResponse,
+    LoadContainerRolesRoot,
+    LoadContainersResponse,
     LoadLdapUserByStringRoot,
     LoadLdapUserDetailsRoot,
     LoadUsergroupsRoot,
@@ -66,6 +67,7 @@ import { HistoryService } from '../../../history.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -110,7 +112,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         XsButtonDirective,
         RouterLink,
         NgOptionHighlightDirective,
-        FormLoaderComponent
+        FormLoaderComponent,
+        KeyFilterModule
     ],
     templateUrl: './users-edit.component.html',
     styleUrl: './users-edit.component.css'
@@ -149,14 +152,19 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
+
             if (id === 1) {
                 this.post.User.ContainersUsersMemberships[id] = 2;
                 return;
             }
-            // Only if not already set to 1 or 2.
-            if (this.post.User.ContainersUsersMemberships[id] !== 2) {
+
+            let value = parseInt(this.post.User.ContainersUsersMemberships[id] as unknown as string);
+            if (isNaN(value)) {
+                console.info("Fallback to 1.");
                 this.post.User.ContainersUsersMemberships[id] = 1;
+                return;
             }
+            this.post.User.ContainersUsersMemberships[id] = value;
         });
     }
 
@@ -278,11 +286,18 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                     this.loadLdapUsers('');
                 }
                 this.notPermittedContainerIds = result.notPermittedContainerIds;
+
+                // Clear those ContainerRoleIds that are not available for the user and would cause an empty böbbel in the oitc-multi select.
+                let selectedContainerRoleIds = new Set(this.containers.map(item => item.key));
+                this.invisibleContainerRoleIds = this.post.User.usercontainerroles._ids.filter(key => !selectedContainerRoleIds.has(key));
+                this.post.User.usercontainerroles._ids = this.post.User.usercontainerroles._ids.filter(key => selectedContainerRoleIds.has(key));
             }));
         this.selectedContainerIds = [];
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
         this.containerRoles = {} as LoadContainerRolesRoot;
     }
+
+    protected invisibleContainerRoleIds: number[] = [];
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -308,10 +323,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         // For each containerPermissions object attach the containerId to this.containerRoleContainerIds.
         this.containerRoleContainerIds = [];
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
-
-        if (this.post.User.usercontainerroles._ids.length === 0) {
-            return;
-        }
 
         let params: LoadContainerPermissionsRequest = {
             'usercontainerRoleIds[]': this.post.User.usercontainerroles._ids,

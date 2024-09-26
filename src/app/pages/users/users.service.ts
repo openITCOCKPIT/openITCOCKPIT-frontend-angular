@@ -84,7 +84,6 @@ export class UsersService {
     }
 
     public loadContainerPermissions(params: LoadContainerPermissionsRequest): Observable<LoadContainerPermissionsRoot> {
-        console.warn(params);
         const proxyPath = this.proxyPath;
         return this.http.get<LoadContainerPermissionsRoot>(`${proxyPath}/users/loadContainerPermissions.json`, {
             params: params as {}
