@@ -142,11 +142,6 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
                 }
             })
         );
