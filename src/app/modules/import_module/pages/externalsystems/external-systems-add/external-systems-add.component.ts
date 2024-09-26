@@ -38,7 +38,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
@@ -58,6 +58,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import {
     MultiSelectOptgroupComponent
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { SystemnameService } from '../../../../../services/systemname.service';
+
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -107,7 +109,10 @@ import {
         AlertComponent,
         AlertHeadingDirective,
         MultiSelectComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        AsyncPipe,
+        JsonPipe,
+        NgForOf
     ],
     templateUrl: './external-systems-add.component.html',
     styleUrl: './external-systems-add.component.css'
@@ -119,10 +124,12 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     public post = this.getClearForm();
     public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
+    public objectTypes: IdoitObjectTypeResult[] = [];
 
     public errors: GenericValidationError | null = null;
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
-    public objectTypes: IdoitObjectTypeResult[] = [];
+    public readonly SystemnameService = inject(SystemnameService);
+
 
     protected readonly ExternalSystemTypes = [
         {
@@ -157,6 +164,25 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             container_id: null,
             name: '',
             description: '',
+            api_url: 'itop-jammy.itsm.love/itop/webservices/rest.php?version=1.3',
+            api_key: '',
+            api_user: 'oitc_api_user',
+            api_password: 'Asdf123!',
+            use_https: 0, //number
+            use_proxy: 0, //number
+            ignore_ssl_certificate: 1, //number
+            system_type: 'itop',
+            object_type_ids: [],
+            custom_data: {
+                custom_mappings: [],
+                hostgroup_mappings: []
+            }
+        }
+        /*
+        return {
+            container_id: null,
+            name: '',
+            description: '',
             api_url: '',
             api_key: '',
             api_user: '',
@@ -170,7 +196,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                 custom_mappings: [],
                 hostgroup_mappings: []
             }
-        }
+        } */
     }
 
     public ngOnDestroy(): void {
@@ -212,5 +238,17 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             });
         });
         return Object.values(newFormat);
+    }
+
+    public trackByIndex(index: number, item: any): number {
+        return index;
+    }
+
+    public removeCustomMapping($index: any) {
+
+    }
+
+    public addCustomMapping() {
+        
     }
 }

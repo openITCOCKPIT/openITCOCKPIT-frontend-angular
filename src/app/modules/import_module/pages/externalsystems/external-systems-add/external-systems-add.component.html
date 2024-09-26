@@ -272,25 +272,24 @@
                                     </div>
                                 </c-col>
                             </c-row>
-                            <c-row>
-                                <c-col [xs]="12" class="mt-3" *ngIf="connectStatus === false">
+                            <c-row *ngIf="connectStatus === false">
+                                <c-col [xs]="12" class="mt-3">
                                     <c-alert color="danger">
                                         <h4 cAlertHeading>{{ t('404 Bad Request') }}</h4>
                                         <p>{{ connectMessage }}</p>
                                     </c-alert>
                                 </c-col>
                             </c-row>
-                            <c-row>
-                                <c-col [xs]="12" class="mt-3" *ngIf="connectStatus === true">
+                            <c-row *ngIf="connectStatus === true">
+                                <c-col [xs]="12" class="mt-3">
                                     <c-alert color="success">
                                         <fa-icon [icon]="['fas', 'check']"></fa-icon>
                                         {{ t('Connection established successfully.') }}
                                     </c-alert>
                                 </c-col>
                             </c-row>
-                            <c-row class="px-2">
-                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5"
-                                       *ngIf="objectTypes.length > 0">
+                            <c-row class="px-2" *ngIf="objectTypes.length > 0">
+                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
                                     <h4 cAlertHeading class="text-primary">
                                         {{ t('Detected object types') }}
                                         <span class="help-block small">
@@ -317,10 +316,131 @@
                                         <oitc-form-feedback [errors]="errors"
                                                             errorField="object_type_ids"></oitc-form-feedback>
                                     </div>
-
                                 </c-col>
                             </c-row>
-
+                        </fieldset>
+                        <fieldset>
+                            <!-- ITC-2918 iTop only mapping for custom classes -->
+                            <c-row class="px-2" *ngIf="post.system_type == 'itop' && objectTypes.length > 0">
+                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                    <h4 cAlertHeading class="text-primary">
+                                        {{ t('Custom object type mappings') }}
+                                    </h4>
+                                </c-col>
+                                <c-col *ngFor="let custom_mapping of post.custom_data.custom_mappings; let i = index; trackBy: trackByIndex">
+                                    <div class="row ">
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group required">
+                                                <label class="control-label">
+                                                    {{ t('Class name') }}
+                                                </label>
+                                                <input
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="WANLine"
+                                                    ng-model="custom_mapping.classname">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group required">
+                                                <label class="control-label">
+                                                    {{ t('Interface type') }}
+                                                </label>
+                                                <select
+                                                    class="form-control"
+                                                    ng-model="custom_mapping.interface_type">
+                                                    <option value="custom">{{ t('Custom') }}</option>
+                                                    <option value="PhysicalInterface">{{ t('PhysicalInterface') }}</option>
+                                                    <option value="LogicalInterface">{{ t('LogicalInterface') }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <button
+                                                class="btn btn-outline-danger btn-sm btn-w-m waves-effect waves-themed margin-top-25 pull-right"
+                                                type="button"
+                                                (click)="removeCustomMapping(i)">
+                                                {{ t('Remove mapping') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group required">
+                                                <label class="control-label">
+                                                    {{ t('Hostname') }}
+                                                </label>
+                                                <input
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="name"
+                                                    ng-model="custom_mapping.hostname">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group required">
+                                                <label class="control-label">
+                                                    {{ t('IP-Address') }}
+                                                </label>
+                                                <input
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="address"
+                                                    ng-disabled="custom_mapping.interface_type !== 'custom'"
+                                                    ng-model="custom_mapping.address">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    {{ t('Description') }}
+                                                </label>
+                                                <input
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="description"
+                                                    ng-model="custom_mapping.description">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    {{ t('Software') }}
+                                                </label>
+                                                <input
+                                                    class="form-control"
+                                                    type="text"
+                                                    placeholder="software"
+                                                    ng-model="custom_mapping.software">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <div class="col-12 padding-top-10 padding-bottom-20">
+                                    <button class="btn btn-success pull-right waves-effect waves-themed"
+                                            type="button"
+                                            (click)="addCustomMapping()">
+                                        {{ t('Add custom mapping') }}
+                                    </button>
+                                </div>
+                            </c-row>
+                        </fieldset>
+                        <fieldset>
+                            <!-- ITC-3098 iTop only mapping for import of applications into host groups -->
+                            <c-row class="px-2" *ngIf="post.system_type == 'itop' && objectTypes.length > 0">
+                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                    <h4 cAlertHeading class="text-primary">
+                                        {{ t('Mapping of Applications into host groups') }}
+                                    </h4>
+                                    <div class="help-block small">
+                                        {{
+                                            t('This mapping can be used to import host groups from the iTop CMDB into {0}', {
+                                                '0': SystemnameService.systemName$ | async
+                                            })
+                                        }}
+                                    </div>
+                                </c-col>
+                            </c-row>
                         </fieldset>
                     </c-container>
                 </c-card-body>
