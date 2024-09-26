@@ -110,16 +110,15 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
 
-
-                        <ng-select name="post.contacts._ids"
-                                   id="post.contacts._ids"
-                                   [(ngModel)]="post.contacts._ids"
-                                   [multiple]="true"
-                                   oitcFormError [errors]="errors" errorField="contacts">
-                            <ng-option *ngFor="let contact of this.contacts" [value]="contact.key">
-                                {{ contact.value }}
-                            </ng-option>
-                        </ng-select>
+                        <oitc-multi-select
+                                name="post.contacts._ids"
+                                id="post.contacts._ids"
+                                [(ngModel)]="post.contacts._ids"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="contacts"
+                                oitcFormError [errors]="errors" errorField="contacts">
+                        </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="contacts"></oitc-form-feedback>
                     </div>
 
