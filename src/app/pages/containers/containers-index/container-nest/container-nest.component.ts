@@ -1,16 +1,17 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
-import { NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '@coreui/angular';
+import { DeleteAllModalComponent } from '../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { DisableModalComponent } from '../../../../layouts/coreui/disable-modal/disable-modal.component';
+import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-container-nest',
@@ -28,7 +29,10 @@ import { TooltipDirective } from '@coreui/angular';
         NgSwitchDefault,
         RouterLink,
         TooltipDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        DeleteAllModalComponent,
+        DisableModalComponent,
+        CommonModule
     ],
     templateUrl: './container-nest.component.html',
     styleUrl: './container-nest.component.css'
@@ -37,45 +41,15 @@ export class ContainerNestComponent {
 
     @Input() public nestedContainers: ContainersIndexNested[] = [];
     @Input() public level: number = 0;
+    @Input() public collapsed: boolean[] = [];
 
-    public collapsed: boolean[] = [];
+    @Input() containerTemplate!: TemplateRef<any>
+
     public readonly PermissionsService = inject(PermissionsService);
-
+    public readonly ContainersService = inject(ContainersService);
 
     public toggleCollapsed(index: number): void {
         this.collapsed[index] = !this.collapsed[index];
     }
 
-    public getIconByContainerType(containerType: number): IconProp {
-        switch (containerType) {
-            case ContainerTypesEnum.CT_GLOBAL:
-                return ['fas', 'globe'];
-
-            case ContainerTypesEnum.CT_TENANT:
-                return ['fas', 'home'];
-
-            case ContainerTypesEnum.CT_LOCATION:
-                return ['fas', 'location-arrow'];
-
-            case ContainerTypesEnum.CT_NODE:
-                return ['fas', 'link'];
-
-            case ContainerTypesEnum.CT_CONTACTGROUP:
-                return ['fas', 'users'];
-
-            case ContainerTypesEnum.CT_HOSTGROUP:
-                return ['fas', 'server'];
-
-            case ContainerTypesEnum.CT_SERVICEGROUP:
-                return ['fas', 'cogs'];
-
-            case ContainerTypesEnum.CT_SERVICETEMPLATEGROUP:
-                return ['fas', 'pen-to-square'];
-
-            default:
-                return ['fas', 'question'];
-        }
-    }
-
-    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }
