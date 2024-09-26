@@ -117,12 +117,9 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 [options]="contacts"
-                                oitcFormError [errors]="errors" errorField="containerroles">
+                                oitcFormError [errors]="errors" errorField="contacts">
                         </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
-                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="contacts"></oitc-form-feedback>
                     </div>
 
                 </c-card-body>
