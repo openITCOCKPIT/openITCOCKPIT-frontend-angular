@@ -110,17 +110,19 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
 
-
-                        <ng-select name="post.contacts._ids"
-                                   id="post.contacts._ids"
-                                   [(ngModel)]="post.contacts._ids"
-                                   [multiple]="true"
-                                   oitcFormError [errors]="errors" errorField="contacts">
-                            <ng-option *ngFor="let contact of this.contacts" [value]="contact.key">
-                                {{ contact.value }}
-                            </ng-option>
-                        </ng-select>
-                        <oitc-form-feedback [errors]="errors" errorField="contacts"></oitc-form-feedback>
+                        <oitc-multi-select
+                                name="post.contacts._ids"
+                                id="post.contacts._ids"
+                                [(ngModel)]="post.contacts._ids"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="contacts"
+                                oitcFormError [errors]="errors" errorField="containerroles">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                        </div>
                     </div>
 
                 </c-card-body>
