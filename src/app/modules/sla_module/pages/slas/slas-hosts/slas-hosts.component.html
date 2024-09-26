@@ -162,7 +162,7 @@
                             <td>
                                 <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
                                 @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
-                                    <a [routerLink]="['/', 'hosts', 'brwoser', host.id]">
+                                    <a [routerLink]="['/', 'hosts', 'browser', host.id]">
                                         {{ host.name }}
                                     </a>
                                 } @else {
