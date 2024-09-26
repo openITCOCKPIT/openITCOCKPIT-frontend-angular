@@ -51,5 +51,10 @@ export interface ContainersIndexContainer {
     rght: number
     linkedId: number
     allowEdit: boolean
-    elements: number
+    elements?: number
+    hosts?: number
+    hosttemplates?: number
+    services?: number
+    servicetemplates?: number
+    contacts?: number
 }

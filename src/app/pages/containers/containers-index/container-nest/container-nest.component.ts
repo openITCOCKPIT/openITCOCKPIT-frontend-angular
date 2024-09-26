@@ -1,12 +1,16 @@
 import { Component, inject, Input } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../permissions/permissions.service';
+import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
+import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
+import { RouterLink } from '@angular/router';
+import { TooltipDirective } from '@coreui/angular';
 
 @Component({
     selector: 'oitc-container-nest',
@@ -16,7 +20,15 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
         NgIf,
         FaIconComponent,
         XsButtonDirective,
-        TranslocoDirective
+        TranslocoDirective,
+        NgSwitchCase,
+        LabelLinkComponent,
+        RequiredIconComponent,
+        NgSwitch,
+        NgSwitchDefault,
+        RouterLink,
+        TooltipDirective,
+        TranslocoPipe
     ],
     templateUrl: './container-nest.component.html',
     styleUrl: './container-nest.component.css'
@@ -65,4 +77,5 @@ export class ContainerNestComponent {
         }
     }
 
+    protected readonly ContainerTypesEnum = ContainerTypesEnum;
 }

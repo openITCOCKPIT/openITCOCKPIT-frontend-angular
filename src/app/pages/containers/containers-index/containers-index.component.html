@@ -94,13 +94,14 @@
                     </c-col>
                 </c-row>
 
+
                 <c-row>
                     <c-col [xs]="12">
-
                         <div class="dd">
+                            <!-- Recursive component -->
                             <oitc-container-nest *ngIf="nestedContainers.length > 0"
                                                  [nestedContainers]="nestedContainers">
-                                
+
                             </oitc-container-nest>
                         </div>
 

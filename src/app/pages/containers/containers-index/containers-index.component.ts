@@ -64,6 +64,7 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     public nestedContainers: ContainersIndexNested[] = [];
     public isLoading: boolean = false;
 
+
     private subscriptions: Subscription = new Subscription();
     private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -73,18 +74,26 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     private readonly router = inject(Router);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            const id = Number(this.route.snapshot.paramMap.get('id'));
 
-            this.loadContainersForSelect();
-            if (id) {
-                this.selectedContainerId = id;
-                this.loadContainers(id);
+        this.loadContainersForSelect();
+
+        // This subscription is used to reload the container tree, when the ID in the URL changes.
+        // This will happen in the following cases:
+        // - The user navigates to /containers/index and select a ID form the dropdown
+        // - The user navigates to /containers/index/ID directly
+        // - The user click on a CT_NODE link the tree
+        this.subscriptions.add(this.route.params.subscribe(
+            params => {
+                if (params.hasOwnProperty('id')) {
+                    const id = Number(params['id']);
+                    if (id) {
+                        this.selectedContainerId = id;
+                        this.loadContainers(id);
+                    }
+                }
             }
-        }));
+        ));
+
     }
 
     public ngOnDestroy(): void {
@@ -92,9 +101,20 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     }
 
     public onContainerChange(event: any) {
-        this.loadContainers(this.selectedContainerId);
-    }
+        // Clear the current container tree
+        this.nestedContainers = [];
 
+        // Update the URL with the new container ID
+        this.router.navigate(['/', 'containers', 'index', this.selectedContainerId], {
+            queryParamsHandling: 'merge'
+        });
+
+        // Load new container tree
+        //this.loadContainers(this.selectedContainerId);
+        // The reload will be done by the subscription to the route params
+        // see ngOnInit method for details
+    }
+    
     public loadContainers(id: number) {
         this.isLoading = true;
         this.subscriptions.add(this.ContainersService.loadContainersByContainerId(id).subscribe(containers => {
