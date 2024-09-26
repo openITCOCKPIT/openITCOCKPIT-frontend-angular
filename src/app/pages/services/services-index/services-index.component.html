@@ -665,8 +665,13 @@
                                 <fa-icon [icon]="['fas', 'fire']"></fa-icon>
                             </th>
 
-                            <th *ngIf="fields[7]"><span mat-sort-header="Hosts.name">{{ t('Host') }}</span><span
-                                mat-sort-header="servicename">{{ t('Service') }}</span>
+                            <th *ngIf="fields[7]">
+                                <div class="d-inline-flex">
+                                    <span mat-sort-header="Hosts.name">{{ t('Host') }}</span>
+                                    <span class="pe-3">/</span>
+                                    <span mat-sort-header="servicename">{{ t('Service') }}</span>
+                                </div>
+
                             </th>
                             <th *ngIf="fields[8]">
                                 {{ t('Service type') }}
@@ -934,7 +939,8 @@
                                                     </a>
                                                 </li>
                                                 <li *oitcPermission="['servicegroups', 'add']">
-                                                    <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
+                                                    <a href="javascript:void(0);" cDropdownItem
+                                                       (click)="confirmAddServicesToServicegroup()">
                                                         <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                         {{ t('Add to service group') }}
                                                     </a>
@@ -999,6 +1005,9 @@
                 </c-row>
 
             </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
         </c-card>
     </ng-container>
 

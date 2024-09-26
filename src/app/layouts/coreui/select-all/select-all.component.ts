@@ -67,7 +67,6 @@ export class SelectAllComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         // Subscribe to selection changes
         this.subscriptions.add(this.selection.selection$.subscribe(selection => {
             this.currentSelection = selection; // Used to show the length of the selection in the template

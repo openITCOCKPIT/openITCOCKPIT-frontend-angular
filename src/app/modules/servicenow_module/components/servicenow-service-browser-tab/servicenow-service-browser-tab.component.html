@@ -1,0 +1,157 @@
+<ng-container *transloco="let t">
+
+    <oitc-block-loader *ngIf="!result"></oitc-block-loader>
+
+    <c-card *ngIf="result && result.incident && result.incident.ServicenowIncident" class="mb-3">
+        <c-card-header>
+            <fa-icon [icon]="['far', 'circle-xmark']"></fa-icon>
+            {{ t('Incident overview') }}
+        </c-card-header>
+        <c-card-body>
+
+            <table cTable bordered>
+                <tbody>
+                <tr>
+                    <td>{{ t('Number') }}</td>
+                    <td>{{ result.incident.ServicenowIncident?.incident_id }}</td>
+                </tr>
+                <tr>
+                    <td>{{ t('State') }}</td>
+                    <td>{{ result.incident.ServicenowIncident?.state }}</td>
+                </tr>
+                <tr *ngIf="result.incident.ServicenowIncident?.resolution_code">
+                    <td>{{ t('Resolution code') }}</td>
+                    <td>{{ result.incident.ServicenowIncident?.resolution_code }}</td>
+                </tr>
+                <tr *ngIf="result.incident.ServicenowIncident?.resolution_notes">
+                    <td>{{ t('Resolution notes') }}</td>
+                    <td>{{ result.incident.ServicenowIncident?.resolution_notes }}</td>
+                </tr>
+                <tr>
+                    <td>{{ t('URL') }}</td>
+                    <td>
+                        <div *ngIf="result.globalsettings.ServicenowSettings.domain">
+                            <a href="{{result.globalsettings.ServicenowSettings.domain}}/nav_to.do?uri=/incident.do?sys_id={{result.incident.ServicenowIncident?.sys_id}}"
+                               target="_blank">
+                                <!-- @formatter:off -->
+                                {{ result.globalsettings.ServicenowSettings.domain }}/nav_to.do?uri=/incident.do?sys_id={{ result.incident.ServicenowIncident?.sys_id }}
+                                <!-- @formatter:on -->
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </c-card-body>
+    </c-card>
+
+    <form cForm (ngSubmit)="submit()" *ngIf="result && result.settings && allowEdit">
+        <c-card>
+
+            <c-card-header>
+                <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
+                {{ t('Edit Service-Specific Settings') }}
+            </c-card-header>
+
+            <c-card-body>
+                <div class="mb-3">
+                    <label cLabel for="IncidentImpact">
+                        {{ t('Incident Impact') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <select aria-label="Default select example" cSelect id="IncidentImpact"
+                            name="IncidentImpact"
+                            oitcFormError [errors]="errors" errorField="impact"
+                            [(ngModel)]="result.settings.ServicenowServicespecificSettings.impact">>
+                        <option value="1">{{ t('1 - High') }}</option>
+                        <option value="2">{{ t('2 - Medium') }}</option>
+                        <option value="3">{{ t('3 - Low') }}</option>
+                    </select>
+                    <oitc-form-feedback [errors]="errors" errorField="impact"></oitc-form-feedback>
+                </div>
+                <div class="help-block">
+                    {{ t('Impact defines the effect that the task has on business Including urgency used for priority calculating') }}
+                    <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
+                        {{ t('(More information)') }}
+                    </a>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="IncidentUrgency">
+                        {{ t('Incident Urgency') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <select aria-label="Default select example" cSelect id="IncidentUrgency"
+                            name="IncidentUrgency"
+                            oitcFormError [errors]="errors" errorField="urgency"
+                            [(ngModel)]="result.settings.ServicenowServicespecificSettings.urgency">>
+                        <option value="1">{{ t('1 - High') }}</option>
+                        <option value="2">{{ t('2 - Medium') }}</option>
+                        <option value="3">{{ t('3 - Low') }}</option>
+                    </select>
+                    <oitc-form-feedback [errors]="errors" errorField="urgency"></oitc-form-feedback>
+                </div>
+                <div class="help-block">
+                    {{ t('Urgency defines the extent to which the task resolution can be delayed Including impact used for priority calculating') }}
+                    <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
+                        {{ t('(More information)') }}
+                    </a>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="AssignmentGroup">
+                        {{ t('Assignment Group') }}
+                    </label>
+                    <input cFormControl id="AssignmentGroup" required type="text"
+                           name="AssignmentGroup"
+                           oitcFormError [errors]="errors" errorField="assignment_group"
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.assignment_group">
+                    <oitc-form-feedback [errors]="errors" errorField="assignment_group"></oitc-form-feedback>
+                </div>
+                <div class="help-block">
+                    {{ t('ServiceNow Incident Assignment Group') }}
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="AssignedTo">
+                        {{ t('Assigned To') }}
+                    </label>
+                    <input cFormControl id="AssignedTo" required type="text"
+                           name="AssignedTo"
+                           oitcFormError [errors]="errors" errorField="assigned_to"
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.assigned_to">
+                    <oitc-form-feedback [errors]="errors" errorField="assigned_to"></oitc-form-feedback>
+                </div>
+                <div class="help-block">
+                    {{ t('ServiceNow Incident Assigned To (automatically sets status to "In progress")') }}
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="BusinessService">
+                        {{ t('Business Service') }}
+                    </label>
+                    <input cFormControl id="BusinessService" required type="text"
+                           name="BusinessService"
+                           oitcFormError [errors]="errors" errorField="business_service"
+                           [(ngModel)]="result.settings.ServicenowServicespecificSettings.business_service">
+                    <oitc-form-feedback [errors]="errors" errorField="business_service"></oitc-form-feedback>
+                </div>
+                <div class="help-block">
+                    {{ t('ServiceNow Incident Business Service') }}
+                </div>
+            </c-card-body>
+
+            <c-card-footer class="text-end">
+                <button cButton color="primary" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </form>
+
+
+</ng-container>

@@ -456,6 +456,30 @@ const coreRoutes: Routes = [{
     path: 'acknowledgements/service/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
 }, {
+    path: 'locations/index',
+    loadComponent: () => import('./pages/locations/locations-index/locations-index.component').then(m => m.LocationsIndexComponent)
+}, {
+    path: 'locations/add',
+    loadComponent: () => import('./pages/locations/locations-add/locations-add.component').then(m => m.LocationsAddComponent)
+}, {
+    path: 'locations/edit/:id',
+    loadComponent: () => import('./pages/locations/locations-edit/locations-edit.component').then(m => m.LocationsEditComponent)
+}, {
+    path: 'tenants/index',
+    loadComponent: () => import('./pages/tenants/tenants-index/tenants-index.component').then(m => m.TenantsIndexComponent)
+}, {
+    path: 'tenants/add',
+    loadComponent: () => import('./pages/tenants/tenants-add/tenants-add.component').then(m => m.TenantsAddComponent)
+}, {
+    path: 'tenants/edit/:id',
+    loadComponent: () => import('./pages/tenants/tenants-edit/tenants-edit.component').then(m => m.TenantsEditComponent)
+}, {
+    path: 'containers/index',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
+    path: 'containers/index/:id',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

@@ -1,4 +1,5 @@
 // If you want to override variables do it here
+@import "../../../node_modules/@coreui/coreui/scss/_functions.scss";
 
 // scss-docs-start gray-color-variables
 $white: #fff !default;
@@ -36,6 +37,28 @@ $danger: #CC0000;
 $info: #33b5e5;
 $light: $gray-100 !default;
 $dark: $gray-900 !default;
+
+$cui-primary-100: tint-color($primary, 80%);
+$cui-primary-200: tint-color($primary, 60%);
+$cui-primary-300: tint-color($primary, 40%);
+$cui-primary-400: tint-color($primary, 20%);
+$cui-primary-500: $primary;
+$cui-primary-600: shade-color($primary, 20%);
+$cui-primary-700: shade-color($primary, 40%);
+$cui-primary-800: shade-color($primary, 60%);
+$cui-primary-900: shade-color($primary, 80%);
+
+$primaries: (
+    "primary-100": $cui-primary-100,
+    "primary-200": $cui-primary-200,
+    "primary-300": $cui-primary-300,
+    "primary-400": $cui-primary-400,
+    "primary-500": $cui-primary-500,
+    "primary-600": $cui-primary-600,
+    "primary-700": $cui-primary-700,
+    "primary-800": $cui-primary-800,
+    "primary-900": $cui-primary-900,
+) !default;
 
 // scss-docs-start theme-text-variables
 /*

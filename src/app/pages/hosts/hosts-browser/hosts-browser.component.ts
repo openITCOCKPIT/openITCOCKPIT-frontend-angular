@@ -278,7 +278,9 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
                 this.priorities[i] = this.priorityClasses[priority]; // set color depending on priority level
             }
 
-            this.tags = String(result.mergedHost.tags).split(',');
+            if (String(result.mergedHost.tags) !== "") {
+                this.tags = String(result.mergedHost.tags).split(',');
+            }
 
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();

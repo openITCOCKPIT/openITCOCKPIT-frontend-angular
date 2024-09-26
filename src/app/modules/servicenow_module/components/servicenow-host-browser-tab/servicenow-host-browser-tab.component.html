@@ -2,7 +2,7 @@
 
     <oitc-block-loader *ngIf="!result"></oitc-block-loader>
 
-    <c-card *ngIf="result && result.incident" class="mb-3">
+    <c-card *ngIf="result && result.incident && result.incident.ServicenowIncident" class="mb-3">
         <c-card-header>
             <fa-icon [icon]="['far', 'circle-xmark']"></fa-icon>
             {{ t('Incident overview') }}

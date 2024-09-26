@@ -1,0 +1,15 @@
+.alert-icon {
+    width: 2.5rem;
+}
+
+.alert-icon > i {
+    font-size: 1.75rem;
+}
+
+.alert-icon + div {
+    padding-left: 0.25rem;
+}
+
+.text-default {
+    color: unset !important;
+}

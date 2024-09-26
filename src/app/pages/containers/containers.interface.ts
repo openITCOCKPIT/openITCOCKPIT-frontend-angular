@@ -28,3 +28,28 @@ export interface ContainersLoadContainersByStringParams {
     'filter[Containers.name]': string,
     onlyWritePermissions?: true
 }
+
+/**********************
+ *    Index action    *
+ **********************/
+export interface ContainersIndexRoot {
+    nest: ContainersIndexNested[],
+    _csrfToken: string
+}
+
+export interface ContainersIndexNested {
+    Container: ContainersIndexContainer
+    children: ContainersIndexNested[]
+}
+
+export interface ContainersIndexContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    linkedId: number
+    allowEdit: boolean
+    elements: number
+}

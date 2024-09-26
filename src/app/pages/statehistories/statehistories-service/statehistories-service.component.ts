@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -93,7 +94,8 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         XsButtonDirective,
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,
-        NgClass
+        NgClass,
+        CardFooterComponent
     ],
     templateUrl: './statehistories-service.component.html',
     styleUrl: './statehistories-service.component.css'

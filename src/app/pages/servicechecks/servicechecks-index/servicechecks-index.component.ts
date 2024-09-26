@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -92,7 +92,8 @@ import {
         XsButtonDirective,
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,
-        NgClass
+        NgClass,
+        CardFooterComponent
     ],
     templateUrl: './servicechecks-index.component.html',
     styleUrl: './servicechecks-index.component.css'

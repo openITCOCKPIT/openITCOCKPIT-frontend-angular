@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, model, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,7 +22,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -35,6 +35,12 @@ import { ChangelogIndexRoot, ChangelogsIndexParams, getDefaultChangelogsIndexPar
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import { HostgroupExtendedTabs } from '../../hostgroups/hostgroups.enum';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import {
+    SlaHostgroupHostsStatusOverviewComponent
+} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
+import { result } from 'lodash';
 
 
 @Component({
@@ -71,12 +77,14 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        NoRecordsComponent
+        NoRecordsComponent,
+        NgClass,
+        SlaHostgroupHostsStatusOverviewComponent
     ],
     templateUrl: './changelogs-index.component.html',
     styleUrl: './changelogs-index.component.css'
 })
-export class ChangelogsIndexComponent {
+export class ChangelogsIndexComponent implements OnInit, OnDestroy{
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
@@ -84,6 +92,8 @@ export class ChangelogsIndexComponent {
     public params: ChangelogsIndexParams = getDefaultChangelogsIndexParams();
     private subscriptions: Subscription = new Subscription();
     private ChangelogsService = inject(ChangelogsService)
+    public readonly PermissionsService = inject(PermissionsService);
+
     public changes?: ChangelogIndexRoot;
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -114,7 +124,8 @@ export class ChangelogsIndexComponent {
             copy: true,
             delete: true,
             activate: true,
-            deactivate: true
+            deactivate: true,
+            export: true
         }
     }
 
@@ -182,7 +193,8 @@ export class ChangelogsIndexComponent {
                 copy: true,
                 delete: true,
                 activate: true,
-                deactivate: true
+                deactivate: true,
+                export: true
             }
         }
         this.loadChanges();
@@ -201,5 +213,11 @@ export class ChangelogsIndexComponent {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
         this.loadChanges();
+    }
+
+    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 }

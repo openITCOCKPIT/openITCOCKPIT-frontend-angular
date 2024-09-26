@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -100,7 +101,8 @@ import {
         HoststatusSimpleIconComponent,
         ContainerComponent,
         TableLoaderComponent,
-        HostsBrowserMenuComponent
+        HostsBrowserMenuComponent,
+        CardFooterComponent
     ],
     templateUrl: './host-notification.component.html',
     styleUrl: './host-notification.component.css'

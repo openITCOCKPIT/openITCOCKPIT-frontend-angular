@@ -26,6 +26,26 @@
                         {{ t('overview') }}
                     </small>
                 </h5>
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                    <c-nav-item *oitcPermission="['changelogs', 'index']">
+                        <button
+                            class="nav-link active"
+                            [routerLink]="['/', 'changelogs', 'index']">
+                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                            {{ t('Main overview') }}
+                        </button>
+                    </c-nav-item>
+                    @if (PermissionsService.hasModule('ImportModule')) {
+                        <c-nav-item *oitcPermission="['ImportModule','importchangelogs', 'index']">
+                            <button
+                                class="nav-link"
+                                [routerLink]="['/', 'import_module', 'import_changelogs', 'index']">
+                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                {{ t('Import Module Changes') }}
+                            </button>
+                        </c-nav-item>
+                    }
+                </c-nav>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="loadChanges()" cButton class="ripple" color="default" size="xs">
