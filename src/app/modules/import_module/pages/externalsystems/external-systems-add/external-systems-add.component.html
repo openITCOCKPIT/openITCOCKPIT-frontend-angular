@@ -326,103 +326,109 @@
                                     <h4 cAlertHeading class="text-primary">
                                         {{ t('Custom object type mappings') }}
                                     </h4>
-                                </c-col>
-                                <c-col *ngFor="let custom_mapping of post.custom_data.custom_mappings; let i = index; trackBy: trackByIndex">
-                                    <div class="row ">
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group required">
-                                                <label class="control-label">
-                                                    {{ t('Class name') }}
-                                                </label>
-                                                <input
-                                                    class="form-control"
-                                                    type="text"
-                                                    placeholder="WANLine"
-                                                    ng-model="custom_mapping.classname">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group required">
-                                                <label class="control-label">
-                                                    {{ t('Interface type') }}
-                                                </label>
-                                                <select
-                                                    class="form-control"
-                                                    ng-model="custom_mapping.interface_type">
-                                                    <option value="custom">{{ t('Custom') }}</option>
-                                                    <option value="PhysicalInterface">{{ t('PhysicalInterface') }}</option>
-                                                    <option value="LogicalInterface">{{ t('LogicalInterface') }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-6">
-                                            <button
-                                                class="btn btn-outline-danger btn-sm btn-w-m waves-effect waves-themed margin-top-25 pull-right"
-                                                type="button"
-                                                (click)="removeCustomMapping(i)">
-                                                {{ t('Remove mapping') }}
+
+                                    <c-row
+                                        *ngFor="let custom_mapping of post.custom_data.custom_mappings; let i = index; trackBy: trackByIndex">
+                                        <c-row>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('Class name') }}
+                                                    </label>
+                                                    <input cFormControl
+                                                           type="text"
+                                                           name="classname"
+                                                           placeholder=" {{ t('WANLine') }}"
+                                                           [(ngModel)]="custom_mapping.classname">
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('Interface type') }}
+                                                    </label>
+                                                    <select name="interface_type"
+                                                            class="form-control"
+                                                            [(ngModel)]="custom_mapping.interface_type">
+                                                        <option value="custom">{{ t('Custom') }}</option>
+                                                        <option value="PhysicalInterface">{{ t('PhysicalInterface') }}
+                                                        </option>
+                                                        <option value="LogicalInterface">{{ t('LogicalInterface') }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <button
+                                                    class="btn btn-outline-danger btn-sm btn-w-m waves-effect waves-themed margin-top-25 pull-right"
+                                                    type="button"
+                                                    (click)="removeCustomMapping(i)">
+                                                    {{ t('Remove mapping') }}
+                                                </button>
+                                            </c-col>
+                                        </c-row>
+                                        <c-row>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('Hostname') }}
+                                                    </label>
+                                                    <input cFormControl
+                                                           type="text"
+                                                           name="name"
+                                                           placeholder="name"
+                                                           [(ngModel)]="custom_mapping.hostname">
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('IP-Address') }}
+                                                    </label>
+                                                    <input cFormControl
+                                                           type="text"
+                                                           name="address"
+                                                           placeholder="address"
+                                                           [disabled]="custom_mapping.interface_type !== 'custom'"
+                                                           [(ngModel)]="custom_mapping.address">
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('Description') }}
+                                                    </label>
+                                                    <input cFormControl
+                                                           type="text"
+                                                           name="description"
+                                                           placeholder="description"
+                                                           [(ngModel)]="custom_mapping.description">
+                                                </div>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="6" [lg]="3">
+                                                <div class="mb-3">
+                                                    <label cLabel>
+                                                        {{ t('Software') }}
+                                                    </label>
+                                                    <input cFormControl
+                                                           type="text"
+                                                           name="software"
+                                                           placeholder="software"
+                                                           [(ngModel)]="custom_mapping.software">
+                                                </div>
+                                            </c-col>
+                                        </c-row>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col class="col-12 pt-1 pb-2">
+                                            <button class="btn btn-success pull-right waves-effect waves-themed"
+                                                    type="button"
+                                                    (click)="addCustomMapping()">
+                                                {{ t('Add custom mapping') }}
                                             </button>
-                                        </div>
-                                    </div>
-                                    <div class="row ">
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group required">
-                                                <label class="control-label">
-                                                    {{ t('Hostname') }}
-                                                </label>
-                                                <input
-                                                    class="form-control"
-                                                    type="text"
-                                                    placeholder="name"
-                                                    ng-model="custom_mapping.hostname">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group required">
-                                                <label class="control-label">
-                                                    {{ t('IP-Address') }}
-                                                </label>
-                                                <input
-                                                    class="form-control"
-                                                    type="text"
-                                                    placeholder="address"
-                                                    ng-disabled="custom_mapping.interface_type !== 'custom'"
-                                                    ng-model="custom_mapping.address">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    {{ t('Description') }}
-                                                </label>
-                                                <input
-                                                    class="form-control"
-                                                    type="text"
-                                                    placeholder="description"
-                                                    ng-model="custom_mapping.description">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-3">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    {{ t('Software') }}
-                                                </label>
-                                                <input
-                                                    class="form-control"
-                                                    type="text"
-                                                    placeholder="software"
-                                                    ng-model="custom_mapping.software">
-                                            </div>
-                                        </div>
-                                    </div>
+                                        </c-col>
+                                    </c-row>
                                 </c-col>
-                                <div class="col-12 padding-top-10 padding-bottom-20">
-                                    <button class="btn btn-success pull-right waves-effect waves-themed"
-                                            type="button"
-                                            (click)="addCustomMapping()">
-                                        {{ t('Add custom mapping') }}
-                                    </button>
-                                </div>
                             </c-row>
                         </fieldset>
                         <fieldset>

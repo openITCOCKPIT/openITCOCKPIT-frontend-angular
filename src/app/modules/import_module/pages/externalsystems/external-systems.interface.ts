@@ -437,8 +437,8 @@ export interface ExternalSystemPost {
     system_type: string
     object_type_ids: number[],
     custom_data: {
-        custom_mappings: number[],
-        hostgroup_mappings: number[]
+        custom_mappings: CustomMapping[],
+        hostgroup_mappings: HostgroupMapping[]
     }
 }
 
@@ -474,4 +474,20 @@ export interface IdoitObjectType {
     status: string
     type_group: string
     type_group_title: string
+}
+
+export interface CustomMapping {
+    classname: string
+    interface_type: string
+    hostname: string
+    address: string
+    description: string
+    software: string
+}
+
+export interface HostgroupMapping {
+    classname: string
+    name_regex: string
+    ci_regex: string
+    container_id: number
 }

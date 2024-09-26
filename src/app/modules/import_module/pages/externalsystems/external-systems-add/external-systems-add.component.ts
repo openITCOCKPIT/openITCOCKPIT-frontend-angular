@@ -244,11 +244,31 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         return index;
     }
 
-    public removeCustomMapping($index: any) {
-
+    public addCustomMapping() {
+        this.post.custom_data.custom_mappings.push({
+            'classname': '',
+            'interface_type': 'custom',
+            'hostname': '',
+            'address': '',
+            'description': '',
+            'software': ''
+        });
     }
 
-    public addCustomMapping() {
-        
+    public removeCustomMapping($index: any) {
+        this.post.custom_data.custom_mappings.splice($index, 1);
+    }
+
+    public addCustomHostgroupMapping() {
+        this.post.custom_data.hostgroup_mappings.push({
+            'classname': '',
+            'name_regex': '',
+            'ci_regex': '',
+            'container_id': 0
+        });
+    }
+
+    public removeCustomHostgroupMapping($index: any) {
+        this.post.custom_data.hostgroup_mappings.splice($index, 1);
     }
 }
