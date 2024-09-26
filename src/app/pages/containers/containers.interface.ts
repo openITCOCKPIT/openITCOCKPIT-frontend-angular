@@ -1,3 +1,5 @@
+import { ContainerTypesEnum } from '../changelogs/object-types.enum';
+
 export interface Container {
     containertype_id: number
     id: number
@@ -57,4 +59,10 @@ export interface ContainersIndexContainer {
     services?: number
     servicetemplates?: number
     contacts?: number
+}
+
+
+export interface DataForCreateContainerModal {
+    parentContainerId: number
+    parentContainerTypeId: ContainerTypesEnum
 }

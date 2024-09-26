@@ -203,6 +203,7 @@
                                         @if ([ContainerTypesEnum.CT_GLOBAL, ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
                                             @if (PermissionsService.hasPermission(['containers', 'add']) && container.Container.allowEdit) {
                                                 <button type="button"
+                                                        (click)="toggleCreateContainerModal(container.Container)"
                                                         class="btn btn-link text-body p-1 text-decoration-none ripple">
                                                     <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
                                                     {{ t('Add') }}
@@ -309,3 +310,8 @@
 </oitc-coreui>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+<oitc-create-container-modal
+    [parentContainerId]="dataForCreateContainerModal.parentContainerId"
+    [parentContainerTypeId]="dataForCreateContainerModal.parentContainerTypeId"
+    (completed)="onMassActionComplete($event)"></oitc-create-container-modal>

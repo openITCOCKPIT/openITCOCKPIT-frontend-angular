@@ -24,7 +24,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { CommonModule, JsonPipe, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { ContainersIndexContainer, ContainersIndexNested } from '../containers.interface';
+import { ContainersIndexContainer, ContainersIndexNested, DataForCreateContainerModal } from '../containers.interface';
 import { NestLoaderComponent } from '../../../layouts/primeng/loading/nest-loader/nest-loader.component';
 import { ContainerNestComponent } from './container-nest/container-nest.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
@@ -33,6 +33,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { CreateContainerModalComponent } from './create-container-modal/create-container-modal.component';
 
 @Component({
     selector: 'oitc-containers-index',
@@ -63,7 +64,8 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         TranslocoPipe,
         NgSwitch,
         CommonModule,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        CreateContainerModalComponent
     ],
     templateUrl: './containers-index.component.html',
     styleUrl: './containers-index.component.css',
@@ -81,6 +83,11 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
 
     // Used for the delete all modal
     public selectedItems: any[] = [];
+
+    public dataForCreateContainerModal: DataForCreateContainerModal = {
+        parentContainerId: ROOT_CONTAINER,
+        parentContainerTypeId: ContainerTypesEnum.CT_GLOBAL
+    };
 
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
@@ -181,6 +188,18 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    public toggleCreateContainerModal(container: ContainersIndexContainer): void {
+        this.dataForCreateContainerModal = {
+            parentContainerId: container.id,
+            parentContainerTypeId: container.containertype_id
+        };
+
+        this.modalService.toggle({
+            show: true,
+            id: 'createContainerModal',
+        });
+    }
+
     public toggleDeleteAllModal(container: ContainersIndexContainer): void {
         let items: DeleteAllItem[] = [];
         if (container.allowEdit) {
@@ -206,6 +225,8 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     }
 
     // Generic callback whenever a mass action (like delete all) has been finished
+    // We do not really make mass changes as we only delete, add or edit one container at a time
+    // but to be consistent with the other components, we keep the name
     public onMassActionComplete(success: boolean) {
         if (success) {
             this.loadContainers(this.selectedContainerId, false);
