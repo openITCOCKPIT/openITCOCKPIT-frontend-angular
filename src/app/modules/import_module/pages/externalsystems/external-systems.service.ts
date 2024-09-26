@@ -204,7 +204,7 @@ export class ExternalSystemsService {
     public testConnection(params: ExternalSystemPost): Observable<ExternalSystemConnect> {
         const proxyPath = this.proxyPath;
         return this.http.post<ExternalSystemConnect>(`${proxyPath}/import_module/external_systems/testConnection.json?angular=true`,
-            params // cast ExternalSystemsIndexParams into object
+            params // cast ExternalSystemPost into object
         ).pipe(
             map(data => {
                 return data;

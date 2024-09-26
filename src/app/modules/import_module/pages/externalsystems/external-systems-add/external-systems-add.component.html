@@ -144,6 +144,7 @@
                                             <span cInputGroupText>://</span>
                                             <input cFormControl id="Url" required type="text"
                                                    name="Url"
+                                                   [(ngModel)]="post.api_url"
                                                    placeholder="{{post.system_type === 'idoit' ? ExternalSystemTypes[0].placeholder : ExternalSystemTypes[1].placeholder}}"
                                                    oitcFormError errorField="api_url">
                                             <oitc-form-feedback errorField="api_url"></oitc-form-feedback>
@@ -168,6 +169,7 @@
                                         <input cFormControl id="api_key" required type="text"
                                                name="api_key"
                                                placeholder="ZXhhbXBsZV9ncmFmYW5hX2FwaV9rZXk="
+                                               [(ngModel)]="post.api_key"
                                                oitcFormError errorField="api_key">
                                         <oitc-form-feedback errorField="api_key"></oitc-form-feedback>
                                     </div>
@@ -178,6 +180,8 @@
                                         </label>
                                         <input cFormControl required type="text"
                                                placeholder="oitc_api"
+                                               name="oitc_api"
+                                               [(ngModel)]="post.api_user"
                                                autocomplete="off"
                                                oitcFormError errorField="api_user">
                                         <oitc-form-feedback errorField="api_user"></oitc-form-feedback>
@@ -188,6 +192,8 @@
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
                                         <input cFormControl required type="text"
+                                               [(ngModel)]="post.api_password"
+                                               name="api_password"
                                                autocomplete="off"
                                                oitcFormError errorField="api_password">
                                         <oitc-form-feedback errorField="api_password"></oitc-form-feedback>
@@ -242,12 +248,12 @@
                             </legend>
                             <c-row>
                                 <c-col [xs]="12" class="mt-3">
-                                    <div class="alert  border-faded bg-transparent text-secondary mt-2">
+                                    <div class="alert border-faded bg-transparent text-secondary mt-2">
                                         <div class="d-flex align-items-center">
                                             <div class="alert-icon me-2">
                                                 <span class="icon-stack icon-stack-md">
                                                     <i class="base-circle icon-stack-3x text-primary-500"></i>
-                                                    <i class="fas fa-satellite icon-stack-1x text-white"></i>
+                                                    <i class="fas fa-info icon-stack-1x text-white"></i>
                                                 </span>
                                             </div>
                                             <div class="flex-1">
@@ -267,13 +273,54 @@
                                 </c-col>
                             </c-row>
                             <c-row>
-                                <c-col [xs]="12" class="mt-3">
+                                <c-col [xs]="12" class="mt-3" *ngIf="connectStatus === false">
                                     <c-alert color="danger">
                                         <h4 cAlertHeading>{{ t('404 Bad Request') }}</h4>
-                                        <p>{{ status?.status?.msg?.message }}</p>
+                                        <p>{{ connectMessage }}</p>
                                     </c-alert>
                                 </c-col>
                             </c-row>
+                            <c-row>
+                                <c-col [xs]="12" class="mt-3" *ngIf="connectStatus === true">
+                                    <c-alert color="success">
+                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                        {{ t('Connection established successfully.') }}
+                                    </c-alert>
+                                </c-col>
+                            </c-row>
+                            <c-row class="px-2">
+                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5"
+                                       *ngIf="objectTypes.length > 0">
+                                    <h4 cAlertHeading class="text-primary">
+                                        {{ t('Detected object types') }}
+                                        <span class="help-block small">
+                                            ({{ objectTypes.length }})
+                                        </span>
+                                    </h4>
+                                    <div class="mb-3">
+                                        <label cLabel for="objectTypes">
+                                            {{ t('Object types') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <oitc-multi-select-optgroup
+                                            name="objectTypes"
+                                            id="objectTypes"
+                                            optionValue="value"
+                                            optionLabel="label"
+                                            [(ngModel)]="post.object_type_ids"
+                                            [options]="objectTypesForOptionGroup"
+                                            [debounce]="true"
+                                            [group]="true"
+                                            class="flex-1"
+                                            oitcFormError [errors]="errors" errorField="object_type_ids">
+                                        </oitc-multi-select-optgroup>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="object_type_ids"></oitc-form-feedback>
+                                    </div>
+
+                                </c-col>
+                            </c-row>
+
                         </fieldset>
                     </c-container>
                 </c-card-body>

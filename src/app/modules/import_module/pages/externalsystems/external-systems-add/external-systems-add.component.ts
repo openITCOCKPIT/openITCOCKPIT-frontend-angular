@@ -2,7 +2,8 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent, AlertHeadingDirective,
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -10,14 +11,18 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownComponent, DropdownItemDirective,
+    DropdownComponent,
+    DropdownItemDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective, FormCheckComponent,
-    FormCheckInputDirective, FormCheckLabelDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    InputGroupComponent, InputGroupTextDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -36,9 +41,9 @@ import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { ExternalSystemConnect, ExternalSystemConnectStatus, ExternalSystemPost } from '../external-systems.interface';
+import { ExternalSystemConnect, ExternalSystemPost, IdoitObjectTypeResult } from '../external-systems.interface';
 import {
     IdoitOverviewComponent
 } from '../../../components/additional-host-information/idoit/idoit-overview/idoit-overview.component';
@@ -49,6 +54,10 @@ import { GenericValidationError } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { ExternalSystemsService } from '../external-systems.service';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -96,7 +105,9 @@ import { ExternalSystemsService } from '../external-systems.service';
         FormCheckComponent,
         FormCheckLabelDirective,
         AlertComponent,
-        AlertHeadingDirective
+        AlertHeadingDirective,
+        MultiSelectComponent,
+        MultiSelectOptgroupComponent
     ],
     templateUrl: './external-systems-add.component.html',
     styleUrl: './external-systems-add.component.css'
@@ -107,8 +118,11 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private readonly ContainersService = inject(ContainersService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     public post = this.getClearForm();
+    public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
+
     public errors: GenericValidationError | null = null;
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService)
+    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    public objectTypes: IdoitObjectTypeResult[] = [];
 
     protected readonly ExternalSystemTypes = [
         {
@@ -123,12 +137,12 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         }
     ];
 
-    containers: SelectKeyValue[] = [];
-    public status?: ExternalSystemConnect;
+    public containers: SelectKeyValue[] = [];
+    public connectStatus: boolean | null = null;
+    public connectMessage: string = '';
 
     public ngOnInit(): void {
         this.loadContainers();
-
     }
 
     public loadContainers = (): void => {
@@ -159,7 +173,6 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         }
     }
 
-
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
@@ -172,8 +185,32 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public checkConnection() {
         this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
             .subscribe((result: ExternalSystemConnect) => {
-                this.status = result;
-                console.log(this.status);
+                this.connectStatus = result.status.status;
+                if (result.status.msg) {
+                    this.connectMessage = result.status.msg.message;
+                }
+                if (result.status.result) {
+                    this.objectTypes = result.status.result;
+                    this.objectTypesForOptionGroup = this.parseElementsForOptionGroup(this.objectTypes);
+                }
             }));
+    }
+
+    private parseElementsForOptionGroup(objectTypes: IdoitObjectTypeResult[]): SelectItemOptionGroup[] {
+        let newFormat: any = {};
+        objectTypes.forEach(function (objectType) {
+            if (!newFormat[objectType.value.type_group_title]) {
+                newFormat[objectType.value.type_group_title] = {
+                    value: objectType.value.type_group,
+                    label: objectType.value.type_group_title,
+                    items: []
+                };
+            }
+            newFormat[objectType.value.type_group_title].items.push({
+                value: objectType.value.id,
+                label: objectType.value.title
+            });
+        });
+        return Object.values(newFormat);
     }
 }

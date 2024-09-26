@@ -448,7 +448,30 @@ export interface ExternalSystemConnect {
 
 export interface ExternalSystemConnectStatus {
     status: boolean
-    msg: {
-        message: string
-    }
+    result: IdoitObjectTypeResult[]
+    msg: ConnectMessage
+}
+
+export interface IdoitObjectTypeResult {
+    key: number
+    value: IdoitObjectType
+}
+
+export interface ConnectMessage {
+    message: string
+}
+
+export interface IdoitObjectType {
+    id: number
+    title: string
+    container: string
+    const: string
+    color: string
+    image: string
+    icon: string
+    cats?: string
+    tree_group: string
+    status: string
+    type_group: string
+    type_group_title: string
 }
