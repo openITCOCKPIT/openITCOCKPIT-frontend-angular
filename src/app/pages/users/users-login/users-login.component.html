@@ -13,7 +13,7 @@
     ></ngx-particles>
 
     <!-- FORM -->
-    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg ng-scope">
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg">
         <c-col md="8"></c-col>
         <c-col md="4" class="p-4" style="background:rgba(0,0,0,0.5)">
 
@@ -99,7 +99,7 @@
             <!-- Users with valid SSL certificates are always logged in -->
             <div *ngIf="hasValidSslCertificate">
                 <c-alert color="success">
-                    {{ t('Authorization through SSL certificate successfully.') }}
+                    {{ t('Authorization through SSL certificate successful.') }}
                 </c-alert>
 
                 <div class="form-group">

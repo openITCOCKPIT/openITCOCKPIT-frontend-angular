@@ -121,6 +121,9 @@ canvas {
 .login-side-bg {
     position:fixed;
 }
+.login-side-bg .btn {
+    margin-right: 5px;
+}
 
 /** fix button with icons **/
 
