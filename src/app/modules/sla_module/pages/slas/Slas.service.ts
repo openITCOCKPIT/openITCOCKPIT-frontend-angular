@@ -10,6 +10,8 @@ import {
     LoadUsersRoot,
     SlaPost,
     SlasEditRoot,
+    SlasHostsParams,
+    SlasHostsRoot,
     SlasIndexParams,
     SlasIndexRoot
 } from './Slas.interface';
@@ -120,6 +122,17 @@ export class SlasService {
                     });
                 })
             );
+    }
+
+    public getSlaHosts(id: number, params: SlasHostsParams): Observable<SlasHostsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasHostsRoot>(`${proxyPath}/sla_module/slas/hosts/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 
 }

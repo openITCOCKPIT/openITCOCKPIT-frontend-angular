@@ -157,7 +157,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
     };
 
     public ngOnInit() {
-        //this.loadContainers();
+        
         this.slaId = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.SlasService.getEdit(this.slaId)
             .subscribe((result) => {
