@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
     ContainerShowDetailsRootResult,
+    ContainerShowDetailsTreeRootResult,
     ContainersIndexNested,
     ContainersLoadContainersByStringParams,
     NodePost
@@ -132,6 +133,20 @@ export class ContainersService {
             params: {
                 angular: true,
                 asTree: false
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadShowDetailsAsTree(id: number): Observable<ContainerShowDetailsTreeRootResult> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<ContainerShowDetailsTreeRootResult>(`${proxyPath}/containers/showDetails/${id}.json`, {
+            params: {
+                angular: true,
+                asTree: true
             }
         }).pipe(
             map(data => {

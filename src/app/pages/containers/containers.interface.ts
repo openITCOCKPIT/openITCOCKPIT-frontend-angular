@@ -1,5 +1,6 @@
 import { ContainerTypesEnum } from '../changelogs/object-types.enum';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Edge, Node } from 'vis-network';
 
 export interface Container {
     containertype_id: number
@@ -132,4 +133,16 @@ export type  ContainerChildElements = {
     [key in ContainerShowDetailsObjectTypesEnum]: {  // 'hosts' or 'hostgroups' etc
         [key: string]: string                        // object id "5" => object name "default host"
     }
+}
+
+/**************************
+ * ShowDetails Map action *
+ **************************/
+export interface ContainerShowDetailsTreeRootResult {
+    containerMap: {
+        nodes: Node[]
+        edges: Edge[]
+        cluster: any[]
+    }
+    _csrfToken: string
 }

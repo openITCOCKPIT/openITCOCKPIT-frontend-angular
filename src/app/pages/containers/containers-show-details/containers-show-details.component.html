@@ -60,11 +60,11 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item>
-                        <button
-                            class="nav-link">
+                        <a [routerLink]="['/', 'containers', 'map', selectedContainerId]"
+                           class="nav-link">
                             <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                             {{ t('Containers map') }}
-                        </button>
+                        </a>
                     </c-nav-item>
                 </c-nav>
 
