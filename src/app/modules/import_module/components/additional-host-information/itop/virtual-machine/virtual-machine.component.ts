@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AdditionalHostInformationResult } from '../../../../external-systems.interface';
+import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { FaIconComponent, FaLayersComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
