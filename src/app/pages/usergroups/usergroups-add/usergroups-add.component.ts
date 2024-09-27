@@ -1,0 +1,173 @@
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
+} from '@coreui/angular';
+import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { PaginatorModule } from 'primeng/paginator';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { AcoRoot, LoadLdapgroups, UsergroupsAddRoot } from '../usergroups.interface';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { HistoryService } from '../../../history.service';
+import { UsergroupsService } from '../usergroups.service';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+
+@Component({
+    selector: 'oitc-usergroups-add',
+    standalone: true,
+    imports: [
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CoreuiComponent,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PaginatorModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RowComponent,
+        ColComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        RouterLink,
+        NgForOf,
+        NgClass
+    ],
+    templateUrl: './usergroups-add.component.html',
+    styleUrl: './usergroups-add.component.css'
+})
+export class UsergroupsAddComponent implements OnInit, OnDestroy {
+
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private readonly router: Router = inject(Router);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly TranslocoService = inject(TranslocoService);
+
+    protected errors: GenericValidationError | null = null;
+    protected acos: AcoRoot = {} as AcoRoot;
+    protected createAnother: boolean = false;
+    protected ldapGroups: SelectKeyValue[] = [];
+    protected post: UsergroupsAddRoot = {
+        Acos: [],
+        Usergroup: {
+            description: '',
+            ldapgroups: {
+                _ids: []
+            },
+            name: ''
+        }
+    } as UsergroupsAddRoot;
+
+
+    public ngOnInit() {
+
+        this.subscriptions.add(this.UsergroupsService.loadAcos().subscribe((acoRoot: AcoRoot) => {
+            console.log(acoRoot);
+            this.acos = acoRoot;
+        }));
+
+        this.loadLdapGroups('');
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    private getDefaultPost(): UsergroupsAddRoot {
+        return {} as UsergroupsAddRoot;
+    }
+
+    protected loadLdapGroups(search: string = ''): void {
+        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
+            this.ldapGroups = ldapgroups.ldapgroups;
+        }));
+    }
+
+    protected addUserrole() {
+
+        this.subscriptions.add(this.UsergroupsService.addUsergroup(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                if (result.success) {
+                    const response: GenericIdResponse = result.data as GenericIdResponse;
+
+                    const title: string = this.TranslocoService.translate('Servicegroup');
+                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const url: (string | number)[] = ['servicegroups', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+                    if (!this.createAnother) {
+                        this.HistoryService.navigateWithFallback(['/servicegroups/index']);
+                        return;
+                    }
+                    this.post = this.getDefaultPost();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
+                    if (typeof this.errors['container']['name'] !== 'undefined') {
+                        this.errors['name'] = <any>this.errors['container']['name'];
+                    }
+                }
+            })
+        );
+    }
+}

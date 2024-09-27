@@ -438,6 +438,15 @@ const coreRoutes: Routes = [{
     path: 'statehistories/service/:id',
     loadComponent: () => import('./pages/statehistories/statehistories-service/statehistories-service.component').then(m => m.StatehistoriesServiceComponent)
 }, {
+    path: 'usergroups/add',
+    loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
+}, {
+    path: 'usergroups/copy/:ids',
+    loadComponent: () => import('./pages/usergroups/usergroups-copy/usergroups-copy.component').then(m => m.UsergroupsCopyComponent)
+}, {
+    path: 'usergroups/index',
+    loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
+}, {
     path: 'users/add',
     loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
 }, {
