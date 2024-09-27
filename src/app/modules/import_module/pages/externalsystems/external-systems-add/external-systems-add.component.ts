@@ -50,7 +50,7 @@ import {
 import {
     ItopOverviewComponent
 } from '../../../components/additional-host-information/itop/itop-overview/itop-overview.component';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { ExternalSystemsService } from '../external-systems.service';
@@ -59,7 +59,7 @@ import {
     MultiSelectOptgroupComponent
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { SystemnameService } from '../../../../../services/systemname.service';
-
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -122,6 +122,8 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private readonly notyService = inject(NotyService);
+
     public post = this.getClearForm();
     public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
     public objectTypes: IdoitObjectTypeResult[] = [];
@@ -144,7 +146,23 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         }
     ];
 
+    protected readonly InterfaceTypes = [
+        {
+            key: 'custom',
+            value: this.TranslocoService.translate('Custom')
+        },
+        {
+            key: 'PhysicalInterface',
+            value: this.TranslocoService.translate('PhysicalInterface')
+        },
+        {
+            key: 'LogicalInterface',
+            value: this.TranslocoService.translate('LogicalInterface')
+        }
+    ];
+
     public containers: SelectKeyValue[] = [];
+    public hostgroup_containers: SelectKeyValue[] = [];
     public connectStatus: boolean | null = null;
     public connectMessage: string = '';
 
@@ -164,25 +182,6 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             container_id: null,
             name: '',
             description: '',
-            api_url: 'itop-jammy.itsm.love/itop/webservices/rest.php?version=1.3',
-            api_key: '',
-            api_user: 'oitc_api_user',
-            api_password: 'Asdf123!',
-            use_https: 0, //number
-            use_proxy: 0, //number
-            ignore_ssl_certificate: 1, //number
-            system_type: 'itop',
-            object_type_ids: [],
-            custom_data: {
-                custom_mappings: [],
-                hostgroup_mappings: []
-            }
-        }
-        /*
-        return {
-            container_id: null,
-            name: '',
-            description: '',
             api_url: '',
             api_key: '',
             api_user: '',
@@ -196,7 +195,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                 custom_mappings: [],
                 hostgroup_mappings: []
             }
-        } */
+        }
     }
 
     public ngOnDestroy(): void {
@@ -205,7 +204,33 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
 
 
     public submit() {
+        this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
 
+                    const title = this.TranslocoService.translate('External system');
+                    const msg = this.TranslocoService.translate('created successfully');
+
+                    this.notyService.genericSuccess(msg, title);
+
+                    // Create another
+                    this.post = this.getClearForm();
+                    this.errors = null;
+                    this.ngOnInit();
+                    this.notyService.scrollContentDivToTop();
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            })
+        );
     }
 
     public checkConnection() {
@@ -240,10 +265,6 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         return Object.values(newFormat);
     }
 
-    public trackByIndex(index: number, item: any): number {
-        return index;
-    }
-
     public addCustomMapping() {
         this.post.custom_data.custom_mappings.push({
             'classname': '',
@@ -270,5 +291,14 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
 
     public removeCustomHostgroupMapping($index: any) {
         this.post.custom_data.hostgroup_mappings.splice($index, 1);
+    }
+
+    public loadHostgroupContainers() {
+        if (this.post.container_id) {
+            this.subscriptions.add(this.ExternalSystemsService.loadHostgroupContainers(this.post.container_id)
+                .subscribe((result: SelectKeyValue[]) => {
+                    this.hostgroup_containers = result;
+                }));
+        }
     }
 }

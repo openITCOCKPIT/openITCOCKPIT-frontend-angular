@@ -6,7 +6,8 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 import {
     AdditionalHostInformationResult,
     Applications,
-    DependencyTreeApiResult, ExternalSystemConnect,
+    DependencyTreeApiResult,
+    ExternalSystemConnect,
     ExternalSystemEntity,
     ExternalSystemPost,
     ExternalSystemsIndexParams,
@@ -21,6 +22,7 @@ import {
     GenericValidationError
 } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -210,5 +212,42 @@ export class ExternalSystemsService {
                 return data;
             })
         )
+    }
+
+    public loadHostgroupContainers(container_id: number): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[]
+        }>(`${proxyPath}/import_module/external_systems/loadHostgroupContainers/${container_id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
+
+    public createExternalSystem(externalSystem: ExternalSystemPost) {
+        const proxyPath = this.proxyPath;
+        console.log(externalSystem);
+        return this.http.post<any>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }
