@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ExternalSystemsService } from '../../external-systems.service';
-import { AdditionalHostInformationResult } from '../../external-systems.interface';
+import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
+import { AdditionalHostInformationResult } from '../../pages/externalsystems/external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NgIf } from '@angular/common';

@@ -1,22 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { PermissionsService } from '../../permissions/permissions.service';
+import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 import {
     AdditionalHostInformationResult,
     Applications,
     DependencyTreeApiResult,
-    ExternalSystemEntity
+    ExternalSystemConnect,
+    ExternalSystemEntity,
+    ExternalSystemPost,
+    ExternalSystemsIndexParams,
+    ExternalSystemsIndexRoot
 } from './external-systems.interface';
-import { HostgroupSummaryState, SummaryState } from '../../pages/hosts/summary_state.interface';
+import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { ModalService } from '@coreui/angular';
 import {
     GenericIdResponse,
     GenericMessageResponse,
     GenericResponseWrapper,
     GenericValidationError
-} from '../../generic-responses';
+} from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -178,5 +184,70 @@ export class ExternalSystemsService {
                 });
             })
         );
+    }
+
+    public getIndex(params: ExternalSystemsIndexParams): Observable<ExternalSystemsIndexRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ExternalSystemsIndexRoot>(`${proxyPath}/import_module/external_systems/index.json`, {
+            params: params as {} // cast ExternalSystemsIndexParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/external_systems/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public testConnection(params: ExternalSystemPost): Observable<ExternalSystemConnect> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ExternalSystemConnect>(`${proxyPath}/import_module/external_systems/testConnection.json?angular=true`,
+            params // cast ExternalSystemPost into object
+        ).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadHostgroupContainers(container_id: number): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            containers: SelectKeyValue[]
+        }>(`${proxyPath}/import_module/external_systems/loadHostgroupContainers/${container_id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
+
+    public createExternalSystem(externalSystem: ExternalSystemPost) {
+        const proxyPath = this.proxyPath;
+        console.log(externalSystem);
+        return this.http.post<any>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

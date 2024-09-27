@@ -1,6 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { Hostgroup } from '../../../../pages/hostgroups/hostgroups.interface';
-import { ExternalSystemEntity } from '../../external-systems.interface';
+import { ExternalSystemEntity } from '../externalsystems/external-systems.interface';
 import { Container } from '../../../../pages/containers/containers.interface';
 
 
