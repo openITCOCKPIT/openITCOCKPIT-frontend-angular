@@ -214,6 +214,7 @@
                                         @if ([ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
                                             @if (PermissionsService.hasPermission(['containers', 'edit']) && container.Container.allowEdit) {
                                                 <button type="button"
+                                                        (click)="editContainer(container.Container)"
                                                         class="btn btn-link text-body p-1 text-decoration-none ripple">
                                                     <fa-icon [icon]="['fas', 'pen-alt']"
                                                              class="text-secondary"></fa-icon>
@@ -315,3 +316,7 @@
     [parentContainerId]="dataForCreateContainerModal.parentContainerId"
     [parentContainerTypeId]="dataForCreateContainerModal.parentContainerTypeId"
     (completed)="onMassActionComplete($event)"></oitc-create-container-modal>
+
+<oitc-edit-container-modal
+    [container]="selectedContainerForEdit"
+    (completed)="onMassActionComplete($event)"></oitc-edit-container-modal>
