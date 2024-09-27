@@ -78,6 +78,7 @@
                         </label>
                         <input cFormControl id="ExternalSystemDescription" required type="text"
                                name="name"
+                               [(ngModel)]="post.description"
                                oitcFormError errorField="description">
                     </div>
                     <div class="mb-3">
@@ -346,19 +347,21 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="classname"
+                                                           name="classname{{$index}}"
+                                                           id="classname{{$index}}"
                                                            placeholder=" {{ t('WANLine') }}"
                                                            [(ngModel)]="custom_mapping.classname">
                                                 </div>
                                             </c-col>
                                             <c-col [xs]="12" [md]="6" [lg]="3">
                                                 <div class="mb-3">
-                                                    <label cLabel for="interface_type">
+                                                    <label cLabel for="interface_type{{$index}}">
                                                         {{ t('Interface type') }}
+                                                        <oitc-required-icon></oitc-required-icon>
                                                     </label>
                                                     <oitc-select
-                                                        name="interface_type"
-                                                        id="interface_type"
+                                                        name="interface_type{{$index}}"
+                                                        id="interface_type{{$index}}"
                                                         optionValue="key"
                                                         optionLabel="value"
                                                         [options]="InterfaceTypes"
@@ -384,8 +387,9 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="name"
-                                                           placeholder="name"
+                                                           name="name{{$index}}"
+                                                           id="name{{$index}}"
+                                                           placeholder="{{ t('name') }}"
                                                            [(ngModel)]="custom_mapping.hostname">
                                                 </div>
                                             </c-col>
@@ -397,8 +401,9 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="address"
-                                                           placeholder="address"
+                                                           name="address{{$index}}"
+                                                           id="address{{$index}}"
+                                                           placeholder="{{ t('address') }}"
                                                            [disabled]="custom_mapping.interface_type !== 'custom'"
                                                            [(ngModel)]="custom_mapping.address">
                                                 </div>
@@ -410,7 +415,8 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="description"
+                                                           name="description{{$index}}"
+                                                           id="description{{$index}}"
                                                            placeholder="description"
                                                            [(ngModel)]="custom_mapping.description">
                                                 </div>
@@ -422,7 +428,8 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="software"
+                                                           name="software{{$index}}"
+                                                           id="software{{$index}}"
                                                            placeholder="software"
                                                            [(ngModel)]="custom_mapping.software">
                                                 </div>
@@ -465,8 +472,8 @@
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="hostgroup_mapping.classname"
-                                                           placeholder=" {{ t('WANLine') }}"
+                                                           name="classname{{$index}}"
+                                                           placeholder=" {{ t('ApplicationSolution') }}"
                                                            [(ngModel)]="hostgroup_mapping.classname">
                                                 </div>
                                             </c-col>
@@ -483,11 +490,10 @@
                                                 <div class="mb-3">
                                                     <label cLabel>
                                                         {{ t('Name RegEx') }}
-                                                        <oitc-required-icon></oitc-required-icon>
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="name_regex"
+                                                           name="name_regex{{$index}}"
                                                            placeholder=""
                                                            [(ngModel)]="hostgroup_mapping.name_regex">
                                                     <div class="help-block small">
@@ -499,11 +505,10 @@
                                                 <div class="mb-3">
                                                     <label cLabel>
                                                         {{ t('CI RegEx') }}
-                                                        <oitc-required-icon></oitc-required-icon>
                                                     </label>
                                                     <input cFormControl
                                                            type="text"
-                                                           name="ci_regex"
+                                                           name="ci_regex{{$index}}"
                                                            placeholder=""
                                                            [(ngModel)]="hostgroup_mapping.ci_regex">
                                                     <div class="help-block small">
@@ -513,13 +518,13 @@
                                             </c-col>
                                             <c-col [xs]="12" [md]="6" [lg]="3">
                                                 <div class="mb-3">
-                                                    <label cLabel for="hostgroup_containers">
+                                                    <label cLabel for="hostgroup_containers{{$index}}">
                                                         {{ t('Hostgroup container') }}
                                                         <oitc-required-icon></oitc-required-icon>
                                                     </label>
                                                     <oitc-select
-                                                        name="hostgroup_containers"
-                                                        id="hostgroup_containers"
+                                                        name="hostgroup_containers{{$index}}"
+                                                        id="hostgroup_containers{{$index}}"
                                                         optionValue="key"
                                                         optionLabel="value"
                                                         [options]="hostgroup_containers"
