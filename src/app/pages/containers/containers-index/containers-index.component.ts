@@ -34,6 +34,7 @@ import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-a
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { CreateContainerModalComponent } from './create-container-modal/create-container-modal.component';
+import { EditContainerModalComponent } from './edit-container-modal/edit-container-modal.component';
 
 @Component({
     selector: 'oitc-containers-index',
@@ -65,7 +66,8 @@ import { CreateContainerModalComponent } from './create-container-modal/create-c
         NgSwitch,
         CommonModule,
         DeleteAllModalComponent,
-        CreateContainerModalComponent
+        CreateContainerModalComponent,
+        EditContainerModalComponent
     ],
     templateUrl: './containers-index.component.html',
     styleUrl: './containers-index.component.css',
@@ -84,10 +86,14 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     // Used for the delete all modal
     public selectedItems: any[] = [];
 
+    // For the create modal
     public dataForCreateContainerModal: DataForCreateContainerModal = {
         parentContainerId: ROOT_CONTAINER,
         parentContainerTypeId: ContainerTypesEnum.CT_GLOBAL
     };
+
+    // For the edit modal
+    public selectedContainerForEdit?: ContainersIndexContainer;
 
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
@@ -231,6 +237,16 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
         if (success) {
             this.loadContainers(this.selectedContainerId, false);
         }
+    }
+
+    public editContainer(container: ContainersIndexContainer): void {
+        this.selectedContainerForEdit = container;
+        
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'editContainerModal',
+        });
     }
 
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
