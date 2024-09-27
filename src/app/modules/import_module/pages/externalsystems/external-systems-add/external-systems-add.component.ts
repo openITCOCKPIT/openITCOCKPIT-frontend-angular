@@ -60,6 +60,8 @@ import {
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { HistoryService } from '../../../../../history.service';
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -112,7 +114,8 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         MultiSelectOptgroupComponent,
         AsyncPipe,
         JsonPipe,
-        NgForOf
+        NgForOf,
+        TrueFalseDirective
     ],
     templateUrl: './external-systems-add.component.html',
     styleUrl: './external-systems-add.component.css'
@@ -123,6 +126,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private readonly ContainersService = inject(ContainersService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private readonly notyService = inject(NotyService);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public post = this.getClearForm();
     public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
@@ -213,13 +217,8 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                     const msg = this.TranslocoService.translate('created successfully');
 
                     this.notyService.genericSuccess(msg, title);
-
-                    // Create another
-                    this.post = this.getClearForm();
-                    this.errors = null;
-                    this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
-
+                    this.HistoryService.navigateWithFallback(['/import_module/ExternalSystems/index']);
                     return;
                 }
 

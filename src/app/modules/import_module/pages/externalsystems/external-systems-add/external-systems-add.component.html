@@ -68,6 +68,7 @@
                         </label>
                         <input cFormControl id="ExternalSystemName" required type="text"
                                name="name"
+                               [(ngModel)]="post.name"
                                oitcFormError errorField="name">
                         <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                     </div>
@@ -155,6 +156,9 @@
                                             id="use_https"
                                             class="checkbox-lg me-2 mt-0"
                                             name="use_https"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
                                             oitcDebounce
                                             type="checkbox"/>
                                         <label cFormCheckLabel
@@ -204,6 +208,9 @@
                                             id="use_proxy"
                                             class="checkbox-lg me-2 mt-0"
                                             name="use_proxy"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
                                             oitcDebounce
                                             type="checkbox"/>
                                         <label cFormCheckLabel
@@ -223,6 +230,9 @@
                                             id="ignore_ssl_certificate"
                                             class="checkbox-lg me-2 mt-0"
                                             name="ignore_ssl_certificate"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
                                             oitcDebounce
                                             type="checkbox"/>
                                         <label cFormCheckLabel
