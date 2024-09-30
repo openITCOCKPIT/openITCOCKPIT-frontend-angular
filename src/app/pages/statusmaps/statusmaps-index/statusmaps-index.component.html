@@ -1,0 +1,117 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['statusmaps', 'index']" [routerLink]="['/', 'statusmaps', 'index']">
+                        <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                        {{ t('Status Map') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    {{ t('Overview') }}
+                </li>
+            </ol>
+        </nav>
+
+        <c-row>
+            <c-col xs="12" class="mb-3 mt-1">
+                <c-input-group>
+                    <span cInputGroupText class="bg-primary text-white">
+                        <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                        &nbsp;
+                        {{ t('Satellite') }}
+                    </span>
+
+                    <oitc-select
+                        class="flex-grow-1"
+                        name="satellites"
+                        id="satellites"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="params['filter[Hosts.satellite_id]']"
+                        [options]="sattelites"
+                        (onChange)="onSatelliteChange()">
+                    </oitc-select>
+                </c-input-group>
+            </c-col>
+        </c-row>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Status map') }}
+                    <small class="fw-300">
+                        {{ t('overview') }}
+                    </small>
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item class="px-1">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <input cFormControl id="address" type="text"
+                                   name="address"
+                                   (debouncedValue)="onFilterChange($event)"
+                                   [placeholder]="'Filter by IP address' | transloco"
+                                   [(ngModel)]="params['filter[Hosts.address]']"
+                                   oitcDebounce
+                            >
+                        </c-input-group>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            </span>
+                            <input cFormControl id="name" type="text"
+                                   name="name"
+                                   (debouncedValue)="onFilterChange($event)"
+                                   [placeholder]="'Filter by host name' | transloco"
+                                   [(ngModel)]="params['filter[Hosts.name]']"
+                                   oitcDebounce
+                            >
+                        </c-input-group>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <span cInputGroupText>
+                            <label>
+                                <input type="checkbox"
+                                       name="showAll"
+                                       oitcDebounce
+                                       (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="considerParentChildRelations"
+                                />
+                                {{ t('Consider parent child relations') }}
+                            </label>
+                        </span>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+
+            <c-card-body>
+                <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
+
+                <c-row>
+                    <c-col xs="12" *ngIf="isEmpty">
+                        <oitc-no-records></oitc-no-records>
+                    </c-col>
+                    <c-col xs="12" *ngIf="showProgressbar">
+                        <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+                    </c-col>
+                    <c-col xs="12" id="statusmapNetwork"></c-col>
+                </c-row>
+
+            </c-card-body>
+
+        </c-card>
+    </ng-container>
+</oitc-coreui>
