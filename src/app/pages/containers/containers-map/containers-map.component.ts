@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
@@ -21,7 +21,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DecimalPipe, DOCUMENT, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
@@ -32,6 +32,7 @@ import { ContainersService } from '../containers.service';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
+import { ClusterOptions } from 'vis-network/declarations/network/Network';
 
 @Component({
     selector: 'oitc-containers-map',
@@ -60,7 +61,8 @@ import { DataSet } from 'vis-data/peer';
         XsButtonDirective,
         RouterLink,
         DecimalPipe,
-        ProgressComponent
+        ProgressComponent,
+        TranslocoPipe
     ],
     templateUrl: './containers-map.component.html',
     styleUrl: './containers-map.component.css'
@@ -77,6 +79,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
     public progress: number = 0;
 
     private subscriptions: Subscription = new Subscription();
+    private isFullscreen: boolean = false;
     public readonly PermissionsService = inject(PermissionsService);
     private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -85,6 +88,13 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private readonly document = inject(DOCUMENT);
+
+    @HostListener('fullscreenchange', ['$event'])
+    handleFullscreenchangeEvent(Event: Event) {
+        if (document.fullscreenElement === null) {
+            this.isFullscreen = false;
+        }
+    }
 
     public ngOnInit(): void {
         this.loadContainersForSelect();
@@ -254,8 +264,11 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'circularImage',
                     color: '#00e676',
                     size: 15,
-                    image: '../node_modules/@fortawesome/fontawesome-free/svgs/solid/users.svg',
-                    fill: '#ff00ff'
+                    image: './assets/images/fontawesome-free/svgs/solid/server-solid-white.svg',
+                    shapeProperties: {
+                        useImageSize: false,
+                    },
+                    imagePadding: 8,
                 },
 
                 hosts: {
@@ -263,7 +276,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#007bff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf108',
                         color: '#ffffff',
                         size: 5,
@@ -287,7 +300,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#304ffe',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -299,7 +312,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#66bb6a',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -311,7 +324,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f4511e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf085',
                         color: '#ffffff',
                         size: 5,
@@ -347,7 +360,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#45526e',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
@@ -359,7 +372,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#0091ea',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
@@ -383,7 +396,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#b388ff',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -407,7 +420,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#800080',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
@@ -431,7 +444,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f50057',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf041',
                         color: '#ffffff',
                         size: 5,
@@ -479,7 +492,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#f05a28',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf1fe',
                         color: '#ffffff',
                         size: 5,
@@ -496,10 +509,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                 },
                 font: {
                     size: 12,
-                    background: 'rgba(255,255,255,0.7)',
-                    bold: {
-                        mod: 'bold'
-                    }
+                    background: 'rgba(255,255,255,0.7)' // important for dark mode
                 },
                 // heightConstraint: {
                 //    minimum: 20
@@ -551,29 +561,107 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
         // https://github.com/visjs/vis-network/issues/1967
         // 'normal normal 900 24px/1 "Font Awesome 5 Free"'
         // 'normal 400 1em/1 "Font Awesome 6 Free"'
-        this.document.fonts.load('normal 400 1em/1 "Font Awesome 6 Free"').then(() => {
-            console.log('Font Awesome 6 Free is available');
+        //this.document.fonts.load('normal 400 1em/1 "Font Awesome 6 Free"').then(() => {
+        console.log('Font Awesome 6 Free is available');
 
-            const network = new Network(elem, {nodes: nodes, edges: edges}, options);
-            network.fit({
-                animation: {
-                    duration: 500,
-                    easingFunction: 'linear'
-                }
-            });
-
-            if (options.physics) {
-                network.on('stabilizationProgress', (params) => {
-                    let currentPercentage = Math.round(params.iterations / params.total * 100);
-                    this.progress = currentPercentage;
-                });
-                network.once('stabilizationIterationsDone', () => {
-                    this.showProgressbar = false;
-                    network.setOptions({physics: false});
-                });
+        const network = new Network(elem, {nodes: nodes, edges: edges}, options);
+        network.fit({
+            animation: {
+                duration: 500,
+                easingFunction: 'linear'
             }
         });
 
+        if (options.physics) {
+            network.on('stabilizationProgress', (params) => {
+                let currentPercentage = Math.round(params.iterations / params.total * 100);
+                this.progress = currentPercentage;
+            });
+            network.once('stabilizationIterationsDone', () => {
+                this.showProgressbar = false;
+
+                // Force the network to stop moving
+                network.setOptions({physics: false});
+
+                // Wait a bit before enabling physics again
+                setTimeout(function () {
+                    network.setOptions({physics: true});
+                }, 250);
+            });
+        }
+
+        network.on("selectNode", (params) => {
+            if (params.nodes.length === 1) {
+                if (network.isCluster(params.nodes[0]) == true) {
+                    // The method .cluster() creates a cluster and .openCluster() releases the clustered nodes and
+                    // edges from the cluster and then disposes of it. There's no way to close it because it no longer exists.
+                    // Source: https://github.com/visjs/vis-network/issues/354#issuecomment-574260404
+                    network.openCluster(params.nodes[0]);
+                } else {
+                    //Was a cluster and want to get closed down?
+                    nodesData.forEach((node: any) => {
+                        if (node.hasOwnProperty('createCluster') && node.id === params.nodes[0]) {
+                            //Lookup cluster configuration
+                            let clusterLabel: string = 'ERR';
+                            cluster.forEach((clusterObj) => {
+                                if (clusterObj.name === node.createCluster) {
+                                    clusterLabel = String(clusterObj.size)
+                                }
+                            });
+
+                            //Recluster
+                            let clusterOptions: ClusterOptions = {
+                                joinCondition(nodeOptions: any): boolean {
+                                    return nodeOptions.cid === node.createCluster;
+                                },
+                                clusterNodeProperties: {
+                                    label: clusterLabel,
+                                    color: node.color || '#97c2fc'
+                                }
+                            };
+
+                            network.cluster(clusterOptions);
+                        }
+                    });
+                }
+            }
+        });
+
+
+        //Create all vis-network clusters on page load
+        if (cluster) {
+            cluster.forEach((clusterData) => {
+                let clusterOptions: ClusterOptions = {
+                    joinCondition(nodeOptions: any): boolean {
+                        return nodeOptions.cid === clusterData.name;
+                    },
+                    clusterNodeProperties: {
+                        label: String(clusterData.size) //cast number to string otherwise it will not be displayed
+                    }
+                };
+
+                network.cluster(clusterOptions);
+            });
+        }
+
+        // });
+
+    }
+
+    public toggleFullscreenMode() {
+        const elem = this.document.getElementById('fullscreenContainerMap');
+
+        if (this.isFullscreen) {
+            if (document.exitFullscreen) {
+                this.isFullscreen = false;
+                document.exitFullscreen();
+            }
+        } else {
+            this.isFullscreen = true;
+            if (elem && elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
+        }
     }
 
 }

@@ -71,6 +71,15 @@
 
                 <c-nav class="card-toolbar card-header-pills ms-3">
                     <c-nav-item class="px-1">
+                        <button cButton class="ripple ms-1" color="success"
+                                (click)="toggleFullscreenMode()"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'expand-arrows-alt']"
+                                     [title]="'Toggle full screen mode' |transloco"></fa-icon>
+                        </button>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
                         <button [fallbackUrl]="['containers', 'index']" cButton class="ripple" color="default"
                                 oitcBackButton
                                 size="xs">
@@ -82,7 +91,7 @@
 
             </c-card-header>
 
-            <c-card-body>
+            <c-card-body id="fullscreenContainerMap">
                 <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
 
                 <c-row>
