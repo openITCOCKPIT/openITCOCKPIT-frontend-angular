@@ -12,7 +12,7 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
+    FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -23,12 +23,12 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AcoRoot, LoadLdapgroups, UsergroupsAddRoot } from '../usergroups.interface';
 import { Subscription } from 'rxjs';
@@ -39,6 +39,7 @@ import { UsergroupsService } from '../usergroups.service';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-usergroups-add',
@@ -76,7 +77,12 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         TrueFalseDirective,
         RouterLink,
         NgForOf,
-        NgClass
+        NgClass,
+        DebounceDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        KeyValuePipe
     ],
     templateUrl: './usergroups-add.component.html',
     styleUrl: './usergroups-add.component.css'
@@ -95,6 +101,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected acos: AcoRoot = {} as AcoRoot;
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
+    protected controllerFilter: string = '';
     protected post: UsergroupsAddRoot = {
         Acos: [],
         Usergroup: {

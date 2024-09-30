@@ -92,42 +92,99 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        Filter by controller
-                        <input>
+                    <c-row>
+                        <c-col md="6">
 
-                        create another
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input
+                                        [(ngModel)]="controllerFilter"
+                                        [placeholder]="'Filter by controller' | transloco"
+                                        cFormControl
+                                        name="Usergroups.description"
+                                        type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <label class="me-2">
+                                <input cFormCheckInput type="checkbox" name="createAnother"
+                                       [(ngModel)]="createAnother">
+                                {{ t('Create another') }}
+                            </label>
 
-                        create user role
+                            <button cButton class="ripple" color="primary" type="submit">
+                                {{ t('Create service group') }}
+                            </button>
+                            <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    type="button">
+                                {{ t('Cancel') }}
+                            </button>
+                        </c-col>
+                    </c-row>
 
-                        cancel
+                    <ng-container *ngFor="let controller of acos.acos[0].children | keyvalue">
+                        <ng-container
+                                *ngIf="controller.value.children && controller.value.alias.substr(-6) !== 'Module'">
+                            <h5>
+                                {{ controller.value.alias }}
+                            </h5>
+                            <c-row>
+                                <c-col
+                                        md="2"
+                                        *ngFor="let action of controller.value.children | keyvalue"
+                                        [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               name="post.Acos[{{action.value.id}}]"
+                                               id="post.Acos[{{action.value.id}}]"
+                                               type="checkbox"
+                                               trueFalseValue
+                                               [(ngModel)]="post.Acos[action.value.id]"
+                                        />
+                                        <label cFormCheckLabel for="post.Acos[{{action.value.id}}]">
+                                            {{ action.value.alias }}
+                                        </label>
+                                    </c-form-check>
+                                </c-col>
+                            </c-row>
+                        </ng-container>
+                    </ng-container>
 
-                        bulk actions
-                    </div>
+                    <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue">
+                        <ng-container *ngIf="plugin.value.children && plugin.value.alias.substr(-6) === 'Module'">
 
-                    <ng-container *ngFor="let controller of acos.acos[0].children">
-                        <h5 [ngClass]="{'ok': controller.alias.substr(-6) == 'Module'}">
-                            {{ controller.alias }}
-                        </h5>
-                        <c-row *ngIf="controller.children.length > 0 && controller.alias.substr(-6) !== 'Module'">
-                            <c-col
-                                    md="2"
-                                    *ngFor="let action of controller.children"
-                                    [ngClass]="{'txt-ack': action.alias == 'index', 'ok': action.alias == 'add', 'warning': action.alias == 'edit', 'down': action.alias == 'delete'}">
-                                <c-form-check>
-                                    <input cFormCheckInput
-                                           name="post.User.is_active"
-                                           id="post.User.is_active"
-                                           type="checkbox"
-                                           trueFalseValue
-                                           [(ngModel)]="post.Acos[action.id]"
-                                    />
-                                    <label cFormCheckLabel for="post.User.is_active">
-                                        {{ action.alias }}
-                                    </label>
-                                </c-form-check>
-                            </c-col>
-                        </c-row>
+                            <h5 class="ok">
+                                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                {{ plugin.value.alias }}
+                            </h5>
+                            <c-row>
+                                <c-col md="2" *ngFor="let controller of plugin.value.children | keyvalue">
+                                    <h5>
+                                        {{ controller.value.alias }}
+                                    </h5>
+                                    <div
+                                            *ngFor="let action of controller.value.children | keyvalue"
+                                            [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}"
+                                            class="mb-3">
+                                        <input cFormCheckInput
+                                               name="post.Acos[{{action.value.id}}]"
+                                               id="post.Acos[{{action.value.id}}]"
+                                               type="checkbox"
+                                               trueFalseValue
+                                               [(ngModel)]="post.Acos[action.value.id]"
+                                        />
+                                        <label cFormCheckLabel for="post.Acos[{{action.value.id}}]">
+                                            {{ action.value.alias }}
+                                        </label>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </ng-container>
                     </ng-container>
 
 

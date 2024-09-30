@@ -218,35 +218,19 @@ export interface LoadLdapgroups {
 
 /* ACOs */
 export interface AcoRoot {
-    acos: {
-        id: number
-        parent_id: any
-        model: any
-        foreign_key: any
-        alias: string
-        lft: number
-        rght: number
-        children: {
-            id: number
-            parent_id: number
-            model: any
-            foreign_key: any
-            alias: string
-            lft: number
-            rght: number
-            children: {
-                id: number
-                parent_id: number
-                model: any
-                foreign_key: any
-                alias: string
-                lft: number
-                rght: number
-                children: any
-            }[]
-        }[]
-    }[]
+    acos: { [key: number]: child }
     _csrfToken: string
+}
+
+export interface child {
+    id: number
+    parent_id: number
+    model:  any
+    foreign_key: any
+    alias: string
+    lft: number
+    rght: number
+    children: { [key: number]: child }
 }
 
 
