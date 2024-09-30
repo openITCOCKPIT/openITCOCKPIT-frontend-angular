@@ -175,7 +175,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         face: '"Font Awesome 6 Free"',
                         code: '\uf0ac',
                         color: colorGroup, //color for icon,
-                        weight: 'bold' // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
 
                     },
                     margin: {
@@ -203,7 +203,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf015',
                         size: 35,
                         color: '#ff4444',
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 location: {
@@ -214,7 +214,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf124',
                         size: 35,
                         color: '#ff8800',
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 node: {
@@ -225,7 +225,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0c1',
                         size: 35,
                         color: '#00695c',
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 devicegroup: {
@@ -235,10 +235,10 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         face: '"Font Awesome 6 Free"',
                         code: '\uf0c1',
                         color: colorGroup, //color for icon
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
-                hostgroups: {
+                /*hostgroups: {
                     shape: 'dot',
                     color: '#00e676',
                     size: 15,
@@ -247,8 +247,15 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf233',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
+                },*/
+                hostgroups: {
+                    shape: 'circularImage',
+                    color: '#00e676',
+                    size: 15,
+                    image: '../node_modules/@fortawesome/fontawesome-free/svgs/solid/users.svg',
+                    fill: '#ff00ff'
                 },
 
                 hosts: {
@@ -260,7 +267,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf108',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 hosttemplates: {
@@ -272,7 +279,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf044',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 hostescalations: {
@@ -284,7 +291,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 hostdependencies: {
@@ -296,7 +303,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 servicegroups: {
@@ -308,7 +315,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf085',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 servicetemplategroups: {
@@ -320,7 +327,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0c5',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 servicetemplates: {
@@ -332,7 +339,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf044',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 serviceescalations: {
@@ -344,7 +351,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf1e2',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 servicedependencies: {
@@ -356,7 +363,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0e8',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 contacts: {
@@ -368,7 +375,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf2bd',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 contactgroups: {
@@ -380,7 +387,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 users: {
@@ -392,7 +399,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf2bd',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 usercontainerroles: {
@@ -404,7 +411,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0c0',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 timeperiods: {
@@ -416,7 +423,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf017',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 maps: {
@@ -428,7 +435,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf041',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 instantreports: {
@@ -440,7 +447,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf1c5',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 autoreports: {
@@ -452,7 +459,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf1c5',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 satellites: {
@@ -464,7 +471,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf0c2',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
                 grafana_userdashboards: {
@@ -476,7 +483,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         code: '\uf1fe',
                         color: '#ffffff',
                         size: 5,
-                        weight: 'bold'
+                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
             },
@@ -489,7 +496,10 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                 },
                 font: {
                     size: 12,
-                    background: 'rgba(255,255,255,0.7)'
+                    background: 'rgba(255,255,255,0.7)',
+                    bold: {
+                        mod: 'bold'
+                    }
                 },
                 // heightConstraint: {
                 //    minimum: 20
@@ -506,7 +516,6 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     enabled: false
                 },
                 hideEdgesOnDrag: true
-
             },
             physics: {
                 barnesHut: {
@@ -539,6 +548,9 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
             this.progress = 0;
         }
 
+        // https://github.com/visjs/vis-network/issues/1967
+        // 'normal normal 900 24px/1 "Font Awesome 5 Free"'
+        // 'normal 400 1em/1 "Font Awesome 6 Free"'
         this.document.fonts.load('normal 400 1em/1 "Font Awesome 6 Free"').then(() => {
             console.log('Font Awesome 6 Free is available');
 
