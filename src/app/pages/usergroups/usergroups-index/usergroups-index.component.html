@@ -134,7 +134,7 @@
                             <oitc-item-select
                                     *oitcPermission="['usergroups', 'delete']"
                                     [disabled]="false"
-                                    [hidden]="usergroup.name === 'Administrator' || usergroup.users.length !== 0"
+                                    [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
                                     [item]="usergroup"></oitc-item-select>
 
                         </td>
@@ -157,9 +157,9 @@
                                     {{ t('Copy') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider
-                                    [hidden]="usergroup.name === 'Administrator' || usergroup.users.length !== 0"></li>
+                                    [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(usergroup)"
-                                                             [hidden]="usergroup.name === 'Administrator' || usergroup.users.length !== 0"
+                                                             [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
                                                              [permission]="'usergroups.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
