@@ -104,6 +104,48 @@
                     <c-col xs="12" *ngIf="isEmpty">
                         <oitc-no-records></oitc-no-records>
                     </c-col>
+                    <c-col xs="12">
+                        <fa-icon [icon]="['fas', 'info-circle']" class="p-0 up"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Up') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'exclamation-circle']" class="p-0 down"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Down') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'question-circle']" class="p-0 unreachable"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Unreachable') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'eye-slash']" class="p-0 text-primary"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Not monitored') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'plug']" class="p-0 text-primary"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Disabled') }}
+                        </em>
+                        |
+                        <fa-icon [icon]="['fas', 'power-off']" class="p-0"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('In downtime') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'user']" class="p-0"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Acknowledged') }}
+                        </em>
+
+                        <fa-icon [icon]="['fas', 'user-md']" class="p-0"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Acknowledged and in downtime') }}
+                        </em>
+                    </c-col>
+
                     <c-col xs="12" *ngIf="showProgressbar">
                         <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
                     </c-col>
