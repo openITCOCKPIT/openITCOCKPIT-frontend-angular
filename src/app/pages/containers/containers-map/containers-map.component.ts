@@ -32,6 +32,7 @@ import { ContainersService } from '../containers.service';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
+import { ClusterOptions } from 'vis-network/declarations/network/Network';
 
 @Component({
     selector: 'oitc-containers-map',
@@ -254,8 +255,11 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     shape: 'circularImage',
                     color: '#00e676',
                     size: 15,
-                    image: '../node_modules/@fortawesome/fontawesome-free/svgs/solid/users.svg',
-                    fill: '#ff00ff'
+                    image: '../node_modules/@fortawesome/fontawesome-free/svgs/solid/server.svg',
+                    shapeProperties: {
+                        useImageSize: false,
+                    },
+                    imagePadding: 8,
                 },
 
                 hosts: {
@@ -496,10 +500,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                 },
                 font: {
                     size: 12,
-                    background: 'rgba(255,255,255,0.7)',
-                    bold: {
-                        mod: 'bold'
-                    }
+                    background: 'rgba(255,255,255,0.7)'
                 },
                 // heightConstraint: {
                 //    minimum: 20
@@ -569,9 +570,71 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                 });
                 network.once('stabilizationIterationsDone', () => {
                     this.showProgressbar = false;
+
+                    // Force the network to stop moving
                     network.setOptions({physics: false});
+
+                    // Wait a bit before enabling physics again
+                    setTimeout(function () {
+                        network.setOptions({physics: true});
+                    }, 250);
                 });
             }
+
+            network.on("selectNode", (params) => {
+                if (params.nodes.length === 1) {
+                    if (network.isCluster(params.nodes[0]) == true) {
+                        // The method .cluster() creates a cluster and .openCluster() releases the clustered nodes and
+                        // edges from the cluster and then disposes of it. There's no way to close it because it no longer exists.
+                        // Source: https://github.com/visjs/vis-network/issues/354#issuecomment-574260404
+                        network.openCluster(params.nodes[0]);
+                    } else {
+                        //Was a cluster and want to get closed down?
+                        nodesData.forEach((node: any) => {
+                            if (node.hasOwnProperty('createCluster') && node.id === params.nodes[0]) {
+                                //Lookup cluster configuration
+                                let clusterLabel: string = 'ERR';
+                                cluster.forEach((clusterObj) => {
+                                    if (clusterObj.name === node.createCluster) {
+                                        clusterLabel = String(clusterObj.size)
+                                    }
+                                });
+
+                                //Recluster
+                                let clusterOptions: ClusterOptions = {
+                                    joinCondition(nodeOptions: any): boolean {
+                                        return nodeOptions.cid === node.createCluster;
+                                    },
+                                    clusterNodeProperties: {
+                                        label: clusterLabel,
+                                        color: node.color || '#97c2fc'
+                                    }
+                                };
+
+                                network.cluster(clusterOptions);
+                            }
+                        });
+                    }
+                }
+            });
+
+
+            //Create all vis-network clusters on page load
+            if (cluster) {
+                cluster.forEach((clusterData) => {
+                    let clusterOptions: ClusterOptions = {
+                        joinCondition(nodeOptions: any): boolean {
+                            return nodeOptions.cid === clusterData.name;
+                        },
+                        clusterNodeProperties: {
+                            label: String(clusterData.size) //cast number to string otherwise it will not be displayed
+                        }
+                    };
+
+                    network.cluster(clusterOptions);
+                });
+            }
+
         });
 
     }
