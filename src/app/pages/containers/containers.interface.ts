@@ -11,6 +11,10 @@ export interface Container {
     rght: number
 }
 
+// Just an alias for the Container interface
+export interface ContainerEntity extends Container {
+}
+
 export interface ContainerWithHostJoinData extends Container {
     id: number
     host_id: number
