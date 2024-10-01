@@ -20,15 +20,16 @@
                     </a>
                 </li>
                 <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add external system') }}
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    {{ t('Edit external system') }}
                 </li>
             </ol>
         </nav>
+        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
         <form cForm (ngSubmit)="submit()" autocomplete="off">
-            <c-card class="mb-3">
+            <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Create new external system') }}</h5>
+                    <h5 cCardTitle>{{ t('Update external system') }}</h5>
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['import_module', 'ExternalSystems', 'index']" cButton class="ripple"

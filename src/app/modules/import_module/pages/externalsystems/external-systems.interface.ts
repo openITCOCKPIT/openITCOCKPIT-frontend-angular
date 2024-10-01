@@ -442,6 +442,15 @@ export interface ExternalSystemPost {
     }
 }
 
+export interface ExternalSystemGet {
+    externalSystem: ExternalSystemPost
+}
+
+export interface CustomData {
+    custom_mappings: CustomMapping[]
+    hostgroup_mappings: HostgroupMapping[]
+}
+
 export interface ExternalSystemConnect {
     status: ExternalSystemConnectStatus
 }
