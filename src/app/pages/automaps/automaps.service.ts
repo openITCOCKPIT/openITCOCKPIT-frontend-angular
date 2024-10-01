@@ -4,6 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import { AutomapsIndexParams, AutomapsIndexRoot } from './automaps.interface';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -23,5 +24,11 @@ export class AutomapsService {
                 return data;
             })
         )
+    }
+
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/automaps/delete/${item.id}.json?angular=true`, {});
     }
 }

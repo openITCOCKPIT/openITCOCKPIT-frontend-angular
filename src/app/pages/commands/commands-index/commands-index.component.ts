@@ -91,6 +91,7 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { IndexPage } from '../../../pages.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-commands-index',
@@ -144,6 +145,7 @@ import { IndexPage } from '../../../pages.interface';
         DropdownDividerDirective,
         MatSort,
         MatSortHeader,
+        TableLoaderComponent,
     ],
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
