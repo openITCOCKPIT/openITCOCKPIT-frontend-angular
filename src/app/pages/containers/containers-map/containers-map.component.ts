@@ -157,7 +157,6 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
         nodes.clear();
         edges.clear();
 
-        console.log(nodesData, edgesData);
         nodes.add(nodesData);
         edges.add(edgesData);
 
@@ -248,29 +247,18 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                         weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
                 },
-                /*hostgroups: {
+                hostgroups: {
                     shape: 'dot',
                     color: '#00e676',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
+                        face: '"Font Awesome 6 Free Solid"',
                         code: '\uf233',
                         color: '#ffffff',
                         size: 5,
                         weight: "900", // Font Awesome 5 doesn't work properly unless bold.
                     }
-                },*/
-                hostgroups: {
-                    shape: 'circularImage',
-                    color: '#00e676',
-                    size: 15,
-                    image: './assets/images/fontawesome-free/svgs/solid/server-solid-white.svg',
-                    shapeProperties: {
-                        useImageSize: false,
-                    },
-                    imagePadding: 8,
                 },
-
                 hosts: {
                     shape: 'dot',
                     color: '#007bff',
@@ -480,8 +468,8 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
                     color: '#01579b',
                     size: 15,
                     icon: {
-                        face: '"Font Awesome 6 Free"',
-                        code: '\uf0c2',
+                        face: '"Font Awesome 6 Free Solid"',
+                        code: '\uf7bf',
                         color: '#ffffff',
                         size: 5,
                         weight: "900", // Font Awesome 5 doesn't work properly unless bold.
@@ -562,7 +550,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
         // 'normal normal 900 24px/1 "Font Awesome 5 Free"'
         // 'normal 400 1em/1 "Font Awesome 6 Free"'
         //this.document.fonts.load('normal 400 1em/1 "Font Awesome 6 Free"').then(() => {
-        console.log('Font Awesome 6 Free is available');
+        //console.log('Font Awesome 6 Free is available');
 
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);
         network.fit({

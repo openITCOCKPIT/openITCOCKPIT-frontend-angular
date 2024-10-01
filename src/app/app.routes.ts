@@ -483,6 +483,9 @@ const coreRoutes: Routes = [{
     path: 'containers/map/:id',
     loadComponent: () => import('./pages/containers/containers-map/containers-map.component').then(m => m.ContainersMapComponent)
 }, {
+    path: 'statusmaps/index',
+    loadComponent: () => import('./pages/statusmaps/statusmaps-index/statusmaps-index.component').then(m => m.StatusmapsIndexComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
