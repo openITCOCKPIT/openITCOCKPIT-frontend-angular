@@ -24,10 +24,15 @@ export function getDefaultStatusmapsIndexParams(): StatusmapsIndexParmas {
 
 export interface StatusmapsIndexRootResult {
     statusMap: {
-        nodes: Node[]
+        nodes: StatusmapExtendedNode[]
         edges: Edge[]
     },
     hasBrowserRights: boolean,
     satellites: SelectKeyValue[],
     _csrfToken: string
+}
+
+export interface StatusmapExtendedNode extends Node {
+    hostId: number,
+    uuid: string
 }

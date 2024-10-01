@@ -14,8 +14,13 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
+    ProgressBarComponent,
     ProgressComponent,
-    RowComponent
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
@@ -28,7 +33,7 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { StatusmapService } from '../statusmap.service';
-import { getDefaultStatusmapsIndexParams, StatusmapsIndexParmas } from '../statusmap.interface';
+import { getDefaultStatusmapsIndexParams, StatusmapExtendedNode, StatusmapsIndexParmas } from '../statusmap.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -40,6 +45,18 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+    HostGroupSummaryComponent
+} from '../../../modules/import_module/components/dependency-tree/host-group-summary/host-group-summary.component';
+import {
+    HostSummaryComponent
+} from '../../../modules/import_module/components/dependency-tree/host-summary/host-summary.component';
+import {
+    NotInMonitoringComponent
+} from '../../../modules/import_module/components/dependency-tree/not-in-monitoring/not-in-monitoring.component';
+import { SummaryState } from '../../hosts/summary_state.interface';
+import { HostEntity } from '../../hosts/hosts.interface';
+import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-summary-statusmap.component';
 
 @Component({
     selector: 'oitc-statusmaps-index',
@@ -76,7 +93,16 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         DebounceDirective,
         RegexHelperTooltipComponent,
         NoRecordsComponent,
-        FaIconComponent
+        FaIconComponent,
+        HostGroupSummaryComponent,
+        HostSummaryComponent,
+        NotInMonitoringComponent,
+        ProgressBarComponent,
+        ToastBodyComponent,
+        ToastComponent,
+        ToastHeaderComponent,
+        ToasterComponent,
+        HostSummaryStatusmapComponent
     ],
     templateUrl: './statusmaps-index.component.html',
     styleUrl: './statusmaps-index.component.css'
@@ -88,6 +114,12 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public isEmpty: boolean = false;
     public considerParentChildRelations: boolean = true;
+
+    // Host details toast
+    public toastVisible: boolean = false;
+    public toastPercentage: number = 0;
+    public hostSummaryState?: SummaryState;
+    public toastHost?: HostEntity;
 
     // Progress is only necessary if physics is enabled
     public showProgressbar: boolean = false;
@@ -143,14 +175,14 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
         }));
     }
 
-    private renderVisNetwork(edgesData: Edge[], nodesData: Node[]): void {
+    private renderVisNetwork(edgesData: Edge[], nodesData: StatusmapExtendedNode[]): void {
         const elem = this.document.getElementById('statusmapNetwork');
         if (!elem) {
             // Just to make TS happy
             return;
         }
 
-        let nodes: DataSet<Node> = new DataSet<Node>();
+        let nodes: DataSet<Node> = new DataSet<StatusmapExtendedNode>();
         let edges: DataSet<Edge> = new DataSet<Edge>();
 
         nodes.clear();
@@ -413,9 +445,61 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
             });
         }
 
-        network.on('click', (params) => {
-            console.log("Clicked on", params.nodes);
+        network.on('click', (properties) => {
+            if (properties.nodes.length === 0) {
+                network.fit({
+                    animation: {
+                        duration: 500,
+                        easingFunction: 'linear'
+                    }
+                });
+                return;
+            }
+
+            const nodeId = properties.nodes[0];
+            if (nodeId === 0) {
+                return;
+            }
+
+            // @ts-ignore
+            let selectedNode: StatusmapExtendedNode = nodes.get(nodeId) as StatusmapExtendedNode;
+            this.toggleToast(selectedNode);
+            // shared $scope with HostSummaryDirective
         });
+    }
+
+    private toggleToast(node: StatusmapExtendedNode) {
+
+        this.toastHost = {
+            id: node.hostId,
+            uuid: node.uuid,
+            name: String(node.title), // hostname + ip address
+            disabled: node.group === 'disabled' ? 1 : 0,
+        };
+
+        if (this.toastVisible) {
+            // Close any open toast
+            this.toastVisible = false;
+        }
+
+        this.hostSummaryState = undefined;
+
+        this.StatusmapService.loadHostAndServicesSummaryStatus(node.hostId).subscribe(data => {
+            this.hostSummaryState = data;
+            this.toastVisible = true; // Show toast
+        });
+
+    }
+
+    public onToastTimerChange($event: number) {
+        this.toastPercentage = $event * 25;
+    }
+
+    public onToastVisibleChange($event: boolean) {
+        this.toastVisible = $event;
+        if (!this.toastVisible) {
+            this.toastPercentage = 0;
+        }
     }
 
 }
