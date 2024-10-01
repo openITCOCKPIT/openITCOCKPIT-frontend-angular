@@ -486,6 +486,18 @@ const coreRoutes: Routes = [{
     path: 'statusmaps/index',
     loadComponent: () => import('./pages/statusmaps/statusmaps-index/statusmaps-index.component').then(m => m.StatusmapsIndexComponent)
 }, {
+    path: 'automaps/index',
+    loadComponent: () => import('./pages/automaps/automaps-index/automaps-index.component').then(m => m.AutomapsIndexComponent)
+}, {
+    path: 'automaps/add',
+    loadComponent: () => import('./pages/automaps/automaps-add/automaps-add.component').then(m => m.AutomapsAddComponent)
+}, {
+    path: 'automaps/edit/:id',
+    loadComponent: () => import('./pages/automaps/automaps-edit/automaps-edit.component').then(m => m.AutomapsEditComponent)
+}, {
+    path: 'automaps/copy/:ids',
+    loadComponent: () => import('./pages/automaps/automaps-copy/automaps-copy.component').then(m => m.AutomapsCopyComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

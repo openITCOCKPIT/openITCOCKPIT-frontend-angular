@@ -105,7 +105,7 @@
                         <oitc-no-records></oitc-no-records>
                     </c-col>
                     <c-col xs="12">
-                        <fa-icon [icon]="['fas', 'info-circle']" class="p-0 up"></fa-icon>
+                        <fa-icon [icon]="['fas', 'check-circle']" class="p-0 up"></fa-icon>
                         <em class="pe-1">
                             {{ t('Up') }}
                         </em>
@@ -151,9 +151,37 @@
                     </c-col>
                     <c-col xs="12" id="statusmapNetwork"></c-col>
                 </c-row>
-
             </c-card-body>
 
         </c-card>
+
+        <c-toaster [placement]="'top-end'" class="p-3 w-25" position="fixed">
+            <c-toast #toast="cToast"
+                     (timer)="onToastTimerChange($event)"
+                     (visibleChange)="onToastVisibleChange($event)"
+                     [visible]="toastVisible"
+                     [delay]="5000"
+                     class="align-items-center w-100">
+                <div class="d-flex">
+                    <c-toast-header>
+                        <c-progress thin>
+                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                        </c-progress>
+                    </c-toast-header>
+                    <c-toast-body class="w-100">
+                        <div *ngIf="hostSummaryState && toastHost">
+                            <oitc-host-summary-statusmap [hostSummaryStat]="hostSummaryState"
+                                                         [host]="toastHost"></oitc-host-summary-statusmap>
+                        </div>
+
+                        <c-progress thin>
+                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                        </c-progress>
+
+                    </c-toast-body>
+                </div>
+            </c-toast>
+        </c-toaster>
+
     </ng-container>
 </oitc-coreui>
