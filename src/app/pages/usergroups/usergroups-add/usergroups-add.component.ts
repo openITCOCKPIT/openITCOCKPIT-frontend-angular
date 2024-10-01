@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -88,6 +88,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
     styleUrl: './usergroups-add.component.css'
 })
 export class UsergroupsAddComponent implements OnInit, OnDestroy {
+    protected readonly keepOrder = keepOrder;
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
@@ -177,4 +178,18 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
             })
         );
     }
+}
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'defaultOrderKeyvalue'
+})
+export class DefaultOrderKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
+    }
+
 }

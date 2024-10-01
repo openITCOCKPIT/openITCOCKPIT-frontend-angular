@@ -127,16 +127,15 @@
                         </c-col>
                     </c-row>
 
-                    <ng-container *ngFor="let controller of acos.acos[0].children | keyvalue">
+                    <ng-container *ngFor="let controller of acos.acos[0].children | keyvalue: keepOrder">
                         <ng-container
                                 *ngIf="controller.value.children && controller.value.alias.substr(-6) !== 'Module'">
                             <h5>
                                 {{ controller.value.alias }}
                             </h5>
                             <c-row>
-                                <c-col
-                                        md="2"
-                                        *ngFor="let action of controller.value.children | keyvalue"
+                                <c-col md="4"
+                                        *ngFor="let action of controller.value.children | keyvalue: keepOrder"
                                         [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}">
                                     <c-form-check>
                                         <input cFormCheckInput
@@ -155,7 +154,7 @@
                         </ng-container>
                     </ng-container>
 
-                    <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue">
+                    <ng-container *ngFor="let plugin of acos.acos[0].children | keyvalue: keepOrder">
                         <ng-container *ngIf="plugin.value.children && plugin.value.alias.substr(-6) === 'Module'">
 
                             <h5 class="ok">
@@ -163,12 +162,12 @@
                                 {{ plugin.value.alias }}
                             </h5>
                             <c-row>
-                                <c-col md="2" *ngFor="let controller of plugin.value.children | keyvalue">
+                                <c-col md="4" *ngFor="let controller of plugin.value.children | keyvalue: keepOrder">
                                     <h5>
                                         {{ controller.value.alias }}
                                     </h5>
                                     <div
-                                            *ngFor="let action of controller.value.children | keyvalue"
+                                            *ngFor="let action of controller.value.children | keyvalue: keepOrder"
                                             [ngClass]="{'txt-ack': action.value.alias == 'index', 'ok': action.value.alias == 'add', 'warning': action.value.alias == 'edit', 'down': action.value.alias == 'delete'}"
                                             class="mb-3">
                                         <input cFormCheckInput
