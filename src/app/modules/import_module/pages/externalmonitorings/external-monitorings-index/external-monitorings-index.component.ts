@@ -5,15 +5,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent,
-    DropdownComponent,
-    DropdownDividerDirective,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
+    ContainerComponent, DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -21,115 +13,104 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent,
-    TableDirective
+    RowComponent, TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+    ExternalMonitoring,
+    ExternalMonitoringsIndexParams,
+    ExternalMonitoringsIndexRoot,
+    getDefaultExternalMonitoringsIndexParams
+} from '../external-monitorings.interface';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
-import {
-    ExternalSystem,
-    ExternalSystemsIndexParams,
-    ExternalSystemsIndexRoot,
-    getDefaultExternalSystemsIndexParams
-} from '../external-systems.interface';
-import { ExternalSystemsService } from '../external-systems.service';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { ExternalMonitoringsService } from '../external-monitorings.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
-import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
-    selector: 'oitc-external-systems-index',
+    selector: 'oitc-external-monitorings-index',
     standalone: true,
     imports: [
+        CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        PermissionDirective,
-        XsButtonDirective,
-        CardBodyComponent,
         ColComponent,
         ContainerComponent,
+        CoreuiComponent,
         DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
+        FaIconComponent,
         FormControlDirective,
         FormDirective,
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
+        NavComponent,
+        NavItemComponent,
+        NgIf,
+        PermissionDirective,
         ReactiveFormsModule,
         RowComponent,
-        TranslocoPipe,
-        TrueFalseDirective,
         TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
+        DeleteAllModalComponent,
         DropdownDividerDirective,
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
+        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
-        TableDirective,
-        DeleteAllModalComponent
+        TableDirective
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ExternalSystemsService} // Inject the ExternalSystemsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService} // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
     ],
-    templateUrl: './external-systems-index.component.html',
-    styleUrl: './external-systems-index.component.css'
+    templateUrl: './external-monitorings-index.component.html',
+    styleUrl: './external-monitorings-index.component.css'
 })
-export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: ExternalSystemsIndexParams = getDefaultExternalSystemsIndexParams();
-
+    public params: ExternalMonitoringsIndexParams = getDefaultExternalMonitoringsIndexParams();
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
+    public externalMonitorings?: ExternalMonitoringsIndexRoot;
+
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
-    public externalSystems?: ExternalSystemsIndexRoot;
-    private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly ExternalMonitoringsService = inject(ExternalMonitoringsService);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -146,11 +127,12 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
 
     public load() {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.ExternalSystemsService.getIndex(this.params)
+        this.subscriptions.add(this.ExternalMonitoringsService.getIndex(this.params)
             .subscribe((result) => {
-                this.externalSystems = result;
+                this.externalMonitorings = result;
             })
         );
+
     }
 
     public toggleFilter() {
@@ -158,7 +140,7 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
     }
 
     public resetFilter() {
-        this.params = getDefaultExternalSystemsIndexParams();
+        this.params = getDefaultExternalMonitoringsIndexParams();
         this.load();
     }
 
@@ -182,14 +164,14 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
     }
 
     // Open the Delete All Modal
-    public toggleDeleteAllModal(externalSystem?: ExternalSystem) {
+    public toggleDeleteAllModal(externalMonitoring?: ExternalMonitoring) {
         let items: DeleteAllItem[] = [];
 
-        if (externalSystem) {
+        if (externalMonitoring) {
             // User just want to delete a single calendar
             items = [{
-                id: externalSystem.id,
-                displayName: externalSystem.name
+                id: externalMonitoring.id,
+                displayName: externalMonitoring.name
             }];
         } else {
             // User clicked on delete selected button
