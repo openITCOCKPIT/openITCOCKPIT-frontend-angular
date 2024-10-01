@@ -24,5 +24,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/ExternalSystems/edit/:id',
     loadComponent: () => import('./pages/externalsystems/external-systems-edit/external-systems-edit.component').then(m => m.ExternalSystemsEditComponent)
+}, {
+    path: 'import_module/ExternalMonitorings/index',
+    loadComponent: () => import('./pages/externalmonitorings/external-monitorings-index/external-monitorings-index.component').then(m => m.ExternalMonitoringsIndexComponent)
 }
 ];
