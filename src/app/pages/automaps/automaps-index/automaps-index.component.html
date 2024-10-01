@@ -163,10 +163,10 @@
                                 {{ automap.name }}
                             }
                         </td>
-                        <td class="word-break">{{ automap.description }}</td>
-                        <td class="word-break">{{ automap.host_regex }}</td>
-                        <td class="word-break">{{ automap.hostgroup_regex }}</td>
-                        <td class="word-break">{{ automap.service_regex }}</td>
+                        <td class="word-break code-font">{{ automap.description }}</td>
+                        <td class="word-break code-font">{{ automap.host_regex }}</td>
+                        <td class="word-break code-font">{{ automap.hostgroup_regex }}</td>
+                        <td class="word-break code-font">{{ automap.service_regex }}</td>
                         <td>
                             <oitc-badge-outline color="success" *ngIf="automap.show_ok" class="me-1"
                                                 [cTooltip]="'Ok'|transloco">
