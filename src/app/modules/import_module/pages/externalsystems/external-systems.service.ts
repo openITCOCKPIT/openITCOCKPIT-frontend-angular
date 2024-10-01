@@ -292,7 +292,7 @@ export class ExternalSystemsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.externalSystem as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
