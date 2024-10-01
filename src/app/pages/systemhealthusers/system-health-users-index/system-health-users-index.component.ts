@@ -54,6 +54,7 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-system-health-users-index',
@@ -104,7 +105,7 @@ import {
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemHealthUsersService}
     ]
 })
-export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy {
+export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SystemHealthUsersService: SystemHealthUsersService = inject(SystemHealthUsersService);
 
     public readonly route = inject(ActivatedRoute);

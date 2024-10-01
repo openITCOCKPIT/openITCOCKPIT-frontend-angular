@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutomapsService } from '../automaps.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { IndexPage } from '../../../pages.interface';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-automaps-index',
@@ -11,7 +14,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
     templateUrl: './automaps-index.component.html',
     styleUrl: './automaps-index.component.css'
 })
-export class AutomapsIndexComponent implements OnInit, OnDestroy {
+export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     private subscriptions: Subscription = new Subscription();
     private AutomapsService = inject(AutomapsService);
@@ -34,9 +37,26 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    public onFilterChange(event: Event): void {
+    }
+
+    public onMassActionComplete(success: boolean): void {
+    }
+
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+    }
+
+    public onSortChange(sort: Sort): void {
+    }
+
+    public resetFilter(): void {
+    }
+
+    public toggleFilter(): void {
+    }
+
     public loadAutomaps() {
 
     }
-
 
 }

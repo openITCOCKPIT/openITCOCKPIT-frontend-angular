@@ -57,6 +57,7 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-locations-index',
@@ -108,7 +109,7 @@ import {
         {provide: DELETE_SERVICE_TOKEN, useClass: LocationsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
-export class LocationsIndexComponent implements OnInit, OnDestroy {
+export class LocationsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: LocationsIndexParams = getDefaultLocationsIndexParams()
     public locations?: LocationsIndexRoot;
@@ -140,7 +141,7 @@ export class LocationsIndexComponent implements OnInit, OnDestroy {
 
     public loadLocations(): void {
         this.SelectionServiceService.deselectAll();
-        
+
         this.subscriptions.add(
             this.LocationsService.getIndex(this.params).subscribe((locations) => {
                 this.locations = locations;

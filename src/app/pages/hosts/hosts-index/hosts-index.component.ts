@@ -129,7 +129,7 @@ import {
 import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
-import {forEach} from 'lodash';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -217,7 +217,7 @@ import {forEach} from 'lodash';
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
-export class HostsIndexComponent implements OnInit, OnDestroy {
+export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     // Filter vars
     public params: HostsIndexParams = getDefaultHostsIndexParams();
     public filter: HostsIndexFilter = getDefaultHostsIndexFilter();
@@ -880,33 +880,33 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
             this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'];
             this.filter['hostdescription'] = bookmarkfilter['hostdescription'];
             this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'];
-            this.filter['Hosts.keywords'] =  bookmarkfilter['Hosts.keywords'];
+            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'];
             this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'];
             this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'];
             this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'], 'currentStateFilter');
-            if(bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
+            if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
             }
-            if(bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'false') {
+            if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'false') {
                 this.acknowledgementsFilter.not_acknowledged = true;
             }
-            if(bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'true') {
+            if (bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'true') {
                 this.downtimeFilter.in_downtime = true;
             }
-            if(bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'false') {
+            if (bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'false') {
                 this.downtimeFilter.not_in_downtime = true;
             }
-            if(bookmarkfilter['Hoststatus.notifications_enabled'] === 'true') {
+            if (bookmarkfilter['Hoststatus.notifications_enabled'] === 'true') {
                 this.notificationsFilter.enabled = true;
             }
-            if(bookmarkfilter['Hoststatus.notifications_enabled'] === 'false') {
+            if (bookmarkfilter['Hoststatus.notifications_enabled'] === 'false') {
                 this.notificationsFilter.not_enabled = true;
             }
             //Hoststatus.is_hardstate
-            if(bookmarkfilter['Hoststatus.is_hardstate'] === '0') {
+            if (bookmarkfilter['Hoststatus.is_hardstate'] === '0') {
                 this.state_typesFilter.soft = true;
             }
-            if(bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
+            if (bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
                 this.state_typesFilter.hard = true;
             }
             this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
@@ -916,7 +916,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected convert2currentStateFilter(state_array: string[], filter: string ): void {
+    protected convert2currentStateFilter(state_array: string[], filter: string): void {
 
         state_array.forEach((state) => {
             // @ts-ignore

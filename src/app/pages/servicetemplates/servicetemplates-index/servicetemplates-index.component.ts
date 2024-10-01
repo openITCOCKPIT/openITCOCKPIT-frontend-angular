@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -53,6 +53,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicetemplates-index',
@@ -104,7 +105,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService} // Inject the ServicetemplatesService into the DeleteAllModalComponent
     ]
 })
-export class ServicetemplatesIndexComponent {
+export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: ServicetemplatesIndexParams = getDefaultServicetemplatesIndexParams();
     public servicetemplates?: ServicetemplateIndexRoot;

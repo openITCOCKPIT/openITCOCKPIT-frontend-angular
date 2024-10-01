@@ -1,7 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -52,7 +53,8 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HostsService } from '../../hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
-import _ from 'lodash';
+import _, { parseInt } from 'lodash';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-logentries-index',
@@ -105,7 +107,7 @@ import _ from 'lodash';
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css'
 })
-export class LogentriesIndexComponent implements OnInit, OnDestroy {
+export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private LogentriesService = inject(LogentriesService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -231,5 +233,8 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy {
     }
 
     protected readonly String = String;
+
+    public onMassActionComplete(success: boolean): void {
+    }
 
 }

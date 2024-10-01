@@ -62,6 +62,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { Statistics } from '../../statistics/statistics.enum';
+import { IndexPage } from '../../../pages.interface';
 
 
 @Component({
@@ -121,7 +122,7 @@ import { Statistics } from '../../statistics/statistics.enum';
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService}
     ]
 })
-export class SystemfailuresIndexComponent implements OnInit, OnDestroy {
+export class SystemfailuresIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SystemfailuresService = inject(SystemfailuresService)
 
     public readonly route = inject(ActivatedRoute);

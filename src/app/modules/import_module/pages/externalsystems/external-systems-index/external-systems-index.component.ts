@@ -60,6 +60,7 @@ import {
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-external-systems-index',
@@ -117,7 +118,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
     templateUrl: './external-systems-index.component.html',
     styleUrl: './external-systems-index.component.css'
 })
-export class ExternalSystemsIndexComponent implements OnInit, OnDestroy {
+export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: ExternalSystemsIndexParams = getDefaultExternalSystemsIndexParams()

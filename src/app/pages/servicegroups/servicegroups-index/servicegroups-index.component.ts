@@ -61,6 +61,7 @@ import {
 } from '../servicegroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { HttpParams } from '@angular/common/http';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicegroups-index',
@@ -119,7 +120,7 @@ import { HttpParams } from '@angular/common/http';
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicegroupsService} // Inject the ServicegroupsService into the DeleteAllModalComponent
     ]
 })
-export class ServicegroupsIndexComponent implements OnInit, OnDestroy {
+export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();
