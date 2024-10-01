@@ -51,7 +51,7 @@ export interface UsergroupIndex {
 export interface UsergroupsAddRoot {
     Acos: {
         [key: number]: number
-    }[]
+    }
     Usergroup: UsergroupAdd
 }
 

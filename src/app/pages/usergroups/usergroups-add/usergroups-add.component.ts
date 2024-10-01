@@ -7,18 +7,25 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
@@ -82,7 +89,14 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         InputGroupComponent,
         InputGroupTextDirective,
         TranslocoPipe,
-        KeyValuePipe
+        KeyValuePipe,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        DropdownItemDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        DropdownDividerDirective
     ],
     templateUrl: './usergroups-add.component.html',
     styleUrl: './usergroups-add.component.css'
@@ -178,6 +192,36 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
             })
         );
     }
+
+
+    protected forceTicks(actionToTick: string, tick: boolean) {
+        for (let aco in this.acos.acos) {
+            for (let controller in this.acos.acos[aco].children) {
+                let isModule = this.acos.acos[aco].children[controller].alias.substr(-6) === 'Module';
+
+                if (isModule) {
+                    for (let pluginController in this.acos.acos[aco].children[controller].children) {
+                        for (let action in this.acos.acos[aco].children[controller].children[pluginController].children) {
+                            let actionName = this.acos.acos[aco].children[controller].children[pluginController].children[action].alias;
+                            let acoId = this.acos.acos[aco].children[controller].children[pluginController].children[action].id;
+                            if (actionName === actionToTick || actionToTick === 'all') {
+                                this.post.Acos[acoId] = tick ? 1 : 0;
+                            }
+                        }
+                    }
+                    continue;
+                }
+                for (let action in this.acos.acos[aco].children[controller].children) {
+                    let acoId = this.acos.acos[aco].children[controller].children[action].id;
+                    let actionName = this.acos.acos[aco].children[controller].children[action].alias;
+                    if (actionName === actionToTick || actionToTick === 'all') {
+                        this.post.Acos[acoId] = tick ? 1 : 0;
+                    }
+                }
+            }
+        }
+    };
+
 }
 const keepOrder = (a: any, b: any) => a;
 
