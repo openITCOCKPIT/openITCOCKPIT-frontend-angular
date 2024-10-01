@@ -39,7 +39,6 @@ import {
     ExternalSystemsIndexRoot,
     getDefaultExternalSystemsIndexParams
 } from '../external-systems.interface';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ExternalSystemsService } from '../external-systems.service';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -120,7 +119,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 export class ExternalSystemsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: ExternalSystemsIndexParams = getDefaultExternalSystemsIndexParams()
+    public params: ExternalSystemsIndexParams = getDefaultExternalSystemsIndexParams();
 
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
@@ -128,7 +127,6 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     public externalSystems?: ExternalSystemsIndexRoot;
-    private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 

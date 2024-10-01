@@ -1,1 +1,114 @@
-<p>external-monitorings-index works!</p>
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Import Module') }}
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                    {{ t('External Monitoring Systems Overview ') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('External Monitorings') }}
+                    <small class="fw-300">
+                        {{ t('Overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['ImportModule', 'ExternalMonitorings', 'add']"
+                                [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[ExternalMonitorings.name]']"
+                                           [placeholder]="'Filter by system name' | transloco"
+                                           aria-label="ExternalMonitoringsName"
+                                           cFormControl
+                                           name="ExternalMonitoringsName"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[ExternalMonitorings.description]']"
+                                           [placeholder]="'Filter by system description' | transloco"
+                                           aria-label="ExternalMonitoringsDescription"
+                                           cFormControl
+                                           name="ExternalMonitoringsDescription"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <oitc-table-loader *ngIf="!externalMonitorings"></oitc-table-loader>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
