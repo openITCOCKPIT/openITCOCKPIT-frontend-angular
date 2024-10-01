@@ -1,3 +1,19 @@
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
+    externalMonitorings: ExternalMonitoring[]
+    _csrfToken: any
+}
+export interface ExternalMonitoring {
+    id: number
+    name: string
+    container_id: number
+    description: string
+    system_type: string
+    container: string
+    allowEdit: boolean
+}
+
+
 export interface ExternalMonitoringsIndexParams {
     angular: true,
     scroll: boolean,
