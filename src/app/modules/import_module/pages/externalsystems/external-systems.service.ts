@@ -9,9 +9,11 @@ import {
     DependencyTreeApiResult,
     ExternalSystemConnect,
     ExternalSystemEntity,
+    ExternalSystemGet,
     ExternalSystemPost,
     ExternalSystemsIndexParams,
-    ExternalSystemsIndexRoot
+    ExternalSystemsIndexRoot,
+    IdoitObjectTypeResult
 } from './external-systems.interface';
 import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { ModalService } from '@coreui/angular';
@@ -22,7 +24,7 @@ import {
     GenericValidationError
 } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -197,11 +199,6 @@ export class ExternalSystemsService {
         )
     }
 
-    // Generic function for the Delete All Modal
-    public delete(item: DeleteAllItem): Observable<Object> {
-        const proxyPath = this.proxyPath;
-        return this.http.post(`${proxyPath}/import_module/external_systems/delete/${item.id}.json?angular=true`, {});
-    }
 
     public testConnection(params: ExternalSystemPost): Observable<ExternalSystemConnect> {
         const proxyPath = this.proxyPath;
@@ -229,9 +226,42 @@ export class ExternalSystemsService {
         )
     }
 
+    public getEdit(id: number): Observable<ExternalSystemGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ExternalSystemGet>(`${proxyPath}/import_module/external_systems/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public parseElementsForOptionGroup(objectTypes: IdoitObjectTypeResult[]): SelectItemOptionGroup[] {
+        let newFormat: any = {};
+        objectTypes.forEach(function (objectType) {
+            if (!newFormat[objectType.value.type_group_title]) {
+                newFormat[objectType.value.type_group_title] = {
+                    value: objectType.value.type_group,
+                    label: objectType.value.type_group_title,
+                    items: []
+                };
+            }
+            newFormat[objectType.value.type_group_title].items.push({
+                value: objectType.value.id,
+                label: objectType.value.title
+            });
+        });
+        return Object.values(newFormat);
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
     public createExternalSystem(externalSystem: ExternalSystemPost) {
         const proxyPath = this.proxyPath;
-        console.log(externalSystem);
         return this.http.post<any>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
             .pipe(
                 map(data => {
@@ -249,5 +279,38 @@ export class ExternalSystemsService {
                     });
                 })
             );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(externalSystem: ExternalSystemPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/external_systems/edit/${externalSystem.id}.json?angular=true`, externalSystem)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.externalSystem as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    /**********************
+     *    Delete action    *
+     **********************/
+    // Generic function for the Delete All Modal
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/external_systems/delete/${item.id}.json?angular=true`, {});
     }
 }

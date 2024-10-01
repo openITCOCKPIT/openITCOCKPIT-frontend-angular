@@ -1,6 +1,4 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -27,104 +25,102 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { ContainersService } from '../../../../../pages/containers/containers.service';
-import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { ExternalSystemConnect, ExternalSystemPost, IdoitObjectTypeResult } from '../external-systems.interface';
-import {
-    IdoitOverviewComponent
-} from '../../../components/additional-host-information/idoit/idoit-overview/idoit-overview.component';
-import {
-    ItopOverviewComponent
-} from '../../../components/additional-host-information/itop/itop-overview/itop-overview.component';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { ExternalSystemsService } from '../external-systems.service';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { FormsModule } from '@angular/forms';
 import {
     MultiSelectOptgroupComponent
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { PaginatorModule } from 'primeng/paginator';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import {
+    ExternalSystemConnect,
+    ExternalSystemGet,
+    ExternalSystemPost,
+    IdoitObjectTypeResult
+} from '../external-systems.interface';
+import { Subscription } from 'rxjs';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
+import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
+import { ContainersService } from '../../../../../pages/containers/containers.service';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
+import { ExternalSystemsService } from '../external-systems.service';
+
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { HistoryService } from '../../../../../history.service';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
-    selector: 'oitc-external-systems-add',
+    selector: 'oitc-external-systems-edit',
     standalone: true,
     imports: [
+        AlertComponent,
+        AlertHeadingDirective,
+        AsyncPipe,
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
         CoreuiComponent,
+        DebounceDirective,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
         FaIconComponent,
+        FormCheckComponent,
         FormCheckInputDirective,
+        FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MultiSelectOptgroupComponent,
         NavComponent,
         NavItemComponent,
-        NgOptionTemplateDirective,
-        NgSelectComponent,
+        NgIf,
+        PaginatorModule,
         PermissionDirective,
-        ReactiveFormsModule,
         RequiredIconComponent,
+        RowComponent,
+        SelectComponent,
         TranslocoDirective,
+        TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        NgIf,
-        SelectComponent,
-        IdoitOverviewComponent,
-        ItopOverviewComponent,
-        ColComponent,
-        RowComponent,
-        ContainerComponent,
-        InputGroupComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        InputGroupTextDirective,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckLabelDirective,
-        AlertComponent,
-        AlertHeadingDirective,
-        MultiSelectComponent,
-        MultiSelectOptgroupComponent,
-        AsyncPipe,
-        JsonPipe,
-        NgForOf,
-        TrueFalseDirective,
+        FormLoaderComponent,
+        TranslocoPipe,
         RegexHelperTooltipComponent
     ],
-    templateUrl: './external-systems-add.component.html',
-    styleUrl: './external-systems-add.component.css'
+    templateUrl: './external-systems-edit.component.html',
+    styleUrl: './external-systems-edit.component.css'
 })
-export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
+export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
+    private id: number = 0;
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
@@ -132,7 +128,8 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
-    public post = this.getClearForm();
+    public post!: ExternalSystemPost;
+    public get!: ExternalSystemGet;
     public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
     public objectTypes: IdoitObjectTypeResult[] = [];
 
@@ -174,8 +171,12 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public connectStatus: boolean | null = null;
     public connectMessage: string = '';
 
+    constructor(private route: ActivatedRoute) {
+    }
+
     public ngOnInit(): void {
-        this.loadContainers();
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadExternalSystem();
     }
 
     public loadContainers = (): void => {
@@ -185,56 +186,15 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public getClearForm(): ExternalSystemPost {
-        return {
-            container_id: null,
-            name: '',
-            description: '',
-            api_url: '',
-            api_key: '',
-            api_user: '',
-            api_password: '',
-            use_https: 1, //number
-            use_proxy: 1, //number
-            ignore_ssl_certificate: 0, //number
-            system_type: 'idoit',
-            object_type_ids: [],
-            custom_data: {
-                custom_mappings: [],
-                hostgroup_mappings: []
-            }
-        }
-    }
-
-    public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
-    }
-
-
-    public submit() {
-        console.log('submit!!!');
-        this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
+    public loadExternalSystem() {
+        this.subscriptions.add(this.ExternalSystemsService.getEdit(this.id)
             .subscribe((result) => {
-                if (result.success) {
-                    const response = result.data as GenericIdResponse;
-
-                    const title = this.TranslocoService.translate('External system');
-                    const msg = this.TranslocoService.translate('created successfully');
-
-                    this.notyService.genericSuccess(msg, title);
-                    this.notyService.scrollContentDivToTop();
-                    this.HistoryService.navigateWithFallback(['/import_module/ExternalSystems/index']);
-                    return;
-                }
-
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.errors = errorResponse;
-                }
-            })
-        );
+                //Fire on page load
+                this.post = result.externalSystem;
+                this.loadContainers();
+                this.checkConnection();
+                this.loadHostgroupContainers();
+            }));
     }
 
     public checkConnection() {
@@ -250,7 +210,6 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                 }
             }));
     }
-
 
     public addCustomMapping() {
         this.post.custom_data.custom_mappings.push({
@@ -287,5 +246,36 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                     this.hostgroup_containers = result;
                 }));
         }
+    }
+
+    public submit() {
+        this.subscriptions.add(this.ExternalSystemsService.edit(this.post)
+            .subscribe((result) => {
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    const title = this.TranslocoService.translate('External system');
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['import_module', 'ExternalSystems', 'edit', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
+
+                    this.HistoryService.navigateWithFallback(['/import_module/ExternalSystems/index']);
+                    this.notyService.scrollContentDivToTop();
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
+
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 }
