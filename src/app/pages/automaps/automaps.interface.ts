@@ -80,3 +80,10 @@ export interface AutomapCopy {
     hostgroup_regex: string
     service_regex: string
 }
+
+export interface AutomapsMatchingHostAndServiceCounts {
+    hostCount: number,
+    serviceCount: number,
+    hostgroupCount: number,
+    _csrfToken?: string
+}
