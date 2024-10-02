@@ -8,7 +8,9 @@ import {
     AutomapEntity,
     AutomapsIndexParams,
     AutomapsIndexRoot,
-    AutomapsMatchingHostAndServiceCounts
+    AutomapsMatchingHostAndServiceCounts,
+    AutomapsViewParams,
+    AutomapsViewRoot
 } from './automaps.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
@@ -177,6 +179,17 @@ export class AutomapsService {
                     });
                 })
             );
+    }
+
+    public view(id: number, params: AutomapsViewParams): Observable<AutomapsViewRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AutomapsViewRoot>(`${proxyPath}/automaps/view/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 
 }

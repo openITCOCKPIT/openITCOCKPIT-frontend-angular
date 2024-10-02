@@ -61,7 +61,8 @@
                         [placeholder]="timerangePlaceholder"
                         [(ngModel)]="selectedTimerange"
                         [options]="availableTimeranges"
-                        (onChange)="reloadChart()">
+                        (onChange)="reloadChart()"
+                        [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 
@@ -73,7 +74,8 @@
                         optionLabel="value"
                         [(ngModel)]="selectedDatasource"
                         [options]="availableDataSources"
-                        (onChange)="reloadChart()">
+                        (onChange)="reloadChart()"
+                        [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 
@@ -85,7 +87,8 @@
                         optionLabel="value"
                         [(ngModel)]="selectedAggregation"
                         [options]="availableAggregation"
-                        (onChange)="reloadChart()">
+                        (onChange)="reloadChart()"
+                        [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 

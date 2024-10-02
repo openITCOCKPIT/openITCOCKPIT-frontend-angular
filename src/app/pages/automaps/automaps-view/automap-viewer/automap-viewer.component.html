@@ -1,0 +1,156 @@
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col [xs]="12" [md]="3">
+            {{ t('Regular expression for hosts') }}:
+            <code>{{ automapResult.automap.host_regex }}</code>
+        </c-col>
+        <c-col [xs]="12" [md]="3">
+            {{ t('Regular expression for host groups') }}:
+            <code>{{ automapResult.automap.hostgroup_regex }}</code>
+        </c-col>
+        <c-col [xs]="12" [md]="3">
+            {{ t('Regular expression for services') }}:
+            <code>{{ automapResult.automap.service_regex }}</code>
+        </c-col>
+        <c-col [xs]="12" [md]="3">
+            {{ t('Recursive') }}:
+            <oitc-badge-outline color="danger" *ngIf="!automapResult.automap.recursive">
+                {{ t('Disabled') }}
+            </oitc-badge-outline>
+            <oitc-badge-outline color="success" *ngIf="automapResult.automap.recursive">
+                {{ t('Enabled') }}
+            </oitc-badge-outline>
+        </c-col>
+    </c-row>
+
+    <c-row>
+        <c-col [xs]="12" class="fieldset-legend-border-bottom mt-2 mb-2"></c-col>
+    </c-row>
+
+    <!-- Only status color icons -->
+    <c-row *ngIf="!automapResult.automap.show_label && !automapResult.automap.group_by_host" class="g-0">
+        <c-col [xs]="12">
+            @for (host of automapResult.servicesByHost; track $index) {
+                @for (service of host.services; track $index) {
+                    <span class="cursor-pointer me-1"
+                          [style.font-size]="automapResult.automap.font_size_html"
+                          [title]="host.host.hostname+'/'+service.service.servicename"
+                          (click)="showServiceStatusDetails(service.service.id)">
+
+                        <oitc-servicestatus-icon-automap
+                            [servicestatus]="service.servicestatus">
+
+                        </oitc-servicestatus-icon-automap>
+                    </span>
+                }
+            }
+        </c-col>
+    </c-row>
+
+    <!-- Status color icons with host headline -->
+    <c-row *ngIf="!automapResult.automap.show_label && automapResult.automap.group_by_host" class="g-0">
+        <c-col [xs]="12" [md]="6" [lg]="4" *ngFor="let host of automapResult.servicesByHost; let i = index"
+               class="mb-2">
+            <c-row>
+                <c-col [xs]="12">
+                    <h3>
+                        <fa-icon [icon]="['fas', 'desktop']" class="me-1"></fa-icon>
+                        <oitc-label-link
+                            [objectId]="host.host.id"
+                            [route]="'/hosts/browser'"
+                            [permissions]="'hosts.browser'">
+                            {{ host.host.hostname }}
+                        </oitc-label-link>
+                    </h3>
+                </c-col>
+                <c-col [xs]="12">
+                    <div class="d-flex">
+                        @for (service of host.services; track $index) {
+                            <span class="cursor-pointer me-1"
+                                  [style.font-size]="automapResult.automap.font_size_html"
+                                  [title]="host.host.hostname+'/'+service.service.servicename"
+                                  (click)="showServiceStatusDetails(service.service.id)">
+
+                                <oitc-servicestatus-icon-automap
+                                    [servicestatus]="service.servicestatus">
+                                </oitc-servicestatus-icon-automap>
+                            </span>
+                        }
+                    </div>
+                </c-col>
+            </c-row>
+        </c-col>
+    </c-row>
+
+    <!-- Status color icons + Hostname/Service description -->
+    <c-row *ngIf="automapResult.automap.show_label && !automapResult.automap.group_by_host" class="g-0">
+        @for (host of automapResult.servicesByHost; track $index) {
+            @for (service of host.services; track $index) {
+                <c-col xs="12" sm="6" md="4" lg="3" class="text-truncate">
+                    <span class="cursor-pointer me-1"
+                          [style.font-size]="automapResult.automap.font_size_html"
+                          [title]="host.host.hostname+'/'+service.service.servicename"
+                          (click)="showServiceStatusDetails(service.service.id)">
+
+                        <oitc-servicestatus-icon-automap
+                            [servicestatus]="service.servicestatus">
+                        </oitc-servicestatus-icon-automap>
+                        {{ host.host.hostname }}/{{ service.service.servicename }}
+                    </span>
+                </c-col>
+            }
+        }
+    </c-row>
+
+    <!-- Status color icons with host and service name and host headline -->
+    <c-row *ngIf="automapResult.automap.show_label && automapResult.automap.group_by_host" class="g-0">
+        <c-col [xs]="12" *ngFor="let host of automapResult.servicesByHost; let i = index"
+               class="mb-2">
+            <c-row>
+                <c-col [xs]="12">
+                    <h3>
+                        <fa-icon [icon]="['fas', 'desktop']" class="me-1"></fa-icon>
+                        <oitc-label-link
+                            [objectId]="host.host.id"
+                            [route]="'/hosts/browser'"
+                            [permissions]="'hosts.browser'">
+                            {{ host.host.hostname }}
+                        </oitc-label-link>
+                    </h3>
+                </c-col>
+                <c-col [xs]="12">
+                    <c-row>
+                        @for (service of host.services; track $index) {
+                            <c-col xs="12" sm="6" md="4" lg="3" class="text-truncate">
+                                <span class="cursor-pointer me-1"
+                                      [style.font-size]="automapResult.automap.font_size_html"
+                                      [title]="host.host.hostname+'/'+service.service.servicename"
+                                      (click)="showServiceStatusDetails(service.service.id)">
+
+                                    <oitc-servicestatus-icon-automap
+                                        [servicestatus]="service.servicestatus">
+                                    </oitc-servicestatus-icon-automap>
+                                    {{ service.service.servicename }}
+                                </span>
+                            </c-col>
+                        }
+                    </c-row>
+                </c-col>
+            </c-row>
+        </c-col>
+    </c-row>
+
+    <c-container fluid class="mt-3">
+        <c-row>
+            <c-col>
+                <oitc-paginate-or-scroll
+                    (paginatorChange)="onPaginatorChange($event)"
+                    *ngIf="automapResult"
+                    [paginateOrScroll]="automapResult"></oitc-paginate-or-scroll>
+            </c-col>
+        </c-row>
+    </c-container>
+</ng-container>
+
+
+<oitc-service-browser-modal [serviceId]="serviceIdForBrowser"></oitc-service-browser-modal>
