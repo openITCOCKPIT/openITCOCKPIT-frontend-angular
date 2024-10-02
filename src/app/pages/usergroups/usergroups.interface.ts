@@ -65,114 +65,25 @@ export interface UsergroupAdd {
 
 /* EDIT GET */
 export interface UsergroupsEditGetRoot {
-    usergroup: UsergroupsEdit
+    usergroup: Usergroup
     acos: {
-        id: number
-        parent_id: any
-        model: any
-        foreign_key: any
-        alias: string
-        lft: number
-        rght: number
-        children: {
-            id: number
-            parent_id: number
-            model: any
-            foreign_key: any
-            alias: string
-            lft: number
-            rght: number
-            children: {
-                id: number
-                parent_id: number
-                model: any
-                foreign_key: any
-                alias: string
-                lft: number
-                rght: number
-                children: any
-            }[]
-        }[]
-    }[]
+        [key: number]: number
+    }
     _csrfToken: string
 }
 
 // Cleanup . This looks really awful!
-export interface UsergroupsEdit {
-    id: number
-    name: string
-    description: string
-    created: string
-    modified: string
-    ldapgroups: {
-        _ids: any[]
-    }
-    aro: {
-        id: number
-        parent_id: any
-        model: string
-        foreign_key: number
-        alias: any
-        lft: number
-        rght: number
-        acos: {
-            id: number
-            parent_id: number
-            model: any
-            foreign_key: any
-            alias: string
-            lft: number
-            rght: number
-            _joinData: {
-                id: number
-                aro_id: number
-                aco_id: number
-                _create: string
-                _read: string
-                _update: string
-                _delete: string
-            }
-        }[]
-    }
-}
-
 /* EDIT POST */
 export interface UsergroupsEditPostRoot {
     Acos: {
         [key: number]: number
-    }[]
+    }
     Usergroup: Usergroup
 }
 
-// TIDY THIS UP AS WELL. LOOKS HIDEOUS!!!!!!
+// Usergroup definition
 export interface Usergroup {
-    aro: {
-        acos: {
-            _joinData: {
-                _create: string
-                _delete: string
-                _read: string
-                _update: string
-                aco_id: number
-                aro_id: number
-                id: number
-            }
-            alias: string
-            foreign_key: any
-            id: number
-            lft: number
-            model: any
-            parent_id: number
-            rght: number
-        }[]
-        alias: any
-        foreign_key: number
-        id: number
-        lft: number
-        model: string
-        parent_id: any
-        rght: number
-    }
+    acos: { [key: number]: child }
     created: string
     description: string
     id: number

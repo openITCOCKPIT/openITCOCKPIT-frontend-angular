@@ -7,6 +7,8 @@ import {
     UsergroupsAddRoot,
     UsergroupsCopyGetRoot,
     UsergroupsCopyPostRoot,
+    UsergroupsEditGetRoot,
+    UsergroupsEditPostRoot,
     UsergroupsIndexParams,
     UsergroupsIndexRoot
 } from './usergroups.interface';
@@ -85,6 +87,24 @@ export class UsergroupsService {
                     });
                 })
             );
+    }
+
+    public getEdit(id: number): Observable<UsergroupsEditGetRoot> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<UsergroupsEditGetRoot>(`${proxyPath}/usergroups/edit/${id}.json?angular=true`);
+    }
+
+    public updateUsergroup(post: UsergroupsEditPostRoot): Observable<any> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<null>(`${proxyPath}/usergroups/edit/${post.Usergroup.id}.json?angular=true`, {
+            data: post
+        }).pipe(
+            map(data => {
+                // This API has no return value
+                return null;
+            })
+        );
 
     }
 

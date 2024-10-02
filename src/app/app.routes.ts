@@ -441,6 +441,9 @@ const coreRoutes: Routes = [{
     path: 'usergroups/add',
     loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
 }, {
+    path: 'usergroups/edit/:id',
+    loadComponent: () => import('./pages/usergroups/usergroups-edit/usergroups-edit.component').then(m => m.UsergroupsEditComponent)
+}, {
     path: 'usergroups/copy/:ids',
     loadComponent: () => import('./pages/usergroups/usergroups-copy/usergroups-copy.component').then(m => m.UsergroupsCopyComponent)
 }, {
