@@ -130,7 +130,43 @@ export class AutomapsService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.automap as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getAutomapEdit(id: number): Observable<AutomapEntity> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ automap: AutomapEntity }>(`${proxyPath}/automaps/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.automap;
+            })
+        );
+    }
+
+    public saveAutomapEdit(automap: AutomapEntity): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/automaps/edit/${automap.id}.json?angular=true`, {
+            Automap: automap
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.automap as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

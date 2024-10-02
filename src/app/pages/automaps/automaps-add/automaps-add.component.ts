@@ -19,7 +19,6 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -120,7 +119,6 @@ export class AutomapsAddComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService: NotyService = inject(NotyService);
-    private readonly modalService = inject(ModalService);
 
 
     public ngOnInit(): void {
