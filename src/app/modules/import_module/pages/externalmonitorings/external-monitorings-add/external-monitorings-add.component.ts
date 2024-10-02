@@ -38,12 +38,19 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { ExternalMonitoringPost } from '../external-monitorings.interface';
+import {
+    ExternalMonitoringConfig,
+    ExternalMonitoringConfigIcinga2,
+    ExternalMonitoringConfigOpmanager,
+    ExternalMonitoringConfigPrtg,
+    ExternalMonitoringFormFields,
+    ExternalMonitoringPost
+} from '../external-monitorings.interface';
 import {
     IdoitOverviewComponent
 } from '../../../components/additional-host-information/idoit/idoit-overview/idoit-overview.component';
@@ -119,7 +126,9 @@ import {
         JsonPipe,
         NgForOf,
         TrueFalseDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        KeyValuePipe,
+        NgClass
     ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css'
@@ -137,7 +146,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
-
+    public formFields?: ExternalMonitoringFormFields;
 
     protected readonly ExternalMonitoringTypes = [
         {
@@ -155,6 +164,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     ];
 
     public containers: SelectKeyValue[] = [];
+
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -212,10 +222,27 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public loadConfigFieldsBySystemType() {
         if (this.post.system_type) {
             this.subscriptions.add(this.ExternalMonitoringsService.loadConfig(this.post.system_type)
-                .subscribe((result) => {
-                    console.log(result);
+                .subscribe((result: ExternalMonitoringConfig) => {
+                    switch (this.post.system_type) {
+                        case 'icinga2':
+                            const icinga2 = result.config.config as ExternalMonitoringConfigIcinga2;
+                            this.post.json_data = icinga2;
+                            break;
+                        case 'opmanager':
+                            const opmanager = result.config.config as ExternalMonitoringConfigOpmanager;
+                            this.post.json_data = opmanager;
+                            break;
+                        case 'prtg':
+                            const prtg = result.config.config as ExternalMonitoringConfigPrtg;
+                            this.post.json_data = prtg;
+                            break;
+                    }
+
+                    this.formFields = result.config.formFields;
                 })
             );
         }
     }
+
+    protected readonly Object = Object;
 }

@@ -109,9 +109,96 @@
                                     {{ t('Data source settings') }}
                                 </h4>
                             </legend>
-                            <c-row>
+                            @if (formFields) {
+                                <div *ngFor="let formField of Object.values(formFields)">
+                                    <!-- TEXT FIELDS -->
+                                    <div *ngIf="formField['type'] === 'text'" class="mb-3">
+                                        <label cLabel for="{{formField['ngModel']}}">
+                                            {{ formField['label'] }}
+                                            @if (formField['required'] === true) {
+                                                <oitc-required-icon></oitc-required-icon>
+                                            }
+                                        </label>
+                                        <input cFormControl type="{{ formField['type'] }}"
+                                               placeholder="{{formField['placeholder']}}"
+                                               name="{{formField['ngModel']}}"
+                                               [(ngModel)]="post.json_data[formField['ngModel']]"
+                                               class="{{formField['class']}}"
+                                               oitcFormError errorField="{{formField['ngModel']}}"/>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="{{formField['ngModel']}}"></oitc-form-feedback>
 
-                            </c-row>
+                                        <div class="help-block" *ngIf="formField['help']">
+                                            {{ formField['help'] }}
+                                        </div>
+                                    </div>
+
+                                    <!-- NUMBER FIELDS -->
+                                    <div *ngIf="formField['type'] === 'number'" class="mb-3">
+                                        <label cLabel for="{{formField['ngModel']}}">
+                                            {{ formField['label'] }}
+                                            @if (formField['required'] === true) {
+                                                <oitc-required-icon></oitc-required-icon>
+                                            }
+                                        </label>
+                                        <input cFormControl type="{{ formField['type'] }}"
+                                               placeholder="{{formField['placeholder']}}"
+                                               name="{{formField['ngModel']}}"
+                                               min="0"
+                                               [(ngModel)]="post.json_data[formField['ngModel']]"
+                                               class="{{formField['class']}}"
+                                               oitcFormError errorField="{{formField['ngModel']}}"/>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+                                        <div class="help-block" *ngIf="formField['help']">
+                                            {{ formField['help'] }}
+                                        </div>
+                                    </div>
+
+                                    <!-- CHECKBOX FIELDS -->
+                                    <div *ngIf="formField['type'] === 'checkbox'" class="mb-3">
+                                        <c-form-check>
+                                            <input
+                                                [(ngModel)]="post.json_data[formField['ngModel']]" cFormCheckInput
+                                                id="{{formField['ngModel']}}"
+                                                class="checkbox-lg me-2 mt-0"
+                                                name="{{formField['ngModel']}}"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                oitcDebounce
+                                                type="checkbox"/>
+                                            <label cFormCheckLabel
+                                                   for="{{formField['ngModel']}}">{{ t(formField['label']) }}</label>
+                                        </c-form-check>
+                                        <div class="help-block" *ngIf="formField['help']">
+                                            {{ formField['help'] }}
+                                        </div>
+                                    </div>
+
+                                    <!-- PASSWORD FIELDS -->
+                                    <div *ngIf="formField['type'] === 'password'" class="mb-3">
+                                        <label cLabel for="{{formField['ngModel']}}">
+                                            {{ formField['label'] }}
+                                            @if (formField['required'] === true) {
+                                                <oitc-required-icon></oitc-required-icon>
+                                            }
+                                        </label>
+                                        <input cFormControl type="{{ formField['type'] }}"
+                                               placeholder="{{formField['placeholder']}}"
+                                               name="{{formField['ngModel']}}"
+                                               min="0"
+                                               [(ngModel)]="post.json_data[formField['ngModel']]"
+                                               class="{{formField['class']}}"
+                                               oitcFormError errorField="{{formField['ngModel']}}"/>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+                                        <div class="help-block" *ngIf="formField['help']">
+                                            {{ formField['help'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </fieldset>
                     </c-container>
                 </c-card-body>

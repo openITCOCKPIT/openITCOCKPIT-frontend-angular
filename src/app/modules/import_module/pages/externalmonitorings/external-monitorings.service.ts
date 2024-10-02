@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
+    ExternalMonitoringConfig,
     ExternalMonitoringPost,
     ExternalMonitoringsIndexParams,
     ExternalMonitoringsIndexRoot
@@ -61,8 +62,8 @@ export class ExternalMonitoringsService {
         return this.http.post(`${proxyPath}/import_module/external_monitorings/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadConfig(system_type: string): Observable<Object> {
+    public loadConfig(system_type: string) {
         const proxyPath = this.proxyPath;
-        return this.http.post(`${proxyPath}/import_module/external_monitorings/loadConfigFieldsBySystemType/${system_type}.json?angular=true`, {});
+        return this.http.post<ExternalMonitoringConfig>(`${proxyPath}/import_module/external_monitorings/loadConfigFieldsBySystemType/${system_type}.json?angular=true`, {});
     }
 }

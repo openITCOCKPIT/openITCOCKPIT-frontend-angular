@@ -21,7 +21,7 @@ export interface ExternalMonitoringPost {
     name: string
     description: string
     system_type: string
-    json_data: object
+    json_data: any
 }
 
 export interface ExternalMonitoringGet {
@@ -55,8 +55,10 @@ export function getDefaultExternalMonitoringsIndexParams(): ExternalMonitoringsI
 }
 
 export interface ExternalMonitoringConfig {
-    config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg
-    formFields: ExternalMonitoringFormFields[]
+    config: {
+        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg
+        formFields: ExternalMonitoringFormFields
+    }
 }
 
 export interface ExternalMonitoringConfigIcinga2 {
@@ -90,14 +92,16 @@ export interface ExternalMonitoringConfigPrtg {
 }
 
 export interface ExternalMonitoringFormFields {
-    [key: `string${string}`]: {
-        type: string
-        class: string
-        label: string
-        help: string
-        placeholder: number
-        required: boolean
-        id: string
-        ngModel: string
-    }
+    [key: string]: ExternalMonitoringFormField
+}
+
+export interface ExternalMonitoringFormField {
+    type: string
+    class: string
+    label: string
+    help: string
+    placeholder: number
+    required: boolean
+    id: string
+    ngModel: string
 }
