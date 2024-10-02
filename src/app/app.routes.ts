@@ -495,6 +495,9 @@ const coreRoutes: Routes = [{
     path: 'automaps/edit/:id',
     loadComponent: () => import('./pages/automaps/automaps-edit/automaps-edit.component').then(m => m.AutomapsEditComponent)
 }, {
+    path: 'automaps/view/:id',
+    loadComponent: () => import('./pages/automaps/automaps-view/automaps-view.component').then(m => m.AutomapsViewComponent)
+}, {
     path: 'automaps/copy/:ids',
     loadComponent: () => import('./pages/automaps/automaps-copy/automaps-copy.component').then(m => m.AutomapsCopyComponent)
 }, {

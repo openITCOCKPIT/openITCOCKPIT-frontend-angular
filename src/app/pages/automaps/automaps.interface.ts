@@ -1,10 +1,12 @@
-/**********************
- *    Index action    *
- **********************/
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { ContainerEntity } from '../containers/containers.interface';
 import { GenericValidationError } from '../../generic-responses';
+import { HostObject } from '../hosts/hosts.interface';
+import { ServiceObject, ServicestatusObject } from '../services/services.interface';
 
+/**********************
+ *    Index action    *
+ **********************/
 export interface AutomapsIndexParams {
     angular: true,
     scroll: boolean,
@@ -55,6 +57,7 @@ export interface AutomapEntity {
     modified?: string
     container?: ContainerEntity
     allow_edit?: boolean
+    font_size_html?: string // view action only
 }
 
 /**********************
@@ -86,4 +89,33 @@ export interface AutomapsMatchingHostAndServiceCounts {
     serviceCount: number,
     hostgroupCount: number,
     _csrfToken?: string
+}
+
+/**********************
+ *     View action    *
+ **********************/
+export interface AutomapsViewParams {
+    angular: true,
+    scroll: boolean,
+    page: number,
+}
+
+export function getDefaultAutomapsViewParams(): AutomapsViewParams {
+    return {
+        angular: true,
+        scroll: true,
+        page: 1,
+    }
+}
+
+export interface AutomapsViewRoot extends PaginateOrScroll {
+    automap: AutomapEntity,
+    servicesByHost: {
+        host: HostObject,
+        services: {
+            service: ServiceObject,
+            servicestatus: ServicestatusObject
+        }[]
+    }[]
+    _csrfToken: string
 }
