@@ -1,1 +1,137 @@
-<p>automaps-copy works!</p>
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
+                        <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                        {{ t('Auto Maps') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Auto map') }}
+                    <small class="fw-300">
+                        {{ t('Copy auto map/s') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <button [fallbackUrl]="['automaps', 'index']" cButton class="ripple" color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <oitc-form-loader *ngIf="automaps.length === 0"></oitc-form-loader>
+
+                <c-card class="mb-3" *ngFor="let automap of automaps; let i = index">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source auto map:') }}
+                            {{ automap.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Automap name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="automap.Automap.name"
+                                   oitcFormError [errors]="automap.Error" errorField="name">
+                            <oitc-form-feedback [errors]="automap.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new auto map') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="automap.Automap.description"
+                                   oitcFormError [errors]="automap.Error" errorField="description">
+                            <oitc-form-feedback [errors]="automap.Error" errorField="description"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="host_regex{{i}}">
+                                {{ t('Host RegEx') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="host_regex{{i}}"
+                                   id="host_regex{{i}}"
+                                   [(ngModel)]="automap.Automap.host_regex"
+                                   oitcFormError [errors]="automap.Error" errorField="host_regex">
+                            <oitc-form-feedback [errors]="automap.Error" errorField="host_regex"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="service_regex{{i}}">
+                                {{ t('Service RegEx') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="service_regex{{i}}"
+                                   id="service_regex{{i}}"
+                                   [(ngModel)]="automap.Automap.service_regex"
+                                   oitcFormError [errors]="automap.Error" errorField="service_regex">
+                            <oitc-form-feedback [errors]="automap.Error"
+                                                errorField="service_regex"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="hostgroup_regex{{i}}">
+                                {{ t('Host group RegEx') }}
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="hostgroup_regex{{i}}"
+                                   id="hostgroup_regex{{i}}"
+                                   [(ngModel)]="automap.Automap.hostgroup_regex"
+                                   oitcFormError [errors]="automap.Error" errorField="hostgroup_regex">
+                            <oitc-form-feedback [errors]="automap.Error"
+                                                errorField="hostgroup_regex"></oitc-form-feedback>
+                        </div>
+
+                    </c-card-body>
+                </c-card>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="button" (click)="copy()">
+                    {{ t('Copy auto maps') }}
+                </button>
+                <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton>
+                    {{ t('Cancel') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+
+
+    </ng-container>
+</oitc-coreui>

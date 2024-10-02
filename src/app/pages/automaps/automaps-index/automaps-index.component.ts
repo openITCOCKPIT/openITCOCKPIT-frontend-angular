@@ -192,6 +192,8 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public loadAutomaps() {
+        this.SelectionServiceService.deselectAll();
+
         this.subscriptions.add(this.AutomapsService.getIndex(this.params).subscribe(automaps => {
             this.automaps = automaps;
         }));

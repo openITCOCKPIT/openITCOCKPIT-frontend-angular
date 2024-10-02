@@ -3,6 +3,7 @@
  **********************/
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { ContainerEntity } from '../containers/containers.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface AutomapsIndexParams {
     angular: true,
@@ -54,4 +55,35 @@ export interface AutomapEntity {
     modified?: string
     container?: ContainerEntity
     allow_edit?: boolean
+}
+
+/**********************
+ *     Copy action    *
+ **********************/
+
+export interface AutomapCopyPost {
+    Source: SourceAutomap
+    Automap: AutomapCopy
+    Error: GenericValidationError | null
+}
+
+export interface SourceAutomap {
+    id: number
+    name: string
+}
+
+export interface AutomapCopy {
+    id?: number,
+    name: string
+    description: string
+    host_regex: string
+    hostgroup_regex: string
+    service_regex: string
+}
+
+export interface AutomapsMatchingHostAndServiceCounts {
+    hostCount: number,
+    serviceCount: number,
+    hostgroupCount: number,
+    _csrfToken?: string
 }
