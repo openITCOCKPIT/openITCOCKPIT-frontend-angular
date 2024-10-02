@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { PermissionsService } from '../../../../permissions/permissions.service';
 import {
     AdditionalHostInformationResult,
     Applications,
@@ -39,7 +38,6 @@ export class ExternalSystemsService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    private readonly PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
 
 
@@ -101,29 +99,6 @@ export class ExternalSystemsService {
                 return data.summaryState;
             })
         );
-    }
-
-    public loadExternalSystem(externalSystem: ExternalSystemEntity) {
-        if (!externalSystem.id) {
-            return;
-        }
-        switch (externalSystem.system_type) {
-            case 'itop':
-                // open modal
-                this.modalService.toggle({
-                    show: true,
-                    id: 'importITopData',
-                });
-                this.loadDataFromITop(externalSystem).subscribe(data => {
-
-                    console.log(data);
-                });
-
-                break;
-            default:
-                console.log('External System not supported yet')
-                return;
-        }
     }
 
     public loadDataFromITop(externalSystem: ExternalSystemEntity): Observable<{
@@ -262,7 +237,7 @@ export class ExternalSystemsService {
      **********************/
     public createExternalSystem(externalSystem: ExternalSystemPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
+        return this.http.post<ExternalSystemPost>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok

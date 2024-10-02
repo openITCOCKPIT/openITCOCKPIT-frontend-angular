@@ -41,9 +41,9 @@ import { Subscription } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
-import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { ExternalSystemConnect, ExternalSystemPost, IdoitObjectTypeResult } from '../external-systems.interface';
+import { ExternalMonitoringPost } from '../external-monitorings.interface';
 import {
     IdoitOverviewComponent
 } from '../../../components/additional-host-information/idoit/idoit-overview/idoit-overview.component';
@@ -53,7 +53,7 @@ import {
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { ExternalSystemsService } from '../external-systems.service';
+import { ExternalMonitoringsService } from '../external-monitorings.service';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import {
     MultiSelectOptgroupComponent
@@ -67,7 +67,7 @@ import {
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
-    selector: 'oitc-external-systems-add',
+    selector: 'oitc-external-monitorings-add',
     standalone: true,
     imports: [
         BackButtonDirective,
@@ -121,58 +121,40 @@ import {
         TrueFalseDirective,
         RegexHelperTooltipComponent
     ],
-    templateUrl: './external-systems-add.component.html',
-    styleUrl: './external-systems-add.component.css'
+    templateUrl: './external-monitorings-add.component.html',
+    styleUrl: './external-monitorings-add.component.css'
 })
-export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
+export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
-    private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private readonly ExternalMonitoringsService = inject(ExternalMonitoringsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public post = this.getClearForm();
-    public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
-    public objectTypes: IdoitObjectTypeResult[] = [];
 
     public errors: GenericValidationError | null = null;
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
 
 
-    protected readonly ExternalSystemTypes = [
+    protected readonly ExternalMonitoringTypes = [
         {
-            key: 'idoit',
-            value: this.TranslocoService.translate('i-doit System'),
-            placeholder: 'i-doit.system/src/jsonrpc.php'
+            key: 'icinga2',
+            value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'itop',
-            value: this.TranslocoService.translate('iTop System'),
-            placeholder: 'itop/webservices/rest.php?version=1.3'
-        }
-    ];
-
-    protected readonly InterfaceTypes = [
-        {
-            key: 'custom',
-            value: this.TranslocoService.translate('Custom')
+            key: 'opmanager',
+            value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'PhysicalInterface',
-            value: this.TranslocoService.translate('PhysicalInterface')
-        },
-        {
-            key: 'LogicalInterface',
-            value: this.TranslocoService.translate('LogicalInterface')
+            key: 'prtg',
+            value: this.TranslocoService.translate('Paessler PRTG System')
         }
     ];
 
     public containers: SelectKeyValue[] = [];
-    public hostgroup_containers: SelectKeyValue[] = [];
-    public connectStatus: boolean | null = null;
-    public connectMessage: string = '';
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -185,24 +167,13 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public getClearForm(): ExternalSystemPost {
+    public getClearForm(): ExternalMonitoringPost {
         return {
             container_id: null,
             name: '',
             description: '',
-            api_url: '',
-            api_key: '',
-            api_user: '',
-            api_password: '',
-            use_https: 1, //number
-            use_proxy: 1, //number
-            ignore_ssl_certificate: 0, //number
-            system_type: 'idoit',
-            object_type_ids: [],
-            custom_data: {
-                custom_mappings: [],
-                hostgroup_mappings: []
-            }
+            system_type: '',
+            json_data: {}
         }
     }
 
@@ -210,20 +181,21 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-
     public submit() {
-        this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
+        this.subscriptions.add(this.ExternalMonitoringsService.createExternalMonitoring(this.post)
             .subscribe((result) => {
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
-                    const title = this.TranslocoService.translate('External system');
+                    const title = this.TranslocoService.translate('External Monitoring system');
                     const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['import_module', 'ExternalSystems', 'edit', response.id];
+                    const url = ['import_module', 'ExternalMonitorings', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
+
+                    this.notyService.genericSuccess(msg, title);
                     this.notyService.scrollContentDivToTop();
-                    this.HistoryService.navigateWithFallback(['/import_module/ExternalSystems/index']);
+                    this.HistoryService.navigateWithFallback(['/import_module/ExternalMonitorings/index']);
                     return;
                 }
 
@@ -237,55 +209,13 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public checkConnection() {
-        this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
-            .subscribe((result: ExternalSystemConnect) => {
-                this.connectStatus = result.status.status;
-                if (result.status.msg) {
-                    this.connectMessage = result.status.msg.message;
-                }
-                if (result.status.result) {
-                    this.objectTypes = result.status.result;
-                    this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
-                }
-            }));
-    }
-
-
-    public addCustomMapping() {
-        this.post.custom_data.custom_mappings.push({
-            'classname': '',
-            'interface_type': 'custom',
-            'hostname': '',
-            'address': '',
-            'description': '',
-            'software': ''
-        });
-    }
-
-    public removeCustomMapping($index: any) {
-        this.post.custom_data.custom_mappings.splice($index, 1);
-    }
-
-    public addCustomHostgroupMapping() {
-        this.post.custom_data.hostgroup_mappings.push({
-            'classname': '',
-            'name_regex': '',
-            'ci_regex': '',
-            'container_id': 0
-        });
-    }
-
-    public removeCustomHostgroupMapping($index: any) {
-        this.post.custom_data.hostgroup_mappings.splice($index, 1);
-    }
-
-    public loadHostgroupContainers() {
-        if (this.post.container_id) {
-            this.subscriptions.add(this.ExternalSystemsService.loadHostgroupContainers(this.post.container_id)
-                .subscribe((result: SelectKeyValue[]) => {
-                    this.hostgroup_containers = result;
-                }));
+    public loadConfigFieldsBySystemType() {
+        if (this.post.system_type) {
+            this.subscriptions.add(this.ExternalMonitoringsService.loadConfig(this.post.system_type)
+                .subscribe((result) => {
+                    console.log(result);
+                })
+            );
         }
     }
 }

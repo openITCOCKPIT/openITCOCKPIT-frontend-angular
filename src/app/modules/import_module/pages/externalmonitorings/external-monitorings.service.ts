@@ -1,12 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-
-import { PermissionsService } from '../../../../permissions/permissions.service';
-import { ExternalMonitoringsIndexParams, ExternalMonitoringsIndexRoot } from './external-monitorings.interface';
-import { map, Observable } from 'rxjs';
+import {
+    ExternalMonitoringPost,
+    ExternalMonitoringsIndexParams,
+    ExternalMonitoringsIndexRoot
+} from './external-monitorings.interface';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { ModalService } from '@coreui/angular';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +16,6 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
 export class ExternalMonitoringsService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
-
-    private readonly PermissionsService = inject(PermissionsService);
-    private readonly modalService = inject(ModalService);
 
     constructor() {
     }
@@ -32,6 +31,27 @@ export class ExternalMonitoringsService {
         )
     }
 
+    public createExternalMonitoring(externalMonitoring: ExternalMonitoringPost) {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ExternalMonitoringPost>(`${proxyPath}/import_module/external_monitorings/add.json?angular=true`, externalMonitoring)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
     /**********************
      *    Delete action    *
      **********************/
@@ -39,5 +59,10 @@ export class ExternalMonitoringsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/import_module/external_monitorings/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadConfig(system_type: string): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/import_module/external_monitorings/loadConfigFieldsBySystemType/${system_type}.json?angular=true`, {});
     }
 }
