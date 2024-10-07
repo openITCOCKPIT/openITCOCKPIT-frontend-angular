@@ -1,19 +1,20 @@
 import {
     ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     forwardRef,
     inject,
     Input,
     OnDestroy,
     OnInit,
-    Output
+    Output,
+    TemplateRef
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SharedModule } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { SelectKeyValue } from "../../select.interface";
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -115,6 +116,13 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      */
     private searchCallbackSubject = new Subject<any>();
     @Input() searchCallback: Function | undefined;
+
+    /**
+     * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
+     * Set this to an empty string for Modals !!!
+     * @group Props
+     */
+    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
 
     @Output() ngModelChange = new EventEmitter();
     @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();

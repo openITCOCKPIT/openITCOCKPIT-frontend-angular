@@ -251,7 +251,6 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             .subscribe((result: LoadHostsRoot) => {
                 this.hosts = result;
                 this.isHostsLoading = false;
-                // error loading hosts
             }))
     }
 

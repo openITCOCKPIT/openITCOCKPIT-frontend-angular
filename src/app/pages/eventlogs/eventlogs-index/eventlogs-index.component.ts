@@ -43,6 +43,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { EventlogsIndex, EventlogsIndexParams, getDefaultEventlogsIndexParams } from '../eventlogs.interface';
 import { EventlogsService } from '../eventlogs.service';
 import { HttpParams } from '@angular/common/http';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-eventlogs-index',
@@ -90,7 +91,7 @@ import { HttpParams } from '@angular/common/http';
     templateUrl: './eventlogs-index.component.html',
     styleUrl: './eventlogs-index.component.css',
 })
-export class EventlogsIndexComponent implements OnInit, OnDestroy {
+export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private EventlogsService: EventlogsService = inject(EventlogsService);
 
     public readonly route = inject(ActivatedRoute);
@@ -217,6 +218,9 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy {
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
 
+    }
+
+    public onMassActionComplete(success: boolean): void {
     }
 
 }

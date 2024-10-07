@@ -67,6 +67,7 @@ import {
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosttemplates-index',
@@ -129,7 +130,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService} // Inject the HosttemplatesService into the DeleteAllModalComponent
     ]
 })
-export class HosttemplatesIndexComponent implements OnInit, OnDestroy {
+export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: HosttemplatesIndexParams = getDefaultHosttemplatesIndexParams();
     public hosttemplates?: HosttemplateIndexRoot;

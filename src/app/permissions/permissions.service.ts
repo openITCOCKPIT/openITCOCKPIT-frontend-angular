@@ -100,6 +100,16 @@ export class PermissionsService {
         return hasPermission;
     }
 
+    // USE this method for Components and Services
+    public hasPermissionObservable(checkChunks: string | string[]): Observable<boolean> {
+        return this.permissions$$.asObservable().pipe(
+            filter(permissions => {
+                return Object.keys(permissions).length > 0
+            }),
+            map(permissions => this.checkPermission(checkChunks, permissions))
+        );
+    }
+
     // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
     public hasModule(module: string): boolean {
         return this.modules$$.getValue().includes(module);

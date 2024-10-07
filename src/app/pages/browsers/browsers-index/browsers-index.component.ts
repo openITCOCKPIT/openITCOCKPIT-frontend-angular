@@ -127,6 +127,7 @@ import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-browsers-index',
@@ -211,7 +212,7 @@ import { LocalStorageService } from '../../../services/local-storage.service';
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
-export class BrowsersIndexComponent implements OnInit, OnDestroy {
+export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 // Filter vars
     public params: HostsIndexParams = getDefaultHostsIndexParams();
     public filter: HostsIndexFilter = getDefaultHostsIndexFilter();

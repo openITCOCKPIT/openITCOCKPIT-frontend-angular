@@ -49,6 +49,8 @@
                             </oitc-select>
                         </div>
                     </c-col>
+
+                    <!-- legend -->
                     <c-col [xs]="12" class="text-end">
                         <div>
                             <fa-icon [icon]="['fas', 'globe']"></fa-icon>
@@ -88,20 +90,214 @@
                 </c-row>
 
 
+                <!-- fancy loader -->
                 <c-row>
                     <c-col [xs]="12" class="mt-2" *ngIf="isLoading">
                         <oitc-nest-loader></oitc-nest-loader>
                     </c-col>
                 </c-row>
 
+
                 <c-row>
                     <c-col [xs]="12">
-
                         <div class="dd">
+                            <!-- Recursive component -->
                             <oitc-container-nest *ngIf="nestedContainers.length > 0"
-                                                 [nestedContainers]="nestedContainers">
-                                
+                                                 [nestedContainers]="nestedContainers"
+                                                 [containerTemplate]="containerTemplate">
                             </oitc-container-nest>
+
+                            <ng-template #containerTemplate let-container let-index="index" let-collapsed="collapsed"
+                                         let-component="component">
+                                <div class="dd-handle">
+                                    <button
+                                        *ngIf="container.children.length > 0"
+                                        type="button" class="dd-collapse-button"
+                                        (click)="component.toggleCollapsed(index)">
+                                        <fa-icon [icon]="['fas', 'angle-down']" *ngIf="!collapsed[index]"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'angle-right']" *ngIf="collapsed[index]"></fa-icon>
+                                    </button>
+
+                                    <fa-icon
+                                        [icon]="getIconByContainerType(container.Container.containertype_id)"></fa-icon>
+
+                                    <!-- Container name and Links -->
+                                    <span [ngSwitch]="container.Container.containertype_id">
+                                        <!-- Link for Tenants -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_TENANT"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/tenants/edit'"
+                                            [permissions]="'tenants.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- Link for Tenants -->
+                                        <span *ngSwitchCase="ContainerTypesEnum.CT_NODE">
+                                            <a [routerLink]="['/', 'containers', 'index', container.Container.linkedId]">
+                                                {{ container.Container.name }}
+                                            </a>
+                                        </span>
+
+                                        <!-- Link for Locations -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_LOCATION"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/locations/edit'"
+                                            [permissions]="'locations.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- Link for Contact groups -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_CONTACTGROUP"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/contactgroups/edit'"
+                                            [permissions]="'contactgroups.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- Link for Host groups -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_HOSTGROUP"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/hostgroups/edit'"
+                                            [permissions]="'hostgroups.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- Link for Service groups -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_SERVICEGROUP"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/servicegroups/edit'"
+                                            [permissions]="'servicegroups.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- Link for Service template groups -->
+                                        <oitc-label-link
+                                            *ngSwitchCase="ContainerTypesEnum.CT_SERVICETEMPLATEGROUP"
+                                            [objectId]="container.Container.linkedId"
+                                            [route]="'/servicetemplategroups/edit'"
+                                            [permissions]="'servicetemplategroups.edit'"
+                                        >
+                                            {{ container.Container.name }}
+                                        </oitc-label-link>
+
+                                        <!-- All other container types do just print the name -->
+                                        <span *ngSwitchDefault>
+                                            {{ container.Container.name }}
+                                        </span>
+                                    </span>
+                                    <!-- End of Container name and Links -->
+
+
+                                    <!-- Buttons -->
+                                    <div class="btn-group btn-group-xs ms-2">
+                                        @if ([ContainerTypesEnum.CT_GLOBAL, ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
+                                            @if (PermissionsService.hasPermission(['containers', 'add']) && container.Container.allowEdit) {
+                                                <button type="button"
+                                                        (click)="toggleCreateContainerModal(container.Container)"
+                                                        class="btn btn-link text-body p-1 text-decoration-none ripple">
+                                                    <fa-icon [icon]="['fas', 'plus']" class="text-success"></fa-icon>
+                                                    {{ t('Add') }}
+                                                </button>
+                                            }
+                                        }
+
+                                        @if ([ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
+                                            @if (PermissionsService.hasPermission(['containers', 'edit']) && container.Container.allowEdit) {
+                                                <button type="button"
+                                                        (click)="editContainer(container.Container)"
+                                                        class="btn btn-link text-body p-1 text-decoration-none ripple">
+                                                    <fa-icon [icon]="['fas', 'pen-alt']"
+                                                             class="text-secondary"></fa-icon>
+                                                    {{ t('Edit') }}
+                                                </button>
+                                            }
+
+                                            @if (PermissionsService.hasPermission(['containers', 'showDetails'])) {
+                                                <a type="button"
+                                                   class="btn btn-link text-body p-1 text-decoration-none ripple"
+                                                   [routerLink]="['/', 'containers','showDetails',container.Container.id]">
+                                                    <fa-icon [icon]="['fas', 'info']" class="text-info"></fa-icon>
+                                                    {{ t('Show details') }}
+                                                </a>
+                                            }
+
+                                            @if (PermissionsService.hasPermission(['containers', 'delete']) && container.Container.allowEdit) {
+                                                <button type="button"
+                                                        class="btn btn-link text-body text-decoration-none p-1 ripple"
+                                                        (click)="toggleDeleteAllModal(container.Container)">
+                                                    <span class="text-danger">
+                                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                        {{ t('Delete') }}
+                                                    </span>
+                                                </button>
+                                            }
+                                        }
+                                    </div>
+                                    <!-- End of Buttons -->
+
+                                    <!-- Sub containers badge and object count information -->
+                                    @if ([ContainerTypesEnum.CT_GLOBAL, ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
+                                        <span class="badge border border-primary text-primary float-end">
+                                            {{ t('Sub containers:') }} {{ container.Container.elements }}
+                                        </span>
+                                    }
+
+                                    <span class="float-end"
+                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_CONTACTGROUP"
+                                          [title]="'Contacts' | transloco"
+                                    >
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                        {{ container.Container.contacts }}
+                                    </span>
+
+                                    <span class="float-end"
+                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_SERVICETEMPLATEGROUP"
+                                          [title]="'Service templates' | transloco"
+                                    >
+                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                        {{ container.Container.servicetemplates }}
+                                    </span>
+
+                                    <span class="float-end"
+                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_HOSTGROUP">
+                                        <span [title]="'Hosts' | transloco">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            {{ container.Container.hosts }}
+                                        </span>
+
+                                        <span [title]="'Host templates' | transloco">
+                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                            {{ container.Container.hosttemplates }}
+                                        </span>
+                                    </span>
+
+                                    <span class="float-end"
+                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_SERVICEGROUP">
+                                        <span [title]="'Services' | transloco">
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ container.Container.services }}
+                                        </span>
+
+                                        <span [title]="'Service templates' | transloco">
+                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                            {{ container.Container.servicetemplates }}
+                                        </span>
+                                    </span>
+                                    <!-- End of Sub containers badge and count interformation -->
+
+                                </div>
+                            </ng-template>
+
                         </div>
 
                     </c-col>
@@ -113,3 +309,14 @@
         </c-card>
     </ng-container>
 </oitc-coreui>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+<oitc-create-container-modal
+    [parentContainerId]="dataForCreateContainerModal.parentContainerId"
+    [parentContainerTypeId]="dataForCreateContainerModal.parentContainerTypeId"
+    (completed)="onMassActionComplete($event)"></oitc-create-container-modal>
+
+<oitc-edit-container-modal
+    [container]="selectedContainerForEdit"
+    (completed)="onMassActionComplete($event)"></oitc-edit-container-modal>

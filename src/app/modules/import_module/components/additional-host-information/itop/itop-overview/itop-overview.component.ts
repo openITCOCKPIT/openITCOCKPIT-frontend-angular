@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AdditionalHostInformationResult } from '../../../../external-systems.interface';
+import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import {
     CardBodyComponent,
     CardComponent,

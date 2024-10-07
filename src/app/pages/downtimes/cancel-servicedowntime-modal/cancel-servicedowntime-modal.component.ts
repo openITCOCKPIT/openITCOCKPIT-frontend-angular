@@ -94,7 +94,7 @@ export class CancelServicedowntimeModalComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: false,
-            id: 'cancelAllModal'
+            id: 'cancelServiceAllModal'
         });
     }
 

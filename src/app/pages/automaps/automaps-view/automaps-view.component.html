@@ -1,0 +1,73 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
+                        <fa-icon [icon]="['fas', 'globe-europe']"></fa-icon>
+                        {{ t('Auto Maps') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    {{ t('View') }}
+                </li>
+            </ol>
+        </nav>
+
+        <oitc-query-handler-checker></oitc-query-handler-checker>
+
+        <oitc-block-loader *ngIf="!result"></oitc-block-loader>
+        <c-card class="mb-3" *ngIf="result">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('View auto map: ') }}
+                    <small class="fw-300">
+                        {{ result.automap.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="loadAutomap()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['automaps', 'edit']"
+                                [routerLink]="['/', 'automaps', 'edit', result.automap.id]" cButton
+                                class="ripple"
+                                color="default"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Edit') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['automaps', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <!-- The automap can also be displayed on dashboards so we use a seperate component for that -->
+                <oitc-automap-viewer
+                    (reload)="loadAutomap()"
+                    [automapResult]="result"
+                    (paginatorChange)="onPaginatorChange($event)"
+                ></oitc-automap-viewer>
+
+            </c-card-body>
+        </c-card>
+
+    </ng-container>
+</oitc-coreui>

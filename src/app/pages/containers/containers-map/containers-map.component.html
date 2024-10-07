@@ -1,0 +1,108 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['containers', 'index']" [routerLink]="['/', 'containers', 'index']">
+                        <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                        {{ t('Containers') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                    {{ t('Show details') }}
+                </li>
+            </ol>
+        </nav>
+
+        <c-row>
+            <c-col xs="12" class="mb-3 mt-1">
+                <c-input-group>
+                    <span cInputGroupText class="bg-primary text-white">
+                        <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                        &nbsp;
+                        {{ t('Container') }}
+                    </span>
+
+                    <oitc-select
+                        class="flex-grow-1"
+                        name="containers"
+                        id="containers"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="selectedContainerId"
+                        [options]="containers"
+                        (onChange)="onContainerChange()">
+                    </oitc-select>
+                </c-input-group>
+            </c-col>
+        </c-row>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Containers') }}
+                    <small class="fw-300">
+                        {{ t('details') }}
+                    </small>
+                </h5>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills">
+                    <c-nav-item>
+                        <a
+                            [routerLink]="['/', 'containers', 'showDetails', selectedContainerId]"
+                            class="nav-link">
+                            <fa-icon [icon]="['fas', 'layer-group']"></fa-icon>
+                            {{ t('Containers') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            class="nav-link active">
+                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            {{ t('Containers map') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+                <c-nav class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple ms-1" color="success"
+                                (click)="toggleFullscreenMode()"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'expand-arrows-alt']"
+                                     [title]="'Toggle full screen mode' |transloco"></fa-icon>
+                        </button>
+                    </c-nav-item>
+
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['containers', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+
+            <c-card-body id="fullscreenContainerMap">
+                <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
+
+                <c-row>
+                    <c-col xs="12" *ngIf="showProgressbar">
+                        <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+                    </c-col>
+                    <c-col xs="12" id="containerNetwork"></c-col>
+                </c-row>
+
+            </c-card-body>
+
+        </c-card>
+    </ng-container>
+</oitc-coreui>

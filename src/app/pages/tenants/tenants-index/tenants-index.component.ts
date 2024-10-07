@@ -48,6 +48,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-tenants-index',
@@ -98,7 +99,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         {provide: DELETE_SERVICE_TOKEN, useClass: TenantsService} // Inject the ServicesService into the DeleteAllModalComponent
     ]
 })
-export class TenantsIndexComponent implements OnInit, OnDestroy {
+export class TenantsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: TenantsIndexParams = getDefaultTenantsIndexParams();
     public tenants?: TenantsIndexRoot;

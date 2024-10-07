@@ -435,6 +435,18 @@ const coreRoutes: Routes = [{
     path: 'statehistories/service/:id',
     loadComponent: () => import('./pages/statehistories/statehistories-service/statehistories-service.component').then(m => m.StatehistoriesServiceComponent)
 }, {
+    path: 'usergroups/add',
+    loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
+}, {
+    path: 'usergroups/edit/:id',
+    loadComponent: () => import('./pages/usergroups/usergroups-edit/usergroups-edit.component').then(m => m.UsergroupsEditComponent)
+}, {
+    path: 'usergroups/copy/:ids',
+    loadComponent: () => import('./pages/usergroups/usergroups-copy/usergroups-copy.component').then(m => m.UsergroupsCopyComponent)
+}, {
+    path: 'usergroups/index',
+    loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
+}, {
     path: 'users/add',
     loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
 }, {
@@ -479,6 +491,30 @@ const coreRoutes: Routes = [{
 }, {
     path: 'containers/index/:id',
     loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
+    path: 'containers/showDetails/:id',
+    loadComponent: () => import('./pages/containers/containers-show-details/containers-show-details.component').then(m => m.ContainersShowDetailsComponent)
+}, {
+    path: 'containers/map/:id',
+    loadComponent: () => import('./pages/containers/containers-map/containers-map.component').then(m => m.ContainersMapComponent)
+}, {
+    path: 'statusmaps/index',
+    loadComponent: () => import('./pages/statusmaps/statusmaps-index/statusmaps-index.component').then(m => m.StatusmapsIndexComponent)
+}, {
+    path: 'automaps/index',
+    loadComponent: () => import('./pages/automaps/automaps-index/automaps-index.component').then(m => m.AutomapsIndexComponent)
+}, {
+    path: 'automaps/add',
+    loadComponent: () => import('./pages/automaps/automaps-add/automaps-add.component').then(m => m.AutomapsAddComponent)
+}, {
+    path: 'automaps/edit/:id',
+    loadComponent: () => import('./pages/automaps/automaps-edit/automaps-edit.component').then(m => m.AutomapsEditComponent)
+}, {
+    path: 'automaps/view/:id',
+    loadComponent: () => import('./pages/automaps/automaps-view/automaps-view.component').then(m => m.AutomapsViewComponent)
+}, {
+    path: 'automaps/copy/:ids',
+    loadComponent: () => import('./pages/automaps/automaps-copy/automaps-copy.component').then(m => m.AutomapsCopyComponent)
 }, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)

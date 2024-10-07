@@ -1,4 +1,4 @@
-import { Component, inject, model, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -40,7 +40,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import {
     SlaHostgroupHostsStatusOverviewComponent
 } from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
-import { result } from 'lodash';
+import { IndexPage } from '../../../pages.interface';
+import { Sort } from '@angular/material/sort';
 
 
 @Component({
@@ -84,7 +85,7 @@ import { result } from 'lodash';
     templateUrl: './changelogs-index.component.html',
     styleUrl: './changelogs-index.component.css'
 })
-export class ChangelogsIndexComponent implements OnInit, OnDestroy{
+export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
@@ -219,5 +220,11 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy{
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public onMassActionComplete(success: boolean) {
+    }
+
+    public onSortChange(sort: Sort) {
     }
 }

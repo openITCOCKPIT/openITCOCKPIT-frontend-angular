@@ -122,6 +122,12 @@ import {
 import {
     ServicenowServiceBrowserTabComponent
 } from '../../../modules/servicenow_module/components/servicenow-service-browser-tab/servicenow-service-browser-tab.component';
+import {
+    CancelHostdowntimeModalComponent
+} from '../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
+import {
+    CancelServicedowntimeModalComponent
+} from '../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -189,7 +195,9 @@ import {
         FormsModule,
         KeyValuePipe,
         SatelliteNameComponent,
-        ServicenowServiceBrowserTabComponent
+        ServicenowServiceBrowserTabComponent,
+        CancelHostdowntimeModalComponent,
+        CancelServicedowntimeModalComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
@@ -569,7 +577,24 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleCancelDowntimeModal(serviceDowntime: DowntimeObject) {
+    public toggleCancelHostDowntimeModal(hostDowntime: DowntimeObject) {
+        this.selectedItems = [];
+
+        const item: CancelAllItem[] = [{
+            id: hostDowntime.internalDowntimeId
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'cancelHostAllModal',
+        });
+    }
+
+    public toggleCancelServiceDowntimeModal(serviceDowntime: DowntimeObject) {
         this.selectedItems = [];
 
         const item: CancelAllItem[] = [{
@@ -582,7 +607,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'cancelAllModal',
+            id: 'cancelServiceAllModal',
         });
     }
 

@@ -1,5 +1,5 @@
 import { Component, Input, Pipe, PipeTransform } from '@angular/core';
-import { AdditionalHostInformationResult } from '../../../../external-systems.interface';
+import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';

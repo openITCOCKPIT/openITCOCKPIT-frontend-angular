@@ -61,12 +61,12 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
-import { ExternalSystemEntity } from '../../../external-systems.interface';
+import { ExternalSystemEntity } from '../../externalsystems/external-systems.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { ImportITopDataComponent } from '../../../components/import-itop-data/import-itop-data.component';
-import { ExternalSystemsService } from '../../../external-systems.service';
+import { ExternalSystemsService } from '../../externalsystems/external-systems.service';
 
 @Component({
     selector: 'oitc-imported-hostgroups-index',

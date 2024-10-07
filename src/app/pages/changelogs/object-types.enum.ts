@@ -31,7 +31,7 @@ export enum ContainerTypesEnum {
     'CT_GLOBAL' = 1,
     'CT_TENANT' = 2,
     'CT_LOCATION' = 3,
-    'CT_DEVICEGROUP' = 4,
+    'CT_DEVICEGROUP' = 4, // Devicegroups got replaced by nodes with ITC-653.
     'CT_NODE' = 5,
     'CT_CONTACTGROUP' = 6,
     'CT_HOSTGROUP' = 7,
