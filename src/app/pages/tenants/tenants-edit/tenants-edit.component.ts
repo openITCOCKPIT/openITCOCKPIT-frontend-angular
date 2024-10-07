@@ -82,7 +82,7 @@ export class TenantsEditComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.route.queryParams.subscribe(params => {
             const id = Number(this.route.snapshot.paramMap.get('id'));
-            this.loadLocation(id);
+            this.loadTenant(id);
         });
     }
 
@@ -90,7 +90,7 @@ export class TenantsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public loadLocation(id: number) {
+    public loadTenant(id: number) {
         this.subscriptions.add(this.TenantsService.getTenantEdit(id).subscribe(tenant => {
             this.post = tenant;
         }));

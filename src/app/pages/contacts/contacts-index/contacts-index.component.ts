@@ -56,6 +56,7 @@ import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-al
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-contacts-index',
@@ -110,7 +111,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: ContactsService} // Inject the ContactsService into the DeleteAllModalComponent
     ]
 })
-export class ContactsIndexComponent implements OnInit, OnDestroy {
+export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();

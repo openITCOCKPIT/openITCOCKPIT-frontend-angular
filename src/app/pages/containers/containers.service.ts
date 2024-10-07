@@ -1,5 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { ContainersIndexNested, ContainersLoadContainersByStringParams, NodePost } from './containers.interface';
+import {
+    ContainerShowDetailsRootResult,
+    ContainerShowDetailsTreeRootResult,
+    ContainersIndexNested,
+    ContainersLoadContainersByStringParams,
+    NodePost
+} from './containers.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { HttpClient } from '@angular/common/http';
@@ -116,5 +122,36 @@ export class ContainersService {
                     });
                 })
             );
+    }
+
+    /**********************
+     * ShowDetails action *
+     **********************/
+    public loadShowDetails(id: number): Observable<ContainerShowDetailsRootResult> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<ContainerShowDetailsRootResult>(`${proxyPath}/containers/showDetails/${id}.json`, {
+            params: {
+                angular: true,
+                asTree: false
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadShowDetailsAsTree(id: number): Observable<ContainerShowDetailsTreeRootResult> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<ContainerShowDetailsTreeRootResult>(`${proxyPath}/containers/showDetails/${id}.json`, {
+            params: {
+                angular: true,
+                asTree: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

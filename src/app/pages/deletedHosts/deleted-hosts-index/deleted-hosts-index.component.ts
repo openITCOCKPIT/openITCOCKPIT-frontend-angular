@@ -51,6 +51,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import {
     RegexHelperTooltipComponent
 } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-deleted-hosts-index',
@@ -100,7 +101,7 @@ import {
     templateUrl: './deleted-hosts-index.component.html',
     styleUrl: './deleted-hosts-index.component.css'
 })
-export class DeletedHostsIndexComponent implements OnInit, OnDestroy {
+export class DeletedHostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: DeletedHostsIndexParams = getDefaultDeletedHostsIndexParams();
     public deletedHosts?: DeletedHostsIndexRoot;
@@ -158,6 +159,9 @@ export class DeletedHostsIndexComponent implements OnInit, OnDestroy {
     public resetFilter() {
         this.params = getDefaultDeletedHostsIndexParams();
         this.load();
+    }
+
+    public onMassActionComplete(success: boolean) {
     }
 
 }

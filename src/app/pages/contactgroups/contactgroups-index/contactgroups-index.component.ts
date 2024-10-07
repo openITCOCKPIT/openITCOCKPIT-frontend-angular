@@ -56,6 +56,7 @@ import {
     getDefaultContactgroupsIndexParams
 } from '../contactgroups.interface';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-contactgroups-index',
@@ -110,7 +111,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: ContactgroupsService} // Inject the ContactgroupsService into the DeleteAllModalComponent
     ]
 })
-export class ContactgroupsIndexComponent implements OnInit, OnDestroy {
+export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();

@@ -48,6 +48,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { getDefaultHostchecksIndexParams, HostchecksIndexParams, HostchecksIndexRoot } from '../hostchecks.interface';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hostchecks-index',
@@ -98,7 +99,7 @@ import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-se
     templateUrl: './hostchecks-index.component.html',
     styleUrl: './hostchecks-index.component.css'
 })
-export class HostchecksIndexComponent implements OnInit, OnDestroy {
+export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     private hostId: number = 0;
     private HostchecksService = inject(HostchecksService)
     public readonly route = inject(ActivatedRoute);
@@ -201,6 +202,9 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadHostchecks();
         }
+    }
+
+    public onMassActionComplete(success: boolean) {
     }
 
     protected readonly String = String;

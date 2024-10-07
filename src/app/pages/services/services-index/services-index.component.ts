@@ -36,8 +36,8 @@ import { Subscription } from 'rxjs';
 import { ServicesService } from '../services.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import {
-    getDefaultServicesIndexFilter,
     getDefaultServiceIndexParams,
+    getDefaultServicesIndexFilter,
     getDefaultServicesIndexFilterApiRequest,
     getServiceCurrentStateForApi,
     ServiceIndexFilter,
@@ -142,7 +142,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
-import {getDefaultHostsIndexFilter, getDefaultHostsIndexParams} from '../../hosts/hosts.interface';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-services-index',
@@ -224,7 +224,7 @@ import {getDefaultHostsIndexFilter, getDefaultHostsIndexParams} from '../../host
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}
     ]
 })
-export class ServicesIndexComponent implements OnInit, OnDestroy {
+export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -494,12 +494,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         }
 
         let priorityFilter = [];
-       /* for (var key in this.filter.Services.priority) {
-            // @ts-ignore
-            if (this.filter.Services.priority[key] === true) {
-                priorityFilter.push(key);
-            }
-        } */
+        /* for (var key in this.filter.Services.priority) {
+             // @ts-ignore
+             if (this.filter.Services.priority[key] === true) {
+                 priorityFilter.push(key);
+             }
+         } */
         for (const key in this.filter.Services.priority) {
             if (this.filter.Services.priority.hasOwnProperty(key)) {
                 // @ts-ignore
@@ -773,7 +773,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy {
         let priorityFilter: string[] = [];
         for (const key in filter.Services.priority) {
             if (filter.Services.priority.hasOwnProperty(key)) {
-               // console.log(key); // Logs the key
+                // console.log(key); // Logs the key
                 // @ts-ignore
                 if (filter.Services.priority[key] === true) {
                     priorityFilter.push(key);

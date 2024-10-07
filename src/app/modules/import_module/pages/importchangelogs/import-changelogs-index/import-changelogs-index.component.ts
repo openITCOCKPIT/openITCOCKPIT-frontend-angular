@@ -40,6 +40,8 @@ import {
 import { Subscription } from 'rxjs';
 import { ImportChangelogsService } from '../importchangelogs.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
+import { IndexPage } from '../../../../../pages.interface';
+import { Sort } from '@angular/material/sort';
 
 
 @Component({
@@ -81,7 +83,7 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
     templateUrl: './import-changelogs-index.component.html',
     styleUrl: './import-changelogs-index.component.css'
 })
-export class ImportChangelogsIndexComponent implements OnInit, OnDestroy {
+export class ImportChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public readonly PermissionsService = inject(PermissionsService);
@@ -199,5 +201,11 @@ export class ImportChangelogsIndexComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public onMassActionComplete(success: boolean): void {
+    }
+
+    public onSortChange(sort: Sort): void {
     }
 }

@@ -55,6 +55,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { CalendarsService } from '../calendars.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-calendars-index',
@@ -107,7 +108,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
         {provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService} // Inject the CalendarsService into the DeleteAllModalComponent
     ]
 })
-export class CalendarsIndexComponent implements OnInit, OnDestroy {
+export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: CalendarsIndexParams = getDefaultCalendarsIndexParams()

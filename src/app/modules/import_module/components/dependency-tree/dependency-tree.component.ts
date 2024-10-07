@@ -25,8 +25,8 @@ import { OnlineOfflineComponent } from '../additional-host-information/online-of
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DecimalPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ExternalSystemsService } from '../../external-systems.service';
-import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../external-systems.interface';
+import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
+import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../pages/externalsystems/external-systems.interface';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';

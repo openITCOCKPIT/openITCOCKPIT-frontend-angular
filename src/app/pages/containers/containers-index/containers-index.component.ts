@@ -241,7 +241,7 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
 
     public editContainer(container: ContainersIndexContainer): void {
         this.selectedContainerForEdit = container;
-        
+
         // open modal
         this.modalService.toggle({
             show: true,
