@@ -61,6 +61,7 @@
 
                 <!-- The automap can also be displayed on dashboards so we use a seperate component for that -->
                 <oitc-automap-viewer
+                    (reload)="loadAutomap()"
                     [automapResult]="result"
                     (paginatorChange)="onPaginatorChange($event)"
                 ></oitc-automap-viewer>

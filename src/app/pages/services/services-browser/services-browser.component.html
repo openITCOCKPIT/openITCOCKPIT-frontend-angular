@@ -300,7 +300,8 @@
                                             </div>
 
                                             <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelDowntimeModal(result.downtime)" cButton
+                                                <button (click)="toggleCancelServiceDowntimeModal(result.downtime)"
+                                                        cButton
                                                         class="ripple float-end" color="danger"
                                                         size="xs"
                                                         *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
@@ -422,7 +423,8 @@
                                             </div>
 
                                             <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelDowntimeModal(result.hostDowntime)" cButton
+                                                <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
+                                                        cButton
                                                         class="ripple float-end" color="danger"
                                                         size="xs"
                                                         *ngIf="result.hostDowntime.allowEdit && result.hostDowntime.isCancellable">
@@ -1326,3 +1328,9 @@
 
 <oitc-delete-acknowledgements-modal [items]="selectedItems"
                                     (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
+
+<oitc-cancel-hostdowntime-modal [items]="selectedItems"
+                                (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
+
+<oitc-cancel-servicedowntime-modal [items]="selectedItems"
+                                   (completed)="onMassActionComplete($event)"></oitc-cancel-servicedowntime-modal>

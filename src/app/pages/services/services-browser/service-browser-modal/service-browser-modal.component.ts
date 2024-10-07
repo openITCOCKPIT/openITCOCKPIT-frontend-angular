@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
     AlertComponent,
     BadgeComponent,
@@ -81,6 +81,12 @@ import { ServicesBrowserChartComponent } from '../services-browser-chart/service
 import { CopyToClipboardComponent } from '../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
+import {
+    CancelHostdowntimeModalComponent
+} from '../../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime-modal.component';
+import {
+    CancelServicedowntimeModalComponent
+} from '../../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
 
 @Component({
     selector: 'oitc-service-browser-modal',
@@ -126,7 +132,9 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
         PermissionDirective,
         TableDirective,
         BorderDirective,
-        RouterLink
+        RouterLink,
+        CancelHostdowntimeModalComponent,
+        CancelServicedowntimeModalComponent
     ],
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',
@@ -138,6 +146,7 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
 
     @Input() public serviceId: number = 0;
+    @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public timezone!: TimezoneObject;
     public result?: ServiceBrowserResult;
@@ -407,7 +416,24 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleCancelDowntimeModal(serviceDowntime: DowntimeObject) {
+    public toggleCancelHostDowntimeModal(hostDowntime: DowntimeObject) {
+        this.selectedItems = [];
+
+        const item: CancelAllItem[] = [{
+            id: hostDowntime.internalDowntimeId
+        }];
+
+        // Pass selection to the modal
+        this.selectedItems = item;
+
+        // open modal
+        this.modalService.toggle({
+            show: true,
+            id: 'cancelHostAllModal',
+        });
+    }
+
+    public toggleCancelServiceDowntimeModal(serviceDowntime: DowntimeObject) {
         this.selectedItems = [];
 
         const item: CancelAllItem[] = [{
@@ -420,7 +446,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'cancelAllModal',
+            id: 'cancelServiceAllModal',
         });
     }
 
@@ -463,6 +489,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     }
 
     public onMassActionComplete(success: boolean) {
+        this.completed.emit(success); // Pass the event to the parent component
         if (success) {
             this.loadService();
         }
