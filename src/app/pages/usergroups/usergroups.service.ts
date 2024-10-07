@@ -97,14 +97,22 @@ export class UsergroupsService {
 
     public updateUsergroup(post: UsergroupsEditPostRoot): Observable<any> {
         const proxyPath = this.proxyPath;
-        return this.http.post<null>(`${proxyPath}/usergroups/edit/${post.Usergroup.id}.json?angular=true`, {
-            data: post
-        }).pipe(
-            map(data => {
-                // This API has no return value
-                return null;
-            })
-        );
+        return this.http.post<any>(`${proxyPath}/usergroups/edit/${post.Usergroup.id}.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
 
     }
 

@@ -113,30 +113,26 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
     protected errors: GenericValidationError | null = null;
-    protected acos: AcoRoot = {} as AcoRoot;
+    protected acos: AcoRoot = {acos: {}} as AcoRoot;
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
-    protected post: UsergroupsAddRoot = {
-        Acos: [],
-        Usergroup: {
-            description: '',
-            ldapgroups: {
-                _ids: []
-            },
-            name: ''
-        }
-    } as UsergroupsAddRoot;
+    protected post: UsergroupsAddRoot = this.getDefaultPost() as UsergroupsAddRoot;
 
 
     public ngOnInit() {
+        this.loadAcos();
+        this.loadLdapGroups('');
+    }
 
+    private loadAcos(): void {
         this.subscriptions.add(this.UsergroupsService.loadAcos().subscribe((acoRoot: AcoRoot) => {
-            console.log(acoRoot);
             this.acos = acoRoot;
         }));
+    }
 
-        this.loadLdapGroups('');
+    protected showController(object: object): boolean {
+        return Object.keys(object).length !== 0;
     }
 
     public ngOnDestroy() {
@@ -144,7 +140,16 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     }
 
     private getDefaultPost(): UsergroupsAddRoot {
-        return {} as UsergroupsAddRoot;
+        return {
+            Acos: [],
+            Usergroup: {
+                description: '',
+                ldapgroups: {
+                    _ids: []
+                },
+                name: ''
+            }
+        } as UsergroupsAddRoot;
     }
 
     protected loadLdapGroups(search: string = ''): void {
@@ -160,19 +165,19 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
-                    const title: string = this.TranslocoService.translate('Servicegroup');
+                    const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['servicegroups', 'edit', response.id];
+                    const url: (string | number)[] = ['usergroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/servicegroups/index']);
+                        this.HistoryService.navigateWithFallback(['/usergroups/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();
                     this.errors = null;
-                    this.ngOnInit();
+                    this.loadLdapGroups('');
                     this.notyService.scrollContentDivToTop();
 
                     return;

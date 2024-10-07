@@ -68,7 +68,8 @@ export interface UsergroupsEditGetRoot {
     usergroup: Usergroup
     acos: {
         [key: number]: number
-    }
+    },
+    systemname: string
     _csrfToken: string
 }
 
@@ -93,8 +94,19 @@ export interface Usergroup {
 
     modified: string
     name: string
+    aro: Aro | undefined
 }
 
+export interface Aro {
+    id: number
+    parent_id: any
+    model: string
+    foreign_key: number
+    alias: any
+    lft: number
+    rght: number
+    acos: { [key: number]: child }
+}
 
 /* COPY GET */
 export interface UsergroupsCopyGetRoot {
@@ -142,6 +154,15 @@ export interface child {
     lft: number
     rght: number
     children: { [key: number]: child }
+    _joinData: {
+        id: number
+        aro_id: number
+        aco_id: number
+        _create: string
+        _read: string
+        _update: string
+        _delete: string
+    }
 }
 
 

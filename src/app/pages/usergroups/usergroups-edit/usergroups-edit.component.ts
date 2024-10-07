@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -30,7 +31,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -47,6 +48,8 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-usergroups-edit',
@@ -96,7 +99,10 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         DropdownItemDirective,
         FaStackComponent,
         FaStackItemSizeDirective,
-        DropdownDividerDirective
+        DropdownDividerDirective,
+        FormLoaderComponent,
+        AlertComponent,
+        AsyncPipe
     ],
     templateUrl: './usergroups-edit.component.html',
     styleUrl: './usergroups-edit.component.css'
@@ -112,8 +118,9 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TranslocoService = inject(TranslocoService);
 
+    protected systemname: string = 'openITCOCKPIT';
     protected errors: GenericValidationError | null = null;
-    protected acos: AcoRoot = {} as AcoRoot;
+    protected acos: AcoRoot = {acos: {}} as AcoRoot;
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
@@ -129,27 +136,47 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
             },
             modified: '',
             name: '',
+            aro: {}
         }
-    } as UsergroupsEditPostRoot;
+    } as unknown as UsergroupsEditPostRoot;
 
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
 
         this.subscriptions.add(this.UsergroupsService.loadAcos().subscribe((acoRoot: AcoRoot) => {
-            console.log(acoRoot);
             this.acos = acoRoot;
         }));
 
-        this.subscriptions.add(this.UsergroupsService.getEdit(id).subscribe((edit: UsergroupsEditGetRoot) => {
-            this.post = edit as unknown as UsergroupsEditPostRoot;
-            this.post.Usergroup = edit.usergroup;
-            this.post.Acos = edit.acos;
+        this.subscriptions.add(this.UsergroupsService.getEdit(id).subscribe((result: UsergroupsEditGetRoot) => {
+            this.post.Usergroup = result.usergroup;
+            this.post.Acos = result.acos;
+            this.systemname = result.systemname;
+
+
+            //Set permissions of current user group to $scope.post.Acos;
+            if ((result.usergroup.aro) && result.usergroup.aro.acos) {
+                for (let usergroupAco in result.usergroup.aro.acos) {
+                    let usergroupAcoId = result.usergroup.aro.acos[parseInt(usergroupAco)].id;
+
+                    //Deny all by default
+                    this.post.Acos[usergroupAcoId] = 0;
+
+                    if (result.usergroup.aro.acos[parseInt(usergroupAco)]._joinData._create === "1") {
+                        //Only enable what is enabled in the database
+                        this.post.Acos[usergroupAcoId] = 1;
+                    }
+                }
+            }
         }));
 
         // Load current detaails
 
         this.loadLdapGroups('');
+    }
+
+    protected showController(object: object): boolean {
+        return Object.keys(object).length !== 0;
     }
 
     public ngOnDestroy() {
@@ -173,20 +200,13 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
-                    const title: string = this.TranslocoService.translate('Servicegroup');
+                    const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['servicegroups', 'edit', response.id];
+                    const url: (string | number)[] = ['usergroups', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/servicegroups/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost();
-                    this.errors = null;
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
+                    this.HistoryService.navigateWithFallback(['/usergroups/index']);
 
                     return;
                 }

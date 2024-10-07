@@ -113,7 +113,7 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
 
     protected params: UsergroupsIndexParams = getdefaultUsergroupsIndexParams();
-    protected usergroups: UsergroupsIndexRoot = {} as UsergroupsIndexRoot;
+    protected usergroups: UsergroupsIndexRoot = {allUsergroups: [], _csrfToken: ''} as UsergroupsIndexRoot;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
 
