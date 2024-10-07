@@ -108,18 +108,18 @@
                                     <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                     {{ t('Data source settings') }}
                                 </h4>
-                                +++ {{ post.json_data | json }} +++
-                                @if (formFields) {
-                                    <div *ngFor="let formField of Object.values(formFields)">
-                                        <oitc-dynamical-form-fields
-                                            [formField]="formField"
-                                            [errors]="errors"
-                                            [name]="formField['ngModel']"
-                                            [(ngModel)]="post.json_data[formField['ngModel']]">
-                                        </oitc-dynamical-form-fields>
-                                    </div>
-                                }
                             </legend>
+                            +++ {{ post.json_data | json }} +++
+                            @if (formFields) {
+                                <div *ngFor="let formField of Object.values(formFields)">
+                                    <oitc-dynamical-form-fields
+                                        [formField]="formField"
+                                        [errors]="errors"
+                                        [name]="formField['ngModel']"
+                                        [(ngModel)]="post.json_data[formField['ngModel']]">
+                                    </oitc-dynamical-form-fields>
+                                </div>
+                            }
                         </fieldset>
                     </c-container>
                 </c-card-body>

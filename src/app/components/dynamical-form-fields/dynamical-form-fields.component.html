@@ -146,12 +146,14 @@
         </div>
         <!-- RADIO FIELDS -->
         <div *ngIf="formField['type'] === 'radio'" class="mb-3">
-            <label cLabel for="{{formField['ngModel']}}">
-                {{ formField['label'] }}
-                @if (formField['required']) {
-                    <oitc-required-icon></oitc-required-icon>
-                }
-            </label>
+            <div>
+                <label cLabel for="{{formField['ngModel']}}">
+                    {{ formField['label'] }}
+                    @if (formField['required']) {
+                        <oitc-required-icon></oitc-required-icon>
+                    }
+                </label>
+            </div>
             <c-form-check inline *ngFor="let option of formField['options']">
                 <input cFormCheckInput
                        [attr.id]="option['id']"
@@ -160,7 +162,9 @@
                        [ngModelOptions]="{standalone: true}"
                        [value]="option['value']"
                        [name]="name"
-                       type="radio" class="radio-lg me-2 mt-0"/>
+                       type="radio"
+                       class="radio-lg me-2 mt-0"
+                />
                 <label cFormCheckLabel [attr.for]="option['id']">{{ t(option['name']) }}</label>
             </c-form-check>
         </div>
