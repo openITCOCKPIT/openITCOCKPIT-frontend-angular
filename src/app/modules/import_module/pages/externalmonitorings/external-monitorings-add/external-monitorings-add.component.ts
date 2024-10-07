@@ -48,7 +48,6 @@ import {
     ExternalMonitoringConfigIcinga2,
     ExternalMonitoringConfigOpmanager,
     ExternalMonitoringConfigPrtg,
-    ExternalMonitoringFormFields,
     ExternalMonitoringPost
 } from '../external-monitorings.interface';
 import {
@@ -72,6 +71,10 @@ import { HistoryService } from '../../../../../history.service';
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
+import {
+    DynamicalFormFieldsComponent
+} from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 
 @Component({
     selector: 'oitc-external-monitorings-add',
@@ -128,7 +131,8 @@ import {
         TrueFalseDirective,
         RegexHelperTooltipComponent,
         KeyValuePipe,
-        NgClass
+        NgClass,
+        DynamicalFormFieldsComponent
     ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css'
@@ -146,7 +150,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
-    public formFields?: ExternalMonitoringFormFields;
+    public formFields?: DynamicalFormFields;
 
     protected readonly ExternalMonitoringTypes = [
         {
@@ -223,6 +227,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
         if (this.post.system_type) {
             this.subscriptions.add(this.ExternalMonitoringsService.loadConfig(this.post.system_type)
                 .subscribe((result: ExternalMonitoringConfig) => {
+                    this.errors = null;
                     switch (this.post.system_type) {
                         case 'icinga2':
                             const icinga2 = result.config.config as ExternalMonitoringConfigIcinga2;
@@ -243,6 +248,4 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
             );
         }
     }
-
-    protected readonly Object = Object;
 }

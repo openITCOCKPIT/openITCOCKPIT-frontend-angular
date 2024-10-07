@@ -1,0 +1,157 @@
+<ng-container *transloco="let t">
+    @if (formFields) {
+        <div *ngFor="let formField of Object.values(formFields)">
+            <!-- TEXT FIELDS -->
+            <div *ngIf="formField['type'] === 'text'" class="mb-3">
+                <label cLabel for="{{formField['ngModel']}}">
+                    {{ formField['label'] }}
+                    @if (formField['required']) {
+                        <oitc-required-icon></oitc-required-icon>
+                    }
+                </label>
+                <input cFormControl type="{{ formField['type'] }}"
+                       placeholder="{{formField['placeholder']}}"
+                       name="{{formField['ngModel']}}"
+                       [(ngModel)]="ngModel[formField['ngModel']]"
+                       class="{{formField['class']}}"
+                       oitcFormError errorField="{{formField['ngModel']}}"/>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+
+            <!-- NUMBER FIELDS -->
+            <div *ngIf="formField['type'] === 'number'" class="mb-3">
+                <label cLabel for="{{formField['ngModel']}}">
+                    {{ formField['label'] }}
+                    @if (formField['required']) {
+                        <oitc-required-icon></oitc-required-icon>
+                    }
+                </label>
+                <input cFormControl type="{{ formField['type'] }}"
+                       placeholder="{{formField['placeholder']}}"
+                       name="{{formField['ngModel']}}"
+                       min="0"
+                       [(ngModel)]="ngModel[formField['ngModel']]"
+                       class="{{formField['class']}}"
+                       oitcFormError errorField="{{formField['ngModel']}}"/>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+
+            <!-- CHECKBOX FIELDS -->
+            <div *ngIf="formField['type'] === 'checkbox'" class="mb-3">
+                <c-form-check>
+                    <input
+                        [(ngModel)]="ngModel[formField['ngModel']]" cFormCheckInput
+                        id="{{formField['ngModel']}}"
+                        class="checkbox-lg me-2 mt-0"
+                        name="{{formField['ngModel']}}"
+                        trueFalseValue
+                        [falseValue]="0"
+                        [trueValue]="1"
+                        oitcDebounce
+                        type="checkbox"/>
+                    <label cFormCheckLabel
+                           for="{{formField['ngModel']}}">{{ t(formField['label']) }}</label>
+                </c-form-check>
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+            <!-- TAGSINPUTS FIELDS -->
+            <div *ngIf="formField['type'] === 'tagsinput'" class="mb-3">
+                <label cLabel for="{{formField['ngModel']}}">
+                    {{ formField['label'] }}
+                    @if (formField['required']) {
+                        <oitc-required-icon></oitc-required-icon>
+                    }
+                </label>
+                <ng-select
+                    id="{{formField['ngModel']}}"
+                    name="{{formField['ngModel']}}"
+                    [items]="[]"
+                    [(ngModel)]="ngModel[formField['ngModel']]"
+                    [addTag]="true"
+                    [multiple]="true"
+                    [selectOnTab]="true"
+                    [placeholder]="String(formField['placeholder'])"
+                    [isOpen]="false"
+                    oitcFormError [errors]="errors" errorField="{{formField['ngModel']}}">
+                </ng-select>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+            <!-- PASSWORD FIELDS -->
+            <div *ngIf="formField['type'] === 'password'" class="mb-3">
+                <label cLabel for="{{formField['ngModel']}}">
+                    {{ formField['label'] }}
+                    @if (formField['required']) {
+                        <oitc-required-icon></oitc-required-icon>
+                    }
+                </label>
+                <input cFormControl type="{{ formField['type'] }}"
+                       placeholder="{{formField['placeholder']}}"
+                       name="{{formField['ngModel']}}"
+                       min="0"
+                       [(ngModel)]="ngModel[formField['ngModel']]"
+                       class="{{formField['class']}}"
+                       oitcFormError errorField="{{formField['ngModel']}}"/>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="{{formField['ngModel']}}"></oitc-form-feedback>
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+            <!-- SELECT FIELDS -->
+            <div *ngIf="formField['type'] === 'select'" class="mb-3">
+                {{ formField['label'] }}
+                @if (formField['required']) {
+                    <oitc-required-icon></oitc-required-icon>
+                }
+                <oitc-select
+                    id="{{formField['ngModel']}}"
+                    name="{{formField['ngModel']}}"
+                    optionValue="key"
+                    optionLabel="value"
+                    [options]="formField['options']"
+                    [(ngModel)]="ngModel[formField['ngModel']]"
+                    [showClear]="false">
+                </oitc-select>
+                <div class="help-block" *ngIf="formField['help']">
+                    {{ formField['help'] }}
+                </div>
+            </div>
+            <!-- RADIO FIELDS -->
+            <div *ngIf="formField['type'] === 'radio'" class="mb-3">
+                {{ formField['label'] }}
+                @if (formField['required']) {
+                    <oitc-required-icon></oitc-required-icon>
+                }
+                <c-form-check inline>
+                    <span *ngFor="let option of formField['options']; let i = index">
+                        <input
+                            [(ngModel)]="ngModel[formField['ngModel']]"
+                            cFormCheckInput
+                            id="option['id']"
+                            class="radio-lg me-2 mt-0"
+                            name="{{formField['ngModel']}}"
+                            oitcDebounce
+                            type="radio"/>
+                        <label cFormCheckLabel
+                               for="{{option['id']}}">{{ t(option['name']) }}</label>
+                    </span>
+                </c-form-check>
+            </div>
+        </div>
+    }
+</ng-container>

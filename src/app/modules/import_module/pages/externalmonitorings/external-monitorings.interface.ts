@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 
 export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
     externalMonitorings: ExternalMonitoring[]
@@ -57,7 +58,7 @@ export function getDefaultExternalMonitoringsIndexParams(): ExternalMonitoringsI
 export interface ExternalMonitoringConfig {
     config: {
         config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg
-        formFields: ExternalMonitoringFormFields
+        formFields: DynamicalFormFields
     }
 }
 
@@ -89,19 +90,4 @@ export interface ExternalMonitoringConfigPrtg {
     ignore_ssl_certificate: number
     polling_interval: number
     include_channels: number
-}
-
-export interface ExternalMonitoringFormFields {
-    [key: string]: ExternalMonitoringFormField
-}
-
-export interface ExternalMonitoringFormField {
-    type: string
-    class: string
-    label: string
-    help: string
-    placeholder: number
-    required: boolean
-    id: string
-    ngModel: string
 }
