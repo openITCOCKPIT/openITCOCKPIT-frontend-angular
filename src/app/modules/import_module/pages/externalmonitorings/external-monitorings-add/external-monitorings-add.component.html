@@ -109,7 +109,6 @@
                                     {{ t('Data source settings') }}
                                 </h4>
                             </legend>
-                            +++ {{ post.json_data | json }} +++
                             @if (formFields) {
                                 <div *ngFor="let formField of Object.values(formFields)">
                                     <oitc-dynamical-form-fields
