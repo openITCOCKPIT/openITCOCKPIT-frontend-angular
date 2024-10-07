@@ -159,6 +159,13 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
 
+    public hideModal() {
+        this.modalService.toggle({
+            show: false,
+            id: 'automapServiceDetailsModal'
+        });
+    }
+
     private resetModal(): void {
         // Reset everything
         this.selectedItems = [];

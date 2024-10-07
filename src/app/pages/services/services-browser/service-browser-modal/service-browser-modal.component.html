@@ -13,7 +13,7 @@
                 <fa-icon [icon]="['fas', 'gears']"></fa-icon>
                 {{ t('Service status details') }}
             </h5>
-            <button cButtonClose></button>
+            <button cButtonClose (click)="hideModal()"></button>
         </c-modal-header>
         <c-modal-body>
 
@@ -413,8 +413,14 @@
 
         </c-modal-body>
         <c-modal-footer>
-            <button cButton color="secondary" class="ripple">Close</button>
-            <button cButton color="primary" class="ripple">Save changes</button>
+            <button cButton color="secondary" class="ripple" (click)="hideModal()">
+                {{ t('Close') }}
+            </button>
+            <a cButton color="primary" class="ripple" *ngIf="result"
+               [routerLink]="['/', 'services', 'browser', result.mergedService.id]">
+                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                {{ t('View') }}
+            </a>
         </c-modal-footer>
     </c-modal>
 
