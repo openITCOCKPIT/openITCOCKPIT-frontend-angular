@@ -11,8 +11,9 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       [name]="formField['ngModel']"
+                       [attr.name]="formField['ngModel']"
                        [(ngModel)]="ngModel[formField['ngModel']]"
+                       [ngModelOptions]="{standalone: true}"
                        class="{{formField['class']}}"
                        oitcFormError errorField="{{formField['ngModel']}}"/>
                 <oitc-form-feedback [errors]="errors"
@@ -33,9 +34,10 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       [name]="formField['ngModel']"
+                       [attr.name]="formField['ngModel']"
                        min="0"
                        [(ngModel)]="ngModel[formField['ngModel']]"
+                       [ngModelOptions]="{standalone: true}"
                        class="{{formField['class']}}"
                        oitcFormError errorField="{{formField['ngModel']}}"/>
                 <oitc-form-feedback [errors]="errors"
@@ -50,9 +52,10 @@
                 <c-form-check>
                     <input
                         [(ngModel)]="ngModel[formField['ngModel']]" cFormCheckInput
+                        [ngModelOptions]="{standalone: true}"
                         id="{{formField['ngModel']}}"
                         class="checkbox-lg me-2 mt-0"
-                        [name]="formField['ngModel']"
+                        [attr.name]="formField['ngModel']"
                         trueFalseValue
                         [falseValue]="0"
                         [trueValue]="1"
@@ -75,9 +78,10 @@
                 </label>
                 <ng-select
                     id="{{formField['ngModel']}}"
-                    [name]="formField['ngModel']"
+                    [attr.name]="formField['ngModel']"
                     [items]="[]"
                     [(ngModel)]="ngModel[formField['ngModel']]"
+                    [ngModelOptions]="{standalone: true}"
                     [addTag]="true"
                     [multiple]="true"
                     [selectOnTab]="true"
@@ -101,8 +105,9 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       [name]="formField['ngModel']"
+                       [attr.name]="formField['ngModel']"
                        [(ngModel)]="ngModel[formField['ngModel']]"
+                       [ngModelOptions]="{standalone: true}"
                        class="{{formField['class']}}"
                        oitcFormError errorField="{{formField['ngModel']}}"/>
                 <oitc-form-feedback [errors]="errors"
@@ -119,11 +124,12 @@
                 }
                 <oitc-select
                     id="{{formField['ngModel']}}"
-                    [name]="formField['ngModel']"
+                    [attr.name]="formField['ngModel']"
                     optionValue="key"
                     optionLabel="value"
                     [options]="formField['options']"
                     [(ngModel)]="ngModel[formField['ngModel']]"
+                    [ngModelOptions]="{standalone: true}"
                     [showClear]="false">
                 </oitc-select>
                 <div class="help-block" *ngIf="formField['help']">
@@ -140,10 +146,11 @@
                     <span *ngFor="let option of formField['options']; let i = index">
                         <input
                             [(ngModel)]="ngModel[formField['ngModel']]"
+                            [ngModelOptions]="{standalone: true}"
                             cFormCheckInput
                             id="option['id']"
                             class="radio-lg me-2 mt-0"
-                            [name]="option['name']"
+                            [attr.name]="option['name']"
                             [value]="option['value']"
                             oitcDebounce
                             type="radio"/>
