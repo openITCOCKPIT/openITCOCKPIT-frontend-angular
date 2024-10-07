@@ -248,4 +248,6 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
             );
         }
     }
+
+    protected readonly Object = Object;
 }

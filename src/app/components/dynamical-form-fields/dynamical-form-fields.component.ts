@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DynamicalFormFields } from './dynamical-form-fields.interface';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { DynamicalFormField } from './dynamical-form-fields.interface';
 import { DebounceDirective } from '../../directives/debounce.directive';
 import {
     FormCheckComponent,
@@ -10,15 +10,14 @@ import {
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../directives/true-false.directive';
 import { GenericValidationError } from '../../generic-responses';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { Subject } from 'rxjs';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
 
 @Component({
@@ -40,43 +39,61 @@ import { SelectComponent } from '../../layouts/primeng/select/select/select.comp
         TrueFalseDirective,
         TranslocoDirective,
         NgSelectComponent,
-        SelectComponent
+        SelectComponent,
+        JsonPipe,
+        FormsModule
     ],
     templateUrl: './dynamical-form-fields.component.html',
-    styleUrl: './dynamical-form-fields.component.css'
+    styleUrl: './dynamical-form-fields.component.css',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DynamicalFormFieldsComponent),
+            multi: true
+        }
+    ],
 })
-export class DynamicalFormFieldsComponent {
+export class DynamicalFormFieldsComponent implements ControlValueAccessor {
     @Input() public errors: GenericValidationError | null = null;
-    @Input() public formFields: DynamicalFormFields = {};
+    @Input() public formField!: DynamicalFormField;
+    @Input() public name: string = '';
+
+    @Input() disabled: boolean = false;
+
     /**
      * ngModel for the form
      * @group Props
      */
     @Input() ngModel: any | undefined;
-    @Input() debounce: boolean = false;
-    @Input() debounceTime: number = 500;
-    private onChangeSubject = new Subject<any>();
     @Output() ngModelChange = new EventEmitter();
-    @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
-    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
+
 
     protected readonly Object = Object;
+
+
+    //  Updates the component's value.
+    writeValue(value: any): void {
+        this.ngModel = value;
+    }
+
+    // Registers a callback function to be called when the value changes.
+    public registerOnChange(fn: Function): void {
+        this.ngModelChange.subscribe(fn);
+    }
+
+    // Registers a callback function to be called when the component is touched.
+    public registerOnTouched(fn: Function): void {
+        this.ngModelChange.subscribe(fn);
+    }
+
+    // Handles the disabled state of the component (optional)
+    public setDisabledState?(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
 
     updateNgModel(value: any) {
         this.ngModel = value;
         this.ngModelChange.emit(this.ngModel);
-    }
-
-    triggerOnChange(event: any) {
-        if (this.debounce) {
-            this.onChangeSubject.next(event);
-        } else {
-            this.onChange.emit(event);
-        }
-    }
-
-    triggerOnFilter(event: any) {
-        this.onFilter.emit(event);
     }
 
     protected readonly String = String;

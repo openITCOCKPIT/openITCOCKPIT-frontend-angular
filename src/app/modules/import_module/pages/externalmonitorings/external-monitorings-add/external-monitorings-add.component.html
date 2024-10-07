@@ -109,12 +109,16 @@
                                     {{ t('Data source settings') }}
                                 </h4>
                                 +++ {{ post.json_data | json }} +++
-                                <oitc-dynamical-form-fields *ngIf="formFields"
-                                                            [formFields]="formFields"
-                                                            [errors]="errors"
-                                                            [ngModel]="post.json_data"
-                                                            (ngModelChange)="post.json_data = $event">
-                                </oitc-dynamical-form-fields>
+                                @if (formFields) {
+                                    <div *ngFor="let formField of Object.values(formFields)">
+                                        <oitc-dynamical-form-fields
+                                            [formField]="formField"
+                                            [errors]="errors"
+                                            [name]="formField['ngModel']"
+                                            [(ngModel)]="post.json_data[formField['ngModel']]">
+                                        </oitc-dynamical-form-fields>
+                                    </div>
+                                }
                             </legend>
                         </fieldset>
                     </c-container>
