@@ -11,7 +11,7 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       name="{{formField['ngModel']}}"
+                       [name]="formField['ngModel']"
                        [(ngModel)]="ngModel[formField['ngModel']]"
                        class="{{formField['class']}}"
                        oitcFormError errorField="{{formField['ngModel']}}"/>
@@ -33,7 +33,7 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       name="{{formField['ngModel']}}"
+                       [name]="formField['ngModel']"
                        min="0"
                        [(ngModel)]="ngModel[formField['ngModel']]"
                        class="{{formField['class']}}"
@@ -52,7 +52,7 @@
                         [(ngModel)]="ngModel[formField['ngModel']]" cFormCheckInput
                         id="{{formField['ngModel']}}"
                         class="checkbox-lg me-2 mt-0"
-                        name="{{formField['ngModel']}}"
+                        [name]="formField['ngModel']"
                         trueFalseValue
                         [falseValue]="0"
                         [trueValue]="1"
@@ -75,7 +75,7 @@
                 </label>
                 <ng-select
                     id="{{formField['ngModel']}}"
-                    name="{{formField['ngModel']}}"
+                    [name]="formField['ngModel']"
                     [items]="[]"
                     [(ngModel)]="ngModel[formField['ngModel']]"
                     [addTag]="true"
@@ -101,8 +101,7 @@
                 </label>
                 <input cFormControl type="{{ formField['type'] }}"
                        placeholder="{{formField['placeholder']}}"
-                       name="{{formField['ngModel']}}"
-                       min="0"
+                       [name]="formField['ngModel']"
                        [(ngModel)]="ngModel[formField['ngModel']]"
                        class="{{formField['class']}}"
                        oitcFormError errorField="{{formField['ngModel']}}"/>
@@ -120,7 +119,7 @@
                 }
                 <oitc-select
                     id="{{formField['ngModel']}}"
-                    name="{{formField['ngModel']}}"
+                    [name]="formField['ngModel']"
                     optionValue="key"
                     optionLabel="value"
                     [options]="formField['options']"
@@ -132,7 +131,7 @@
                 </div>
             </div>
             <!-- RADIO FIELDS -->
-            <div *ngIf="formField['type'] === 'radio'" class="mb-3">
+            <div *ngIf="formField['type'] === 'radiooooo'" class="mb-3">
                 {{ formField['label'] }}
                 @if (formField['required']) {
                     <oitc-required-icon></oitc-required-icon>
@@ -144,7 +143,7 @@
                             cFormCheckInput
                             id="option['id']"
                             class="radio-lg me-2 mt-0"
-                            name="{{formField['ngModel']}}"
+                            [name]="option['name']"
                             oitcDebounce
                             type="radio"/>
                         <label cFormCheckLabel
