@@ -6,5 +6,6 @@
     "Installation done. Please reload your {0} web interface.": "Installation done. Please reload your {{systemname}} web interface.",
     "Your installation of {0} is running in a container based environment like Docker.": "Your installation of {{systemname}} is running in a container based environment like Docker.",
     "To install the selected packages, please execute the following command on your {0} system.": "To install the selected packages, please execute the following command on your {{systemname}} system.",
-    "Please update your {0} installation to the latest version to get new features and latest security fixes.": "Please update your {{systemname}} installation to the latest version to get new features and latest security fixes."
+    "Please update your {0} installation to the latest version to get new features and latest security fixes.": "Please update your {{systemname}} installation to the latest version to get new features and latest security fixes.",
+    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Upon every update of {{systemname}}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings."
 }

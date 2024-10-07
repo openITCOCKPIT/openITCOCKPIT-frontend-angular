@@ -502,7 +502,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'cancelAllModal',
+            id: 'cancelHostAllModal',
         });
     }
 

@@ -2466,7 +2466,7 @@
     "Create user role": "Створіть роль користувача",
     "Edit user role:": "Редагувати роль користувача:",
     "Notice!": "Зверніть увагу!",
-    "Permissions of the user role Administrator will be set back to default on every update of {0}!": "Дозволи ролі користувача Адміністратор буде повернено до стандартних під час кожного оновлення програми {{0}}!",
+    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Дозволи ролі користувача Адміністратор буде повернено до стандартних під час кожного оновлення програми {{systemname}}!",
     "Update user role": "Оновіть роль користувача",
     "Add local": "Додати локальний",
     "Create new local user": "Створити нового локального користувача",

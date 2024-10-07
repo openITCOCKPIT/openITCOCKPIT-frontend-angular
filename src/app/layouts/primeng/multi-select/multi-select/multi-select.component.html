@@ -24,7 +24,7 @@ https://stackoverflow.com/a/76688561
     (ngModelChange)="ngModelChange.emit($event)"
     (onFilter)="doHighlightSearch($event.filter)"
     [showClear]="showClear"
-    appendTo="body">
+    [appendTo]="appendTo">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

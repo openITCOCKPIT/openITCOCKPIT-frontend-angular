@@ -223,7 +223,7 @@ export class DowntimesServiceComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'cancelAllModal',
+            id: 'cancelServiceAllModal',
         });
     }
 

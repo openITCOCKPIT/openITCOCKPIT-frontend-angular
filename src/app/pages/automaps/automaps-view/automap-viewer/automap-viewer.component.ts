@@ -113,12 +113,17 @@ export class AutomapViewerComponent {
 
     @Input() public automapResult!: AutomapsViewRoot;
     @Output() paginatorChange = new EventEmitter<PaginatorChangeEvent>();
+    @Output() reload = new EventEmitter<boolean>();
 
     public serviceIdForBrowser: number = 0;
 
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly modalService: ModalService = inject(ModalService);
 
+    // Pass reload event to parent component
+    public reloadAutomap(success: boolean) {
+        this.reload.emit(success);
+    }
 
     // Pass paginator events to parent component
     public onPaginatorChange($event: PaginatorChangeEvent) {

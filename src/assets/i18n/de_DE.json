@@ -2709,7 +2709,7 @@
     "Name of the new user role": "Name der neuen Benutzerrolle",
     "Edit user role:": "Bearbeite Benutzer Rolle",
     "Notice!": "Beachten Sie!",
-    "Permissions of the user role Administrator will be set back to default on every update of {0}!": "Die Berechtigungen der Benutzerrolle Administrator werden bei jedem Update von {{0}} auf den Standardwert zurückgesetzt!",
+    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Die Berechtigungen der Benutzerrollen Administrator und Viewer werden bei jedem Update von {{systemname}} auf den Standardwert zurückgesetzt!",
     "Update user role": "Aktualisiere Benutzer Rolle",
     "Add local": "Lokal hinzufügen",
     "Create new local user": "Erstelle neuen lokalen Benutzer",

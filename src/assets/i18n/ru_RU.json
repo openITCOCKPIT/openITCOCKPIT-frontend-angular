@@ -2472,7 +2472,7 @@
     "Create user role": "Создать роль пользователя",
     "Edit user role:": "Изменить роль пользователя",
     "Notice!": "Уведомление!",
-    "Permissions of the user role Administrator will be set back to default on every update of {0}!": "Полномочия роли пользователя Администратор будут возвращаться в стандартное состояние при каждом обновлении {{0}}!",
+    "Upon every update of {0}, the permissions for both the Administrator and Viewer user roles will automatically revert to their default settings.": "Полномочия роли пользователя Администратор будут возвращаться в стандартное состояние при каждом обновлении {{systemname}}!",
     "Update user role": "Обновить роль пользователя",
     "Add local": "Добавить местный",
     "Create new local user": "Создать нового локального пользователя",
