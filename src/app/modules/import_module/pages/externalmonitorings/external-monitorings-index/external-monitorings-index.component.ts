@@ -5,7 +5,8 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent, DropdownDividerDirective,
+    ContainerComponent,
+    DropdownDividerDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -13,7 +14,8 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent, TableDirective
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -49,6 +51,7 @@ import {
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-external-monitorings-index',
@@ -98,7 +101,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
     templateUrl: './external-monitorings-index.component.html',
     styleUrl: './external-monitorings-index.component.css'
 })
-export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy {
+export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: ExternalMonitoringsIndexParams = getDefaultExternalMonitoringsIndexParams();
