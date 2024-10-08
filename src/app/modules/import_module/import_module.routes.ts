@@ -27,5 +27,11 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/ExternalMonitorings/index',
     loadComponent: () => import('./pages/externalmonitorings/external-monitorings-index/external-monitorings-index.component').then(m => m.ExternalMonitoringsIndexComponent)
+}, {
+    path: 'import_module/ExternalMonitorings/add',
+    loadComponent: () => import('./pages/externalmonitorings/external-monitorings-add/external-monitorings-add.component').then(m => m.ExternalMonitoringsAddComponent)
+}, {
+    path: 'import_module/ExternalMonitorings/edit/:id',
+    loadComponent: () => import('./pages/externalmonitorings/external-monitorings-edit/external-monitorings-edit.component').then(m => m.ExternalMonitoringsEditComponent)
 }
 ];
