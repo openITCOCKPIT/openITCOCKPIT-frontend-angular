@@ -513,6 +513,9 @@ const coreRoutes: Routes = [{
     path: 'automaps/copy/:ids',
     loadComponent: () => import('./pages/automaps/automaps-copy/automaps-copy.component').then(m => m.AutomapsCopyComponent)
 }, {
+    path: 'currentstatereports/index',
+    loadComponent: () => import('./pages/currentstatereports/currentstatereports-index/currentstatereports-index.component').then(m => m.CurrentstatereportsIndexComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

@@ -1,0 +1,13 @@
+<div class="progress progress-md bg-primary position-relative mt-1">
+    <div
+        [style.width]="percentage + '%'"
+        style="position: unset;"
+        class="progress-bar"
+        [ngClass]="[backgroundColorClass]"
+        [title]="label">
+        <span
+            class="justify-content-center d-flex position-absolute w-100 ellipsis">
+            {{ label }}
+        </span>
+    </div>
+</div>
