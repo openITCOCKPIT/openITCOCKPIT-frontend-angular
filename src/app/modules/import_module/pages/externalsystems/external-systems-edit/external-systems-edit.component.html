@@ -29,7 +29,12 @@
         <form cForm (ngSubmit)="submit()" autocomplete="off">
             <c-card class="mb-3" *ngIf="post">
                 <c-card-header>
-                    <h5 cCardTitle>{{ t('Update external system') }}</h5>
+                    <h5 cCardTitle>
+                        {{ t('Update external system') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['import_module', 'ExternalSystems', 'index']" cButton class="ripple"
