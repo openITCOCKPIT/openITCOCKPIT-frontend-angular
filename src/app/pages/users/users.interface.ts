@@ -333,6 +333,8 @@ export interface LoginGetRoot {
     isSsoEnabled: boolean
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
+    customLoginBackgroundHtml: string
+    isCustomLoginBackground: boolean
 }
 
 export interface LoginImage {

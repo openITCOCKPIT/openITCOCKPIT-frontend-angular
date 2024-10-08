@@ -128,6 +128,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     };
 
     protected images: LoginImage[] = [];
+    protected customLoginBackgroundHtml: string ='';
+    protected isCustomLoginBackground: boolean = false;
     private readonly NotyService: NotyService = inject(NotyService);
     private _csrfToken: string = '';
 
@@ -147,6 +149,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.forceRedirectSsousersToLoginScreen = data.forceRedirectSsousersToLoginScreen;
             this.hasValidSslCertificate = data.hasValidSslCertificate;
             this.logoUrl = data.logoUrl;
+            this.customLoginBackgroundHtml = data.customLoginBackgroundHtml;
+            this.isCustomLoginBackground = data.isCustomLoginBackground;
 
             switch (data.images.particles) {
                 case 'none':
@@ -201,7 +205,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected description: string = 'Lorem ipsum dolor sit amet';
 
     getBackgroundUrl(image: string): string {
-        return `url('/img/login/${image}')`;
+        return `url('${image}')`;
     }
     particlesLoaded(container: Container): void {
     }

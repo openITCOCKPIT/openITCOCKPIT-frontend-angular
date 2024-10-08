@@ -1,10 +1,17 @@
 <ng-container *transloco="let t" class="peers">
     <!-- IMAGES -->
-    <div class="login-screen">
-        <figure *ngFor="let image of images" [ngStyle]="{'background-image': getBackgroundUrl(image.image)}">
-            <figcaption>{{ image.credit }} {{ description }}</figcaption>
-        </figure>
-    </div>
+    <ng-container *ngIf="! isCustomLoginBackground">
+        <div class="login-screen">
+            <figure *ngFor="let image of images"
+                    [ngStyle]="{'background-image': getBackgroundUrl('/img/login/' + image.image)}">
+                <figcaption>{{ image.credit }} {{ description }}</figcaption>
+            </figure>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="isCustomLoginBackground">
+        <div class="login-screen" [ngStyle]="{'background-image': getBackgroundUrl(customLoginBackgroundHtml	)}">
+        </div>
+    </ng-container>
     <!-- PRTCLS -->
     <ngx-particles
             id="prtcls"
