@@ -20,7 +20,8 @@ import {
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
-    InputGroupTextDirective, ModalService,
+    InputGroupTextDirective,
+    ModalService,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -62,6 +63,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ResetPasswordModalComponent } from '../../../components/reset-password-modal/reset-password-modal.component';
 import { IndexPage } from '../../../pages.interface';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-users-index',
@@ -112,7 +114,8 @@ import { IndexPage } from '../../../pages.interface';
         FormErrorDirective,
         MultiSelectComponent,
         BadgeComponent,
-        ResetPasswordModalComponent
+        ResetPasswordModalComponent,
+        BadgeOutlineComponent
     ],
     templateUrl: './users-index.component.html',
     styleUrl: './users-index.component.css',
@@ -128,9 +131,14 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     protected params: UsersIndexParams = getDefaultUsersIndexParams();
     protected selectedItems: DeleteAllItem[] = [];
-    protected result: UsersIndexRoot = {all_users: [], _csrfToken: '', myUserId: 0, isLdapAuth: false} as UsersIndexRoot;
+    protected result: UsersIndexRoot = {
+        all_users: [],
+        _csrfToken: '',
+        myUserId: 0,
+        isLdapAuth: false
+    } as UsersIndexRoot;
     protected hideFilter: boolean = true;
-    protected usergroups : SelectKeyValue[] = [];
+    protected usergroups: SelectKeyValue[] = [];
     protected resetPasswordUser: User = {} as User;
 
     public loadUsers() {
@@ -140,6 +148,17 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             .subscribe((result: UsersIndexRoot) => {
                 this.result = result;
             }));
+    }
+
+
+    /**
+     * Existence is pain. ¯\_(ツ)_/¯
+     * Forces the given string to type-match the enumeration for <oitc-badge-outline 's color attribute.
+     * @param color
+     * @protected
+     */
+    protected toColor(color: string): ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark') {
+        return color as ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark');
     }
 
     public ngOnInit() {
@@ -175,6 +194,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params.scroll = change.scroll;
         this.loadUsers();
     }
+
     public resetFilter() {
         this.params = getDefaultUsersIndexParams();
         this.loadUsers();
@@ -188,6 +208,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.loadUsers();
         }
     }
+
     // Open the Delete All Modal
 
     public toggleDeleteAllModal(user?: User) {

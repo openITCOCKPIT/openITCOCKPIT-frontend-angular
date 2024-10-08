@@ -239,18 +239,18 @@
                             {{ user.company }}
                         </td>
                         <td>
-                            <button *ngIf="user.is_active" cButton size="xs" color="success" class="btnNoHover" variant="outline">
-                                {{t('Active')}}
-                            </button>
-                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" class="btnNoHover" variant="outline">
-                                {{t('Disabled')}}
-                            </button>
+                            <oitc-badge-outline *ngIf="user.is_active" color="success">
+                                {{ t('Active') }}
+                            </oitc-badge-outline>
+                            <oitc-badge-outline *ngIf="! user.is_active" color="danger">
+                                {{ t('Disabled') }}
+                            </oitc-badge-outline>
                         </td>
                         <td>
-
-                            <button cButton size="xs" class="btnNoHover {{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}" color="{{ user.UserTypes[0].color }}" variant="outline">
+                            <oitc-badge-outline class="{{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}"
+                                                [color]="toColor(user.UserTypes[0].color)">
                                 {{ user.UserTypes[0].title }}
-                            </button>
+                            </oitc-badge-outline>
                         </td>
                         <td>
                             {{ user.usergroup.name }}
@@ -274,7 +274,7 @@
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'users.edit'"
                                                              (click)="resetPasswordModal(user)"
-                                *ngIf="!user.samaccountname && user.allow_edit">
+                                                             *ngIf="!user.samaccountname && user.allow_edit">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
@@ -339,4 +339,5 @@
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
-<oitc-reset-password-modal (completed)="onMassActionComplete($event)" [user]="resetPasswordUser"></oitc-reset-password-modal>
+<oitc-reset-password-modal (completed)="onMassActionComplete($event)"
+                           [user]="resetPasswordUser"></oitc-reset-password-modal>

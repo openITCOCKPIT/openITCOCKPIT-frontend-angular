@@ -149,6 +149,7 @@ export interface CreateUser {
     }
     usergroup_id: number
 }
+
 export interface CreateLdapUser extends CreateUser {
     ldap_dn: string
     samaccountname: string
@@ -174,7 +175,7 @@ export interface EditUser extends CreateUser {
 
 export interface UserType {
     title: string
-    color: string
+    color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
     class: string
 }
 
@@ -202,9 +203,10 @@ export interface Apikey {
 // LoadContainerRoles
 export interface LoadContainerRolesRequest {
     angular: boolean
-    'filter[Usercontainerroles.name]' : string
+    'filter[Usercontainerroles.name]': string
     selected: number[]
 }
+
 export interface LoadContainerRolesRoot {
     usercontainerroles: SelectKeyValue[]
     _csrfToken: string
@@ -221,6 +223,7 @@ export interface LoadContainerPermissionsRequest {
     angular: boolean
     'usercontainerRoleIds[]': number[]
 }
+
 export interface LoadContainerPermissionsRoot {
     userContainerRoleContainerPermissions: UserContainerRoleContainerPermissions
     _csrfToken: string
