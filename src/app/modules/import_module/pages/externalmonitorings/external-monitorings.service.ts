@@ -34,13 +34,13 @@ export class ExternalMonitoringsService {
 
     public createExternalMonitoring(externalMonitoring: ExternalMonitoringPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<ExternalMonitoringPost>(`${proxyPath}/import_module/external_monitorings/add.json?angular=true`, externalMonitoring)
+        return this.http.post<any>(`${proxyPath}/import_module/external_monitorings/add.json?angular=true`, externalMonitoring)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.externalMonitoring as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

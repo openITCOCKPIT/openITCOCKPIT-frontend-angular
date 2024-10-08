@@ -237,13 +237,13 @@ export class ExternalSystemsService {
      **********************/
     public createExternalSystem(externalSystem: ExternalSystemPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<ExternalSystemPost>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
+        return this.http.post<any>(`${proxyPath}/import_module/external_systems/add.json?angular=true`, externalSystem)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.externalSystem as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

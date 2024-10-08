@@ -207,7 +207,6 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    this.notyService.genericSuccess(msg, title);
                     this.notyService.scrollContentDivToTop();
                     this.HistoryService.navigateWithFallback(['/import_module/ExternalMonitorings/index']);
                     return;
