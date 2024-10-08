@@ -150,17 +150,6 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             }));
     }
 
-
-    /**
-     * Existence is pain. ¯\_(ツ)_/¯
-     * Forces the given string to type-match the enumeration for <oitc-badge-outline 's color attribute.
-     * @param color
-     * @protected
-     */
-    protected toColor(color: string): ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark') {
-        return color as ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark');
-    }
-
     public ngOnInit() {
         this.loadUsergroups();
         this.loadUsers();

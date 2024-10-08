@@ -175,7 +175,7 @@ export interface EditUser extends CreateUser {
 
 export interface UserType {
     title: string
-    color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+    color: ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark')
     class: string
 }
 
