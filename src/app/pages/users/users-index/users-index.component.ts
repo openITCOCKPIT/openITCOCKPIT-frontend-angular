@@ -61,6 +61,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ResetPasswordModalComponent } from '../../../components/reset-password-modal/reset-password-modal.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-users-index',
@@ -119,7 +120,7 @@ import { ResetPasswordModalComponent } from '../../../components/reset-password-
         {provide: DELETE_SERVICE_TOKEN, useClass: UsersService} // Inject the ServicegroupsService into the DeleteAllModalComponent
     ]
 })
-export class UsersIndexComponent implements OnInit, OnDestroy {
+export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
@@ -151,7 +152,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
     }
 
     // Show or hide the filter
-    protected toggleFilter() {
+    public toggleFilter() {
         this.hideFilter = !this.hideFilter;
     }
 
@@ -163,7 +164,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
     }
 
     // Callback when a filter has changed
-    protected onFilterChange(event: any) {
+    public onFilterChange(event: any) {
         this.params.page = 1;
         this.loadUsers();
     }
@@ -174,7 +175,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy {
         this.params.scroll = change.scroll;
         this.loadUsers();
     }
-    protected resetFilter() {
+    public resetFilter() {
         this.params = getDefaultUsersIndexParams();
         this.loadUsers();
     }
