@@ -20,6 +20,19 @@ export interface CurrentStateReportsHtmlParams {
     }
 }
 
+export interface CurrentStateReportsPdfParams {
+    angular: true,
+    'data[current_state][ok]': boolean,
+    'data[current_state][warning]': boolean,
+    'data[current_state][critical]': boolean,
+    'data[current_state][unknown]': boolean,
+    'data[services][]': number[],
+    'data[Servicestatus][hasBeenAcknowledged]'?: boolean | string,
+    'data[Servicestatus][inDowntime]'?: boolean | string,
+    'data[Servicestatus][passive]': boolean | string,
+    'data[Servicestatus][current_state][]': number[]
+}
+
 export interface CurrentStateReportResponseWrapper {
     success: boolean,
     data: GenericValidationError | CurrentStateReportHtmlResponse

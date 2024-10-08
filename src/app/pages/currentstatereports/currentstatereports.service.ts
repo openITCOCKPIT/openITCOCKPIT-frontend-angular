@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GenericValidationError } from '../../generic-responses';
+import { GenericFilenameResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import {
     CurrentStateReportHtmlResponse,
     CurrentStateReportResponseWrapper,
-    CurrentStateReportsHtmlParams
+    CurrentStateReportsHtmlParams,
+    CurrentStateReportsPdfParams
 } from './currentstatereports.interface';
 
 @Injectable({
@@ -41,5 +42,39 @@ export class CurrentstatereportsService {
                     });
                 })
             );
+    }
+
+    // This API Call will only validate the form data and return a success or a validation error
+    // It will not create the report
+    public validateReportFormForPdf(data: CurrentStateReportsPdfParams): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/currentstatereports/createPdfReport.json`, {
+            params: data as {}
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericFilenameResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public generateReportPdf(params: CurrentStateReportsPdfParams): Observable<Blob> {
+        const proxyPath = this.proxyPath;
+
+        return this.http.get(`${proxyPath}/currentstatereports/createPdfReport.pdf`, {
+            params: params as {},
+            responseType: 'blob'
+        });
     }
 }

@@ -184,7 +184,7 @@
         </c-card>
 
         <!-- HTML Report -->
-        <c-card class="mb-3" *ngIf="report">
+        <c-card class="mb-3" *ngIf="report && report.all_services">
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Current state report') }}

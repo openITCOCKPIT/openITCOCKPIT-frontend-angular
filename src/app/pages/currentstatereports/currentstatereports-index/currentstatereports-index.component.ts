@@ -48,6 +48,7 @@ import {
     CurrentStateReportHtmlResponse,
     CurrentStateReportPerfdataArrayValue,
     CurrentStateReportsHtmlParams,
+    CurrentStateReportsPdfParams,
     ReportFormat
 } from '../currentstatereports.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -64,7 +65,7 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import {
     CurrentstatereportPerfdataGaugesComponent
 } from './currentstatereport-perfdata-gauges/currentstatereport-perfdata-gauges.component';
-
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'oitc-currentstatereports-index',
@@ -207,7 +208,70 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
         this.isGeneratingReport = true;
 
         if (this.selectedFormat === 'pdf') {
-            //todo
+            // Generate PDF report
+
+            let params: CurrentStateReportsPdfParams = {
+                angular: true,
+                'data[current_state][ok]': this.currentStateFilter.ok,
+                'data[current_state][warning]': this.currentStateFilter.warning,
+                'data[current_state][critical]': this.currentStateFilter.critical,
+                'data[current_state][unknown]': this.currentStateFilter.unknown,
+                'data[services][]': this.selectedServices,
+                'data[Servicestatus][current_state][]': [],
+                'data[Servicestatus][hasBeenAcknowledged]': '',
+                'data[Servicestatus][inDowntime]': '',
+                'data[Servicestatus][passive]': this.checkTypeFilter.passive ? false : ''
+            }
+
+            if (this.currentStateFilter.ok) {
+                params['data[Servicestatus][current_state][]'].push(0);
+            }
+            if (this.currentStateFilter.warning) {
+                params['data[Servicestatus][current_state][]'].push(1);
+            }
+            if (this.currentStateFilter.critical) {
+                params['data[Servicestatus][current_state][]'].push(2);
+            }
+            if (this.currentStateFilter.unknown) {
+                params['data[Servicestatus][current_state][]'].push(3);
+            }
+
+            if (this.acknowledgementsFilter.acknowledged !== this.acknowledgementsFilter.not_acknowledged) {
+                params['data[Servicestatus][hasBeenAcknowledged]'] = this.acknowledgementsFilter.acknowledged === true;
+            }
+
+            if (this.downtimeFilter.in_downtime !== this.downtimeFilter.not_in_downtime) {
+                params['data[Servicestatus][inDowntime]'] = this.downtimeFilter.in_downtime === true;
+            }
+
+            this.subscriptions.add(this.CurrentstatereportsService.validateReportFormForPdf(params)
+                .subscribe((result) => {
+                    if (result.success) {
+                        // Success - Form data is valid - now we can generate the report
+                        const filename = result.data.filename;
+                        this.subscriptions.add(this.CurrentstatereportsService.generateReportPdf(params).subscribe({
+                            next: (data: Blob) => {
+                                this.isGeneratingReport = false;
+                                const blob = new Blob([data], {type: 'application/pdf'});
+
+                                // Open save as dialog in all browsers
+                                saveAs(blob, filename);
+                            },
+                            error: (data: any) => {
+                                this.notyService.genericError(
+                                    this.TranslocoService.translate('An error occured while generating the report')
+                                );
+                            }
+                        }));
+                    } else {
+                        // Error - dispaly form validation errors
+                        this.isGeneratingReport = false;
+                        this.notyService.genericError();
+                        this.errors = result.data as GenericValidationError;
+                    }
+                })
+            );
+
         } else {
             // Generate HTML report
 
