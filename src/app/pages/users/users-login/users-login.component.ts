@@ -204,7 +204,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         return `url('/img/login/${image}')`;
     }
     particlesLoaded(container: Container): void {
-        console.log(container);
     }
 
     private readonly AuthService: AuthService = inject(AuthService);
@@ -218,10 +217,9 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         //CakePHPs FormAuthenticator is able to parse the POST data
         //AngularJS $httpParamSerializerJQLike is going to encode the data for us...
 
-        this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe(data => {
+        this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe((data: any) => {
 
-            // FERDSCH:
-            if (data) {
+            if (data.success) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
                 window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
@@ -233,20 +231,17 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.disableLogin = false;
 
             if (data.hasOwnProperty('errors')) {
-                let errors: {} = data as unknown as object;
-                /*
-                for (var key in errors) {
+                let errors: {[key:string]: string[]} = data.errors as unknown as  {[key:string]: string[]};
+                for (let key in errors) {
                     if (typeof errors[key] === "string") {
-                        this.NotyService.genericError(errors[key]);
+                        this.NotyService.genericError(errors[key] as unknown as string);
                         return;
                     }
-                    for (var index in errors[key]) {
+                    for (let index in errors[key]) {
                         this.NotyService.genericError(errors[key][index]);
                     }
                 }
-                 */
             }
-            this.NotyService.genericError('Unknown error');
 
             this.disableLogin = false;
             this.hasValidSslCertificate = false;
@@ -273,7 +268,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
             this.NotyService.genericSuccess('Login successful');
 
-            console.log(this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/'));
             window.location.href = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
         }
 

@@ -1,8 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap, throwError } from "rxjs";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
+import { LoginResponse } from './auth.interface';
+import { GenericValidationError } from '../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -25,17 +27,18 @@ export class AuthService {
         this.document.location = '/users/logout';
     }
 
-    public login(email: string, password: string, rememberMe = true): Observable<boolean> {
+    public login(email: string, password: string, rememberMe = true): Observable<LoginResponse> {
         const proxyPath = this.proxyPath;
+
         return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json?angular=true`).pipe(
             switchMap(data => {
-
                 const csrfToken = data['_csrfToken'];
                 const searchParams = new URLSearchParams();
                 searchParams.set('email', email);
                 searchParams.set('password', password);
                 searchParams.set('_csrfToken', csrfToken);
                 searchParams.set('remember_me', rememberMe ? '1' : '0');
+/*
 
                 return this.http.post(`${proxyPath}/users/login?angular=true`, searchParams.toString(), {
                     responseType: 'text',
@@ -52,9 +55,39 @@ export class AuthService {
                     }),
                     map((response) => !!response),
                 );
+
+ */
+                return this.http.post<LoginResponse>(`${proxyPath}/users/login?angular=true`, searchParams.toString(), {
+                    responseType: 'json', // Ensure responseType is set to json
+                    withCredentials: true,
+                    headers: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    }
+                }).pipe(
+                    tap((response) => {
+                        // Optionally handle successful login state here
+                        this.authenticated$$.next(true);
+                    }),
+                    catchError(error => {
+                        console.error(error);
+                        const err = error.error.errors as GenericValidationError;
+                        return of({
+                            success: false,
+                            errors: err
+                        } as unknown as LoginResponse);
+                    })
+                );
             }),
-            tap((loggedIn) => this.authenticated$$.next(loggedIn)),
-        )
+            catchError(error => {
+                // Handle error from the initial GET request or the POST request
+                console.error(error);
+                const err = error.error.errors as GenericValidationError;
+                return of({
+                    success: false,
+                    errors: err
+                } as unknown as LoginResponse);
+            })
+        );
     }
 
     public logout(): void {
