@@ -223,6 +223,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe((data: any) => {
 
+            console.warn(data);
             if (data.success) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
