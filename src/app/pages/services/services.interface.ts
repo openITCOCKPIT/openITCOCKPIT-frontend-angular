@@ -581,7 +581,7 @@ export interface ServiceCopyPost {
  **********************/
 export interface ServicesLoadServicesByStringParams {
     'angular': true,
-    'filter[Services.name]': string,
+    'filter[servicename]': string,
     'filter[Services.disabled]'?: number,
     'selected[]': number[],
     'includeDisabled': boolean

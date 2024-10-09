@@ -20,11 +20,25 @@
 @include generate-color-classes($blues);
 @include generate-color-classes($indigos);
 @include generate-color-classes($purples);
+@include generate-color-classes($pinks);
 @include generate-color-classes($reds);
 @include generate-color-classes($oranges);
 @include generate-color-classes($yellows);
 @include generate-color-classes($greens);
-@include generate-color-classes($blues);
 @include generate-color-classes($teals);
 @include generate-color-classes($cyans);
+@include generate-color-classes($blues);
+
+$oitcgrays: (
+    "gray-100": $gray-100,
+    "gray-200": $gray-200,
+    "gray-300": $gray-300,
+    "gray-400": $gray-400,
+    "gray-500": $gray-500,
+    "gray-600": $gray-600,
+    "gray-700": $gray-700,
+    "gray-800": $gray-800,
+    "gray-900": $gray-900
+) !default;
+@include generate-color-classes($oitcgrays);
 @include generate-color-classes($primaries);

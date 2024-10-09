@@ -5,6 +5,11 @@
     height: 20px;
 }
 
+.radio-lg {
+    width: 20px;
+    height: 20px;
+}
+
 @each $color-name, $color-value in $theme-colors {
     .checkbox-#{$color-name}.form-check-input:checked {
         background-color: $color-value;
