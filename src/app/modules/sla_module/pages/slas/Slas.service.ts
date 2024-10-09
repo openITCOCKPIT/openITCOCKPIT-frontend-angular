@@ -10,6 +10,10 @@ import {
     LoadUsersRoot,
     SlaPost,
     SlasEditRoot,
+    SlasGenerateDownloadParams,
+    SlasGenerateDownloadResponse,
+    SlasGeneratePost,
+    SlasGenerateRoot,
     SlasHostsParams,
     SlasHostsRoot,
     SlasIndexParams,
@@ -130,6 +134,58 @@ export class SlasService {
             params: params as {}
         }).pipe(
             map(data => {
+                return data;
+            })
+        )
+    }
+
+    public generateReportPost(sla: SlasGeneratePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/sla_module/slas/generate.json`, sla)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public generateReportPdf(params: SlasGenerateDownloadParams): Observable<SlasGenerateDownloadResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasGenerateDownloadResponse>(`${proxyPath}/sla_module/slas/generate.pdf`, params as {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public generateReportZip(params: SlasGenerateDownloadParams): Observable<SlasGenerateDownloadResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasGenerateDownloadResponse>(`${proxyPath}/sla_module/slas/generate.zip`, params as {}).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadGenerateReport(): Observable<SlasGenerateRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<SlasGenerateRoot>(`${proxyPath}/sla_module/slas/generate.json`, {
+            params: {
+                'angular': true
+            }
+        }).pipe(
+            map((data: SlasGenerateRoot) => {
                 return data;
             })
         )
