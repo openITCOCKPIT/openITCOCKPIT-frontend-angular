@@ -214,7 +214,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                                 responseType: 'blob'
                             }).subscribe((res) => {
                                 this.isGenerating = false;
-                                let blob = new Blob([res.data], {type: "application/pdf"});
+                                let blob = new Blob([res], {type: "application/pdf"});
                                 saveAs(blob, POSTresult.data.filename);
                             }))
                         }
@@ -225,7 +225,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                                 responseType: 'blob'
                             }).subscribe((res) => {
                                 this.isGenerating = false;
-                                let blob = new Blob([res.data], {type: "application/zip"});
+                                let blob = new Blob([res], {type: "application/zip"});
                                 saveAs(blob, POSTresult.data.filename);
                             }))
                         }

@@ -255,11 +255,6 @@ export interface SlasGenerateDownloadParams {
     responseType: 'blob'
 }
 
-export interface SlasGenerateDownloadResponse {
-    data: Blob
-}
-
-
 export interface SlasGeneratePostResponse {
     success: boolean
     sla: Sla

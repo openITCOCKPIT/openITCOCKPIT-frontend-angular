@@ -11,7 +11,6 @@ import {
     SlaPost,
     SlasEditRoot,
     SlasGenerateDownloadParams,
-    SlasGenerateDownloadResponse,
     SlasGeneratePost,
     SlasGenerateRoot,
     SlasHostsParams,
@@ -160,18 +159,18 @@ export class SlasService {
             );
     }
 
-    public generateReportPdf(params: SlasGenerateDownloadParams): Observable<SlasGenerateDownloadResponse> {
+    public generateReportPdf(params: SlasGenerateDownloadParams): Observable<Blob> {
         const proxyPath = this.proxyPath;
-        return this.http.get<SlasGenerateDownloadResponse>(`${proxyPath}/sla_module/slas/generate.pdf`, params as {}).pipe(
+        return this.http.get<Blob>(`${proxyPath}/sla_module/slas/generate.pdf`, params as {}).pipe(
             map(data => {
                 return data;
             })
         )
     }
 
-    public generateReportZip(params: SlasGenerateDownloadParams): Observable<SlasGenerateDownloadResponse> {
+    public generateReportZip(params: SlasGenerateDownloadParams): Observable<Blob> {
         const proxyPath = this.proxyPath;
-        return this.http.get<SlasGenerateDownloadResponse>(`${proxyPath}/sla_module/slas/generate.zip`, params as {}).pipe(
+        return this.http.get<Blob>(`${proxyPath}/sla_module/slas/generate.zip`, params as {}).pipe(
             map(data => {
                 return data;
             })
