@@ -1196,7 +1196,8 @@
                 <oitc-no-records
                     *ngIf="hosts && hosts.all_hosts.length === 0"></oitc-no-records>
                 <ng-container *ngIf="hosts && hosts.all_hosts">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-select-all
@@ -1300,7 +1301,8 @@
                     </c-container>
                 </ng-container>
 
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll

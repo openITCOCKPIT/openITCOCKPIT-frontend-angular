@@ -85,7 +85,7 @@
             </c-card-header>
             <c-card-body>
 
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -181,7 +181,8 @@
                 <oitc-no-records
                     *ngIf="deletedHosts && deletedHosts.deletedHosts.length === 0"></oitc-no-records>
 
-                <c-container fluid class="mt-3">
+                <c-container
+                    [fluid]="true" class="mt-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll

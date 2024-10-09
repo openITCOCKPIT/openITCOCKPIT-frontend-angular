@@ -40,7 +40,7 @@
         </c-card-header>
         <c-card-body>
             <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <c-row>
                     <c-col>
                         <h6 class="pb-2 mb-3 border-bottom">
@@ -125,7 +125,8 @@
                     </c-row>
                 </form>
             </c-container>
-            <c-container fluid>
+            <c-container
+                [fluid]="true">
                 <c-row class="flex-row-reverse">
                     @if (isLoading) {
                         <c-col md="12" lg="3" xs="12">

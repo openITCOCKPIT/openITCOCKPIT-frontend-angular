@@ -337,480 +337,480 @@
                         <c-card-body>
                             <form cForm>
 
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        </span>
-                                        <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="filter['Hosts.name']"
-                                               [placeholder]="'Filter by host name' | transloco"
-                                               cFormControl
-                                               name="Hosts.name"
-                                               oitcDebounce
-                                               type="text"
-                                        />
-                                        <span cInputGroupText>
-                                            <label>
-                                                {{ t('Enable RegEx') }}
-                                                <input type="checkbox"
-                                                       name="filter.Host.name_regex"
-                                                       oitcDebounce
-                                                       (debouncedValue)="onFilterChange($event)"
-                                                       [(ngModel)]="filter['Hosts.name_regex']"
-                                                />
-                                                <oitc-regex-helper-tooltip/>
-                                            </label>
-                                        </span>
-                                    </c-input-group>
-                                </c-col>
+                                <c-row class="mb-2">
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            </span>
+                                            <input (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.name']"
+                                                   [placeholder]="'Filter by host name' | transloco"
+                                                   cFormControl
+                                                   name="Hosts.name"
+                                                   oitcDebounce
+                                                   type="text"
+                                            />
+                                            <span cInputGroupText>
+                                                <label>
+                                                    {{ t('Enable RegEx') }}
+                                                    <input type="checkbox"
+                                                           name="filter.Host.name_regex"
+                                                           oitcDebounce
+                                                           (debouncedValue)="onFilterChange($event)"
+                                                           [(ngModel)]="filter['Hosts.name_regex']"
+                                                    />
+                                                    <oitc-regex-helper-tooltip/>
+                                                </label>
+                                            </span>
+                                        </c-input-group>
+                                    </c-col>
 
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="filter['hostdescription']"
-                                               [placeholder]="'Filter by host description' | transloco"
-                                               cFormControl
-                                               name="Hosts.hostdescription"
-                                               oitcDebounce
-                                               type="text"
-                                        />
-                                    </c-input-group>
-                                </c-col>
-                            </c-row>
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <input (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['hostdescription']"
+                                                   [placeholder]="'Filter by host description' | transloco"
+                                                   cFormControl
+                                                   name="Hosts.hostdescription"
+                                                   oitcDebounce
+                                                   type="text"
+                                            />
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
 
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="filter['Hosts.address']"
-                                               [placeholder]="'Filter by IP address' | transloco"
-                                               cFormControl
-                                               name="Hosts.address"
-                                               oitcDebounce
-                                               type="text"
-                                        />
-                                        <span cInputGroupText>
-                                            <label>
-                                                {{ t('Enable RegEx') }}
-                                                <input type="checkbox"
-                                                       name="filter.Host.address_regex"
-                                                       oitcDebounce
-                                                       (debouncedValue)="onFilterChange($event)"
-                                                       [(ngModel)]="filter['Hosts.address_regex']"
-                                                />
-                                                <oitc-regex-helper-tooltip/>
-                                            </label>
-                                        </span>
-                                    </c-input-group>
-                                </c-col>
+                                <c-row class="mb-2">
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <input (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.address']"
+                                                   [placeholder]="'Filter by IP address' | transloco"
+                                                   cFormControl
+                                                   name="Hosts.address"
+                                                   oitcDebounce
+                                                   type="text"
+                                            />
+                                            <span cInputGroupText>
+                                                <label>
+                                                    {{ t('Enable RegEx') }}
+                                                    <input type="checkbox"
+                                                           name="filter.Host.address_regex"
+                                                           oitcDebounce
+                                                           (debouncedValue)="onFilterChange($event)"
+                                                           [(ngModel)]="filter['Hosts.address_regex']"
+                                                    />
+                                                    <oitc-regex-helper-tooltip/>
+                                                </label>
+                                            </span>
+                                        </c-input-group>
+                                    </c-col>
 
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <input (debouncedValue)="onFilterChange($event)"
-                                               [(ngModel)]="filter['Hoststatus.output']"
-                                               [placeholder]="'Filter by output' | transloco"
-                                               cFormControl
-                                               name="Hosts.output"
-                                               oitcDebounce
-                                               type="text"
-                                        />
-                                    </c-input-group>
-                                </c-col>
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <input (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hoststatus.output']"
+                                                   [placeholder]="'Filter by output' | transloco"
+                                                   cFormControl
+                                                   name="Hosts.output"
+                                                   oitcDebounce
+                                                   type="text"
+                                            />
+                                        </c-input-group>
+                                    </c-col>
 
-                            </c-row>
+                                </c-row>
 
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <ng-select
-                                            id="HostKeywordsInput"
-                                            name="HostKeywordsInput"
-                                            [items]="[]"
-                                            [(ngModel)]="filter['Hosts.keywords']"
-                                            [addTag]="true"
-                                            [multiple]="true"
-                                            [selectOnTab]="true"
-                                            [placeholder]="t('Filter by tags')"
-                                            oitcDebounce
-                                            (debouncedValue)="onFilterChange($event)"
-                                            [isOpen]="false">
-                                        </ng-select>
-                                    </c-input-group>
-                                </c-col>
-
-                                <c-col [xs]="12" [lg]="6">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                        </span>
-                                        <ng-select
-                                            id="HostNotKeywordsInput"
-                                            name="HostNotKeywordsInput"
-                                            [items]="[]"
-                                            [(ngModel)]="filter['Hosts.not_keywords']"
-                                            [addTag]="true"
-                                            [multiple]="true"
-                                            [selectOnTab]="true"
-                                            [placeholder]="t('Filter by excluded tags')"
-                                            oitcDebounce
-                                            (debouncedValue)="onFilterChange($event)"
-                                            [isOpen]="false">
-                                        </ng-select>
-                                    </c-input-group>
-                                </c-col>
-                            </c-row>
-
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" [lg]="6" class="ui-fluid">
-                                    <c-input-group>
-                                        <span cInputGroupText>
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        </span>
-
-                                        <oitc-multi-select
-                                            name="hosttemplatetype_id"
-                                            id="hosttemplatetype_id"
-                                            optionValue="id"
-                                            optionLabel="name"
-                                            [(ngModel)]="filter['Hosts.host_type']"
-                                            [options]="hostTypes"
-                                            [debounce]="true"
-                                            [placeholder]="'Filter by host types' | transloco"
-                                            (onChange)="onFilterChange(null)">
-                                        </oitc-multi-select>
-                                    </c-input-group>
-                                </c-col>
-
-                            </c-row>
-
-                            <c-row class="mb-2">
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('Host status') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-success"
-                                                name="Hosts.currentStateUp"
-                                                id="Hosts.currentStateUp"
-                                                type="checkbox"
-                                                trueFalseValue
+                                <c-row class="mb-2">
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <ng-select
+                                                id="HostKeywordsInput"
+                                                name="HostKeywordsInput"
+                                                [items]="[]"
+                                                [(ngModel)]="filter['Hosts.keywords']"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="t('Filter by tags')"
                                                 oitcDebounce
-                                                [(ngModel)]="currentStateFilter.up"/>
-
-                                            <label cFormCheckLabel
-                                                   for="Hosts.currentStateUp">{{ t('Up') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
                                                 (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-danger"
-                                                name="Hosts.currentStateDown"
-                                                id="Hosts.currentStateDown"
-                                                type="checkbox"
-                                                trueFalseValue
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+
+                                    <c-col [xs]="12" [lg]="6">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <ng-select
+                                                id="HostNotKeywordsInput"
+                                                name="HostNotKeywordsInput"
+                                                [items]="[]"
+                                                [(ngModel)]="filter['Hosts.not_keywords']"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="t('Filter by excluded tags')"
                                                 oitcDebounce
-                                                [(ngModel)]="currentStateFilter.down"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.currentStateDown">{{ t('Down') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
                                                 (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-secondary"
-                                                name="Hosts.currentStateUnreachable"
-                                                id="Hosts.currentStateUnreachable"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="currentStateFilter.unreachable"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.currentStateUnreachable">{{ t('Unreachable') }}</label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
 
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('State Types') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.soft"
-                                                id="Hosts.soft"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="state_typesFilter.soft"/>
+                                <c-row class="mb-2">
+                                    <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            </span>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.soft">{{ t('Soft') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.hard"
-                                                id="Hosts.hard"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="state_typesFilter.hard"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.hard">{{ t('Hard') }}</label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                            <oitc-multi-select
+                                                name="hosttemplatetype_id"
+                                                id="hosttemplatetype_id"
+                                                optionValue="id"
+                                                optionLabel="name"
+                                                [(ngModel)]="filter['Hosts.host_type']"
+                                                [options]="hostTypes"
+                                                [debounce]="true"
+                                                [placeholder]="'Filter by host types' | transloco"
+                                                (onChange)="onFilterChange(null)">
+                                            </oitc-multi-select>
+                                        </c-input-group>
+                                    </c-col>
 
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('Acknowledgements') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.acknowledged"
-                                                id="Hosts.acknowledged"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="acknowledgementsFilter.acknowledged"/>
+                                </c-row>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.acknowledged">{{ t('Acknowledged') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.not_acknowledged"
-                                                id="Hosts.not_acknowledged"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="acknowledgementsFilter.not_acknowledged"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.not_acknowledged">{{ t('Not acknowledged') }}</label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                <c-row class="mb-2">
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('Host status') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-success"
+                                                    name="Hosts.currentStateUp"
+                                                    id="Hosts.currentStateUp"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="currentStateFilter.up"/>
 
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('Downtimes') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.in_downtime"
-                                                id="Hosts.in_downtime"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="downtimeFilter.in_downtime"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.currentStateUp">{{ t('Up') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-danger"
+                                                    name="Hosts.currentStateDown"
+                                                    id="Hosts.currentStateDown"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="currentStateFilter.down"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.currentStateDown">{{ t('Down') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-secondary"
+                                                    name="Hosts.currentStateUnreachable"
+                                                    id="Hosts.currentStateUnreachable"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="currentStateFilter.unreachable"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.currentStateUnreachable">{{ t('Unreachable') }}</label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.in_downtime">{{ t('In downtime') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.not_in_downtime"
-                                                id="Hosts.not_in_downtime"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="downtimeFilter.not_in_downtime"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.not_in_downtime">{{ t('Not in downtime') }}</label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('State Types') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.soft"
+                                                    id="Hosts.soft"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="state_typesFilter.soft"/>
 
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('Notifications') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.noty_enabled"
-                                                id="Hosts.noty_enabled"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="notificationsFilter.enabled"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.soft">{{ t('Soft') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.hard"
+                                                    id="Hosts.hard"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="state_typesFilter.hard"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.hard">{{ t('Hard') }}</label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.noty_enabled">{{ t('Enabled') }}</label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.noty_not_enabled"
-                                                id="Hosts.noty_not_enabled"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="notificationsFilter.not_enabled"/>
-                                            <label cFormCheckLabel
-                                                   for="Hosts.noty_not_enabled">{{ t('Not enabled') }}</label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('Acknowledgements') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.acknowledged"
+                                                    id="Hosts.acknowledged"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="acknowledgementsFilter.acknowledged"/>
 
-                                <c-col [xs]="12" lg="2">
-                                    <fieldset>
-                                        <h5>
-                                            {{ t('Priority') }}
-                                        </h5>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.Priority_1"
-                                                id="Hosts.Priority_1"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['1']"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.acknowledged">{{ t('Acknowledged') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.not_acknowledged"
+                                                    id="Hosts.not_acknowledged"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="acknowledgementsFilter.not_acknowledged"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.not_acknowledged">{{ t('Not acknowledged') }}</label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.Priority_1" class="ok-soft">
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            </label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.Priority_2"
-                                                id="Hosts.Priority_2"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['2']"/>
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('Downtimes') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.in_downtime"
+                                                    id="Hosts.in_downtime"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="downtimeFilter.in_downtime"/>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.Priority_2" class="ok">
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            </label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.Priority_3"
-                                                id="Hosts.Priority_3"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['3']"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.in_downtime">{{ t('In downtime') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.not_in_downtime"
+                                                    id="Hosts.not_in_downtime"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="downtimeFilter.not_in_downtime"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.not_in_downtime">{{ t('Not in downtime') }}</label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.Priority_3" class="warning">
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            </label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.Priority_4"
-                                                id="Hosts.Priority_4"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['4']"/>
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('Notifications') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.noty_enabled"
+                                                    id="Hosts.noty_enabled"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="notificationsFilter.enabled"/>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.Priority_4" class="critical-soft">
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            </label>
-                                        </c-form-check>
-                                        <c-form-check>
-                                            <input
-                                                (debouncedValue)="onFilterChange($event)"
-                                                cFormCheckInput
-                                                class="checkbox-primary"
-                                                name="Hosts.Priority_5"
-                                                id="Hosts.Priority_5"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['5']"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.noty_enabled">{{ t('Enabled') }}</label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.noty_not_enabled"
+                                                    id="Hosts.noty_not_enabled"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="notificationsFilter.not_enabled"/>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.noty_not_enabled">{{ t('Not enabled') }}</label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
 
-                                            <label cFormCheckLabel
-                                                   for="Hosts.Priority_5" class="critical">
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            </label>
-                                        </c-form-check>
-                                    </fieldset>
-                                </c-col>
+                                    <c-col [xs]="12" lg="2">
+                                        <fieldset>
+                                            <h5>
+                                                {{ t('Priority') }}
+                                            </h5>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.Priority_1"
+                                                    id="Hosts.Priority_1"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="priorityFilter['1']"/>
 
-                            </c-row>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.Priority_1" class="ok-soft">
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.Priority_2"
+                                                    id="Hosts.Priority_2"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="priorityFilter['2']"/>
 
-                            <c-row class="mt-2">
-                                <c-col class="text-end">
-                                    <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                        {{ t('Reset filter') }}
-                                    </button>
-                                </c-col>
-                            </c-row>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.Priority_2" class="ok">
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.Priority_3"
+                                                    id="Hosts.Priority_3"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="priorityFilter['3']"/>
 
-                        </form>
+                                                <label cFormCheckLabel
+                                                       for="Hosts.Priority_3" class="warning">
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.Priority_4"
+                                                    id="Hosts.Priority_4"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="priorityFilter['4']"/>
+
+                                                <label cFormCheckLabel
+                                                       for="Hosts.Priority_4" class="critical-soft">
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input
+                                                    (debouncedValue)="onFilterChange($event)"
+                                                    cFormCheckInput
+                                                    class="checkbox-primary"
+                                                    name="Hosts.Priority_5"
+                                                    id="Hosts.Priority_5"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    oitcDebounce
+                                                    [(ngModel)]="priorityFilter['5']"/>
+
+                                                <label cFormCheckLabel
+                                                       for="Hosts.Priority_5" class="critical">
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
+
+                                </c-row>
+
+                                <c-row class="mt-2">
+                                    <c-col class="text-end">
+                                        <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                            {{ t('Reset filter') }}
+                                        </button>
+                                    </c-col>
+                                </c-row>
+
+                            </form>
                         </c-card-body>
                         <c-card-footer>
                             <c-row class="mt-2">
@@ -1393,7 +1393,7 @@
                         *ngIf="hosts && hosts.all_hosts.length === 0"></oitc-no-records>
                     <ng-container *ngIf="hosts && hosts.all_hosts">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
@@ -1497,7 +1497,8 @@
                         </c-container>
                     </ng-container>
 
-                    <c-container fluid>
+                    <c-container
+                        [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll

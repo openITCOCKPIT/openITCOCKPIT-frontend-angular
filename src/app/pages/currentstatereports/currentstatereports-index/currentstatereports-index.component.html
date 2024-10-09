@@ -200,7 +200,8 @@
                             class="mb-3">
                             <c-card-header>
                                 <!-- cCardTitle -->
-                                <c-container fluid class="p-0">
+                                <c-container
+                                    [fluid]="true" class="p-0">
                                     <c-row class="w-100 h4" [ngClass]="[reportService.Hoststatus.textClass]">
                                         <c-col [xs]="12" [lg]="9">
                                             <oitc-label-link [objectId]="reportService.Host.id"

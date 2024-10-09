@@ -442,7 +442,7 @@
                         *ngIf="services && services.all_services.length === 0"></oitc-no-records>
                     <ng-container *ngIf="services && services.all_services">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
@@ -474,7 +474,8 @@
                                             </button>
                                             <ul cDropdownMenu>
                                                 <li *oitcPermission="['servicegroups', 'add']">
-                                                    <a href="javascript:void(0);" cDropdownItem (click)="confirmAddServicesToServicegroup()">
+                                                    <a href="javascript:void(0);" cDropdownItem
+                                                       (click)="confirmAddServicesToServicegroup()">
                                                         <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                                         {{ t('Add to service group') }}
                                                     </a>
@@ -528,7 +529,8 @@
                         </c-container>
                     </ng-container>
 
-                    <c-container fluid>
+                    <c-container
+                        [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll
@@ -637,7 +639,7 @@
                         *ngIf="notMonitoredServices && notMonitoredServices.all_services.length === 0"></oitc-no-records>
                     <ng-container *ngIf="notMonitoredServices && notMonitoredServices.all_services">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
@@ -668,7 +670,8 @@
                         </c-container>
                     </ng-container>
 
-                    <c-container fluid>
+                    <c-container
+                        [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll
@@ -776,7 +779,7 @@
                         *ngIf="disabledServices && disabledServices.all_services.length === 0"></oitc-no-records>
                     <ng-container *ngIf="disabledServices && disabledServices.all_services">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
@@ -807,7 +810,8 @@
                         </c-container>
                     </ng-container>
 
-                    <c-container fluid>
+                    <c-container
+                        [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll
@@ -877,7 +881,8 @@
                     <oitc-no-records
                         *ngIf="deletedServices && deletedServices.all_services.length === 0"></oitc-no-records>
 
-                    <c-container fluid class="mt-3">
+                    <c-container
+                        [fluid]="true" class="mt-3">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll

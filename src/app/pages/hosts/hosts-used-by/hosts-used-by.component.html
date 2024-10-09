@@ -53,7 +53,8 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="objects">
                         <tbody>
                         <!-- Instant reports -->
