@@ -127,15 +127,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
 
     public isGeneratingReport: boolean = false;
     public services: SelectKeyValue[] = [];
-    public selectedServices: number[] = [
-        // todo remove
-        2003,
-        2004,
-        1969,
-        5,
-        143,
-        43
-    ];
+    public selectedServices: number[] = [];
     public errors: GenericValidationError | null = null;
     public selectedFormat: ReportFormat = 'html';
     public formats: SelectKeyValueString[] = [
