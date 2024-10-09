@@ -516,6 +516,18 @@ const coreRoutes: Routes = [{
     path: 'currentstatereports/index',
     loadComponent: () => import('./pages/currentstatereports/currentstatereports-index/currentstatereports-index.component').then(m => m.CurrentstatereportsIndexComponent)
 }, {
+    path: 'instantreports/index',
+    loadComponent: () => import('./pages/instantreports/instantreports-index/instantreports-index.component').then(m => m.InstantreportsIndexComponent)
+}, {
+    path: 'instantreports/add',
+    loadComponent: () => import('./pages/instantreports/instantreports-add/instantreports-add.component').then(m => m.InstantreportsAddComponent)
+}, {
+    path: 'instantreports/edit/:id',
+    loadComponent: () => import('./pages/instantreports/instantreports-edit/instantreports-edit.component').then(m => m.InstantreportsEditComponent)
+}, {
+    path: 'instantreports/generate',
+    loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
