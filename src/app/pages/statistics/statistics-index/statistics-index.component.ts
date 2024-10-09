@@ -1,10 +1,12 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
-import { JSONEditor, JSONEditorPropsOptional, Mode } from 'vanilla-jsoneditor'
+import { createJSONEditor, Mode } from 'vanilla-jsoneditor'
+
+
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -46,7 +48,10 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
     templateUrl: './statistics-index.component.html',
     styleUrl: './statistics-index.component.css'
 })
-export class StatisticsIndexComponent implements OnInit, OnDestroy {
+export class StatisticsIndexComponent implements OnInit, OnDestroy, AfterViewInit {
+
+    // Select jsoneditor div the Angular way
+    @ViewChild('jsoneditor') jsoneditor!: ElementRef;
 
     public currentSettings: StatisticsIndex | undefined;
 
@@ -55,21 +60,19 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy {
     private readonly document = inject(DOCUMENT);
     private readonly subscriptions: Subscription = new Subscription();
 
-    private jsonEditorProps: JSONEditorPropsOptional = {
-        mode: Mode.tree,
-        mainMenuBar: true,
-        readOnly: true,
-    };
-
     public ngOnInit(): void {
-        this.subscriptions.add(this.StatisticsService.getCurrentStatisticSettings().subscribe(settings => {
-            this.currentSettings = settings;
-            this.createEditor();
-        }));
+
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public ngAfterViewInit(): void {
+        this.subscriptions.add(this.StatisticsService.getCurrentStatisticSettings().subscribe(settings => {
+            this.currentSettings = settings;
+            this.createEditor();
+        }));
     }
 
     private createEditor() {
@@ -77,18 +80,18 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy {
             return;
         }
 
-        let options = this.jsonEditorProps as any;
-        options['content'] = {
-            json: this.currentSettings.statistics
-        };
-
-        let elm = this.document.getElementById('jsoneditor');
-        if (elm) {
-            const editor = new JSONEditor({
-                target: elm,
-                props: options
-            });
-        }
+        const editor = createJSONEditor({
+            target: this.jsoneditor.nativeElement,
+            props: {
+                mode: Mode.tree,
+                mainMenuBar: true,
+                readOnly: true,
+                content: {
+                    text: undefined,
+                    json: this.currentSettings.statistics
+                }
+            }
+        });
     }
 
     public saveSettings(value: Statistics): void {
