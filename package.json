@@ -64,7 +64,9 @@
         "vanilla-jsoneditor": "^0.23.2",
         "vis-network": "^9.1.9",
         "vis-timeline": "^7.7.3",
-        "zone.js": "~0.14.4"
+        "zone.js": "~0.14.4",
+        "file-saver": "^2.0.5",
+        "@types/file-saver": "^2.0.7"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^18.0.4",
