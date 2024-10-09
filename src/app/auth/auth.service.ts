@@ -28,46 +28,27 @@ export class AuthService {
     }
 
     public login(email: string, password: string, rememberMe = true): Observable<LoginResponse> {
+        const searchParams = new URLSearchParams();
+        searchParams.set('email', email);
+        searchParams.set('password', password);
+        searchParams.set('_csrfToken', this.csrfToken as string);
+        searchParams.set('remember_me', rememberMe ? '1' : '0');
+        searchParams.set('_method', 'POST');
 
-        return this.http.get<Record<string, string>>(`${this.proxyPath}/users/login.json?angular=true`).pipe(
-            switchMap(data => {
-                const csrfToken = data['_csrfToken'];
-                const searchParams = new URLSearchParams();
-                searchParams.set('email', email);
-                searchParams.set('password', password);
-                searchParams.set('_csrfToken', csrfToken);
-                searchParams.set('remember_me', rememberMe ? '1' : '0');
-                searchParams.set('_method', 'POST');
-
-                console.info(csrfToken);
-                console.info(this.csrfToken);
-
-                return this.http.post<LoginResponse>(`${this.proxyPath}/users/login`, searchParams.toString(), {
-                    withCredentials: true,
-                    headers: {
-                        'x-csrf-token': csrfToken,
-                        'content-type': 'application/x-www-form-urlencoded'
-                    }
-                }).pipe(
-                    tap((response) => {
-                        // Optionally handle successful login state here
-                        this.authenticated$$.next(true);
-                    }),
-                    catchError(error => {
-                        console.warn('ERR');
-                        const err = error.error.errors as GenericValidationError;
-                        return of({
-                            success: false,
-                            errors: err
-                        } as unknown as LoginResponse);
-                    })
-                );
+        return this.http.post<LoginResponse>(`${this.proxyPath}/users/login`, searchParams.toString(), {
+            withCredentials: true,
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            }
+        }).pipe(
+            tap((response) => {
+                // Optionally handle successful login state here
+                this.authenticated$$.next(true);
             }),
             catchError(error => {
-                // Handle error from the initial GET request or the POST request
                 const err = error.error.errors as GenericValidationError;
                 return of({
-                    success: false,
+                    success: error.status === 200,
                     errors: err
                 } as unknown as LoginResponse);
             })
