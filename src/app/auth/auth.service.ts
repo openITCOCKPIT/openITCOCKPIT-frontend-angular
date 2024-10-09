@@ -39,6 +39,9 @@ export class AuthService {
                 searchParams.set('remember_me', rememberMe ? '1' : '0');
                 searchParams.set('_method', 'POST');
 
+                console.info(csrfToken);
+                console.info(this.csrfToken);
+
                 return this.http.post<LoginResponse>(`${this.proxyPath}/users/login`, searchParams.toString(), {
                     withCredentials: true,
                     headers: {
@@ -51,6 +54,7 @@ export class AuthService {
                         this.authenticated$$.next(true);
                     }),
                     catchError(error => {
+                        console.warn('ERR');
                         const err = error.error.errors as GenericValidationError;
                         return of({
                             success: false,
