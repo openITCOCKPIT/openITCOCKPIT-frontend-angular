@@ -525,7 +525,7 @@ const coreRoutes: Routes = [{
     path: 'instantreports/edit/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-edit/instantreports-edit.component').then(m => m.InstantreportsEditComponent)
 }, {
-    path: 'instantreports/generate',
+    path: 'instantreports/generate/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
 }, {
     path: 'exports/index',
