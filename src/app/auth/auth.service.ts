@@ -39,7 +39,7 @@ export class AuthService {
                 searchParams.set('remember_me', rememberMe ? '1' : '0');
                 searchParams.set('_method', 'POST');
 
-                return this.http.post<LoginResponse>(`${this.proxyPath}/users/login`, searchParams.toString(), {
+                return this.http.post<LoginResponse>(`${this.proxyPath}/users/login.json?angular=true`, searchParams.toString(), {
                     withCredentials: true,
                     headers: {
                         'x-csrf-token': csrfToken,
