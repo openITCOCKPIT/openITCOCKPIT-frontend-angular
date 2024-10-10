@@ -152,7 +152,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         } as UsergroupsAddRoot;
     }
 
-    protected loadLdapGroups(search: string = ''): void {
+    protected loadLdapGroups = (search: string = '') => {
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
         }));
