@@ -296,7 +296,7 @@ export interface DateRange {
 
 export interface ReportHostParent {
     host: ReportHost
-    sla_log: SlaLog
+    sla_log: SlaLogHost
     services: ReportServiceParent[]
 }
 
@@ -306,15 +306,21 @@ export interface ReportHost {
     created: string
 }
 
-export interface SlaLog {
-    last_log_entry: any
+export interface SlaLogHost {
+    last_log_entry: LastLogEntryHost
+    outages: any[] | Outage[]
+    outages_in_downtime: any[]
+}
+
+export interface SlaLogService {
+    last_log_entry: LastLogEntryService
     outages: any[] | Outage[]
     outages_in_downtime: any[]
 }
 
 export interface ReportServiceParent {
     service: ReportService
-    sla_log: SlaLog
+    sla_log: SlaLogService
 }
 
 export interface ReportService {
@@ -332,6 +338,58 @@ export interface Outage {
     output: string
     is_hardstate: boolean
     in_downtime: boolean
+}
+
+export interface LastLogEntryHost {
+    id: number
+    host_id: number
+    sla_id: number
+    evaluation_total_time: number
+    total_time: number
+    minimal_availability_percent: number
+    determined_availability_percent: number
+    minimal_availability_time: number
+    determined_availability_time: number
+    determined_outage_time: number
+    determined_number_outages: number
+    up: number
+    down: number
+    unreachable: number
+    evaluation_start: string
+    evaluation_end: string
+    created: string
+    sla_host_outages: any[]
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    passed: boolean
+}
+
+export interface LastLogEntryService {
+    id: number
+    host_id: number
+    service_id: number
+    sla_id: number
+    evaluation_total_time: number
+    total_time: number
+    minimal_availability_percent: number
+    determined_availability_percent: number
+    minimal_availability_time: number
+    determined_availability_time: number
+    determined_outage_time: number
+    determined_number_outages: number
+    ok: number
+    warning: number
+    critical: number
+    unknown: number
+    evaluation_start: string
+    evaluation_end: string
+    created: string
+    sla_service_outages: Outage[]
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    passed: boolean
 }
 
 export interface ReportError {
