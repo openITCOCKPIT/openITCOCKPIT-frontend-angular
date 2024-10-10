@@ -790,6 +790,11 @@
                                        [(ngModel)]="post.User.apikeys[i].description"
                                        oitcFormError [errors]="getMacroErrors(i)" errorField="description">
                                 <oitc-form-feedback [errors]="getMacroErrors(i)" errorField="description"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Last used:') }}
+                                    <span class="text-info" *ngIf="post.User.apikeys[i].last_use === null">{{t('never')}}</span>
+                                    <span class="text-info" *ngIf="post.User.apikeys[i].last_use !== null">{{post.User.apikeys[i].last_use}}</span>
+                                </div>
                             </div>
                         </c-col>
                         <c-col md="8">

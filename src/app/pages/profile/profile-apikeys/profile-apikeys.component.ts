@@ -102,7 +102,8 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public ApikeyCreatePost: ProfileCreateApiKey = {
         apikey: '',
         qrcode: '',
-        description: ''
+        description: '',
+        last_use: null
     };
     public ApikeyErrors: GenericValidationError | null = null;
 
@@ -157,7 +158,8 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
                     this.ApikeyCreatePost = {
                         apikey: '',
                         qrcode: '',
-                        description: ''
+                        description: '',
+                        last_use: null
                     };
 
                     this.loadApiKeys();
