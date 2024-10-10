@@ -152,3 +152,72 @@ export interface InstantreportsReportPdfParams {
     'data[from_date]': string,
     'data[to_date]': string
 }
+
+export interface InstantreportsReportHtmlParams {
+    instantreport_id: number,
+    report_format: InstantreportFormats.HTML
+    from_date: string,
+    to_date: string
+}
+
+
+export interface InstantreportGenerateResponse {
+    instantReport: {
+        hosts: {
+            [key: string]: {
+                Host: {
+                    id: number,
+                    name: string,
+                    reportData: {
+                        "0": number,
+                        "1": number, // duration in seconds
+                        "2": number, // duration in seconds
+                        "percentage": string[] // "Up (75.916%)", "Down (0%)", "Unreachable (24.084%)"
+                    },
+                },
+                Services: {
+                    [key: string]: {
+                        Service: {
+                            name: string,
+                            id: number,
+                            reportData: {
+                                "0": number // duration in seconds
+                                "1": number // duration in seconds
+                                "2": number // duration in seconds
+                                "3": number // duration in seconds
+                                "percentage": string[] //  "Ok (100%)", "Warning (0%)", "Critical (0%)", "Unknown (0%)"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        reportDetails: {
+            name: string,
+            evaluation: InstantreportEvaluationTypes,
+            type: InstantreportObjectTypes,
+            summary: number // 0 or 1
+            totalTime: number// time in seconds e.g2602774,
+            from: string // "00:00:00 - 01.08.2024",
+            to: string // "23:59:59 - 01.10.2024",
+            summary_hosts?: {
+                reportData: {
+                    "0": number // duration in seconds,
+                    "1": number // duration in seconds,
+                    "2": number // duration in seconds,
+                    percentage: string[] //"Up (78.251%)", "Down (8.013%)", "Unreachable (13.736%)"
+                }
+            }
+            summary_services: {
+                reportData: {
+                    "0": number // duration in seconds,
+                    "1": number // duration in seconds,
+                    "2": number // duration in seconds,
+                    "3": number // duration in seconds,
+                    percentage: string[] //"Ok (54.251%)", "Warning (2.385%)", "Critical (24.314%)", "Unknown (19.049%)"
+                }
+            },
+        }
+    }
+    _csrfToken: string
+}

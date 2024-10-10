@@ -4,9 +4,11 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
+    InstantreportGenerateResponse,
     InstantreportPost,
     InstantreportsIndexParams,
     InstantreportsIndexRoot,
+    InstantreportsReportHtmlParams,
     InstantreportsReportPdfParams
 } from './instantreports.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -171,6 +173,27 @@ export class InstantreportsService {
             params: params as {},
             responseType: 'blob'
         });
+    }
+
+    public generateReportHtml(data: InstantreportsReportHtmlParams): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/instantreports/generate/${data.instantreport_id}.json`, data)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as InstantreportGenerateResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }
