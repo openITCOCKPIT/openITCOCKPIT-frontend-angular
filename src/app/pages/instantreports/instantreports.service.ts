@@ -110,4 +110,23 @@ export class InstantreportsService {
             );
     }
 
+    /**********************
+     *   Generate action  *
+     **********************/
+
+    public loadCommands(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            instantreports: SelectKeyValue[]
+        }>(`${proxyPath}/instantreports/loadInstantreports.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.instantreports
+            })
+        )
+    }
+
 }

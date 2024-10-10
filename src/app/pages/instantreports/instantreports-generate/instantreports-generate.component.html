@@ -1,1 +1,63 @@
-<p>instantreports-generate works!</p>
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <a *oitcPermission="['instantreports', 'index']" [routerLink]="['/', 'instantreports', 'index']">
+                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                        {{ t('Instant reports') }}
+                    </a>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
+                    {{ t('Generate') }}
+                </li>
+            </ol>
+        </nav>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Generate instant report') }}
+                </h5>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == 'generate'}"
+                            (click)="changeTab('generate')">
+                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                            {{ t('Configuration') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab == 'report'}"
+                            (click)="changeTab('report')">
+                            <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                            {{ t('Report') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="button"
+                        (click)="generateReport()"
+                        [disabled]="isGeneratingReport">
+                    <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="isGeneratingReport"></fa-icon>
+                    {{ t('Generate report') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
