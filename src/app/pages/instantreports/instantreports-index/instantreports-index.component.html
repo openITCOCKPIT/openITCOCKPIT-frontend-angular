@@ -382,7 +382,10 @@
 
             </c-card-body>
             <c-card-footer>
-                &nbsp;
+                <c-alert color="info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Instant Reports provide a percentage-based analysis of the availability of individual hosts and services. These reports are available in HTML or PDF format and can be automatically sent via email.') }}
+                </c-alert>
             </c-card-footer>
 
         </c-card>

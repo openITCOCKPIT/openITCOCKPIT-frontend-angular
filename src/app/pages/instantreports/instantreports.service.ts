@@ -2,9 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { InstantreportsIndexParams, InstantreportsIndexRoot } from './instantreports.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { InstantreportPost, InstantreportsIndexParams, InstantreportsIndexRoot } from './instantreports.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +34,42 @@ export class InstantreportsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/instantreports/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/instantreports/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers;
+            })
+        )
+    }
+
+    public add(instantreport: InstantreportPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/instantreports/add.json?angular=true`, {
+            Instantreport: instantreport
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.instantreport as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }

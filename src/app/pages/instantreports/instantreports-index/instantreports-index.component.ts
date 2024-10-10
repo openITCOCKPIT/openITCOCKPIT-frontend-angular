@@ -17,6 +17,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import _ from 'lodash';
 import { InstantreportsService } from '../instantreports.service';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -110,7 +111,8 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         ActionsButtonElementComponent,
         DropdownDividerDirective,
         DeleteAllModalComponent,
-        DisableModalComponent
+        DisableModalComponent,
+        AlertComponent
     ],
     templateUrl: './instantreports-index.component.html',
     styleUrl: './instantreports-index.component.css',

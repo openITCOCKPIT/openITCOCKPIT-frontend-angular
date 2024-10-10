@@ -90,4 +90,37 @@ export interface InstantreportUser {
     }
 }
 
+/**********************
+ *    Add action    *
+ **********************/
+export interface InstantreportPost {
+    id?: number,
+    container_id: number,
+    name: string,
+    type: InstantreportObjectTypes, // 1 - host groups, 2 - hosts, 3 - service groups, 4 - services
+    timeperiod_id: number,
+    reflection: number,// 1 - soft and hard states, 2 - only hard states
+    summary: number,
+    downtimes: number,
+    send_email: number,
+    send_interval: number, // 0 - NEVER
+    evaluation: InstantreportEvaluationTypes,
+    hostgroups: {
+        _ids: number[]
+    },
+    hosts: {
+        _ids: number[]
+    },
+    servicegroups: {
+        _ids: number[]
+    },
+    services: {
+        _ids: number[]
+    },
+    users: {
+        _ids: number[]
+    },
+    created?: string
+    modified?: string
+}
 

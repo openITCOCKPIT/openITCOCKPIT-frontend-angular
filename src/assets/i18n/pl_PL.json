@@ -2144,7 +2144,7 @@
     "Create new instant report": "Utwórz nowy raport natychmiastowy",
     "Instant report": "Raport natychmiastowy",
     "Select the object type, which should be evaluated by the report.": "Wybierz typ obiektu, który ma być oceniany przez raport.",
-    "Choose if <b><u>only<\/u><\/b> host, host and services or <b><u>only<\/u><\/b> services should be evaluated.": "Wybierz, czy oceniane mają być <b><u>tylko<\/u><\/b> hosty, hosty i usługi, czy <b><u>tylko<\/u><\/b> usługi.",
+    "Choose if only host, host and services or only services should be evaluated.": "Wybierz, czy oceniane mają być tylko hosty, hosty i usługi, czy tylko usługi.",
     "Consider downtimes": "Rozważ przerwy",
     "Summary display": "Wyświetlanie podsumowania",
     "Send email": "Wyślij e-mail",
