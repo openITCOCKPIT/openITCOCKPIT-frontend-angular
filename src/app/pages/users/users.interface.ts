@@ -107,7 +107,7 @@ export function getDefaultUsersIndexParams(): UsersIndexParams {
         angular: true,
         direction: 'asc',
         page: 1,
-        scroll: false,
+        scroll: true,
         sort: 'full_name',
         'filter[Users.company]': '',
         'filter[Users.email]': '',
