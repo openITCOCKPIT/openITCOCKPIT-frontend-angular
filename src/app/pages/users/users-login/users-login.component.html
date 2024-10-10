@@ -1,0 +1,149 @@
+<ng-container *transloco="let t" class="peers">
+    <!-- IMAGES -->
+    <ng-container *ngIf="! isCustomLoginBackground">
+        <div class="login-screen">
+            <figure *ngFor="let image of images"
+                    [ngStyle]="{'background-image': getBackgroundUrl('/img/login/' + image.image)}">
+                <figcaption>{{ image.credit }} {{ description }}</figcaption>
+            </figure>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="isCustomLoginBackground">
+        <div class="login-screen" [ngStyle]="{'background-image': getBackgroundUrl(customLoginBackgroundHtml	)}">
+        </div>
+    </ng-container>
+    <!-- PRTCLS -->
+    <ngx-particles
+            id="prtcls"
+            [options]="particlesOptions"
+            (particlesLoaded)="particlesLoaded($event)"
+    ></ngx-particles>
+
+    <!-- FORM -->
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg">
+        <c-col md="8"></c-col>
+        <c-col md="4" class="p-5 login-side-right">
+
+            <div class="col-12 text-center">
+                <img class="img-fluid" src="{{logoUrl}}" style="max-height: 230px;"/>
+            </div>
+
+            <h4 class="fw-300 mb-5 text-white">{{ t('Login') }}</h4>
+
+            <div *ngIf="isSsoEnabled" class="form-group mb-5">
+                <a      id="sso-redirect-href"
+                        href="/users/login?redirect_sso=true"
+                        class="btn btn-primary btn-lg w-100">
+                    <i class="fas fa-sign-in-alt"></i>
+                    {{ t('Login through Single sign-on') }}
+                </a>
+            </div>
+
+            <!-- Start login form for username and password (Session and LDAP) -->
+            <form (ngSubmit)="submit()" *ngIf="!hasValidSslCertificate && !forceRedirectSsousersToLoginScreen">
+                <!-- username -->
+                <div class="mb-3">
+                    <label cLabel for="post.email" class="text-white">
+                        {{ t('Username') }}
+                    </label>
+                    <input cFormControl
+                           id="post.email"
+                           required
+                           placeholder="John Doe"
+                           type="text"
+                           sizing="lg"
+                           name="post.email"
+                           [disabled]="disableLogin"
+                           [(ngModel)]="post.email">
+                </div>
+
+
+                <!-- username -->
+                <div class="mb-3">
+                    <label cLabel for="post.password" class="text-white">
+                        {{ t('Password') }}
+                    </label>
+                    <input cFormControl
+                           id="post.password"
+                           required
+                           type="password"
+                           sizing="lg"
+                           placeholder="Password"
+                           name="post.password"
+                           [disabled]="disableLogin"
+                           [(ngModel)]="post.password">
+                </div>
+
+
+                <c-row class="mb-3">
+                    <c-col md="4">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.remember_me"
+                                   id="post.remember_me"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [(ngModel)]="post.remember_me"/>
+                            <label cFormCheckLabel for="post.remember_me" class="text-white">
+                                {{ t('Remember me') }}
+                            </label>
+                        </c-form-check>
+                    </c-col>
+                    <c-col md="8" class="text-end">
+                        <button
+                                type="submit"
+                                class="btn btn-primary text-end"
+                                [disabled]="disableLogin">
+                            <span>
+                                <i class="fa fa-spinner fa-spin" *ngIf="disableLogin"></i>
+                            </span>
+                            {{ t('Login') }}
+                        </button>
+                    </c-col>
+                </c-row>
+            </form>
+
+            <!-- Users with valid SSL certificates are always logged in -->
+            <div *ngIf="hasValidSslCertificate">
+                <c-alert color="success">
+                    {{ t('Authorization through SSL certificate successful.') }}
+                </c-alert>
+
+                <div class="form-group">
+                    <div class="peers ai-c jc-sb fxw-nw">
+                        <div class="peer">
+                        </div>
+                        <div class="peer">
+                            <a
+                                    href="/"
+                                    class="btn btn-primary">
+                                {{ t('Start') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End certificates login -->
+
+
+            <div class="text-end" style="padding-top: 100px;">
+                <a href="https://openitcockpit.io/" target="_blank" class="btn  btn-light btn-icon">
+                    <fa-icon [icon]="['fas', 'globe']"/>
+                </a>
+                <a href="https://github.com/it-novum/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
+                    <fa-icon [icon]="['fab', 'github']"/>
+                </a>
+                <a href="https://twitter.com/openITCOCKPIT" target="_blank" class="btn  btn-light btn-icon">
+                    <fa-icon [icon]="['fab', 'twitter']"/>
+                </a>
+                <a href="https://www.reddit.com/r/openitcockpit" target="_blank" class="btn  btn-light btn-icon">
+                    <fa-icon [icon]="['fab', 'reddit']"/>
+                </a>
+                <a href="https://discord.gg/G8KhxKuQ9G" target="_blank" class="btn  btn-light btn-icon">
+                    <fa-icon [icon]="['fab', 'discord']"/>
+                </a>
+            </div>
+
+        </c-col>
+    </c-row>
+</ng-container>

@@ -3,13 +3,17 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
+    EditUserGet,
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
     LoadContainerRolesRoot,
+    LoadContainersResponse,
     LoadLdapUserByStringRoot,
     LoadLdapUserDetailsRoot,
     LoadUsergroupsRoot,
+    LoginGetRoot,
+    UpdateUser,
     UserDateformat,
     UserDateformatsRoot,
     UserLocaleOption,
@@ -22,6 +26,7 @@ import {
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { ContainersLoadContainersByStringParams } from '../containers/containers.interface';
 
 
 @Injectable({
@@ -48,6 +53,17 @@ export class UsersService {
         );
     }
 
+    public loadContainersByString(params: ContainersLoadContainersByStringParams): Observable<LoadContainersResponse> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<LoadContainersResponse>(`${proxyPath}/users/loadContainersForAngular.json?angular=true`, {
+            params: params as {}
+        }).pipe(
+            map((data: LoadContainersResponse) => {
+                return data;
+            })
+        );
+    }
     public loadContainerRoles(params: LoadContainerRolesRequest): Observable<LoadContainerRolesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {
@@ -59,8 +75,16 @@ export class UsersService {
         );
     }
 
+    public getLoginDetails(): Observable<LoginGetRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<LoginGetRoot>(`${proxyPath}/users/login.json`).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
     public loadContainerPermissions(params: LoadContainerPermissionsRequest): Observable<LoadContainerPermissionsRoot> {
-        console.warn(params);
         const proxyPath = this.proxyPath;
         return this.http.get<LoadContainerPermissionsRoot>(`${proxyPath}/users/loadContainerPermissions.json`, {
             params: params as {}
@@ -157,6 +181,57 @@ export class UsersService {
     public addFromLdap(user: UsersAddRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, user)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<EditUserGet> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<EditUserGet>(`${proxyPath}/users/edit/${id}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            );
+    }
+
+    public updateUser(user: UpdateUser): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/edit/${user.User.id}.json?angular=true`, user)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
+    }
+
+    public resetPassword(id: number): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/users/resetPassword/${id}.json?angular=true`, {})
             .pipe(
                 map(data => {
                     return {

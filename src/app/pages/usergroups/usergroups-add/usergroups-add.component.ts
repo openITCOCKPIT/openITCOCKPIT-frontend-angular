@@ -152,7 +152,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         } as UsergroupsAddRoot;
     }
 
-    protected loadLdapGroups(search: string = ''): void {
+    protected loadLdapGroups = (search: string = '') => {
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
         }));
@@ -163,11 +163,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UsergroupsService.addUsergroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
-                    const response: GenericIdResponse = result.data as GenericIdResponse;
+                    const response: {usergroup: GenericIdResponse} = result.data as {usergroup: GenericIdResponse};
 
                     const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['usergroups', 'edit', response.id];
+                    const url: (string | number)[] = ['usergroups', 'edit', response.usergroup.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
