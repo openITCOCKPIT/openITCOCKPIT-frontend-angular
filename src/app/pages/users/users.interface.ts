@@ -86,11 +86,7 @@ export interface User {
         name: string
     }
     allow_edit: boolean
-    UserTypes: {
-        title: string
-        color: string
-        class: string
-    }[]
+    UserTypes: UserType[]
 }
 
 export interface UsersIndexParams {
@@ -111,7 +107,7 @@ export function getDefaultUsersIndexParams(): UsersIndexParams {
         angular: true,
         direction: 'asc',
         page: 1,
-        scroll: false,
+        scroll: true,
         sort: 'full_name',
         'filter[Users.company]': '',
         'filter[Users.email]': '',
@@ -153,12 +149,45 @@ export interface CreateUser {
     }
     usergroup_id: number
 }
+
 export interface CreateLdapUser extends CreateUser {
     ldap_dn: string
     samaccountname: string
     usercontainerroles_ldap: {
         _ids: number[]
     }
+}
+
+export interface EditUser extends CreateUser {
+    id: number
+    containers: {
+        _ids: number[]
+    }
+    usercontainerroles_containerids: {
+        _ids: number[]
+    }
+    ldap_dn: string
+    samaccountname: string
+    usercontainerroles_ldap: {
+        _ids: number[]
+    }
+}
+
+export interface UserType {
+    title: string
+    color: ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark')
+    class: string
+}
+
+export interface EditUserGet {
+    user: EditUser,
+    isLdapUser: boolean,
+    UserTypes: UserType[],
+    notPermittedContainerIds: number[]
+}
+
+export interface UpdateUser {
+    User: EditUser
 }
 
 export interface AddFromLdapRoot {
@@ -174,9 +203,10 @@ export interface Apikey {
 // LoadContainerRoles
 export interface LoadContainerRolesRequest {
     angular: boolean
-    'filter[Usercontainerroles.name]' : string
+    'filter[Usercontainerroles.name]': string
     selected: number[]
 }
+
 export interface LoadContainerRolesRoot {
     usercontainerroles: SelectKeyValue[]
     _csrfToken: string
@@ -193,6 +223,7 @@ export interface LoadContainerPermissionsRequest {
     angular: boolean
     'usercontainerRoleIds[]': number[]
 }
+
 export interface LoadContainerPermissionsRoot {
     userContainerRoleContainerPermissions: UserContainerRoleContainerPermissions
     _csrfToken: string
@@ -289,4 +320,32 @@ export interface LdapUserDetails {
         modified: string
     },
     ldapgroupIds: number[]
+}
+
+// LOGIN
+export interface LoginGetRoot {
+    _csrfToken: string
+    images: {
+        description: string
+        particles: string
+        images: LoginImage[]
+    }
+    hasValidSslCertificate: boolean
+    logoUrl: string
+    isLoggedIn: boolean
+    isSsoEnabled: boolean
+    forceRedirectSsousersToLoginScreen: boolean
+    errorMessages: any[]
+    customLoginBackgroundHtml: string
+    isCustomLoginBackground: boolean
+}
+
+export interface LoginImage {
+    image: string
+    credit: string
+}
+
+export interface LoadContainersResponse {
+    containers: SelectKeyValue[]
+    containerIdsWithWritePermissions: number[]
 }

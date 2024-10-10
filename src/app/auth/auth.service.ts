@@ -3,6 +3,8 @@ import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from "rxjs";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
+import { LoginResponse } from './auth.interface';
+import { GenericValidationError } from '../generic-responses';
 
 @Injectable({
     providedIn: 'root',
@@ -17,44 +19,40 @@ export class AuthService {
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public goToLogin() {
-        this.document.location = '/users/login';
+    public goToLogin(): void {
+        this.document.location = `${this.proxyPath}/users/login`;
     }
 
-    public goToLogout() {
-        this.document.location = '/users/logout';
+    public goToLogout(): void {
+        this.document.location = `${this.proxyPath}/users/logout`;
     }
 
-    public login(email: string, password: string, rememberMe = true): Observable<boolean> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<Record<string, string>>(`${proxyPath}/users/login.json`).pipe(
-            switchMap(data => {
+    public login(email: string, password: string, rememberMe = true): Observable<LoginResponse> {
+        const searchParams = new URLSearchParams();
+        searchParams.set('email', email);
+        searchParams.set('password', password);
+        searchParams.set('_csrfToken', this.csrfToken as string);
+        searchParams.set('remember_me', rememberMe ? '1' : '0');
+        searchParams.set('_method', 'POST');
 
-                const csrfToken = data['_csrfToken'];
-                const searchParams = new URLSearchParams();
-                searchParams.set('email', email);
-                searchParams.set('password', password);
-                searchParams.set('_csrfToken', csrfToken);
-                searchParams.set('remember_me', rememberMe ? '1' : '0');
-
-                return this.http.post(`${proxyPath}/users/login`, searchParams.toString(), {
-                    responseType: 'text',
-                    withCredentials: true,
-                    headers: {
-                        // 'x-csrf-token': csrfToken,
-                        'content-type': 'application/x-www-form-urlencoded'
-                    }
-                }).pipe(
-                    catchError(error => {
-                        console.error(error);
-
-                        return of(null);
-                    }),
-                    map((response) => !!response),
-                );
+        return this.http.post<LoginResponse>(`${this.proxyPath}/users/login`, searchParams.toString(), {
+            withCredentials: true,
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            }
+        }).pipe(
+            tap((response) => {
+                // Optionally handle successful login state here
+                this.authenticated$$.next(true);
             }),
-            tap((loggedIn) => this.authenticated$$.next(loggedIn)),
-        )
+            catchError(error => {
+                const err = error.error.errors as GenericValidationError;
+                return of({
+                    success: error.status === 200,
+                    errors: err
+                } as unknown as LoginResponse);
+            })
+        );
     }
 
     public logout(): void {

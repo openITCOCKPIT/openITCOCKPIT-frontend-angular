@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -32,7 +32,6 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import {
-    LdapUserDetails,
     LoadContainerPermissionsRequest,
     LoadContainerPermissionsRoot,
     LoadContainerRolesRequest,
@@ -52,7 +51,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValue, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
@@ -115,6 +114,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly profileService: ProfileService = inject(ProfileService);
 
+    protected readonly keepOrder = keepOrder;
     protected createAnother: boolean = false;
     protected post: UsersAddRoot = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
@@ -338,6 +338,20 @@ export class UsersAddComponent implements OnDestroy, OnInit {
             return {} as GenericValidationError;
         }
         return this.errors['apikeys'][index] as unknown as GenericValidationError;
+    }
+}
+
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'sortKeyValue'
+})
+export class SortKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
     }
 
 }

@@ -177,7 +177,7 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="result.all_users.length === 0"></oitc-table-loader>
+                <oitc-table-loader *ngIf="result.myUserId === 0"></oitc-table-loader>
 
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -239,22 +239,18 @@
                             {{ user.company }}
                         </td>
                         <td>
-                            <button *ngIf="user.is_active" cButton size="xs" color="success" class="btnNoHover"
-                                    variant="outline">
+                            <oitc-badge-outline *ngIf="user.is_active" color="success">
                                 {{ t('Active') }}
-                            </button>
-                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" class="btnNoHover"
-                                    variant="outline">
+                            </oitc-badge-outline>
+                            <oitc-badge-outline *ngIf="! user.is_active" color="danger">
                                 {{ t('Disabled') }}
-                            </button>
+                            </oitc-badge-outline>
                         </td>
                         <td>
-
-                            <button cButton size="xs"
-                                    class="btnNoHover {{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}"
-                                    color="{{ user.UserTypes[0].color }}" variant="outline">
+                            <oitc-badge-outline class="{{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}"
+                                                [color]="user.UserTypes[0].color">
                                 {{ user.UserTypes[0].title }}
-                            </button>
+                            </oitc-badge-outline>
                         </td>
                         <td>
                             {{ user.usergroup.name }}
@@ -263,20 +259,29 @@
                             {{ user.last_login }}
                         </td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="user.allow_edit"
-                                                 [permission]="'users.edit'"
+                            <oitc-actions-button [permission]="'users.edit'"
                                                  [url]="'/users/edit/' + user.id">
                                 <oitc-actions-button-element [permission]="'users.edit'"
-                                                             [url]="'/users/edit/' + user.id">
+                                                             [url]="'/users/edit/' + user.id"
+                                                             *ngIf="user.allow_edit">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'changelogs.index'">
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             *ngIf="!user.allow_edit">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             (click)="resetPasswordModal(user)"
+                                                             *ngIf="!user.samaccountname && user.allow_edit">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
+                                <li cDropdownDivider
+                                    *ngIf="user.allow_edit"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(user)"
+                                                             *ngIf="user.allow_edit"
                                                              [permission]="'users.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -336,3 +341,5 @@
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-reset-password-modal (completed)="onMassActionComplete($event)"
+                           [user]="resetPasswordUser"></oitc-reset-password-modal>
