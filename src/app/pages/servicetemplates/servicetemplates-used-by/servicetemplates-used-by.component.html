@@ -67,7 +67,8 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <table bordered cTable class="mt-2 mb-0" hover striped>
                         <thead>
                         <tr *ngIf="total > 0">
@@ -155,7 +156,7 @@
 
                     <ng-container *ngIf="hostsWithServices.length > 0">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all

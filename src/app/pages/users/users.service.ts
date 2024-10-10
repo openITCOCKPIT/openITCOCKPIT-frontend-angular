@@ -25,6 +25,7 @@ import {
 } from './users.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../containers/containers.interface';
 
 
@@ -156,8 +157,6 @@ export class UsersService {
     }
 
 
-
-
     public addUser(user: UsersAddRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, user)
@@ -178,6 +177,7 @@ export class UsersService {
             );
 
     }
+
     public addFromLdap(user: UsersAddRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/users/addFromLdap.json?angular=true`, user)
@@ -286,6 +286,24 @@ export class UsersService {
                     serverTimeZone: data.serverTimeZone
                 };
                 return result;
+            })
+        );
+    }
+
+    public loadUsersByContainerId(containerId: number, selected: any[]): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            users: SelectKeyValue[]
+        }>(`${proxyPath}/users/loadUsersByContainerId.json`, {
+            params: {
+                angular: true,
+                containerId: containerId,
+                'selected[]': selected,
+            }
+        }).pipe(
+            map(data => {
+                return data.users;
             })
         );
     }

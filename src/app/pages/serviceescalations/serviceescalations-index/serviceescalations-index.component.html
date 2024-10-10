@@ -54,7 +54,7 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -504,7 +504,8 @@
                 <oitc-no-records
                     *ngIf="serviceescalations && serviceescalations.all_serviceescalations.length === 0"></oitc-no-records>
                 <ng-container *ngIf="serviceescalations && serviceescalations.all_serviceescalations">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-select-all
@@ -525,7 +526,8 @@
                     </c-container>
                 </ng-container>
 
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll

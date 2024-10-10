@@ -63,7 +63,7 @@
             </c-card-header>
             <c-card-body>
                 <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -393,7 +393,8 @@
                         </c-row>
                     </form>
                 </c-container>
-                <c-container fluid *ngIf="changes && changes.all_changes">
+                <c-container
+                    [fluid]="true" *ngIf="changes && changes.all_changes">
                     <ul class="cbp_tmtimeline">
                         <li *ngFor="let changeLogEntry of changes.all_changes">
                             <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
@@ -401,7 +402,8 @@
                     </ul>
                 </c-container>
                 <oitc-no-records *ngIf="changes && changes.all_changes.length === 0"></oitc-no-records>
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll

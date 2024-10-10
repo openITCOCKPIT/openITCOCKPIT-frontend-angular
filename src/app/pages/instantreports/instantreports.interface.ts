@@ -1,4 +1,5 @@
 import { InstantreportEvaluationTypes, InstantreportObjectTypes } from './instantreports.enums';
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
 /**********************
  *    Index action    *
@@ -51,3 +52,75 @@ export function getDefaultInstantreportEvaluationTypesFilter(): InstantreportEva
         [InstantreportEvaluationTypes.Services]: false,
     }
 }
+
+export interface InstantreportsIndexRoot extends PaginateOrScroll {
+    instantreports: InstantreportIndex[];
+    _csrfToken: string
+}
+
+export interface InstantreportIndex {
+    Instantreport: {
+        id: number
+        container_id: number
+        name: string
+        evaluation: number
+        type: number
+        reflection: number
+        downtimes: number
+        summary: number
+        send_email: number
+        send_interval: number
+    },
+    Timeperiod: {
+        id: number
+        name: string
+    },
+    User: InstantreportUser[],
+    allowEdit: boolean
+}
+
+export interface InstantreportUser {
+    id: number
+    firstname: string
+    lastname: string
+    _joinData: {
+        id: number
+        instantreport_id: number
+        user_id: number
+    }
+}
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface InstantreportPost {
+    id?: number,
+    container_id: number,
+    name: string,
+    type: InstantreportObjectTypes, // 1 - host groups, 2 - hosts, 3 - service groups, 4 - services
+    timeperiod_id: number,
+    reflection: number,// 1 - soft and hard states, 2 - only hard states
+    summary: number,
+    downtimes: number,
+    send_email: number,
+    send_interval: number, // 0 - NEVER
+    evaluation: InstantreportEvaluationTypes,
+    hostgroups: {
+        _ids: number[]
+    },
+    hosts: {
+        _ids: number[]
+    },
+    servicegroups: {
+        _ids: number[]
+    },
+    services: {
+        _ids: number[]
+    },
+    users: {
+        _ids: number[]
+    },
+    created?: string
+    modified?: string
+}
+

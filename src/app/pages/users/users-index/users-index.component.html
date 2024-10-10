@@ -66,7 +66,7 @@
             <c-card-body>
 
                 <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -152,15 +152,15 @@
                                     </span>
 
                                     <oitc-multi-select
-                                            name="UserRoleFilter"
-                                            id="UserRoleFilter"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="params['filter[Users.usergroup_id][]']"
-                                            [options]="usergroups"
-                                            [debounce]="true"
-                                            [placeholder]="'Filter by user role' | transloco"
-                                            (onChange)="onFilterChange(true)"
+                                        name="UserRoleFilter"
+                                        id="UserRoleFilter"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="params['filter[Users.usergroup_id][]']"
+                                        [options]="usergroups"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by user role' | transloco"
+                                        (onChange)="onFilterChange(true)"
                                     >
                                     </oitc-multi-select>
                                 </c-input-group>
@@ -221,9 +221,9 @@
                             <div *ngIf="user.id !== 1">
 
                                 <oitc-item-select
-                                        *oitcPermission="['users', 'delete']"
-                                        [disabled]="false"
-                                        [item]="user"></oitc-item-select>
+                                    *oitcPermission="['users', 'delete']"
+                                    [disabled]="false"
+                                    [item]="user"></oitc-item-select>
                             </div>
                         </td>
                         <td>
@@ -295,15 +295,16 @@
                 </table>
 
                 <oitc-no-records
-                        *ngIf="result && result.all_users.length === 0"></oitc-no-records>
+                    *ngIf="result && result.all_users.length === 0"></oitc-no-records>
 
 
                 <ng-container *ngIf="result && result.all_users">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                        [itemsCount]="result.all_users.length"></oitc-select-all>
+                                    [itemsCount]="result.all_users.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group d-flex flex-row" role="group">
@@ -319,13 +320,14 @@
                     </c-container>
                 </ng-container>
 
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                    (paginatorChange)="onPaginatorChange($event)"
-                                    *ngIf="result"
-                                    [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

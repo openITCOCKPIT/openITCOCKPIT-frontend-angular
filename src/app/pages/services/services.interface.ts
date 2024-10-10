@@ -584,7 +584,9 @@ export interface ServicesLoadServicesByStringParams {
     'filter[servicename]': string,
     'filter[Services.disabled]'?: number,
     'selected[]': number[],
-    'includeDisabled': boolean
+    'includeDisabled': boolean,
+    'containerId'?: number,
+    'resolveContainerIds'?: boolean
 }
 
 /**************************

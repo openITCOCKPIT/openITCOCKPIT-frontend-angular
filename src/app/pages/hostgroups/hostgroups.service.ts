@@ -241,4 +241,23 @@ export class HostgroupsService {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/hostgroups/append/.json?angular=true`, param);
     }
+
+    public loadHostgroupsByContainerId(containerId: number, selected: any[], resolveContainerIds: boolean = true): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            hostgroups: SelectKeyValue[]
+        }>(`${proxyPath}/hostgroups/loadHostgroupsByContainerId.json`, {
+            params: {
+                angular: true,
+                containerId: containerId,
+                'selected[]': selected,
+                resolveContainerIds: resolveContainerIds
+            }
+        }).pipe(
+            map(data => {
+                return data.hostgroups;
+            })
+        );
+    }
 }

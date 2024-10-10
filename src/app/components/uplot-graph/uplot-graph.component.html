@@ -24,7 +24,8 @@
   -->
 
 <ng-container>
-    <c-container fluid>
+    <c-container
+        [fluid]="true">
         <c-row *transloco="let t">
             <c-col>
                 <select [(ngModel)]="currentSelectedTimerange"

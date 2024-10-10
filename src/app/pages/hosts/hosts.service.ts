@@ -632,4 +632,21 @@ export class HostsService {
             )
     }
 
+    public loadHostsByContainerId(containerId: number, searchString: string, selected: number[], resolveContainerIds: boolean = true): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ hosts: SelectKeyValue[] }>(`${proxyPath}/hosts/loadHostsByContainerId.json`, {
+            params: {
+                'angular': true,
+                'containerId': containerId,
+                'filter[Hosts.name]': searchString,
+                'selected[]': selected,
+                'resolveContainerIds': resolveContainerIds
+            }
+        }).pipe(
+            map(data => {
+                return data.hosts
+            })
+        )
+    }
+
 }

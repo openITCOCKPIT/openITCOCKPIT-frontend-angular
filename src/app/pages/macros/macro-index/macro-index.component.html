@@ -118,7 +118,8 @@
 
                 <oitc-no-records *ngIf="macros && macros.length === 0"></oitc-no-records>
 
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col class="text-info pt-3 pb-2">
                             <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>

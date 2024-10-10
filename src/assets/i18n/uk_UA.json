@@ -1988,7 +1988,7 @@
     "Create new instant report": "Створіть новий миттєвий звіт",
     "Instant report": "Миттєвий звіт",
     "Select the object type, which should be evaluated by the report.": "Виберіть тип об’єкта, який слід оцінити у звіті.",
-    "Choose if <b><u>only<\/u><\/b> host, host and services or <b><u>only<\/u><\/b> services should be evaluated.": "Виберіть, чи слід оцінювати хост, хост та служби <b> <u> лише <\/u> <\/b>, а також послуги <b> <u> лише <\/u> <\/b>.",
+    "Choose if only host, host and services or only services should be evaluated.": "Виберіть, чи слід оцінювати хост, хост та служби лише, а також послуги лише.",
     "Consider downtimes": "Подумайте про простої",
     "Summary display": "Відображення підсумків",
     "Send email": "Відправити лист",

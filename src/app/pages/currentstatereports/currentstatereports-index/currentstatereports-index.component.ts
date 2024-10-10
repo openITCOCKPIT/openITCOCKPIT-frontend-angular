@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+    AlertComponent,
     BadgeComponent,
     BorderDirective,
     CardBodyComponent,
@@ -116,7 +117,8 @@ import { saveAs } from 'file-saver';
         BadgeOutlineComponent,
         ContainerComponent,
         TrustAsHtmlPipe,
-        CurrentstatereportPerfdataGaugesComponent
+        CurrentstatereportPerfdataGaugesComponent,
+        AlertComponent
     ],
     templateUrl: './currentstatereports-index.component.html',
     styleUrl: './currentstatereports-index.component.css'

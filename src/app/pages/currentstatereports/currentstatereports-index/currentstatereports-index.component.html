@@ -180,6 +180,10 @@
                     <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="isGeneratingReport"></fa-icon>
                     {{ t('Create current state report') }}
                 </button>
+                <c-alert color="info" class="text-start mt-3" *ngIf="!report">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Current state reports reflect the current state of hosts and services including the latest performance data.') }}
+                </c-alert>
             </c-card-footer>
         </c-card>
 
@@ -200,7 +204,8 @@
                             class="mb-3">
                             <c-card-header>
                                 <!-- cCardTitle -->
-                                <c-container fluid class="p-0">
+                                <c-container
+                                    [fluid]="true" class="p-0">
                                     <c-row class="w-100 h4" [ngClass]="[reportService.Hoststatus.textClass]">
                                         <c-col [xs]="12" [lg]="9">
                                             <oitc-label-link [objectId]="reportService.Host.id"
