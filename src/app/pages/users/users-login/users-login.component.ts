@@ -202,7 +202,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         }));
     }
 
-    protected description: string = 'Lorem ipsum dolor sit amet';
+    protected description: string = '';
 
     getBackgroundUrl(image: string): string {
         return `url('${image}')`;
