@@ -49,6 +49,79 @@
 
             </c-card-header>
             <c-card-body>
+
+                <!-- Generate Report Form -->
+                <ng-container *ngIf="selectedTab === 'generate'">
+                    <div class="mb-3">
+                        <label cLabel for="InstantreportSelect">
+                            {{ t('Instant report') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <oitc-select
+                                name="InstantreportSelect"
+                                id="InstantreportSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="instantreports"
+                                [(ngModel)]="params.instantreport_id"
+                                class="flex-1"
+                            >
+                            </oitc-select>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="ReportFormat">
+                            {{ t('Report format') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <oitc-select
+                                name="ReportFormat"
+                                id="ReportFormat"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="ReportFormatsSelect"
+                                [(ngModel)]="params.report_format"
+                                class="flex-1"
+                            >
+                            </oitc-select>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="from_date">
+                            {{ t('From') }}
+                        </label>
+
+                        <input cFormControl id="from_date" type="date"
+                               name="from_date" placeholder="{{ t('MM.HH.YYYY') }}"
+                               oitcFormError [errors]="errors" errorField="from_date"
+                               [(ngModel)]="params.from_date">
+                        <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="to_date">
+                            {{ t('To') }}
+                        </label>
+
+                        <input cFormControl id="to_date" type="date"
+                               name="to_date" placeholder="{{ t('MM.HH.YYYY') }}"
+                               oitcFormError [errors]="errors" errorField="to_date"
+                               [(ngModel)]="params.to_date">
+                        <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                    </div>
+                </ng-container>
+                <!-- End Generate Report Form -->
+
+                <!-- Report -->
+                <ng-container *ngIf="selectedTab === 'report'">
+                    <oitc-host-radialbar-chart></oitc-host-radialbar-chart>
+                </ng-container>
+                <!-- End Report -->
+
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="button"

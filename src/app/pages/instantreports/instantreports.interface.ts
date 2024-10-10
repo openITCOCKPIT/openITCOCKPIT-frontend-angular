@@ -1,5 +1,6 @@
-import { InstantreportEvaluationTypes, InstantreportObjectTypes } from './instantreports.enums';
+import { InstantreportEvaluationTypes, InstantreportFormats, InstantreportObjectTypes } from './instantreports.enums';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { DateTime } from 'luxon';
 
 /**********************
  *    Index action    *
@@ -124,3 +125,30 @@ export interface InstantreportPost {
     modified?: string
 }
 
+/**********************
+ *  Generate action   *
+ **********************/
+export interface InstantreportGenerateParams {
+    instantreport_id: number,
+    report_format: InstantreportFormats
+    from_date: string
+    to_date: string
+}
+
+export function getDefaultInstantreportGenerateParams(): InstantreportGenerateParams {
+    const now = DateTime.now();
+
+    return {
+        instantreport_id: 0,
+        report_format: InstantreportFormats.HTML,
+        from_date: now.minus({months: 1}).toFormat('yyyy-MM-dd'),
+        to_date: now.toFormat('yyyy-MM-dd')
+    }
+}
+
+export interface InstantreportsReportPdfParams {
+    'angular': true,
+    'data[instantreport_id]': number,
+    'data[from_date]': string,
+    'data[to_date]': string
+}
