@@ -29,6 +29,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+import { MessageOfTheDayComponent } from '../../../components/message-of-the-day/message-of-the-day.component';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -56,7 +57,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        MessageOfTheDayComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css'
