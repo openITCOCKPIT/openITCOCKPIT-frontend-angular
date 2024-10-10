@@ -142,7 +142,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 this.post.User.ContainersUsersMemberships[id] = 1;
             }
         });
-        console.log(this.selectedContainerIds);
     }
 
     public addUser(): void {
