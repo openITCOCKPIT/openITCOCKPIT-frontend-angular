@@ -72,4 +72,42 @@ export class InstantreportsService {
             );
     }
 
+    public getInstantreportEdit(id: number): Observable<InstantreportPost> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            instantreport: { Instantreport: InstantreportPost }
+        }>(`${proxyPath}/instantreports/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.instantreport.Instantreport;
+            })
+        );
+    }
+
+    public saveInstantreportEdit(instantreport: InstantreportPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/instantreports/edit/${instantreport.id}.json?angular=true`, {
+            Instantreport: instantreport
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.instantreport as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }
