@@ -68,6 +68,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -113,7 +114,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
         RouterLink,
         NgOptionHighlightDirective,
         FormLoaderComponent,
-        KeyFilterModule
+        KeyFilterModule,
+        BadgeOutlineComponent
     ],
     templateUrl: './users-edit.component.html',
     styleUrl: './users-edit.component.css'

@@ -40,10 +40,10 @@
 
                     <c-nav class="card-toolbar card-header-pills">
                         <c-nav-item class="px-1">
-
-                            <button cButton size="xs" class="btnNoHover {{ UserType.class }} {{ UserType.color }}" color="{{ UserType.color }}" variant="outline">
+                            <oitc-badge-outline class="{{ UserType.class }} {{ UserType.color }}"
+                                                [color]="UserType.color">
                                 {{ UserType.title }}
-                            </button>
+                            </oitc-badge-outline>
                         </c-nav-item>
                         <c-nav-item class="px-1">
                             <button [fallbackUrl]="['users', 'index']" cButton class="ripple" color="default"
@@ -58,81 +58,6 @@
 
 
                 <c-card-body>
-                    <div class="mb-3" *ngIf="isLdapUser">
-                        <label cLabel for="samaccountname">
-                            {{ t('SAM-Account-Name') }}
-                            <oitc-required-icon />
-                        </label>
-                        <oitc-select
-                                name="samaccountname"
-                                id="samaccountname"
-                                optionValue="samaccountname"
-                                optionLabel="display_name"
-                                [(ngModel)]="post.User.samaccountname"
-                                [searchCallback]="loadLdapUsers"
-                                (onChange)="onLdapUserChange($event)"
-                                [options]="samaccountnames"
-                                oitcFormError [errors]="errors" errorField="samaccountname">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="samaccountname"></oitc-form-feedback>
-                        <div class="help-block text-info">
-                            {{ t('Username for the login') }}
-                        </div>
-                    </div>
-
-
-
-                    <div class="mb-3" *ngIf="isLdapUser">
-                        <label cLabel for="dn">
-                            {{ t('DN') }}
-                            <oitc-required-icon />
-                        </label>
-                        <input cFormControl
-                               required
-                               id="dn"
-                               type="text"
-                               [disabled]="isLdapUser"
-                               name="dn"
-                               [(ngModel)]="post.User.ldap_dn"
-                               oitcFormError [errors]="errors" errorField="email">
-                        <oitc-form-feedback [errors]="errors" errorField="email"></oitc-form-feedback>
-                        <div class="help-block text-info">
-                            {{ t('Value imported from LDAP Server') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3" *ngIf="isLdapUser">
-                        <label cLabel for="ldapUserDetails.ldapgroups">
-                            {{ t('LDAP Groups') }}
-                        </label>
-                        <oitc-multi-select
-                                name="ldapUserDetails.ldapgroups"
-                                id="ldapUserDetails.ldapgroups"
-                                optionValue="id"
-                                optionLabel="cn"
-                                [disabled]="isLdapUser"
-                                [(ngModel)]="ldapUserDetails.ldapgroupIds"
-                                [options]="ldapUserDetails.ldapgroups"
-                                oitcFormError [errors]="errors" errorField="containerroles">
-                        </oitc-multi-select>
-                    </div>
-
-                    <c-alert color="info" *ngIf="isLdapUser">
-                        <h4 cAlertHeading>
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('LDAP Configuration') }}
-                        </h4>
-                        <p class="mb-0">
-                            {{ t('Connected LDAP server') }}:
-                            <b>{{ ldapConfig.host }}</b>
-                            <br>
-                            {{ t('Used filter query') }}:
-                            <b>{{ ldapConfig.query }}</b>
-                            <br>
-                            {{ t('Base DN') }}:
-                            <b>{{ ldapConfig.base_dn }}</b>
-                        </p>
-                    </c-alert>
 
                     <div class="mb-3" *ngIf="isLdapUser">
                         <label cLabel for="post.User.usercontainerroles_ldap._ids">
@@ -462,6 +387,58 @@
                         </c-form-check>
                     </div>
 
+                    <!-- SAMACCOUNTNAME -->
+                    <div class="mb-3" *ngIf="isLdapUser">
+                        <label cLabel for="samaccountname">
+                            {{ t('SAM-Account-Name') }}
+                            <oitc-required-icon />
+                        </label>
+                        <input cFormControl
+                               required
+                               id="samaccountname"
+                               type="text"
+                               [disabled]="isLdapUser"
+                               name="samaccountname"
+                               [(ngModel)]="post.User.samaccountname"
+                               oitcFormError [errors]="errors" errorField="samaccountname">
+                        <oitc-form-feedback [errors]="errors" errorField="samaccountname"></oitc-form-feedback>
+                        <div class="help-block text-info">
+                            {{ t('Username for the login') }}
+                        </div>
+                    </div>
+                    <div class="mb-3" *ngIf="isLdapUser">
+                        <label cLabel for="ldapUserDetails.ldapgroups">
+                            {{ t('LDAP Groups') }}
+                        </label>
+                        <oitc-multi-select
+                                name="ldapUserDetails.ldapgroups"
+                                id="ldapUserDetails.ldapgroups"
+                                optionValue="id"
+                                optionLabel="cn"
+                                [disabled]="isLdapUser"
+                                [(ngModel)]="ldapUserDetails.ldapgroupIds"
+                                [options]="ldapUserDetails.ldapgroups"
+                                oitcFormError [errors]="errors" errorField="containerroles">
+                        </oitc-multi-select>
+                    </div>
+
+                    <c-alert color="info" *ngIf="isLdapUser">
+                        <h4 cAlertHeading>
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('LDAP Configuration') }}
+                        </h4>
+                        <p class="mb-0">
+                            {{ t('Connected LDAP server') }}:
+                            <b>{{ ldapConfig.host }}</b>
+                            <br>
+                            {{ t('Used filter query') }}:
+                            <b>{{ ldapConfig.query }}</b>
+                            <br>
+                            {{ t('Base DN') }}:
+                            <b>{{ ldapConfig.base_dn }}</b>
+                        </p>
+                    </c-alert>
+
                     <!-- EMAIL ADDRESS -->
                     <div class="mb-3">
                         <label cLabel for="post.User.email">
@@ -488,7 +465,7 @@
                     </div>
 
                     <!-- ENABLE LOGIN OAUTH2 -->
-                    <div class="mb-3">
+                    <div class="mb-3" *ngIf="!isLdapUser">
                         <c-form-check>
                             <input cFormCheckInput
                                    name="post.User.is_oauth"
