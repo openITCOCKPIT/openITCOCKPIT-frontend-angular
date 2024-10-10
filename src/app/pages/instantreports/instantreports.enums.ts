@@ -10,3 +10,8 @@ export enum InstantreportObjectTypes {
     Servicegroups = 3,
     Services = 4,
 }
+
+export enum InstantreportFormats {
+    PDF = 1,
+    HTML = 2
+}
