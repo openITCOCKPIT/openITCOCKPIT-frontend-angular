@@ -172,10 +172,10 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.updateUser(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 if (result.success) {
-                    const response: GenericIdResponse = result.data as GenericIdResponse;
+                    const response: {user: GenericIdResponse} = result.data as {user: GenericIdResponse};
                     const title: string = this.TranslocoService.translate('User');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['users', 'edit', response.id];
+                    const url: (string | number)[] = ['users', 'edit', response.user.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
