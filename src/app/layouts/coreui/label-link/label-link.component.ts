@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
@@ -16,13 +16,13 @@ import { NgIf, NgTemplateOutlet } from '@angular/common';
 })
 export class LabelLinkComponent {
 
-    @Input() public objectId: number | null | undefined = null;
-    @Input() public permissions: string[] | string = [];
-    @Input() public route: string = '';
+    public objectId = input<number | null | undefined>(null);
+    public permissions = input<string[] | string>([]);
+    public route = input<string>('');
 
     public PermissionService: PermissionsService = inject(PermissionsService);
 
     public hasPermission(): boolean {
-        return this.PermissionService.hasPermission(this.permissions);
+        return this.PermissionService.hasPermission(this.permissions());
     }
 }
