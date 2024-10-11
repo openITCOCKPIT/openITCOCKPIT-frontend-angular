@@ -94,6 +94,7 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
         '6': 'x-large',
         '7': 'xx-large'
     };
+    public currentHtmlFontsize: string = 'normal';
     public post!: AutomapEntity;
     public errors: GenericValidationError | null = null;
     public hostAndServiceCount: AutomapsMatchingHostAndServiceCounts = {
@@ -146,13 +147,12 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getFontSize(): string {
+    public onFontsizeChange() {
+        this.currentHtmlFontsize = 'normal';
         if (this.fontSizesHtml.hasOwnProperty(this.post.font_size)) {
             // @ts-ignore
-            return this.fontSizesHtml[this.post.font_size];
+            this.currentHtmlFontsize = String(this.fontSizesHtml[this.post.font_size]);
         }
-
-        return 'normal';
     }
 
     public submit(): void {

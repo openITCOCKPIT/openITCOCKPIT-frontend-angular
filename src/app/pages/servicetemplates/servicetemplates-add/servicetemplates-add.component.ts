@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -99,7 +99,8 @@ import { HistoryService } from '../../../history.service';
         TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        TranslocoPipe
     ],
     templateUrl: './servicetemplates-add.component.html',
     styleUrl: './servicetemplates-add.component.css'

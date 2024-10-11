@@ -187,7 +187,7 @@
                                                    [addTag]="true"
                                                    [multiple]="true"
                                                    [selectOnTab]="true"
-                                                   [placeholder]="t('Filter by tags')"
+                                                   [placeholder]="'Filter by tags'|transloco"
                                                    [isOpen]="false"
                                                    (change)="onFilterChange($event)">
                                         </ng-select>
@@ -203,7 +203,7 @@
                                                    [addTag]="true"
                                                    [multiple]="true"
                                                    [selectOnTab]="true"
-                                                   [placeholder]="t('Filter by excluded tags')"
+                                                   [placeholder]="'Filter by excluded tags'|transloco"
                                                    [isOpen]="false"
                                                    (change)="onFilterChange($event)">
                                         </ng-select>

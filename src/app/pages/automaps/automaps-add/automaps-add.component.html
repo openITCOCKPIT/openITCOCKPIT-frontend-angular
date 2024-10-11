@@ -383,7 +383,8 @@
                                             optionValue="key"
                                             optionLabel="value"
                                             [options]="fontSizesSelect"
-                                            [(ngModel)]="post.font_size">
+                                            [(ngModel)]="post.font_size"
+                                            (onChange)="onFontsizeChange()">
                                         </oitc-select>
                                         <oitc-form-feedback [errors]="errors"
                                                             errorField="font_size"></oitc-form-feedback>
@@ -411,7 +412,7 @@
                                             </h3>
                                         </c-col>
                                         <c-col [xs]="6" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']"
                                                      class="up"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
@@ -420,7 +421,7 @@
                                             </span>
                                         </c-col>
                                         <c-col [xs]="6" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']" class="critical"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
                                             <span>
@@ -439,7 +440,7 @@
                                             </h3>
                                         </c-col>
                                         <c-col [xs]="12" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']"
                                                      class="up me-1"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
@@ -450,7 +451,7 @@
 
                                     <c-row *ngIf="!post.show_label && !post.group_by_host">
                                         <c-col [xs]="12" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']"
                                                      class="up me-1"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
@@ -461,7 +462,7 @@
 
                                     <c-row *ngIf="post.show_label && !post.group_by_host">
                                         <c-col [xs]="6" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']"
                                                      class="up"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
@@ -470,7 +471,7 @@
                                             </span>
                                         </c-col>
                                         <c-col [xs]="6" class="text-truncate"
-                                               [style.font-size]="getFontSize()">
+                                               [style.font-size]="currentHtmlFontsize">
                                             <fa-icon [icon]="['fas', 'square']" class="critical"
                                                      title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
                                             <span>

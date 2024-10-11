@@ -444,7 +444,7 @@
                                                 [addTag]="true"
                                                 [multiple]="true"
                                                 [selectOnTab]="true"
-                                                [placeholder]="t('Filter by tags')"
+                                                [placeholder]="'Filter by tags'|transloco"
                                                 oitcDebounce
                                                 (debouncedValue)="onFilterChange($event)"
                                                 [isOpen]="false">
@@ -465,7 +465,7 @@
                                                 [addTag]="true"
                                                 [multiple]="true"
                                                 [selectOnTab]="true"
-                                                [placeholder]="t('Filter by excluded tags')"
+                                                [placeholder]="'Filter by excluded tags'|transloco"
                                                 oitcDebounce
                                                 (debouncedValue)="onFilterChange($event)"
                                                 [isOpen]="false">
