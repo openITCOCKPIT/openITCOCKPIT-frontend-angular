@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { GenericValidationError } from '../../../generic-responses';
 import { NgForOf, NgIf } from '@angular/common';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-form-feedback',
@@ -15,13 +16,13 @@ import { NgForOf, NgIf } from '@angular/common';
 export class FormFeedbackComponent {
 
     @Input() public errors?: GenericValidationError | null = null;
+    // field like "name" or path like "containers.name"
     @Input({required: true}) errorField: string = '';
 
     public hasError(): boolean {
-        if (this.errors) {
-            if (this.errors[this.errorField]) {
-                return true;
-            }
+        const errors = _.result(this.errors, this.errorField);
+        if (errors) {
+            return true;
         }
 
         return false;
@@ -32,19 +33,12 @@ export class FormFeedbackComponent {
             return [];
         }
 
-        const errors: string[] = [];
-        for (let key in this.errors[this.errorField]) {
-            if (typeof (this.errors[this.errorField][key]) === 'string') {
-                errors.push(this.errors[this.errorField][key]);
-            } else if (typeof (this.errors[this.errorField][key]) === 'object') {
-                // @ts-ignore
-                for (let subKey in this.errors[this.errorField][key]) {
-                    errors.push(this.errors[this.errorField][key][subKey]);
-                }
-            }
+        const errors = _.result(this.errors, this.errorField);
+        if (!errors) {
+            return [];
         }
 
-        return errors;
+        return Object.values(errors);
     }
 
 }

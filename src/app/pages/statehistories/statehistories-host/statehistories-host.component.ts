@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -90,7 +91,8 @@ import {
         TrueFalseDirective,
         TrustAsHtmlPipe,
         XsButtonDirective,
-        NgClass
+        NgClass,
+        CardFooterComponent
     ],
     templateUrl: './statehistories-host.component.html',
     styleUrl: './statehistories-host.component.css'

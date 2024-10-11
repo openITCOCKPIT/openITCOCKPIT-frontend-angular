@@ -83,7 +83,8 @@
                                             <td>
                                                 <oitc-item-select
                                                     [disabled]="false"
-                                                    [item]="satellite"></oitc-item-select>
+                                                    [item]="satellite"
+                                                    [initialChecked]="satellite.sync_instance == 1"></oitc-item-select>
                                             </td>
                                             <td>
                                                 {{ satellite.name }}
@@ -95,7 +96,7 @@
                                     </table>
                                     <c-container
                                         class="bg-secondary bg-opacity-10 py-2 rounded-bottom border border-top-0"
-                                        fluid>
+                                        [fluid]="true">
                                         <c-row>
                                             <c-col>
                                                 <oitc-select-all

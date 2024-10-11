@@ -63,6 +63,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { HttpParams } from '@angular/common/http';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostgroupExtendedTabs } from '../hostgroups.enum';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hostgroups-index',
@@ -121,7 +122,7 @@ import { HostgroupExtendedTabs } from '../hostgroups.enum';
         {provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService} // Inject the HostgroupsService into the DeleteAllModalComponent
     ]
 })
-export class HostgroupsIndexComponent implements OnInit, OnDestroy {
+export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private subscriptions: Subscription = new Subscription();

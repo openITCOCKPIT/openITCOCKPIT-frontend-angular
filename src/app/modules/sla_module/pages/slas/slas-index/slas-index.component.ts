@@ -48,6 +48,7 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { IndexPage } from '../../../../../pages.interface';
 
 @Component({
     selector: 'oitc-slas-index',
@@ -102,7 +103,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
     ]
 })
-export class SlasIndexComponent implements OnInit, OnDestroy {
+export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);

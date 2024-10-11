@@ -147,7 +147,7 @@
             </c-card-header>
             <c-card-body>
                 <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -304,7 +304,7 @@
                         </td>
                         <td>
                             <span class="text-muted">
-                                AUTO[{{serviceSystemdowntime.Systemdowntime.id}}]:
+                                AUTO[{{ serviceSystemdowntime.Systemdowntime.id }}]:
                             </span>
                             {{ serviceSystemdowntime.Systemdowntime.comment }}
                         </td>
@@ -336,7 +336,8 @@
                 <oitc-no-records
                     *ngIf="serviceSystemdowntimes && serviceSystemdowntimes.all_service_recurring_downtimes.length === 0"></oitc-no-records>
                 <ng-container *ngIf="serviceSystemdowntimes && serviceSystemdowntimes.all_service_recurring_downtimes">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-select-all
@@ -356,7 +357,8 @@
                         </c-row>
                     </c-container>
                 </ng-container>
-                <c-container fluid class="mb-3 py-3">
+                <c-container
+                    [fluid]="true" class="mb-3 py-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll

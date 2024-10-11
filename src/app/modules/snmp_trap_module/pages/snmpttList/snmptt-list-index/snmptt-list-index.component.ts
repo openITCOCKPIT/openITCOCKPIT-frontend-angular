@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -58,19 +59,20 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
+import { IndexPage } from '../../../../../pages.interface';
 
 
 @Component({
     selector: 'oitc-snmptt-list-index',
     standalone: true,
-    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent, NgClass],
+    imports: [RouterModule, CardComponent, CoreuiComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, TrueFalseDirective, HoststatusSimpleIconComponent, MatSort, MatSortHeader, NgForOf, NgIf, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, DropdownDividerDirective, SelectAllComponent, DeleteAllModalComponent, NgClass, CardFooterComponent],
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
     ]
 })
-export class SnmpttListIndexComponent implements OnInit {
+export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SnmpttService = inject(SnmpttService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -90,6 +92,10 @@ export class SnmpttListIndexComponent implements OnInit {
             // You can do something with these parameters here.
             this.loadSnmpttEntries();
         }));
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     public loadSnmpttEntries() {

@@ -19,6 +19,7 @@ import {
 } from './timeperiods.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -189,6 +190,22 @@ export class TimeperiodsService {
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/timeperiods/delete/${item.id}.json?angular=true`, {});
+    }
+
+    public loadTimeperiodsByContainerId(container_id: number): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            timeperiods: SelectKeyValue[]
+        }>(`${proxyPath}/timeperiods/loadTimeperiodsByContainerId.json`, {
+            params: {
+                angular: true,
+                containerId: container_id.toString()
+            }
+        }).pipe(
+            map(data => {
+                return data.timeperiods;
+            })
+        )
     }
 
 }

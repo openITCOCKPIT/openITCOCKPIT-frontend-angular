@@ -36,7 +36,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -103,7 +103,8 @@ import { HistoryService } from '../../../history.service';
         RouterLink,
         NgClass,
         ObjectUuidComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        TranslocoPipe
     ],
     templateUrl: './servicetemplates-edit.component.html',
     styleUrl: './servicetemplates-edit.component.css'

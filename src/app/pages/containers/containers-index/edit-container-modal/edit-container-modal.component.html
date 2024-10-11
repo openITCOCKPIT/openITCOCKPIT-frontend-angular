@@ -1,0 +1,48 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="editContainerModal"
+        size="lg"
+    >
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('Edit container name') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            <form (submit)="submit()" *ngIf="container">
+                <label cLabel for="Name" class="mt-3">
+                    {{ t('Name') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                    </span>
+                    <input cFormControl id="Name" type="text"
+                           name="Name"
+                           [placeholder]="'Container name' | transloco"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="container.name">
+                </c-input-group>
+                <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+            </form>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton class="ripple" color="primary"
+                    (click)="submit()"
+                    [disabled]="isSaving">
+                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="isSaving"></fa-icon>
+                {{ t('Save') }}
+            </button>
+
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

@@ -66,7 +66,7 @@
             <c-card-body>
 
                 <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" fluid>
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
                         <c-col>
                             <h6 class="pb-2 mb-3 border-bottom">
@@ -152,15 +152,15 @@
                                     </span>
 
                                     <oitc-multi-select
-                                            name="UserRoleFilter"
-                                            id="UserRoleFilter"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="params['filter[Users.usergroup_id][]']"
-                                            [options]="usergroups"
-                                            [debounce]="true"
-                                            [placeholder]="'Filter by user role' | transloco"
-                                            (onChange)="onFilterChange(true)"
+                                        name="UserRoleFilter"
+                                        id="UserRoleFilter"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="params['filter[Users.usergroup_id][]']"
+                                        [options]="usergroups"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by user role' | transloco"
+                                        (onChange)="onFilterChange(true)"
                                     >
                                     </oitc-multi-select>
                                 </c-input-group>
@@ -177,7 +177,7 @@
                 </c-container>
                 <!-- End Filter -->
 
-                <oitc-table-loader *ngIf="result.all_users.length === 0"></oitc-table-loader>
+                <oitc-table-loader *ngIf="result.myUserId === 0"></oitc-table-loader>
 
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -221,9 +221,9 @@
                             <div *ngIf="user.id !== 1">
 
                                 <oitc-item-select
-                                        *oitcPermission="['users', 'delete']"
-                                        [disabled]="false"
-                                        [item]="user"></oitc-item-select>
+                                    *oitcPermission="['users', 'delete']"
+                                    [disabled]="false"
+                                    [item]="user"></oitc-item-select>
                             </div>
                         </td>
                         <td>
@@ -239,18 +239,18 @@
                             {{ user.company }}
                         </td>
                         <td>
-                            <button *ngIf="user.is_active" cButton size="xs" color="success" class="btnNoHover" variant="outline">
-                                {{t('Active')}}
-                            </button>
-                            <button *ngIf="!user.is_active" cButton size="xs" color="danger" class="btnNoHover" variant="outline">
-                                {{t('Disabled')}}
-                            </button>
+                            <oitc-badge-outline *ngIf="user.is_active" color="success">
+                                {{ t('Active') }}
+                            </oitc-badge-outline>
+                            <oitc-badge-outline *ngIf="! user.is_active" color="danger">
+                                {{ t('Disabled') }}
+                            </oitc-badge-outline>
                         </td>
                         <td>
-
-                            <button cButton size="xs" class="btnNoHover {{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}" color="{{ user.UserTypes[0].color }}" variant="outline">
+                            <oitc-badge-outline class="{{ user.UserTypes[0].class }} {{ user.UserTypes[0].color }}"
+                                                [color]="user.UserTypes[0].color">
                                 {{ user.UserTypes[0].title }}
-                            </button>
+                            </oitc-badge-outline>
                         </td>
                         <td>
                             {{ user.usergroup.name }}
@@ -259,20 +259,29 @@
                             {{ user.last_login }}
                         </td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="user.allow_edit"
-                                                 [permission]="'users.edit'"
+                            <oitc-actions-button [permission]="'users.edit'"
                                                  [url]="'/users/edit/' + user.id">
                                 <oitc-actions-button-element [permission]="'users.edit'"
-                                                             [url]="'/users/edit/' + user.id">
+                                                             [url]="'/users/edit/' + user.id"
+                                                             *ngIf="user.allow_edit">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'changelogs.index'">
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             *ngIf="!user.allow_edit">
+                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'users.edit'"
+                                                             (click)="resetPasswordModal(user)"
+                                                             *ngIf="!user.samaccountname && user.allow_edit">
                                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                                     {{ t('Reset password') }}
                                 </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
+                                <li cDropdownDivider
+                                    *ngIf="user.allow_edit"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(user)"
+                                                             *ngIf="user.allow_edit"
                                                              [permission]="'users.delete'">
                                     <span class="text-danger">
                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -286,15 +295,16 @@
                 </table>
 
                 <oitc-no-records
-                        *ngIf="result && result.all_users.length === 0"></oitc-no-records>
+                    *ngIf="result && result.all_users.length === 0"></oitc-no-records>
 
 
                 <ng-container *ngIf="result && result.all_users">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0" fluid>
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-select-all
-                                        [itemsCount]="result.all_users.length"></oitc-select-all>
+                                    [itemsCount]="result.all_users.length"></oitc-select-all>
                             </c-col>
                             <c-col md="3">
                                 <div class="btn-group d-flex flex-row" role="group">
@@ -310,13 +320,14 @@
                     </c-container>
                 </ng-container>
 
-                <c-container fluid>
+                <c-container
+                    [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                    (paginatorChange)="onPaginatorChange($event)"
-                                    *ngIf="result"
-                                    [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>
@@ -330,3 +341,5 @@
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-reset-password-modal (completed)="onMassActionComplete($event)"
+                           [user]="resetPasswordUser"></oitc-reset-password-modal>

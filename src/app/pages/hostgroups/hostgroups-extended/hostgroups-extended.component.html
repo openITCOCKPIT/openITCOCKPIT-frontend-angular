@@ -651,7 +651,8 @@
                                     <oitc-no-records
                                         *ngIf="host.services.length === 0"></oitc-no-records>
 
-                                    <c-container fluid>
+                                    <c-container
+                                        [fluid]="true">
                                         <c-row class="py-2">
                                             <c-col>
                                                 <oitc-paginate-or-scroll
@@ -668,7 +669,8 @@
                     </table>
                     <oitc-no-records
                         *ngIf="hostgroupExtended.Hosts.length === 0"></oitc-no-records>
-                    <c-container fluid>
+                    <c-container
+                        [fluid]="true">
                         <c-row>
                             <c-col>
                                 <oitc-paginate-or-scroll
@@ -706,4 +708,5 @@
                              [items]="selectedItems"></oitc-host-acknowledge-modal>
 <oitc-disable-modal (completed)="onResetChecktime($event)" [items]="selectedItems"></oitc-disable-modal>
 
-<oitc-delete-all-modal (completed)="onResetChecktime($event)" [items]="selectedItems" [overrideDeleteService]="deleteService"></oitc-delete-all-modal>
+<oitc-delete-all-modal (completed)="onResetChecktime($event)" [items]="selectedItems"
+                       [overrideDeleteService]="deleteService"></oitc-delete-all-modal>

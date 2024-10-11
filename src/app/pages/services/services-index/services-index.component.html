@@ -187,7 +187,7 @@
                                                    [addTag]="true"
                                                    [multiple]="true"
                                                    [selectOnTab]="true"
-                                                   [placeholder]="t('Filter by tags')"
+                                                   [placeholder]="'Filter by tags'|transloco"
                                                    [isOpen]="false"
                                                    (change)="onFilterChange($event)">
                                         </ng-select>
@@ -203,7 +203,7 @@
                                                    [addTag]="true"
                                                    [multiple]="true"
                                                    [selectOnTab]="true"
-                                                   [placeholder]="t('Filter by excluded tags')"
+                                                   [placeholder]="'Filter by excluded tags'|transloco"
                                                    [isOpen]="false"
                                                    (change)="onFilterChange($event)">
                                         </ng-select>
@@ -891,7 +891,7 @@
 
                     <ng-container *ngIf="services && services.all_services">
                         <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                     fluid>
+                                     [fluid]="true">
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
@@ -1005,6 +1005,9 @@
                 </c-row>
 
             </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
         </c-card>
     </ng-container>
 

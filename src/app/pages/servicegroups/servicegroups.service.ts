@@ -2,7 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from "rxjs";
 import {
     AddServicegroupsPost,
+    LoadContainersRoot,
+    LoadServicesForServices,
+    LoadServicesRequest,
+    LoadServicesResponse,
+    LoadServicetemplates,
     Servicegroup,
+    ServicegroupAppend,
+    ServiceGroupExtendedRoot,
     ServicegroupsCopyGet,
     ServicegroupsCopyGetServicegroup,
     ServicegroupsCopyPostResult,
@@ -11,20 +18,13 @@ import {
     ServicegroupsExtendedServiceListParams,
     ServicegroupsIndexParams,
     ServicegroupsIndexRoot,
-    ServicegroupsLoadServicegroupsByStringParams,
-    LoadContainersRoot,
-    LoadServicesRequest,
-    LoadServicesResponse,
-    LoadServicetemplates,
-    LoadServicesForServices,
-    ServiceGroupExtendedRoot, ServicegroupAppend
+    ServicegroupsLoadServicegroupsByStringParams
 } from "./servicegroups.interface";
 import { HttpClient } from "@angular/common/http";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from "../../generic-responses";
 import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
-import { HostgroupAppend } from '../hostgroups/hostgroups.interface';
 
 
 @Injectable({
@@ -225,5 +225,24 @@ export class ServicegroupsService {
     public appendServices(param: ServicegroupAppend): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/servicegroups/append/.json?angular=true`, param);
+    }
+
+    public loadServicegroupsByContainerId(containerId: number, selected: any[], resolveContainerIds: boolean = true): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<{
+            servicegroups: SelectKeyValue[]
+        }>(`${proxyPath}/servicegroups/loadServicegroupsByContainerId.json`, {
+            params: {
+                angular: true,
+                containerId: containerId,
+                'selected[]': selected,
+                resolveContainerIds: resolveContainerIds
+            }
+        }).pipe(
+            map(data => {
+                return data.servicegroups;
+            })
+        );
     }
 }

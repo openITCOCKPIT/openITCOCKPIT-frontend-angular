@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -45,7 +46,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -56,6 +57,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicedependencies-index',
@@ -103,7 +105,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CardFooterComponent
     ],
     templateUrl: './servicedependencies-index.component.html',
     styleUrl: './servicedependencies-index.component.css',
@@ -111,7 +114,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicedependenciesService} // Inject the ServicedependenciesService into the DeleteAllModalComponent
     ]
 })
-export class ServicedependenciesIndexComponent implements OnInit, OnDestroy {
+export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService = inject(TranslocoService);
     public params: ServicedependenciesIndexParams = getDefaultServicedependenciesIndexParams();
     public servicedependencies?: ServicedependencyIndexRoot;
@@ -219,5 +222,8 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy {
         if (success) {
             this.loadServicedependencies();
         }
+    }
+
+    public onSortChange(sort: Sort) {
     }
 }

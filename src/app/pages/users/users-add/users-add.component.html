@@ -65,7 +65,7 @@
                     </div>
 
                     <ng-container *ngIf="containerPermissions">
-                        <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue"
+                        <c-row *ngFor="let userContainerRole of containerPermissions.userContainerRoleContainerPermissions | keyvalue:keepOrder"
                                class="containerRoleInheritance mb-3">
                             <c-col md="1">
                             </c-col>

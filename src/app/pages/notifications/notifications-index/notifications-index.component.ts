@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -52,6 +53,7 @@ import {
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -95,12 +97,13 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         HoststatusSimpleIconComponent,
         ContainerComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CardFooterComponent
     ],
     templateUrl: './notifications-index.component.html',
     styleUrl: './notifications-index.component.css'
 })
-export class NotificationsIndexComponent implements OnInit, OnDestroy {
+export class NotificationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private NotificationsService = inject(NotificationsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -178,6 +181,9 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadNotifications();
         }
+    }
+
+    public onMassActionComplete(success: boolean): void {
     }
 
 }

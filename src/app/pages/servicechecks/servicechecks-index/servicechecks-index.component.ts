@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -51,6 +52,7 @@ import {
     ServicechecksIndexParams,
     ServicechecksIndexRoot
 } from '../servicechecks.interface';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-servicechecks-index',
@@ -92,12 +94,13 @@ import {
         XsButtonDirective,
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,
-        NgClass
+        NgClass,
+        CardFooterComponent
     ],
     templateUrl: './servicechecks-index.component.html',
     styleUrl: './servicechecks-index.component.css'
 })
-export class ServicechecksIndexComponent implements OnInit, OnDestroy {
+export class ServicechecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     private serviceId: number = 0;
     private ServicechecksService = inject(ServicechecksService)
     public readonly route = inject(ActivatedRoute);
@@ -202,5 +205,8 @@ export class ServicechecksIndexComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadServicechecks();
         }
+    }
+
+    public onMassActionComplete(success: boolean) {
     }
 }

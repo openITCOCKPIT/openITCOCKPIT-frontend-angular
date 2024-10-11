@@ -43,6 +43,7 @@ import {
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
     selector: 'oitc-contactgroups-edit',
@@ -79,7 +80,8 @@ import { HistoryService } from '../../../history.service';
         XsButtonDirective,
         RouterLink,
         ObjectUuidComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        MultiSelectComponent
     ],
     templateUrl: './contactgroups-edit.component.html',
     styleUrl: './contactgroups-edit.component.css'
@@ -140,11 +142,6 @@ export class ContactgroupsEditComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    // This is a bit of a hack, but it's the only way to get the error message to show up in the right place.
-                    if (typeof this.errors['container']['name'] !== 'undefined') {
-                        this.errors['name'] = <any>this.errors['container']['name'];
-                    }
                 }
             })
         );

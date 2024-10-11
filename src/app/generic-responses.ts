@@ -3,7 +3,7 @@
 // If success=false, than we have a validation error
 export interface GenericResponseWrapper {
     success: boolean,
-    data: GenericValidationError | GenericIdResponse | GenericSuccessResponse | GenericMessageResponse | any
+    data: GenericValidationError | GenericIdResponse | GenericSuccessResponse | GenericMessageResponse | GenericFilenameResponse | any
 }
 
 export interface GenericValidationError {
@@ -29,6 +29,10 @@ export interface GenericResponse {
 
 export interface GenericMessageResponse {
     message: string
+}
+
+export interface GenericFilenameResponse {
+    filename: string
 }
 
 export interface GenericActionErrorResponse {

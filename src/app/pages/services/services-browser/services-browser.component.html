@@ -199,7 +199,8 @@
 
                                     <button cButton color="default"
                                             *ngIf="Number(result.servicestatus.currentState) > 0"
-                                            [cTooltip]="'Acknowledge host status' | transloco" cTooltipPlacement="top"
+                                            [cTooltip]="'Acknowledge service status' | transloco"
+                                            cTooltipPlacement="top"
                                             (click)="acknowledgeStatus(result.mergedService, result.host)">
                                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                     </button>
@@ -299,7 +300,8 @@
                                             </div>
 
                                             <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelDowntimeModal(result.downtime)" cButton
+                                                <button (click)="toggleCancelServiceDowntimeModal(result.downtime)"
+                                                        cButton
                                                         class="ripple float-end" color="danger"
                                                         size="xs"
                                                         *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
@@ -421,7 +423,8 @@
                                             </div>
 
                                             <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelDowntimeModal(result.hostDowntime)" cButton
+                                                <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
+                                                        cButton
                                                         class="ripple float-end" color="danger"
                                                         size="xs"
                                                         *ngIf="result.hostDowntime.allowEdit && result.hostDowntime.isCancellable">
@@ -896,7 +899,7 @@
                                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                     </div>
                                     <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Acknowledge host status') }}
+                                        {{ t('Acknowledge service status') }}
                                     </div>
                                 </div>
 
@@ -1325,3 +1328,9 @@
 
 <oitc-delete-acknowledgements-modal [items]="selectedItems"
                                     (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
+
+<oitc-cancel-hostdowntime-modal [items]="selectedItems"
+                                (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
+
+<oitc-cancel-servicedowntime-modal [items]="selectedItems"
+                                   (completed)="onMassActionComplete($event)"></oitc-cancel-servicedowntime-modal>

@@ -165,7 +165,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
         }
         let params: ServicesLoadServicesByStringParams = {
             angular: true,
-            'filter[Services.name]': searchString,
+            'filter[servicename]': searchString,
             'filter[Services.disabled]': 0,
             'selected[]': selected,
             includeDisabled: false

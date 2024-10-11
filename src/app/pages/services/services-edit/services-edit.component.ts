@@ -39,7 +39,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -115,7 +115,8 @@ import { HistoryService } from '../../../history.service';
         ObjectUuidComponent,
         NgClass,
         FakeSelectComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        TranslocoPipe
     ],
     templateUrl: './services-edit.component.html',
     styleUrl: './services-edit.component.css'

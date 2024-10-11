@@ -18,6 +18,10 @@
 @import 'ngx-toastr/toastr';
 @import "toast";
 
+// Import vis-network css required for the tooltip
+// https://github.com/almende/vis/issues/3192#issuecomment-309995797
+@import "vis-network/dist/dist/vis-network.css";
+
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
  * and can also be used within libraries like Vis-Timeline
@@ -77,6 +81,7 @@
 @import "badge";
 @import "opacity";
 @import "alert";
+@import "nestable";
 
 //  Modules
 @import "../../app/modules/import_module/assets/import_module";

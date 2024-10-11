@@ -48,9 +48,6 @@ const coreRoutes: Routes = [{
     loadComponent: () => import('./pages/start-page/start-page.component').then(m => m.StartPageComponent),
     canActivate: [authGuard]
 }, {
-    path: 'login',
-    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
-}, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {
@@ -438,8 +435,23 @@ const coreRoutes: Routes = [{
     path: 'statehistories/service/:id',
     loadComponent: () => import('./pages/statehistories/statehistories-service/statehistories-service.component').then(m => m.StatehistoriesServiceComponent)
 }, {
+    path: 'usergroups/add',
+    loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
+}, {
+    path: 'usergroups/edit/:id',
+    loadComponent: () => import('./pages/usergroups/usergroups-edit/usergroups-edit.component').then(m => m.UsergroupsEditComponent)
+}, {
+    path: 'usergroups/copy/:ids',
+    loadComponent: () => import('./pages/usergroups/usergroups-copy/usergroups-copy.component').then(m => m.UsergroupsCopyComponent)
+}, {
+    path: 'usergroups/index',
+    loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
+}, {
     path: 'users/add',
     loadComponent: () => import('./pages/users/users-add/users-add.component').then(m => m.UsersAddComponent)
+}, {
+    path: 'users/edit/:id',
+    loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
 }, {
     path: 'users/index',
     loadComponent: () => import('./pages/users/users-index/users-index.component').then(m => m.UsersIndexComponent)
@@ -447,11 +459,77 @@ const coreRoutes: Routes = [{
     path: 'users/ldap',
     loadComponent: () => import('./pages/users/users-ldap/users-ldap.component').then(m => m.UsersLdapComponent)
 }, {
+    path: 'users/login',
+    loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
+}, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
 }, {
     path: 'acknowledgements/service/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-service/acknowledgements-service.component').then(m => m.AcknowledgementsServiceComponent)
+}, {
+    path: 'locations/index',
+    loadComponent: () => import('./pages/locations/locations-index/locations-index.component').then(m => m.LocationsIndexComponent)
+}, {
+    path: 'locations/add',
+    loadComponent: () => import('./pages/locations/locations-add/locations-add.component').then(m => m.LocationsAddComponent)
+}, {
+    path: 'locations/edit/:id',
+    loadComponent: () => import('./pages/locations/locations-edit/locations-edit.component').then(m => m.LocationsEditComponent)
+}, {
+    path: 'tenants/index',
+    loadComponent: () => import('./pages/tenants/tenants-index/tenants-index.component').then(m => m.TenantsIndexComponent)
+}, {
+    path: 'tenants/add',
+    loadComponent: () => import('./pages/tenants/tenants-add/tenants-add.component').then(m => m.TenantsAddComponent)
+}, {
+    path: 'tenants/edit/:id',
+    loadComponent: () => import('./pages/tenants/tenants-edit/tenants-edit.component').then(m => m.TenantsEditComponent)
+}, {
+    path: 'containers/index',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
+    path: 'containers/index/:id',
+    loadComponent: () => import('./pages/containers/containers-index/containers-index.component').then(m => m.ContainersIndexComponent)
+}, {
+    path: 'containers/showDetails/:id',
+    loadComponent: () => import('./pages/containers/containers-show-details/containers-show-details.component').then(m => m.ContainersShowDetailsComponent)
+}, {
+    path: 'containers/map/:id',
+    loadComponent: () => import('./pages/containers/containers-map/containers-map.component').then(m => m.ContainersMapComponent)
+}, {
+    path: 'statusmaps/index',
+    loadComponent: () => import('./pages/statusmaps/statusmaps-index/statusmaps-index.component').then(m => m.StatusmapsIndexComponent)
+}, {
+    path: 'automaps/index',
+    loadComponent: () => import('./pages/automaps/automaps-index/automaps-index.component').then(m => m.AutomapsIndexComponent)
+}, {
+    path: 'automaps/add',
+    loadComponent: () => import('./pages/automaps/automaps-add/automaps-add.component').then(m => m.AutomapsAddComponent)
+}, {
+    path: 'automaps/edit/:id',
+    loadComponent: () => import('./pages/automaps/automaps-edit/automaps-edit.component').then(m => m.AutomapsEditComponent)
+}, {
+    path: 'automaps/view/:id',
+    loadComponent: () => import('./pages/automaps/automaps-view/automaps-view.component').then(m => m.AutomapsViewComponent)
+}, {
+    path: 'automaps/copy/:ids',
+    loadComponent: () => import('./pages/automaps/automaps-copy/automaps-copy.component').then(m => m.AutomapsCopyComponent)
+}, {
+    path: 'currentstatereports/index',
+    loadComponent: () => import('./pages/currentstatereports/currentstatereports-index/currentstatereports-index.component').then(m => m.CurrentstatereportsIndexComponent)
+}, {
+    path: 'instantreports/index',
+    loadComponent: () => import('./pages/instantreports/instantreports-index/instantreports-index.component').then(m => m.InstantreportsIndexComponent)
+}, {
+    path: 'instantreports/add',
+    loadComponent: () => import('./pages/instantreports/instantreports-add/instantreports-add.component').then(m => m.InstantreportsAddComponent)
+}, {
+    path: 'instantreports/edit/:id',
+    loadComponent: () => import('./pages/instantreports/instantreports-edit/instantreports-edit.component').then(m => m.InstantreportsEditComponent)
+}, {
+    path: 'instantreports/generate/:id',
+    loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
 }, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)

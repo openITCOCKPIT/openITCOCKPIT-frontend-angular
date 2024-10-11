@@ -90,6 +90,8 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { IndexPage } from '../../../pages.interface';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 
 @Component({
     selector: 'oitc-commands-index',
@@ -143,6 +145,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
         DropdownDividerDirective,
         MatSort,
         MatSortHeader,
+        TableLoaderComponent,
     ],
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
@@ -150,7 +153,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
         {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
     ]
 })
-export class CommandsIndexComponent implements OnInit, OnDestroy {
+export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);

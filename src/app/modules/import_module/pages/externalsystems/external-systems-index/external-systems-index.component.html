@@ -1,0 +1,241 @@
+<oitc-coreui>
+    <ng-container *transloco="let t">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Import Module') }}
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                    {{ t('External Systems Overview') }}
+                </li>
+            </ol>
+        </nav>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('External Systems') }}
+                    <small class="fw-300">
+                        {{ t('Overview') }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['ImportModule', 'ExternalSystems', 'add']"
+                                [routerLink]="['/', 'import_module', 'ExternalSystems', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[ExternalSystems.name]']"
+                                           [placeholder]="'Filter by system name' | transloco"
+                                           aria-label="ExternalSystemsName"
+                                           cFormControl
+                                           name="ExternalSystemsName"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col md="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[ExternalSystems.description]']"
+                                           [placeholder]="'Filter by system description' | transloco"
+                                           aria-label="ExternalSystemsDescription"
+                                           cFormControl
+                                           name="ExternalSystemsDescription"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+                <oitc-table-loader *ngIf="!externalSystems"></oitc-table-loader>
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="ExternalSystems.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ExternalSystems.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Connectivity') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="externalSystems">
+                    <tr *ngFor="let externalSystem of externalSystems.externalSystems">
+                        <td class="text-center">
+                            <oitc-item-select
+                                *oitcPermission="['importmodule','externalsystems', 'delete']"
+                                [disabled]="!externalSystem.allowEdit"
+                                [item]="externalSystem"></oitc-item-select>
+
+                        </td>
+                        <td>
+                            <span *oitcPermission="['importmodule','externalsystems', 'edit']">
+                                @if (externalSystem.allowEdit) {
+                                    <a [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit',externalSystem.id]">
+                                        {{ externalSystem.name }}
+                                    </a>
+                                } @else {
+                                    {{ externalSystem.name }}
+                                }
+                            </span>
+                            <span *oitcPermission="['importmodule','externalsystems', 'edit']; negate: true">
+                                {{ externalSystem.name }}
+                            </span>
+                        </td>
+                        <td>{{ externalSystem.description }}</td>
+                        <td> {{ externalSystem.container }}</td>
+                        <td class="text-center">
+                            <span class="badge border border-success text-success"
+                                  *ngIf="externalSystem.connected.status">
+                                {{ t('ONLINE') }}
+                            </span>
+                            <span class="badge border border-danger text-danger"
+                                  title="{{externalSystem.connected.msg.message}}"
+                                  *ngIf="!externalSystem.connected.status">
+                                {{ t('OFFLINE') }}
+                            </span>
+                        </td>
+                        <td class="width-50">
+                            <oitc-actions-button [permission]="'ImportModule.ExternalSystems.edit'"
+                                                 [icon]="['fas', 'cog']"
+                                                 [url]="'/import_module/ExternalSystems/edit/' + externalSystem.id">
+                                <oitc-actions-button-element [permission]="'ImportModule.ExternalSystems.edit'"
+                                                             *ngIf="externalSystem.allowEdit"
+                                                             [url]="'/import_module/ExternalSystems/edit/' + externalSystem.id">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    {{ t('Edit') }}
+                                </oitc-actions-button-element>
+                                <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
+                                                             [url]="'/import_module/import_changelogs/entity/ExternalSystem/' + externalSystem.id">
+                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                    {{ t('Changelog') }}
+                                </oitc-actions-button-element>
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(externalSystem)"
+                                                             *ngIf="externalSystem.allowEdit"
+                                                             [permission]="'ImportModule.importedhostgroups.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            </oitc-actions-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <oitc-no-records
+                    *ngIf="externalSystems && externalSystems.externalSystems.length === 0"></oitc-no-records>
+                <ng-container *ngIf="externalSystems">
+                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                 [fluid]="true">
+                        <c-row>
+                            <c-col>
+                                <oitc-select-all
+                                    [itemsCount]="externalSystems.externalSystems.length"></oitc-select-all>
+                            </c-col>
+                            <c-col md="3">
+                                <div class="btn-group d-flex flex-row" role="group">
+                                    <button (click)="toggleDeleteAllModal()"
+                                            class="btn btn-outline-danger col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                </ng-container>
+
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="externalSystems"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </c-card-body>
+        </c-card>
+    </ng-container>
+</oitc-coreui>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

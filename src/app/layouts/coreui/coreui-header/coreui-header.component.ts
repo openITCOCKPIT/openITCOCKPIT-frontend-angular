@@ -26,8 +26,9 @@ import { SidebarService } from '../coreui-navbar/sidebar.service';
 import { Subscription } from 'rxjs';
 import { TopSearchComponent } from '../top-search/top-search.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -54,7 +55,8 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
         TopSearchComponent,
         TranslocoDirective,
         FaIconComponent,
-        PermissionDirective
+        PermissionDirective,
+        XsButtonDirective
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css'

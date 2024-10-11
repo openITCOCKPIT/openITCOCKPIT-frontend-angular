@@ -147,15 +147,6 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             this.useSingleInstanceSync = data.useSingleInstanceSync;
             this.satellites = data.satellites;
 
-            if (this.useSingleInstanceSync) {
-                // mark already selected satellite systems
-                for (let satellite of this.satellites) {
-                    if (satellite.sync_instance) {
-                        this.SelectionServiceService.selectItem(satellite);
-                    }
-                }
-            }
-
             if (this.isExportRunning) {
                 this.broadcastIntervalId = setInterval(() => {
                     this.ExportsService.getBroadcastStatus().subscribe(data => {

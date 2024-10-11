@@ -59,6 +59,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-timeperiods-index',
@@ -114,7 +115,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         {provide: DELETE_SERVICE_TOKEN, useClass: TimeperiodsService} // Inject the CommandsService into the DeleteAllModalComponent
     ]
 })
-export class TimeperiodsIndexComponent implements OnInit, OnDestroy {
+export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);

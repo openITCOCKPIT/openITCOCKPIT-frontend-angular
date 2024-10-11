@@ -1,5 +1,6 @@
 import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
+import _ from 'lodash';
 
 @Directive({
     selector: '[oitcFormError]',
@@ -21,7 +22,8 @@ export class FormErrorDirective {
             return {};
         }
 
-        if (this.errors[this.errorField]) {
+        const errors = _.result(this.errors, this.errorField);
+        if (errors) {
             return {
                 'is-invalid': true
             }
