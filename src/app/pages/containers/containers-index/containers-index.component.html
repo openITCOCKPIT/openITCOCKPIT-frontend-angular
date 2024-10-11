@@ -335,15 +335,20 @@
 
         </c-card>
     </ng-container>
+
+    <ng-container>
+        <oitc-delete-all-modal (completed)="onMassActionComplete($event)"
+                               [items]="selectedItems"></oitc-delete-all-modal>
+
+        <oitc-create-container-modal
+            [parentContainerId]="dataForCreateContainerModal.parentContainerId"
+            [parentContainerTypeId]="dataForCreateContainerModal.parentContainerTypeId"
+            (completed)="onMassActionComplete($event)"></oitc-create-container-modal>
+
+        <oitc-edit-container-modal
+            [container]="selectedContainerForEdit"
+            (completed)="onMassActionComplete($event)"></oitc-edit-container-modal>
+    </ng-container>
+
 </oitc-coreui>
 
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
-
-<oitc-create-container-modal
-    [parentContainerId]="dataForCreateContainerModal.parentContainerId"
-    [parentContainerTypeId]="dataForCreateContainerModal.parentContainerTypeId"
-    (completed)="onMassActionComplete($event)"></oitc-create-container-modal>
-
-<oitc-edit-container-modal
-    [container]="selectedContainerForEdit"
-    (completed)="onMassActionComplete($event)"></oitc-edit-container-modal>

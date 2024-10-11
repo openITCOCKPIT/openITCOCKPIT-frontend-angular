@@ -1,4 +1,4 @@
-import { Component, inject, input, Input, TemplateRef } from '@angular/core';
+import { Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
 import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -48,7 +48,8 @@ export class ContainerNestComponent {
     //@Input() public level: number = 0;
     public level = input(0);
 
-    @Input() containerTemplate!: TemplateRef<any>
+    //@Input() containerTemplate!: TemplateRef<any>
+    containerTemplate = input<TemplateRef<any> | null>(null);
 
     public readonly PermissionsService = inject(PermissionsService);
     public readonly ContainersService = inject(ContainersService);
