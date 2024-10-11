@@ -40,7 +40,6 @@
                             "src/material.scss"
                         ],
                         "scripts": [
-                            "src/peter.js"
                         ],
                         "loader": {
                             ".svg": "text"
