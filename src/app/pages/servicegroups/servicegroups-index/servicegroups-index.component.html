@@ -151,7 +151,7 @@
                         </td>
                         <td>{{ servicegroup.description }}</td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="servicegroup.allow_edit"
+                            <oitc-actions-button [allowEdit]="servicegroup.allow_edit"
                                                  [permission]="'servicegroups.edit'"
                                                  [url]="'/servicegroups/edit/' + servicegroup.id">
                                 <oitc-actions-button-element [permission]="'servicegroups.edit'"

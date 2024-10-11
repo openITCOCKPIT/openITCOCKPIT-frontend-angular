@@ -164,7 +164,7 @@
                             </c-badge>
                         </td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="systemHealthUser.allow_edit"
+                            <oitc-actions-button [allowEdit]="systemHealthUser.allow_edit"
                                                  [permission]="'systemhealthusers.edit'"
                                                  [url]="'/systemHealthUsers/edit/' + systemHealthUser.system_health_user.id">
                                 <oitc-actions-button-element [permission]="'systemhealthusers.edit'"
