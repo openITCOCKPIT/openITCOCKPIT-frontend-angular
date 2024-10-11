@@ -232,13 +232,11 @@
                                 <c-badge *ngIf="sla.fulfill"
                                          textColor="success"
                                          class="badge-border w-100">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
                                     {{ t('PASSED') }}
                                 </c-badge>
                                 <c-badge [hidden]="sla.fulfill"
                                          textColor="danger"
                                          class="badge-border w-100">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
                                     {{ t('FAILED') }}
                                 </c-badge>
                             </div>
