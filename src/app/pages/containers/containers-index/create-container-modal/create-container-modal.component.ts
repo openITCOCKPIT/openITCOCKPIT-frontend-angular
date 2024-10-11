@@ -1,14 +1,4 @@
-import {
-    Component,
-    EventEmitter,
-    inject,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChanges
-} from '@angular/core';
+import { Component, effect, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
     ButtonCloseDirective,
@@ -88,9 +78,14 @@ import { UserTimezonesSelect } from '../../../users/users.interface';
 })
 export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestroy {
 
-    @Input() public parentContainerId: number = 0;
-    @Input() public parentContainerTypeId: ContainerTypesEnum = ContainerTypesEnum.CT_GLOBAL;
-    @Output() completed = new EventEmitter<boolean>();
+    //@Input() public parentContainerId: number = 0;
+    public parentContainerId = input<number>(0);
+
+    //@Input() public parentContainerTypeId: ContainerTypesEnum = ContainerTypesEnum.CT_GLOBAL;
+    public parentContainerTypeId = input<ContainerTypesEnum>(ContainerTypesEnum.CT_GLOBAL);
+
+    //@Output() completed = new EventEmitter<boolean>();
+    completed = output<boolean>();
 
     // container_type of the new container
     public availableContainerTypes: SelectKeyValue[] = [];
@@ -113,6 +108,18 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
 
+
+    constructor() {
+        effect(() => {
+            this.availableContainerTypes = this.getOptionsForContainerTypeSelect();
+            if (this.parentContainerTypeId() === ContainerTypesEnum.CT_GLOBAL) {
+                this.currentContainerTypeId = ContainerTypesEnum.CT_TENANT;
+            } else {
+                this.currentContainerTypeId = ContainerTypesEnum.CT_NODE;
+            }
+        });
+    }
+
     public ngOnInit() {
         // Timezones are required for locations
         this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
@@ -121,20 +128,20 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes['parentContainerTypeId']) {
-            this.parentContainerTypeId = changes['parentContainerTypeId'].currentValue;
-            this.availableContainerTypes = this.getOptionsForContainerTypeSelect();
+        //  if (changes['parentContainerTypeId']) {
+        //      this.parentContainerTypeId = changes['parentContainerTypeId'].currentValue;
+        //      this.availableContainerTypes = this.getOptionsForContainerTypeSelect();
 
-            if (this.parentContainerTypeId === ContainerTypesEnum.CT_GLOBAL) {
-                this.currentContainerTypeId = ContainerTypesEnum.CT_TENANT;
-            } else {
-                this.currentContainerTypeId = ContainerTypesEnum.CT_NODE;
-            }
-        }
+        //      if (this.parentContainerTypeId === ContainerTypesEnum.CT_GLOBAL) {
+        //          this.currentContainerTypeId = ContainerTypesEnum.CT_TENANT;
+        //      } else {
+        //          this.currentContainerTypeId = ContainerTypesEnum.CT_NODE;
+        //      }
+        //  }
 
-        if (changes['parentContainerId']) {
-            this.parentContainerId = changes['parentContainerId'].currentValue;
-        }
+        //if (changes['parentContainerId']) {
+        //    this.parentContainerId = changes['parentContainerId'].currentValue;
+        //}
     }
 
     public ngOnDestroy() {
@@ -191,7 +198,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     public submitLocation() {
         this.isSaving = true;
 
-        this.locationPost.container.parent_id = this.parentContainerId;
+        this.locationPost.container.parent_id = this.parentContainerId();
 
         this.subscriptions.add(this.LocationsService.add(this.locationPost)
             .subscribe((result) => {
@@ -254,7 +261,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     public submitNode() {
         this.isSaving = true;
 
-        this.nodePost.parent_id = this.parentContainerId;
+        this.nodePost.parent_id = this.parentContainerId();
 
         this.subscriptions.add(this.ContainersService.add(this.nodePost)
             .subscribe((result) => {
@@ -286,11 +293,11 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     public getOptionsForContainerTypeSelect(): SelectKeyValue[] {
         const types: SelectKeyValue[] = []
 
-        if (this.parentContainerTypeId === ContainerTypesEnum.CT_GLOBAL) {
+        if (this.parentContainerTypeId() === ContainerTypesEnum.CT_GLOBAL) {
             types.push({key: ContainerTypesEnum.CT_TENANT, value: this.TranslocoService.translate('Tenant')});
         }
 
-        if (this.parentContainerTypeId !== ContainerTypesEnum.CT_GLOBAL) {
+        if (this.parentContainerTypeId() !== ContainerTypesEnum.CT_GLOBAL) {
             types.push({key: ContainerTypesEnum.CT_NODE, value: this.TranslocoService.translate('Node')});
             types.push({key: ContainerTypesEnum.CT_LOCATION, value: this.TranslocoService.translate('Location')});
 
