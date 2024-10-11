@@ -70,7 +70,7 @@
                         <c-col md="3">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'less-than-equal']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'greater-than-equal']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="determined_availability.from"
@@ -81,11 +81,15 @@
                                        oitcDebounce
                                 />
                             </c-input-group>
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('This value filters all hosts whose SLA status is greater than or equal to that value') }}
+                            </div>
                         </c-col>
                         <c-col md="3">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'greater-than-equal']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'less-than-equal']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="determined_availability.to"
@@ -96,6 +100,10 @@
                                        oitcDebounce
                                 />
                             </c-input-group>
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('This value filters all hosts whose SLA status is less than or equal to that value') }}
+                            </div>
                         </c-col>
                         <c-col md="6">
                             <c-input-group class="multi-select-input-group">
@@ -208,12 +216,12 @@
                                title="{{slaStatusHost.host_name}} [{{slaStatusHost.sla_name}}]">
                             <span *oitcPermission="['hosts', 'browser']"
                                   [routerLink]="['/', 'hosts', 'browser', slaStatusHost.host_id, { selectedTab: 'tab7'}]"
-                                  class="text-white badge-clickable fs-6">
+                                  class="text-white badge-clickable">
                                 {{ slaStatusHost.heatmapLabel }}
                                 <br>
                                 {{ slaStatusHost.host_name }}
                             </span>
-                            <span *oitcPermission="['hosts', 'browser']; negate: true" class="fs-6">
+                            <span *oitcPermission="['hosts', 'browser']; negate: true">
                                 {{ slaStatusHost.heatmapLabel }}
                                 <br>
                                 {{ slaStatusHost.host_name }}
