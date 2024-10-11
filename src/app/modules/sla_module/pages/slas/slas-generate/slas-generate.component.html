@@ -59,7 +59,8 @@
                                 type="button"
                                 [ngClass]="{'active': tabName == SlasGenerateTabs.ReportConfig}"
                                 (click)="changeTab(SlasGenerateTabs.ReportConfig)">
-                                <fa-icon [icon]="['fas', 'pencil-square']"></fa-icon>
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                {{ t('Configuration') }}
                             </button>
                         </c-nav-item>
 
@@ -70,6 +71,7 @@
                                 [ngClass]="{'active': tabName == SlasGenerateTabs.ShowReport}"
                                 (click)="changeTab(SlasGenerateTabs.ShowReport)">
                                 <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                                {{ t('Report') }}
                             </button>
                         </c-nav-item>
                     </c-nav>
@@ -245,7 +247,7 @@
                             </c-col>
 
                             <c-col xs="12" md="6" lg="6" class="text-right">
-                                <!--<img alt="logo" src="<?php echo $Logo->getLogoForHtml(); ?>" width="200">-->
+                                <img alt="logo" src="{{logoUrl}}" width="200">
                             </c-col>
                         </c-row>
 
@@ -511,7 +513,7 @@
                 <c-card-footer class="text-end" *ngIf="tabName === SlasGenerateTabs.ReportConfig">
 
                     <button cButton class="ripple" color="primary" type="submit" [disabled]="isGenerating">
-                        <i class="fas fa-spinner fa-spin" [hidden]="!isGenerating"></i>
+                        <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
                         {{ t('Generate report') }}
                     </button>
                     <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ms-1 ripple" color="default"

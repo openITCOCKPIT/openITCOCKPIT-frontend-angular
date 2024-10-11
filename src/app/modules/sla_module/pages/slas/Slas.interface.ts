@@ -259,6 +259,7 @@ export interface SlasGeneratePostResponse {
     success: boolean
     sla: Sla
     report: Report
+    logoUrl: string
     _csrfToken: string
 }
 

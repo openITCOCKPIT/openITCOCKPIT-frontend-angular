@@ -134,6 +134,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
     public report: Report = {} as Report;
     public sla: Sla = {} as Sla;
     public slas: Sla[] = [];
+    public logoUrl: string = '';
     public reportMessage: { successMessage: string, errorMessage: string } = {
         successMessage: this.TranslocoService.translate('Report created successfully'),
         errorMessage: this.TranslocoService.translate('Report could not be created')
@@ -265,6 +266,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                         this.isGenerating = false;
                         this.report = response.report;
                         this.sla = response.sla;
+                        this.logoUrl = response.logoUrl;
 
                         this.notyService.genericSuccess(this.reportMessage.successMessage);
                         return;
