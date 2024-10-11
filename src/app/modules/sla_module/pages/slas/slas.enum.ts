@@ -28,3 +28,14 @@ export enum SlasReportFormatEnum {
     REPORT_FORMAT_PDF = 1 << 1,              // 2
     REPORT_FORMAT_ZIP = 1 << 2,
 }
+
+export enum SlasGenerateTabs {
+    ReportConfig = 'reportConfig',
+    ShowReport = 'showReport',
+}
+
+export enum SlasGenerateReportFormatEnum {
+    REPORT_FORMAT_CSV = 'zip',
+    REPORT_FORMAT_PDF = 'pdf',
+    REPORT_FORMAT_HTML = 'html',
+}

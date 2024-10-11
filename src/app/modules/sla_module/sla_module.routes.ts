@@ -18,6 +18,10 @@ export const slaModuleRoutes: Routes = [
         loadComponent: () => import('./pages/slas/slas-hosts/slas-hosts.component').then(m => m.SlasHostsComponent)
     },
     {
+        path: 'sla_module/slas/generate/:id',
+        loadComponent: () => import('./pages/slas/slas-generate/slas-generate.component').then(m => m.SlasGenerateComponent)
+    },
+    {
         path: 'sla_module/host_mapping_rules/assignToHosts/:id',
         loadComponent: () => import('./pages/host-mapping-rules/host-mapping-rules-assign-to-hosts/host-mapping-rules-assign-to-hosts.component').then(m => m.HostMappingRulesAssignToHostsComponent)
     },
