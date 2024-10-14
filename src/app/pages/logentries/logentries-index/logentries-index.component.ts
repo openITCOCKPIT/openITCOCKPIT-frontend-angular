@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -105,7 +105,8 @@ import { IndexPage } from '../../../pages.interface';
         CardFooterComponent
     ],
     templateUrl: './logentries-index.component.html',
-    styleUrl: './logentries-index.component.css'
+    styleUrl: './logentries-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private LogentriesService = inject(LogentriesService)
@@ -122,6 +123,8 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     private readonly HostsService = inject(HostsService);
     public entryTypesForSelect: any[] = [];
+
+    private cdr = inject(ChangeDetectorRef);
 
     public entryTypes = {
         1: this.TranslocoService.translate('Runtime error'),
@@ -175,6 +178,7 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.LogentriesService.getIndex(this.params)
             .subscribe((result) => {
                 this.logentries = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -198,7 +202,7 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
 
     // Callback when a filter has changed
-    public onFilterChange(event: Event) {
+    public onFilterChange(event: Event | null) {
         this.params.page = 1;
         this.loadLogentries();
     }

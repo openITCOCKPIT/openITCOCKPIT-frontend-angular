@@ -104,7 +104,7 @@
                                     [options]="entryTypesForSelect"
                                     [debounce]="true"
                                     [placeholder]="'Filter by entry type' | transloco"
-                                    (onChange)="loadLogentries()">
+                                    (onChange)="onFilterChange(null)">
                                 </oitc-multi-select>
                             </c-input-group>
                         </c-col>
