@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { UserTimezonesSelect } from '../../users/users.interface';
 import { LocationPost } from '../locations.interface';
@@ -75,7 +75,8 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
         NgOptionHighlightDirective
     ],
     templateUrl: './locations-edit.component.html',
-    styleUrl: './locations-edit.component.css'
+    styleUrl: './locations-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LocationsEditComponent implements OnInit, OnDestroy {
 
@@ -95,6 +96,7 @@ export class LocationsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.route.queryParams.subscribe(params => {
@@ -114,24 +116,28 @@ export class LocationsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.LocationsService.getLocationEdit(id).subscribe(location => {
             this.post = location;
             this.updateMarker();
+            this.cdr.markForCheck();
         }));
     }
 
     public loadContainers() {
         this.subscriptions.add(this.LocationsService.loadContainers().subscribe(containers => {
             this.containers = containers;
+            this.cdr.markForCheck();
         }));
     }
 
     public loadTimezones() {
         this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
             this.timezones = data.timezones;
+            this.cdr.markForCheck();
         }));
     }
 
     public submit() {
         this.subscriptions.add(this.LocationsService.saveLocationEdit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Location');
@@ -167,7 +173,7 @@ export class LocationsEditComponent implements OnInit, OnDestroy {
                     }
                 }
             };
-
+            this.cdr.markForCheck();
             this.markers = [marker];
         }
     }

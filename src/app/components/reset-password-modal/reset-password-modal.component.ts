@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -19,8 +29,8 @@ import { Subscription } from 'rxjs';
 import { UsersService } from '../../pages/users/users.service';
 
 @Component({
-  selector: 'oitc-reset-password-modal',
-  standalone: true,
+    selector: 'oitc-reset-password-modal',
+    standalone: true,
     imports: [
         ButtonCloseDirective,
         ColComponent,
@@ -35,8 +45,9 @@ import { UsersService } from '../../pages/users/users.service';
         TranslocoDirective,
         XsButtonDirective
     ],
-  templateUrl: './reset-password-modal.component.html',
-  styleUrl: './reset-password-modal.component.css'
+    templateUrl: './reset-password-modal.component.html',
+    styleUrl: './reset-password-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPasswordModalComponent implements OnInit, OnDestroy {
     @Output() completed = new EventEmitter<boolean>();
@@ -44,6 +55,8 @@ export class ResetPasswordModalComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
+
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
@@ -63,7 +76,7 @@ export class ResetPasswordModalComponent implements OnInit, OnDestroy {
     }
 
     protected resetPassword() {
-        if (! this.user) {
+        if (!this.user) {
             return;
         }
         this.UsersService.resetPassword(this.user.id).subscribe({

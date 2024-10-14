@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -48,7 +48,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './nagiostats-index.component.html',
-    styleUrl: './nagiostats-index.component.css'
+    styleUrl: './nagiostats-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NagiostatsIndexComponent implements OnInit, OnDestroy {
 
@@ -58,7 +59,7 @@ export class NagiostatsIndexComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly NagiostatsService = inject(NagiostatsService)
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(
@@ -70,6 +71,7 @@ export class NagiostatsIndexComponent implements OnInit, OnDestroy {
                 .subscribe((data: Nagiostats) => {
                     this.stats = data;
                     this.lastUpdate = new Date();
+                    this.cdr.markForCheck();
                 })
         );
     }
@@ -83,6 +85,7 @@ export class NagiostatsIndexComponent implements OnInit, OnDestroy {
             this.NagiostatsService.getIndex().subscribe((data: Nagiostats) => {
                 this.stats = data;
                 this.lastUpdate = new Date();
+                this.cdr.markForCheck();
             }));
     }
 

@@ -1,4 +1,4 @@
-import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RespositoryCheckerResponse } from './repository-checker.interface';
@@ -9,8 +9,8 @@ import { Subscription } from 'rxjs';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'oitc-repository-checker',
-  standalone: true,
+    selector: 'oitc-repository-checker',
+    standalone: true,
     imports: [
         CoreuiComponent,
         TranslocoDirective,
@@ -20,13 +20,16 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
         NgForOf,
         NgClass
     ],
-  templateUrl: './repository-checker.component.html',
-  styleUrl: './repository-checker.component.css'
+    templateUrl: './repository-checker.component.html',
+    styleUrl: './repository-checker.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RepositoryCheckerComponent implements OnInit, OnDestroy {
     private readonly RepositoryCheckerService: RepositoryCheckerService = inject(RepositoryCheckerService);
     private readonly Subscription: Subscription = new Subscription();
     protected data: RespositoryCheckerResponse | null = null;
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.getRepositoryCheckerData();
@@ -40,6 +43,7 @@ export class RepositoryCheckerComponent implements OnInit, OnDestroy {
         this.Subscription.add(
             this.RepositoryCheckerService.getRepositoryCheckerData().subscribe((data: RespositoryCheckerResponse): void => {
                 this.data = data;
+                this.cdr.markForCheck();
             }));
     }
 }

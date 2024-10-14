@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -107,7 +107,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './locations-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: LocationsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LocationsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -124,6 +125,7 @@ export class LocationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -145,6 +147,7 @@ export class LocationsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(
             this.LocationsService.getIndex(this.params).subscribe((locations) => {
                 this.locations = locations;
+                this.cdr.markForCheck();
             })
         );
     }

@@ -104,7 +104,6 @@ import {
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { UplotGraphComponent } from '../../../components/uplot-graph/uplot-graph.component';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
@@ -190,7 +189,6 @@ import { IndexPage } from '../../../pages.interface';
         DropdownToggleDirective,
         DropdownMenuDirective,
         PopoverGraphComponent,
-        UplotGraphComponent,
         DeleteAllModalComponent,
         ServiceMaintenanceModalComponent,
         ServiceAcknowledgeModalComponent,

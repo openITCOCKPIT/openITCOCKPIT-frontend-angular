@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -95,7 +95,8 @@ import { ConsoleCopyComponent } from '../../../components/console-copy/console-c
         ConsoleCopyComponent
     ],
     templateUrl: './packetmanager-index.component.html',
-    styleUrl: './packetmanager-index.component.css'
+    styleUrl: './packetmanager-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
 
@@ -132,11 +133,14 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         _csrfToken: '',
     };
 
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit() {
         this.subscriptions.add(this.PacketmanagerService.getIndex()
             .subscribe((result: PacketmanagerIndexRoot): void => {
                 this.data = result;
+                this.cdr.markForCheck();
 
                 this.initializeModulesToCheckboxesInstall();
             })
@@ -147,6 +151,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         this.data.result.data.modules.forEach((module: PacketmanagerModule) => {
             this.modulesToCheckboxesInstall[module.Module.apt_name] = false;
         });
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy() {
@@ -176,6 +181,8 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
             show: true,
             id: 'installPacketModal'
         });
+        this.cdr.markForCheck();
+
     }
 
     private buildCommands(): void {
@@ -189,11 +196,11 @@ sudo dnf upgrade \\
 sudo dnf install ${this.packageList} \\
 && echo "#########################################" \\
 && echo "${this.TranslocoService.translate('Installation done. Please reload your {0} web interface.', {systemname: this.data.result.data.systemname})}"`;
+        this.cdr.markForCheck();
     }
 
 
-    protected openChangeLog(): void
-    {
+    protected openChangeLog(): void {
         this.modalService.toggle({
             show: true,
             id: 'changelogModal'

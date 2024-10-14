@@ -1,167 +1,165 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['locations', 'index']" [routerLink]="['/', 'locations', 'index']">
-                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
-                        {{ t('Locations') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                    {{ t('Edit') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['locations', 'index']" [routerLink]="['/', 'locations', 'index']">
+                    <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                    {{ t('Locations') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
 
-        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
 
-        <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3" *ngIf="post">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('Edit location:') }}
-                        <small class="fw-300">
-                            {{ post.container.name }}
-                        </small>
-                    </h5>
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3" *ngIf="post">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit location:') }}
+                    <small class="fw-300">
+                        {{ post.container.name }}
+                    </small>
+                </h5>
 
-                    <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['locations', 'index']" cButton class="ripple" color="default"
-                                    oitcBackButton
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                                {{ t('Back') }}
-                            </button>
-                        </c-nav-item>
-                    </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['locations', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-                </c-card-header>
-                <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-                    <div class="mb-3">
-                        <label cLabel for="post.container.parent_id">
-                            {{ t('Container') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
+                <div class="mb-3">
+                    <label cLabel for="post.container.parent_id">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
 
-                        <oitc-select
-                            name="container"
-                            id="post.container.parent_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [disabled]="true"
-                            [(ngModel)]="post.container.parent_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container.parent_id">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
+                    <oitc-select
+                        name="container"
+                        id="post.container.parent_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [disabled]="true"
+                        [(ngModel)]="post.container.parent_id"
+                        [options]="containers"
+                        oitcFormError [errors]="errors" errorField="container.parent_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="Name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Name" type="text"
+                           name="Name"
+                           oitcFormError [errors]="errors" errorField="container.name"
+                           [(ngModel)]="post.container.name"
+                           (blur)="updateMarker()">
+                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="Description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl id="Description" type="text"
+                           name="Description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="Latitude">
+                        {{ t('Latitude') }}
+                    </label>
+                    <input cFormControl id="Latitude" type="text"
+                           name="Latitude"
+                           [placeholder]="50.5558095"
+                           oitcFormError [errors]="errors" errorField="latitude"
+                           [(ngModel)]="post.latitude"
+                           (blur)="updateMarker()">
+                    <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Name">
-                            {{ t('Name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl id="Name" type="text"
-                               name="Name"
-                               oitcFormError [errors]="errors" errorField="container.name"
-                               [(ngModel)]="post.container.name"
-                               (blur)="updateMarker()">
-                        <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                <div class="mb-3">
+                    <label cLabel for="Longitude">
+                        {{ t('Longitude') }}
+                    </label>
+                    <input cFormControl id="Longitude" type="text"
+                           name="Longitude"
+                           [placeholder]="9.6808449"
+                           oitcFormError [errors]="errors" errorField="longitude"
+                           [(ngModel)]="post.longitude"
+                           (blur)="updateMarker()">
+                    <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Description">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl id="Description" type="text"
-                               name="Description"
-                               oitcFormError [errors]="errors" errorField="description"
-                               [(ngModel)]="post.description">
-                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="UserTimezone">
+                        {{ t('Timezone') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <ng-select id="UserTimezone"
+                               name="UserTimezone"
+                               [items]="timezones"
+                               groupBy="group"
+                               bindLabel="name"
+                               bindValue="value"
+                               [clearable]="false"
+                               [(ngModel)]="post.timezone"
+                               oitcFormError [errors]="errors" errorField="timezone">
+                        <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                        </ng-template>
+                    </ng-select>
+                    <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Latitude">
-                            {{ t('Latitude') }}
-                        </label>
-                        <input cFormControl id="Latitude" type="text"
-                               name="Latitude"
-                               [placeholder]="50.5558095"
-                               oitcFormError [errors]="errors" errorField="latitude"
-                               [(ngModel)]="post.latitude"
-                               (blur)="updateMarker()">
-                        <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
-                        </div>
-                    </div>
+                <div class="mb-3">
+                    <oitc-vectormap [markers]="markers"></oitc-vectormap>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Longitude">
-                            {{ t('Longitude') }}
-                        </label>
-                        <input cFormControl id="Longitude" type="text"
-                               name="Longitude"
-                               [placeholder]="9.6808449"
-                               oitcFormError [errors]="errors" errorField="longitude"
-                               [(ngModel)]="post.longitude"
-                               (blur)="updateMarker()">
-                        <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
-                        </div>
-                    </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Update location') }}
+                </button>
+                <button [fallbackUrl]="['locations', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
 
-                    <div class="mb-3">
-                        <label cLabel for="UserTimezone">
-                            {{ t('Timezone') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <ng-select id="UserTimezone"
-                                   name="UserTimezone"
-                                   [items]="timezones"
-                                   groupBy="group"
-                                   bindLabel="name"
-                                   bindValue="value"
-                                   [clearable]="false"
-                                   [(ngModel)]="post.timezone"
-                                   oitcFormError [errors]="errors" errorField="timezone">
-                            <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
-                            </ng-template>
-                        </ng-select>
-                        <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <oitc-vectormap [markers]="markers"></oitc-vectormap>
-                    </div>
-
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Update location') }}
-                    </button>
-                    <button [fallbackUrl]="['locations', 'index']" cButton class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
-
-                </c-card-footer>
-            </c-card>
-        </form>
-    </ng-container>
-</oitc-coreui>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
 
 
 

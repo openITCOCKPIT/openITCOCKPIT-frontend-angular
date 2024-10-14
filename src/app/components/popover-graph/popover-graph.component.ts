@@ -1,4 +1,12 @@
-import { Component, inject, Input, OnDestroy, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnDestroy,
+    ViewChild
+} from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
@@ -43,7 +51,8 @@ type PerfParams = {
         ChartLoaderComponent
     ],
     templateUrl: './popover-graph.component.html',
-    styleUrl: './popover-graph.component.css'
+    styleUrl: './popover-graph.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopoverGraphComponent implements OnDestroy {
     private visible: boolean = false;
@@ -72,6 +81,8 @@ export class PopoverGraphComponent implements OnDestroy {
     private startTimestamp: number = new Date().getTime();
 
     @ViewChild('graphOverlayPanel') graphOverlayPanel!: OverlayPanel;
+
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor(private window: Window) {
     }
@@ -112,6 +123,7 @@ export class PopoverGraphComponent implements OnDestroy {
                 this.visible = true;
                 this.graphOverlayPanel.toggle(event); // open popup
                 this.setParamsAndLoadPerfdata();
+                this.cdr.markForCheck();
             }, 150);
         }
     }
@@ -135,6 +147,7 @@ export class PopoverGraphComponent implements OnDestroy {
         this.isLoading = true;
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(this.perfParams)
             .subscribe((perfdata) => {
+                this.cdr.markForCheck();
                 if (perfdata.performance_data && perfdata.performance_data.length > 4) {
                     this.perfData = perfdata.performance_data.slice(0, 4);
                 } else {

@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -57,7 +67,8 @@ import { Subscription } from 'rxjs';
         FormsModule
     ],
     templateUrl: './hosts-process-checkresult-modal.component.html',
-    styleUrl: './hosts-process-checkresult-modal.component.css'
+    styleUrl: './hosts-process-checkresult-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsProcessCheckresultModalComponent implements OnDestroy {
     @Input({required: true}) public items: HostProcessCheckResultItem[] = [];
@@ -79,9 +90,13 @@ export class HostsProcessCheckresultModalComponent implements OnDestroy {
         force_hardstate: false
     };
 
+    private cdr = inject(ChangeDetectorRef);
+
     public hideModal() {
         this.isSend = false;
         this.error = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
