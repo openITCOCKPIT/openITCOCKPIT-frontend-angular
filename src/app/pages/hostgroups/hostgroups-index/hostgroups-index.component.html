@@ -175,7 +175,7 @@
                         </td>
                         <td>{{ hostgroup.description }}</td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="hostgroup.allowEdit"
+                            <oitc-actions-button [allowEdit]="hostgroup.allowEdit"
                                                  [permission]="'hostgroups.edit'"
                                                  [url]="'/hostgroups/edit/' + hostgroup.id">
                                 <oitc-actions-button-element [permission]="'hostgroups.edit'"

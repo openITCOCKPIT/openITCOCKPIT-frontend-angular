@@ -245,7 +245,7 @@
                             </div>
                         </td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="sla.allowEdit"
+                            <oitc-actions-button [allowEdit]="sla.allowEdit"
                                                  [permission]="'slamodule.slas.edit'"
                                                  [url]="'/sla_module/slas/edit/' + sla.id">
                                 <oitc-actions-button-element *ngIf="sla.allowEdit" [permission]="'slamodule.slas.edit'"

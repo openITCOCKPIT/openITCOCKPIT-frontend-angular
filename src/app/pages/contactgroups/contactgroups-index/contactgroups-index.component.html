@@ -147,7 +147,7 @@
                         <td>{{ contactgroup.Contactgroup.description }}</td>
                         <td>{{ contactgroup.Contactgroup.contact_count }}</td>
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="contactgroup.Contactgroup.allow_edit"
+                            <oitc-actions-button [allowEdit]="contactgroup.Contactgroup.allow_edit"
                                                  [permission]="'contactgroups.edit'"
                                                  [url]="'/contactgroups/edit/' + contactgroup.Contactgroup.id">
                                 <oitc-actions-button-element [permission]="'contactgroups.edit'"
