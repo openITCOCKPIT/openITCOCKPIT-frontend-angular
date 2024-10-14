@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DebounceDirective } from '../../directives/debounce.directive';
 import {
     ContainerComponent,
@@ -18,7 +18,6 @@ import {
 import { CoreuiHeaderComponent } from './coreui-header/coreui-header.component';
 import { CoreuiFooterComponent } from './coreui-footer/coreui-footer.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CoreuiMenuComponent } from './coreui-menu/coreui-menu.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { GlobalLoaderComponent } from './global-loader/global-loader.component';
@@ -40,7 +39,6 @@ import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
         CoreuiFooterComponent,
         ShadowOnScrollDirective,
         DebounceDirective,
-        CoreuiMenuComponent,
         FormsModule,
         FontAwesomeModule,
         ReactiveFormsModule,
@@ -62,7 +60,8 @@ import { CoreuiNavbarComponent } from './coreui-navbar/coreui-navbar.component';
         RouterOutlet,
     ],
     templateUrl: './coreui.component.html',
-    styleUrl: './coreui.component.css'
+    styleUrl: './coreui.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoreuiComponent {
 

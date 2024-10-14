@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CoreuiComponent } from '../../coreui.component';
 import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -14,7 +14,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './error404.component.html',
-    styleUrl: './error404.component.css'
+    styleUrl: './error404.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Error404Component {
 

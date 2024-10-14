@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { SystemsettingsService } from '../systemsettings.service';
 import { Subscription } from 'rxjs';
@@ -112,7 +112,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         ReloadInterfaceModalComponent
     ],
     templateUrl: './systemsettings-index.component.html',
-    styleUrl: './systemsettings-index.component.css'
+    styleUrl: './systemsettings-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
 
@@ -125,11 +126,13 @@ export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(
             this.SystemsettingsService.getIndex().subscribe(data => {
                 this.SystemsettingsCategories = data;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -163,6 +166,7 @@ export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
         if (this.SystemsettingsCategories) {
             this.subscriptions.add(this.SystemsettingsService.updateSystemsettings(this.SystemsettingsCategories)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
 
                         this.notyService.genericSuccess();
@@ -178,7 +182,6 @@ export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
 
                     // Error
                     this.notyService.genericError();
-                    console.log(result.data);
                 })
             );
         }

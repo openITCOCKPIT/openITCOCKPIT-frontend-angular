@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -82,7 +82,8 @@ import { HistoryService } from '../../../../../history.service';
         DurationInputComponent
     ],
     templateUrl: './add-satellite-downtime.component.html',
-    styleUrl: './add-satellite-downtime.component.css'
+    styleUrl: './add-satellite-downtime.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
     public satellites: SelectKeyValueWithDisabled[] = [];
@@ -107,6 +108,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
     };
     public weekdaysForSelect: any[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -121,6 +123,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+                this.cdr.markForCheck();
             }));
         this.loadSatellites('');
 
@@ -156,6 +159,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadSatellites = (searchString: string) => {
@@ -167,6 +171,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SatellitesService.loadSatellitesByString(params)
             .subscribe((result) => {
                 this.satellites = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -179,6 +184,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SatellitesService.createSatellitedowntime(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 

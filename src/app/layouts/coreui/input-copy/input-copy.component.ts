@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { InputGroupTextDirective, TooltipDirective } from '@coreui/angular';
@@ -13,13 +13,16 @@ import { InputGroupTextDirective, TooltipDirective } from '@coreui/angular';
         TooltipDirective
     ],
     templateUrl: './input-copy.component.html',
-    styleUrl: './input-copy.component.css'
+    styleUrl: './input-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class InputCopyComponent {
+export class InputCopyComponent implements OnInit {
     @Input() copyText: string | undefined; // Text that should be copyable
     private readonly TranslocoService = inject(TranslocoService);
 
     public tooltipText: string = '';
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.tooltipText = this.TranslocoService.translate('Copy');
@@ -29,12 +32,13 @@ export class InputCopyComponent {
         if (this.copyText) {
             await navigator.clipboard.writeText(this.copyText);
             this.tooltipText = this.TranslocoService.translate('Copied');
+            this.cdr.markForCheck();
 
-            // Wait 1 second
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Switch tooltip text back to copy
-            this.tooltipText = this.TranslocoService.translate('Copy');
+            setTimeout(() => {
+                // Switch tooltip text back to copy
+                this.tooltipText = this.TranslocoService.translate('Copy');
+                this.cdr.markForCheck();
+            }, 1000);
         }
     }
 }
