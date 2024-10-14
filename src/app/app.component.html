@@ -1,1 +1,25 @@
-<router-outlet/>
+<oitc-global-loader></oitc-global-loader>
+<div class="main-container">
+    <!--sidebar-->
+    <oitc-coreui-navbar>
+    </oitc-coreui-navbar>
+    <div id="right" class="column">
+        <div class="top-right">
+            <!--app-header-->
+            <oitc-coreui-header [cShadowOnScroll]="'sm'"
+                                class="w-100 shadow-sm p-0"
+                                position="sticky"
+                                sidebarId="sidebar1"/>
+        </div>
+        <div class="bottom">
+            <!--main-->
+            <!--app-body-->
+            <c-container [fluid]="true" class="" id="mainContentContainer">
+                <!-- Content will be here -->
+                <router-outlet/>
+            </c-container>
+            <!--app footer-->
+            <!-- You can use the oitc-coreui-footer component here but we have removed it for now as we do not need a footer -->
+        </div>
+    </div>
+</div>

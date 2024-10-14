@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,7 @@ import 'flag-icons';
 import { HistoryService } from './history.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgSelectConfig } from '@ng-select/ng-select';
-import { ContainerComponent } from '@coreui/angular';
+import { ContainerComponent, ShadowOnScrollDirective } from '@coreui/angular';
 import { CoreuiFooterComponent } from './layouts/coreui/coreui-footer/coreui-footer.component';
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
@@ -27,15 +27,18 @@ import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loa
         CoreuiFooterComponent,
         CoreuiHeaderComponent,
         CoreuiNavbarComponent,
-        GlobalLoaderComponent
+        GlobalLoaderComponent,
+        ShadowOnScrollDirective
     ],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.css'
+    styleUrl: './app.component.css',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class AppComponent {
 
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(library: FaIconLibrary,
                 private IconSetService: IconSetService,
@@ -51,5 +54,7 @@ export class AppComponent {
 
         this.selectConfig.notFoundText = this.TranslocoService.translate('No entries match the selection');
         this.selectConfig.placeholder = this.TranslocoService.translate('Please choose');
+
+        this.cdr.markForCheck();
     }
 }
