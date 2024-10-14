@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MenuHeadline, MenuLink } from '../../../../components/navigation/navigation.interface';
@@ -24,11 +24,13 @@ import { Subscription } from 'rxjs';
         NgClass
     ],
     templateUrl: './navbar-search.component.html',
-    styleUrl: './navbar-search.component.css'
+    styleUrl: './navbar-search.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarSearchComponent implements OnDestroy {
 
-    @Input({required: true}) public menu: MenuHeadline[] = [];
+    public menu = input.required<MenuHeadline[]>();
+
     public searchString: string = '';
     public searchResult: MenuLink[] = [];
 
@@ -44,6 +46,7 @@ export class NavbarSearchComponent implements OnDestroy {
     private readonly SearchService = inject(SearchService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -81,9 +84,10 @@ export class NavbarSearchComponent implements OnDestroy {
 
             case RETURN_KEY:
                 if (this.currentSelectedIndex > -1) {
-                    // User has navigated in the search results so he want to search for an menu record
+                    // User has navigated in the search results so he wants to search for a menu record
                     const link: MenuLink = this.searchResult[this.currentSelectedIndex];
                     this.router.navigate([link.angularUrl]);
+                    this.resetSearch();
                 }
 
                 if (this.currentSelectedIndex === -1) {
@@ -91,7 +95,7 @@ export class NavbarSearchComponent implements OnDestroy {
                     if (uuid.isUuid(this.searchString)) {
                         // We have a UUID
                         this.isSearching = true;
-                        
+
                         this.subscriptions.add(this.SearchService.searchUUID(this.searchString)
                             .subscribe((result) => {
                                 this.isSearching = false;
@@ -129,7 +133,7 @@ export class NavbarSearchComponent implements OnDestroy {
     public searchMenu(event: any) {
         const result: MenuLink[] = [];
 
-        this.menu.map(((item: MenuHeadline) => {
+        this.menu().map(((item: MenuHeadline) => {
             item.items.map((link: MenuLink) => {
                 // Has the link children?
                 if (link.items) {
