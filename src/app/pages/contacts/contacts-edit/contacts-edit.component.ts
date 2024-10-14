@@ -328,12 +328,4 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
     }
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
-    }
 }

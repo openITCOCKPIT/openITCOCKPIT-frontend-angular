@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -28,7 +28,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { HosttemplateContainerResult, HosttemplatePost, HosttemplateTypeResult, } from '../hosttemplates.interface';
 import { Subscription } from 'rxjs';
@@ -97,9 +97,11 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
         MacrosComponent,
         CardFooterComponent,
         TranslocoPipe,
+        AsyncPipe,
     ],
     templateUrl: './hosttemplates-add.component.html',
-    styleUrl: './hosttemplates-add.component.css'
+    styleUrl: './hosttemplates-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
@@ -132,6 +134,8 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    private cdr = inject(ChangeDetectorRef);
+
     constructor(private route: ActivatedRoute) {
     }
 
@@ -149,6 +153,8 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             this.loadHosttemplateTypes();
 
             this.post = this.getDefaultPost(this.hosttemplateTypeId);
+
+            this.cdr.markForCheck();
         });
 
     }
@@ -220,6 +226,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HosttemplatesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -228,6 +235,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HosttemplatesService.loadCommands()
             .subscribe((result) => {
                 this.commands = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -237,12 +245,14 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.hosttemplateTypes = result;
                 this.setDetailsForType();
+                this.cdr.markForCheck();
             })
         );
     }
 
     private setDetailsForType() {
         this.typeDetails = this.hosttemplateTypes.find(type => type.key === this.post.hosttemplatetype_id)?.value;
+        this.cdr.markForCheck();
     };
 
     private loadElements() {
@@ -261,6 +271,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                 this.hostgroups = result.hostgroups;
                 this.exporters = result.exporters;
                 this.slas = result.slas;
+                this.cdr.markForCheck();
             })
         );
 
@@ -276,6 +287,7 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForAdd(commandId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -303,23 +315,12 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
-    }
-
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -328,6 +329,9 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HosttemplatesService.add(this.post)
             .subscribe((result) => {
+                // Trigger change detection for custom variable errors
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host template');
@@ -362,7 +366,5 @@ export class HosttemplatesAddComponent implements OnInit, OnDestroy {
                     }
                 }
             }))
-
     }
-
 }

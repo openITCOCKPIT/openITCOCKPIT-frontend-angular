@@ -529,19 +529,6 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.post.customvariables.splice(index, 1);
     }
 
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
-    }
-
     public submit(submitType: HostSubmitType) {
         this.post.tags = this.tagsForSelect.join(',');
 

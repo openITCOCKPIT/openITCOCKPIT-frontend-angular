@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -63,7 +63,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './hosttemplates-copy.component.html',
-    styleUrl: './hosttemplates-copy.component.css'
+    styleUrl: './hosttemplates-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
 
@@ -76,6 +77,8 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -104,6 +107,7 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
                 }
 
                 this.commands = response.commands;
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -115,6 +119,7 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
     public loadCommandArguments(sourceHosttemplateId: number, commandId: number, index: number) {
         this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForCopy(commandId, sourceHosttemplateId).subscribe(response => {
             this.hosttemplates[index].Hosttemplate.hosttemplatecommandargumentvalues = response;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -128,6 +133,7 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
             delete hosttemplatecommandargumentvalues[i].hosttemplate_id;
         }
 
+        this.cdr.markForCheck();
         return hosttemplatecommandargumentvalues;
     }
 
@@ -148,6 +154,7 @@ export class HosttemplatesCopyComponent implements OnInit, OnDestroy {
 
                 this.notyService.genericError();
                 this.hosttemplates = error.error.result as HosttemplateCopyPost[];
+                this.cdr.markForCheck();
             }
         });
 

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     ButtonGroupComponent,
@@ -27,7 +35,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         InputGroupComponent
     ],
     templateUrl: './check-attempts-input.component.html',
-    styleUrl: './check-attempts-input.component.css'
+    styleUrl: './check-attempts-input.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckAttemptsInputComponent {
 
@@ -38,6 +47,8 @@ export class CheckAttemptsInputComponent {
 
     @Input() selectedAttempts: number = 3;
     @Output() selectedAttemptsChange = new EventEmitter<number>();
+
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
 

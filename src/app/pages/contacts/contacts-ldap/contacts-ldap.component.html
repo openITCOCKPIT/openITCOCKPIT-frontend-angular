@@ -172,14 +172,14 @@
 
 
                         <oitc-select
-                                name="contactUser"
-                                id="user"
-                                [(ngModel)]="post.user_id"
-                                optionValue="key"
-                                optionLabel="value"
-                                [showClear]="true"
-                                [options]="users"
-                                oitcFormError [errors]="errors" errorField="user">
+                            name="contactUser"
+                            id="user"
+                            [(ngModel)]="post.user_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [showClear]="true"
+                            [options]="users"
+                            oitcFormError [errors]="errors" errorField="user">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="user"></oitc-form-feedback>
 
@@ -207,17 +207,17 @@
                                             </oitc-label-link>
                                         </label>
                                         <oitc-select
-                                                name="host_timeperiod_id"
-                                                id="host_timeperiod_id"
-                                                [(ngModel)]="post.host_timeperiod_id"
-                                                optionValue="key"
-                                                optionLabel="value"
-                                                [options]="timeperiods"
-                                                oitcFormError [errors]="errors" errorField="host_timeperiod_id">
+                                            name="host_timeperiod_id"
+                                            id="host_timeperiod_id"
+                                            [(ngModel)]="post.host_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="host_timeperiod_id">
                                         </oitc-select>
                                         <oitc-form-feedback
-                                                [errors]="errors"
-                                                errorField="host_timeperiod_id"
+                                            [errors]="errors"
+                                            errorField="host_timeperiod_id"
                                         />
                                     </div>
 
@@ -228,18 +228,18 @@
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
                                         <oitc-multi-select
-                                                name="host_commands"
-                                                id="host_commands"
-                                                optionValue="key"
-                                                optionLabel="value"
-                                                [(ngModel)]="post.host_commands._ids"
-                                                [options]="notificationCommands"
-                                                (onChange)="updateHostBrowserNotification()"
-                                                oitcFormError [errors]="errors" errorField="host_commands">
+                                            name="host_commands"
+                                            id="host_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.host_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateHostBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="host_commands">
                                         </oitc-multi-select>
                                         <oitc-form-feedback
-                                                [errors]="errors"
-                                                errorField="host_commands"
+                                            [errors]="errors"
+                                            errorField="host_commands"
                                         />
                                     </div>
 
@@ -413,17 +413,17 @@
                                             </oitc-label-link>
                                         </label>
                                         <oitc-select
-                                                name="service_timeperiod_id"
-                                                id="service_timeperiod_id"
-                                                [(ngModel)]="post.service_timeperiod_id"
-                                                optionValue="key"
-                                                optionLabel="value"
-                                                [options]="timeperiods"
-                                                oitcFormError [errors]="errors" errorField="service_timeperiod_id">
+                                            name="service_timeperiod_id"
+                                            id="service_timeperiod_id"
+                                            [(ngModel)]="post.service_timeperiod_id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="timeperiods"
+                                            oitcFormError [errors]="errors" errorField="service_timeperiod_id">
                                         </oitc-select>
                                         <oitc-form-feedback
-                                                [errors]="errors"
-                                                errorField="service_timeperiod_id"
+                                            [errors]="errors"
+                                            errorField="service_timeperiod_id"
                                         />
                                     </div>
 
@@ -433,18 +433,18 @@
                                             <oitc-required-icon></oitc-required-icon>
                                         </label>
                                         <oitc-multi-select
-                                                name="service_commands"
-                                                id="service_commands"
-                                                optionValue="key"
-                                                optionLabel="value"
-                                                [(ngModel)]="post.service_commands._ids"
-                                                [options]="notificationCommands"
-                                                (onChange)="updateServiceBrowserNotification()"
-                                                oitcFormError [errors]="errors" errorField="service_commands">
+                                            name="service_commands"
+                                            id="service_commands"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.service_commands._ids"
+                                            [options]="notificationCommands"
+                                            (onChange)="updateServiceBrowserNotification()"
+                                            oitcFormError [errors]="errors" errorField="service_commands">
                                         </oitc-multi-select>
                                         <oitc-form-feedback
-                                                [errors]="errors"
-                                                errorField="service_commands"
+                                            [errors]="errors"
+                                            errorField="service_commands"
                                         />
                                     </div>
 
@@ -645,7 +645,7 @@
                                 [macroName]="'CONTACT'"
                                 [index]="i"
                                 [deleteMacroCallback]="deleteMacro"
-                                [errors]="getMacroErrors"
+                                [errors]="errors"
                                 class="col-lg-12"
                             />
 

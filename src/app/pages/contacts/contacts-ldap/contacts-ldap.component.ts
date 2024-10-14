@@ -332,14 +332,6 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.post.customvariables.splice(index, 1);
     }
 
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
-    }
-
     public loadLdapUsers = (samaccountname: string): void => {
         this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {

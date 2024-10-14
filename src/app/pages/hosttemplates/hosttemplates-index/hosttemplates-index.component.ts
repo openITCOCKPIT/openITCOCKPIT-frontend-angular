@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -120,7 +120,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './hosttemplates-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService} // Inject the HosttemplatesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -138,6 +139,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.hosttemplateTypes = this.HosttemplatesService.getHosttemplateTypes();
@@ -166,6 +168,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage
         this.subscriptions.add(this.HosttemplatesService.getIndex(this.params)
             .subscribe((result) => {
                 this.hosttemplates = result;
+                this.cdr.markForCheck();
             })
         );
     }
