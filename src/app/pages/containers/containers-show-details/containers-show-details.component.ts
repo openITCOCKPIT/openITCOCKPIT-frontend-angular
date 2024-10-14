@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     BorderDirective,
     CardBodyComponent,
@@ -71,7 +71,8 @@ import { GenericKeyValue } from '../../../generic.interfaces';
         TableDirective,
     ],
     templateUrl: './containers-show-details.component.html',
-    styleUrl: './containers-show-details.component.css'
+    styleUrl: './containers-show-details.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainersShowDetailsComponent implements OnInit, OnDestroy {
 
@@ -89,6 +90,8 @@ export class ContainersShowDetailsComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.objectDetails = this.getObjectDetails();
@@ -115,6 +118,7 @@ export class ContainersShowDetailsComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe(containers => {
             // Filter the ROOT_CONTAINER as it has to many dependencies to display
             this.containers = containers.filter(c => c.key !== ROOT_CONTAINER);
+            this.loadContainerDetails();
         }));
     }
 
@@ -130,6 +134,7 @@ export class ContainersShowDetailsComponent implements OnInit, OnDestroy {
     public loadContainerDetails() {
         this.subscriptions.add(this.ContainersService.loadShowDetails(this.selectedContainerId).subscribe(containerDetails => {
             this.containerDetails = containerDetails.containersWithChilds;
+            this.cdr.markForCheck();
         }));
     }
 

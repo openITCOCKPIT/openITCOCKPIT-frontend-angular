@@ -1,4 +1,15 @@
-import { Component, effect, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    inject,
+    input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    output,
+    SimpleChanges
+} from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
     ButtonCloseDirective,
@@ -74,7 +85,8 @@ import { UserTimezonesSelect } from '../../../users/users.interface';
         JsonPipe
     ],
     templateUrl: './create-container-modal.component.html',
-    styleUrl: './create-container-modal.component.css'
+    styleUrl: './create-container-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestroy {
 

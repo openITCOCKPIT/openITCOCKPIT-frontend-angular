@@ -1,4 +1,15 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -41,7 +52,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './delete-all-modal.component.html',
-    styleUrl: './delete-all-modal.component.css'
+    styleUrl: './delete-all-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
