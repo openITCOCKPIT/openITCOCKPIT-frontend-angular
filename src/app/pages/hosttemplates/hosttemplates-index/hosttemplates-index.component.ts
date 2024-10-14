@@ -58,12 +58,6 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import {
-    NgSelectSelectAllComponent
-} from '../../../components/ng-select/ng-select-select-all/ng-select-select-all.component';
-import {
-    NgSelectOptionCheckboxComponent
-} from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -118,8 +112,6 @@ import { IndexPage } from '../../../pages.interface';
         TableDirective,
         NgClass,
         DeleteAllModalComponent,
-        NgSelectSelectAllComponent,
-        NgSelectOptionCheckboxComponent,
         MultiSelectModule,
         MultiSelectComponent,
         TableLoaderComponent
