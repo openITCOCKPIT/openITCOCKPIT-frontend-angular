@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -36,7 +36,8 @@ import { RouterLink } from '@angular/router';
         ColComponent,
     ],
     templateUrl: './apikey-doc-modal.component.html',
-    styleUrl: './apikey-doc-modal.component.css'
+    styleUrl: './apikey-doc-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApikeyDocModalComponent {
 

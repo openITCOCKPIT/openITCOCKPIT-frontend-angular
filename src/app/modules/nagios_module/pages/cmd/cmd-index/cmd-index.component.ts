@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -167,7 +167,8 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ApikeyDocModalComponent
     ],
     templateUrl: './cmd-index.component.html',
-    styleUrl: './cmd-index.component.css'
+    styleUrl: './cmd-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CmdIndexComponent implements OnInit, OnDestroy {
 
@@ -188,6 +189,8 @@ export class CmdIndexComponent implements OnInit, OnDestroy {
 
     private externalCommandsResult: ExternalCommandDefinitionRoot = {};
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit() {
 
         this.subscriptions.add(this.ExternalCommandsService.getExternalCommandsWithParams()
@@ -207,6 +210,7 @@ export class CmdIndexComponent implements OnInit, OnDestroy {
 
                 // Trigger the change event to display the first command
                 this.onCommandChange();
+                this.cdr.markForCheck();
             })
         );
     }
