@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AlertComponent } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -17,7 +17,8 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './query-handler-checker.component.html',
-    styleUrl: './query-handler-checker.component.css'
+    styleUrl: './query-handler-checker.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QueryHandlerCheckerComponent implements OnInit, OnDestroy {
     public showError: boolean = false;
@@ -32,6 +33,8 @@ export class QueryHandlerCheckerComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit(): void {
         this.subscriptions.add(
             this.QueryHandlerService.load().subscribe(queryHandler => {
@@ -41,6 +44,7 @@ export class QueryHandlerCheckerComponent implements OnInit, OnDestroy {
                 if (!queryHandler.exists && !queryHandler.isContainer) {
                     this.showError = true;
                 }
+                this.cdr.markForCheck();
             })
         );
     }

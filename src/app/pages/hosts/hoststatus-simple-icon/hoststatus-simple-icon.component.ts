@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
@@ -14,7 +14,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './hoststatus-simple-icon.component.html',
-    styleUrl: './hoststatus-simple-icon.component.css'
+    styleUrl: './hoststatus-simple-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HoststatusSimpleIconComponent {
     private readonly TranslocoService = inject(TranslocoService);

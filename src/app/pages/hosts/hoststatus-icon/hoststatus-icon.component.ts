@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { HoststatusObject } from '../hosts.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgClass, NgIf } from '@angular/common';
@@ -15,7 +15,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './hoststatus-icon.component.html',
-    styleUrl: './hoststatus-icon.component.css'
+    styleUrl: './hoststatus-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HoststatusIconComponent implements OnInit, OnDestroy {
 
@@ -23,6 +24,7 @@ export class HoststatusIconComponent implements OnInit, OnDestroy {
 
     private readonly TranslocoService = inject(TranslocoService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     @Input()
     set hoststatus(value: HoststatusObject | undefined) {
@@ -118,12 +120,14 @@ export class HoststatusIconComponent implements OnInit, OnDestroy {
         // We use a classic setInterval as it is way more constant and needs WAY LESS cpu power as the new RxJS fancy hipster stuff
         this.interval = setInterval(() => {
             this.flappingState = this.flappingState === 0 ? 1 : 0;
+            this.cdr.markForCheck();
         }, 750);
     }
 
     public stopFlapping() {
         if (this.interval) {
             clearInterval(this.interval);
+            this.cdr.markForCheck();
         }
     }
 

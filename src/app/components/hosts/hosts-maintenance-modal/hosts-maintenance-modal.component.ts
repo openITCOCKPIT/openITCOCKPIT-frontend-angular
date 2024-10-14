@@ -1,4 +1,15 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -59,7 +70,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './hosts-maintenance-modal.component.html',
-    styleUrl: './hosts-maintenance-modal.component.css'
+    styleUrl: './hosts-maintenance-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: HostDowntimeItem[] = [];
@@ -87,12 +99,17 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
 
     private subscriptions: Subscription = new Subscription();
+
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal(): void {
         this.isSend = false;
         this.hasErrors = false;
         this.errors = {};
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
@@ -152,6 +169,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
             this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
             this.downtimeModal.to_time = downtimeDefaults.to_time;
             this.downtimeModal.comment = downtimeDefaults.comment;
+            this.cdr.markForCheck();
         }));
     }
 

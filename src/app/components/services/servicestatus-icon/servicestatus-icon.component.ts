@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -11,7 +11,8 @@ import { ServicestatusObject } from '../../../pages/services/services.interface'
     standalone: true,
     imports: [NgClass, NgIf, TooltipDirective, FaIconComponent],
     templateUrl: './servicestatus-icon.component.html',
-    styleUrl: './servicestatus-icon.component.css'
+    styleUrl: './servicestatus-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicestatusIconComponent implements OnInit, OnDestroy {
 
@@ -19,7 +20,7 @@ export class ServicestatusIconComponent implements OnInit, OnDestroy {
     private _servicestatus?: ServicestatusObject;
 
     private readonly TranslocoService = inject(TranslocoService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     @Input()
     set servicestatus(value: ServicestatusObject | undefined) {
@@ -121,12 +122,14 @@ export class ServicestatusIconComponent implements OnInit, OnDestroy {
         // We use a classic setInterval as it is way more constant and needs WAY LESS cpu power as the new RxJS fancy hipster stuff
         this.interval = setInterval(() => {
             this.flappingState = this.flappingState === 0 ? 1 : 0;
+            this.cdr.markForCheck();
         }, 750);
     }
 
     public stopFlapping() {
         if (this.interval) {
             clearInterval(this.interval);
+            this.cdr.markForCheck();
         }
     }
 

@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, ViewChild } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
@@ -64,7 +64,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
         FormControlDirective
     ],
     templateUrl: './filter-bookmark-export-modal.component.html',
-    styleUrl: './filter-bookmark-export-modal.component.css'
+    styleUrl: './filter-bookmark-export-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBookmarkExportModalComponent {
 

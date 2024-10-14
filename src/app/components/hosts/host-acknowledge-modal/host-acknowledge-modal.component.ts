@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -59,7 +69,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './host-acknowledge-modal.component.html',
-    styleUrl: './host-acknowledge-modal.component.css'
+    styleUrl: './host-acknowledge-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostAcknowledgeModalComponent implements OnDestroy {
     @Input({required: true}) public items: HostAcknowledgeItem[] = [];
@@ -76,6 +87,9 @@ export class HostAcknowledgeModalComponent implements OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private subscriptions: Subscription = new Subscription();
+
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('modal') private modal!: ModalComponent;
     public ackModal = {
         comment: '',
@@ -87,6 +101,8 @@ export class HostAcknowledgeModalComponent implements OnDestroy {
         this.isSend = false;
         this.error = false;
 
+        this.cdr.markForCheck();
+        
         this.modalService.toggle({
             show: false,
             id: 'hostAcknowledgeModal'

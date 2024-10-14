@@ -1,4 +1,16 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -41,7 +53,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
         XsButtonDirective
     ],
     templateUrl: './delete-bookmark-modal.component.html',
-    styleUrl: './delete-bookmark-modal.component.css'
+    styleUrl: './delete-bookmark-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteBookmarkModalComponent implements OnInit, OnDestroy {
 
@@ -59,6 +72,8 @@ export class DeleteBookmarkModalComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
+
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(@Inject(DELETE_SERVICE_TOKEN) private deleteService: any) {
     }
@@ -78,6 +93,8 @@ export class DeleteBookmarkModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

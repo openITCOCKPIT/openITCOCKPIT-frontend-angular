@@ -1,4 +1,16 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -40,7 +52,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './disable-modal.component.html',
-    styleUrl: './disable-modal.component.css'
+    styleUrl: './disable-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DisableModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: DisableItem[] = [];
@@ -56,6 +69,8 @@ export class DisableModalComponent implements OnInit, OnDestroy {
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('modal') private modal!: ModalComponent;
 
     constructor(@Inject(DISABLE_SERVICE_TOKEN) private disableService: any) {
@@ -75,6 +90,8 @@ export class DisableModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
@@ -142,10 +159,12 @@ export class DisableModalComponent implements OnInit, OnDestroy {
     }
 
     public currentItemHasErrors(item: DisableItem): boolean {
+        this.cdr.markForCheck();
         return this.errors.some((error) => error.id == item.id);
     }
 
     public getErrorsForItem(item: DisableItem): DisableResponse[] {
+        this.cdr.markForCheck();
         return this.errors.filter((error) => error.id == item.id);
     }
 }

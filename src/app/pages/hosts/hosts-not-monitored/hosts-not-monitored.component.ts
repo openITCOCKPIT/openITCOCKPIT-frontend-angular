@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -98,6 +98,7 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 import {
     HostsAddToHostgroupComponent
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosts-not-monitored',
@@ -174,9 +175,10 @@ import {
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DisableAllModalComponent
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsNotMonitoredComponent {
+export class HostsNotMonitoredComponent implements OnInit, OnDestroy, IndexPage {
     // Filter vars
     public params: HostsNotMonitoredParams = getDefaultHostsNotMonitoredParams();
     // Filter end
@@ -197,6 +199,7 @@ export class HostsNotMonitoredComponent {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadHosts();
@@ -204,6 +207,7 @@ export class HostsNotMonitoredComponent {
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -218,6 +222,7 @@ export class HostsNotMonitoredComponent {
         this.subscriptions.add(this.HostsService.getNotMonitored(this.params)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -342,8 +347,7 @@ export class HostsNotMonitoredComponent {
         });
     }
 
-    protected confirmAddHostsToHostgroup(host?: HostObject) : void
-    {
+    protected confirmAddHostsToHostgroup(host?: HostObject): void {
         let items: SelectKeyValue[] = [];
 
         if (host) {

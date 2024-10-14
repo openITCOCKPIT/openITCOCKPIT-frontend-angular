@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -24,7 +24,8 @@ import { DowntimesService } from '../downtimes.service';
         TranslocoDirective
     ],
     templateUrl: './downtime-icon.component.html',
-    styleUrl: './downtime-icon.component.css'
+    styleUrl: './downtime-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DowntimeIconComponent implements OnInit, OnDestroy {
     @Input() public type: 'hosts' | 'services' = 'hosts';
@@ -39,6 +40,7 @@ export class DowntimeIconComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     private timeout: any = null;
+    private cdr = inject(ChangeDetectorRef);
 
     public loadDowntimeDetails(): void {
         this.isLoading = true;
@@ -51,6 +53,7 @@ export class DowntimeIconComponent implements OnInit, OnDestroy {
                             .subscribe(downtime => {
                                 this.downtime = downtime;
                                 this.isLoading = false;
+                                this.cdr.markForCheck();
                             }));
                 }
             }, 150);

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
@@ -25,7 +25,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         ColComponent
     ],
     templateUrl: './acknowledgement-icon.component.html',
-    styleUrl: './acknowledgement-icon.component.css'
+    styleUrl: './acknowledgement-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AcknowledgementIconComponent implements OnInit, OnDestroy {
     @Input() public type: 'hosts' | 'services' = 'hosts';
@@ -43,6 +44,7 @@ export class AcknowledgementIconComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     private timeout: any = null;
+    private cdr = inject(ChangeDetectorRef);
 
     public loadAcknowledgementDetails(): void {
         this.isLoading = true;
@@ -55,6 +57,7 @@ export class AcknowledgementIconComponent implements OnInit, OnDestroy {
                             .subscribe(acknowledgement => {
                                 this.acknowledgement = acknowledgement;
                                 this.isLoading = false;
+                                this.cdr.markForCheck();
                             }));
                 }
             }, 150);
