@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
 
-    @if (this.PermissionsService.hasPermission(['hosts', 'index']) || this.PermissionsService.hasPermission(['services', 'index'])) {
+    @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async ) || ( this.PermissionsService.hasPermissionObservable(['services', 'index']) | async )) {
         <form cForm class="d-none d-sm-flex" (ngSubmit)="doSearch()">
 
             <c-input-group>
@@ -72,6 +72,5 @@
             </c-input-group>
         </form>
     }
-
 
 </ng-container>

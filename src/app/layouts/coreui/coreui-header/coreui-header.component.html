@@ -25,29 +25,29 @@
                 </c-nav-item>
             </c-header-nav>
 
-        <c-header-nav class="d-none d-md-flex ms-auto ">
-        </c-header-nav>
+            <c-header-nav class="d-none d-md-flex ms-auto ">
+            </c-header-nav>
 
-        <c-header-nav class="ms-auto ms-md-0">
-            <div class="nav-item py-1">
-                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-            </div>
-            <ng-container *ngTemplateOutlet="themeDropdown"/>
-            <div class="nav-item py-1">
-                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-            </div>
-        </c-header-nav>
+            <c-header-nav class="ms-auto ms-md-0">
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+                <ng-container *ngTemplateOutlet="themeDropdown"/>
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+            </c-header-nav>
 
-        <c-header-nav class="ms-auto ms-md-0">
-            <oitc-change-language></oitc-change-language>
-            <div class="nav-item py-1">
-                <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-            </div>
-        </c-header-nav>
+            <c-header-nav class="ms-auto ms-md-0">
+                <oitc-change-language></oitc-change-language>
+                <div class="nav-item py-1">
+                    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+                </div>
+            </c-header-nav>
 
-        <c-header-nav class="mx-0">
-            <ng-container *ngTemplateOutlet="userDropdown"/>
-        </c-header-nav>
+            <c-header-nav class="mx-0">
+                <ng-container *ngTemplateOutlet="userDropdown"/>
+            </c-header-nav>
 
         </c-container>
     </ng-container>
@@ -154,7 +154,7 @@
                     </a>
                 </li>
                 <li>
-                    <a cDropdownItem  href="/users/logout">
+                    <a cDropdownItem href="/users/logout">
                         <svg cIcon class="me-2" name="cilAccountLogout"></svg>
                         Logout
                     </a>
@@ -187,7 +187,7 @@
                     class="d-flex align-items-center"
                 >
                     <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
-                    Light
+                    {{ t('Light') }}
                 </button>
                 <button
                     (click)="colorMode.set('dark')"
@@ -197,7 +197,7 @@
                     class="d-flex align-items-center"
                 >
                     <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
-                    Dark
+                    {{ t('Dark') }}
                 </button>
                 <button
                     (click)="colorMode.set('auto')"
@@ -207,7 +207,7 @@
                     class="d-flex align-items-center"
                 >
                     <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
-                    Auto
+                    {{ t('Auto') }}
                 </button>
             </div>
         </c-dropdown>

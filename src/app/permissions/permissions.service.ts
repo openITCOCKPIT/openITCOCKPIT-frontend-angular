@@ -88,7 +88,15 @@ export class PermissionsService {
         });
     }
 
-    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
+
+    /**
+     * 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
+     * @deprecated
+     * hasPermission is deprecated. Use hasPermissionObservable instead.
+     * Use example:  @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async )) {...}
+     * @param checkChunks
+     * @param negate
+     */
     public hasPermission(checkChunks: string | string[], negate: boolean = false): boolean {
         let permissions = this.permissions$$.getValue();
         let hasPermission = this.checkPermission(checkChunks, permissions);
@@ -110,8 +118,19 @@ export class PermissionsService {
         );
     }
 
-    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
+    /**
+     * 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
+     *
+     * @deprecated
+     * hasModule is deprecated. Use hasModuleObservable instead.
+     * Use example:  @if (( this.PermissionsService.hasModule('ImportModule') | async )) {...}
+     *
+     * @param module
+     */
     public hasModule(module: string): boolean {
+        //console.error("hasModule is deprecated. Use hasModuleObservable instead.");
+        //console.log("Use example:  @if (( this.PermissionsService.hasModule('ImportModule') | async )) {...}");
+
         return this.modules$$.getValue().includes(module);
     }
 

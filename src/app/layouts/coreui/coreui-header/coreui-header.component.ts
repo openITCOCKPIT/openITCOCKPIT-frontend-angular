@@ -1,4 +1,12 @@
-import { Component, DestroyRef, inject, Input, OnDestroy } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DestroyRef,
+    inject,
+    input,
+    OnDestroy
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
     AvatarComponent,
@@ -59,10 +67,11 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './coreui-header.component.html',
-    styleUrl: './coreui-header.component.css'
+    styleUrl: './coreui-header.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy {
-    @Input() sidebarId: string = 'sidebar1';
+    sidebarId = input('sidebar1');
 
     readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     readonly #colorModeService = inject(ColorModeService);
@@ -70,6 +79,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
     readonly #destroyRef: DestroyRef = inject(DestroyRef);
     readonly sidebarService: SidebarService = inject(SidebarService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     private readonly subscriptions: Subscription = new Subscription();
 
@@ -85,6 +95,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
                 filter(theme => ['dark', 'light', 'auto'].includes(theme)),
                 tap(theme => {
                     this.colorMode.set(theme);
+                    this.cdr.markForCheck();
                 }),
                 takeUntilDestroyed(this.#destroyRef)
             )
