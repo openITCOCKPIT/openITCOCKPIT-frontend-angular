@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -109,7 +109,8 @@ import {
         CardFooterComponent
     ],
     templateUrl: './service-notification.component.html',
-    styleUrl: './service-notification.component.css'
+    styleUrl: './service-notification.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceNotificationComponent implements OnInit, OnDestroy {
     private serviceId: number = 0;
@@ -131,6 +132,8 @@ export class ServiceNotificationComponent implements OnInit, OnDestroy {
 
     public serviceBrowserConfig?: ServiceBrowserMenuConfig;
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadNotifications();
@@ -141,6 +144,7 @@ export class ServiceNotificationComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -155,6 +159,7 @@ export class ServiceNotificationComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.NotificationsService.getServiceNotifications(this.serviceId, this.params)
             .subscribe((result) => {
                 this.notifications = result;
+                this.cdr.markForCheck();
             })
         );
     }

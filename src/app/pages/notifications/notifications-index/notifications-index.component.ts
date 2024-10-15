@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -101,7 +101,8 @@ import { IndexPage } from '../../../pages.interface';
         CardFooterComponent
     ],
     templateUrl: './notifications-index.component.html',
-    styleUrl: './notifications-index.component.css'
+    styleUrl: './notifications-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private NotificationsService = inject(NotificationsService)
@@ -118,6 +119,8 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy, IndexPage
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -139,6 +142,7 @@ export class NotificationsIndexComponent implements OnInit, OnDestroy, IndexPage
         this.subscriptions.add(this.NotificationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.notifications = result;
+                this.cdr.markForCheck();
             })
         );
     }
