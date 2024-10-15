@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -131,6 +131,7 @@ import {
     ],
     templateUrl: './host-mapping-rules-assign-to-hosts.component.html',
     styleUrl: './host-mapping-rules-assign-to-hosts.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy {
 
@@ -139,8 +140,6 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private router: Router = inject(Router);
-
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
@@ -151,12 +150,14 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     protected hosts: LoadHostsRoot = {} as LoadHostsRoot;
     public params!: HostMappingRulesLoadHostsParams;
     public sla: Sla = {} as Sla;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
 
         this.slaId = Number(this.route.snapshot.paramMap.get('id'));
         this.post = getDefaultHostMappingRulesPost(this.slaId);
         this.params = getDefaultHostMappingRulesLoadHostsParams(this.slaId);
+        this.cdr.markForCheck();
         this.load();
     }
 
@@ -167,6 +168,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     public load() {
         this.subscriptions.add(this.HostMappingRulesService.loadAssignToHosts(this.slaId)
             .subscribe((result: HostMappingRulesAssignToHostsRoot) => {
+                this.cdr.markForCheck();
                 this.sla = result.sla;
                 if (result.sla.host_mapping_rule !== null) {
                     if (result.sla.host_mapping_rule.host_keywords !== null && typeof result.sla.host_mapping_rule.host_keywords === 'string' && result.sla.host_mapping_rule.host_keywords.length > 0) {
@@ -190,6 +192,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
                         result.sla.host_mapping_rule.service_not_keywords = [];
                     }
                     this.post = result.sla.host_mapping_rule;
+                    this.cdr.markForCheck();
                 }
                 this.loadHosts();
             }));
@@ -212,6 +215,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
 
         this.subscriptions.add(this.HostMappingRulesService.assignToHosts(this.post, this.slaId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Data');
@@ -251,6 +255,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             .subscribe((result: LoadHostsRoot) => {
                 this.hosts = result;
                 this.isHostsLoading = false;
+                this.cdr.markForCheck();
             }))
     }
 
