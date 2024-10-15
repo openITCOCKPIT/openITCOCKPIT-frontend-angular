@@ -1,5 +1,6 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Inject,
@@ -66,7 +67,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     templateUrl: './cancel-hostdowntime-modal.component.html',
     styleUrl: './cancel-hostdowntime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
 
@@ -107,6 +107,7 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
         this.errors = [];
 
         this.cdr.markForCheck();
+
         this.modalService.toggle({
             show: false,
             id: 'cancelHostAllModal'

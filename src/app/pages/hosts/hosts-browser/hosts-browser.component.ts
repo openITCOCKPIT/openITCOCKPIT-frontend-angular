@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -33,7 +33,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -176,14 +176,16 @@ import {
         IframeComponent,
         GrafanaTimepickerComponent,
         ServicenowHostBrowserTabComponent,
-        AdditionalHostInformationComponent
+        AdditionalHostInformationComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
         {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsBrowserComponent implements OnInit, OnDestroy {
 
@@ -220,7 +222,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
     }
@@ -245,6 +247,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             let selectedTab = params['selectedTab'] || undefined;
             if (selectedTab) {
                 this.changeTab(selectedTab);
+                this.cdr.markForCheck();
             }
         });
 
@@ -266,6 +269,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         };
 
         this.subscriptions.add(this.HostsService.getHostBrowser(this.id).subscribe((result) => {
+            this.cdr.markForCheck();
             this.result = result;
 
             let priority = Number(result.mergedHost.priority);
@@ -294,6 +298,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe((result) => {
                 this.GrafanaIframe = result;
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -308,6 +313,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadAdditionalInformation(this.result.mergedHost.id).subscribe((result) => {
                 this.AdditionalInformationExists = result;
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -316,6 +322,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost && this.result.mergedHost.sla_id) {
             this.subscriptions.add(this.HostsService.loadSlaInformation(this.result.mergedHost.id, this.result.mergedHost.sla_id).subscribe((result) => {
                 this.SlaOverview = result;
+                this.cdr.markForCheck();
             }));
         }
     }

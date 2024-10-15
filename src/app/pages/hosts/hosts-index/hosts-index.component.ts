@@ -404,6 +404,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
+                this.cdr.markForCheck();
             })
         );
 

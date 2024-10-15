@@ -1,4 +1,13 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass } from '@angular/common';
 import _ from 'lodash';
@@ -30,6 +39,7 @@ export class TemplateDiffComponent implements OnChanges {
 
 
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['value']) {
@@ -65,6 +75,8 @@ export class TemplateDiffComponent implements OnChanges {
     }
 
     runDiff() {
+        this.cdr.markForCheck();
+
         if (this.templateValue === null && this.value === null) {
             this.hasDiff = false;
             return;

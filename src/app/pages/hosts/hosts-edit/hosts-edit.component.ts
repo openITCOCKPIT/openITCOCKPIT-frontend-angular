@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import {
     AlertComponent,
@@ -37,7 +37,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
@@ -124,10 +124,12 @@ import { HistoryService } from '../../../history.service';
         NgClass,
         FakeSelectComponent,
         UiBlockerComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-edit.component.html',
-    styleUrl: './hosts-edit.component.css'
+    styleUrl: './hosts-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsEditComponent implements OnInit, OnDestroy {
 
@@ -187,6 +189,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -196,6 +199,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.loadContainers(); // will also trigger loadHost
 
         this.data.dnsLookUp = this.LocalStorageService.getItemWithDefault('HostsDnsLookUpEnabled', 'false') === 'true';
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -206,7 +210,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
-
+                this.cdr.markForCheck();
                 this.loadHost();
             })
         );
@@ -244,6 +248,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                     this.containers = result.fakeDisplayContainers;
                 }
 
+                this.cdr.markForCheck();
                 this.loadElements();
                 this.loadParentHosts('');
             }));
@@ -275,6 +280,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                         this.post.hosts_to_containers_sharing._ids.push(this.oldPrimaryContainerId);
                     }
                 }
+                this.cdr.markForCheck();
             })
         );
     }
@@ -287,6 +293,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
             .subscribe((result) => {
                 this.parenthosts = result;
+                this.cdr.markForCheck();
             })
         );
     };
@@ -301,6 +308,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadCommandArguments(commandId, this.id)
             .subscribe((result) => {
                 this.post.hostcommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -346,6 +354,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             this.data.dnsHostnameNotFound = false;
             this.data.dnsAddressNotFound = false;
         }
+        this.cdr.markForCheck();
     }
 
     public runDnsLookup(lookupByHostname: boolean) {
@@ -377,6 +386,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.runDnsLookup(data)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (lookupByHostname) {
                     const address = result.address;
                     if (address === null) {
@@ -405,6 +415,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(this.post.name, [this.id])
             .subscribe((result) => {
                 this.data.isHostnameInUse = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -413,6 +424,8 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         if (!this.hosttemplate) {
             return;
         }
+
+        this.cdr.markForCheck();
 
         const fields = [
             'description',
@@ -509,6 +522,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             if (this.hosttemplate) {
                 this.post.contacts._ids = this.hosttemplate.contacts._ids;
                 this.post.contactgroups._ids = this.hosttemplate.contactgroups._ids;
+                this.cdr.markForCheck();
             }
         }
     }
@@ -523,10 +537,12 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
     public submit(submitType: HostSubmitType) {
@@ -540,6 +556,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.edit(this.post, save_host_and_assign_matching_servicetemplate_groups)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
 
                     const response = result.data as HostAddEditSuccessResponse;

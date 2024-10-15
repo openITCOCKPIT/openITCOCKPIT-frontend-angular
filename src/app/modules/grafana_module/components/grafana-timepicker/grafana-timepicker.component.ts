@@ -96,6 +96,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setHumanNames();
+        this.cdr.markForCheck();
     }
 
 
@@ -107,6 +108,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
         this.selectedAutoRefresh = refreshValue;
 
         this.setHumanNames();
+        this.cdr.markForCheck();
 
         this.change.emit({
             timerange: this.selectedTimerange,
