@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -92,7 +92,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent
     ],
     templateUrl: './hostdependencies-edit.component.html',
-    styleUrl: './hostdependencies-edit.component.css'
+    styleUrl: './hostdependencies-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     public containers: HostdependencyContainerResult | undefined;
