@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -87,7 +87,8 @@ import { HistoryService } from '../../../history.service';
         CheckAttemptsInputComponent
     ],
     templateUrl: './hosts-edit-details.component.html',
-    styleUrl: './hosts-edit-details.component.css'
+    styleUrl: './hosts-edit-details.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
@@ -148,6 +149,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.isLoading = true;
@@ -159,6 +161,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
         if (ids) {
             this.subscriptions.add(this.HostsService.getEditDetails(ids).subscribe(response => {
+                this.cdr.markForCheck();
                 this.hostIds = ids;
                 this.contacts = response.contacts;
                 this.contactgroups = response.contactgroups;
@@ -181,6 +184,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             this.post.Host.hosts_to_containers_sharing._ids = [];
             this.post.keepSharedContainers = false;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditDescription() {
@@ -189,6 +193,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editDescription) {
             this.post.Host.description = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditTags() {
@@ -198,6 +203,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             this.post.Host.tags = null;
             this.tagsForSelect = [];
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditPriority() {
@@ -208,6 +214,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         } else {
             this.post.Host.priority = 1;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditCheckInterval() {
@@ -216,6 +223,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editCheckInterval) {
             this.post.Host.check_interval = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditRetryInterval() {
@@ -224,6 +232,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editRetryInterval) {
             this.post.Host.retry_interval = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditMaxNumberOfCheckAttempts() {
@@ -232,6 +241,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editMaxNumberOfCheckAttempts) {
             this.post.Host.max_check_attempts = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditNotificationInterval() {
@@ -240,6 +250,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editNotificationInterval) {
             this.post.Host.notification_interval = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditContacts() {
@@ -249,6 +260,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             this.post.Host.contacts._ids = [];
             this.post.keepContacts = false;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditContactgroups() {
@@ -258,6 +270,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             this.post.Host.contactgroups._ids = [];
             this.post.keepContactgroups = false;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditHostUrl() {
@@ -266,6 +279,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editHostUrl) {
             this.post.Host.host_url = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditNotes() {
@@ -274,6 +288,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editNotes) {
             this.post.Host.notes = null;
         }
+        this.cdr.markForCheck();
     }
 
     public toggleEditSatellites() {
@@ -282,6 +297,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         if (!this.post.editSatellites) {
             this.post.Host.satellite_id = null;
         }
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -291,6 +307,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.saveEditDetails(this.post, this.hostIds)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.notyService.genericSuccess();
                 this.notyService.scrollContentDivToTop();
                 this.HistoryService.navigateWithFallback(['/hosts/index']);

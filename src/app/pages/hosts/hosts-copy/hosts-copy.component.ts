@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -61,7 +61,8 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './hosts-copy.component.html',
-    styleUrl: './hosts-copy.component.css'
+    styleUrl: './hosts-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsCopyComponent implements OnInit, OnDestroy {
 
@@ -73,6 +74,7 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     isHostnameInUse: { [key: number]: boolean } = {};
 
@@ -101,6 +103,7 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
 
                     this.hosts.push(h);
                 }
+                this.cdr.markForCheck();
 
             }));
         }
@@ -114,6 +117,8 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(hostname)
             .subscribe((result) => {
                 this.isHostnameInUse[index] = result;
+                this.cdr.markForCheck();
+
             })
         );
     }
@@ -132,6 +137,8 @@ export class HostsCopyComponent implements OnInit, OnDestroy {
                 // two host templates where copied successfully, but the third one failed due to a validation error.
                 //
                 // The Server returns everything as the frontend expect it
+
+                this.cdr.markForCheck();
 
                 this.notyService.genericError();
                 this.hosts = error.error.result as HostCopyPost[];

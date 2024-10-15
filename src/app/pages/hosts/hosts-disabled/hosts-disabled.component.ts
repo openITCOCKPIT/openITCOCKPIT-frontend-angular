@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -167,9 +167,10 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
         {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsDisabledComponent {
+export class HostsDisabledComponent implements OnInit, OnDestroy {
     // Filter vars
     public params: HostsDisabledParams = getDefaultHostsDisabledParams();
     // Filter end
@@ -189,6 +190,7 @@ export class HostsDisabledComponent {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -196,6 +198,7 @@ export class HostsDisabledComponent {
 
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.satellites = result;
             })
         );
@@ -210,6 +213,8 @@ export class HostsDisabledComponent {
 
         this.subscriptions.add(this.HostsService.getHostsDisabled(this.params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.hosts = result;
             })
         );

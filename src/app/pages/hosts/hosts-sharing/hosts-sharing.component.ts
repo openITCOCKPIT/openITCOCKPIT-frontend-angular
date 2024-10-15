@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -98,7 +98,8 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './hosts-sharing.component.html',
-    styleUrl: './hosts-sharing.component.css'
+    styleUrl: './hosts-sharing.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsSharingComponent implements OnInit, OnDestroy {
 
@@ -115,11 +116,13 @@ export class HostsSharingComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.HostsService.getSharing(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.host = result.host;
                 this.primaryContainerPathSelect = result.primaryContainerPathSelect;
                 this.sharingContainers = result.sharingContainers;
@@ -137,6 +140,7 @@ export class HostsSharingComponent implements OnInit, OnDestroy {
         if (this.host) {
             this.subscriptions.add(this.HostsService.updateSharing(this.host)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         const response = result.data as GenericIdResponse;
                         const title = this.TranslocoService.translate('Host sharing');

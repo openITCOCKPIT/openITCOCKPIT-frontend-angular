@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -51,7 +51,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         FormLoaderComponent
     ],
     templateUrl: './hosts-used-by.component.html',
-    styleUrl: './hosts-used-by.component.css'
+    styleUrl: './hosts-used-by.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsUsedByComponent {
 
@@ -67,10 +68,12 @@ export class HostsUsedByComponent {
     private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.hostId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy() {
@@ -80,6 +83,7 @@ export class HostsUsedByComponent {
     public load() {
         this.subscriptions.add(this.HostsService.usedBy(this.hostId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.host = result.host;
                 this.objects = result.objects;
                 this.total = result.total;
