@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    OnDestroy,
+    ViewChild
+} from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -46,9 +55,10 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
         AsyncPipe
     ],
     templateUrl: './statistics-index.component.html',
-    styleUrl: './statistics-index.component.css'
+    styleUrl: './statistics-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatisticsIndexComponent implements OnInit, OnDestroy, AfterViewInit {
+export class StatisticsIndexComponent implements OnDestroy, AfterViewInit {
 
     // Select jsoneditor div the Angular way
     @ViewChild('jsoneditor') jsoneditor!: ElementRef;
@@ -59,10 +69,7 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy, AfterViewIni
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
     private readonly subscriptions: Subscription = new Subscription();
-
-    public ngOnInit(): void {
-
-    }
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -72,6 +79,7 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy, AfterViewIni
         this.subscriptions.add(this.StatisticsService.getCurrentStatisticSettings().subscribe(settings => {
             this.currentSettings = settings;
             this.createEditor();
+            this.cdr.markForCheck();
         }));
     }
 
@@ -92,12 +100,14 @@ export class StatisticsIndexComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
         });
+        this.cdr.markForCheck();
     }
 
     public saveSettings(value: Statistics): void {
         this.subscriptions.add(this.StatisticsService.saveSettings(value)
             .subscribe((result) => {
-                this.ngOnInit();
+                this.cdr.markForCheck();
+                this.ngAfterViewInit();
             }));
     }
 
