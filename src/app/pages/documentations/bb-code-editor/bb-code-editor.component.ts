@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { DropdownColorpickerComponent } from '../dropdown-colorpicker/dropdown-colorpicker.component';
 import {
     ButtonCloseDirective,
@@ -70,7 +78,8 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         InputGroupTextDirective
     ],
     templateUrl: './bb-code-editor.component.html',
-    styleUrl: './bb-code-editor.component.css'
+    styleUrl: './bb-code-editor.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BbCodeEditorComponent {
     public colors: string[] = [
@@ -103,9 +112,12 @@ export class BbCodeEditorComponent {
         targetBlank: true
     };
 
+    private cdr = inject(ChangeDetectorRef);
+
     public updateBbcode(newBbcode: string) {
         this.bbcode = newBbcode;
         this.bbcodeChange.emit(newBbcode);
+        this.cdr.markForCheck();
     }
 
     public selection(ev: any) {
