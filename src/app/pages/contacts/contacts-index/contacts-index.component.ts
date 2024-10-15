@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -109,7 +109,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './contacts-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ContactsService} // Inject the ContactsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
@@ -124,6 +125,8 @@ export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public contacts?: ContactsIndexRoot;
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
+    private cdr = inject(ChangeDetectorRef);
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -183,6 +186,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.ContactsService.getIndex(this.params)
             .subscribe((result: ContactsIndexRoot) => {
                 this.contacts = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -219,6 +223,7 @@ export class ContactsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

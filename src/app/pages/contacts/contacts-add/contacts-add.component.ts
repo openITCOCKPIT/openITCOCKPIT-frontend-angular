@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
@@ -22,7 +22,7 @@ import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xs
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from "../../../permissions/permission.directive";
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -93,13 +93,13 @@ import { HistoryService } from '../../../history.service';
         LabelLinkComponent
     ],
     templateUrl: './contacts-add.component.html',
-    styleUrl: './contacts-add.component.css'
+    styleUrl: './contacts-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     protected hasMacroErrors: boolean = false;
@@ -113,6 +113,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     private servicePushCommandId: number = 0;
     public errors: GenericValidationError = {} as GenericValidationError;
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -162,6 +163,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
     public submit(): void {
         this.subscriptions.add(this.ContactService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Contact');
@@ -201,6 +203,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -215,6 +218,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -228,6 +232,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         };
         this.subscriptions.add(this.ContactService.loadTimeperiods(param).subscribe((result: LoadTimeperiodsRoot) => {
             this.timeperiods = result.timeperiods;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -236,6 +241,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
             this.notificationCommands = result.notificationCommands;
             this.hostPushCommandId = result.hostPushComamndId;
             this.servicePushCommandId = result.servicePushComamndId;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -249,6 +255,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         this.loadTimeperiods();
     }
 
+    // Called by (click) - no manual change detection required
     public addMacro() {
         this.post.customvariables.push({
             name: '',
@@ -258,6 +265,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleServiceBrowserCheckbox(): void {
         if (this.post.service_push_notifications_enabled !== 1) {
             if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) === -1) {
@@ -270,6 +278,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleHostBrowserCheckbox(): void {
         if (this.post.host_push_notifications_enabled !== 1) {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) === -1) {
@@ -282,6 +291,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateServiceBrowserNotification(): void {
         if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) !== -1) {
             this.post.service_push_notifications_enabled = 1;
@@ -290,6 +300,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateHostBrowserNotification(): void {
         if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
             this.post.host_push_notifications_enabled = 1;
@@ -298,6 +309,7 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     /*******************
      * ARROW functions *
      *******************/
