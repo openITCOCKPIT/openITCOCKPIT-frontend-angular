@@ -1,4 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TimeperiodDetailsTooltipService } from './timeperiod-details-tooltip.service';
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +33,8 @@ import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
         NgClass
     ],
     templateUrl: './timeperiod-details-tooltip.component.html',
-    styleUrl: './timeperiod-details-tooltip.component.css'
+    styleUrl: './timeperiod-details-tooltip.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -40,6 +51,7 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
         messageExists: this.TranslocoService.translate('Yes'),
         messageNotExists: this.TranslocoService.translate('No')
     };
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnChanges(changes: SimpleChanges): void {
         //this is necessary to update the component if the timeperiodId was changed
@@ -61,13 +73,11 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
     }
 
     public loadTimeperiodDetails() {
-
         this.isLoading = true;
-
         if (this.timeperiodId > 0) {
-
             this.subscriptions.add(this.TimeperiodDetailsTooltipService.loadTimeperiodDetails(this.timeperiodId)
                 .subscribe((result: TimeperiodRoot) => {
+                    this.cdr.markForCheck();
                     this.isLoading = false;
 
                     this.timeperiod = result.timeperiod;
@@ -91,6 +101,6 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
 
                 }));
         }
+        this.cdr.markForCheck();
     }
-
 }
