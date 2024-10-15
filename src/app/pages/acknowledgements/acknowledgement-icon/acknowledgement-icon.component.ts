@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { AcknowledgementObject } from '../acknowledgement.interface';
 import { AcknowledgementTypes } from '../acknowledgement-types.enum';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -22,7 +22,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         PopoverDirective,
         SkeletonModule,
         RowComponent,
-        ColComponent
+        ColComponent,
+        AsyncPipe
     ],
     templateUrl: './acknowledgement-icon.component.html',
     styleUrl: './acknowledgement-icon.component.css',

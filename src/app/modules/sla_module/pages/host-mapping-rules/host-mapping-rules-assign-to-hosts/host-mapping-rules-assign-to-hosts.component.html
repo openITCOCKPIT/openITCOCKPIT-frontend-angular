@@ -56,7 +56,7 @@
                         <div class="flex-1">
                             <span class="h4 text-primary">
                                 {{ t('Service level Agreement: ') }}
-                                @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
+                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
                                     <a [routerLink]="['/', 'sla_module', 'slas', 'edit', sla.id]"
                                        *ngIf="sla.allowEdit">
                                         "{{ sla.name }}"
@@ -345,7 +345,7 @@
                                 <tr [ngClass]="{'table-header-bg-primary-light': i % 2 === 0, 'table-header-bg-primary-dark': i % 2 !== 0}">
                                     <td>
                                         <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', host.id]" class="text-white">
                                                 {{ host.name }}
                                             </a>
@@ -372,7 +372,7 @@
                                         <div [hidden]="host.sla !== null" class="text-center">
                                             <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
                                         </div>
-                                        @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit']) && host.sla !== null) {
+                                        @if (( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async ) && host.sla !== null) {
                                             <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
                                                class="text-white" *ngIf="sla.allowEdit">
                                                 {{ host.sla.name }}
@@ -404,7 +404,7 @@
                                     <tr *ngFor="let service of host.services">
                                         <td colspan="2">
                                             <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
-                                            @if (this.PermissionsService.hasPermission(['services', 'browser'])) {
+                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                                 <a [routerLink]="['/', 'services', 'browser', service.id]">
                                                     {{ service.servicename }}
                                                 </a>
@@ -459,7 +459,7 @@
             </c-card-body>
             <c-card-footer class="text-end">
 
-                @if (this.PermissionsService.hasPermission(['slamodule', 'hostmappingrules', 'assignToHosts'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'hostmappingrules', 'assignToHosts'])|async) {
                     <c-dropdown direction="center" variant="btn-group" class="ms-1">
                         <button cButton color="primary" type="submit" class="ripple">
                             {{ t('Assign to hosts') }}

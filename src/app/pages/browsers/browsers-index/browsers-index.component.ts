@@ -94,7 +94,7 @@ import {
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -203,7 +203,8 @@ import { IndexPage } from '../../../pages.interface';
         HostPieChartComponent,
         ServicePieChartComponent,
         ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent
+        ColumnsConfigImportModalComponent,
+        AsyncPipe
     ],
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',

@@ -64,7 +64,7 @@
                     </button>
                 </c-nav-item>
 
-                @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
+                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'elements', 'service_configuration']) |async )) {
                     <c-nav-item>
                         <button
                             class="nav-link"
@@ -76,7 +76,7 @@
                     </c-nav-item>
                 }
 
-                @if (PermissionsService.hasModule('CustomalertModule') && CustomalertsExists) {
+                @if (( PermissionsService.hasModuleObservable('CustomalertModule') |async ) && CustomalertsExists) {
                     <c-nav-item>
                         <button
                             class="nav-link"
@@ -88,7 +88,7 @@
                     </c-nav-item>
                 }
 
-                @if (PermissionsService.hasModule('SLAModule') && SlaOverview) {
+                @if (( PermissionsService.hasModuleObservable('SLAModule') |async ) && SlaOverview) {
                     <c-nav-item>
                         @if (SlaOverview.state === 'not_available') {
                             <button
@@ -377,7 +377,7 @@
                                         </h5>
                                     </c-card-header>
                                     <c-card-body>
-                                        @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
                                                 {{ result.host.Host.hostname }}
                                             </a>
@@ -487,11 +487,11 @@
                             <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
                                 <table cTable bordered>
                                     <tbody>
-                                        @if (PermissionsService.hasPermission(['services', 'checkcommand'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'checkcommand'])|async) {
                                             <tr>
                                                 <td>{{ t('Check command') }}</td>
                                                 <td>
-                                                    @if (PermissionsService.hasPermission(['commands', 'edit'])) {
+                                                    @if (PermissionsService.hasPermissionObservable(['commands', 'edit'])|async) {
                                                         <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
                                                             {{ result.checkCommand.Command.name }}
                                                         </a>
@@ -623,7 +623,7 @@
                                                 [hoststatus]="result.hoststatus.currentState"></oitc-hoststatus-simple-icon>
                                         </td>
                                         <td>
-                                            @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                            @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                                 <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
                                                     {{ result.host.Host.hostname }}
                                                 </a>
@@ -702,7 +702,7 @@
                                                 <td>{{ t('Contacts') }}</td>
                                                 <td>
                                                     <div *ngFor="let contact of result.mergedService.contacts">
-                                                        @if (PermissionsService.hasPermission(['contacts', 'edit']) && contact.allowEdit) {
+                                                        @if (( PermissionsService.hasPermissionObservable(['contacts', 'edit']) |async ) && contact.allowEdit) {
                                                             <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
                                                                 {{ contact.name }}
                                                             </a>
@@ -720,7 +720,7 @@
                                                 <td>
                                                     <div
                                                         *ngFor="let contactgroup of result.mergedService.contactgroups">
-                                                        @if (PermissionsService.hasPermission(['contactgroups', 'edit']) && contactgroup.allowEdit) {
+                                                        @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'edit']) |async ) && contactgroup.allowEdit) {
                                                             <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
                                                                 {{ contactgroup.container.name }}
                                                             </a>
@@ -1074,7 +1074,7 @@
                                 <tr>
                                     <td>{{ t('Container') }}</td>
                                     <td>
-                                        @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
                                             <span *ngFor="let container of result.mainContainer">
                                                 /
                                                 <a *ngIf="container.id != null"
@@ -1098,7 +1098,7 @@
                                 <tr>
                                     <td>{{ t('Shared containers') }}</td>
                                     <td>
-                                        @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['browsers', 'index'])|async) {
                                             <div *ngFor="let sharing of result.sharedContainers |keyvalue">
                                                 <span *ngFor="let container of sharing.value">
                                                     /
@@ -1135,7 +1135,7 @@
                                 </tr>
 
                                 <!-- Satellite -->
-                                    @if (PermissionsService.hasModule('DistributeModule') && result.host.Host.is_satellite_host) {
+                                    @if (( PermissionsService.hasModuleObservable('DistributeModule')|async ) && result.host.Host.is_satellite_host) {
                                         <tr>
                                             <td>{{ t('Satellite') }}</td>
                                             <td>
@@ -1165,7 +1165,7 @@
                                 <tr *ngIf="result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Servicegroups || result.objects.Instantreports || result.objects.Maps">
                                     <td>{{ t('Used by') }}</td>
                                     <td>
-                                        @if (PermissionsService.hasPermission(['services', 'usedBy'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'usedBy'])|async) {
 
                                             <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
                                                *ngIf="result.objects.Instantreports.length > 0">
@@ -1176,7 +1176,7 @@
                                                 </span>
                                             </a>
 
-                                            @if (PermissionsService.hasModule('AutoreportModule')) {
+                                            @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
                                                 <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
                                                    *ngIf="result.objects.Autoreports.length > 0">
                                                     <span class="badge border border-generic text-generic me-1">
@@ -1187,7 +1187,7 @@
                                                 </a>
                                             }
 
-                                            @if (PermissionsService.hasModule('EventcorrelationModule')) {
+                                            @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
                                                 <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
                                                    *ngIf="result.objects.Eventcorrelations.length > 0">
                                                     <span class="badge border border-generic text-generic me-1">
@@ -1199,7 +1199,7 @@
                                                 </a>
                                             }
 
-                                            @if (PermissionsService.hasModule('MapModule')) {
+                                            @if (PermissionsService.hasModuleObservable('MapModule')|async) {
                                                 <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
                                                    *ngIf="result.objects.Maps.length > 0">
                                                     <span class="badge border border-generic text-generic me-1">
@@ -1262,7 +1262,7 @@
 
             <!-- ServiceNow Module start -->
             <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceNow">
-                @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
+                @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'elements', 'service_configuration'])|async )) {
                     <oitc-servicenow-service-browser-tab
                         *ngIf="result && result.mergedService"
                         [serviceUuid]="String(result.mergedService.uuid)"

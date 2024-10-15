@@ -87,7 +87,7 @@
                             @for (host of hostsWithServices; track $index) {
                                 <tr>
                                     <td colspan="3">
-                                        @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', host.id]">
                                                 {{ host.name }} ({{ host.address }})
                                             </a>
@@ -95,7 +95,7 @@
                                             {{ host.name }} ({{ host.address }})
                                         }
 
-                                        @if (PermissionsService.hasPermission(['services', 'serviceList'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
                                             <a class="float-end"
                                                [routerLink]="['/', 'services', 'serviceList', host.id]">
                                                 <span [title]="'Go to Service list'|transloco">
@@ -113,7 +113,7 @@
                                             [item]="service"></oitc-item-select>
                                     </td>
                                     <td>
-                                        @if (PermissionsService.hasPermission(['services', 'edit'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
                                             <a [routerLink]="['/', 'services', 'edit', service.id]">
                                                 {{ service.servicename }}
                                                 <span [hidden]="!service.disabled" [title]="'Disabled' | transloco">

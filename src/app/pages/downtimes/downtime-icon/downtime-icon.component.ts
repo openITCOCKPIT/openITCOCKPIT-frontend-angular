@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, O
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
 import { SkeletonModule } from 'primeng/skeleton';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DowntimeObject } from '../downtimes.interface';
@@ -21,7 +21,8 @@ import { DowntimesService } from '../downtimes.service';
         NgIf,
         TooltipDirective,
         TranslocoPipe,
-        TranslocoDirective
+        TranslocoDirective,
+        AsyncPipe
     ],
     templateUrl: './downtime-icon.component.html',
     styleUrl: './downtime-icon.component.css',

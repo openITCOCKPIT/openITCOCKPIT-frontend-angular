@@ -131,7 +131,7 @@
 
                             <div class="row text-center font-xs">
                                 <div class="col-xs-12 col-md-4 no-padding">
-                                    @if (PermissionsService.hasPermission(['hosts', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'index']"
                                            [queryParams]="{hoststate: 0, sort: 'Hoststatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
@@ -145,7 +145,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-4 no-padding">
-                                    @if (PermissionsService.hasPermission(['hosts', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'index']"
                                            [queryParams]="{hoststate: 1, sort: 'Hoststatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
@@ -159,7 +159,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-4 no-padding">
-                                    @if (PermissionsService.hasPermission(['hosts', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'index']"
                                            [queryParams]="{hoststate: 2, sort: 'Hoststatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
@@ -205,7 +205,7 @@
 
                             <div class="row text-center font-xs">
                                 <div class="col-xs-12 col-md-3 no-padding">
-                                    @if (PermissionsService.hasPermission(['services', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                         <a [routerLink]="['/', 'services', 'index']"
                                            [queryParams]="{servicestate: 0, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
@@ -219,7 +219,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-3 no-padding">
-                                    @if (PermissionsService.hasPermission(['services', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                         <a [routerLink]="['/', 'services', 'index']"
                                            [queryParams]="{servicestate: 1, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
@@ -233,7 +233,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-3 no-padding">
-                                    @if (PermissionsService.hasPermission(['services', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                         <a [routerLink]="['/', 'services', 'index']"
                                            [queryParams]="{servicestate: 2, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
@@ -247,7 +247,7 @@
                                 </div>
 
                                 <div class="col-xs-12 col-md-3 no-padding">
-                                    @if (PermissionsService.hasPermission(['services', 'index'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                         <a [routerLink]="['/', 'services', 'index']"
                                            [queryParams]="{servicestate: 3, sort: 'Servicestatus.last_state_change',  direction: 'desc', BrowserContainerId: containerId}">
                                             <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
@@ -1173,7 +1173,7 @@
                         </td>
 
                         <td *ngIf="fields[7]">
-                            @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                 <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                     {{ host.Host.name }}
                                 </a>
@@ -1181,7 +1181,7 @@
                                 {{ host.Host.name }}
                             }
 
-                            @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                            @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
                                 <span class="badge border border-info"
                                       [hidden]="!host.Host.additionalInformationExists">
                                     <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
@@ -1222,10 +1222,10 @@
                             {{ host.Host.satelliteName }}
                         </td>
 
-                        @if (this.PermissionsService.hasPermission(['services', 'serviceList'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
                             <td *ngIf="fields[14]" class="width-160">
                                 <div class="btn-group btn-group-justified w-100" role="group">
-                                    @if (this.PermissionsService.hasPermission(['services', 'index'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                         <a class="btn btn-success state-button-small"
                                            [routerLink]="['/', 'services', 'index']"
                                            [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
@@ -1311,7 +1311,7 @@
                                     {{ t('Changelog') }}
                                 </oitc-actions-button-element>
 
-                                @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) && host.Host.additionalInformationExists) {
+                                @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) |async ) && host.Host.additionalInformationExists) {
                                     <li><a cDropdownItem [routerLink]="'/hosts/browser/' + host.Host.id"
                                            [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
                                            *oitcPermission="['hosts', 'browser']">
@@ -1344,7 +1344,7 @@
                                     {{ t('openITCOCKPIT Agent discovery') }}
                                 </oitc-actions-button-element>
 
-                                @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                                @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
                                     <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
                                                                  [url]="'/checkmk_module/scans/index/' + host.Host.id">
                                         <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>

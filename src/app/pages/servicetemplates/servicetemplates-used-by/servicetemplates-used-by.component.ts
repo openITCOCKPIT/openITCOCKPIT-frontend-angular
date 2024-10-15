@@ -25,7 +25,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -86,7 +86,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PaginatorModule,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',
