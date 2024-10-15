@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
@@ -24,6 +24,8 @@ export class HoststatusSimpleIconComponent {
     public isHardstate: boolean = true;
     public humanState: string = this.TranslocoService.translate('not in monitoring');
 
+    private cdr = inject(ChangeDetectorRef);
+
     @Input()
     set hoststatus(value: number | undefined) {
         this.state = value;
@@ -44,6 +46,7 @@ export class HoststatusSimpleIconComponent {
                     this.humanState = this.TranslocoService.translate('unreachable');
                     break;
             }
+            this.cdr.markForCheck();
         }
     }
 

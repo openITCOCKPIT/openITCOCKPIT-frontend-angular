@@ -50,6 +50,7 @@ export class ServicestatusSimpleIconComponent {
                     this.humanState = this.TranslocoService.translate('unknown');
                     break;
             }
+            this.cdr.markForCheck();
         }
     }
 
