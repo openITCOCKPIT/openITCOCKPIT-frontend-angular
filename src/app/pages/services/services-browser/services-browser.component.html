@@ -1,383 +1,628 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
+<ng-container *transloco="let t">
 
-        <oitc-services-browser-menu
-            *ngIf="serviceBrowserConfig"
-            [config]="serviceBrowserConfig">
-        </oitc-services-browser-menu>
+    <oitc-services-browser-menu
+        *ngIf="serviceBrowserConfig"
+        [config]="serviceBrowserConfig">
+    </oitc-services-browser-menu>
 
-        <oitc-query-handler-checker></oitc-query-handler-checker>
-
-
-        <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
-        <c-card class="mb-3 mt-3" *ngIf="result">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Service') }}:
-                    <small class="fw-300">
-                        {{ result.host.Host.name }} / {{ result.mergedService.name }}
-                    </small>
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="loadService()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
+    <oitc-query-handler-checker></oitc-query-handler-checker>
 
 
-                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+    <oitc-browser-loader *ngIf="!result"></oitc-browser-loader>
+    <c-card class="mb-3 mt-3" *ngIf="result">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service') }}:
+                <small class="fw-300">
+                    {{ result.host.Host.name }} / {{ result.mergedService.name }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadService()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                <c-nav-item>
+                    <button
+                        class="nav-link"
+                        [ngClass]="{'active': selectedTab == ServiceBrowserTabs.StatusInformation}"
+                        (click)="changeTab(ServiceBrowserTabs.StatusInformation)">
+                        <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                        {{ t('Status information') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <button
+                        class="nav-link"
+                        [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceInformation}"
+                        (click)="changeTab(ServiceBrowserTabs.ServiceInformation)">
+                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                        {{ t('Service information') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <button
+                        *oitcPermission="['hosts', 'timeline']" class="nav-link"
+                        [ngClass]="{'active': selectedTab == ServiceBrowserTabs.Timeline}"
+                        (click)="changeTab(ServiceBrowserTabs.Timeline)">
+                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                        {{ t('Timeline') }}
+                    </button>
+                </c-nav-item>
+
+                @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
                     <c-nav-item>
                         <button
                             class="nav-link"
-                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.StatusInformation}"
-                            (click)="changeTab(ServiceBrowserTabs.StatusInformation)">
-                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
-                            {{ t('Status information') }}
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceNow}"
+                            (click)="changeTab(ServiceBrowserTabs.ServiceNow)">
+                            <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
+                            {{ t('ServiceNow') }}
                         </button>
                     </c-nav-item>
+                }
+
+                @if (PermissionsService.hasModule('CustomalertModule') && CustomalertsExists) {
                     <c-nav-item>
                         <button
                             class="nav-link"
-                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceInformation}"
-                            (click)="changeTab(ServiceBrowserTabs.ServiceInformation)">
-                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                            {{ t('Service information') }}
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.CustomAlerts}"
+                            (click)="changeTab(ServiceBrowserTabs.CustomAlerts)">
+                            <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+                            {{ t('Custom alerts') }}
                         </button>
                     </c-nav-item>
+                }
+
+                @if (PermissionsService.hasModule('SLAModule') && SlaOverview) {
                     <c-nav-item>
-                        <button
-                            *oitcPermission="['hosts', 'timeline']" class="nav-link"
-                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.Timeline}"
-                            (click)="changeTab(ServiceBrowserTabs.Timeline)">
-                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                            {{ t('Timeline') }}
-                        </button>
+                        @if (SlaOverview.state === 'not_available') {
+                            <button
+                                class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
+                                (click)="changeTab(ServiceBrowserTabs.SLA)">
+                                <span class="btn-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                </span> {{ t('Not available') }}
+                            </button>
+                        } @else {
+                            <button
+                                class="btn btn-labeled btn-xs btn-w-m ripple"
+                                [ngClass]="'btn-'+SlaOverview.state"
+                                (click)="changeTab(ServiceBrowserTabs.SLA)">
+                                <span class="btn-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'check']"
+                                             *ngIf="SlaOverview.state == 'success'"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                             *ngIf="SlaOverview.state == 'warning'"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'bolt']"
+                                             *ngIf="SlaOverview.state == 'danger'"></fa-icon>
+                                </span> {{ SlaOverview.determined_availability_percent }} %
+                            </button>
+                        }
+
                     </c-nav-item>
+                }
 
-                    @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
-                        <c-nav-item>
-                            <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == ServiceBrowserTabs.ServiceNow}"
-                                (click)="changeTab(ServiceBrowserTabs.ServiceNow)">
-                                <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
-                                {{ t('ServiceNow') }}
-                            </button>
-                        </c-nav-item>
-                    }
+            </c-nav>
 
-                    @if (PermissionsService.hasModule('CustomalertModule') && CustomalertsExists) {
-                        <c-nav-item>
-                            <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == ServiceBrowserTabs.CustomAlerts}"
-                                (click)="changeTab(ServiceBrowserTabs.CustomAlerts)">
-                                <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-                                {{ t('Custom alerts') }}
-                            </button>
-                        </c-nav-item>
-                    }
+        </c-card-header>
+        <c-card-body>
 
-                    @if (PermissionsService.hasModule('SLAModule') && SlaOverview) {
-                        <c-nav-item>
-                            @if (SlaOverview.state === 'not_available') {
-                                <button
-                                    class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
-                                    (click)="changeTab(ServiceBrowserTabs.SLA)">
-                                    <span class="btn-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
-                                    </span> {{ t('Not available') }}
-                                </button>
-                            } @else {
-                                <button
-                                    class="btn btn-labeled btn-xs btn-w-m ripple"
-                                    [ngClass]="'btn-'+SlaOverview.state"
-                                    (click)="changeTab(ServiceBrowserTabs.SLA)">
-                                    <span class="btn-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'check']"
-                                                 *ngIf="SlaOverview.state == 'success'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"
-                                                 *ngIf="SlaOverview.state == 'warning'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'bolt']"
-                                                 *ngIf="SlaOverview.state == 'danger'"></fa-icon>
-                                    </span> {{ SlaOverview.determined_availability_percent }} %
-                                </button>
-                            }
+            <!-- Status information start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.StatusInformation">
 
-                        </c-nav-item>
-                    }
-
-                </c-nav>
-
-            </c-card-header>
-            <c-card-body>
-
-                <!-- Status information start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.StatusInformation">
-
-                    <!-- Status for small resolution (mobile) -->
-                    <div class="d-md-none p-2 text-white" [ngClass]="result.servicestatus.cssClass">
-                        <c-row>
-                            <c-col [xs]="6">
-                                {{ 'State' }}
-                            </c-col>
-                            <c-col [xs]="6">
-                                {{ result.servicestatus.currentState | serviceStatusName }}
-                            </c-col>
-                        </c-row>
-
-                        <c-row *ngIf="result.servicestatus.isInMonitoring">
-                            <c-col [xs]="6">
-                                {{ 'State since' }}
-                            </c-col>
-                            <c-col [xs]="6" [title]="result.servicestatus.last_state_change_user">
-                                {{ result.servicestatus.last_state_change }}
-                            </c-col>
-
-                            <c-col [xs]="6">
-                                {{ 'Last check' }}
-                            </c-col>
-                            <c-col [xs]="6" [title]="result.servicestatus.lastCheckUser">
-                                {{ result.servicestatus.lastCheck }}
-                            </c-col>
-
-                            <c-col [xs]="6">
-                                {{ 'Next check' }}
-                            </c-col>
-                            @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
-                                <c-col [xs]="6" [title]="result.servicestatus.nextCheckUser">
-                                    {{ result.servicestatus.nextCheck }}
-                                </c-col>
-                            } @else {
-                                <c-col [xs]="6">
-                                    {{ t('n/a') }}
-                                </c-col>
-                            }
-
-                            <c-col [xs]="6">
-                                {{ 'State type' }}
-                            </c-col>
-                            <c-col [xs]="6">
-                                @if (result.servicestatus.isHardstate) {
-                                    {{ t('Hard state') }}
-                                } @else {
-                                    {{ t('Soft state') }}
-                                }
-                                ({{ result.servicestatus.current_check_attempt }}
-                                /{{ result.servicestatus.max_check_attempts }})
-                            </c-col>
-
-                        </c-row>
-
-                        <!-- External Commands Mobile View -->
-                        <c-row
-                            *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring">
-                            <c-button-toolbar role="group" class="justify-content-center pt-2">
-                                <c-button-group role="group">
-                                    <button cButton color="default"
-                                            [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
-                                            (click)="resetChecktime(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default"
-                                            [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
-                                            (click)="toggleDowntimeModal(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default"
-                                            *ngIf="Number(result.servicestatus.currentState) > 0"
-                                            [cTooltip]="'Acknowledge service status' | transloco"
-                                            cTooltipPlacement="top"
-                                            (click)="acknowledgeStatus(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default"
-                                            [cTooltip]="'Passive transfer check result' | transloco"
-                                            cTooltipPlacement="top"
-                                            (click)="processCheckResult(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default" *ngIf="!result.servicestatus.flap_detection_enabled"
-                                            [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
-                                            (click)="enableFlapdetection(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default" *ngIf="result.servicestatus.flap_detection_enabled"
-                                            [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
-                                            (click)="disableFlapdetection(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default" *ngIf="!result.servicestatus.notifications_enabled"
-                                            [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
-                                            (click)="enableNotifications(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                    </button>
-
-                                    <button cButton color="default" *ngIf="result.servicestatus.notifications_enabled"
-                                            [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
-                                            (click)="disableNotifications(result.mergedService, result.host)">
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                    </button>
-
-                                </c-button-group>
-                            </c-button-toolbar>
-                        </c-row>
-
-
-                    </div>
-                    <!-- End of mobile status view -->
-
+                <!-- Status for small resolution (mobile) -->
+                <div class="d-md-none p-2 text-white" [ngClass]="result.servicestatus.cssClass">
                     <c-row>
-                        <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
+                        <c-col [xs]="6">
+                            {{ 'State' }}
+                        </c-col>
+                        <c-col [xs]="6">
+                            {{ result.servicestatus.currentState | serviceStatusName }}
+                        </c-col>
+                    </c-row>
 
-                            <!-- Check if service is disabled -->
-                            <c-col *ngIf="result.mergedService.disabled">
-                                <c-card [cBorder]="{top: {color: 'danger', width: 3}}" [textColor]="'danger'"
+                    <c-row *ngIf="result.servicestatus.isInMonitoring">
+                        <c-col [xs]="6">
+                            {{ 'State since' }}
+                        </c-col>
+                        <c-col [xs]="6" [title]="result.servicestatus.last_state_change_user">
+                            {{ result.servicestatus.last_state_change }}
+                        </c-col>
+
+                        <c-col [xs]="6">
+                            {{ 'Last check' }}
+                        </c-col>
+                        <c-col [xs]="6" [title]="result.servicestatus.lastCheckUser">
+                            {{ result.servicestatus.lastCheck }}
+                        </c-col>
+
+                        <c-col [xs]="6">
+                            {{ 'Next check' }}
+                        </c-col>
+                        @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
+                            <c-col [xs]="6" [title]="result.servicestatus.nextCheckUser">
+                                {{ result.servicestatus.nextCheck }}
+                            </c-col>
+                        } @else {
+                            <c-col [xs]="6">
+                                {{ t('n/a') }}
+                            </c-col>
+                        }
+
+                        <c-col [xs]="6">
+                            {{ 'State type' }}
+                        </c-col>
+                        <c-col [xs]="6">
+                            @if (result.servicestatus.isHardstate) {
+                                {{ t('Hard state') }}
+                            } @else {
+                                {{ t('Soft state') }}
+                            }
+                            ({{ result.servicestatus.current_check_attempt }}
+                            /{{ result.servicestatus.max_check_attempts }})
+                        </c-col>
+
+                    </c-row>
+
+                    <!-- External Commands Mobile View -->
+                    <c-row
+                        *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring">
+                        <c-button-toolbar role="group" class="justify-content-center pt-2">
+                            <c-button-group role="group">
+                                <button cButton color="default"
+                                        [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
+                                        (click)="resetChecktime(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default"
+                                        [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
+                                        (click)="toggleDowntimeModal(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default"
+                                        *ngIf="Number(result.servicestatus.currentState) > 0"
+                                        [cTooltip]="'Acknowledge service status' | transloco"
+                                        cTooltipPlacement="top"
+                                        (click)="acknowledgeStatus(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default"
+                                        [cTooltip]="'Passive transfer check result' | transloco"
+                                        cTooltipPlacement="top"
+                                        (click)="processCheckResult(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default" *ngIf="!result.servicestatus.flap_detection_enabled"
+                                        [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
+                                        (click)="enableFlapdetection(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default" *ngIf="result.servicestatus.flap_detection_enabled"
+                                        [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
+                                        (click)="disableFlapdetection(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default" *ngIf="!result.servicestatus.notifications_enabled"
+                                        [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
+                                        (click)="enableNotifications(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                </button>
+
+                                <button cButton color="default" *ngIf="result.servicestatus.notifications_enabled"
+                                        [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
+                                        (click)="disableNotifications(result.mergedService, result.host)">
+                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                </button>
+
+                            </c-button-group>
+                        </c-button-toolbar>
+                    </c-row>
+
+
+                </div>
+                <!-- End of mobile status view -->
+
+                <c-row>
+                    <c-col [xs]="12" [sm]="12" [md]="7" [lg]="9">
+
+                        <!-- Check if service is disabled -->
+                        <c-col *ngIf="result.mergedService.disabled">
+                            <c-card [cBorder]="{top: {color: 'danger', width: 3}}" [textColor]="'danger'"
+                                    class="mb-3">
+                                <c-card-header>
+                                    <h4>{{ t('Attention!') }}</h4>
+                                </c-card-header>
+                                <c-card-body>
+                                    <p cCardText>
+                                        {{ t('This service is currently disabled!') }}
+                                    </p>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+
+                        <c-row>
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Status overview') }}</h4>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Service Downtime -->
+                        <c-row *ngIf="Number(result.servicestatus.scheduledDowntimeDepth) > 0 && result.downtime">
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
                                         class="mb-3">
                                     <c-card-header>
-                                        <h4>{{ t('Attention!') }}</h4>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                            {{ t('The service is currently in a planned maintenance period') }}
+                                        </h5>
                                     </c-card-header>
                                     <c-card-body>
-                                        <p cCardText>
-                                            {{ t('This service is currently disabled!') }}
-                                        </p>
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
+                                        <div>
+                                            {{ t('Downtime was set by') }}
+                                            <b>{{ result.downtime.authorName }}</b>
+                                            {{ t('with an duration of') }}
+                                            <b>{{ result.downtime.durationHuman }}</b>.
+                                        </div>
+                                        <div class="pt-1">
+                                            <small>
+                                                {{ t('Start time:') }}
+                                                {{ result.downtime.scheduledStartTime }}
+                                                {{ t('End time:') }}
+                                                {{ result.downtime.scheduledEndTime }}
+                                            </small>
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            {{ result.downtime.commentData }}
+                                        </div>
 
-                            <c-row>
-                                <c-col [xs]="12" class="mt-1">
-                                    <h4>{{ t('Status overview') }}</h4>
-                                </c-col>
-                            </c-row>
-
-                            <!-- Service Downtime -->
-                            <c-row *ngIf="Number(result.servicestatus.scheduledDowntimeDepth) > 0 && result.downtime">
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
-                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                {{ t('The service is currently in a planned maintenance period') }}
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
-                                            <div>
-                                                {{ t('Downtime was set by') }}
-                                                <b>{{ result.downtime.authorName }}</b>
-                                                {{ t('with an duration of') }}
-                                                <b>{{ result.downtime.durationHuman }}</b>.
-                                            </div>
-                                            <div class="pt-1">
-                                                <small>
-                                                    {{ t('Start time:') }}
-                                                    {{ result.downtime.scheduledStartTime }}
-                                                    {{ t('End time:') }}
-                                                    {{ result.downtime.scheduledEndTime }}
-                                                </small>
-                                            </div>
-                                            <div class="pt-1">
-                                                {{ t('Comment: ') }}
-                                                {{ result.downtime.commentData }}
-                                            </div>
-
-                                            <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelServiceDowntimeModal(result.downtime)"
-                                                        cButton
-                                                        class="ripple float-end" color="danger"
-                                                        size="xs"
-                                                        *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Cancel') }}
-                                                </button>
-                                            </div>
-
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
-                            </c-row>
-
-                            <!-- Service Acknowledgement -->
-                            <c-row *ngIf="result.servicestatus.problemHasBeenAcknowledged && result.acknowledgement">
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
-                                                <fa-icon
-                                                    [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
-                                                {{ t('State of service is acknowledged') }}
-                                                <span [hidden]="!result.acknowledgement.is_sticky">
-                                                    ({{ t('Sticky') }})
-                                                </span>
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
-                                            <div>
-                                                {{ t('Acknowledgement was set by') }}
-                                                <b>{{ result.acknowledgement.author_name }}</b>
-                                                {{ t('at') }}
-                                                {{ result.acknowledgement.entry_time }}.
-                                            </div>
-                                            <div class="pt-1">
-                                                {{ t('Comment: ') }}
-                                                <div class="word-break d-inline"
-                                                     [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
-                                            </div>
-
-                                            <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
-                                                <button
-                                                    (click)="toggleDeleteAcknowledgementModal(result.mergedService, result.host)"
+                                        <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                            <button (click)="toggleCancelServiceDowntimeModal(result.downtime)"
                                                     cButton
                                                     class="ripple float-end" color="danger"
                                                     size="xs"
-                                                    *ngIf="result.acknowledgement.allowEdit">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Delete') }}
-                                                </button>
-                                            </div>
+                                                    *ngIf="result.downtime.allowEdit && result.downtime.isCancellable">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Cancel') }}
+                                            </button>
+                                        </div>
 
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Service Acknowledgement -->
+                        <c-row *ngIf="result.servicestatus.problemHasBeenAcknowledged && result.acknowledgement">
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon
+                                                [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                            {{ t('State of service is acknowledged') }}
+                                            <span [hidden]="!result.acknowledgement.is_sticky">
+                                                ({{ t('Sticky') }})
+                                            </span>
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Acknowledgement was set by') }}
+                                            <b>{{ result.acknowledgement.author_name }}</b>
+                                            {{ t('at') }}
+                                            {{ result.acknowledgement.entry_time }}.
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            <div class="word-break d-inline"
+                                                 [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                        </div>
+
+                                        <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                            <button
+                                                (click)="toggleDeleteAcknowledgementModal(result.mergedService, result.host)"
+                                                cButton
+                                                class="ripple float-end" color="danger"
+                                                size="xs"
+                                                *ngIf="result.acknowledgement.allowEdit">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Flapping alert -->
+                        <c-alert color="warning" [dismissible]="false" *ngIf="result.servicestatus.isFlapping">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('The state of this service is currently flapping!') }}
+                        </c-alert>
+
+                        <!-- Host Problem -->
+                        <c-row *ngIf="Number(result.hoststatus.currentState) > 0">
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ t('Problem with host detected!') }}
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
+                                                {{ result.host.Host.hostname }}
+                                            </a>
+                                        } @else {
+                                            {{ result.host.Host.hostname }}
+
+                                        }
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Host Downtime -->
+                        <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.hostDowntime">
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                            {{ t('The host is currently in a planned maintenance period') }}
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Downtime was set by') }}
+                                            <b>{{ result.hostDowntime.authorName }}</b>
+                                            {{ t('with an duration of') }}
+                                            <b>{{ result.hostDowntime.durationHuman }}</b>.
+                                        </div>
+                                        <div class="pt-1">
+                                            <small>
+                                                {{ t('Start time:') }}
+                                                {{ result.hostDowntime.scheduledStartTime }}
+                                                {{ t('End time:') }}
+                                                {{ result.hostDowntime.scheduledEndTime }}
+                                            </small>
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            {{ result.hostDowntime.commentData }}
+                                        </div>
+
+                                        <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                            <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
+                                                    cButton
+                                                    class="ripple float-end" color="danger"
+                                                    size="xs"
+                                                    *ngIf="result.hostDowntime.allowEdit && result.hostDowntime.isCancellable">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Cancel') }}
+                                            </button>
+                                        </div>
+
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Host Acknowledgement -->
+                        <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.hostAcknowledgement">
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon
+                                                [icon]="(result.hostAcknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                            {{ t('State of host is acknowledged') }}
+                                            <span [hidden]="!result.hostAcknowledgement.is_sticky">
+                                                ({{ t('Sticky') }})
+                                            </span>
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Acknowledgement was set by') }}
+                                            <b>{{ result.hostAcknowledgement.author_name }}</b>
+                                            {{ t('at') }}
+                                            {{ result.hostAcknowledgement.entry_time }}.
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            <div class="word-break d-inline"
+                                                 [innerHTML]="String(result.hostAcknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                        </div>
+
+                                        <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                            <button
+                                                (click)="toggleDeleteHostAcknowledgementModal(result.host)"
+                                                cButton
+                                                class="ripple float-end" color="danger"
+                                                size="xs"
+                                                *ngIf="result.hostAcknowledgement.allowEdit">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <c-row>
+                            <!-- Check command -->
+                            <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
+                                <table cTable bordered>
+                                    <tbody>
+                                        @if (PermissionsService.hasPermission(['services', 'checkcommand'])) {
+                                            <tr>
+                                                <td>{{ t('Check command') }}</td>
+                                                <td>
+                                                    @if (PermissionsService.hasPermission(['commands', 'edit'])) {
+                                                        <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
+                                                            {{ result.checkCommand.Command.name }}
+                                                        </a>
+                                                    } @else {
+                                                        {{ result.checkCommand.Command.name }}
+                                                    }
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td>{{ t('Command line') }}</td>
+                                                <td>
+                                                    <oitc-copy-to-clipboard
+                                                        [data]="result.mergedService.serviceCommandLine">
+                                                        <code
+                                                            [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
+                                                            {{ result.mergedService.serviceCommandLine }}
+                                                        </code>
+                                                    </oitc-copy-to-clipboard>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    <tr>
+                                        <td>{{ t('Output') }}</td>
+                                        <td>
+                                            <div class="code-font"
+                                                 [ngClass]="result.servicestatus.textClass"
+                                                 [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="Number(result.servicestatus.currentState) > 0">
+                                        <td>
+                                            {{ t('Last time') }}
+                                            <c-badge color="success">{{ t('OK') }}</c-badge>
+                                        </td>
+                                        <td>
+                                            {{ result.servicestatus.last_time_ok }}
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </c-col>
+
+                            <!-- Check period -->
+                            <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Check period') }}</td>
+                                        <td>
+                                            <oitc-label-link
+                                                [objectId]=" result.checkPeriod.id"
+                                                [route]="'/timeperiods/edit'"
+                                                [permissions]="'timeperiods.edit'"
+                                            >
+                                                {{ result.checkPeriod.name }}
+                                            </oitc-label-link>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Check interval') }}</td>
+                                        <td>
+                                            {{ result.mergedService.checkIntervalHuman }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Retry interval') }}</td>
+                                        <td>
+                                            {{ result.mergedService.retryIntervalHuman }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Long output -->
+                        <c-row *ngIf="result.servicestatus.longOutputHtml">
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Long output') }}</h4>
+                            </c-col>
+                            <c-col [xs]="12">
+                                <c-card>
+                                    <c-card-body>
+                                        <div class="word-break"
+                                             [innerHTML]="String(result.servicestatus.longOutputHtml) | trustAsHtml "></div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+
+                        <!-- Prometheus state overview table -->
+                        @if (PermissionsService.hasModuleObservable('PrometheusModule')|async) {
+                            <c-row>
+                                <oitc-prometheus-service-browser
+                                    *ngIf="result.mergedService.service_type === ServiceTypesEnum.PROMETHEUS_SERVICE"
+                                    [serviceId]="Number(result.mergedService.id)"
+                                    [lastUpdated]="lastUpdated">
+
+                                </oitc-prometheus-service-browser>
                             </c-row>
+                        }
 
-                            <!-- Flapping alert -->
-                            <c-alert color="warning" [dismissible]="false" *ngIf="result.servicestatus.isFlapping">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ t('The state of this service is currently flapping!') }}
-                            </c-alert>
+                        <!-- Host state overview table -->
+                        <c-row>
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Host state overview') }}</h4>
+                            </c-col>
 
-                            <!-- Host Problem -->
-                            <c-row *ngIf="Number(result.hoststatus.currentState) > 0">
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
-                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                                {{ t('Problem with host detected!') }}
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
+                            <c-col [xs]="12">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <th class="width-130">{{ t('Host state') }}</th>
+                                        <th>{{ t('Host name') }}</th>
+                                        <th>{{ t('Last state change') }}</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <oitc-hoststatus-simple-icon
+                                                *ngIf="result.hoststatus"
+                                                [hardstate]="result.hoststatus.isHardstate"
+                                                [hoststatus]="result.hoststatus.currentState"></oitc-hoststatus-simple-icon>
+                                        </td>
+                                        <td>
                                             @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
                                                 <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
                                                     {{ result.host.Host.hostname }}
@@ -386,697 +631,476 @@
                                                 {{ result.host.Host.hostname }}
 
                                             }
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
-                            </c-row>
+                                        </td>
+                                        <td>
+                                            {{ result.hoststatus.last_state_change }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c-col>
 
-                            <!-- Host Downtime -->
-                            <c-row *ngIf="Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.hostDowntime">
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
-                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                {{ t('The host is currently in a planned maintenance period') }}
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
-                                            <div>
-                                                {{ t('Downtime was set by') }}
-                                                <b>{{ result.hostDowntime.authorName }}</b>
-                                                {{ t('with an duration of') }}
-                                                <b>{{ result.hostDowntime.durationHuman }}</b>.
-                                            </div>
-                                            <div class="pt-1">
-                                                <small>
-                                                    {{ t('Start time:') }}
-                                                    {{ result.hostDowntime.scheduledStartTime }}
-                                                    {{ t('End time:') }}
-                                                    {{ result.hostDowntime.scheduledEndTime }}
-                                                </small>
-                                            </div>
-                                            <div class="pt-1">
-                                                {{ t('Comment: ') }}
-                                                {{ result.hostDowntime.commentData }}
-                                            </div>
+                        </c-row>
 
-                                            <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
-                                                        cButton
-                                                        class="ripple float-end" color="danger"
-                                                        size="xs"
-                                                        *ngIf="result.hostDowntime.allowEdit && result.hostDowntime.isCancellable">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Cancel') }}
-                                                </button>
-                                            </div>
+                        <!-- Notification overview -->
+                        <c-row *ngIf="result && result.mergedService">
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Notification overview') }}</h4>
+                            </c-col>
 
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
-                            </c-row>
+                            <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromService">
+                                {{ t('Contacts and contact groups got inherited from') }}
 
-                            <!-- Host Acknowledgement -->
-                            <c-row *ngIf="result.hoststatus.problemHasBeenAcknowledged && result.hostAcknowledgement">
-                                <c-col [xs]="12">
-                                    <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                            class="mb-3">
-                                        <c-card-header>
-                                            <h5 class="text-info">
-                                                <fa-icon
-                                                    [icon]="(result.hostAcknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
-                                                {{ t('State of host is acknowledged') }}
-                                                <span [hidden]="!result.hostAcknowledgement.is_sticky">
-                                                    ({{ t('Sticky') }})
-                                                </span>
-                                            </h5>
-                                        </c-card-header>
-                                        <c-card-body>
-                                            <div>
-                                                {{ t('Acknowledgement was set by') }}
-                                                <b>{{ result.hostAcknowledgement.author_name }}</b>
-                                                {{ t('at') }}
-                                                {{ result.hostAcknowledgement.entry_time }}.
-                                            </div>
-                                            <div class="pt-1">
-                                                {{ t('Comment: ') }}
-                                                <div class="word-break d-inline"
-                                                     [innerHTML]="String(result.hostAcknowledgement.commentDataHtml) | trustAsHtml "></div>
-                                            </div>
+                                <span [ngClass]="{'bold':result.areContactsInheritedFromServicetemplate}">
+                                    <oitc-label-link
+                                        [objectId]="result.mergedService.servicetemplate_id"
+                                        [route]="'/servicetemplates/edit'"
+                                        [permissions]="'servicetemplates.edit'"
+                                    >
+                                        {{ t('service template') }}
+                                    </oitc-label-link>
+                                </span>
 
-                                            <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
-                                                <button
-                                                    (click)="toggleDeleteHostAcknowledgementModal(result.host)"
-                                                    cButton
-                                                    class="ripple float-end" color="danger"
-                                                    size="xs"
-                                                    *ngIf="result.hostAcknowledgement.allowEdit">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Delete') }}
-                                                </button>
-                                            </div>
+                                <span [ngClass]="{'bold':result.areContactsInheritedFromHost}"
+                                      *ngIf="!result.areContactsInheritedFromServicetemplate">
 
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
-                            </c-row>
+                                    <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
 
-                            <c-row>
-                                <!-- Check command -->
-                                <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
-                                    <table cTable bordered>
-                                        <tbody>
-                                            @if (PermissionsService.hasPermission(['services', 'checkcommand'])) {
-                                                <tr>
-                                                    <td>{{ t('Check command') }}</td>
-                                                    <td>
-                                                        @if (PermissionsService.hasPermission(['commands', 'edit'])) {
-                                                            <a [routerLink]="['/', 'commands', 'edit', result.checkCommand.Command.id]">
-                                                                {{ result.checkCommand.Command.name }}
+                                    <oitc-label-link
+                                        [objectId]="result.mergedService.host_id"
+                                        [route]="'/hosts/edit'"
+                                        [permissions]="'hosts.edit'"
+                                    >
+                                        {{ t('host') }}
+                                    </oitc-label-link>
+                                </span>
+
+                                <span class="bold" *ngIf="result.areContactsInheritedFromHosttemplate">
+
+                                    <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
+
+                                    <oitc-label-link
+                                        [objectId]="result.host.Host.hosttemplate_id"
+                                        [route]="'/hosttemplates/edit'"
+                                        [permissions]="'hosttemplates.edit'"
+                                    >
+                                        {{ t('host template') }}
+                                    </oitc-label-link>
+                                </span>
+                                .
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row *ngIf="result">
+                            <!-- Contacts and Contact groups -->
+                            <c-col [xs]="12" [md]="6">
+                                <table cTable bordered>
+                                    <tbody>
+                                        @if (result.mergedService.contacts.length > 0) {
+                                            <tr>
+                                                <td>{{ t('Contacts') }}</td>
+                                                <td>
+                                                    <div *ngFor="let contact of result.mergedService.contacts">
+                                                        @if (PermissionsService.hasPermission(['contacts', 'edit']) && contact.allowEdit) {
+                                                            <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                                                {{ contact.name }}
                                                             </a>
                                                         } @else {
-                                                            {{ result.checkCommand.Command.name }}
+                                                            {{ contact.name }}
                                                         }
-                                                    </td>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
 
-                                                </tr>
-
-                                                <tr>
-                                                    <td>{{ t('Command line') }}</td>
-                                                    <td>
-                                                        <oitc-copy-to-clipboard
-                                                            [data]="result.mergedService.serviceCommandLine">
-                                                            <code
-                                                                [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
-                                                                {{ result.mergedService.serviceCommandLine }}
-                                                            </code>
-                                                        </oitc-copy-to-clipboard>
-                                                    </td>
-                                                </tr>
-                                            }
-
-                                        <tr>
-                                            <td>{{ t('Output') }}</td>
-                                            <td>
-                                                <div class="code-font"
-                                                     [ngClass]="result.servicestatus.textClass"
-                                                     [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
-                                            </td>
-                                        </tr>
-
-                                        <tr *ngIf="Number(result.servicestatus.currentState) > 0">
-                                            <td>
-                                                {{ t('Last time') }}
-                                                <c-badge color="success">{{ t('OK') }}</c-badge>
-                                            </td>
-                                            <td>
-                                                {{ result.servicestatus.last_time_ok }}
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                </c-col>
-
-                                <!-- Check period -->
-                                <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
-                                    <table cTable bordered>
-                                        <tbody>
-                                        <tr>
-                                            <td>{{ t('Check period') }}</td>
-                                            <td>
-                                                <oitc-label-link
-                                                    [objectId]=" result.checkPeriod.id"
-                                                    [route]="'/timeperiods/edit'"
-                                                    [permissions]="'timeperiods.edit'"
-                                                >
-                                                    {{ result.checkPeriod.name }}
-                                                </oitc-label-link>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>{{ t('Check interval') }}</td>
-                                            <td>
-                                                {{ result.mergedService.checkIntervalHuman }}
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>{{ t('Retry interval') }}</td>
-                                            <td>
-                                                {{ result.mergedService.retryIntervalHuman }}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </c-col>
-                            </c-row>
-
-                            <!-- Long output -->
-                            <c-row *ngIf="result.servicestatus.longOutputHtml">
-                                <c-col [xs]="12" class="mt-1">
-                                    <h4>{{ t('Long output') }}</h4>
-                                </c-col>
-                                <c-col [xs]="12">
-                                    <c-card>
-                                        <c-card-body>
-                                            <div class="word-break"
-                                                 [innerHTML]="String(result.servicestatus.longOutputHtml) | trustAsHtml "></div>
-                                        </c-card-body>
-                                    </c-card>
-                                </c-col>
-                            </c-row>
-
-                            <!-- Prometheus state overview table -->
-                            @if (PermissionsService.hasModule('PrometheusModule')) {
-                                <c-row>
-                                    <oitc-prometheus-service-browser
-                                        *ngIf="result.mergedService.service_type === ServiceTypesEnum.PROMETHEUS_SERVICE"
-                                        [serviceId]="Number(result.mergedService.id)"
-                                        [lastUpdated]="lastUpdated">
-
-                                    </oitc-prometheus-service-browser>
-                                </c-row>
-                            }
-
-                            <!-- Host state overview table -->
-                            <c-row>
-                                <c-col [xs]="12" class="mt-1">
-                                    <h4>{{ t('Host state overview') }}</h4>
-                                </c-col>
-
-                                <c-col [xs]="12">
-                                    <table cTable bordered>
-                                        <tbody>
-                                        <tr>
-                                            <th class="width-130">{{ t('Host state') }}</th>
-                                            <th>{{ t('Host name') }}</th>
-                                            <th>{{ t('Last state change') }}</th>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <oitc-hoststatus-simple-icon
-                                                    *ngIf="result.hoststatus"
-                                                    [hardstate]="result.hoststatus.isHardstate"
-                                                    [hoststatus]="result.hoststatus.currentState"></oitc-hoststatus-simple-icon>
-                                            </td>
-                                            <td>
-                                                @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
-                                                    <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
-                                                        {{ result.host.Host.hostname }}
-                                                    </a>
-                                                } @else {
-                                                    {{ result.host.Host.hostname }}
-
-                                                }
-                                            </td>
-                                            <td>
-                                                {{ result.hoststatus.last_state_change }}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </c-col>
-
-                            </c-row>
-
-                            <!-- Notification overview -->
-                            <c-row *ngIf="result && result.mergedService">
-                                <c-col [xs]="12" class="mt-1">
-                                    <h4>{{ t('Notification overview') }}</h4>
-                                </c-col>
-
-                                <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromService">
-                                    {{ t('Contacts and contact groups got inherited from') }}
-
-                                    <span [ngClass]="{'bold':result.areContactsInheritedFromServicetemplate}">
-                                        <oitc-label-link
-                                            [objectId]="result.mergedService.servicetemplate_id"
-                                            [route]="'/servicetemplates/edit'"
-                                            [permissions]="'servicetemplates.edit'"
-                                        >
-                                            {{ t('service template') }}
-                                        </oitc-label-link>
-                                    </span>
-
-                                    <span [ngClass]="{'bold':result.areContactsInheritedFromHost}"
-                                          *ngIf="!result.areContactsInheritedFromServicetemplate">
-
-                                        <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
-
-                                        <oitc-label-link
-                                            [objectId]="result.mergedService.host_id"
-                                            [route]="'/hosts/edit'"
-                                            [permissions]="'hosts.edit'"
-                                        >
-                                            {{ t('host') }}
-                                        </oitc-label-link>
-                                    </span>
-
-                                    <span class="bold" *ngIf="result.areContactsInheritedFromHosttemplate">
-
-                                        <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
-
-                                        <oitc-label-link
-                                            [objectId]="result.host.Host.hosttemplate_id"
-                                            [route]="'/hosttemplates/edit'"
-                                            [permissions]="'hosttemplates.edit'"
-                                        >
-                                            {{ t('host template') }}
-                                        </oitc-label-link>
-                                    </span>
-                                    .
-                                </c-col>
-
-                            </c-row>
-
-                            <c-row *ngIf="result">
-                                <!-- Contacts and Contact groups -->
-                                <c-col [xs]="12" [md]="6">
-                                    <table cTable bordered>
-                                        <tbody>
-                                            @if (result.mergedService.contacts.length > 0) {
-                                                <tr>
-                                                    <td>{{ t('Contacts') }}</td>
-                                                    <td>
-                                                        <div *ngFor="let contact of result.mergedService.contacts">
-                                                            @if (PermissionsService.hasPermission(['contacts', 'edit']) && contact.allowEdit) {
-                                                                <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
-                                                                    {{ contact.name }}
-                                                                </a>
-                                                            } @else {
-                                                                {{ contact.name }}
-                                                            }
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            }
-
-                                            @if (result.mergedService.contactgroups.length > 0) {
-                                                <tr>
-                                                    <td>{{ t('Contact groups') }}</td>
-                                                    <td>
-                                                        <div
-                                                            *ngFor="let contactgroup of result.mergedService.contactgroups">
-                                                            @if (PermissionsService.hasPermission(['contactgroups', 'edit']) && contactgroup.allowEdit) {
-                                                                <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
-                                                                    {{ contactgroup.container.name }}
-                                                                </a>
-                                                            } @else {
+                                        @if (result.mergedService.contactgroups.length > 0) {
+                                            <tr>
+                                                <td>{{ t('Contact groups') }}</td>
+                                                <td>
+                                                    <div
+                                                        *ngFor="let contactgroup of result.mergedService.contactgroups">
+                                                        @if (PermissionsService.hasPermission(['contactgroups', 'edit']) && contactgroup.allowEdit) {
+                                                            <a [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
                                                                 {{ contactgroup.container.name }}
-                                                            }
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                            </a>
+                                                        } @else {
+                                                            {{ contactgroup.container.name }}
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </c-col>
+
+                            <!-- Notification period -->
+                            <c-col [xs]="12" [md]="6">
+                                <table cTable bordered>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Notification period') }}</td>
+                                        <td>
+                                            <oitc-label-link
+                                                [objectId]=" result.notifyPeriod.id"
+                                                [route]="'/timeperiods/edit'"
+                                                [permissions]="'timeperiods.edit'"
+                                            >
+                                                {{ result.notifyPeriod.name }}
+                                            </oitc-label-link>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Notification interval') }}</td>
+                                        <td>{{ result.mergedService.notificationIntervalHuman }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ t('Notification enabled') }}</td>
+                                        <td>
+                                            @if (result.servicestatus.notifications_enabled) {
+                                                <c-badge color="success">{{ t('Yes') }}</c-badge>
+                                            } @else {
+                                                <c-badge color="danger">{{ t('No') }}</c-badge>
                                             }
-                                        </tbody>
-                                    </table>
-                                </c-col>
+                                        </td>
+                                    </tr>
 
-                                <!-- Notification period -->
-                                <c-col [xs]="12" [md]="6">
-                                    <table cTable bordered>
-                                        <tbody>
-                                        <tr>
-                                            <td>{{ t('Notification period') }}</td>
-                                            <td>
-                                                <oitc-label-link
-                                                    [objectId]=" result.notifyPeriod.id"
-                                                    [route]="'/timeperiods/edit'"
-                                                    [permissions]="'timeperiods.edit'"
-                                                >
-                                                    {{ result.notifyPeriod.name }}
-                                                </oitc-label-link>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ t('Notify on') }}</td>
+                                        <td>
+                                            @if (result.mergedService.notify_on_recovery) {
+                                                <c-badge color="success" class="me-1">{{ t('Recover') }}</c-badge>
+                                            }
+                                            @if (result.mergedService.notify_on_warning) {
+                                                <c-badge color="warning" class="me-1">{{ t('Warning') }}</c-badge>
+                                            }
+                                            @if (result.mergedService.notify_on_critical) {
+                                                <c-badge color="danger" class="me-1">{{ t('Critical') }}</c-badge>
+                                            }
+                                            @if (result.mergedService.notify_on_unknown) {
+                                                <c-badge color="secondary" class="me-1">{{ t('Unknown') }}</c-badge>
+                                            }
+                                            @if (result.mergedService.notify_on_flapping) {
+                                                <c-badge color="primary" class="me-1">{{ t('Flapping') }}</c-badge>
+                                            }
+                                            @if (result.mergedService.notify_on_downtime) {
+                                                <c-badge color="primary" class="me-1">{{ t('Downtime') }}</c-badge>
+                                            }
+                                        </td>
+                                    </tr>
 
-                                        <tr>
-                                            <td>{{ t('Notification interval') }}</td>
-                                            <td>{{ result.mergedService.notificationIntervalHuman }}</td>
-                                        </tr>
+                                    </tbody>
+                                </table>
+                            </c-col>
+                        </c-row>
 
-                                        <tr>
-                                            <td>{{ t('Notification enabled') }}</td>
-                                            <td>
-                                                @if (result.servicestatus.notifications_enabled) {
-                                                    <c-badge color="success">{{ t('Yes') }}</c-badge>
-                                                } @else {
-                                                    <c-badge color="danger">{{ t('No') }}</c-badge>
-                                                }
-                                            </td>
-                                        </tr>
+                    </c-col>
 
-                                        <tr>
-                                            <td>{{ t('Notify on') }}</td>
-                                            <td>
-                                                @if (result.mergedService.notify_on_recovery) {
-                                                    <c-badge color="success" class="me-1">{{ t('Recover') }}</c-badge>
-                                                }
-                                                @if (result.mergedService.notify_on_warning) {
-                                                    <c-badge color="warning" class="me-1">{{ t('Warning') }}</c-badge>
-                                                }
-                                                @if (result.mergedService.notify_on_critical) {
-                                                    <c-badge color="danger" class="me-1">{{ t('Critical') }}</c-badge>
-                                                }
-                                                @if (result.mergedService.notify_on_unknown) {
-                                                    <c-badge color="secondary" class="me-1">{{ t('Unknown') }}</c-badge>
-                                                }
-                                                @if (result.mergedService.notify_on_flapping) {
-                                                    <c-badge color="primary" class="me-1">{{ t('Flapping') }}</c-badge>
-                                                }
-                                                @if (result.mergedService.notify_on_downtime) {
-                                                    <c-badge color="primary" class="me-1">{{ t('Downtime') }}</c-badge>
-                                                }
-                                            </td>
-                                        </tr>
+                    <!-- Desktop status bar -->
+                    <c-col [md]="5" [lg]="3" class="d-none d-md-block"
+                           *ngIf="result?.servicestatus && result?.mergedService"
+                           [ngClass]="[result.servicestatus.cssClass, result.servicestatus.isInMonitoring ? '' : 'browser-not-monitored']">
 
-                                        </tbody>
-                                    </table>
-                                </c-col>
-                            </c-row>
+                        <div class="text-center text-white">
+                            <div class="display-5">
+                                {{ result.servicestatus.currentState | serviceStatusName }}
+                            </div>
+                        </div>
 
-                        </c-col>
+                        <!-- State information -->
+                        <c-row *ngIf="result.servicestatus.isInMonitoring" class="pt-2">
+                            <c-col [xs]="12" class="text-center text-white">
+                                <div>{{ t('State since') }}</div>
+                                <div class="h3"
+                                     [cTooltip]=" result.servicestatus.last_state_change_user"
+                                     cTooltipPlacement="top">
+                                    {{ result.servicestatus.last_state_change }}
+                                </div>
+                            </c-col>
 
-                        <!-- Desktop status bar -->
-                        <c-col [md]="5" [lg]="3" class="d-none d-md-block"
-                               *ngIf="result?.servicestatus && result?.mergedService"
-                               [ngClass]="[result.servicestatus.cssClass, result.servicestatus.isInMonitoring ? '' : 'browser-not-monitored']">
+                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                <div>{{ t('Last check') }}</div>
+                                <div class="h3"
+                                     [cTooltip]=" result.servicestatus.lastCheckUser" cTooltipPlacement="top">
+                                    {{ result.servicestatus.lastCheck }}
+                                </div>
+                            </c-col>
 
-                            <div class="text-center text-white">
-                                <div class="display-5">
-                                    {{ result.servicestatus.currentState | serviceStatusName }}
+                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                <div>{{ t('Next check') }}</div>
+                                @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
+                                    <div class="h3"
+                                         [cTooltip]="result.servicestatus.nextCheckUser" cTooltipPlacement="top">
+                                        {{ result.servicestatus.nextCheck }}
+                                    </div>
+                                    <div [hidden]="Number(result.servicestatus.latency) < 1"
+                                         [cTooltip]="'Latency' | transloco"
+                                         cTooltipPlacement="top">
+                                        <small class="text-muted">(+ {{ result.servicestatus.latency }})</small>
+                                    </div>
+                                } @else {
+                                    <div class="h3">
+                                        {{ t('n/a') }}
+                                    </div>
+                                }
+                            </c-col>
+
+                            <c-col [xs]="12" class="text-center text-white pt-1">
+                                <div>{{ t('State type') }}</div>
+                                @if (result.servicestatus.isHardstate) {
+                                    <div class="h3">
+                                        {{ t('Hard state') }}
+                                        ({{ result.servicestatus.current_check_attempt }}
+                                        /{{ result.servicestatus.max_check_attempts }})
+                                    </div>
+                                } @else {
+                                    <div class="h3">
+                                        {{ t('Soft state') }}
+                                        ({{ result.servicestatus.current_check_attempt }}
+                                        /{{ result.servicestatus.max_check_attempts }})
+                                    </div>
+                                }
+                            </c-col>
+                        </c-row>
+
+                        <!-- External Command Buttons -->
+                        <c-row
+                            *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring"
+                            class="text-white">
+
+                            <div class="browser-action d-flex p-0"
+                                 (click)="resetChecktime(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Reset check time ') }}
                                 </div>
                             </div>
 
-                            <!-- State information -->
-                            <c-row *ngIf="result.servicestatus.isInMonitoring" class="pt-2">
-                                <c-col [xs]="12" class="text-center text-white">
-                                    <div>{{ t('State since') }}</div>
-                                    <div class="h3"
-                                         [cTooltip]=" result.servicestatus.last_state_change_user"
-                                         cTooltipPlacement="top">
-                                        {{ result.servicestatus.last_state_change }}
-                                    </div>
-                                </c-col>
-
-                                <c-col [xs]="12" class="text-center text-white pt-1">
-                                    <div>{{ t('Last check') }}</div>
-                                    <div class="h3"
-                                         [cTooltip]=" result.servicestatus.lastCheckUser" cTooltipPlacement="top">
-                                        {{ result.servicestatus.lastCheck }}
-                                    </div>
-                                </c-col>
-
-                                <c-col [xs]="12" class="text-center text-white pt-1">
-                                    <div>{{ t('Next check') }}</div>
-                                    @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
-                                        <div class="h3"
-                                             [cTooltip]="result.servicestatus.nextCheckUser" cTooltipPlacement="top">
-                                            {{ result.servicestatus.nextCheck }}
-                                        </div>
-                                        <div [hidden]="Number(result.servicestatus.latency) < 1"
-                                             [cTooltip]="'Latency' | transloco"
-                                             cTooltipPlacement="top">
-                                            <small class="text-muted">(+ {{ result.servicestatus.latency }})</small>
-                                        </div>
-                                    } @else {
-                                        <div class="h3">
-                                            {{ t('n/a') }}
-                                        </div>
-                                    }
-                                </c-col>
-
-                                <c-col [xs]="12" class="text-center text-white pt-1">
-                                    <div>{{ t('State type') }}</div>
-                                    @if (result.servicestatus.isHardstate) {
-                                        <div class="h3">
-                                            {{ t('Hard state') }}
-                                            ({{ result.servicestatus.current_check_attempt }}
-                                            /{{ result.servicestatus.max_check_attempts }})
-                                        </div>
-                                    } @else {
-                                        <div class="h3">
-                                            {{ t('Soft state') }}
-                                            ({{ result.servicestatus.current_check_attempt }}
-                                            /{{ result.servicestatus.max_check_attempts }})
-                                        </div>
-                                    }
-                                </c-col>
-                            </c-row>
-
-                            <!-- External Command Buttons -->
-                            <c-row
-                                *ngIf="result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring"
-                                class="text-white">
-
-                                <div class="browser-action d-flex p-0"
-                                     (click)="resetChecktime(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Reset check time ') }}
-                                    </div>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 (click)="toggleDowntimeModal(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                                 </div>
-
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     (click)="toggleDowntimeModal(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Schedule maintenance') }}
-                                    </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Schedule maintenance') }}
                                 </div>
+                            </div>
 
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     *ngIf="Number(result.servicestatus.currentState) > 0"
-                                     (click)="acknowledgeStatus(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Acknowledge service status') }}
-                                    </div>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 *ngIf="Number(result.servicestatus.currentState) > 0"
+                                 (click)="acknowledgeStatus(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                 </div>
-
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     (click)="processCheckResult(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Passive transfer check result') }}
-                                    </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Acknowledge service status') }}
                                 </div>
+                            </div>
 
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     *ngIf="!result.servicestatus.flap_detection_enabled"
-                                     (click)="enableFlapdetection(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Enable flap detection') }}
-                                    </div>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 (click)="processCheckResult(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
                                 </div>
-
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     *ngIf="result.servicestatus.flap_detection_enabled"
-                                     (click)="disableFlapdetection(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Disable flap detection') }}
-                                    </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Passive transfer check result') }}
                                 </div>
+                            </div>
 
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     *ngIf="!result.servicestatus.notifications_enabled"
-                                     (click)="enableNotifications(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Enable notifications') }}
-                                    </div>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 *ngIf="!result.servicestatus.flap_detection_enabled"
+                                 (click)="enableFlapdetection(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                 </div>
-
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     *ngIf="result.servicestatus.notifications_enabled"
-                                     (click)="disableNotifications(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Disable notifications') }}
-                                    </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Enable flap detection') }}
                                 </div>
+                            </div>
 
-                                <div class="browser-action d-flex p-0 mt-2"
-                                     (click)="sendCustomNotification(result.mergedService, result.host)">
-                                    <div class="browser-action-padding-top browser-action-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
-                                    </div>
-                                    <div class="flex-1 browser-action-padding-top">
-                                        {{ t('Send custom service notification ') }}
-                                    </div>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 *ngIf="result.servicestatus.flap_detection_enabled"
+                                 (click)="disableFlapdetection(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                 </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Disable flap detection') }}
+                                </div>
+                            </div>
 
-                            </c-row>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 *ngIf="!result.servicestatus.notifications_enabled"
+                                 (click)="enableNotifications(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Enable notifications') }}
+                                </div>
+                            </div>
 
-                            <c-row class="mb-2">
-                                <!-- spacer -->
-                            </c-row>
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 *ngIf="result.servicestatus.notifications_enabled"
+                                 (click)="disableNotifications(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Disable notifications') }}
+                                </div>
+                            </div>
 
+                            <div class="browser-action d-flex p-0 mt-2"
+                                 (click)="sendCustomNotification(result.mergedService, result.host)">
+                                <div class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                    <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                                </div>
+                                <div class="flex-1 browser-action-padding-top">
+                                    {{ t('Send custom service notification ') }}
+                                </div>
+                            </div>
+
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <!-- spacer -->
+                        </c-row>
+
+                    </c-col>
+                    <!-- End of desktop status bar -->
+
+                </c-row>
+
+
+            </div>
+            <!-- Status information end -->
+
+            <!-- Service information start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceInformation">
+                <ng-container *ngIf="result && result.mergedService && result.servicestatus">
+                    <c-row>
+                        <c-col [xs]="12" class="mt-1">
+                            <h4>{{ t('Service overview') }}</h4>
                         </c-col>
-                        <!-- End of desktop status bar -->
 
-                    </c-row>
+                        <!-- Left panel -->
+                        <c-col [xs]="12" [md]="6">
+                            <table cTable bordered>
+                                <tbody>
+                                <tr>
+                                    <td> {{ t('Host ip address') }}</td>
+                                    <td>
+                                        <oitc-copy-to-clipboard
+                                            [data]="result.host.Host.address">
+                                            {{ result.host.Host.address }}
+                                        </oitc-copy-to-clipboard>
+                                    </td>
+                                </tr>
 
+                                <tr>
+                                    <td>{{ t('Flap detection enabled') }}</td>
+                                    <td>
+                                        @if (result.servicestatus.flap_detection_enabled) {
+                                            <c-badge color="danger">{{ t('Yes') }}</c-badge>
+                                        } @else {
+                                            <c-badge color="success">{{ t('No') }}</c-badge>
+                                        }
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </c-col>
 
-                </div>
-                <!-- Status information end -->
+                        <!-- Right panel -->
+                        <c-col [xs]="12" [md]="6">
+                            <table cTable bordered>
+                                <tbody>
+                                <tr>
+                                    <td> {{ t('Priority') }}</td>
+                                    <td>
+                                        <fa-icon
+                                            *ngFor="let priority of priorities"
+                                            [ngClass]="priority"
+                                            class="me-1"
+                                            [icon]="['fas', 'fire']"></fa-icon>
+                                    </td>
+                                </tr>
 
-                <!-- Service information start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceInformation">
-                    <ng-container *ngIf="result && result.mergedService && result.servicestatus">
-                        <c-row>
-                            <c-col [xs]="12" class="mt-1">
-                                <h4>{{ t('Service overview') }}</h4>
-                            </c-col>
+                                <tr>
+                                    <td>{{ t('Host UUID') }}</td>
+                                    <td>
+                                        <oitc-copy-to-clipboard
+                                            [data]="result.host.Host.uuid">
+                                            <code>{{ result.host.Host.uuid }}</code>
+                                        </oitc-copy-to-clipboard>
+                                    </td>
+                                </tr>
 
-                            <!-- Left panel -->
-                            <c-col [xs]="12" [md]="6">
-                                <table cTable bordered>
-                                    <tbody>
-                                    <tr>
-                                        <td> {{ t('Host ip address') }}</td>
-                                        <td>
-                                            <oitc-copy-to-clipboard
-                                                [data]="result.host.Host.address">
-                                                {{ result.host.Host.address }}
-                                            </oitc-copy-to-clipboard>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ t('Service UUID') }}</td>
+                                    <td>
+                                        <oitc-copy-to-clipboard
+                                            [data]="result.mergedService.uuid">
+                                            <code>{{ result.mergedService.uuid }}</code>
+                                        </oitc-copy-to-clipboard>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td>{{ t('Flap detection enabled') }}</td>
-                                        <td>
-                                            @if (result.servicestatus.flap_detection_enabled) {
-                                                <c-badge color="danger">{{ t('Yes') }}</c-badge>
-                                            } @else {
-                                                <c-badge color="success">{{ t('No') }}</c-badge>
-                                            }
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c-col>
+                                <tr>
+                                    <td>{{ t('Service type') }}</td>
+                                    <td>
+                                        <span
+                                            [ngClass]="[result.serviceType.class, result.serviceType.color]"
+                                            class="badge border">
+                                            <fa-icon [icon]="result.serviceType.icon"></fa-icon>
+                                            {{ result.serviceType.title }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </c-col>
 
-                            <!-- Right panel -->
-                            <c-col [xs]="12" [md]="6">
-                                <table cTable bordered>
-                                    <tbody>
-                                    <tr>
-                                        <td> {{ t('Priority') }}</td>
-                                        <td>
-                                            <fa-icon
-                                                *ngFor="let priority of priorities"
-                                                [ngClass]="priority"
-                                                class="me-1"
-                                                [icon]="['fas', 'fire']"></fa-icon>
-                                        </td>
-                                    </tr>
+                        <!-- Container -->
+                        <c-col [xs]="12">
+                            <table cTable bordered>
+                                <tbody>
+                                <tr>
+                                    <td>{{ t('Container') }}</td>
+                                    <td>
+                                        @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                            <span *ngFor="let container of result.mainContainer">
+                                                /
+                                                <a *ngIf="container.id != null"
+                                                   [routerLink]="['/', 'browsers', 'index']"
+                                                   [queryParams]="{ containerId: container.id }">
+                                                    {{ container.name }}
+                                                </a>
 
-                                    <tr>
-                                        <td>{{ t('Host UUID') }}</td>
-                                        <td>
-                                            <oitc-copy-to-clipboard
-                                                [data]="result.host.Host.uuid">
-                                                <code>{{ result.host.Host.uuid }}</code>
-                                            </oitc-copy-to-clipboard>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Service UUID') }}</td>
-                                        <td>
-                                            <oitc-copy-to-clipboard
-                                                [data]="result.mergedService.uuid">
-                                                <code>{{ result.mergedService.uuid }}</code>
-                                            </oitc-copy-to-clipboard>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Service type') }}</td>
-                                        <td>
-                                            <span
-                                                [ngClass]="[result.serviceType.class, result.serviceType.color]"
-                                                class="badge border">
-                                                <fa-icon [icon]="result.serviceType.icon"></fa-icon>
-                                                {{ result.serviceType.title }}
+                                                <span *ngIf="container.id === null">
+                                                    {{ container.name }}
+                                                </span>
                                             </span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c-col>
-
-                            <!-- Container -->
-                            <c-col [xs]="12">
-                                <table cTable bordered>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ t('Container') }}</td>
-                                        <td>
-                                            @if (PermissionsService.hasPermission(['browsers', 'index'])) {
-                                                <span *ngFor="let container of result.mainContainer">
+                                        } @else {
+                                            <span *ngFor="let container of result.mainContainer">
+                                                /
+                                                {{ container.name }}
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Shared containers') }}</td>
+                                    <td>
+                                        @if (PermissionsService.hasPermission(['browsers', 'index'])) {
+                                            <div *ngFor="let sharing of result.sharedContainers |keyvalue">
+                                                <span *ngFor="let container of sharing.value">
                                                     /
                                                     <a *ngIf="container.id != null"
                                                        [routerLink]="['/', 'browsers', 'index']"
@@ -1088,220 +1112,194 @@
                                                         {{ container.name }}
                                                     </span>
                                                 </span>
-                                            } @else {
-                                                <span *ngFor="let container of result.mainContainer">
+                                            </div>
+                                        } @else {
+                                            <div *ngFor="let sharing of result.sharedContainers |keyvalue">
+                                                <span *ngFor="let container of sharing.value">
                                                     /
                                                     {{ container.name }}
                                                 </span>
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Shared containers') }}</td>
-                                        <td>
-                                            @if (PermissionsService.hasPermission(['browsers', 'index'])) {
-                                                <div *ngFor="let sharing of result.sharedContainers |keyvalue">
-                                                    <span *ngFor="let container of sharing.value">
-                                                        /
-                                                        <a *ngIf="container.id != null"
-                                                           [routerLink]="['/', 'browsers', 'index']"
-                                                           [queryParams]="{ containerId: container.id }">
-                                                            {{ container.name }}
-                                                        </a>
-
-                                                        <span *ngIf="container.id === null">
-                                                            {{ container.name }}
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            } @else {
-                                                <div *ngFor="let sharing of result.sharedContainers |keyvalue">
-                                                    <span *ngFor="let container of sharing.value">
-                                                        /
-                                                        {{ container.name }}
-                                                    </span>
-                                                </div>
-                                            }
-                                        </td>
-                                    </tr>
-
-                                    <tr *ngIf="tags.length > 0">
-                                        <td>{{ t('Tags') }}</td>
-                                        <td>
-                                            <c-badge
-                                                *ngFor="let tag of tags"
-                                                color="primary" class="me-1">{{ tag }}
-                                            </c-badge>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Satellite -->
-                                        @if (PermissionsService.hasModule('DistributeModule') && result.host.Host.is_satellite_host) {
-                                            <tr>
-                                                <td>{{ t('Satellite') }}</td>
-                                                <td>
-                                                    <oitc-satellite-name
-                                                        [satelliteId]="Number(result.host.Host.satelliteId)">
-                                                    </oitc-satellite-name>
-                                                </td>
-                                            </tr>
+                                            </div>
                                         }
+                                    </td>
+                                </tr>
 
-                                    <!-- Master System -->
-                                    <tr *ngIf="!result.host.Host.is_satellite_host">
-                                        <td>{{ t('Satellite') }}</td>
-                                        <td>{{ result.masterInstanceName }}</td>
-                                    </tr>
+                                <tr *ngIf="tags.length > 0">
+                                    <td>{{ t('Tags') }}</td>
+                                    <td>
+                                        <c-badge
+                                            *ngFor="let tag of tags"
+                                            color="primary" class="me-1">{{ tag }}
+                                        </c-badge>
+                                    </td>
+                                </tr>
 
-                                    <tr *ngIf="result.mergedService.notes">
-                                        <td>{{ t('Notes') }}</td>
-                                        <td>{{ result.mergedService.notes }}</td>
-                                    </tr>
+                                <!-- Satellite -->
+                                    @if (PermissionsService.hasModule('DistributeModule') && result.host.Host.is_satellite_host) {
+                                        <tr>
+                                            <td>{{ t('Satellite') }}</td>
+                                            <td>
+                                                <oitc-satellite-name
+                                                    [satelliteId]="Number(result.host.Host.satelliteId)">
+                                                </oitc-satellite-name>
+                                            </td>
+                                        </tr>
+                                    }
 
-                                    <tr *ngIf="result.mergedService.description">
-                                        <td>{{ t('Description') }}</td>
-                                        <td>{{ result.mergedService.description }}</td>
-                                    </tr>
+                                <!-- Master System -->
+                                <tr *ngIf="!result.host.Host.is_satellite_host">
+                                    <td>{{ t('Satellite') }}</td>
+                                    <td>{{ result.masterInstanceName }}</td>
+                                </tr>
 
-                                    <tr *ngIf="result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Servicegroups || result.objects.Instantreports || result.objects.Maps">
-                                        <td>{{ t('Used by') }}</td>
-                                        <td>
-                                            @if (PermissionsService.hasPermission(['services', 'usedBy'])) {
+                                <tr *ngIf="result.mergedService.notes">
+                                    <td>{{ t('Notes') }}</td>
+                                    <td>{{ result.mergedService.notes }}</td>
+                                </tr>
 
+                                <tr *ngIf="result.mergedService.description">
+                                    <td>{{ t('Description') }}</td>
+                                    <td>{{ result.mergedService.description }}</td>
+                                </tr>
+
+                                <tr *ngIf="result.objects.Autoreports || result.objects.Eventcorrelations || result.objects.Servicegroups || result.objects.Instantreports || result.objects.Maps">
+                                    <td>{{ t('Used by') }}</td>
+                                    <td>
+                                        @if (PermissionsService.hasPermission(['services', 'usedBy'])) {
+
+                                            <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
+                                               *ngIf="result.objects.Instantreports.length > 0">
+                                                <span class="badge border border-generic text-generic me-1">
+                                                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                    {{ t('Instant reports') }}
+                                                    ({{ result.objects.Instantreports.length }})
+                                                </span>
+                                            </a>
+
+                                            @if (PermissionsService.hasModule('AutoreportModule')) {
                                                 <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
-                                                   *ngIf="result.objects.Instantreports.length > 0">
+                                                   *ngIf="result.objects.Autoreports.length > 0">
                                                     <span class="badge border border-generic text-generic me-1">
                                                         <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                                        {{ t('Instant reports') }}
-                                                        ({{ result.objects.Instantreports.length }})
-                                                    </span>
-                                                </a>
-
-                                                @if (PermissionsService.hasModule('AutoreportModule')) {
-                                                    <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
-                                                       *ngIf="result.objects.Autoreports.length > 0">
-                                                        <span class="badge border border-generic text-generic me-1">
-                                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                                            {{ t('Autoreports') }}
-                                                            ({{ result.objects.Autoreports.length }})
-                                                        </span>
-                                                    </a>
-                                                }
-
-                                                @if (PermissionsService.hasModule('EventcorrelationModule')) {
-                                                    <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
-                                                       *ngIf="result.objects.Eventcorrelations.length > 0">
-                                                        <span class="badge border border-generic text-generic me-1">
-                                                            <fa-icon [icon]="['fas', 'sitemap']"
-                                                                     [rotate]="90"></fa-icon>
-                                                            {{ t('Event Correlation') }}
-                                                            ({{ result.objects.Eventcorrelations.length }})
-                                                        </span>
-                                                    </a>
-                                                }
-
-                                                @if (PermissionsService.hasModule('MapModule')) {
-                                                    <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
-                                                       *ngIf="result.objects.Maps.length > 0">
-                                                        <span class="badge border border-generic text-generic me-1">
-                                                            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-                                                            {{ t('Maps') }}
-                                                            ({{ result.objects.Maps.length }})
-                                                        </span>
-                                                    </a>
-                                                }
-
-                                                <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
-                                                   *ngIf="result.objects.Servicegroups.length > 0">
-                                                    <span class="badge border border-generic text-generic me-1">
-                                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                                                        {{ t('Service Groups') }}
-                                                        ({{ result.objects.Servicegroups.length }})
+                                                        {{ t('Autoreports') }}
+                                                        ({{ result.objects.Autoreports.length }})
                                                     </span>
                                                 </a>
                                             }
-                                        </td>
-                                    </tr>
 
-                                    </tbody>
-                                </table>
-                            </c-col>
+                                            @if (PermissionsService.hasModule('EventcorrelationModule')) {
+                                                <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
+                                                   *ngIf="result.objects.Eventcorrelations.length > 0">
+                                                    <span class="badge border border-generic text-generic me-1">
+                                                        <fa-icon [icon]="['fas', 'sitemap']"
+                                                                 [rotate]="90"></fa-icon>
+                                                        {{ t('Event Correlation') }}
+                                                        ({{ result.objects.Eventcorrelations.length }})
+                                                    </span>
+                                                </a>
+                                            }
 
-                        </c-row>
+                                            @if (PermissionsService.hasModule('MapModule')) {
+                                                <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
+                                                   *ngIf="result.objects.Maps.length > 0">
+                                                    <span class="badge border border-generic text-generic me-1">
+                                                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                                                        {{ t('Maps') }}
+                                                        ({{ result.objects.Maps.length }})
+                                                    </span>
+                                                </a>
+                                            }
 
-                    </ng-container>
-                </div>
-                <!-- Service information end -->
+                                            <a [routerLink]="['/', 'services', 'usedBy', result.mergedService.id]"
+                                               *ngIf="result.objects.Servicegroups.length > 0">
+                                                <span class="badge border border-generic text-generic me-1">
+                                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                    {{ t('Service Groups') }}
+                                                    ({{ result.objects.Servicegroups.length }})
+                                                </span>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
 
-                <!-- Timeline start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.Timeline && result && result.mergedService">
-                    <oitc-browser-timeline
-                        [type]="'Service'"
-                        [objectId]="Number(result.mergedService.id)"
-                        [timerange$]="timerange$"
-                        (onTimerangeChange)="onTimelineTimerangeChange($event)">
-                        <oitc-service-timeline-legend></oitc-service-timeline-legend>
+                                </tbody>
+                            </table>
+                        </c-col>
 
-                        <div class="mt-2 mb-2">
-                            <c-alert color="light">
-                                <c-form-check>
-                                    <input cFormCheckInput id="sync_timeline_and_graph" type="checkbox"
-                                           class="checkbox-lg checkbox-primary"
-                                           [(ngModel)]="syncTimelineAndGraphTimestamps"
-                                           (change)="onSyncTimelineAndGraphTimestampsChange($event)"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="sync_timeline_and_graph">
-                                        {{ t('Synchronize times for timeline and service graph') }}
-                                    </label>
-                                </c-form-check>
-                            </c-alert>
-                        </div>
+                    </c-row>
 
-                    </oitc-browser-timeline>
-                </div>
-                <!-- Timeline end -->
+                </ng-container>
+            </div>
+            <!-- Service information end -->
 
-                <!-- ServiceNow Module start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceNow">
-                    @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
-                        <oitc-servicenow-service-browser-tab
-                            *ngIf="result && result.mergedService"
-                            [serviceUuid]="String(result.mergedService.uuid)"
-                            [allowEdit]="Boolean(result.mergedService.allowEdit)"
-                            [lastUpdated]="lastUpdated"
-                        ></oitc-servicenow-service-browser-tab>
-                    }
-                </div>
-                <!-- ServiceNow Module end -->
+            <!-- Timeline start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.Timeline && result && result.mergedService">
+                <oitc-browser-timeline
+                    [type]="'Service'"
+                    [objectId]="Number(result.mergedService.id)"
+                    [timerange$]="timerange$"
+                    (onTimerangeChange)="onTimelineTimerangeChange($event)">
+                    <oitc-service-timeline-legend></oitc-service-timeline-legend>
 
-                <!-- CustomAlerts Module start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.CustomAlerts">
-                    CustomAlerts
-                </div>
-                <!-- CustomAlerts Module end -->
+                    <div class="mt-2 mb-2">
+                        <c-alert color="light">
+                            <c-form-check>
+                                <input cFormCheckInput id="sync_timeline_and_graph" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       [(ngModel)]="syncTimelineAndGraphTimestamps"
+                                       (change)="onSyncTimelineAndGraphTimestampsChange($event)"/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="sync_timeline_and_graph">
+                                    {{ t('Synchronize times for timeline and service graph') }}
+                                </label>
+                            </c-form-check>
+                        </c-alert>
+                    </div>
 
-                <!-- SLA Module start -->
-                <div *ngIf="selectedTab == ServiceBrowserTabs.SLA">
-                    SLA
-                </div>
-                <!-- SLA Module end -->
+                </oitc-browser-timeline>
+            </div>
+            <!-- Timeline end -->
 
-            </c-card-body>
+            <!-- ServiceNow Module start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.ServiceNow">
+                @if (PermissionsService.hasModule('ServicenowModule') && PermissionsService.hasPermission(['ServicenowModule', 'elements', 'service_configuration'])) {
+                    <oitc-servicenow-service-browser-tab
+                        *ngIf="result && result.mergedService"
+                        [serviceUuid]="String(result.mergedService.uuid)"
+                        [allowEdit]="Boolean(result.mergedService.allowEdit)"
+                        [lastUpdated]="lastUpdated"
+                    ></oitc-servicenow-service-browser-tab>
+                }
+            </div>
+            <!-- ServiceNow Module end -->
 
-        </c-card>
+            <!-- CustomAlerts Module start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.CustomAlerts">
+                CustomAlerts
+            </div>
+            <!-- CustomAlerts Module end -->
 
-        <oitc-services-browser-chart
-            *ngIf="result && result.mergedService.has_graph"
-            [hostUuid]="String(result.host.Host.uuid)"
-            [serviceUuid]="String(result.mergedService.uuid)"
-            [availableDataSources]="availableDataSources"
-            [autoRefreshInterval]="Number(result.mergedService.check_interval)"
-            [timezone]="timezone"
-            (onGraphChange)="onGraphTimerangeChange($event)"
-            [timerange$]="timerange$"></oitc-services-browser-chart>
+            <!-- SLA Module start -->
+            <div *ngIf="selectedTab == ServiceBrowserTabs.SLA">
+                SLA
+            </div>
+            <!-- SLA Module end -->
 
-    </ng-container>
-</oitc-coreui>
+        </c-card-body>
+
+    </c-card>
+
+    <oitc-services-browser-chart
+        *ngIf="result && result.mergedService.has_graph && timezone"
+        [hostUuid]="String(result.host.Host.uuid)"
+        [serviceUuid]="String(result.mergedService.uuid)"
+        [availableDataSources]="availableDataSources"
+        [autoRefreshInterval]="Number(result.mergedService.check_interval)"
+        [timezone]="timezone"
+        (onGraphChange)="onGraphTimerangeChange($event)"
+        [timerange$]="timerange$"></oitc-services-browser-chart>
+
+</ng-container>
 
 <oitc-service-reset-checktime-modal [items]="selectedItems"
                                     (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>

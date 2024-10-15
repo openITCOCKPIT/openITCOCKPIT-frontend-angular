@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import {
     AlertComponent,
@@ -25,7 +25,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -197,14 +197,16 @@ import {
         SatelliteNameComponent,
         ServicenowServiceBrowserTabComponent,
         CancelHostdowntimeModalComponent,
-        CancelServicedowntimeModalComponent
+        CancelServicedowntimeModalComponent,
+        AsyncPipe
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
         {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesBrowserComponent implements OnInit, OnDestroy {
 
@@ -248,6 +250,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
     }
@@ -263,6 +266,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ServicesService.getServiceByUuid(idOrUuid).subscribe((service) => {
                 this.id = Number(service.id);
                 this.loadService();
+                this.cdr.markForCheck();
             }));
         } else {
             // ID was passed via URL
@@ -274,6 +278,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             let selectedTab = params['selectedTab'] || undefined;
             if (selectedTab) {
                 this.changeTab(selectedTab);
+                this.cdr.markForCheck();
             }
         });
     }
@@ -285,6 +290,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -298,8 +304,9 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             },
             showBackButton: false
         };
-
+        this.cdr.markForCheck();
         this.subscriptions.add(this.ServicesService.getServiceBrowser(this.id).subscribe((result) => {
+            this.cdr.markForCheck();
             this.result = result;
 
             let priority = Number(result.mergedService.priority);
@@ -335,6 +342,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedService && this.result.mergedService.id) {
             this.subscriptions.add(this.ServicesService.loadCustomAlertExists(this.result.mergedService.id).subscribe((result) => {
                 this.CustomalertsExists = result;
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -343,6 +351,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedService && this.result.mergedService.id) {
             this.subscriptions.add(this.ServicesService.loadSlaInformation(this.result.mergedService.id).subscribe((result) => {
                 this.SlaOverview = result;
+                this.cdr.markForCheck();
             }));
         }
     }
