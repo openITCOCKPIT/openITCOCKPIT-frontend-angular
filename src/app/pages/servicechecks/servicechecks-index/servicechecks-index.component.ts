@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -98,7 +98,8 @@ import { IndexPage } from '../../../pages.interface';
         CardFooterComponent
     ],
     templateUrl: './servicechecks-index.component.html',
-    styleUrl: './servicechecks-index.component.css'
+    styleUrl: './servicechecks-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicechecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     private serviceId: number = 0;
@@ -126,6 +127,7 @@ export class ServicechecksIndexComponent implements OnInit, OnDestroy, IndexPage
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
@@ -137,6 +139,7 @@ export class ServicechecksIndexComponent implements OnInit, OnDestroy, IndexPage
             showReschedulingButton: false,
             showBackButton: true
         };
+        this.cdr.markForCheck();
 
     }
 
@@ -161,6 +164,7 @@ export class ServicechecksIndexComponent implements OnInit, OnDestroy, IndexPage
 
         this.subscriptions.add(this.ServicechecksService.getServicechecksIndex(this.serviceId, this.params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicechecks = result;
             })
         );
