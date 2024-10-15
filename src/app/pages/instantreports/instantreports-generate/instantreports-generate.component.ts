@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BorderDirective,
@@ -93,7 +93,8 @@ import { HostPieEchartComponent } from '../../../components/charts/host-pie-echa
         HostPieEchartComponent
     ],
     templateUrl: './instantreports-generate.component.html',
-    styleUrl: './instantreports-generate.component.css'
+    styleUrl: './instantreports-generate.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     public isGeneratingReport: boolean = false;
@@ -110,6 +111,8 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     private readonly InstantreportsService: InstantreportsService = inject(InstantreportsService);
     private readonly route = inject(ActivatedRoute);
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public test: PieChartMetric[] = [{
         name: "foo",
@@ -141,6 +144,7 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.instantreports = result;
                 this.params.instantreport_id = id;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -166,6 +170,8 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.InstantreportsService.validateReportFormForPdf(params)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
+
                     if (result.success) {
                         // Success - Form data is valid - now we can generate the report
                         const filename = result.data.filename;

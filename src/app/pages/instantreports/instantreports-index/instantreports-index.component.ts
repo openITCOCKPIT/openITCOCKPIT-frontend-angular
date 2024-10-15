@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -118,7 +118,8 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
     styleUrl: './instantreports-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: InstantreportsService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstantreportsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -137,6 +138,8 @@ export class InstantreportsIndexComponent implements OnInit, OnDestroy, IndexPag
 
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -198,6 +201,7 @@ export class InstantreportsIndexComponent implements OnInit, OnDestroy, IndexPag
 
         this.subscriptions.add(this.InstantreportsService.getIndex(this.params).subscribe(data => {
             this.instantreports = data;
+            this.cdr.markForCheck();
         }));
 
     }

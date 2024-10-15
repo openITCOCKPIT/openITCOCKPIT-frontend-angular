@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -87,7 +87,8 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './instantreports-edit.component.html',
-    styleUrl: './instantreports-edit.component.css'
+    styleUrl: './instantreports-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstantreportsEditComponent {
     public post!: InstantreportPost;
@@ -113,6 +114,7 @@ export class InstantreportsEditComponent {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     protected readonly ObjectTypesSelect: SelectKeyValue[] = [
         {
@@ -182,6 +184,8 @@ export class InstantreportsEditComponent {
         this.loadContainers();
 
         this.subscriptions.add(this.InstantreportsService.getInstantreportEdit(id).subscribe(instantreport => {
+            this.cdr.markForCheck();
+
             this.post = instantreport;
             this.loadTimeperiods();
             this.loadUsers();
@@ -206,18 +210,21 @@ export class InstantreportsEditComponent {
     private loadContainers() {
         this.subscriptions.add(this.InstantreportsService.loadContainers().subscribe((result) => {
             this.containers = result;
+            this.cdr.markForCheck();
         }));
     }
 
     private loadTimeperiods() {
         this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container_id).subscribe((result) => {
             this.timeperiods = result;
+            this.cdr.markForCheck();
         }));
     }
 
     private loadUsers() {
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container_id, this.post.users._ids).subscribe((result) => {
             this.users = result;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -225,6 +232,7 @@ export class InstantreportsEditComponent {
         this.subscriptions.add(this.HostsService.loadHostsByContainerId(this.post.container_id, searchString, this.post.hosts._ids)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -242,6 +250,7 @@ export class InstantreportsEditComponent {
         this.subscriptions.add(this.ServicesService.loadServicesByString(params)
             .subscribe((result) => {
                 this.services = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -250,6 +259,7 @@ export class InstantreportsEditComponent {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupsByContainerId(this.post.container_id, this.post.hostgroups._ids)
             .subscribe((result) => {
                 this.hostgroups = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -258,6 +268,7 @@ export class InstantreportsEditComponent {
         this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByContainerId(this.post.container_id, this.post.servicegroups._ids)
             .subscribe((result) => {
                 this.servicegroups = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -280,7 +291,7 @@ export class InstantreportsEditComponent {
                 this.loadServicegroups();
                 break;
         }
-
+        this.cdr.markForCheck();
     }
 
     public onTypeChange() {
@@ -315,6 +326,7 @@ export class InstantreportsEditComponent {
 
         this.subscriptions.add(this.InstantreportsService.saveInstantreportEdit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Instant report');

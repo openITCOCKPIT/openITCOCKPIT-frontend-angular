@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -90,7 +90,8 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent
     ],
     templateUrl: './instantreports-add.component.html',
-    styleUrl: './instantreports-add.component.css'
+    styleUrl: './instantreports-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstantreportsAddComponent implements OnInit, OnDestroy {
 
@@ -169,6 +170,8 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
         }
     ];
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit(): void {
         this.loadContainers();
     }
@@ -210,18 +213,21 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
     private loadContainers() {
         this.subscriptions.add(this.InstantreportsService.loadContainers().subscribe((result) => {
             this.containers = result;
+            this.cdr.markForCheck();
         }));
     }
 
     private loadTimeperiods() {
         this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container_id).subscribe((result) => {
             this.timeperiods = result;
+            this.cdr.markForCheck();
         }));
     }
 
     private loadUsers() {
         this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container_id, this.post.users._ids).subscribe((result) => {
             this.users = result;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -229,6 +235,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadHostsByContainerId(this.post.container_id, searchString, this.post.hosts._ids)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -246,6 +253,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicesService.loadServicesByString(params)
             .subscribe((result) => {
                 this.services = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -254,6 +262,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupsByContainerId(this.post.container_id, this.post.hostgroups._ids)
             .subscribe((result) => {
                 this.hostgroups = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -262,6 +271,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByContainerId(this.post.container_id, this.post.servicegroups._ids)
             .subscribe((result) => {
                 this.servicegroups = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -284,7 +294,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
                 this.loadServicegroups();
                 break;
         }
-
+        this.cdr.markForCheck();
     }
 
     public onTypeChange() {
@@ -308,6 +318,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
                 this.loadServicegroups();
                 break;
         }
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -319,6 +330,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.InstantreportsService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Instant report');
