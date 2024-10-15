@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -52,22 +52,20 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormLoaderComponent
     ],
     templateUrl: './contacts-used-by.component.html',
-    styleUrl: './contacts-used-by.component.css'
+    styleUrl: './contacts-used-by.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsUsedByComponent implements OnInit, OnDestroy {
     public contact?: ContactUsedByContact | null;
     public total: number = 0;
     public objects: ContactUsedByObjects | undefined;
-
     private ContactsService = inject(ContactsService);
-
-
-    private router = inject(Router);
     private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
     private contactId: number = 0;
     protected containerIds: number[] = [];
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.contactId = Number(this.route.snapshot.paramMap.get('id'));
@@ -77,7 +75,7 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
         if (myContainerIds !== null) {
             this.containerIds = myContainerIds.split(',').map(Number);
         }
-
+        this.cdr.markForCheck();
         this.load();
     }
 
@@ -92,6 +90,7 @@ export class ContactsUsedByComponent implements OnInit, OnDestroy {
                 this.contact = result.contact;
                 this.objects = result.objects;
                 this.total = result.total;
+                this.cdr.markForCheck();
             }));
     }
 
