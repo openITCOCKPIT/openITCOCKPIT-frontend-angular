@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -85,7 +85,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent
     ],
     templateUrl: './hostescalations-edit.component.html',
-    styleUrl: './hostescalations-edit.component.css'
+    styleUrl: './hostescalations-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostescalationsEditComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
@@ -108,6 +109,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -117,6 +119,8 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.HostescalationsService.getEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.get = result.hostescalation;
                 this.post = {
                     id: this.get.id,
@@ -166,6 +170,8 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostescalationsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
+
             })
         );
     }
@@ -178,6 +184,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
 
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => {
@@ -212,6 +219,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => {
                     return {
@@ -234,6 +242,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts_excluded = result.excludedHosts;
                 this.hosts_excluded = this.hosts_excluded.map(obj => {
                     return {
@@ -255,6 +264,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hostgroups_excluded = result.excludedHostgroups;
                 this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
                     return {
@@ -270,6 +280,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHosts() {
+        this.cdr.markForCheck();
         if (this.hosts.length === 0) {
             return;
         }
@@ -279,6 +290,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedHosts() {
+        this.cdr.markForCheck();
         if (this.hosts_excluded.length === 0) {
             return;
         }
@@ -289,6 +301,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups.length === 0) {
             return;
         }
@@ -298,6 +311,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups_excluded.length === 0) {
             return;
         }
@@ -310,6 +324,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.HostescalationsService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host escalation');

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -41,6 +41,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -80,7 +81,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         CardFooterComponent
     ],
     templateUrl: './hostescalations-add.component.html',
-    styleUrl: './hostescalations-add.component.css'
+    styleUrl: './hostescalations-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
@@ -99,8 +101,11 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -111,6 +116,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             //Fire on page load
             this.loadContainers();
             this.post = this.getDefaultPost();
+            this.cdr.markForCheck();
         });
     }
 
@@ -152,6 +158,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostescalationsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -165,6 +172,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
@@ -196,6 +204,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
@@ -216,6 +225,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts_excluded = result.excludedHosts;
                 this.hosts_excluded = this.hosts_excluded.map(obj => {
                     return {
@@ -238,6 +248,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hostgroups_excluded = result.excludedHostgroups;
                 this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
                     return {
@@ -253,6 +264,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHosts() {
+        this.cdr.markForCheck();
         if (this.hosts.length === 0) {
             return;
         }
@@ -262,6 +274,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedHosts() {
+        this.cdr.markForCheck();
         if (this.hosts_excluded.length === 0) {
             return;
         }
@@ -272,6 +285,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups.length === 0) {
             return;
         }
@@ -281,6 +295,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups_excluded.length === 0) {
             return;
         }
@@ -293,6 +308,8 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.HostescalationsService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host escalation');
@@ -304,6 +321,8 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost();
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+
+                    this.HistoryService.navigateWithFallback(['/hostescalations/index']);
                     return;
                 }
 
