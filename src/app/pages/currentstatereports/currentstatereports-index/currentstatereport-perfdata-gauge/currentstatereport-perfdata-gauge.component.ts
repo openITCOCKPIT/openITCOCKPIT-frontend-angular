@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { CurrentStateReportPerfdataArrayValue } from '../../currentstatereports.interface';
 import { NgClass } from '@angular/common';
 
@@ -9,7 +9,8 @@ import { NgClass } from '@angular/common';
         NgClass
     ],
     templateUrl: './currentstatereport-perfdata-gauge.component.html',
-    styleUrl: './currentstatereport-perfdata-gauge.component.css'
+    styleUrl: './currentstatereport-perfdata-gauge.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CurrentstatereportPerfdataGaugeComponent implements OnInit {
     @Input() public gauge!: CurrentStateReportPerfdataArrayValue;
@@ -17,6 +18,8 @@ export class CurrentstatereportPerfdataGaugeComponent implements OnInit {
     public percentage: number = 0;
     public backgroundColorClass: string = 'bg-ok';
     public label: string = '';
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         const start = this.gauge.min !== null ? parseFloat(this.gauge.min) : 0;
@@ -52,6 +55,7 @@ export class CurrentstatereportPerfdataGaugeComponent implements OnInit {
         }
 
         this.label = `${currentValue} ${unit} | ${label}`;
+        this.cdr.markForCheck();
     }
 
 }
