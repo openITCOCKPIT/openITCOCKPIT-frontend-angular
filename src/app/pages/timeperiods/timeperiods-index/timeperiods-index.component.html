@@ -150,7 +150,7 @@
                         <td class="width-50">
 
                             <c-button-group role="group">
-                                @if (PermissionService.hasPermission(['timeperiods', 'edit'])) {
+                                @if (PermissionService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
                                     <button cButton class="ripple btn-lower-padding" color="default"
                                             *ngIf="timeperiod.Timeperiod.allow_edit" size="xs"
                                             (click)="onActionButtonClick('/timeperiods/edit/' + timeperiod.Timeperiod.id)">
@@ -160,7 +160,7 @@
                                             *ngIf="!timeperiod.Timeperiod.allow_edit" disabled>
                                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     </button>
-                                } @else if (PermissionService.hasPermission(['timeperiods', 'viewdetails'])) {
+                                } @else if (PermissionService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
                                     <button cButton class="ripple btn-lower-padding" color="default" size="xs"
                                             (click)="onActionButtonClick('/timeperiods/viewDetails/' + timeperiod.Timeperiod.id)">
                                         <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>

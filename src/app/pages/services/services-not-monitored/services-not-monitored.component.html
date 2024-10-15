@@ -196,7 +196,7 @@
                         <tr *ngIf="index === 0 || (index > 0 && services.all_services[index -1].Host.uuid !== service.Host.uuid)">
                             <td colspan="5">
                                 <oitc-hoststatus-icon [hoststatus]="service.Hoststatus" class="pe-1"/>
-                                @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                     <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
                                         {{ service.Service.hostname }}
                                     </a>
@@ -207,7 +207,7 @@
                                 } @else {
                                     {{ service.Service.hostname }}({{ service.Host.address }})
                                 }
-                                @if (this.PermissionsService.hasPermission(['services', 'serviceList'])) {
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
                                     <span class="fa-pull-right">
                                         <a [routerLink]="['/', 'services', 'serviceList', service.Host.id]">
                                             <fa-icon [icon]="['fas', 'list']"></fa-icon>
@@ -229,7 +229,7 @@
                             </td>
 
                             <td>
-                                @if (this.PermissionsService.hasPermission(['services', 'browser'])) {
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                     <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                         {{ service.Service.servicename }}
                                     </a>

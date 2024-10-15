@@ -54,7 +54,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -107,7 +107,8 @@ import { IndexPage } from '../../../pages.interface';
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',

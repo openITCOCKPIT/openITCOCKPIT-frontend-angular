@@ -41,7 +41,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import {
     AutomapEntity,
@@ -116,7 +116,8 @@ import {
         NoRecordsComponent,
         SelectAllComponent,
         CardFooterComponent,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        AsyncPipe
     ],
     templateUrl: './automaps-index.component.html',
     styleUrl: './automaps-index.component.css',

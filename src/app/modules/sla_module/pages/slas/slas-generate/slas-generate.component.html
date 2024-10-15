@@ -222,7 +222,7 @@
                                 <c-col xs="12" md="6" lg="8">
                                     <c-row>
                                         <c-col md="12">
-                                            @if (this.PermissionsService.hasPermission(['timeperiods', 'edit'])) {
+                                            @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
                                                 <a [routerLink]="['/', 'timeperiods', 'edit', report.timeperiod.id]">
                                                     {{ report.timeperiod.name }}
                                                 </a>
@@ -320,7 +320,7 @@
                                             {{ host.sla_log.last_log_entry.determined_outage_time_human_readable }}
                                         </td>
                                         <td>
-                                            @if (this.PermissionsService.hasPermission(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])) {
+                                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
                                                 <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
                                                    [queryParams]="{from:date_range.start, to:date_range.end}"
                                                    [ngClass]="{'text-danger': host.sla_log.outages.length > 0}">
@@ -334,7 +334,7 @@
                                             {{ host.sla_log.last_log_entry.minimal_availability_percent }}%
                                         </td>
                                         <td [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
-                                            @if (this.PermissionsService.hasPermission(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])) {
+                                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusHostsLog', 'index'])|async) {
                                                 <a [routerLink]="['/', 'sla_module', 'sla_availability_status_hosts_log', 'index', host.host.id]"
                                                    [queryParams]="{from:date_range.start, to:date_range.end}"
                                                    [ngClass]="{'text-danger': !host.sla_log.last_log_entry.passed}">
@@ -374,7 +374,7 @@
                                                 {{ service.sla_log.last_log_entry.determined_outage_time_human_readable }}
                                             </td>
                                             <td [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
-                                                @if (this.PermissionsService.hasPermission(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])) {
+                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
                                                     <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
                                                        [queryParams]="{from:date_range.start, to:date_range.end}"
                                                        [ngClass]="{'text-danger': service.sla_log.outages.length > 0}">
@@ -389,7 +389,7 @@
                                                 %
                                             </td>
                                             <td [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">
-                                                @if (this.PermissionsService.hasPermission(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])) {
+                                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'SlaAvailabilityStatusServicesLog', 'index'])|async) {
                                                     <a [routerLink]="['/', 'sla_module', 'sla_availability_status_services_log', 'index', service.service.id]"
                                                        [queryParams]="{from:date_range.start, to:date_range.end}"
                                                        [ngClass]="{'text-danger': !service.sla_log.last_log_entry.passed}">

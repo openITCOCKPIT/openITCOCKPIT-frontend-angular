@@ -119,7 +119,7 @@
                                                 <td>
                                                     @for (element of this.getChildElementsByTypeAsIterator(container.childsElements, details); track $index) {
                                                         <div>
-                                                            @if (PermissionsService.hasPermission(details.rights)) {
+                                                            @if (PermissionsService.hasPermissionObservable(details.rights)|async) {
                                                                 <a [routerLink]="details.baseRoute+element.key">
                                                                     {{ element.value }}
                                                                 </a>

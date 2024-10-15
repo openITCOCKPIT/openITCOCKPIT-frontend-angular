@@ -32,7 +32,7 @@ import { FormsModule } from '@angular/forms';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -116,7 +116,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        EnableModalComponent
+        EnableModalComponent,
+        AsyncPipe
     ],
     templateUrl: './services-disabled.component.html',
     styleUrl: './services-disabled.component.css',

@@ -228,7 +228,7 @@
                                 <!-- Buttons -->
                                 <div class="btn-group btn-group-xs ms-2">
                                     @if ([ContainerTypesEnum.CT_GLOBAL, ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
-                                        @if (PermissionsService.hasPermission(['containers', 'add']) && container.Container.allowEdit) {
+                                        @if (( PermissionsService.hasPermissionObservable(['containers', 'add'])|async ) && container.Container.allowEdit) {
                                             <button type="button"
                                                     (click)="toggleCreateContainerModal(container.Container)"
                                                     class="btn btn-link text-body p-1 text-decoration-none ripple">
@@ -239,7 +239,7 @@
                                     }
 
                                     @if ([ContainerTypesEnum.CT_TENANT, ContainerTypesEnum.CT_LOCATION, ContainerTypesEnum.CT_NODE].includes(container.Container.containertype_id)) {
-                                        @if (PermissionsService.hasPermission(['containers', 'edit']) && container.Container.allowEdit) {
+                                        @if (( PermissionsService.hasPermissionObservable(['containers', 'edit'])|async ) && container.Container.allowEdit) {
                                             <button type="button"
                                                     (click)="editContainer(container.Container)"
                                                     class="btn btn-link text-body p-1 text-decoration-none ripple">
@@ -248,7 +248,7 @@
                                             </button>
                                         }
 
-                                        @if (PermissionsService.hasPermission(['containers', 'showDetails'])) {
+                                        @if (PermissionsService.hasPermissionObservable(['containers', 'showDetails'])|async) {
                                             <a type="button"
                                                class="btn btn-link text-body p-1 text-decoration-none ripple"
                                                [routerLink]="['/', 'containers','showDetails',container.Container.id]">
@@ -257,7 +257,7 @@
                                             </a>
                                         }
 
-                                        @if (PermissionsService.hasPermission(['containers', 'delete']) && container.Container.allowEdit) {
+                                        @if (( PermissionsService.hasPermissionObservable(['containers', 'delete'])|async ) && container.Container.allowEdit) {
                                             <button type="button"
                                                     class="btn btn-link text-body text-decoration-none p-1 ripple"
                                                     (click)="toggleDeleteAllModal(container.Container)">

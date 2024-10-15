@@ -259,7 +259,7 @@
                     </td>
 
                     <td>
-                        @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
                             </a>
@@ -333,7 +333,7 @@
                                 {{ t('openITCOCKPIT Agent discovery') }}
                             </oitc-actions-button-element>
 
-                            @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                            @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
                                 <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
                                                              [url]="'/checkmk_module/scans/index/' + host.Host.id">
                                     <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>

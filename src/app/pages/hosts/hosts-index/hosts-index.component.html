@@ -976,7 +976,7 @@
                     </td>
 
                     <td *ngIf="fields[7]">
-                        @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
                             </a>
@@ -984,7 +984,7 @@
                             {{ host.Host.name }}
                         }
 
-                        @if (this.PermissionsService.hasModule('ImportModule') && this.PermissionsService.hasPermission(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])) {
+                        @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
                             <span class="badge border border-info"
                                   [hidden]="!host.Host.additionalInformationExists">
                                 <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
@@ -1025,10 +1025,10 @@
                         {{ host.Host.satelliteName }}
                     </td>
 
-                    @if (this.PermissionsService.hasPermission(['services', 'serviceList'])) {
+                    @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
                         <td *ngIf="fields[14]" class="width-160">
                             <div class="btn-group btn-group-justified w-100" role="group">
-                                @if (this.PermissionsService.hasPermission(['services', 'index'])) {
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
                                     <a class="btn btn-success state-button-small"
                                        [routerLink]="['/', 'services', 'index']"
                                        [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">

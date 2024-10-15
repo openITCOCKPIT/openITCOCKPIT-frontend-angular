@@ -53,7 +53,7 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -160,7 +160,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         RouterLink,
         TooltipDirective,
         HoststatusSimpleIconComponent,
-        EnableModalComponent
+        EnableModalComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-disabled.component.html',
     styleUrl: './hosts-disabled.component.css',

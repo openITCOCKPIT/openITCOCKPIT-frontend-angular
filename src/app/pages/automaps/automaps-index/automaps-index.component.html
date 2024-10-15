@@ -154,7 +154,7 @@
                             [item]="automap"></oitc-item-select>
                     </td>
                     <td>
-                        @if (this.PermissionsService.hasPermission(['automaps', 'view'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['automaps', 'view'])|async) {
                             <a [routerLink]="['/', 'automaps', 'view', automap.id]">
                                 {{ automap.name }}
                             </a>

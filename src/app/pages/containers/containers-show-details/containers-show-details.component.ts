@@ -37,7 +37,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainerTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { GenericKeyValue } from '../../../generic.interfaces';
 
 @Component({
@@ -69,6 +69,7 @@ import { GenericKeyValue } from '../../../generic.interfaces';
         CardTextDirective,
         NgForOf,
         TableDirective,
+        AsyncPipe,
     ],
     templateUrl: './containers-show-details.component.html',
     styleUrl: './containers-show-details.component.css',

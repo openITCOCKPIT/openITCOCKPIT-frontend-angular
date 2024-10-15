@@ -218,7 +218,7 @@
                                            for="use_proxy">{{ t('Use Proxy') }}</label>
                                 </c-form-check>
                                 <div class="help-block">
-                                    @if (this.PermissionsService.hasPermission(['proxy', 'index'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['proxy', 'index'])|async) {
                                         {{ t('Determine if the configured proxy should be used.') }}
                                         <a [routerLink]="['/', 'proxy', 'index']">{{ t('Proxy settings') }}</a>
                                     } @else {

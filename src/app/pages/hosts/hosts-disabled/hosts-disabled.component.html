@@ -254,7 +254,7 @@
                     </td>
 
                     <td>
-                        @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                             <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
                                 {{ host.Host.name }}
                             </a>

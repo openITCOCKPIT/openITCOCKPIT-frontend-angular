@@ -44,7 +44,7 @@ import {
 import {
     HostsSendCustomNotificationModalComponent
 } from '../../../../components/hosts/hosts-send-custom-notification-modal/hosts-send-custom-notification-modal.component';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -144,7 +144,8 @@ import {
         BorderDirective,
         RouterLink,
         CancelHostdowntimeModalComponent,
-        CancelServicedowntimeModalComponent
+        CancelServicedowntimeModalComponent,
+        AsyncPipe
     ],
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',

@@ -3,7 +3,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -106,6 +106,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
         MatSortHeader,
         TableDirective,
         BadgeComponent,
+        AsyncPipe,
     ],
     templateUrl: './slas-generate.component.html',
     styleUrl: './slas-generate.component.css',

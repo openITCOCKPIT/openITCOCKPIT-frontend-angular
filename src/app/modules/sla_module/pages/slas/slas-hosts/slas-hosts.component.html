@@ -54,7 +54,7 @@
             <c-alert
                 class="bg-transparent fade show w-100 margin-10 border-primary text-default d-flex flex-row-reverse justify-content-between"
                 role="alert">
-                @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
                     <span>
                         <a class="btn btn-outline-primary btn-sm btn-w-m waves-effect waves-themed pull-right"
                            *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit"
@@ -76,7 +76,7 @@
                     <div class="flex-1">
                         <span class="h4 text-primary">
                             {{ t('Service level Agreement: ') }}
-                            @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
+                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
                                 <a [routerLink]="['/', 'sla_module', 'slas', 'edit', slaAndHosts.sla.id]"
                                    *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit">
                                     "{{ slaAndHosts.sla.name }}"
@@ -159,7 +159,7 @@
                     <tr>
                         <td>
                             <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
-                            @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                 <a [routerLink]="['/', 'hosts', 'browser', host.id]">
                                     {{ host.name }}
                                 </a>
@@ -181,7 +181,7 @@
                                 <span>
                                     <fa-icon [icon]="['fas', 'desktop']"
                                              class="text-primary-700 width-15"></fa-icon>
-                                    @if (this.PermissionsService.hasPermission(['hosts', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'edit'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'edit', host.id]">
                                             {{ host.name }}
                                         </a>
@@ -197,7 +197,7 @@
                                 <span>
                                     <fa-icon [icon]="['fas', 'pencil-square']"
                                              class="text-primary-700 width-15"></fa-icon>
-                                    @if (this.PermissionsService.hasPermission(['hosttemplates', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosttemplates', 'edit'])|async) {
                                         <a [routerLink]="['/', 'hosttemplates', 'edit', host.hosttemplate.id]">
                                             {{ host.hosttemplate.name }}
                                         </a>
@@ -227,7 +227,7 @@
                             <td colspan="2">
                                 <span>
                                     <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
-                                    @if (this.PermissionsService.hasPermission(['services', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
                                         <a [routerLink]="['/', 'services', 'edit', service.id]">
                                             {{ service.servicename }}
                                         </a>
@@ -253,7 +253,7 @@
                                     <span>
                                         <fa-icon [icon]="['fas', 'cog']"
                                                  class="text-primary-700 width-15"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['services', 'edit'])) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
                                             <a [routerLink]="['/', 'services', 'edit', service.id]">
                                                 {{ service.servicename }}
                                             </a>
@@ -269,7 +269,7 @@
                                     <span>
                                         <fa-icon [icon]="['fas', 'pencil-square']"
                                                  class="text-primary-700 width-15"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['servicetemplates', 'edit'])) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['servicetemplates', 'edit'])|async) {
                                             <a [routerLink]="['/', 'servicetemplates', 'edit', service.servicetemplate.id]">
                                                 {{ service.servicetemplate.template_name }}
                                             </a>

@@ -50,7 +50,7 @@ import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -166,7 +166,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         ServicestatusSimpleIconComponent,
         FormDirective,
         HoststatusSimpleIconComponent,
-        QueryHandlerCheckerComponent
+        QueryHandlerCheckerComponent,
+        AsyncPipe
     ],
     templateUrl: './services-not-monitored.component.html',
     styleUrl: './services-not-monitored.component.css',

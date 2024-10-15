@@ -36,7 +36,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -96,7 +96,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         FaStackComponent,
         FaStackItemSizeDirective,
         BackButtonDirective,
-        AlertComponent
+        AlertComponent,
+        AsyncPipe
     ],
     templateUrl: './slas-hosts.component.html',
     styleUrl: './slas-hosts.component.css',

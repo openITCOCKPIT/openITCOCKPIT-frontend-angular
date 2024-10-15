@@ -674,7 +674,7 @@
                                 {{ t('Contacts and contact groups got inherited from') }}
 
                                 <span [ngClass]="{'fw-bold':data.areContactsInheritedFromServicetemplate}">
-                                    @if (this.PermissionsService.hasPermission(['servicetemplates', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['servicetemplates', 'edit'])|async) {
                                         <a [routerLink]="['/servicetemplates/edit', post.servicetemplate_id]">
                                             {{ t('service template') }}
                                         </a>
@@ -686,7 +686,7 @@
                                 <span [ngClass]="{'fw-bold':data.areContactsInheritedFromHost}"
                                       [hidden]="data.areContactsInheritedFromServicetemplate">
                                     <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
-                                    @if (this.PermissionsService.hasPermission(['hosts', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'edit'])|async) {
                                         <a [routerLink]="['/hosts/edit', post.host_id]">
                                             {{ t('host') }}
                                         </a>
@@ -697,7 +697,7 @@
 
                                 <span class="fw-bold" [hidden]="!data.areContactsInheritedFromHosttemplate">
                                     <fa-icon [icon]="['fas', 'angle-double-right']"></fa-icon>
-                                    @if (this.PermissionsService.hasPermission(['hosttemplates', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosttemplates', 'edit'])|async) {
                                         <a [routerLink]="['/hosttemplates/edit', hosttemplateContactsAndContactgroups.id]">
                                             {{ t('host template') }}
                                         </a>
