@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { SatellitesService } from '../satellites.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -111,7 +111,8 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        AsyncPipe
     ],
     templateUrl: './satellites-downtime.component.html',
     styleUrl: './satellites-downtime.component.css',

@@ -75,7 +75,7 @@
                         </td>
                     </tr>
 
-                        @if (PermissionsService.hasModule('AutoreportModule')) {
+                        @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
                             <!-- Autoreports -->
                             <tr *ngIf="objects.Autoreports.length > 0">
                                 <th colspan="2" class="bg-secondary bg-opacity-10">
@@ -99,7 +99,7 @@
                             </tr>
                         }
 
-                        @if (PermissionsService.hasModule('EventcorrelationModule')) {
+                        @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
                             <!-- Eventcorrelations -->
                             <tr *ngIf="objects.Eventcorrelations.length > 0">
                                 <th colspan="2" class="bg-secondary bg-opacity-10">
@@ -125,7 +125,7 @@
                         }
 
 
-                        @if (PermissionsService.hasModule('MapModule')) {
+                        @if (PermissionsService.hasModuleObservable('MapModule')|async) {
                             <!-- Maps -->
                             <tr *ngIf="objects.Maps.length > 0">
                                 <th colspan="2" class="bg-secondary bg-opacity-10">

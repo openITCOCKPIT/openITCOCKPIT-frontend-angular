@@ -113,9 +113,11 @@ export class NavbarSearchComponent implements OnDestroy {
                         );
                     } else {
                         // Search for host name
-                        if (this.PermissionService.hasPermission(['hosts', 'index'])) {
-                            this.router.navigate(['/hosts/index'], {queryParams: {hostname: this.searchString}});
-                        }
+                        this.subscriptions.add(this.PermissionService.hasPermissionObservable(['hosts', 'index']).subscribe(result => {
+                            if (result) {
+                                this.router.navigate(['/hosts/index'], {queryParams: {hostname: this.searchString}});
+                            }
+                        }));
                     }
                 }
 

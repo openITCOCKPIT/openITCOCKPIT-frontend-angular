@@ -43,7 +43,7 @@ import {
     SystemdowntimeHostIndexRoot
 } from '../../systemdowntimes/systemdowntimes.interface';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -110,7 +110,8 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        AsyncPipe
     ],
     templateUrl: './systemdowntimes-host.component.html',
     styleUrl: './systemdowntimes-host.component.css',

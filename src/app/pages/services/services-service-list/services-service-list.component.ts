@@ -40,7 +40,7 @@ import { FormsModule } from '@angular/forms';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -189,7 +189,8 @@ import {
         ServiceAcknowledgeModalComponent,
         ServiceMaintenanceModalComponent,
         EnableModalComponent,
-        ServiceAddToServicegroupModalComponent
+        ServiceAddToServicegroupModalComponent,
+        AsyncPipe
     ],
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',

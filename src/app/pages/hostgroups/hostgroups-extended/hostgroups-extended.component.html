@@ -46,7 +46,7 @@
                         </button>
                     </c-nav-item>
 
-                    @if (PermissionsService.hasModule('SLAModule')) {
+                    @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
                         <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
                             <c-nav-item *ngIf="hostgroupExtended.hasSLAHosts">
                                 <button
@@ -63,7 +63,7 @@
 
 
                 <c-nav class="card-toolbar card-header-pills">
-                    @if (PermissionsService.hasModule('ImportModule')) {
+                    @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                         <span
                             *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
                             <c-nav-item class="px-1" *ngIf="AdditionalInformationExists">
@@ -683,7 +683,7 @@
                 </div>
 
                 <div *ngIf="selectedTab == HostgroupExtendedTabs.SlaHostsStatus">
-                    @if (PermissionsService.hasModule('SLAModule')) {
+                    @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
                         <oitc-sla-hostgroup-hosts-status-overview
                             *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']"
                             [hostgroupId]="this.hostgroupExtended.Hostgroup.id"></oitc-sla-hostgroup-hosts-status-overview>

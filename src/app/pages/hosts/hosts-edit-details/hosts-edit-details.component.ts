@@ -21,7 +21,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -84,7 +84,8 @@ import { HistoryService } from '../../../history.service';
         NgSelectModule,
         PriorityComponent,
         IntervalInputComponent,
-        CheckAttemptsInputComponent
+        CheckAttemptsInputComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-edit-details.component.html',
     styleUrl: './hosts-edit-details.component.css',

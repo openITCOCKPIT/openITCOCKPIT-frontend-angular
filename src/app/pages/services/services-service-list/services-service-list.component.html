@@ -104,7 +104,7 @@
                                 </a>
                             </li>
 
-                            @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                            @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
                                 <li *oitcPermission="['CheckmkModule', 'scans', 'index']">
                                     <a
                                         cDropdownItem

@@ -1276,7 +1276,7 @@
                 <!-- SERVICE MACRO CONFIGURATION END -->
 
                 <!-- SLA CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')"
+                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('SLAModule')|async"
                         [hidden]="!post.servicetemplate_id">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'award']"></fa-icon>

@@ -174,7 +174,7 @@
                             </div>
                         </div>
 
-                        @if (this.PermissionsService.hasModule('DistributeModule')) {
+                        @if (this.PermissionsService.hasModuleObservable('DistributeModule')|async) {
                             <hr class="border-dashed"/>
 
                             <div class="mb-3">

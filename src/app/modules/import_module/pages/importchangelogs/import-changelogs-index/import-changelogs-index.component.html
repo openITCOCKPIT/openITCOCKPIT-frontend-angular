@@ -34,7 +34,7 @@
                         {{ t('Main overview') }}
                     </button>
                 </c-nav-item>
-                @if (PermissionsService.hasModule('ImportModule')) {
+                @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                     <c-nav-item *oitcPermission="['ImportModule','importchangelogs', 'index']">
                         <button
                             class="nav-link active"

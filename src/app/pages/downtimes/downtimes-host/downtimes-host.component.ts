@@ -44,7 +44,7 @@ import {
     HostDowntimesParams
 } from '../downtimes.interface';
 import { Subscription } from 'rxjs';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { DowntimesService } from '../downtimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -112,7 +112,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         DropdownMenuDirective,
         DropdownToggleDirective,
         DropdownItemDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',

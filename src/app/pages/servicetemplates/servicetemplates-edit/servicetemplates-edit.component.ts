@@ -29,7 +29,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -104,7 +104,8 @@ import { HistoryService } from '../../../history.service';
         NgClass,
         ObjectUuidComponent,
         FormLoaderComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        AsyncPipe
     ],
     templateUrl: './servicetemplates-edit.component.html',
     styleUrl: './servicetemplates-edit.component.css'

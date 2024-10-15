@@ -90,7 +90,7 @@
                                     {{ t('Create container downtime') }}
                                 </a>
                             </li>
-                            @if (PermissionsService.hasModule('DistributeModule')) {
+                            @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                                 <li>
                                     <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
                                        cDropdownItem

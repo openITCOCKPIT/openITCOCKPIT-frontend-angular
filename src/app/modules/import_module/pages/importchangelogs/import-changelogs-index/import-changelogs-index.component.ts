@@ -22,7 +22,7 @@ import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component'
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -78,7 +78,8 @@ import { Sort } from '@angular/material/sort';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        AsyncPipe
     ],
     templateUrl: './import-changelogs-index.component.html',
     styleUrl: './import-changelogs-index.component.css',

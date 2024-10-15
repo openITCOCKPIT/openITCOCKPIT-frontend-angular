@@ -70,7 +70,7 @@
                         {{ t('Container') }}
                     </a>
                 </c-nav-item>
-                @if (PermissionsService.hasModule('DistributeModule')) {
+                @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                     <c-nav-item>
                         <a [routerLink]="['/', 'distribute_module', 'satellites', 'downtime']"
                            *oitcPermission="['distributemodule', 'satellites', 'downtime']" class="nav-link active">
@@ -124,7 +124,7 @@
                                     {{ t('Create container downtime') }}
                                 </a>
                             </li>
-                            @if (PermissionsService.hasModule('DistributeModule')) {
+                            @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                                 <li>
                                     <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
                                        cDropdownItem

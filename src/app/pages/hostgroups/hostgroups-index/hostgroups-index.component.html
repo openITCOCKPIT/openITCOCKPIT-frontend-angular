@@ -149,7 +149,7 @@
                             <span *oitcPermission="['hostgroups', 'extended']; negate: true">
                                 {{ hostgroup.container.name }}
                             </span>
-                            @if (PermissionsService.hasModule('SLAModule')) {
+                            @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
                                 <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
                                     <c-badge *ngIf="hostgroup.hasSLAHosts"
                                              textColor="warning"
@@ -160,7 +160,7 @@
                                     </c-badge>
                                 </span>
                             }
-                            @if (PermissionsService.hasModule('ImportModule')) {
+                            @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                                 <span
                                     *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
                                     <c-badge *ngIf="hostgroup.additionalInformationExists"
@@ -193,7 +193,7 @@
                                     <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
                                     {{ t('Extended view') }}
                                 </oitc-actions-button-element>
-                                @if (PermissionsService.hasModule('SLAModule')) {
+                                @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
                                     <oitc-actions-button-element *ngIf="hostgroup.hasSLAHosts"
                                                                  [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
                                                                  [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
@@ -201,7 +201,7 @@
                                         {{ t('SLA Status Overview') }}
                                     </oitc-actions-button-element>
                                 }
-                                @if (PermissionsService.hasModule('ImportModule')) {
+                                @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                                     <oitc-actions-button-element *ngIf="hostgroup.additionalInformationExists"
                                                                  [permission]="'importmodule.importedhostgroups.dependencytree'"
                                                                  [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
