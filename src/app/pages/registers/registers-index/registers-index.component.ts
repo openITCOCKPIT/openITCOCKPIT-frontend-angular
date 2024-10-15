@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import {
     CardBodyComponent,
@@ -61,7 +61,8 @@ import { CreditsComponent } from '../credits/credits.component';
         CreditsComponent
     ],
     templateUrl: './registers-index.component.html',
-    styleUrl: './registers-index.component.css'
+    styleUrl: './registers-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegistersIndexComponent implements OnInit, OnDestroy {
 
@@ -75,6 +76,8 @@ export class RegistersIndexComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly RegistersService = inject(RegistersService);
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit() {
         this.loadLicense();
@@ -87,6 +90,9 @@ export class RegistersIndexComponent implements OnInit, OnDestroy {
     public loadLicense() {
         this.subscriptions.add(
             this.RegistersService.getLicense().subscribe((response) => {
+
+                this.cdr.markForCheck();
+
                 if (response.hasLicense && response.license) {
                     this.valid = response.hasLicense;
                     this.LicenseResponse = response.licenseResponse;
@@ -101,6 +107,7 @@ export class RegistersIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.RegistersService.saveLicense(this.license_key)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     this.valid = false;
                     if (!result) {
                         this.notyService.genericError();
