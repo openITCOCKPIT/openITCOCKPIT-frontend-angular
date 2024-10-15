@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -99,7 +99,9 @@ import { IndexPage } from '../../../../../pages.interface';
         {provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService} // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
     ],
     templateUrl: './external-monitorings-index.component.html',
-    styleUrl: './external-monitorings-index.component.css'
+    styleUrl: './external-monitorings-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -114,6 +116,7 @@ export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, Ind
     private subscriptions: Subscription = new Subscription();
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly ExternalMonitoringsService = inject(ExternalMonitoringsService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -133,6 +136,7 @@ export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, Ind
         this.subscriptions.add(this.ExternalMonitoringsService.getIndex(this.params)
             .subscribe((result) => {
                 this.externalMonitorings = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -188,6 +192,7 @@ export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, Ind
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
