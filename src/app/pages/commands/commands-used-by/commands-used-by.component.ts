@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -53,7 +53,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormLoaderComponent
     ],
     templateUrl: './commands-used-by.component.html',
-    styleUrl: './commands-used-by.component.css'
+    styleUrl: './commands-used-by.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommandsUsedByComponent implements OnInit, OnDestroy {
     public command: CommandUsedByCommand | undefined;
@@ -66,10 +67,12 @@ export class CommandsUsedByComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private commandId: number = 0;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.commandId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy() {
@@ -82,6 +85,7 @@ export class CommandsUsedByComponent implements OnInit, OnDestroy {
                 this.command = result.command;
                 this.objects = result.objects;
                 this.total = result.total;
+                this.cdr.markForCheck();
             }));
     }
 

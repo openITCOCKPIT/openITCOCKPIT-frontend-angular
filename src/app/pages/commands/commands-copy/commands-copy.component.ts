@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -60,7 +60,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './commands-copy.component.html',
-    styleUrl: './commands-copy.component.css'
+    styleUrl: './commands-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommandsCopyComponent implements OnInit, OnDestroy {
 
@@ -73,6 +74,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -98,6 +100,7 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
                         Error: null
                     })
                 }
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -121,11 +124,11 @@ export class CommandsCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.commands = error.error.result as CommandCopyPost[];
             }
         });
-
         this.subscriptions.add(sub);
     }
 

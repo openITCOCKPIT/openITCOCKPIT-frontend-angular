@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -151,7 +151,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     styleUrl: './commands-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -171,6 +172,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private CommandsService = inject(CommandsService)
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
 
@@ -185,8 +187,8 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
             let id = params['id'];
             if (id) {
                 this.params['filter[Commands.id][]'] = [].concat(id); // make sure we always get an array
+                this.cdr.markForCheck();
             }
-
             this.loadCommands();
         }));
     }
@@ -215,6 +217,7 @@ export class CommandsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.CommandsService.getIndex(this.params)
             .subscribe((result) => {
                 this.commands = result;
+                this.cdr.markForCheck();
             })
         );
     }
