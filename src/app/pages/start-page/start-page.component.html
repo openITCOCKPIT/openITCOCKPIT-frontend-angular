@@ -1,201 +1,199 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Library</a></li>
-                <li aria-current="page" class="breadcrumb-item active">Data</li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li aria-current="page" class="breadcrumb-item active">Data</li>
+        </ol>
+    </nav>
 
-        <h1>{{ t('Start Page') }}</h1>
+    <h1>{{ t('Start Page') }}</h1>
 
-        <button cButton class="ripple" color="success" size="xs"
-                [routerLink]="['/', 'services', 'add']">
-            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-            {{ t('Create Service - History Test') }}
-        </button>
+    <button cButton class="ripple" color="success" size="xs"
+            [routerLink]="['/', 'services', 'add']">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        {{ t('Create Service - History Test') }}
+    </button>
 
-        <button cButton class="ripple" color="secondary" size="xs"
-                [routerLink]="['/', 'hosts', 'index']"
-                [queryParams]="{id:[1,2,500]}">
-            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-            {{ t('Hosts-index mit id array test') }}
-        </button>
+    <button cButton class="ripple" color="secondary" size="xs"
+            [routerLink]="['/', 'hosts', 'index']"
+            [queryParams]="{id:[1,2,500]}">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        {{ t('Hosts-index mit id array test') }}
+    </button>
 
-        <button cButton class="ripple" color="warning" size="xs"
-                [routerLink]="['/', 'commands', 'index']"
-                [queryParams]="{id:2}">
-            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-            {{ t('commands-index mit id array test') }}
-        </button>
+    <button cButton class="ripple" color="warning" size="xs"
+            [routerLink]="['/', 'commands', 'index']"
+            [queryParams]="{id:2}">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        {{ t('commands-index mit id array test') }}
+    </button>
 
-        <c-card>
-            <c-card-header>
-                <c-nav class="card-header-pills float-end">
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="default" size="sm">
-                            Button def
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="secondary" size="sm">
-                            Button 1
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="secondary" size="sm">
-                            Button 2
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="secondary" size="sm">
-                            Button 3
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-                <c-nav>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="primary" size="xs">
-                            Button 1
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="secondary" size="xs">
-                            Button 2
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button cButton class="ripple" color="success" size="xs">
-                            Button 3
-                        </button>
-                    </c-nav-item>
-                </c-nav>
+    <c-card>
+        <c-card-header>
+            <c-nav class="card-header-pills float-end">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="sm">
+                        Button def
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="secondary" size="sm">
+                        Button 1
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="secondary" size="sm">
+                        Button 2
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="secondary" size="sm">
+                        Button 3
+                    </button>
+                </c-nav-item>
+            </c-nav>
+            <c-nav>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="primary" size="xs">
+                        Button 1
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="secondary" size="xs">
+                        Button 2
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="success" size="xs">
+                        Button 3
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>This is some text within a card body.
+            <h5 cCardTitle>Card title</h5>
+            <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
+                Card subtitle
+            </h6>
+            <ul [flush]="true" cListGroup>
+                <li cListGroupItem>Cras justo odio</li>
+                <li cListGroupItem>Dapibus ac facilisis in</li>
+                <li cListGroupItem>Vestibulum at eros</li>
+            </ul>
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary">Save me</button>
+        </c-card-footer>
+    </c-card>
+    <form cForm>
+        <c-card class="mt-2">
+            <c-card-header class="fw-bold">
+                Create new command
             </c-card-header>
-            <c-card-body>This is some text within a card body.
-                <h5 cCardTitle>Card title</h5>
-                <h6 cCardSubtitle class="mb-2 text-medium-emphasis">
-                    Card subtitle
-                </h6>
-                <ul [flush]="true" cListGroup>
-                    <li cListGroupItem>Cras justo odio</li>
-                    <li cListGroupItem>Dapibus ac facilisis in</li>
-                    <li cListGroupItem>Vestibulum at eros</li>
-                </ul>
+            <c-card-body>
+                <div class="mb-3">
+                    <label cLabel for="CommandType">Command type</label>
+                    <select aria-label="Default select example" cSelect cSelect id="CommandType">
+                        <option value="1">Service check command</option>
+                        <option value="2">Host check command</option>
+                        <option value="3">Notification command</option>
+                        <option value="4">Eventhandler command</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="commandName">Name
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="commandName" required type="text">
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="commandLine">
+                        Command line
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-code-mirror-container>
+                        <textarea cFormControl id="commandLine"></textarea>
+                    </oitc-code-mirror-container>
+                    <div cFormText class="text-primary">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                        A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as user
+                        defined macro.
+                        Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$)
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="commandDescription">Description</label>
+                    <textarea cFormControl id="commandDescription" rows="6"></textarea>
+                </div>
+                <c-form-check class="mb-3">
+                    <label cLabel>Arguments:</label>
+                </c-form-check>
             </c-card-body>
             <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary">Save me</button>
+                <input cButton color="primary" type="submit">
             </c-card-footer>
         </c-card>
-        <form cForm>
-            <c-card class="mt-2">
-                <c-card-header class="fw-bold">
-                    Create new command
-                </c-card-header>
-                <c-card-body>
-                    <div class="mb-3">
-                        <label cLabel for="CommandType">Command type</label>
-                        <select aria-label="Default select example" cSelect cSelect id="CommandType">
-                            <option value="1">Service check command</option>
-                            <option value="2">Host check command</option>
-                            <option value="3">Notification command</option>
-                            <option value="4">Eventhandler command</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="commandName">Name
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl id="commandName" required type="text">
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="commandLine">
-                            Command line
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-code-mirror-container>
-                            <textarea cFormControl id="commandLine"></textarea>
-                        </oitc-code-mirror-container>
-                        <div cFormText class="text-primary">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                            A $-sign needs to be escaped manually (\$). Semicolons (;) needs to be defined as user
-                            defined macro.
-                            Nagios supports up to 32 $ARGx$ macros ($ARG1$ through $ARG32$)
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="commandDescription">Description</label>
-                        <textarea cFormControl id="commandDescription" rows="6"></textarea>
-                    </div>
-                    <c-form-check class="mb-3">
-                        <label cLabel>Arguments:</label>
-                    </c-form-check>
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <input cButton color="primary" type="submit">
-                </c-card-footer>
-            </c-card>
-        </form>
+    </form>
 
-        <div>
-            <h2>Button test</h2>
+    <div>
+        <h2>Button test</h2>
 
-            <button class="ripple">asdsad</button>
+        <button class="ripple">asdsad</button>
 
-            <button cButton class="ripple" color="primary">Primary</button>
-            <button cButton class="ripple" color="secondary">Secondary</button>
-            <button cButton class="ripple" color="success">Success</button>
-            <button cButton class="ripple" color="danger">Danger</button>
-            <button cButton class="ripple" color="warning">Warning</button>
-            <button cButton class="ripple" color="info">Info</button>
-            <button cButton class="ripple" color="default">Default</button>
-            <button cButton class="ripple" color="light">Light</button>
-            <button cButton class="ripple" color="dark">Dark</button>
+        <button cButton class="ripple" color="primary">Primary</button>
+        <button cButton class="ripple" color="secondary">Secondary</button>
+        <button cButton class="ripple" color="success">Success</button>
+        <button cButton class="ripple" color="danger">Danger</button>
+        <button cButton class="ripple" color="warning">Warning</button>
+        <button cButton class="ripple" color="info">Info</button>
+        <button cButton class="ripple" color="default">Default</button>
+        <button cButton class="ripple" color="light">Light</button>
+        <button cButton class="ripple" color="dark">Dark</button>
 
-            <button cButton color="link">Link</button>
+        <button cButton color="link">Link</button>
 
-            <br>
-            <button (click)="switchAllowEdit()" class="ripple">Switch Allow Edit</button>
+        <br>
+        <button (click)="switchAllowEdit()" class="ripple">Switch Allow Edit</button>
 
-            <oitc-actions-button [allowEdit]="allowEdit" [permission]="'hosts.edit'" [url]="'/hosts/edit/1'">
-                <oitc-actions-button-element [allow]="allowEdit" [permission]="'hosts.edit'"
-                                             [url]="'/hosts/edit/1'">
-                    <fa-icon [icon]="['fas', 'gear']" class="dropdown-item-icon"></fa-icon>
-                    Edit
-                </oitc-actions-button-element>
-                <li cDropdownDivider></li>
-                <oitc-actions-button-element (click)="clickTest()" [allow]="true" [permission]="'hosts.index'">
-                    <fa-icon [icon]="['fas', 'mouse']" class="dropdown-item-icon"></fa-icon>
-                    Click Test
-                </oitc-actions-button-element>
-            </oitc-actions-button>
+        <oitc-actions-button [allowEdit]="allowEdit" [permission]="'hosts.edit'" [url]="'/hosts/edit/1'">
+            <oitc-actions-button-element [allow]="allowEdit" [permission]="'hosts.edit'"
+                                         [url]="'/hosts/edit/1'">
+                <fa-icon [icon]="['fas', 'gear']" class="dropdown-item-icon"></fa-icon>
+                Edit
+            </oitc-actions-button-element>
+            <li cDropdownDivider></li>
+            <oitc-actions-button-element (click)="clickTest()" [allow]="true" [permission]="'hosts.index'">
+                <fa-icon [icon]="['fas', 'mouse']" class="dropdown-item-icon"></fa-icon>
+                Click Test
+            </oitc-actions-button-element>
+        </oitc-actions-button>
 
-        </div>
+    </div>
 
-        <h2>Route Params</h2>
-        <pre *ngIf="routeParams$ | async as routeParams">
+    <h2>Route Params</h2>
+    <pre *ngIf="routeParams$ | async as routeParams">
     {{ routeParams | json }}
-            {{ routeParams | json }}
-            {{ routeParams | json }}
+        {{ routeParams | json }}
+        {{ routeParams | json }}
   </pre>
-        <h2>Query Params</h2>
-        <pre>
+    <h2>Query Params</h2>
+    <pre>
     {{ queryParams$ | async | json }}
   </pre>
-        <hr/>
-        <button (click)="addRandomQueryParam()">add random query param</button>
-        <h1>Permissions</h1>
-        <span *oitcPermission="['foo', 'bar', 'baz']">show</span>
-        <span *oitcPermission="'gibbet.nicht'">hidden</span>
-        <span *oitcPermission="'a.b'">show</span>
+    <hr/>
+    <button (click)="addRandomQueryParam()">add random query param</button>
+    <h1>Permissions</h1>
+    <span *oitcPermission="['foo', 'bar', 'baz']">show</span>
+    <span *oitcPermission="'gibbet.nicht'">hidden</span>
+    <span *oitcPermission="'a.b'">show</span>
 
-        <span *oitcPermission="'hosts.index'">hosts.index</span>
-        <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
+    <span *oitcPermission="'hosts.index'">hosts.index</span>
+    <span *oitcPermission="'hosts.hahahaha'">hosts.hahahaha</span>
 
-        <hr/>
-        <span *oitcPermission="'services.browser'"><a
-            [routerLink]="['services', 'browser', 3]">Servicesbrowser</a></span>
-        <hr/>
-    </ng-container>
-</oitc-coreui>
+    <hr/>
+    <span *oitcPermission="'services.browser'"><a
+        [routerLink]="['services', 'browser', 3]">Servicesbrowser</a></span>
+    <hr/>
+</ng-container>

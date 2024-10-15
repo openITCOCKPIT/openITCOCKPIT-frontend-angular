@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
@@ -107,7 +107,8 @@ import { CodeMirrorContainerComponent } from '../../components/code-mirror-conta
         CodeMirrorContainerComponent
     ],
     templateUrl: './start-page.component.html',
-    styleUrl: './start-page.component.css'
+    styleUrl: './start-page.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StartPageComponent implements OnDestroy {
     public readonly route = inject(ActivatedRoute);
@@ -122,6 +123,7 @@ export class StartPageComponent implements OnDestroy {
     protected readonly faMouse = faMouse;
     private readonly subscription = new Subscription();
     private readonly document = inject(DOCUMENT);
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         this.route.queryParams.subscribe({
@@ -148,6 +150,8 @@ export class StartPageComponent implements OnDestroy {
 
     public switchAllowEdit() {
         this.allowEdit = !this.allowEdit;
+        this.cdr.markForCheck();
+
     }
 
 }
