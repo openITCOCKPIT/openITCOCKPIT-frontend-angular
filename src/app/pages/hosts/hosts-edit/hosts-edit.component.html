@@ -335,7 +335,7 @@
                                                     errorField="priority"></oitc-form-feedback>
                             </div>
 
-                            @if (PermissionsService.hasModule('DistributeModule')) {
+                            @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                                 <div class="mb-3" *ngIf="post.host_type !== HostTypesEnum.EVK_HOST">
                                     <label cLabel for="SatellitesSelect">
                                         <oitc-label-link
@@ -745,7 +745,7 @@
                                  [ngClass]="{'text-decoration-line-through': data.disableInheritance}">
                                 {{ t('Contacts and contact groups got inherited from') }}
                                 <span class="fw-bold">
-                                    @if (this.PermissionsService.hasPermission(['hosttemplates', 'edit'])) {
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosttemplates', 'edit'])|async) {
                                         <a [routerLink]="['/hosttemplates/edit', post.hosttemplate_id]">
                                             {{ t('host template') }}
                                         </a>
@@ -1163,7 +1163,7 @@
                 <!-- HOST MACRO CONFIGURATION END -->
 
                 <!-- PROMETHEUS CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModule('PrometheusModule')"
+                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('PrometheusModule')|async"
                         [hidden]="!post.hosttemplate_id">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
@@ -1210,7 +1210,7 @@
                 <!-- PROMETHEUS CONFIGURATION END -->
 
                 <!-- SLA CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModule('SLAModule')"
+                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('SLAModule')|async"
                         [hidden]="!post.hosttemplate_id">
                     <c-card-header>
                         <fa-icon [icon]="['fas', 'award']"></fa-icon>
@@ -1280,7 +1280,7 @@
                         <span class="visually-hidden">Toggle Dropdown</span>
                     </button>
                     <ul cDropdownMenu>
-                        @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['services', 'add'])|async) {
                             <li>
                                 <button cDropdownItem type="button"
                                         (click)="submit(HostSubmitType.ServiceAdd)">
@@ -1290,7 +1290,7 @@
                             </li>
                         }
 
-                        @if (this.PermissionsService.hasPermission(['agentconnector', 'config'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['agentconnector', 'config'])|async) {
                             <li>
                                 <button cDropdownItem type="button"
                                         (click)="submit(HostSubmitType.AgentDiscovery)">
@@ -1300,7 +1300,7 @@
                             </li>
                         }
 
-                        @if (this.PermissionsService.hasPermission(['services', 'add'])) {
+                        @if (this.PermissionsService.hasPermissionObservable(['services', 'add'])|async) {
                             <li>
                                 <button cDropdownItem type="button"
                                         (click)="submit(HostSubmitType.AssignMatchingServicetemplateGroups)">
@@ -1310,7 +1310,7 @@
                             </li>
                         }
 
-                        @if (this.PermissionsService.hasModule('CheckmkModule') && this.PermissionsService.hasPermission(['CheckmkModule', 'scans', 'index'])) {
+                        @if (( this.PermissionsService.hasModuleObservable('CheckmkModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['CheckmkModule', 'scans', 'index'])|async )) {
                             <li>
                                 <button cDropdownItem type="button"
                                         (click)="submit(HostSubmitType.CheckmkDiscovery)">
