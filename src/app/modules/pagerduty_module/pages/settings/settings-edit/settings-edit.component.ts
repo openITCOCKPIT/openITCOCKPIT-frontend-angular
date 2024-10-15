@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { PagerdutySettingsService } from '../PagerdutySettings.service';
 import { Subscription } from 'rxjs';
@@ -79,7 +79,8 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ApikeyDocModalComponent
     ],
     templateUrl: './settings-edit.component.html',
-    styleUrl: './settings-edit.component.css'
+    styleUrl: './settings-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsEditComponent implements OnInit, OnDestroy {
     private readonly pagerdutySettingsService: PagerdutySettingsService = inject(PagerdutySettingsService);
@@ -98,16 +99,19 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
         two_way: false,
         use_proxy: false
     };
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(
             this.pagerdutySettingsService.getPagerdutySettings().subscribe((settings: PagerdutySettings): void => {
-                    this.post = settings
+                    this.post = settings;
+                    this.cdr.markForCheck();
                 }
             )
         );
         const API_KEY_TRANSLATION = this.TranslocoService.translate('YOUR_API_KEY_HERE');
         this.currentCommandAsPostRequest = `https://${window.location.hostname}/pagerduty_module/acknowledge/submit.json?apikey=${API_KEY_TRANSLATION}`;
+        this.cdr.markForCheck();
     }
 
 
@@ -118,7 +122,7 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
     protected updatePagerdutySettings(): void {
         this.subscriptions.add(
             this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: GenericResponseWrapper): void => {
-                console.log(result);
+                this.cdr.markForCheck();
                 if (result.success) {
                     this.errors = null;
                     this.post = result.data as PagerdutySettings;
