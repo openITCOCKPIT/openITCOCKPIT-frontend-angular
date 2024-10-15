@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -63,7 +63,8 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
         NgSwitchDefault
     ],
     templateUrl: './documentations-edit.component.html',
-    styleUrl: './documentations-edit.component.css'
+    styleUrl: './documentations-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentationsEditComponent implements OnInit, OnDestroy {
 
@@ -81,13 +82,19 @@ export class DocumentationsEditComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
         this.uuid = String(this.route.snapshot.paramMap.get('uuid'));
         this.type = String(this.route.snapshot.paramMap.get('type'));
+
+        this.cdr.markForCheck();
+
         this.subscriptions.add(this.DocumentationsService.getView(this.uuid, this.type)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.documentation = result;
 
                 if (this.documentation.docuExists) {
@@ -105,6 +112,7 @@ export class DocumentationsEditComponent implements OnInit, OnDestroy {
         if (this.documentation) {
             this.subscriptions.add(this.DocumentationsService.save(this.uuid, this.type, this.documentation.bbcode)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result) {
                         this.notyService.genericSuccess();
                         this.router.navigate(['/', 'documentations', 'view', this.uuid, this.type]);

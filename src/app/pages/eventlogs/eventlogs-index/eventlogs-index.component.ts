@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -90,6 +90,7 @@ import { IndexPage } from '../../../pages.interface';
     ],
     templateUrl: './eventlogs-index.component.html',
     styleUrl: './eventlogs-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private EventlogsService: EventlogsService = inject(EventlogsService);
@@ -110,6 +111,8 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             user_password_change: true
         }
     }
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -144,9 +147,11 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
 
+        this.cdr.markForCheck();
         this.subscriptions.add(this.EventlogsService.getIndex(this.params)
             .subscribe((result: EventlogsIndex) => {
                 this.eventlogs = result;
+                this.cdr.markForCheck();
             })
         );
     }

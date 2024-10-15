@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CurrentStateReportPerfdataArrayValue } from '../../currentstatereports.interface';
 import {
     CurrentstatereportPerfdataGaugeComponent
@@ -15,7 +15,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './currentstatereport-perfdata-gauges.component.html',
-    styleUrl: './currentstatereport-perfdata-gauges.component.css'
+    styleUrl: './currentstatereport-perfdata-gauges.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CurrentstatereportPerfdataGaugesComponent {
 
