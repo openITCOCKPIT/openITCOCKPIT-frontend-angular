@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { CalendarComponent } from '../calendar/calendar.component';
 import {
@@ -65,7 +65,8 @@ import { HistoryService } from '../../../history.service';
         NgOptionHighlightModule
     ],
     templateUrl: './calendars-edit.component.html',
-    styleUrl: './calendars-edit.component.css'
+    styleUrl: './calendars-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarsEditComponent implements OnInit, OnDestroy {
 
@@ -91,6 +92,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         let request = {
@@ -102,6 +104,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
             (result) => {
                 this.containers = result.containers;
                 this.countries = result.countries;
+                this.cdr.markForCheck();
             });
 
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -139,6 +142,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
 
                 // customEvents contains now all events (custom and normal holidays
                 this.events = customEvents;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -149,6 +153,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.CalendarsService.updateCalendar(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const title = this.TranslocoService.translate('Calendar');
                     const msg = this.TranslocoService.translate('updated successfully');
