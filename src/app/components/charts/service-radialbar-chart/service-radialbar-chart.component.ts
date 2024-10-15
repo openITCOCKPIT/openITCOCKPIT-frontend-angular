@@ -1,4 +1,15 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { ApexGrid, ChartComponent } from 'ng-apexcharts';
 import { ChartOptions } from '../host-pie-chart/host-pie-chart.component';
 import { ChartAbsolutValue } from '../charts.interface';
@@ -14,7 +25,8 @@ import { ColorModeService } from '@coreui/angular';
         ChartComponent
     ],
     templateUrl: './service-radialbar-chart.component.html',
-    styleUrl: './service-radialbar-chart.component.css'
+    styleUrl: './service-radialbar-chart.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -31,6 +43,7 @@ export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDest
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ColorModeService = inject(ColorModeService);
+    private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {
         padding: {
@@ -62,6 +75,7 @@ export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDest
                         }
                     }
                 });
+                this.cdr.markForCheck();
             }
 
         }));
@@ -82,6 +96,7 @@ export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDest
             this.chart.updateOptions({
                 series: this.chartData
             });
+            this.cdr.markForCheck();
         }
 
         if (changes['statusDataAbsolut'] && this.chart) {
@@ -95,6 +110,7 @@ export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDest
             this.chart.updateOptions({
                 series: this.chartData
             });
+            this.cdr.markForCheck();
         }
     }
 
@@ -200,5 +216,6 @@ export class ServiceRadialbarChartComponent implements OnInit, OnChanges, OnDest
                 }
             ]
         };
+        this.cdr.markForCheck();
     }
 }
