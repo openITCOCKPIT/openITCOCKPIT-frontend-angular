@@ -20,8 +20,8 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { GrafanaService } from '../../grafana.service';
 import { GrafanaTimepickerChange } from './grafana-timepicker.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-grafana-timepicker',
@@ -56,8 +56,8 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
     public humanTimerange: string = '';
     public humanAutoRefresh: string = '';
 
-    private readonly GrafanaService = inject(GrafanaService);
     private readonly TranslocoService = inject(TranslocoService);
+    private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
     public timeranges = {
@@ -101,6 +101,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
 
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public changeAutoRefresh(refreshValue: string, name: string) {
@@ -129,6 +130,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
     private setHumanNames(): void {
         this.humanTimerange = '';
         this.humanAutoRefresh = '';
+        this.cdr.markForCheck()
 
         for (const category of Object.values(this.timeranges)) {
             const item = category.find((item: any) => item.key === this.selectedTimerange);
@@ -141,7 +143,5 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
                 this.humanAutoRefresh = interval.name;
             }
         }
-
     }
-
 }

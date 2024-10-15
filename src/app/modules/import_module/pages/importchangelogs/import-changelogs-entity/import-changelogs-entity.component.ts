@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -77,7 +77,8 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
         RouterLink
     ],
     templateUrl: './import-changelogs-entity.component.html',
-    styleUrl: './import-changelogs-entity.component.css'
+    styleUrl: './import-changelogs-entity.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
@@ -89,8 +90,6 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
     private ImportChangelogsService = inject(ImportChangelogsService)
     public changes?: ChangelogIndexRoot;
     public entityType = String(this.route.snapshot.paramMap.get('type')).toUpperCase();
-    protected readonly ImportObjectTypesEnum = ImportObjectTypesEnum;
-
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -102,13 +101,13 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
             edit: true,
             delete: true
         }
-    }
+    };
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
-            //console.log(params);
             this.loadChanges();
         }));
     }
@@ -138,6 +137,7 @@ export class ImportChangelogsEntityComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ImportChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
+                    this.cdr.markForCheck();
                 })
             );
         }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -115,7 +115,8 @@ import { IndexPage } from '../../../../../pages.interface';
         {provide: DELETE_SERVICE_TOKEN, useClass: ExternalSystemsService} // Inject the ExternalSystemsService into the DeleteAllModalComponent
     ],
     templateUrl: './external-systems-index.component.html',
-    styleUrl: './external-systems-index.component.css'
+    styleUrl: './external-systems-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -130,6 +131,7 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
     public externalSystems?: ExternalSystemsIndexRoot;
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -149,6 +151,7 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
         this.subscriptions.add(this.ExternalSystemsService.getIndex(this.params)
             .subscribe((result) => {
                 this.externalSystems = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -203,7 +206,8 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
 
         // Pass selection to the modal
         this.selectedItems = items;
-
+        this.cdr.markForCheck();
+        
         // open modal
         this.modalService.toggle({
             show: true,
