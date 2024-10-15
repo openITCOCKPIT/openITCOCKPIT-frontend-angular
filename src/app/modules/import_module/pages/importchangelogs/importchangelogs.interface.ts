@@ -24,7 +24,7 @@ export function getDefaultImportChangelogsEntityParams(): ImportChangelogsEntity
         angular: true,
         scroll: true,
         page: 1,
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
         'filter[Changelogs.object_id]': null,
         'filter[Changelogs.objecttype_id]': [],

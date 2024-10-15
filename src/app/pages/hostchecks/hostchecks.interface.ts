@@ -27,7 +27,7 @@ export function getDefaultHostchecksIndexParams(): HostchecksIndexParams {
         'filter[Hostchecks.output]': '',
         'filter[Hostchecks.state][]': [],
         'filter[Hostchecks.state_type]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutomapsService } from '../automaps.service';
@@ -122,7 +122,8 @@ import {
     styleUrl: './automaps-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService} // Inject the AutomapsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -141,6 +142,7 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -196,6 +198,7 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         this.subscriptions.add(this.AutomapsService.getIndex(this.params).subscribe(automaps => {
             this.automaps = automaps;
+            this.cdr.markForCheck();
         }));
     }
 
