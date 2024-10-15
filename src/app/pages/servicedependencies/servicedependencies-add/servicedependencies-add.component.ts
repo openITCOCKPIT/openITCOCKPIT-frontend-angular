@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -52,6 +52,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -94,7 +95,8 @@ import {
         MultiSelectOptgroupComponent
     ],
     templateUrl: './servicedependencies-add.component.html',
-    styleUrl: './servicedependencies-add.component.css'
+    styleUrl: './servicedependencies-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     public containers: ServicedependencyContainerResult | undefined;
@@ -114,6 +116,7 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -132,6 +135,7 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicedependenciesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -151,6 +155,7 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
 
                 this.processChosenServicegroups();
                 this.processChosenDependentServicegroups();
+                this.cdr.markForCheck();
             })
         );
     }
@@ -162,6 +167,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicedependenciesService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.services = result.services;
                 this.services.map(obj => {
                     obj.items.map(service => {
@@ -184,6 +191,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicedependenciesService.loadDependentServices(containerId, searchString, this.post.services_dependent._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.services_dependent = result.services;
                 this.services_dependent.map(obj => {
                     obj.items.map(service => {
@@ -221,6 +230,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentServices() {
+        this.cdr.markForCheck();
+
         if (this.services_dependent.length === 0) {
             return;
         }
@@ -235,6 +246,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenServicegroups() {
+        this.cdr.markForCheck();
+
         if (this.servicegroups.length === 0) {
             return;
         }
@@ -244,6 +257,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentServicegroups() {
+        this.cdr.markForCheck();
+
         if (this.servicegroups_dependent.length === 0) {
             return;
         }
@@ -287,6 +302,7 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ServicedependenciesService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service servicedependency');
@@ -299,6 +315,8 @@ export class ServicedependenciesAddComponent implements OnInit, OnDestroy {
                     this.errors = null;
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+
+                    this.HistoryService.navigateWithFallback(['/servicedependencies/index']);
                     return;
                 }
 

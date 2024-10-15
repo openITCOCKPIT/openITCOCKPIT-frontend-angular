@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -100,7 +100,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent
     ],
     templateUrl: './servicedependencies-edit.component.html',
-    styleUrl: './servicedependencies-edit.component.css'
+    styleUrl: './servicedependencies-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     public containers: ServicedependencyContainerResult | undefined;
@@ -132,6 +133,8 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.ServicedependenciesService.getEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.get = result.servicedependency;
                 this.post = {
                     id: this.get.id,
@@ -177,6 +180,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicedependenciesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -190,6 +194,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicedependenciesService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicegroups = result.servicegroups;
                 this.servicegroups_dependent = result.servicegroupsDependent;
                 this.timeperiods = result.timeperiods;
@@ -207,6 +212,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicedependenciesService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.services = result.services;
                 this.services.map(obj => {
                     obj.items.map(service => {
@@ -229,6 +235,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicedependenciesService.loadDependentServices(containerId, searchString, this.post.services_dependent._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.services_dependent = result.services;
                 this.services_dependent.map(obj => {
                     obj.items.map(service => {
@@ -266,6 +273,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentServices() {
+        this.cdr.markForCheck();
         if (this.services_dependent.length === 0) {
             return;
         }
@@ -280,6 +288,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenServicegroups() {
+        this.cdr.markForCheck();
         if (this.servicegroups.length === 0) {
             return;
         }
@@ -289,6 +298,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentServicegroups() {
+        this.cdr.markForCheck();
         if (this.servicegroups_dependent.length === 0) {
             return;
         }
@@ -300,6 +310,7 @@ export class ServicedependenciesEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ServicedependenciesService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service dependency');
