@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -113,7 +113,8 @@ import { HistoryService } from '../../../history.service';
         CalendarComponent
     ],
     templateUrl: './calendars-add.component.html',
-    styleUrl: './calendars-add.component.css'
+    styleUrl: './calendars-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarsAddComponent implements OnInit, OnDestroy {
 
@@ -133,6 +134,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public getClearForm(): CalendarPost {
         return {
@@ -153,6 +155,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
             (result) => {
                 this.containers = result.containers;
                 this.countries = result.countries;
+                this.cdr.markForCheck();
             });
 
         this.loadHolidays();
@@ -170,7 +173,7 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
     public loadHolidays() {
         this.subscriptions.add(this.CalendarsService.getHolidays(this.countryCode)
             .subscribe((result) => {
-
+                this.cdr.markForCheck();
                 // Keep custom events
                 let oldEvents = this.events;
                 let customEvents = oldEvents.filter(event => !event.default_holiday);
@@ -184,17 +187,17 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
 
                 // customEvents contains now all events (custom and normal holidays
                 this.events = customEvents;
+                this.cdr.markForCheck();
             })
         );
     }
 
 
     public submit() {
-
         this.post.events = this.events;
-
         this.subscriptions.add(this.CalendarsService.createCalendar(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
