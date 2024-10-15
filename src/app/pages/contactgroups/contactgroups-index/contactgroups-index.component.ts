@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -109,7 +109,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './contactgroups-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ContactgroupsService} // Inject the ContactgroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
@@ -124,6 +125,7 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage
     public contactgroups?: ContactgroupsIndexRoot;
     public readonly router = inject(Router);
     public hideFilter: boolean = true;
+    private cdr = inject(ChangeDetectorRef);
 
     // Show or hide the filter
     public toggleFilter() {
@@ -183,6 +185,7 @@ export class ContactgroupsIndexComponent implements OnInit, OnDestroy, IndexPage
         this.subscriptions.add(this.ContactgroupsService.getIndex(this.params)
             .subscribe((result: ContactgroupsIndexRoot) => {
                 this.contactgroups = result;
+                this.cdr.markForCheck();
             }));
     }
 

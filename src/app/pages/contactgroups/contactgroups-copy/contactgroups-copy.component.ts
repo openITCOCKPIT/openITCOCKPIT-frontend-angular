@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -59,7 +59,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './contactgroups-copy.component.html',
-    styleUrl: './contactgroups-copy.component.css'
+    styleUrl: './contactgroups-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
     public contactgroups: ContactgroupsCopyPost[] = [];
@@ -71,6 +72,7 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -82,6 +84,8 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
         }
 
         this.subscriptions.add(this.ContactgroupsService.getContactgroupsCopy(ids).subscribe((contactgroups) => {
+            this.cdr.markForCheck();
+
             for (let contactgroup of contactgroups) {
                 this.contactgroups.push({
                     Contactgroup: {
@@ -112,6 +116,8 @@ export class ContactgroupsCopyComponent implements OnInit, OnDestroy {
                     this.HistoryService.navigateWithFallback(['/', 'contactgroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
+
                     this.notyService.genericError();
                     this.contactgroups = error.error.result as ContactgroupsCopyPost[];
                     this.contactgroups.forEach((copyPostResult: ContactgroupsCopyPost) => {

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -39,6 +39,7 @@ import { ContactgroupAddPostContactgroup, LoadContainersRoot } from '../contactg
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
     selector: 'oitc-contactgroups-add',
@@ -75,10 +76,12 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         XsButtonDirective,
         RouterLink,
         ObjectUuidComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        SelectComponent
     ],
     templateUrl: './contactgroups-add.component.html',
-    styleUrl: './contactgroups-add.component.css'
+    styleUrl: './contactgroups-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
@@ -94,9 +97,11 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     public post: ContactgroupAddPostContactgroup = {} as ContactgroupAddPostContactgroup;
     protected containers: SelectKeyValue[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
+        this.cdr.markForCheck();
     }
 
     public ngOnInit() {
@@ -112,6 +117,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ContactgroupsService.add(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -147,6 +153,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactgroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -166,11 +173,13 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     private loadContacts() {
         if (!this.post.container.parent_id) {
             this.contacts = [];
+            this.cdr.markForCheck();
             return;
         }
         this.subscriptions.add(this.ContactgroupsService.getContactsByContainerId(this.post.container.parent_id)
             .subscribe((result: SelectKeyValue[]) => {
                 this.contacts = result;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -178,6 +187,7 @@ export class ContactgroupsAddComponent implements OnInit, OnDestroy {
     public onContainerChange(): void {
         if (!this.post.container.parent_id) {
             this.contacts = [];
+            this.cdr.markForCheck();
             return;
         }
         this.loadContacts();
