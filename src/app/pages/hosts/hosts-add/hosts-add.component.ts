@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import {
     AlertComponent,
@@ -37,7 +37,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
@@ -114,10 +114,12 @@ import { HistoryService } from '../../../history.service';
         DropdownComponent,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        AsyncPipe
     ],
     templateUrl: './hosts-add.component.html',
-    styleUrl: './hosts-add.component.css'
+    styleUrl: './hosts-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsAddComponent implements OnInit, OnDestroy {
 
@@ -165,6 +167,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -179,6 +182,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         });
 
         this.data.dnsLookUp = this.LocalStorageService.getItemWithDefault('HostsDnsLookUpEnabled', 'false') === 'true';
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -256,6 +260,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -264,6 +269,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadCommands()
             .subscribe((result) => {
                 this.commands = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -288,6 +294,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
                 this.sharingContainers = result.sharingContainers;
                 this.exporters = result.exporters;
                 this.slas = result.slas;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -300,6 +307,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
             .subscribe((result) => {
                 this.parenthosts = result;
+                this.cdr.markForCheck();
             })
         );
     };
@@ -314,6 +322,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadCommandArguments(commandId)
             .subscribe((result) => {
                 this.post.hostcommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -322,6 +331,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.loadElements();
         this.loadParentHosts('');
         this.showRootAlert = this.post.container_id === ROOT_CONTAINER;
+        this.cdr.markForCheck();
     }
 
     public onCommandChange() {
@@ -419,6 +429,8 @@ export class HostsAddComponent implements OnInit, OnDestroy {
             return;
         }
 
+        this.cdr.markForCheck();
+
         const fields = [
             'description',
             'hosttemplate_id',
@@ -514,12 +526,14 @@ export class HostsAddComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+        this.cdr.markForCheck();
     }
-    
+
 
     public submit(submitType: HostSubmitType) {
         this.post.tags = this.tagsForSelect.join(',');
@@ -532,6 +546,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.add(this.post, save_host_and_assign_matching_servicetemplate_groups)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
 
                     const response = result.data as HostAddEditSuccessResponse;

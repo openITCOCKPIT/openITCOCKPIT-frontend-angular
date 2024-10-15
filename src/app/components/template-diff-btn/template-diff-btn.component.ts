@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import _ from 'lodash';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -15,7 +25,8 @@ import { PopoverDirective } from '@coreui/angular';
         PopoverDirective
     ],
     templateUrl: './template-diff-btn.component.html',
-    styleUrl: './template-diff-btn.component.css'
+    styleUrl: './template-diff-btn.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateDiffBtnComponent implements OnChanges {
 
@@ -29,6 +40,7 @@ export class TemplateDiffBtnComponent implements OnChanges {
     @Output() public valueResetted = new EventEmitter<any>();
 
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['value']) {
@@ -40,6 +52,7 @@ export class TemplateDiffBtnComponent implements OnChanges {
         this.value = this.templateValue;
         this.valueChange.emit(this.value);
         this.valueResetted.emit(this.value);
+        this.cdr.markForCheck();
     }
 
     public getPopoverContent(): string {
@@ -64,6 +77,8 @@ export class TemplateDiffBtnComponent implements OnChanges {
     }
 
     runDiff() {
+        this.cdr.markForCheck();
+
         if (this.templateValue === null && this.value === null) {
             this.hasDiff = false;
             return;
