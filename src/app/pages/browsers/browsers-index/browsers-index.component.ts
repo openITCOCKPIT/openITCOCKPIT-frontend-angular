@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     getDefaultHostsIndexFilter,
     getDefaultHostsIndexParams,
@@ -210,7 +210,8 @@ import { IndexPage } from '../../../pages.interface';
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 // Filter vars
@@ -295,6 +296,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly LocalStorageService = inject(LocalStorageService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -311,6 +313,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.subscriptions.add(this.BrowsersService.getIndex(this.containerId)
                 .subscribe((result) => {
                     this.containers = result;
+                    this.cdr.markForCheck();
                 })
             );
 
@@ -320,6 +323,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             // If isRecursiveBrowserEnabled is enabled or not is hardcoded in the HostsController
             this.loadHosts();
+            this.cdr.markForCheck();
         });
 
     }
@@ -336,6 +340,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.BrowsersService.getStatusCountsByContainer([containerId])
             .subscribe((result) => {
                 this.statusCounts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -380,6 +385,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             .subscribe((result) => {
                 this.hosts = result;
                 this.userFullname = result.username;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -831,15 +837,18 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public getDefaultColumns() {
         this.fields = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false];
         this.LocalStorageService.removeItem(this.columnsTableKey)
+        this.cdr.markForCheck();
     };
 
     public saveColumnsConfig() {
         this.LocalStorageService.removeItem(this.columnsTableKey);
         this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
+        this.cdr.markForCheck();
     }
 
     public setColumnConfig(fieldsConfig: boolean[]) {
         this.fields = fieldsConfig;
+        this.cdr.markForCheck();
     }
 
     protected readonly String = String;

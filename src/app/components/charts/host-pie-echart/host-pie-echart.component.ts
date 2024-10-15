@@ -1,4 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
@@ -17,7 +27,8 @@ import { PieChartMetric } from '../charts.interface';
         provideEcharts(),
     ],
     templateUrl: './host-pie-echart.component.html',
-    styleUrl: './host-pie-echart.component.css'
+    styleUrl: './host-pie-echart.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -29,6 +40,7 @@ export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly ColorModeService = inject(ColorModeService);
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         const colorMode$ = toObservable(this.ColorModeService.colorMode);
@@ -77,6 +89,7 @@ export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
+        this.cdr.markForCheck();
     }
 
     private renderChart() {
@@ -108,6 +121,7 @@ export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             ]
-        }
+        };
+        this.cdr.markForCheck();
     }
 }
