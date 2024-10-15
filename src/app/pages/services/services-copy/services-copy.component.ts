@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -64,7 +64,8 @@ import { HistoryService } from '../../../history.service';
         SelectComponent
     ],
     templateUrl: './services-copy.component.html',
-    styleUrl: './services-copy.component.css'
+    styleUrl: './services-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesCopyComponent {
 
@@ -80,6 +81,8 @@ export class ServicesCopyComponent {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     private ids: number[] = [];
 
@@ -116,6 +119,7 @@ export class ServicesCopyComponent {
         this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -124,12 +128,14 @@ export class ServicesCopyComponent {
         if (this.host_id > 0) {
             this.services = [];
             this.loadServices();
+            this.cdr.markForCheck();
         }
     }
 
     public loadServices() {
         if (this.ids) {
             this.subscriptions.add(this.ServicesService.getServicesCopy(this.ids, 1).subscribe(response => {
+                this.cdr.markForCheck();
                 this.commands = response.commands;
 
                 for (let service of response.services) {
@@ -155,6 +161,7 @@ export class ServicesCopyComponent {
     public loadCommandArguments(sourceServiceId: number, commandId: number, index: number) {
         this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId, sourceServiceId).subscribe(response => {
             this.services[index].Service.servicecommandargumentvalues = response;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -177,6 +184,7 @@ export class ServicesCopyComponent {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.services = error.error.result as ServiceCopyPost[];
             }
