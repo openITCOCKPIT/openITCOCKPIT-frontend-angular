@@ -74,7 +74,7 @@
                             />
                         </c-input-group>
 
-                        <div class="ps-3">
+                        <div class="ps-3 nodes-overview">
                             <div *ngFor="let container of getFilteredContainers()" class="mb-1">
                                 <fa-icon [icon]="['fas', 'globe']"
                                          *ngIf="container.value.containertype_id == ContainerTypesEnum.CT_GLOBAL"></fa-icon>

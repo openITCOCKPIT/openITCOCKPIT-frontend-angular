@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -173,7 +173,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DisableAllModalComponent
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
 // Filter vars
@@ -194,6 +195,7 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -210,6 +212,7 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
             .subscribe((result) => {
                 this.services = result;
+                this.cdr.markForCheck();
             })
         );
     }

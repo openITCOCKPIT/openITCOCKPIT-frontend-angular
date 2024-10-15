@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -123,7 +123,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DeleteAllModalComponent
         {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesDisabledComponent implements OnInit, OnDestroy {
 // Filter vars
@@ -144,6 +145,7 @@ export class ServicesDisabledComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -159,6 +161,7 @@ export class ServicesDisabledComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicesService.getDisabled(this.params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.services = result;
             })
         );

@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -87,7 +87,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -214,13 +214,15 @@ import { IndexPage } from '../../../pages.interface';
         DropdownDividerDirective,
         TableLoaderComponent,
         ServiceAddToServicegroupModalComponent,
+        AsyncPipe,
     ],
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
@@ -275,6 +277,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public timezone!: TimezoneObject;
     public selectedItems: any[] = [];
     public userFullname: string = '';
+
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnInit() {
         this.loadColumns();
@@ -377,6 +381,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
         });
         this.setFilterAndLoad(this.filter);
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy() {
@@ -387,6 +392,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.ServicesService.getServicesIndexViaPost(this.params, this.RequestFilter)
             .subscribe((services) => {
+                this.cdr.markForCheck();
                 this.services = services;
                 if (services.satellites) {
                     this.satellites = services.satellites;
@@ -446,6 +452,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public togglecolumnConfiguration() {
         this.showColumnConfig = !this.showColumnConfig;
+        this.cdr.markForCheck();
     }
 
     public toggleColumnsConfigExport() {
@@ -458,6 +465,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             show: true,
             id: 'columnsConfigExportModal',
         });
+        this.cdr.markForCheck();
     }
 
     public toggleColumnsConfigImport() {
@@ -465,6 +473,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             show: true,
             id: 'columnsConfigImportModal',
         });
+        this.cdr.markForCheck();
     }
 
     public linkFor(type: string) {
@@ -763,6 +772,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.filter = bookmarkfilter;
             this.setFilterAndLoad(this.filter);
         }
+        this.cdr.markForCheck();
     }
 
     private setFilterAndLoad(filter: ServiceIndexFilter) {
@@ -824,27 +834,32 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
     public loadColumns() {
         if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
             this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
+            this.cdr.markForCheck();
         }
     }
 
     public getDefaultColumns() {
         this.fields = [true, true, true, true, true, true, true, true, false, false, true, true, true, true];
         this.LocalStorageService.removeItem(this.columnsTableKey)
+        this.cdr.markForCheck();
     };
 
     public saveColumnsConfig() {
         this.LocalStorageService.removeItem(this.columnsTableKey);
         this.LocalStorageService.setItem(this.columnsTableKey, JSON.stringify(this.fields));
+        this.cdr.markForCheck();
     }
 
     public setColumnConfig(fieldsConfig: boolean[]) {
         this.fields = fieldsConfig;
+        this.cdr.markForCheck();
     }
 
     //filter
@@ -860,6 +875,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
 
     protected confirmAddServicesToServicegroup(service?: ServiceObject): void {
+        this.cdr.markForCheck();
+        
         let items: SelectKeyValue[] = [];
 
         if (service) {
@@ -881,6 +898,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.notyService.genericError(message);
             return;
         }
+
         this.modalService.toggle({
             show: true,
             id: 'serviceAddToServicegroupModal',
