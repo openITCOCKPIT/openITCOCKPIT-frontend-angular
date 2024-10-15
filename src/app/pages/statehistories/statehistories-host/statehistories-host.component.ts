@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -95,13 +95,15 @@ import {
         CardFooterComponent
     ],
     templateUrl: './statehistories-host.component.html',
-    styleUrl: './statehistories-host.component.css'
+    styleUrl: './statehistories-host.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatehistoriesHostComponent implements OnInit, OnDestroy {
     private hostId: number = 0;
     private StatehistoryService = inject(StatehistoryService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
 
     public params: StatehistoryHostParams = getDefaultStatehistoryHostParams();
     public stateFilter: HostNotificationsStateFilter = {
@@ -133,7 +135,7 @@ export class StatehistoriesHostComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
-
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -158,6 +160,7 @@ export class StatehistoriesHostComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatehistoryService.getStatehistoryHost(this.hostId, this.params)
             .subscribe((result) => {
                 this.hoststatehistories = result;
+                this.cdr.markForCheck();
             })
         );
     }
