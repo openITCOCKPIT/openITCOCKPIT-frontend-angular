@@ -227,13 +227,15 @@ export class PopoverGraphComponent implements OnDestroy {
             options.unit = this.perfData[i].datasource.unit;
             options.legend.show = false;
 
+
+            this.cdr.markForCheck();
+
             if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
                 try {
                     let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
 
                     elm.innerHTML = '';
                     let plot = new uPlot(options, data, elm);
-
                 } catch (e) {
                     console.error(e);
                 }
@@ -247,6 +249,8 @@ export class PopoverGraphComponent implements OnDestroy {
     }
 
     public cancelDebounce(event: MouseEvent) {
+        this.cdr.markForCheck();
+
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = null;

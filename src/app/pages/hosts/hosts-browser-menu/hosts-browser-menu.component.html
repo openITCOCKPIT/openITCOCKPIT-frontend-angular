@@ -27,7 +27,7 @@
         </c-col>
         <c-col xs="12" sm="5" lg="5" class="text-end">
             @if (data) {
-                @if (config.showBackButton && this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                @if (config().showBackButton && ( this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async )) {
                     <button cButton color="primary"
                             class="me-2 ripple"
                             [routerLink]="['/', 'hosts', 'browser', data.hostId]">
@@ -36,7 +36,7 @@
                     </button>
                 }
 
-                @if (config.showReschedulingButton) {
+                @if (config().showReschedulingButton) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'hosts', 'browser', data.hostId]"
@@ -45,7 +45,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['documentations', 'view'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['documentations', 'view'])|async) {
                     <button cButton color="default" class="position-relative me-2"
                             [routerLink]="'/documentations/view/' + data.hostUuid +'/host'"
                             [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
@@ -57,7 +57,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['notifications', 'hostNotification'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['notifications', 'hostNotification'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'notifications', 'hostNotification', data.hostId]"
@@ -66,7 +66,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['hostchecks', 'index'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['hostchecks', 'index'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'hostchecks', 'index', data.hostId]"
@@ -75,7 +75,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['statehistories', 'host'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['statehistories', 'host'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'statehistories', 'host', data.hostId]"
@@ -84,7 +84,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['acknowledgements', 'host'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['acknowledgements', 'host'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'acknowledgements', 'host', data.hostId]"
@@ -101,7 +101,7 @@
                     <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                 </a>
 
-                @if (this.PermissionsService.hasPermission(['hosts', 'edit']) && data.allowEdit) {
+                @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'edit']) |async ) && data.allowEdit) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'hosts', 'edit', data.hostId]"
@@ -147,7 +147,7 @@
                             </a>
                         </li>
 
-                        @if (this.PermissionsService.hasModule('CheckmkModule')) {
+                        @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
                             <li *oitcPermission="['CheckmkModule','scans', 'index']">
                                 <a [routerLink]="['/', 'checkmk_module', 'scans', 'index', data.hostId]"
                                    cDropdownItem>

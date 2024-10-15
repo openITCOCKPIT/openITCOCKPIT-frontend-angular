@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ServicenowService } from '../../servicenow.service';
 import { ServicenowHostBrowserResult } from '../../servicenow.interface';
@@ -60,13 +60,15 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         BlockLoaderComponent
     ],
     templateUrl: './servicenow-host-browser-tab.component.html',
-    styleUrl: './servicenow-host-browser-tab.component.css'
+    styleUrl: './servicenow-host-browser-tab.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ServicenowHostBrowserTabComponent implements OnInit, OnChanges, OnDestroy {
+export class ServicenowHostBrowserTabComponent implements OnDestroy {
 
-    @Input() hostUuid: string = '';
-    @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
-    @Input() allowEdit: boolean = false;
+    hostUuid = input<string>('');
+    lastUpdated = input<Date>(); // Change the date to trigger an update from an external component
+    allowEdit = input<boolean>(false);
+
 
     public result?: ServicenowHostBrowserResult;
     public errors: GenericValidationError | null = null;
@@ -77,21 +79,20 @@ export class ServicenowHostBrowserTabComponent implements OnInit, OnChanges, OnD
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService = inject(NotyService);
 
-    public ngOnInit(): void {
-    }
+    private cdr = inject(ChangeDetectorRef);
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['hostUuid']) {
-            this.load();
-            return;
-        }
+    constructor() {
+        effect(() => {
+            if (this.hostUuid() !== '') {
+                this.load();
+                return;
+            }
 
-        // Parent component wants to trigger an update
-        if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
-            this.load();
-            return;
-        }
-
+            if (this.lastUpdated()) {
+                this.load();
+                return;
+            }
+        });
     }
 
     public ngOnDestroy(): void {
@@ -99,9 +100,10 @@ export class ServicenowHostBrowserTabComponent implements OnInit, OnChanges, OnD
     }
 
     public load(): void {
-        this.subscriptions.add(this.ServicenowService.getHostspecificSettings(this.hostUuid)
+        this.subscriptions.add(this.ServicenowService.getHostspecificSettings(this.hostUuid())
             .subscribe((result) => {
                 this.result = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -109,10 +111,11 @@ export class ServicenowHostBrowserTabComponent implements OnInit, OnChanges, OnD
     public submit() {
         if (this.result && this.result.settings) {
 
-            this.result.settings.ServicenowHostspecificSettings.host_uuid = this.hostUuid;
+            this.result.settings.ServicenowHostspecificSettings.host_uuid = this.hostUuid();
 
             this.subscriptions.add(this.ServicenowService.saveHostspecificSettings(this.result.settings.ServicenowHostspecificSettings)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
 
                         // Store id to update the record

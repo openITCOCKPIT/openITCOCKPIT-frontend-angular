@@ -47,7 +47,7 @@
         </c-card-body>
     </c-card>
 
-    <form cForm (ngSubmit)="submit()" *ngIf="result && result.settings && allowEdit">
+    <form cForm (ngSubmit)="submit()" *ngIf="result && result.settings && allowEdit()">
         <c-card>
 
             <c-card-header>

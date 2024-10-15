@@ -169,6 +169,9 @@ export class PopoverConfigBuilder {
             ],
             legend: {
                 show: false
+            },
+            ready: (u: any) => {
+                console.log('READFY');
             }
         };
 

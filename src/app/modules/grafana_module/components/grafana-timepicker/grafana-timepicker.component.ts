@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -31,7 +41,8 @@ import { GrafanaTimepickerChange } from './grafana-timepicker.interface';
         KeyValuePipe
     ],
     templateUrl: './grafana-timepicker.component.html',
-    styleUrl: './grafana-timepicker.component.css'
+    styleUrl: './grafana-timepicker.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
 
@@ -47,6 +58,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
 
     private readonly GrafanaService = inject(GrafanaService);
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
     public timeranges = {
         quick: [
@@ -84,6 +96,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.setHumanNames();
+        this.cdr.markForCheck();
     }
 
 
@@ -94,6 +107,7 @@ export class GrafanaTimepickerComponent implements OnInit, OnDestroy {
         this.selectedAutoRefresh = refreshValue;
 
         this.setHumanNames();
+        this.cdr.markForCheck();
 
         this.change.emit({
             timerange: this.selectedTimerange,
