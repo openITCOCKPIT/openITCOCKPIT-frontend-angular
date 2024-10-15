@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -94,7 +94,8 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
         BadgeComponent
     ],
     templateUrl: './exports-index.component.html',
-    styleUrl: './exports-index.component.css'
+    styleUrl: './exports-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExportsIndexComponent implements OnInit, OnDestroy {
 
@@ -120,6 +121,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.ExportsService.getIndex().subscribe(data => {
@@ -127,6 +129,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             this.gearmanReachable = data.gearmanReachable;
             this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
 
+            this.cdr.markForCheck();
             this.getExportStateOnPageLoad();
 
             this.init = false;
@@ -140,6 +143,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
 
     public getExportStateOnPageLoad() {
         this.subscriptions.add(this.ExportsService.getIndex().subscribe(data => {
+            this.cdr.markForCheck();
             this.isExportRunning = data.exportRunning;
             this.gearmanReachable = data.gearmanReachable;
             this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
@@ -150,6 +154,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             if (this.isExportRunning) {
                 this.broadcastIntervalId = setInterval(() => {
                     this.ExportsService.getBroadcastStatus().subscribe(data => {
+                        this.cdr.markForCheck();
                         this.tasks = data.tasks; // Tasks to show in the log
                         this.isExportRunning = !data.exportFinished;
 
@@ -186,12 +191,14 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             create_backup: this.createBackup ? 1 : 0,
             satellites: this.getSelectedSatellitesForPost(),
         }).subscribe((result: GenericResponseWrapper) => {
+            this.cdr.markForCheck();
             if (result.success) {
 
                 this.notyService.genericInfo(this.TranslocoService.translate('Refresh of monitoring configuration started successfully.'));
 
                 this.broadcastIntervalId = setInterval(() => {
                     this.ExportsService.getBroadcastStatus().subscribe(data => {
+                        this.cdr.markForCheck();
                         this.tasks = data.tasks; // Tasks to show in the log
                         this.isExportRunning = !data.exportFinished;
 
@@ -232,6 +239,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
         const post = this.getSelectedSatellitesForPost();
         if (post.length > 0) {
             this.subscriptions.add(this.ExportsService.saveSatelliteSelection(post).subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess();
                     return;
@@ -244,6 +252,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     }
 
     private cancelBroadcastInterval() {
+        this.cdr.markForCheck();
         if (this.broadcastIntervalId !== null) {
             clearInterval(this.broadcastIntervalId);
             this.broadcastIntervalId = null;
@@ -255,6 +264,7 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ExportsService.verifyConfig().subscribe(data => {
             this.exportValidation = data;
+            this.cdr.markForCheck();
         }));
     }
 
