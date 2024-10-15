@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
@@ -102,7 +102,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
     styleUrl: './slas-hosts.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasHostsComponent implements OnInit, OnDestroy {
 
@@ -118,9 +119,11 @@ export class SlasHostsComponent implements OnInit, OnDestroy {
     public slaAndHosts?: SlasHostsRoot;
     public params: SlasHostsParams = getDefaultSlasHostsParams();
     protected slaId: number = 0;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.slaId = Number(this.route.snapshot.paramMap.get('id'));
+        this.cdr.markForCheck();
         this.loadSlaHosts();
     }
 
@@ -132,6 +135,7 @@ export class SlasHostsComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SlasService.getSlaHosts(this.slaId, this.params)
             .subscribe((result: SlasHostsRoot) => {
                 this.slaAndHosts = result;
+                this.cdr.markForCheck();
             }));
 
     }
