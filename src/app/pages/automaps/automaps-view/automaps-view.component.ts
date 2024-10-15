@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -48,7 +48,8 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
         AutomapViewerComponent
     ],
     templateUrl: './automaps-view.component.html',
-    styleUrl: './automaps-view.component.css'
+    styleUrl: './automaps-view.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsViewComponent implements OnInit, OnDestroy {
 
@@ -60,6 +61,7 @@ export class AutomapsViewComponent implements OnInit, OnDestroy {
     public readonly AutomapsService = inject(AutomapsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
@@ -75,6 +77,7 @@ export class AutomapsViewComponent implements OnInit, OnDestroy {
     public loadAutomap() {
         this.subscriptions.add(this.AutomapsService.view(this.id, this.params).subscribe(result => {
             this.result = result;
+            this.cdr.markForCheck();
         }));
     }
 

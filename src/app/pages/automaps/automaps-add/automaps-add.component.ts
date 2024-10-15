@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -44,7 +44,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { HistoryService } from '../../../history.service';
 
-
 @Component({
     selector: 'oitc-automaps-add',
     standalone: true,
@@ -89,7 +88,8 @@ import { HistoryService } from '../../../history.service';
         TranslocoPipe
     ],
     templateUrl: './automaps-add.component.html',
-    styleUrl: './automaps-add.component.css'
+    styleUrl: './automaps-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsAddComponent implements OnInit, OnDestroy {
 
@@ -120,12 +120,14 @@ export class AutomapsAddComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService: NotyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
         this.fontSizesSelect = this.AutomapsService.getFontSizes();
 
         this.loadContainers();
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -161,6 +163,7 @@ export class AutomapsAddComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.AutomapsService.loadContainers().subscribe((containers) => {
             this.containers = containers;
+            this.cdr.markForCheck();
         }))
     }
 
@@ -171,6 +174,7 @@ export class AutomapsAddComponent implements OnInit, OnDestroy {
                     this.hostAndServiceCount = data;
                 }));
             }
+            this.cdr.markForCheck();
         }
     }
 
@@ -180,11 +184,13 @@ export class AutomapsAddComponent implements OnInit, OnDestroy {
             // @ts-ignore
             this.currentHtmlFontsize = String(this.fontSizesHtml[this.post.font_size]);
         }
+        this.cdr.markForCheck();
     }
 
     public submit(): void {
         this.subscriptions.add(this.AutomapsService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Auto Map');

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { AutomapsViewRoot } from '../../automaps.interface';
 import { PaginatorChangeEvent } from '../../../../layouts/coreui/paginator/paginator.interface';
 import {
@@ -107,7 +115,8 @@ import {
         ServiceBrowserModalComponent
     ],
     templateUrl: './automap-viewer.component.html',
-    styleUrl: './automap-viewer.component.css'
+    styleUrl: './automap-viewer.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapViewerComponent {
 
@@ -119,6 +128,7 @@ export class AutomapViewerComponent {
 
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly modalService: ModalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     // Pass reload event to parent component
     public reloadAutomap(success: boolean) {
@@ -133,10 +143,12 @@ export class AutomapViewerComponent {
     public showServiceStatusDetails(serviceId: number) {
         this.PermissionsService.hasPermissionObservable(['services', 'browser']).subscribe(hasPermission => {
             this.serviceIdForBrowser = serviceId;
+            this.cdr.markForCheck();
 
             // Give angular some time to pass the service id to the template which passed it to the modal
             // this is probably wrong
             setTimeout(() => {
+                this.cdr.markForCheck();
                 this.modalService.toggle({
                     show: true,
                     id: 'automapServiceDetailsModal'

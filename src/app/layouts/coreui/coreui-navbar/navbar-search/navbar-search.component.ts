@@ -88,6 +88,7 @@ export class NavbarSearchComponent implements OnDestroy {
                     const link: MenuLink = this.searchResult[this.currentSelectedIndex];
                     this.router.navigate([link.angularUrl]);
                     this.resetSearch();
+                    return;
                 }
 
                 if (this.currentSelectedIndex === -1) {
@@ -121,7 +122,7 @@ export class NavbarSearchComponent implements OnDestroy {
                 break;
 
         }
-
+        this.cdr.markForCheck();
     }
 
     public resetSearch(): void {

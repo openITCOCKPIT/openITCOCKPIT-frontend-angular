@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ServicestatusObject } from '../../../../services/services.interface';
@@ -13,7 +13,8 @@ import { NgClass } from '@angular/common';
         NgClass
     ],
     templateUrl: './servicestatus-icon-automap.component.html',
-    styleUrl: './servicestatus-icon-automap.component.css'
+    styleUrl: './servicestatus-icon-automap.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicestatusIconAutomapComponent {
 
@@ -28,7 +29,7 @@ export class ServicestatusIconAutomapComponent {
     private _servicestatus?: ServicestatusObject;
 
     private readonly TranslocoService = inject(TranslocoService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     @Input()
     set servicestatus(value: ServicestatusObject | undefined) {
@@ -43,6 +44,7 @@ export class ServicestatusIconAutomapComponent {
 
     onServicestatusChange() {
         if (this.servicestatus) {
+            this.cdr.markForCheck();
 
             this.icon = ['fas', 'square'];
 

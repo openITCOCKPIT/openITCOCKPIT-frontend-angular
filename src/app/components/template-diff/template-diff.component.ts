@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     EventEmitter,
@@ -24,7 +25,8 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './template-diff.component.html',
-    styleUrl: './template-diff.component.css'
+    styleUrl: './template-diff.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateDiffComponent implements OnChanges {
 
@@ -51,6 +53,7 @@ export class TemplateDiffComponent implements OnChanges {
         this.value = this.templateValue;
         this.valueChange.emit(this.value);
         this.valueResetted.emit(this.value);
+        this.cdr.markForCheck();
     }
 
     public getPopoverContent(): string {

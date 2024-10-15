@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -95,7 +95,8 @@ import {
         CardFooterComponent
     ],
     templateUrl: './acknowledgements-host.component.html',
-    styleUrl: './acknowledgements-host.component.css'
+    styleUrl: './acknowledgements-host.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
     private hostId: number = 0;
@@ -116,6 +117,8 @@ export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
+    private cdr = inject(ChangeDetectorRef);
+
     public hostBrowserConfig?: HostBrowserMenuConfig;
 
     public ngOnInit(): void {
@@ -128,7 +131,7 @@ export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
-
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -144,6 +147,7 @@ export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AcknowledgementsService.getAcknowledgementsHost(this.hostId, this.params)
             .subscribe((result) => {
                 this.hostAcknowledgements = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -163,6 +167,7 @@ export class AcknowledgementsHostComponent implements OnInit, OnDestroy {
             unreachable: false
         };
         this.loadHostacknowledgements();
+        this.cdr.markForCheck();
     }
 
     // Callback for Paginator or Scroll Index Component
