@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -113,6 +113,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -121,6 +122,8 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.HostdependenciesService.getEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.get = result.hostdependency;
                 this.post = {
                     id: this.get.id,
@@ -162,6 +165,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostdependenciesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -175,6 +179,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostdependenciesService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts_dependent = result.hostsDependent;
                 this.hostgroups = result.hostgroups;
@@ -196,6 +201,8 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostdependenciesService.loadHosts(containerId, searchString, this.post.hosts._ids)
             .subscribe((result) => {
+                +
+                    this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
@@ -213,6 +220,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostdependenciesService.loadDependentHosts(containerId, searchString, this.post.hosts_dependent._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts_dependent = result.hosts;
                 this.hosts_dependent = this.hosts_dependent.map(obj => {
                     return {
@@ -228,6 +236,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHosts() {
+        this.cdr.markForCheck();
         if (this.hosts.length === 0) {
             return;
         }
@@ -237,6 +246,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentHosts() {
+        this.cdr.markForCheck();
         if (this.hosts_dependent.length === 0) {
             return;
         }
@@ -247,6 +257,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups.length === 0) {
             return;
         }
@@ -256,6 +267,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups_dependent.length === 0) {
             return;
         }
@@ -297,6 +309,7 @@ export class HostdependenciesEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.HostdependenciesService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host dependency');

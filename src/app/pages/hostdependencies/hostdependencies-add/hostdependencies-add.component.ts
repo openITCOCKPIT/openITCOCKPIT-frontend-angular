@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -42,6 +42,7 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { HistoryService } from '../../../history.service';
 
 
 @Component({
@@ -83,7 +84,8 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         BadgeComponent
     ],
     templateUrl: './hostdependencies-add.component.html',
-    styleUrl: './hostdependencies-add.component.css'
+    styleUrl: './hostdependencies-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     public containers: HostdependencyContainerResult | undefined;
@@ -101,8 +103,10 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -112,6 +116,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
             //Fire on page load
             this.loadContainers();
             this.post = this.getDefaultPost();
+            this.cdr.markForCheck();
         });
     }
 
@@ -119,6 +124,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostdependenciesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -132,6 +138,8 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostdependenciesService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.hosts = result.hosts;
                 this.hosts_dependent = result.hostsDependent;
                 this.hostgroups = result.hostgroups;
@@ -153,6 +161,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.HostdependenciesService.loadHosts(containerId, searchString, this.post.hosts._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result.hosts;
                 this.hosts = this.hosts.map(obj => ({
                     ...obj,
@@ -170,6 +179,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostdependenciesService.loadDependentHosts(containerId, searchString, this.post.hosts_dependent._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts_dependent = result.hosts;
                 this.hosts_dependent = this.hosts_dependent.map(obj => {
                     return {
@@ -185,6 +195,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHosts() {
+        this.cdr.markForCheck();
         if (this.hosts.length === 0) {
             return;
         }
@@ -194,6 +205,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentHosts() {
+        this.cdr.markForCheck();
         if (this.hosts_dependent.length === 0) {
             return;
         }
@@ -204,6 +216,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups.length === 0) {
             return;
         }
@@ -213,6 +226,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     }
 
     public processChosenDependentHostgroups() {
+        this.cdr.markForCheck();
         if (this.hostgroups_dependent.length === 0) {
             return;
         }
@@ -254,6 +268,7 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.HostdependenciesService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host hostdependency');
@@ -265,6 +280,9 @@ export class HostdependenciesAddComponent implements OnInit, OnDestroy {
                     this.post = this.getDefaultPost();
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
+
+                    this.HistoryService.navigateWithFallback(['/hostdependencies/index']);
+
                     return;
                 }
 
