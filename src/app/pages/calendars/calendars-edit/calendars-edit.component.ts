@@ -110,6 +110,7 @@ export class CalendarsEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.CalendarsService.getEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.post = result.calendar;
                 this.events = result.events;
             }));
