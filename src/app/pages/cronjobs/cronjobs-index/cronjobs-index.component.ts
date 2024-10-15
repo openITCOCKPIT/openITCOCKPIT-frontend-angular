@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -110,7 +110,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         NgOptionHighlightModule
     ],
     templateUrl: './cronjobs-index.component.html',
-    styleUrl: './cronjobs-index.component.css'
+    styleUrl: './cronjobs-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CronjobsIndexComponent implements OnInit, OnDestroy {
     public cronjobs: CronjobsIndex | null = null
@@ -124,6 +125,7 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private CronjobsService = inject(CronjobsService)
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadCronjobs();
@@ -147,6 +149,7 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.CronjobsService.getIndex()
             .subscribe((result) => {
                 this.cronjobs = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -156,6 +159,7 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.CronjobsService.getTasks(pluginName, '')
             .subscribe((result) => {
                 this.tasks = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -165,9 +169,11 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
         this.errors = null;
         this.tasks = [];
         this.plugins = [];
+        this.cdr.markForCheck();
 
         this.subscriptions.add(this.CronjobsService.getPlugins('')
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.plugins = result;
 
                 this.modalService.toggle({
@@ -181,6 +187,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
     public createCronjob() {
         this.subscriptions.add(this.CronjobsService.createConjob(this.CronjobPost)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     this.notyService.genericSuccess();
 
@@ -204,6 +212,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
     }
 
     public triggerEditModal(cronjob: Cronjob) {
+        this.cdr.markForCheck();
+
         this.CronjobPost = {
             id: cronjob.id,
             enabled: cronjob.enabled ? 1 : 0,
@@ -218,10 +228,14 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.CronjobsService.getPlugins(cronjob.plugin)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.plugins = result;
 
                 this.subscriptions.add(this.CronjobsService.getTasks(cronjob.plugin, cronjob.task)
                     .subscribe((result) => {
+                        this.cdr.markForCheck();
+
                         this.tasks = result;
 
                         this.modalService.toggle({
@@ -238,6 +252,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
     public updateCronjob() {
         this.subscriptions.add(this.CronjobsService.updateConjob(this.CronjobPost)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     this.notyService.genericSuccess();
 
@@ -264,6 +280,8 @@ export class CronjobsIndexComponent implements OnInit, OnDestroy {
         const id = Number(this.CronjobPost.id);
         this.subscriptions.add(this.CronjobsService.deleteCronjob(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     this.notyService.genericSuccess();
 
