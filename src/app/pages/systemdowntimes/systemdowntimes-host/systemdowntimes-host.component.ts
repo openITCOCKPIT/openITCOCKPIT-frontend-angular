@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -60,7 +60,6 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { getDefaultHostSystemdowntimesParams } from '../systemdowntimes.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { Statistics } from '../../statistics/statistics.enum';
 
 
 @Component({
@@ -117,7 +116,8 @@ import { Statistics } from '../../statistics/statistics.enum';
     styleUrl: './systemdowntimes-host.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
     private SystemdowntimesService = inject(SystemdowntimesService)
@@ -132,6 +132,7 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -151,6 +152,7 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SystemdowntimesService.getHostSystemdowntimes(this.params)
             .subscribe((result) => {
                 this.hostSystemdowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -208,6 +210,7 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
@@ -223,6 +226,4 @@ export class SystemdowntimesHostComponent implements OnInit, OnDestroy {
             this.loadHostSystemdowntimes();
         }
     }
-
-    protected readonly Statistics = Statistics;
 }

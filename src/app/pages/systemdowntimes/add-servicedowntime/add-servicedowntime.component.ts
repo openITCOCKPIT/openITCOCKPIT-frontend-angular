@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -82,7 +82,8 @@ import { HistoryService } from '../../../history.service';
         MultiSelectOptgroupComponent
     ],
     templateUrl: './add-servicedowntime.component.html',
-    styleUrl: './add-servicedowntime.component.css'
+    styleUrl: './add-servicedowntime.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     public services: SelectKeyValueWithDisabled[] = [];
@@ -91,7 +92,6 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
     private readonly ServicesService = inject(ServicesService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
@@ -107,6 +107,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     };
     public weekdaysForSelect: any[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -121,6 +122,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+                this.cdr.markForCheck();
             }));
         this.loadServices('');
 
@@ -156,6 +158,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadServices = (searchString: string) => {
@@ -174,6 +177,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicesService.loadServicesByString(params)
             .subscribe((result) => {
                 this.services = result;
+                this.cdr.markForCheck();
             })
         );
     }

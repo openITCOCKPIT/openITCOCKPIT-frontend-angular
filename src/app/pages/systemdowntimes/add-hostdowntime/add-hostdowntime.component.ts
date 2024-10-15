@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,7 +20,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -78,7 +78,8 @@ import { HistoryService } from '../../../history.service';
         DurationInputComponent
     ],
     templateUrl: './add-hostdowntime.component.html',
-    styleUrl: './add-hostdowntime.component.css'
+    styleUrl: './add-hostdowntime.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public hosts: SelectKeyValueWithDisabled[] = [];
@@ -87,7 +88,6 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
     private readonly HostsService = inject(HostsService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
@@ -103,6 +103,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     };
     public weekdaysForSelect: any[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -117,6 +118,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+                this.cdr.markForCheck();
             }));
         this.loadHosts('');
 
@@ -152,6 +154,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadHosts = (searchString: string) => {
@@ -169,6 +172,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }

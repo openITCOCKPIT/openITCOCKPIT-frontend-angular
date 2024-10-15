@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -117,7 +117,8 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
     styleUrl: './satellites-downtime.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
     private SatellitesService = inject(SatellitesService);
@@ -131,6 +132,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -150,6 +152,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SatellitesService.getSatelliteSystemdowntimes(this.params)
             .subscribe((result) => {
                 this.satelliteSystemdowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -207,6 +210,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
