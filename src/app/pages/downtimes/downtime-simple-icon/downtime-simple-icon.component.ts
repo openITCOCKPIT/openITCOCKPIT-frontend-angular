@@ -1,5 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Downtime } from '../downtimes.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgIf } from '@angular/common';
@@ -14,12 +14,9 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './downtime-simple-icon.component.html',
-    styleUrl: './downtime-simple-icon.component.css'
+    styleUrl: './downtime-simple-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DowntimeSimpleIconComponent {
-    private readonly TranslocoService = inject(TranslocoService);
-    public iconColor: string = 'btn-primary';
-    public downtimeStateTitle: string = '';
     @Input() downtime!: Downtime;
-
 }

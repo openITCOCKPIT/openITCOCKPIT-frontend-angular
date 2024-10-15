@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -79,7 +79,8 @@ import { HistoryService } from '../../../history.service';
         DurationInputComponent
     ],
     templateUrl: './add-containerdowntime.component.html',
-    styleUrl: './add-containerdowntime.component.css'
+    styleUrl: './add-containerdowntime.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
     public containers: SelectKeyValueWithDisabled[] = [];
@@ -88,7 +89,6 @@ export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
     private readonly ContainersService = inject(ContainersService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
@@ -104,7 +104,7 @@ export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
     };
     public weekdaysForSelect: any[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -119,6 +119,7 @@ export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+                this.cdr.markForCheck();
             }));
         this.loadContainers('');
 
@@ -154,6 +155,7 @@ export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadContainers = (searchString: string) => {
@@ -166,6 +168,7 @@ export class AddContainerdowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByString(params)
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }

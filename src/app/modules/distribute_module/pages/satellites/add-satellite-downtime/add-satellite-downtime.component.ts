@@ -20,7 +20,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -92,7 +92,6 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
     private readonly SatellitesService = inject(SatellitesService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
@@ -213,6 +212,5 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
                 }
             })
         );
-
     }
 }
