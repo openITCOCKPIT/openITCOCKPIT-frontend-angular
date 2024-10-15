@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -63,7 +63,6 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
-
 @Component({
     selector: 'oitc-macro-index',
     standalone: true,
@@ -127,7 +126,8 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
         NgOptionHighlightModule,
     ],
     templateUrl: './macro-index.component.html',
-    styleUrl: './macro-index.component.css'
+    styleUrl: './macro-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MacroIndexComponent implements OnInit, OnDestroy {
 
@@ -141,6 +141,7 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadMacros();
@@ -154,6 +155,7 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MacrosService.getIndex()
             .subscribe((result) => {
                 this.macros = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -175,6 +177,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.MacrosService.getAvailableMacroNames(params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.availableMacroNames = result;
 
                 this.modalService.toggle({
@@ -203,6 +207,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.MacrosService.getAvailableMacroNames(params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.availableMacroNames = result;
 
                 this.modalService.toggle({
@@ -219,6 +225,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
                 // Edit existing macro
                 this.subscriptions.add(this.MacrosService.editMacro(this.currentMacro)
                     .subscribe((result) => {
+                        this.cdr.markForCheck();
+
                         if (result === true) {
                             this.notyService.genericSuccess();
                             this.modalService.toggle({
@@ -242,6 +250,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
             // Create new macro
             this.subscriptions.add(this.MacrosService.addMacro(this.currentMacro)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
+
                     if (result === true) {
                         this.notyService.genericSuccess();
                         this.modalService.toggle({
@@ -267,6 +277,8 @@ export class MacroIndexComponent implements OnInit, OnDestroy {
             if (this.currentMacro.Macro.id && this.currentMacro.Macro.id > 0) {
                 this.subscriptions.add(this.MacrosService.deleteMacro(this.currentMacro.Macro.id)
                     .subscribe((result) => {
+                        this.cdr.markForCheck();
+
                         if (result.success) {
                             this.notyService.genericSuccess(
                                 this.TranslocoService.translate('Record deleted successfully')
