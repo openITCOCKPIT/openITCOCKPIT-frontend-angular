@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -25,7 +35,11 @@ import { Subscription } from 'rxjs';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { Router, RouterLink } from '@angular/router';
-import { Application, Applications, ExternalSystemEntity } from '../../pages/externalsystems/external-systems.interface';
+import {
+    Application,
+    Applications,
+    ExternalSystemEntity
+} from '../../pages/externalsystems/external-systems.interface';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -68,7 +82,8 @@ import { FormsModule } from '@angular/forms';
         FormsModule
     ],
     templateUrl: './import-itop-data.component.html',
-    styleUrl: './import-itop-data.component.css'
+    styleUrl: './import-itop-data.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportITopDataComponent implements OnInit, OnDestroy {
     @ViewChild('modal') private modal!: ModalComponent;
@@ -89,6 +104,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
     public showSpinner: boolean = false;
     public errors: GenericMessageResponse | null = null;
     public hasRootPrivileges: boolean = false;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -97,10 +113,12 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.ExternalSystemService.modalExternalSystem$.subscribe((externalSystem: ExternalSystemEntity) => {
             this.externalSystem = externalSystem;
+            this.cdr.markForCheck();
         });
 
 
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
+            this.cdr.markForCheck();
             if (state.show === true && state.id === 'importITopData') {
                 if (!this.externalSystem) {
                     return;
@@ -110,6 +128,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                     case 'itop':
                         this.ExternalSystemService.loadDataFromITop(this.externalSystem).subscribe(data => {
                             this.iTopData = data;
+                            this.cdr.markForCheck();
                             if (this.iTopData.success) {
                                 // @ts-ignore
                                 for (let application of this.iTopData.data<Application>) {
@@ -117,12 +136,13 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                                 }
                                 // @ts-ignore
                                 this.hasRootPrivileges = this.iTopData.hasRootPrivileges;
-
+                                this.cdr.markForCheck();
                             }
                             if (!this.iTopData.success) {
                                 if (this.iTopData.hasOwnProperty('error')) {
                                     // @ts-ignore
                                     this.errors = this.iTopData.error;
+                                    this.cdr.markForCheck();
                                 }
                             }
 
@@ -147,6 +167,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
 
 
     public startDataImport() {
+        this.cdr.markForCheck();
         if (this.externalSystem && !this.externalSystem.id) {
             return;
         }
@@ -155,6 +176,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
             this.showSynchronizingSpinner = true;
             this.errors = null;
             this.ExternalSystemService.startDataImport(this.externalSystem, this.ignoreExternalSystem).subscribe(data => {
+                this.cdr.markForCheck();
                 this.showSynchronizingSpinner = false;
                 this.showSpinner = false;
                 if (data.success) {

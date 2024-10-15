@@ -20,7 +20,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -190,9 +190,8 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SystemdowntimesService.createServicedowntime(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
-
                     const title = this.TranslocoService.translate('Downtime');
                     const msg = this.TranslocoService.translate('created successfully');
 

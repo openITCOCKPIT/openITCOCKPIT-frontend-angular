@@ -185,9 +185,8 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SystemdowntimesService.createHostdowntime(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
-
                     const title = this.TranslocoService.translate('Downtime');
                     const msg = this.TranslocoService.translate('created successfully');
 

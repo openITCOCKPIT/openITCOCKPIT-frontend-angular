@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
@@ -122,7 +122,8 @@ import {
         RegexHelperTooltipComponent
     ],
     templateUrl: './external-systems-add.component.html',
-    styleUrl: './external-systems-add.component.css'
+    styleUrl: './external-systems-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
@@ -173,6 +174,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public hostgroup_containers: SelectKeyValue[] = [];
     public connectStatus: boolean | null = null;
     public connectMessage: string = '';
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -182,6 +184,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -214,6 +217,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -240,6 +244,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public checkConnection() {
         this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
             .subscribe((result: ExternalSystemConnect) => {
+                this.cdr.markForCheck();
                 this.connectStatus = result.status.status;
                 if (result.status.msg) {
                     this.connectMessage = result.status.msg.message;
@@ -285,6 +290,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ExternalSystemsService.loadHostgroupContainers(this.post.container_id)
                 .subscribe((result: SelectKeyValue[]) => {
                     this.hostgroup_containers = result;
+                    this.cdr.markForCheck();
                 }));
         }
     }

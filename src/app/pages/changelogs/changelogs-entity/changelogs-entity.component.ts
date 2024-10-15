@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -79,7 +79,8 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
         NoRecordsComponent
     ],
     templateUrl: './changelogs-entity.component.html',
-    styleUrl: './changelogs-entity.component.css'
+    styleUrl: './changelogs-entity.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogsEntityComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
@@ -107,7 +108,8 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
             activate: true,
             deactivate: true
         }
-    }
+    };
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -143,6 +145,7 @@ export class ChangelogsEntityComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ChangelogsService.getEntity(this.params)
                 .subscribe((result: ChangelogIndexRoot) => {
                     this.changes = result;
+                    this.cdr.markForCheck();
                 })
             );
         }

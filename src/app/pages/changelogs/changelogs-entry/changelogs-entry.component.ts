@@ -1,4 +1,12 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnInit,
+    ViewEncapsulation
+} from '@angular/core';
 import {
     ChangelogArrayFalseOldNew,
     ChangelogEntry,
@@ -30,12 +38,13 @@ import { RouterLink } from '@angular/router';
     templateUrl: './changelogs-entry.component.html',
     styleUrl: './changelogs-entry.component.css',
     encapsulation: ViewEncapsulation.None, //https://angular.io/guide/view-encapsulation
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogsEntryComponent implements OnInit {
 
     @Input() changelogentry?: ChangelogIndex;
     public entry: ChangelogEntry[] = [];
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         if (this.changelogentry) {
@@ -64,6 +73,7 @@ export class ChangelogsEntryComponent implements OnInit {
 
                     this.entry.push(changeForTemplate);
                 }
+                this.cdr.markForCheck();
             }
         }
         //console.log(this.data);
@@ -210,6 +220,4 @@ export class ChangelogsEntryComponent implements OnInit {
             new: newFieldValues
         }
     }
-
-
 }

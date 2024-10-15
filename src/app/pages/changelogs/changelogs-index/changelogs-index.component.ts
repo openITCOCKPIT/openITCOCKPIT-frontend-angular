@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -83,7 +83,8 @@ import { Sort } from '@angular/material/sort';
         SlaHostgroupHostsStatusOverviewComponent
     ],
     templateUrl: './changelogs-index.component.html',
-    styleUrl: './changelogs-index.component.css'
+    styleUrl: './changelogs-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -128,7 +129,9 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             deactivate: true,
             export: true
         }
-    }
+    };
+    private cdr = inject(ChangeDetectorRef);
+
 
     public loadChanges() {
         this.params['filter[Changelogs.action][]'] = [];
@@ -151,6 +154,7 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
             .subscribe((result: ChangelogIndexRoot) => {
                 this.changes = result;
+                this.cdr.markForCheck();
             })
         );
     }

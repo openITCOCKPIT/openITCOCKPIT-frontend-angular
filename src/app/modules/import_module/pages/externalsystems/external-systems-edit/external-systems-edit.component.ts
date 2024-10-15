@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -117,7 +117,8 @@ import {
         RegexHelperTooltipComponent
     ],
     templateUrl: './external-systems-edit.component.html',
-    styleUrl: './external-systems-edit.component.css'
+    styleUrl: './external-systems-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     private id: number = 0;
@@ -170,6 +171,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public hostgroup_containers: SelectKeyValue[] = [];
     public connectStatus: boolean | null = null;
     public connectMessage: string = '';
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -183,6 +185,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -191,6 +194,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 //Fire on page load
                 this.post = result.externalSystem;
+                this.cdr.markForCheck();
                 this.loadContainers();
                 this.checkConnection();
                 this.loadHostgroupContainers();
@@ -208,6 +212,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }
+                this.cdr.markForCheck();
             }));
     }
 
@@ -244,6 +249,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ExternalSystemsService.loadHostgroupContainers(this.post.container_id)
                 .subscribe((result: SelectKeyValue[]) => {
                     this.hostgroup_containers = result;
+                    this.cdr.markForCheck();
                 }));
         }
     }
@@ -251,6 +257,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalSystemsService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('External system');
