@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { AutomapEntity, AutomapsMatchingHostAndServiceCounts } from '../automaps.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -79,7 +79,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormLoaderComponent
     ],
     templateUrl: './automaps-edit.component.html',
-    styleUrl: './automaps-edit.component.css'
+    styleUrl: './automaps-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsEditComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
@@ -111,6 +112,7 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
@@ -119,6 +121,7 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
         });
         this.fontSizesSelect = this.AutomapsService.getFontSizes();
         this.loadContainers();
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -128,12 +131,20 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
     public loadAutomap(id: number) {
         this.subscriptions.add(this.AutomapsService.getAutomapEdit(id).subscribe(automap => {
             this.post = automap;
+
+            if (this.fontSizesHtml.hasOwnProperty(automap.font_size)) {
+                // @ts-ignore
+                this.currentHtmlFontsize = String(this.fontSizesHtml[automap.font_size]);
+            }
+
+            this.cdr.markForCheck();
         }));
     }
 
     private loadContainers(): void {
         this.subscriptions.add(this.AutomapsService.loadContainers().subscribe((containers) => {
             this.containers = containers;
+            this.cdr.markForCheck();
         }))
     }
 
@@ -144,6 +155,7 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
                     this.hostAndServiceCount = data;
                 }));
             }
+            this.cdr.markForCheck();
         }
     }
 
@@ -153,11 +165,13 @@ export class AutomapsEditComponent implements OnInit, OnDestroy {
             // @ts-ignore
             this.currentHtmlFontsize = String(this.fontSizesHtml[this.post.font_size]);
         }
+        this.cdr.markForCheck();
     }
 
     public submit(): void {
         this.subscriptions.add(this.AutomapsService.saveAutomapEdit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Auto Map');
