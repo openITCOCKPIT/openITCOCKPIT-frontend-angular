@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -120,7 +120,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     styleUrl: './downtimes-service.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DowntimesServiceComponent implements OnInit, OnDestroy {
     private DowntimesService = inject(DowntimesService)
@@ -137,6 +138,7 @@ export class DowntimesServiceComponent implements OnInit, OnDestroy {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -159,6 +161,7 @@ export class DowntimesServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DowntimesService.getServiceDowntimes(this.params)
             .subscribe((result) => {
                 this.serviceDowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -219,6 +222,7 @@ export class DowntimesServiceComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
