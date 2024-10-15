@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -97,7 +97,8 @@ import { IndexPage } from '../../../pages.interface';
         CardFooterComponent
     ],
     templateUrl: './hostchecks-index.component.html',
-    styleUrl: './hostchecks-index.component.css'
+    styleUrl: './hostchecks-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     private hostId: number = 0;
@@ -125,6 +126,8 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public hostBrowserConfig?: HostBrowserMenuConfig;
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit(): void {
         this.hostId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadHostchecks();
@@ -135,7 +138,7 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
             showReschedulingButton: false,
             showBackButton: true
         };
-
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -160,6 +163,7 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.HostchecksService.getHostchecksIndex(this.hostId, this.params)
             .subscribe((result) => {
                 this.hostchecks = result;
+                this.cdr.markForCheck();
             })
         );
     }
