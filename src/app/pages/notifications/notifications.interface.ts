@@ -125,7 +125,7 @@ export function getDefaultNotificationsIndexParams(): NotificationIndexParams {
         'filter[Hosts.name]': '',
         'filter[Contacts.name]': '',
         'filter[Commands.name]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }
@@ -144,7 +144,7 @@ export function getDefaultNotificationsServicesParams(): NotificationServicesPar
         'filter[servicename]': '',
         'filter[Contacts.name]': '',
         'filter[Commands.name]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

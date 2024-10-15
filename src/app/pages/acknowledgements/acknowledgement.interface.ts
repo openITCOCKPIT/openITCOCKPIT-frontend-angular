@@ -32,7 +32,7 @@ export function getDefaultAcknowledgementsHostParams(): AcknowledgementsHostPara
         'filter[AcknowledgementHosts.comment_data]': '',
         'filter[AcknowledgementHosts.state][]': [],
         'filter[AcknowledgementHosts.author_name]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }
@@ -82,7 +82,7 @@ export function getDefaultAcknowledgementsServiceParams(): AcknowledgementsServi
         'filter[AcknowledgementServices.comment_data]': '',
         'filter[AcknowledgementServices.state][]': [],
         'filter[AcknowledgementServices.author_name]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

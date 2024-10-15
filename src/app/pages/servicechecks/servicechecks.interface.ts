@@ -27,7 +27,7 @@ export function getDefaultServicechecksIndexParams(): ServicechecksIndexParams {
         'filter[Servicechecks.output]': '',
         'filter[Servicechecks.state][]': [],
         'filter[Servicechecks.state_type]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

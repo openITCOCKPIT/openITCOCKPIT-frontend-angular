@@ -76,6 +76,7 @@ export class AcknowledgementIconComponent implements OnInit, OnDestroy {
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = null;
+            this.cdr.markForCheck();
         }
     }
 }
