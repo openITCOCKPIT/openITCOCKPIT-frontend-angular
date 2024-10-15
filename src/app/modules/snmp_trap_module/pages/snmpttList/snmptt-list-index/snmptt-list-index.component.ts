@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
     CardBodyComponent,
@@ -70,7 +70,8 @@ import { IndexPage } from '../../../../../pages.interface';
     styleUrl: './snmptt-list-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SnmpttService = inject(SnmpttService)
@@ -84,6 +85,7 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -102,6 +104,7 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.SnmpttService.getIndex(this.params)
             .subscribe((result) => {
                 this.snmptt_entries = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -161,6 +164,7 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
