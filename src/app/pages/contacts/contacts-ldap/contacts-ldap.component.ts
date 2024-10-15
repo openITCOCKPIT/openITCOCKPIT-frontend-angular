@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -98,7 +98,8 @@ import { HistoryService } from '../../../history.service';
         LabelLinkComponent
     ],
     templateUrl: './contacts-ldap.component.html',
-    styleUrl: './contacts-ldap.component.css'
+    styleUrl: './contacts-ldap.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsLdapComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
@@ -123,6 +124,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     protected ldapConfig: LdapConfig = {} as LdapConfig;
 
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -139,6 +141,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.ldapConfiguration()
             .subscribe((result) => {
                 this.ldapConfig = result.ldapConfig;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -181,6 +184,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
     public submit(): void {
         this.subscriptions.add(this.ContactService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Contact');
@@ -220,12 +224,14 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
     private loadUsers() {
         if (this.post.containers._ids.length === 0) {
             this.users = [];
+            this.cdr.markForCheck();
             return;
         }
         const param = {
@@ -234,12 +240,14 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
+                this.cdr.markForCheck();
             }))
     }
 
     private loadTimeperiods() {
         if (this.post.containers._ids.length === 0) {
             this.timeperiods = [];
+            this.cdr.markForCheck();
             return;
         }
         const param: LoadTimeperiodsPost = {
@@ -247,6 +255,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         };
         this.subscriptions.add(this.ContactService.loadTimeperiods(param).subscribe((result: LoadTimeperiodsRoot) => {
             this.timeperiods = result.timeperiods;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -255,27 +264,29 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
             this.notificationCommands = result.notificationCommands;
             this.hostPushCommandId = result.hostPushComamndId;
             this.servicePushCommandId = result.servicePushComamndId;
+            this.cdr.markForCheck();
         }));
     }
 
     public onLdapUserChange(): void {
-        console.log(this.ldapUser);
-        console.log('change und so');
         this.post.name = this.ldapUser?.givenname as string;
         this.post.description = this.ldapUser?.display_name as string;
         this.post.email = this.ldapUser?.email as string;
+        this.cdr.markForCheck();
     }
 
     public onContainerChange(): void {
         if (this.post.containers._ids.length === 0) {
             this.users = [];
             this.timeperiods = [];
+            this.cdr.markForCheck();
             return;
         }
         this.loadUsers();
         this.loadTimeperiods();
     }
 
+    // Called by (click) - no manual change detection required
     public addMacro() {
         this.post.customvariables.push({
             name: '',
@@ -285,6 +296,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleServiceBrowserCheckbox(): void {
         if (this.post.service_push_notifications_enabled !== 1) {
             if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) === -1) {
@@ -297,6 +309,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleHostBrowserCheckbox(): void {
         if (this.post.host_push_notifications_enabled !== 1) {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) === -1) {
@@ -309,6 +322,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateServiceBrowserNotification(): void {
         if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) !== -1) {
             this.post.service_push_notifications_enabled = 1;
@@ -317,6 +331,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateHostBrowserNotification(): void {
         if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
             this.post.host_push_notifications_enabled = 1;
@@ -325,6 +340,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     /*******************
      * ARROW functions *
      *******************/
@@ -336,6 +352,7 @@ export class ContactsLdapComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadLdapUserByString(samaccountname)
             .subscribe((result) => {
                 this.ldapUsers = result.ldapUsers;
+                this.cdr.markForCheck();
             }));
     }
 }

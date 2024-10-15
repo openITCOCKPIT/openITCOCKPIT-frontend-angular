@@ -1,5 +1,5 @@
 import {
-    ChangeDetectionStrategy,
+    ChangeDetectionStrategy, ChangeDetectorRef,
     Component,
     EventEmitter,
     Inject,
@@ -71,7 +71,9 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
     @ViewChild('modal') private modal!: ModalComponent;
+
 
     constructor(@Inject(DELETE_SERVICE_TOKEN) private deleteService: any) {
     }
@@ -91,6 +93,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
@@ -143,6 +146,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
                     const responseError = error.error as DeleteAllResponse;
                     issueCount++
                     this.hasErrors = true;
