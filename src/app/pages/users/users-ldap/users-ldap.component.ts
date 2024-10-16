@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -113,7 +113,8 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
         NgOptionHighlightDirective
     ],
     templateUrl: './users-ldap.component.html',
-    styleUrl: './users-ldap.component.css'
+    styleUrl: './users-ldap.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersLdapComponent implements OnDestroy, OnInit {
     private readonly subscriptions: Subscription = new Subscription();
@@ -142,6 +143,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected ldapConfig: LdapConfig = {} as LdapConfig;
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
+    private cdr = inject(ChangeDetectorRef);
 
     protected usedContainerIdsBySource: { [key: string]: number[] } = {};
 
@@ -157,11 +159,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 this.post.User.ContainersUsersMemberships[id] = 1;
             }
         });
+        this.cdr.markForCheck();
     }
 
     public addUser(): void {
         this.subscriptions.add(this.UsersService.addFromLdap(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -267,6 +272,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadContainerRoles(params)
             .subscribe((result: LoadContainerRolesRoot) => {
                 this.containerRoles = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -280,6 +286,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
 
         if (this.post.User.usercontainerroles._ids.length === 0) {
+            this.cdr.markForCheck();
             return;
         }
 
@@ -289,6 +296,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         }
         this.subscriptions.add(this.UsersService.loadContainerPermissions(params)
             .subscribe((result: LoadContainerPermissionsRoot) => {
+                this.cdr.markForCheck();
                 this.containerPermissions = result;
 
                 // Traverse this.containerPermissions.userContainerRoleContainerPermissions and append the containerPermission.container_id to this.containerRoleContainerIds.
@@ -301,6 +309,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -312,6 +321,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
 
                 this.serverTimeZone = result.serverTimeZone;
                 this.serverTime = result.serverTime;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -319,6 +329,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getLocaleOptions()
             .subscribe((result: UserLocaleOption[]) => {
                 this.localeOptions = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -326,6 +337,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getUsergroups()
             .subscribe((result: LoadUsergroupsRoot) => {
                 this.usergroups = result.usergroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -333,6 +345,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadLdapUserByString(search)
             .subscribe((result: LoadLdapUserByStringRoot) => {
                 this.samaccountnames = result.ldapUsers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -345,6 +358,8 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     private loadLdapUserDetails(): void {
         this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
             .subscribe((result: LoadLdapUserDetailsRoot) => {
+                this.cdr.markForCheck();
+
                 this.ldapUserDetails = result.ldapUser;
 
                 this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
@@ -383,12 +398,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         }
         this.post.User.ldap_dn = ldapUser.dn;
         this.loadLdapUserDetails();
+        this.cdr.markForCheck();
     }
 
     protected createApiKey(): void {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys.push(result);
+                this.cdr.markForCheck();
             })
         );
     }
@@ -397,10 +414,12 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.ContactService.ldapConfiguration()
             .subscribe((result) => {
                 this.ldapConfig = result.ldapConfig;
+                this.cdr.markForCheck();
             }))
     }
 
     protected updateTabRotationInterval(): void {
+        this.cdr.markForCheck();
         if (this.post.User.dashboard_tab_rotation === 0) {
             this.tabRotationIntervalText = 'disabled';
             return;
@@ -416,12 +435,14 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
 
     protected deleteApiKey(index: number): void {
         this.post.User.apikeys.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
     protected refreshApiKey(index: number): void {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys[index].apikey = result.apikey;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -430,12 +451,5 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
         return index;
     }
 
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['apikeys'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['apikeys'][index] as unknown as GenericValidationError;
-    }
 
 }
