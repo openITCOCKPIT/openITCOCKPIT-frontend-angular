@@ -330,6 +330,7 @@ export class ServicesAddComponent {
 
         if (!eventHandlerCommandId) {
             //"None" selected
+            this.cdr.markForCheck();
             this.post.serviceeventcommandargumentvalues = [];
             return;
         }
