@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -88,14 +88,14 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './hostgroups-edit.component.html',
-    styleUrl: './hostgroups-edit.component.css'
+    styleUrl: './hostgroups-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private HostgroupsService: HostgroupsService = inject(HostgroupsService);
     protected hosts: SelectKeyValue[] = [];
-    private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError | null = null;
@@ -127,7 +127,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -138,6 +138,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
                 // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.hostgroup.Hostgroup;
+                this.cdr.markForCheck();
 
                 // Then force containerChange!
                 this.onContainerChange();
@@ -152,6 +153,7 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostgroupsService.updateHostgroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -191,12 +193,14 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
     public onContainerChange(): void {
         if (!this.post.container.parent_id) {
             this.hosts = [];
+            this.cdr.markForCheck();
             return;
         }
         this.loadHosts('');
@@ -207,11 +211,13 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     protected loadHosts = (search: string) => {
         if (!this.post.container.parent_id) {
             this.hosts = [];
+            this.cdr.markForCheck();
             return;
         }
         this.subscriptions.add(this.HostgroupsService.loadHosts(this.post.container.parent_id, search, this.post.hosts._ids)
             .subscribe((result: LoadHostsResponse) => {
                 this.hosts = result.hosts;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -219,11 +225,13 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
     protected loadHosttemplates = (search: string) => {
         if (!this.post.container.parent_id) {
             this.hosttemplates = [];
+            this.cdr.markForCheck();
             return;
         }
         this.subscriptions.add(this.HostgroupsService.loadHosttemplates(this.post.container.parent_id, search, this.post.hosttemplates._ids)
             .subscribe((result: LoadHosttemplates) => {
                 this.hosttemplates = result.hosttemplates;
+                this.cdr.markForCheck();
             }))
     }
 }

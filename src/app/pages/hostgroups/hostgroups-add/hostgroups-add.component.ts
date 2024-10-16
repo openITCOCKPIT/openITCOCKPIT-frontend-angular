@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -80,7 +80,8 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent
     ],
     templateUrl: './hostgroups-add.component.html',
-    styleUrl: './hostgroups-add.component.css'
+    styleUrl: './hostgroups-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsAddComponent implements OnInit, OnDestroy {
 
@@ -99,6 +100,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     protected hosttemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -125,6 +127,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostgroupsService.addHostgroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -170,6 +173,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -204,6 +208,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     protected loadHosts = (search: string) => {
         if (!this.post.container.parent_id) {
             this.hosts = [];
+            this.cdr.markForCheck();
             return;
         }
         this.subscriptions.add(this.HostgroupsService.loadHosts(this.post.container.parent_id, search, this.post.hosts._ids)
@@ -212,6 +217,7 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
 
                 // Preselect hosts if they were passed in the URL.
                 this.post.hosts._ids = this.preselectedHostIds;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -219,11 +225,13 @@ export class HostgroupsAddComponent implements OnInit, OnDestroy {
     protected loadHosttemplates = (search: string) => {
         if (!this.post.container.parent_id) {
             this.hosttemplates = [];
+            this.cdr.markForCheck();
             return;
         }
         this.subscriptions.add(this.HostgroupsService.loadHosttemplates(this.post.container.parent_id, search, this.post.hosttemplates._ids)
             .subscribe((result: LoadHosttemplates) => {
                 this.hosttemplates = result.hosttemplates;
+                this.cdr.markForCheck();
             }))
     }
 }
