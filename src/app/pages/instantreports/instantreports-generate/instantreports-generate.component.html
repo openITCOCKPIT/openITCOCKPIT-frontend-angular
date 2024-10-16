@@ -192,11 +192,9 @@
                                         <c-card-body>
                                             <c-col>
                                                 <c-row [xs]="12">
-                                                    <oitc-host-radialbar-chart
-                                                        [statusDataAbsolut]="getSummaryDataAsPercentag(host.Host.reportData, 'host')"
-                                                        [maxWidth]="250"
-                                                        [offsetX]="90"
-                                                    ></oitc-host-radialbar-chart>
+                                                    <oitc-host-pie-echart
+                                                        [chartData]="test"
+                                                    ></oitc-host-pie-echart>
                                                 </c-row>
 
                                             </c-col>

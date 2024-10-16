@@ -46,11 +46,12 @@ import { InstantreportsService } from '../instantreports.service';
 import { Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ChartAbsolutValue } from '../../../components/charts/charts.interface';
+import { ChartAbsolutValue, PieChartMetric } from '../../../components/charts/charts.interface';
 import {
     ServiceRadialbarChartComponent
 } from '../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { HostPieEchartComponent } from '../../../components/charts/host-pie-echart/host-pie-echart.component';
 
 @Component({
     selector: 'oitc-instantreports-generate',
@@ -88,7 +89,8 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
         BorderDirective,
         ServiceRadialbarChartComponent,
         NgForOf,
-        LabelLinkComponent
+        LabelLinkComponent,
+        HostPieEchartComponent
     ],
     templateUrl: './instantreports-generate.component.html',
     styleUrl: './instantreports-generate.component.css'
@@ -108,6 +110,19 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     private readonly InstantreportsService: InstantreportsService = inject(InstantreportsService);
     private readonly route = inject(ActivatedRoute);
     private readonly notyService = inject(NotyService);
+
+    public test: PieChartMetric[] = [{
+        name: "foo",
+        value: 1000
+    },
+        {
+            name: "faasdasdoo",
+            value: 10300
+        },
+        {
+            name: "foo",
+            value: 1234
+        }];
 
     protected readonly ReportFormatsSelect: SelectKeyValue[] = [
         {
@@ -204,7 +219,7 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getSummaryDataAsPercentag(reportData: any, type: 'host' | 'service') {
+    public getSummaryDataAsPercentag(reportData: any, type: 'host' | 'service'): ChartAbsolutValue[] {
         const data: ChartAbsolutValue[] = [];
 
         // do not use report.instantReport.reportDetails.totalTime
@@ -229,6 +244,28 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
         }
         return data;
     }
+
+    public getSummaryDataForEcharts(reportData: any, type: 'host' | 'service'): PieChartMetric[] {
+        const data: PieChartMetric[] = [];
+
+        // do not use report.instantReport.reportDetails.totalTime
+        // as all outages of all hosts got summed up
+
+        const max = type === 'host' ? 2 : 3;
+
+        if (reportData) {
+
+            // get percentage for each status
+            for (let i = 0; i <= max; i++) {
+                data.push({
+                    name: reportData['percentage'][i] || 'undefined',
+                    value: reportData[i] || 0
+                });
+            }
+        }
+        return data;
+    }
+
 
     protected readonly Object = Object;
 }

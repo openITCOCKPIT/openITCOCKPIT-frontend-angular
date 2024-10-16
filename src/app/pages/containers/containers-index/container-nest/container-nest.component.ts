@@ -1,4 +1,4 @@
-import { Component, inject, Input, TemplateRef } from '@angular/core';
+import { Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
 import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -39,17 +39,23 @@ import { ContainersService } from '../../containers.service';
 })
 export class ContainerNestComponent {
 
-    @Input() public nestedContainers: ContainersIndexNested[] = [];
-    @Input() public level: number = 0;
-    @Input() public collapsed: boolean[] = [];
+    //@Input() public collapsed: boolean[] = [];
+    public collapsed = input<boolean[]>([]);
 
-    @Input() containerTemplate!: TemplateRef<any>
+    //@Input() public nestedContainers: ContainersIndexNested[] = [];
+    public nestedContainers = input<ContainersIndexNested[]>([]);
+
+    //@Input() public level: number = 0;
+    public level = input(0);
+
+    //@Input() containerTemplate!: TemplateRef<any>
+    containerTemplate = input<TemplateRef<any> | null>(null);
 
     public readonly PermissionsService = inject(PermissionsService);
     public readonly ContainersService = inject(ContainersService);
 
     public toggleCollapsed(index: number): void {
-        this.collapsed[index] = !this.collapsed[index];
+        this.collapsed()[index] = !this.collapsed()[index];
     }
 
 }

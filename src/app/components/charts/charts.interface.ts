@@ -3,3 +3,8 @@ export interface ChartAbsolutValue {
     Value: number // W
     // % = Value / Total * 100
 }
+
+export interface PieChartMetric {
+    name: string
+    value: number
+}

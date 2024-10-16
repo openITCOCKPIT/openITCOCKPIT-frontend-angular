@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -11,5 +11,5 @@ import { NgClass } from '@angular/common';
     styleUrl: './badge-outline.component.css'
 })
 export class BadgeOutlineComponent {
-    @Input() public color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary';
+    public color = input<'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'>('primary');
 }
