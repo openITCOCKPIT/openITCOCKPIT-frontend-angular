@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -96,7 +96,8 @@ import { HistoryService } from '../../../history.service';
         FaStackItemSizeDirective
     ],
     templateUrl: './servicetemplategroups-allocate-to-hostgroup.component.html',
-    styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css'
+    styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit, OnDestroy {
 
@@ -115,6 +116,10 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     protected servicetemplategroups: SelectKeyValue[] = [];
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
+    public isProcessing: boolean = false;
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
     protected servicetemplategroupId: number = 0;
     protected hostgroupId: number | null = null;
@@ -138,6 +143,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         }
         this.ServicetemplategroupsService.allocateToHostgroupGet(this.servicetemplategroupId, this.hostgroupId).subscribe(
             (result: AllocateToHostGroupGet): void => {
+                this.cdr.markForCheck();
                 this.hostsWithServicetemplatesForDeploy = result.hostsWithServicetemplatesForDeploy
             }
         )
@@ -151,6 +157,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         for (let serviceIndex in services) {
             this.hostsWithServicetemplatesForDeploy[hostIndex].services[serviceIndex].createServiceOnTargetHost = !areAllCreateServiceOnTargetHostTrue;
         }
+        this.cdr.markForCheck();
     }
 
     protected selectAll(): void {
@@ -181,13 +188,6 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         }
     }
 
-    protected handleChangesOnHostsWitchServicesToDeploy(): void {
-
-    }
-
-    private isProcessing: boolean = false;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
 
     protected allocateToHostgroup(): void {
         let i = 0;
@@ -221,6 +221,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
                 };
             this.subscriptions.add(this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item)
                 .subscribe((result: GenericResponseWrapper) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         i++;
                         this.percentage = Math.round(i / count * 100);
@@ -268,6 +269,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
             .subscribe((result: LoadServicetemplategroupsByString): void => {
                 this.servicetemplategroups = result.servicetemplategroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -275,6 +277,7 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
         this.subscriptions.add(this.ServicetemplategroupsService.loadHostgroupsByString(containerName)
             .subscribe((result: LoadHostgroupsByString): void => {
                 this.hostgroups = result.hostgroups;
+                this.cdr.markForCheck();
             }))
     }
 

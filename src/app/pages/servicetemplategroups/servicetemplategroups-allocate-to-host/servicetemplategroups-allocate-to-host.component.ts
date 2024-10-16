@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -96,7 +96,8 @@ import { HistoryService } from '../../../history.service';
         FaStackItemSizeDirective
     ],
     templateUrl: './servicetemplategroups-allocate-to-host.component.html',
-    styleUrl: './servicetemplategroups-allocate-to-host.component.css'
+    styleUrl: './servicetemplategroups-allocate-to-host.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnDestroy {
 
@@ -121,6 +122,11 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
 
     protected percentage: number = 42;
 
+    private cdr = inject(ChangeDetectorRef);
+    private isProcessing: boolean = false;
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
         let hostId: number = Number(this.route.snapshot.paramMap.get('hostId'));
@@ -143,6 +149,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         }
         this.ServicetemplategroupsService.allocateToHostGet(this.servicetemplategroupId, this.hostId).subscribe(
             (result: AllocateToHostGet): void => {
+                this.cdr.markForCheck();
                 this.hostsWithServicetemplatesForDeploy = result.servicetemplatesForDeploy
             }
         )
@@ -172,10 +179,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     }
 
 
-    private isProcessing: boolean = false;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
-
     protected allocateToHost(): void {
         let item: AllocateToHostPost =
             {
@@ -199,6 +202,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
 
         this.subscriptions.add(this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     i++;
                     this.percentage = Math.round(i / count * 100);
@@ -225,6 +229,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplategroupsByString(containerName)
             .subscribe((result: LoadServicetemplategroupsByString): void => {
                 this.servicetemplategroups = result.servicetemplategroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -232,6 +237,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
         this.subscriptions.add(this.ServicetemplategroupsService.loadHostsByString(this.hostId, containerName)
             .subscribe((result: LoadHostsByStringResponse): void => {
                 this.hosts = result.hosts;
+                this.cdr.markForCheck();
             }))
     }
 

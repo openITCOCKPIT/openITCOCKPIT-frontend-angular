@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -62,7 +62,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './servicetemplategroups-copy.component.html',
-    styleUrl: './servicetemplategroups-copy.component.css'
+    styleUrl: './servicetemplategroups-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
     public servicetemplategroups: ServiceTemplateGroupsGetCopyPostData[] = [];
@@ -74,6 +75,7 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -100,6 +102,7 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
                     Error: null
                 });
             }
+            this.cdr.markForCheck();
         }));
     }
 
@@ -115,6 +118,7 @@ export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
                     this.HistoryService.navigateWithFallback(['/', 'servicetemplategroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
                     this.notyService.genericError();
                     this.servicetemplategroups = error.error.result as ServiceTemplateGroupsGetCopyPostData[];
                     this.servicetemplategroups.forEach((serviceTemplateGroup: ServiceTemplateGroupsGetCopyPostData) => {

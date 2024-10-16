@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -111,7 +111,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './servicetemplategroups-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplategroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService: ModalService = inject(ModalService);
@@ -131,6 +132,8 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
     protected hideFilter: boolean = true;
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -184,6 +187,7 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
         this.subscriptions.add(this.ServicetemplategroupsService.getIndex(this.params)
             .subscribe((result: ServiceTemplateGroupsIndexRoot) => {
                 this.servicetemplategroups = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -198,6 +202,7 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
 
         this.subscriptions.add(this.ServicetemplategroupsService.allocateToMatchingHostgroup(servicetemplategroupId)
             .subscribe((result: AllocateToMatchingHostgroupResponse) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
                     return;
@@ -242,7 +247,6 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
 
     public navigateCopy() {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => {
-            console.warn(item);
             return item.id;
         }).join(',');
         if (ids) {
