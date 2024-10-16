@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { HistoryService } from '../../../history.service';
 import {
@@ -69,7 +69,8 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         RouterLink
     ],
     templateUrl: './hostgroups-append.component.html',
-    styleUrl: './hostgroups-append.component.css'
+    styleUrl: './hostgroups-append.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     private readonly Subscription: Subscription = new Subscription();
@@ -77,7 +78,6 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     private readonly notyService : NotyService= inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     protected post: HostgroupAppend = {
         Hostgroup: {
@@ -88,6 +88,7 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
         }
     };
     protected hostgroups: SelectKeyValue[] = [];
+    private cdr = inject(ChangeDetectorRef);
 
     protected submit(): void {
         const hostIds = this.route.snapshot.paramMap.get('hostids');
@@ -96,14 +97,12 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
         }
 
         this.Subscription.add(this.HostgroupsService.appendHosts(this.post).subscribe((result: GenericResponseWrapper) => {
-
+            this.cdr.markForCheck();
             const title = this.TranslocoService.translate('Host group');
             const msg = this.TranslocoService.translate('saved successfully');
             const url = ['hostgroups', 'edit', this.post.Hostgroup.id];
 
             this.notyService.genericSuccess(msg, title, url);
-
-
             this.HistoryService.navigateWithFallback(['/hostgroups/index']);
         }));
     }
@@ -111,6 +110,7 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.Subscription.add(this.HostgroupsService.loadHostgroupsByString({} as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.hostgroups = data;
+            this.cdr.markForCheck();
         }));
     }
 

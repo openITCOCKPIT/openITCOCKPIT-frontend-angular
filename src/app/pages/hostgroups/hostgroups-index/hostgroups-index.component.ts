@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -121,7 +121,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './hostgroups-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostgroupsService} // Inject the HostgroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
@@ -137,6 +138,8 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hostgroups?: HostgroupsIndexRoot;
     public readonly router: Router = inject(Router);
     public hideFilter: boolean = true;
+    private cdr = inject(ChangeDetectorRef);
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -153,8 +156,6 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (id) {
                 this.params['filter[Hostgroups.id][]'] = [].concat(id); // make sure we always get an array
             }
-
-
             this.loadHostgroups();
         }));
     }
@@ -197,6 +198,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.HostgroupsService.getIndex(this.params)
             .subscribe((result: HostgroupsIndexRoot) => {
                 this.hostgroups = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -234,6 +236,7 @@ export class HostgroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
