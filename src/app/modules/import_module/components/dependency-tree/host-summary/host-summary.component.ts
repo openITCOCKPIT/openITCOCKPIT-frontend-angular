@@ -37,8 +37,7 @@ export class HostSummaryComponent {
         {
             key: 'state',
             label: this.TranslocoService.translate('State'),
-            queryParams: {
-            }
+            queryParams: {}
         }, {
             key: 'acknowledged',
             label: this.TranslocoService.translate('Acknowledged'),

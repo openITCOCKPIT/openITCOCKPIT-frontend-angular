@@ -22,7 +22,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';

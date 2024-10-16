@@ -9,7 +9,6 @@ import {
     OnInit,
     SimpleChanges
 } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,

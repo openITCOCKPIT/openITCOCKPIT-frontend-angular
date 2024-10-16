@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { PagerdutySettingsService } from '../PagerdutySettings.service';
 import { Subscription } from 'rxjs';
 import { PagerdutySettings } from '../PagerdutySettings.interface';

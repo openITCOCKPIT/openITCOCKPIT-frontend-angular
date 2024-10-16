@@ -28,7 +28,6 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ButtonDirective } from '@coreui/angular';

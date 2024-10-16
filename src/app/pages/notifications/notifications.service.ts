@@ -11,14 +11,15 @@ import {
 } from './notifications.interface';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class NotificationsService {
     private readonly http = inject(HttpClient);
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-  constructor() { }
+    constructor() {
+    }
 
     public getIndex(params: NotificationIndexParams): Observable<NotificationIndexRoot> {
         const proxyPath = this.proxyPath;
@@ -42,7 +43,7 @@ export class NotificationsService {
         )
     }
 
-    public getHostNotifications(id: number,params: NotificationIndexParams): Observable<NotificationIndexRoot> {
+    public getHostNotifications(id: number, params: NotificationIndexParams): Observable<NotificationIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationIndexRoot>(`${proxyPath}/notifications/hostNotification/${id}.json?angular=true`, {
             params: params as {}
@@ -53,7 +54,7 @@ export class NotificationsService {
         )
     }
 
-    public getServiceNotifications(id: number,params: NotificationServicesParams): Observable<NotificationServicesRoot> {
+    public getServiceNotifications(id: number, params: NotificationServicesParams): Observable<NotificationServicesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<NotificationServicesRoot>(`${proxyPath}/notifications/serviceNotification/${id}.json?angular=true`, {
             params: params as {}

@@ -13,7 +13,6 @@ import {
     FormDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';

@@ -15,14 +15,16 @@
         <c-modal-body>
             {{ t('Selected services') }}
             <ul>
-                <li *ngFor="let item of items">{{item.value}}</li>
+                <li *ngFor="let item of items">{{ item.value }}</li>
             </ul>
         </c-modal-body>
         <c-modal-footer>
-            <button [disabled]="isSend" cButton class="ripple" color="success" [routerLink]="['/', 'servicegroups', 'add', joinedServiceIds]">
+            <button [disabled]="isSend" cButton class="ripple" color="success"
+                    [routerLink]="['/', 'servicegroups', 'add', joinedServiceIds]">
                 {{ t('Create new service group') }}
             </button>
-            <button [disabled]="isSend" cButton class="ripple" color="primary" [routerLink]="['/', 'servicegroups', 'append', joinedServiceIds]">
+            <button [disabled]="isSend" cButton class="ripple" color="primary"
+                    [routerLink]="['/', 'servicegroups', 'append', joinedServiceIds]">
                 {{ t('Append existing service group') }}
             </button>
             <button (click)="hideModal()" cButton class="ripple" color="default">

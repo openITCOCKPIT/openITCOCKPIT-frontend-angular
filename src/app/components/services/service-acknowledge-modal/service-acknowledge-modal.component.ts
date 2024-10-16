@@ -119,7 +119,7 @@ export class ServiceAcknowledgeModalComponent implements OnDestroy {
         this.error = false;
 
         this.cdr.markForCheck();
-        
+
         this.modalService.toggle({
             show: false,
             id: 'serviceAcknowledgeModal'

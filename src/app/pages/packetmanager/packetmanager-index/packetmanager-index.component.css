@@ -1,6 +1,7 @@
 .packetManagerCardBody {
     height: 150px;
 }
+
 .text-right {
     text-align: right;
 }
@@ -15,6 +16,7 @@ ul.timeline {
     list-style-type: none;
     position: relative;
 }
+
 ul.timeline:before {
     content: ' ';
     background: #d4d9df;
@@ -25,10 +27,12 @@ ul.timeline:before {
     height: 100%;
     z-index: 400;
 }
+
 ul.timeline > li {
     margin: 20px 0;
     padding-left: 20px;
 }
+
 ul.timeline > li:before {
     content: ' ';
     background: white;

@@ -87,7 +87,7 @@ export class PermissionsService {
             }
         });
     }
-    
+
 
     // USE this method for Components and Services
     public hasPermissionObservable(checkChunks: string | string[]): Observable<boolean> {

@@ -225,7 +225,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
         }
 
         this.cdr.markForCheck();
-        
+
         if (this.ngModel && this._options) {
             this.ngModel = _.intersection(
                 _.map(this._options, (this.optionValue || 'key')),

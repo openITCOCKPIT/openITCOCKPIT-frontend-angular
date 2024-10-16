@@ -7,7 +7,6 @@ import { AutomapsService } from '../automaps.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AutomapCopyPost } from '../automaps.interface';
 import { HistoryService } from '../../../history.service';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';

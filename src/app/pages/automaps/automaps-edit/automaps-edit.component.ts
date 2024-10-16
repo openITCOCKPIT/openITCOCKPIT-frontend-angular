@@ -27,7 +27,6 @@ import { HistoryService } from '../../../history.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';

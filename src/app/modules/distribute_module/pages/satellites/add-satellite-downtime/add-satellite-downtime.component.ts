@@ -15,7 +15,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';

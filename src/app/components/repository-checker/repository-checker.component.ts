@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RespositoryCheckerResponse } from './repository-checker.interface';
 import { AlertComponent } from '@coreui/angular';

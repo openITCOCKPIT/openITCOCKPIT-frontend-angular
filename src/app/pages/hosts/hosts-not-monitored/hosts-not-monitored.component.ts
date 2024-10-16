@@ -34,7 +34,6 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';

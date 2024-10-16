@@ -1,7 +1,8 @@
 <ng-container *transloco="let t">
     <ng-container *ngIf="data !== null">
 
-        <div *ngIf="data.result.data.isDebianBased && (data.result.data.isOldRepositoryInUse || data.result.data.hasError)">
+        <div
+            *ngIf="data.result.data.isDebianBased && (data.result.data.isOldRepositoryInUse || data.result.data.hasError)">
             <c-alert color="danger">
 
                 <h5 class="alert-heading">

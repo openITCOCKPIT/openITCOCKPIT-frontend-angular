@@ -4,7 +4,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericValidationError } from '../../generic-responses';

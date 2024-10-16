@@ -102,7 +102,7 @@ export class HostAcknowledgeModalComponent implements OnDestroy {
         this.error = false;
 
         this.cdr.markForCheck();
-        
+
         this.modalService.toggle({
             show: false,
             id: 'hostAcknowledgeModal'

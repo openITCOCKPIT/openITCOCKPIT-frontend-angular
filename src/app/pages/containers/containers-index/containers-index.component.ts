@@ -168,7 +168,7 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
             parentContainerId: container.id,
             parentContainerTypeId: container.containertype_id
         };
-        
+
         this.modalService.toggle({
             show: true,
             id: 'createContainerModal',

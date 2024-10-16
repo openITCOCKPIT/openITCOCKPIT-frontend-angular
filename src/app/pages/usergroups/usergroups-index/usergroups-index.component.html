@@ -1,222 +1,222 @@
 <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['usergroups', 'index']" [routerLink]="['/', 'usergroups', 'index']">
-                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                        {{ t('User roles') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                    {{ t('Overview') }}
-                </li>
-            </ol>
-        </nav>
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('User roles') }}
-                    <small class="fw-300">
-                        {{ t('overview') }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="loadUsergroups()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button *oitcPermission="['usergroups', 'add']" [routerLink]="['/', 'usergroups', 'add']"
-                                cButton
-                                class="ripple"
-                                color="success"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('New') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['usergroups', 'index']" [routerLink]="['/', 'usergroups', 'index']">
+                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                    {{ t('User roles') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('User roles') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadUsergroups()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['usergroups', 'add']" [routerLink]="['/', 'usergroups', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
                     <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Usergroups.name]']"
+                                       [placeholder]="'Filter by name' | transloco"
+                                       cFormControl
+                                       name="Usergroups.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Usergroups.description]']"
+                                       [placeholder]="'Filter by desciption' | transloco"
+                                       cFormControl
+                                       name="Usergroups.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
                         </c-col>
                     </c-row>
-                    <form cForm>
-                        <c-row>
-                            <c-col md="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Usergroups.name]']"
-                                           [placeholder]="'Filter by name' | transloco"
-                                           cFormControl
-                                           name="Usergroups.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
 
-                            <c-col md="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Usergroups.description]']"
-                                           [placeholder]="'Filter by desciption' | transloco"
-                                           cFormControl
-                                           name="Usergroups.description"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                        </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
 
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                    {{ t('Reset filter') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </form>
-                </c-container>
-                <!-- End Filter -->
+            <oitc-table-loader *ngIf="!usergroups"></oitc-table-loader>
+            <table *ngIf="usergroups" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Usergroups.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Usergroups.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let usergroup of usergroups.allUsergroups">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['usergroups', 'delete']"
+                            [disabled]="false"
+                            [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
+                            [item]="usergroup"></oitc-item-select>
 
-                <oitc-table-loader *ngIf="!usergroups"></oitc-table-loader>
-                <table *ngIf="usergroups" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-                        <th scope="col" mat-sort-header="Usergroups.name">
-                            {{ t('Name') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Usergroups.description">
-                            {{ t('Description') }}
-                        </th>
-                        <th class="text-center width-50" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let usergroup of usergroups.allUsergroups">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['usergroups', 'delete']"
-                                [disabled]="false"
-                                [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
-                                [item]="usergroup"></oitc-item-select>
-
-                        </td>
-                        <td>{{ usergroup.name }}</td>
-                        <td>{{ usergroup.description }}</td>
+                    </td>
+                    <td>{{ usergroup.name }}</td>
+                    <td>{{ usergroup.description }}</td>
 
 
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'usergroups.edit'"
-                                                 [url]="'/usergroups/edit/' + usergroup.id">
-                                <oitc-actions-button-element [permission]="'usergroups.edit'"
-                                                             [url]="'/usergroups/edit/' + usergroup.id">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element [permission]="'usergroups.copy'"
-                                                             [url]="'/usergroups/copy/' + usergroup.id">
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'usergroups.edit'"
+                                             [url]="'/usergroups/edit/' + usergroup.id">
+                            <oitc-actions-button-element [permission]="'usergroups.edit'"
+                                                         [url]="'/usergroups/edit/' + usergroup.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element [permission]="'usergroups.copy'"
+                                                         [url]="'/usergroups/copy/' + usergroup.id">
+                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                {{ t('Copy') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider
+                                [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(usergroup)"
+                                                         [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
+                                                         [permission]="'usergroups.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                *ngIf="usergroups && usergroups.allUsergroups.length === 0"></oitc-no-records>
+            <ng-container *ngIf="usergroups && usergroups.allUsergroups">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
+                        </c-col>
+                        <c-col md="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider
-                                    [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(usergroup)"
-                                                             [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
-                                                             [permission]="'usergroups.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="usergroups && usergroups.allUsergroups.length === 0"></oitc-no-records>
-                <ng-container *ngIf="usergroups && usergroups.allUsergroups">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
-                            </c-col>
-                            <c-col md="3">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                            (click)="navigateCopy()">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </button>
-                                    <button (click)="toggleDeleteAllModal()"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="usergroups"
-                                [paginateOrScroll]="usergroups"></oitc-paginate-or-scroll>
+                                </button>
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
                         </c-col>
                     </c-row>
                 </c-container>
+            </ng-container>
 
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="usergroups"
+                            [paginateOrScroll]="usergroups"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
