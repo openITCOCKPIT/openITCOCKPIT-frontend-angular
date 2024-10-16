@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
@@ -6,8 +6,8 @@ import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
-  selector: 'oitc-server',
-  standalone: true,
+    selector: 'oitc-server',
+    standalone: true,
     imports: [
         FaIconComponent,
         FaLayersComponent,
@@ -19,10 +19,11 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
         NgSwitch,
         NgIf
     ],
-  templateUrl: './server.component.html',
-  styleUrl: './server.component.css'
+    templateUrl: './server.component.html',
+    styleUrl: './server.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class ServerComponent {
     @Input() result!: AdditionalHostInformationResult;
-
 }

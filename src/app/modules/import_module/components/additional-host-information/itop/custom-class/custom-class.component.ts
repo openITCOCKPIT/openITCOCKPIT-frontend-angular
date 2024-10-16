@@ -1,4 +1,4 @@
-import { Component, Input, Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Pipe, PipeTransform } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
@@ -22,7 +22,8 @@ import { CustomClassInformationComponent } from './custom-class-information/cust
         CustomClassInformationComponent
     ],
     templateUrl: './custom-class.component.html',
-    styleUrl: './custom-class.component.css'
+    styleUrl: './custom-class.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomClassComponent {
     @Input() result!: AdditionalHostInformationResult;
