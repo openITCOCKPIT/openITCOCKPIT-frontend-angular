@@ -1,4 +1,13 @@
-import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    Pipe,
+    PipeTransform
+} from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -49,7 +58,6 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { SystemnameService } from '../../../services/systemname.service';
 
 @Component({
     selector: 'oitc-usergroups-edit',
@@ -61,7 +69,7 @@ import { SystemnameService } from '../../../services/systemname.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -105,7 +113,8 @@ import { SystemnameService } from '../../../services/systemname.service';
         AsyncPipe
     ],
     templateUrl: './usergroups-edit.component.html',
-    styleUrl: './usergroups-edit.component.css'
+    styleUrl: './usergroups-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsEditComponent implements OnInit, OnDestroy {
     protected readonly keepOrder = keepOrder;
@@ -139,16 +148,18 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
             aro: {}
         }
     } as unknown as UsergroupsEditPostRoot;
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
 
         this.subscriptions.add(this.UsergroupsService.loadAcos().subscribe((acoRoot: AcoRoot) => {
             this.acos = acoRoot;
+            this.cdr.markForCheck();
         }));
 
         this.subscriptions.add(this.UsergroupsService.getEdit(id).subscribe((result: UsergroupsEditGetRoot) => {
+            this.cdr.markForCheck();
             this.post.Usergroup = result.usergroup;
             this.post.Acos = result.acos;
             this.systemname = result.systemname;
@@ -183,13 +194,10 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    private getDefaultPost(): UsergroupsEditPostRoot {
-        return {} as UsergroupsEditPostRoot;
-    }
-
     protected loadLdapGroups(search: string = ''): void {
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -197,6 +205,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UsergroupsService.updateUsergroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -253,6 +262,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.cdr.markForCheck();
     };
 
 }
@@ -265,9 +275,7 @@ const keepOrder = (a: any, b: any) => a;
     name: 'defaultOrderKeyvalue'
 })
 export class DefaultOrderKeyValuePipe extends KeyValuePipe implements PipeTransform {
-
     override transform(value: any, ...args: any[]): any {
         return super.transform(value, keepOrder);
     }
-
 }

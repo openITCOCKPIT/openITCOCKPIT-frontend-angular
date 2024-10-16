@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
@@ -11,7 +11,6 @@ import {
     FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    ModalService,
     NavComponent,
     NavItemComponent,
     ProgressBarComponent,
@@ -26,11 +25,10 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { StatusmapService } from '../statusmap.service';
 import { getDefaultStatusmapsIndexParams, StatusmapExtendedNode, StatusmapsIndexParmas } from '../statusmap.interface';
@@ -69,7 +67,7 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         DecimalPipe,
         FaIconComponent,
         InputGroupComponent,
@@ -105,7 +103,8 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
         HostSummaryStatusmapComponent
     ],
     templateUrl: './statusmaps-index.component.html',
-    styleUrl: './statusmaps-index.component.css'
+    styleUrl: './statusmaps-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusmapsIndexComponent implements OnInit, OnDestroy {
 
@@ -128,13 +127,9 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     private readonly StatusmapService = inject(StatusmapService);
-    private readonly TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
-    private readonly router = inject(Router);
     private readonly document = inject(DOCUMENT);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -170,6 +165,7 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
 
             this.sattelites = statusmap.satellites;
             this.isLoading = false;
+            this.cdr.markForCheck();
 
             this.renderVisNetwork(edges, nodes);
         }));
@@ -487,7 +483,9 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
         this.StatusmapService.loadHostAndServicesSummaryStatus(node.hostId).subscribe(data => {
             this.hostSummaryState = data;
             this.toastVisible = true; // Show toast
+            this.cdr.markForCheck();
         });
+
 
     }
 

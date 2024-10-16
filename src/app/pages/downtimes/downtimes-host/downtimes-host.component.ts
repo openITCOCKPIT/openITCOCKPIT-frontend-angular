@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -44,7 +44,7 @@ import {
     HostDowntimesParams
 } from '../downtimes.interface';
 import { Subscription } from 'rxjs';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { DowntimesService } from '../downtimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -68,7 +68,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -112,13 +112,15 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         DropdownMenuDirective,
         DropdownToggleDirective,
         DropdownItemDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService} // Inject the DowntimesService into the CancelAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DowntimesHostComponent implements OnInit, OnDestroy {
     private DowntimesService = inject(DowntimesService)
@@ -135,6 +137,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -157,6 +160,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.DowntimesService.getHostDowntimes(this.params)
             .subscribe((result) => {
                 this.hostDowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -217,6 +221,7 @@ export class DowntimesHostComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

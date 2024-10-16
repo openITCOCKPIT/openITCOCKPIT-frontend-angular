@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -58,12 +58,6 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import {
-    NgSelectSelectAllComponent
-} from '../../../components/ng-select/ng-select-select-all/ng-select-select-all.component';
-import {
-    NgSelectOptionCheckboxComponent
-} from '../../../components/ng-select/ng-select-option-checkbox/ng-select-option-checkbox.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -77,7 +71,7 @@ import { IndexPage } from '../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -118,8 +112,6 @@ import { IndexPage } from '../../../pages.interface';
         TableDirective,
         NgClass,
         DeleteAllModalComponent,
-        NgSelectSelectAllComponent,
-        NgSelectOptionCheckboxComponent,
         MultiSelectModule,
         MultiSelectComponent,
         TableLoaderComponent
@@ -128,7 +120,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './hosttemplates-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HosttemplatesService} // Inject the HosttemplatesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -146,6 +139,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.hosttemplateTypes = this.HosttemplatesService.getHosttemplateTypes();
@@ -174,6 +168,7 @@ export class HosttemplatesIndexComponent implements OnInit, OnDestroy, IndexPage
         this.subscriptions.add(this.HosttemplatesService.getIndex(this.params)
             .subscribe((result) => {
                 this.hosttemplates = result;
+                this.cdr.markForCheck();
             })
         );
     }

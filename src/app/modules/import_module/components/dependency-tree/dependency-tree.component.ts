@@ -1,4 +1,6 @@
 import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     HostListener,
@@ -26,7 +28,12 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DecimalPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
-import { DependencyTreeApiResult, VisHiststatus, VisObject, VisRelation } from '../../pages/externalsystems/external-systems.interface';
+import {
+    DependencyTreeApiResult,
+    VisHiststatus,
+    VisObject,
+    VisRelation
+} from '../../pages/externalsystems/external-systems.interface';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -90,17 +97,14 @@ export interface NodeExtended extends Node {
         HostGroupSummaryComponent
     ],
     templateUrl: './dependency-tree.component.html',
-    styleUrl: './dependency-tree.component.css'
+    styleUrl: './dependency-tree.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public objectId: number = 0;
-
     @Input() public type: 'host' | 'hostgroup' = 'host';
-
     @Input() public name: string = '';
-
     @Input() public showOnlineOffline: boolean = false;
-
     @Output() public externalSystemConnected = new EventEmitter<boolean>();
 
     selectedNode!: NodeExtended;
@@ -148,6 +152,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         'disabled': '#9999994D',
         'info': '#17a2b8'
     };
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
     }
@@ -173,6 +178,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     public load(): void {
         this.isOnline = false;
         this.ExternalSystemsService.getDependencyTree(this.objectId, this.type).subscribe(data => {
+            this.cdr.markForCheck();
             this.dependencyTree = data;
             this.isOnline = data.connected.status;
             this.externalSystemConnected.emit(this.isOnline);
@@ -446,6 +452,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         if (options.physics) {
             this.showProgressbar = true;
             this.progress = 0;
+            this.cdr.markForCheck();
         }
         const network = new Network(elem, {nodes: nodes, edges: edges}, options);
         network.fit({
@@ -459,9 +466,11 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
             network.on('stabilizationProgress', (params) => {
                 let currentPercentage = Math.round(params.iterations / params.total * 100);
                 this.progress = currentPercentage;
+                this.cdr.markForCheck();
             });
             network.once('stabilizationIterationsDone', () => {
                 this.showProgressbar = false;
+                this.cdr.markForCheck();
                 network.setOptions({physics: false});
             });
         }
@@ -495,10 +504,12 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         if (this.isFullscreen) {
             if (document.exitFullscreen) {
                 this.isFullscreen = false;
+                this.cdr.markForCheck();
                 document.exitFullscreen();
             }
         } else {
             this.isFullscreen = true;
+            this.cdr.markForCheck();
             if (elem && elem.requestFullscreen) {
                 elem.requestFullscreen();
             }
@@ -552,35 +563,43 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
         if (this.toastVisible) {
             // Close any open toast
             this.toastVisible = false;
+            this.cdr.markForCheck();
         }
 
         this.hostSummaryState = undefined;
         this.hostgroupSummeryState = undefined;
+        this.cdr.markForCheck();
 
         if (node.host) {
             this.ExternalSystemsService.getHostSummary(node.host.id).subscribe(data => {
                 this.hostSummaryState = data;
                 this.toastVisible = true; // Show toast
+                this.cdr.markForCheck();
             });
         } else if (node.hostgroup) {
             this.ExternalSystemsService.getHostgroupSummary(node.hostgroup.Hostgroups.id).subscribe(data => {
                 this.hostgroupSummeryState = data;
                 this.toastVisible = true; // Show toast
+                this.cdr.markForCheck();
             });
         } else {
             // Not in monitoring
             this.toastVisible = true; // Show toast
+            this.cdr.markForCheck();
         }
+
     }
 
     public onToastTimerChange($event: number) {
         this.toastPercentage = $event * 25;
+        this.cdr.markForCheck();
     }
 
     public onToastVisibleChange($event: boolean) {
         this.toastVisible = $event;
         if (!this.toastVisible) {
             this.toastPercentage = 0;
+            this.cdr.markForCheck();
         }
     }
 

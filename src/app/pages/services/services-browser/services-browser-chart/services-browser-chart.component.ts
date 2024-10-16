@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import {
     PerformanceData,
     PopoverGraphInterface,
@@ -82,7 +92,8 @@ interface ServiceBrowserChartConfig {
     styleUrl: './services-browser-chart.component.css',
     providers: [
         provideEcharts(),
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
@@ -102,6 +113,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     @Input() public autoRefreshInterval: number = 0; // value in seconds
     @Input() public timerange$?: Observable<GenericUnixtimerange>;
     @Output() onGraphChange: EventEmitter<GenericUnixtimerange> = new EventEmitter<GenericUnixtimerange>();
+
+    private cdr = inject(ChangeDetectorRef);
 
     private autoRefreshIntervalId: any = null;
 
@@ -183,7 +196,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     }
                     break;
             }
-
+            this.cdr.markForCheck();
         }));
     }
 
@@ -208,11 +221,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     if (timerange.start !== this.currentTimerange.start || timerange.end !== this.currentTimerange.end) {
                         //console.log("External timerange change detected", timerange);
                         this.syncChartWithTimeline(timerange.start, timerange.end);
+                        this.cdr.markForCheck();
                     }
                 }
             }));
         }
-
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -264,6 +278,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
             .subscribe((perfdata) => {
+                this.cdr.markForCheck();
                 this.isLoading = false;
 
                 if (this.currentGraphUnit === null) {
@@ -327,6 +342,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
             .subscribe((perfdata) => {
+                this.cdr.markForCheck();
                 this.isLoading = false;
 
                 if (this.currentGraphUnit === null) {
@@ -540,6 +556,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             // @ts-ignore
             this.chartOption.series[0].lineStyle.color = 'rgb(88,86,214)';
         }
+        this.cdr.markForCheck();
     }
 
     public updateChart() {
@@ -555,6 +572,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             this.chartOption.series[0].showSymbol = this.config.showDataPoint;
 
             this.echartsInstance.setOption(this.chartOption);
+            this.cdr.markForCheck();
         }
 
     }
@@ -852,6 +870,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     key: 'dataZoomSelect',
                     dataZoomSelectActive: true,
                 });
+                this.cdr.markForCheck();
             }, 250);
         }
     }
@@ -897,9 +916,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 if ((end - start) > 0) {
                     this.updateAndAppendPerfdata(start, end);
                 }
-
+                this.cdr.markForCheck();
 
             }, this.autoRefreshInterval * 1000);
+            this.cdr.markForCheck();
         }
     }
 
@@ -909,6 +929,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
             clearInterval(this.autoRefreshIntervalId);
             this.autoRefreshIntervalId = null;
         }
+        this.cdr.markForCheck();
     }
 
     public onAutorefreshChange() {

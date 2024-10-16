@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -40,7 +40,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -59,7 +59,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './servicegroups-copy.component.html',
-    styleUrl: './servicegroups-copy.component.css'
+    styleUrl: './servicegroups-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsCopyComponent implements OnInit, OnDestroy {
     public servicegroups: ServicegroupsCopyPostResult[] = [];
@@ -71,6 +72,8 @@ export class ServicegroupsCopyComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -97,6 +100,7 @@ export class ServicegroupsCopyComponent implements OnInit, OnDestroy {
                     Error: null
                 } as ServicegroupsCopyPostResult);
             }
+            this.cdr.markForCheck();
         }));
     }
 
@@ -112,6 +116,7 @@ export class ServicegroupsCopyComponent implements OnInit, OnDestroy {
                     this.HistoryService.navigateWithFallback(['/', 'servicegroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
                     this.notyService.genericError();
                     this.servicegroups = error.error.result as ServicegroupsCopyPostResult[];
                     this.servicegroups.forEach((servicegroup: ServicegroupsCopyPostResult) => {

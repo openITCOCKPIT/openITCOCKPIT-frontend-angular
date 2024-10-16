@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -43,7 +43,7 @@ import {
     SystemdowntimeHostgroupIndexRoot
 } from '../../systemdowntimes/systemdowntimes.interface';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -67,7 +67,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -110,13 +110,15 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        AsyncPipe
     ],
     templateUrl: './systemdowntimes-hostgroup.component.html',
     styleUrl: './systemdowntimes-hostgroup.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
     private SystemdowntimesService = inject(SystemdowntimesService)
@@ -131,7 +133,7 @@ export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -150,6 +152,7 @@ export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SystemdowntimesService.getHostgroupSystemdowntimes(this.params)
             .subscribe((result) => {
                 this.hostgroupSystemdowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -207,6 +210,7 @@ export class SystemdowntimesHostgroupComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

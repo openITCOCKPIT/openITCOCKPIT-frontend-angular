@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { ExternalCommandsService, ServiceProcessCheckResultItem } from '../../../services/external-commands.service';
 import {
     ButtonCloseDirective,
@@ -56,7 +66,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         FormsModule
     ],
     templateUrl: './services-process-checkresult-modal.component.html',
-    styleUrl: './services-process-checkresult-modal.component.css'
+    styleUrl: './services-process-checkresult-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesProcessCheckresultModalComponent implements OnDestroy {
     @Input({required: true}) public items: ServiceProcessCheckResultItem[] = [];
@@ -78,9 +89,13 @@ export class ServicesProcessCheckresultModalComponent implements OnDestroy {
         force_hardstate: false
     };
 
+    private cdr = inject(ChangeDetectorRef);
+
     public hideModal() {
         this.isSend = false;
         this.error = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

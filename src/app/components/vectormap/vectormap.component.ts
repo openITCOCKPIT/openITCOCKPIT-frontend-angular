@@ -1,12 +1,13 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
+    effect,
     ElementRef,
     HostListener,
     inject,
-    Input,
-    OnChanges,
-    SimpleChanges,
+    input,
     ViewChild
 } from '@angular/core';
 
@@ -23,9 +24,10 @@ import { TranslocoService } from '@jsverse/transloco';
     standalone: true,
     imports: [],
     templateUrl: './vectormap.component.html',
-    styleUrl: './vectormap.component.css'
+    styleUrl: './vectormap.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VectormapComponent implements AfterViewInit, OnChanges {
+export class VectormapComponent implements AfterViewInit {
 
     // Creates a VectorMap using https://github.com/themustafaomar/jsvectormap
 
@@ -38,12 +40,32 @@ export class VectormapComponent implements AfterViewInit, OnChanges {
         this.updateMapSize();
     }
 
-    @Input() public height: number = 300;
-    @Input() public markers: VectormapMarker[] = [];
+    public height = input<number>(300);
+    public markers = input<VectormapMarker[]>([]);
 
     private map: any;
 
     private readonly TranslocoService = inject(TranslocoService);
+
+    private cdr = inject(ChangeDetectorRef);
+
+    constructor() {
+        effect(() => {
+
+            // Update markers
+            this.map.removeMarkers();
+            const newMarkers = this.markers()
+            if (newMarkers.length === 1) {
+                this.map.setFocus({
+                    coords: newMarkers[0].coords,
+                    scale: 7,
+                    animate: true
+                });
+            }
+            this.map.addMarkers(newMarkers);
+
+        });
+    }
 
     ngAfterViewInit(): void {
 
@@ -52,7 +74,7 @@ export class VectormapComponent implements AfterViewInit, OnChanges {
         this.map = new jsVectorMap({
             selector: this.mapRef.nativeElement,
             showTooltip: true,
-            markers: this.markers,
+            markers: this.markers(),
             labels: {
                 markers: {
                     // Starting from jsvectormap v1.2 the render function receives
@@ -70,24 +92,6 @@ export class VectormapComponent implements AfterViewInit, OnChanges {
             //},
         });
 
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (this.map && changes['markers']) {
-
-            this.map.removeMarkers();
-
-            const newMarkers = changes['markers'].currentValue;
-            if (newMarkers.length === 1) {
-                this.map.setFocus({
-                    coords: newMarkers[0].coords,
-                    scale: 7,
-                    animate: true
-                });
-            }
-
-            this.map.addMarkers(newMarkers);
-        }
     }
 
     private updateMapSize(): void {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -34,7 +34,6 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
@@ -53,7 +52,7 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -98,6 +97,7 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
 import {
     HostsAddToHostgroupComponent
 } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-hosts-not-monitored',
@@ -114,7 +114,7 @@ import {
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DowntimeIconComponent,
@@ -167,16 +167,18 @@ import {
         TooltipDirective,
         HoststatusSimpleIconComponent,
         DisableModalComponent,
-        HostsAddToHostgroupComponent
+        HostsAddToHostgroupComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-not-monitored.component.html',
     styleUrl: './hosts-not-monitored.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DisableAllModalComponent
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsNotMonitoredComponent {
+export class HostsNotMonitoredComponent implements OnInit, OnDestroy, IndexPage {
     // Filter vars
     public params: HostsNotMonitoredParams = getDefaultHostsNotMonitoredParams();
     // Filter end
@@ -197,6 +199,7 @@ export class HostsNotMonitoredComponent {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadHosts();
@@ -204,6 +207,7 @@ export class HostsNotMonitoredComponent {
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -218,6 +222,7 @@ export class HostsNotMonitoredComponent {
         this.subscriptions.add(this.HostsService.getNotMonitored(this.params)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -342,8 +347,7 @@ export class HostsNotMonitoredComponent {
         });
     }
 
-    protected confirmAddHostsToHostgroup(host?: HostObject) : void
-    {
+    protected confirmAddHostsToHostgroup(host?: HostObject): void {
         let items: SelectKeyValue[] = [];
 
         if (host) {

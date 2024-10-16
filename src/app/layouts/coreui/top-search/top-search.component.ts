@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     DropdownComponent,
@@ -15,7 +15,7 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { UUID } from '../../../classes/UUID';
@@ -44,12 +44,14 @@ import { Subscription } from 'rxjs';
         NgClass,
         FaIconComponent,
         NgIf,
-        FormsModule
+        FormsModule,
+        AsyncPipe
     ],
     templateUrl: './top-search.component.html',
-    styleUrl: './top-search.component.css'
+    styleUrl: './top-search.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TopSearchComponent implements OnInit, OnDestroy {
+export class TopSearchComponent implements OnDestroy {
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService)
     public readonly TranslocoService: TranslocoService = inject(TranslocoService);
@@ -63,14 +65,13 @@ export class TopSearchComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    public ngOnInit(): void {
-
-    }
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
+    // Called by ngSubmit, no manual change detection required
     public doSearch() {
         if (this.searchStr === '') {
             return;
@@ -108,6 +109,7 @@ export class TopSearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     public setSearchType(searchType: SearchType, translation: string) {
         this.currentSearchType = searchType;
         this.currentSearchTypeTranslation = translation;

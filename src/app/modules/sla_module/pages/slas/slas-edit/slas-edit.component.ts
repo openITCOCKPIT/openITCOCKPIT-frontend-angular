@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
@@ -48,7 +48,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
     TimeperiodDetailsTooltipComponent
@@ -65,7 +65,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
@@ -100,9 +100,11 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FaStackItemSizeDirective,
         PermissionDirective,
         FormLoaderComponent,
+        AsyncPipe,
     ],
     templateUrl: './slas-edit.component.html',
     styleUrl: './slas-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasEditComponent implements OnInit, OnDestroy {
 
@@ -155,12 +157,14 @@ export class SlasEditComponent implements OnInit, OnDestroy {
         pdf: 1 << 1,
         zip: 1 << 2
     };
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        
+
         this.slaId = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.SlasService.getEdit(this.slaId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.post = result.sla;
                 this.send_zip = this.post.report_format & this.filetypes.zip;
                 if (this.post.report_format & this.filetypes.pdf) {
@@ -188,6 +192,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
     public updateSla(redirectToHostMappingRules: boolean = false): void {
         this.subscriptions.add(this.SlasService.updateSla(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as SlaPostResponse;
                     const title = this.TranslocoService.translate('SLA');
@@ -220,6 +225,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SlasService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -234,6 +240,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.SlasService.loadUsers(params)
                 .subscribe((result: LoadUsersRoot) => {
                     this.users = result.users;
+                    this.cdr.markForCheck();
                 }))
         }
     }
@@ -248,6 +255,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.SlasService.loadTimeperiods(params)
                 .subscribe((result: LoadTimeperiodsRoot) => {
                     this.timeperiods = result.timeperiods;
+                    this.cdr.markForCheck();
                 }))
         }
     }
@@ -264,6 +272,7 @@ export class SlasEditComponent implements OnInit, OnDestroy {
             this.post.report_format = 2;
             this.files = [];
             this.send_zip = 0;
+            this.cdr.markForCheck();
         }
     }
 
@@ -275,5 +284,6 @@ export class SlasEditComponent implements OnInit, OnDestroy {
             return a | b;
         }, 0);
         this.post.report_format |= this.send_zip;
+        this.cdr.markForCheck();
     }
 }

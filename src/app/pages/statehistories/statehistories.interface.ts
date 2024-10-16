@@ -27,7 +27,7 @@ export function getDefaultStatehistoryHostParams(): StatehistoryHostParams {
         'filter[StatehistoryHosts.output]': '',
         'filter[StatehistoryHosts.state][]': [],
         'filter[StatehistoryHosts.state_type]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }
@@ -79,7 +79,7 @@ export function getDefaultStatehistoryServiceParams(): StatehistoryServiceParams
         'filter[StatehistoryServices.output]': '',
         'filter[StatehistoryServices.state][]': [],
         'filter[StatehistoryServices.state_type]': '',
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 3000 * 4)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }

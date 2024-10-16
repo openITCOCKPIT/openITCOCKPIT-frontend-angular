@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
@@ -64,7 +64,7 @@ import { IndexPage } from '../../../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -101,7 +101,8 @@ import { IndexPage } from '../../../../../pages.interface';
     styleUrl: './slas-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -109,8 +110,6 @@ export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
 
     private readonly SlasService: SlasService = inject(SlasService);
-    private readonly TranslocoService = inject(TranslocoService);
-
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
@@ -119,6 +118,7 @@ export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
     public selectedItems: DeleteAllItem[] = [];
     public slas?: SlasIndexRoot;
     public params: SlasIndexParams = getDefaultSlasIndexParams();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
 
@@ -136,12 +136,11 @@ export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public loadSlas() {
-
         this.SelectionServiceService.deselectAll();
-
         this.subscriptions.add(this.SlasService.getIndex(this.params)
             .subscribe((result: SlasIndexRoot) => {
                 this.slas = result;
+                this.cdr.markForCheck();
             }));
 
     }
@@ -212,6 +211,7 @@ export class SlasIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

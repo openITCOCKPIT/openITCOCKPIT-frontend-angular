@@ -23,7 +23,18 @@
  *     confirmation.
  */
 
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -78,7 +89,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './service-maintenance-modal.component.html',
-    styleUrl: './service-maintenance-modal.component.css'
+    styleUrl: './service-maintenance-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: ServiceDowntimeItem[] = [];
@@ -104,6 +116,8 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
 
+    private cdr = inject(ChangeDetectorRef);
+
     private subscriptions: Subscription = new Subscription();
     @ViewChild('modal') private modal!: ModalComponent;
 
@@ -111,6 +125,8 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         this.isSend = false;
         this.hasErrors = false;
         this.errors = {};
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
@@ -130,7 +146,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
         }
         this.isSend = true;
         this.subscriptions.add(this.DowntimesDefaultsService.validateDowntimesInput(validate).subscribe((result: any) => {
-
+            this.cdr.markForCheck();
             if (!result.success) {
                 this.errors = result.data.Downtime;
                 this.isSend = false;
@@ -169,6 +185,7 @@ export class ServiceMaintenanceModalComponent implements OnInit, OnDestroy {
             this.downtimeModal.to_date = this.createDateString(downtimeDefaults.js_to);
             this.downtimeModal.to_time = downtimeDefaults.to_time;
             this.downtimeModal.comment = this.TranslocoService.translate(downtimeDefaults.comment);
+            this.cdr.markForCheck();
         }));
     }
 

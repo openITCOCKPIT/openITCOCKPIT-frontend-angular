@@ -39,7 +39,7 @@ export class BookmarksService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public getBookmarksIndex (params: BookmarksParams): Observable<BookmarksIndexRoot> {
+    public getBookmarksIndex(params: BookmarksParams): Observable<BookmarksIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<BookmarksIndexRoot>(`${proxyPath}/filter_bookmarks/index.json`, {
             params: params as {} // cast ContactsIndexParams into object
@@ -50,7 +50,7 @@ export class BookmarksService {
         )
     }
 
-    public add (bookmark: BookmarkPost): Observable<GenericResponseWrapper> {
+    public add(bookmark: BookmarkPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/filter_bookmarks/add.json?angular=true`, bookmark)
             .pipe(
@@ -71,7 +71,7 @@ export class BookmarksService {
             );
     }
 
-    public update (bookmark: BookmarksObject, id: number): Observable<GenericResponseWrapper> {
+    public update(bookmark: BookmarksObject, id: number): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/filter_bookmarks/edit/` + id + `.json?angular=true`, bookmark)
             .pipe(
@@ -92,7 +92,7 @@ export class BookmarksService {
             );
     }
 
-    public delete (item: DeleteAllItem): Observable<Object> {
+    public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;
         return this.http.post(`${proxyPath}/filter_bookmarks/delete/${item.id}.json?angular=true`, {});
     }

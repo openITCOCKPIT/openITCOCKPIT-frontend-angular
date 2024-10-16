@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
     ColComponent,
     ContainerComponent,
@@ -51,7 +51,8 @@ import { FormsModule } from '@angular/forms';
         FormsModule
     ],
     templateUrl: './select-all.component.html',
-    styleUrl: './select-all.component.css'
+    styleUrl: './select-all.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectAllComponent implements OnInit, OnDestroy {
 
@@ -62,6 +63,8 @@ export class SelectAllComponent implements OnInit, OnDestroy {
     public intermediate = false;
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
+
 
     constructor(public selection: SelectionServiceService) {
     }
@@ -69,6 +72,8 @@ export class SelectAllComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // Subscribe to selection changes
         this.subscriptions.add(this.selection.selection$.subscribe(selection => {
+            this.cdr.markForCheck();
+
             this.currentSelection = selection; // Used to show the length of the selection in the template
 
             if (selection.length === 0) {
@@ -97,6 +102,7 @@ export class SelectAllComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    // Called by (change) - no manual change detection required
     public toggleSelectAll() {
         if (this.checked) {
             this.selection.selectAll();

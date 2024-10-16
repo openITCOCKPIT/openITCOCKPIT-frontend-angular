@@ -1,326 +1,324 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                    {{ t('Import Module') }}
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                    {{ t('Imported host groups overview') }}
-                </li>
-            </ol>
-        </nav>
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Imported host groups') }}
-                    <small class="fw-300">
-                        {{ t('Overview') }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <c-dropdown *ngIf="externalSystems.length > 0">
-                            <button *oitcPermission="['ImportModule', 'ImportedHostgroups', 'add']"
-                                    cButton cDropdownToggle
-                                    [disabled]="externalSystems.length===0"
-                                    color="success"
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                                {{ t('Start import') }}
-                            </button>
-                            <ul cDropdownMenu>
-                                <li *ngFor="let externalSystem of externalSystems">
-                                    <button (click)="loadExternalSystem(externalSystem)"
-                                            cDropdownItem
-                                            class="ripple"
-                                            [disabled]="showSpinner">
-                                        @switch (externalSystem.system_type) {
-                                            @case ("itop") {
-                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                            }
-                                            @default {
-                                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                                            }
-                                        }
-                                        {{ externalSystem.name }}
-                                    </button>
-                                </li>
-                            </ul>
-                        </c-dropdown>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <button *oitcPermission="['hostgroups', 'add']"
-                                cButton
-                                class="ripple me-1"
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Imported host groups overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Imported host groups') }}
+                <small class="fw-300">
+                    {{ t('Overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown *ngIf="externalSystems.length > 0">
+                        <button *oitcPermission="['ImportModule', 'ImportedHostgroups', 'add']"
+                                cButton cDropdownToggle
+                                [disabled]="externalSystems.length===0"
                                 color="success"
-                                size="xs"
-                                (click)="synchronizeWithMonitoring()"
-                                [disabled]="showSynchronizingSpinner || showSpinner">
-                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
-                                     *ngIf="showSynchronizingSpinner"></fa-icon>
-                            <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                            {{ t('Synchronize with monitoring') }}
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                            {{ t('Start import') }}
                         </button>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <div class="pe-2">
-                            <c-badge color="danger" *ngIf="externalSystems.length===0">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ t('No supported external systems defined') }}
-                            </c-badge>
-                        </div>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <ul cDropdownMenu>
+                            <li *ngFor="let externalSystem of externalSystems">
+                                <button (click)="loadExternalSystem(externalSystem)"
+                                        cDropdownItem
+                                        class="ripple"
+                                        [disabled]="showSpinner">
+                                    @switch (externalSystem.system_type) {
+                                        @case ("itop") {
+                                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        }
+                                        @default {
+                                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                        }
+                                    }
+                                    {{ externalSystem.name }}
+                                </button>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+                <c-nav-item>
+                    <button *oitcPermission="['hostgroups', 'add']"
+                            cButton
+                            class="ripple me-1"
+                            color="success"
+                            size="xs"
+                            (click)="synchronizeWithMonitoring()"
+                            [disabled]="showSynchronizingSpinner || showSpinner">
+                        <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
+                                 *ngIf="showSynchronizingSpinner"></fa-icon>
+                        <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                        {{ t('Synchronize with monitoring') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item>
+                    <div class="pe-2">
+                        <c-badge color="danger" *ngIf="externalSystems.length===0">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('No supported external systems defined') }}
+                        </c-badge>
+                    </div>
+                </c-nav-item>
+                <c-nav-item>
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-
-                <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
                     <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
-                        </c-col>
-                    </c-row>
-                    <form cForm>
-                        <c-row>
-                            <c-col md="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[ImportedHostgroups.name]']"
-                                           [placeholder]="'Filter by imported host group name' | transloco"
-                                           aria-label="ImportedHostgroupName"
-                                           cFormControl
-                                           name="importedhostgroup.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[ImportedHostgroups.description]']"
-                                           [placeholder]="'Filter by imported host group description' | transloco"
-                                           aria-label="ImportedHostgroupDescription"
-                                           cFormControl
-                                           name="importedhostgroup.description"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                        </c-row>
-                        <c-row class="my-3">
-                            <c-col [xs]="12" lg="2">
-                                <fieldset>
-                                    <h5>
-                                        {{ t('Already synchronized') }}
-                                    </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            name="filter.ImportedHostgroups.imported"
-                                            id="filter.ImportedHostgroups.imported"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="params['filter[ImportedHostgroups.imported]']"/>
-                                        <label cFormCheckLabel
-                                               for="filter.ImportedHostgroups.imported">
-                                            <c-badge color="info">
-                                                {{ t('In monitoring') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            name="filter.ImportedHostgroups.not_imported"
-                                            id="filter.ImportedHostgroups.not_imported"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="params['filter[ImportedHostgroups.not_imported]']"/>
-                                        <label cFormCheckLabel
-                                               for="filter.ImportedHostgroups.not_imported">
-                                            <c-badge color="success">
-                                                {{ t('NEW') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </fieldset>
-                            </c-col>
-                        </c-row>
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                    {{ t('Reset filter') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </form>
-                </c-container>
-                <!-- End Filter -->
-                <oitc-table-loader *ngIf="!allImportedGroups"></oitc-table-loader>
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-                        <th scope="col" mat-sort-header="ImportedHostgroups.name">
-                            {{ t('Name') }}
-                        </th>
-                        <th scope="col" mat-sort-header="ImportedHostgroups.description">
-                            {{ t('Description') }}
-                        </th>
-                        <th scope="col" mat-sort-header="ImportedHostgroups.created">
-                            {{ t('Import date') }}
-                        </th>
-                        <th scope="col" mat-sort-header="ImportedHostgroups.modified">
-                            {{ t('Last modified') }}
-                        </th>
-                        <th class="text-center width-50" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody *ngIf="importedhostgroups">
-                    <tr *ngFor="let importedhostgroup of importedhostgroups">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['ImportModule','importedhostgroups', 'delete']"
-                                [disabled]="!importedhostgroup.allowEdit"
-                                [item]="importedhostgroup"></oitc-item-select>
-
-                        </td>
-                        <td>
-                            {{ importedhostgroup.name }}
-                            <c-badge color="success" *ngIf="importedhostgroup.imported !== 1">
-                                <fa-icon [icon]="['fas', 'star']"></fa-icon>
-                                {{ t('NEW') }}
-                            </c-badge>
-                            @if (importedhostgroup.imported === 1) {
-                                <c-badge color="info" *oitcPermission="['hostgroups', 'edit']"
-                                         [routerLink]="['/', 'hostgroups', 'edit', importedhostgroup.hostgroup_id]"
-                                         class="cursor-pointer">
-                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                    {{ t('In monitoring') }}
-                                </c-badge>
-                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                    {{ t('In monitoring') }}
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
-                            }
-                        </td>
-                        <td>{{ importedhostgroup.description }}</td>
-                        <td>{{ importedhostgroup.created }}</td>
-                        <td>{{ importedhostgroup.modified }}</td>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ImportedHostgroups.name]']"
+                                       [placeholder]="'Filter by imported host group name' | transloco"
+                                       aria-label="ImportedHostgroupName"
+                                       cFormControl
+                                       name="importedhostgroup.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ImportedHostgroups.description]']"
+                                       [placeholder]="'Filter by imported host group description' | transloco"
+                                       aria-label="ImportedHostgroupDescription"
+                                       cFormControl
+                                       name="importedhostgroup.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-3">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Already synchronized') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.ImportedHostgroups.imported"
+                                        id="filter.ImportedHostgroups.imported"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ImportedHostgroups.imported]']"/>
+                                    <label cFormCheckLabel
+                                           for="filter.ImportedHostgroups.imported">
+                                        <c-badge color="info">
+                                            {{ t('In monitoring') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        name="filter.ImportedHostgroups.not_imported"
+                                        id="filter.ImportedHostgroups.not_imported"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[ImportedHostgroups.not_imported]']"/>
+                                    <label cFormCheckLabel
+                                           for="filter.ImportedHostgroups.not_imported">
+                                        <c-badge color="success">
+                                            {{ t('NEW') }}
+                                        </c-badge>
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            <oitc-table-loader *ngIf="!allImportedGroups"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHostgroups.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHostgroups.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHostgroups.created">
+                        {{ t('Import date') }}
+                    </th>
+                    <th scope="col" mat-sort-header="ImportedHostgroups.modified">
+                        {{ t('Last modified') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="importedhostgroups">
+                <tr *ngFor="let importedhostgroup of importedhostgroups">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['ImportModule','importedhostgroups', 'delete']"
+                            [disabled]="!importedhostgroup.allowEdit"
+                            [item]="importedhostgroup"></oitc-item-select>
+
+                    </td>
+                    <td>
+                        {{ importedhostgroup.name }}
+                        <c-badge color="success" *ngIf="importedhostgroup.imported !== 1">
+                            <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                            {{ t('NEW') }}
+                        </c-badge>
+                        @if (importedhostgroup.imported === 1) {
+                            <c-badge color="info" *oitcPermission="['hostgroups', 'edit']"
+                                     [routerLink]="['/', 'hostgroups', 'edit', importedhostgroup.hostgroup_id]"
+                                     class="cursor-pointer">
+                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                {{ t('In monitoring') }}
+                            </c-badge>
+                            <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                {{ t('In monitoring') }}
+                            </span>
+                        }
+                    </td>
+                    <td>{{ importedhostgroup.description }}</td>
+                    <td>{{ importedhostgroup.created }}</td>
+                    <td>{{ importedhostgroup.modified }}</td>
 
 
-                        <td class="width-50">
-                            <oitc-actions-button [permission]="'ImportModule.importedhostgroups.view'"
-                                                 [icon]="['fas', 'eye']"
-                                                 [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
-                                <oitc-actions-button-element [permission]="'ImportModule.importedhostgroups.view'"
-                                                             *ngIf="importedhostgroup.allowView"
-                                                             [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
-                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                    {{ t('View') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
-                                                             [url]="'/import_module/import_changelogs/entity/importedHostgroup/' + importedhostgroup.id">
-                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhostgroup)"
-                                                             *ngIf="importedhostgroup.allowEdit"
-                                                             [permission]="'ImportModule.importedhostgroups.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'ImportModule.importedhostgroups.view'"
+                                             [icon]="['fas', 'eye']"
+                                             [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
+                            <oitc-actions-button-element [permission]="'ImportModule.importedhostgroups.view'"
+                                                         *ngIf="importedhostgroup.allowView"
+                                                         [url]="'/import_module/ImportedHostgroups/view/' + importedhostgroup.id">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
+                                                         [url]="'/import_module/import_changelogs/entity/importedHostgroup/' + importedhostgroup.id">
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhostgroup)"
+                                                         *ngIf="importedhostgroup.allowEdit"
+                                                         [permission]="'ImportModule.importedhostgroups.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-                <oitc-no-records
-                    *ngIf="importedhostgroups && importedhostgroups.length === 0"></oitc-no-records>
-                <ng-container *ngIf="importedhostgroups">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="importedhostgroups.length"></oitc-select-all>
-                            </c-col>
-                            <c-col md="3">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button (click)="toggleDeleteAllModal()"
-                                            class="btn btn-outline-danger col-3 border-0"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-                <c-container
-                    [fluid]="true">
+            <oitc-no-records
+                *ngIf="importedhostgroups && importedhostgroups.length === 0"></oitc-no-records>
+            <ng-container *ngIf="importedhostgroups">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="allImportedGroups"></oitc-paginate-or-scroll>
+                            <oitc-select-all
+                                [itemsCount]="importedhostgroups.length"></oitc-select-all>
+                        </c-col>
+                        <c-col md="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
                         </c-col>
                     </c-row>
                 </c-container>
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
-</oitc-coreui>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="allImportedGroups"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
 <oitc-import-itop-data (completed)="onImportIsCompleted($event)"></oitc-import-itop-data>
 
 

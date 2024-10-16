@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
@@ -8,7 +8,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         SkeletonModule
     ],
     templateUrl: './form-loader.component.html',
-    styleUrl: './form-loader.component.css'
+    styleUrl: './form-loader.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 // This loader mimics the optic of a generic form that is loading data

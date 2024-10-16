@@ -1,4 +1,15 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -54,8 +65,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         XsButtonDirective
     ],
     templateUrl: './cancel-hostdowntime-modal.component.html',
-    styleUrl: './cancel-hostdowntime-modal.component.css'
-
+    styleUrl: './cancel-hostdowntime-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
 
@@ -74,6 +85,7 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(@Inject(DELETE_SERVICE_TOKEN) private DowntimesService: any) {
     }
@@ -93,6 +105,8 @@ export class CancelHostdowntimeModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

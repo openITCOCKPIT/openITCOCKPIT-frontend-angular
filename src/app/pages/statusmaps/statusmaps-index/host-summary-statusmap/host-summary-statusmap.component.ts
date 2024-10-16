@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { SummaryState } from '../../../hosts/summary_state.interface';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -22,7 +22,8 @@ import { HostEntity } from '../../../hosts/hosts.interface';
         RouterLink
     ],
     templateUrl: './host-summary-statusmap.component.html',
-    styleUrl: './host-summary-statusmap.component.css'
+    styleUrl: './host-summary-statusmap.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostSummaryStatusmapComponent {
     @Input() hostSummaryStat!: SummaryState;

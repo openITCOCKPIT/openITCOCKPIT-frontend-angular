@@ -1,4 +1,15 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -49,7 +60,8 @@ import { Subscription } from 'rxjs';
         XsButtonDirective
     ],
     templateUrl: './hosts-enable-flapdetection-modal.component.html',
-    styleUrl: './hosts-enable-flapdetection-modal.component.css'
+    styleUrl: './hosts-enable-flapdetection-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsEnableFlapdetectionModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: EnableOrDisableFlapDetectionItem[] = [];
@@ -62,13 +74,15 @@ export class HostsEnableFlapdetectionModalComponent implements OnInit, OnDestroy
     private readonly notyService: NotyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

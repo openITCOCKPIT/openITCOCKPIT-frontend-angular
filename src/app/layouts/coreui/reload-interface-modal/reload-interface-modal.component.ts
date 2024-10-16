@@ -1,4 +1,12 @@
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -37,7 +45,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './reload-interface-modal.component.html',
-    styleUrl: './reload-interface-modal.component.css'
+    styleUrl: './reload-interface-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReloadInterfaceModalComponent implements OnInit, OnDestroy {
     public percentage = 0;
@@ -49,6 +58,8 @@ export class ReloadInterfaceModalComponent implements OnInit, OnDestroy {
     @ViewChild('modal') private modal!: ModalComponent;
 
     private reloadInterval: any;
+
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
@@ -78,6 +89,7 @@ export class ReloadInterfaceModalComponent implements OnInit, OnDestroy {
                 clearInterval(this.reloadInterval);
                 location.reload();
             }
+            this.cdr.markForCheck();
         }, 1000);
     }
 

@@ -1,381 +1,380 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['instantreports', 'index']" [routerLink]="['/', 'instantreports', 'index']">
-                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                        {{ t('Instant reports') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                    {{ t('Edit') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['instantreports', 'index']" [routerLink]="['/', 'instantreports', 'index']">
+                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                    {{ t('Instant reports') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
 
-        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
 
-        <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3" *ngIf="post">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('Edit instant report') }}
-                        <small class="fw-300">
-                            {{ post.name }}
-                        </small>
-                    </h5>
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3" *ngIf="post">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit instant report') }}
+                    <small class="fw-300">
+                        {{ post.name }}
+                    </small>
+                </h5>
 
-                    <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
 
-                            <button [fallbackUrl]="['instantreports', 'index']" cButton class="ripple" color="default"
-                                    oitcBackButton
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                                {{ t('Back') }}
-                            </button>
-                        </c-nav-item>
-                    </c-nav>
+                        <button [fallbackUrl]="['instantreports', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-                </c-card-header>
-                <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-                    <div class="mb-3">
-                        <label cLabel for="container">
-                            {{ t('Container') }}
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-select
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.container_id"
+                        [options]="containers"
+                        (onChange)="onContainerChange()"
+                        oitcFormError [errors]="errors" errorField="container_id">
+                    </oitc-select>
+
+                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                        {{ t('Please select a container.') }}
+                    </div>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="Name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Name" required type="text"
+                           name="Name"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="post.name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Type') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-select
+                        name="type"
+                        id="type"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.type"
+                        [options]="ObjectTypesSelect"
+                        (onChange)="onTypeChange()"
+                        oitcFormError [errors]="errors" errorField="type">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Select the object type, which should be evaluated by the report.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hosts">
+                    <label cLabel for="post.hosts._ids">
+                        {{ t('Hosts') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-multi-select
+                        name="post.hosts._ids"
+                        id="post.hosts._ids"
+                        [(ngModel)]="post.hosts._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadHosts"
+                        [options]="hosts"
+                        oitcFormError [errors]="errors" errorField="hosts">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Services">
+                    <label cLabel for="post.services._ids">
+                        {{ t('Services') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-multi-select-optgroup
+                        name="post.services._ids"
+                        id="post.services._ids"
+                        optionValue="value"
+                        optionLabel="label"
+                        [options]="services"
+                        [(ngModel)]="post.services._ids"
+                        [searchCallback]="loadServices"
+                        class="flex-1"
+                        oitcFormError [errors]="errors" errorField="services">
+                    </oitc-multi-select-optgroup>
+                    <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hostgroups">
+                    <label cLabel for="post.hostgroups._ids">
+                        {{ t('Host groups') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-multi-select
+                        name="post.hostgroups._ids"
+                        id="post.hostgroups._ids"
+                        [(ngModel)]="post.hostgroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="hostgroups"
+                        oitcFormError [errors]="errors" errorField="hostgroups">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Servicegroups">
+                    <label cLabel for="post.servicegroups._ids">
+                        {{ t('Service groups') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-multi-select
+                        name="post.servicegroups._ids"
+                        id="post.servicegroups._ids"
+                        [(ngModel)]="post.servicegroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="servicegroups"
+                        oitcFormError [errors]="errors" errorField="servicegroups">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="servicegroups"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <div>
+                        <label cLabel>
+                            {{ t('Evaluation') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-
-                        <oitc-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.container_id"
-                            [options]="containers"
-                            (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="container_id">
-                        </oitc-select>
-
-                        <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                            {{ t('Please select a container.') }}
-                        </div>
-                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                     </div>
+                    <c-form-check inline>
+                        <input cFormCheckInput
+                               id="evalHosts"
+                               [(ngModel)]="post.evaluation"
+                               [value]="InstantreportEvaluationTypes.Hosts"
+                               name="evalHosts"
+                               type="radio"
+                               class="radio-lg me-2 mt-0"
+                        />
+                        <label cFormCheckLabel for="evalHosts">{{ t('Hosts') }}</label>
+                    </c-form-check>
+                    <c-form-check inline>
+                        <input cFormCheckInput
+                               id="evalHostsAndServices"
+                               [(ngModel)]="post.evaluation"
+                               [value]="InstantreportEvaluationTypes.HostAndServices"
+                               name="evalHostsAndServices"
+                               type="radio"
+                               class="radio-lg me-2 mt-0"
+                        />
+                        <label cFormCheckLabel for="evalHostsAndServices">{{ t('Hosts and Services') }}</label>
+                    </c-form-check>
+                    <c-form-check inline>
+                        <input cFormCheckInput
+                               id="evalServices"
+                               [(ngModel)]="post.evaluation"
+                               [value]="InstantreportEvaluationTypes.Services"
+                               name="evalServices"
+                               type="radio"
+                               class="radio-lg me-2 mt-0"
+                        />
+                        <label cFormCheckLabel for="evalServices">{{ t('Services') }}</label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('Choose if only host, host and services or only services should be evaluated.') }}
+                    </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Name">
-                            {{ t('Name') }}
+                <div class="mb-3">
+                    <label cLabel for="TimePeriodSelect">
+                        <oitc-label-link
+                            [objectId]="post.timeperiod_id"
+                            [route]="'/timeperiods/edit'"
+                            [permissions]="'timeperiods.edit'"
+                        >
+                            {{ t('Time period') }}
                             <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl id="Name" required type="text"
-                               name="Name"
-                               oitcFormError [errors]="errors" errorField="name"
-                               [(ngModel)]="post.name">
-                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                        </oitc-label-link>
+                    </label>
+
+                    <oitc-select
+                        name="TimePeriodSelect"
+                        id="TimePeriodSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.timeperiod_id"
+                        [options]="timeperiods"
+                        oitcFormError [errors]="errors" errorField="timeperiod_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="timeperiod_id"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Only outages during the selected time period will be considered') }}
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="container">
-                            {{ t('Type') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
+                <div class="mb-3">
+                    <label cLabel for="ReflectionState">
+                        {{ t('Reflection state') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
 
-                        <oitc-select
-                            name="type"
-                            id="type"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.type"
-                            [options]="ObjectTypesSelect"
-                            (onChange)="onTypeChange()"
-                            oitcFormError [errors]="errors" errorField="type">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="type"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Select the object type, which should be evaluated by the report.') }}
-                        </div>
+                    <oitc-select
+                        name="ReflectionState"
+                        id="ReflectionState"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.reflection"
+                        [options]="ReflectionStateSelect"
+                        oitcFormError [errors]="errors" errorField="reflection">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="reflection"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            id="downtimes"
+                            name="downtimes"
+                            [(ngModel)]="post.downtimes"
+                            cFormCheckInput
+                            class="checkbox-lg me-2 mt-0"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="downtimes">{{ t('Consider downtimes') }}</label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('If checked, outages that occurred while a scheduled downtime was running will be considered as Ok.') }}
                     </div>
+                </div>
 
-                    <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hosts">
-                        <label cLabel for="post.hosts._ids">
-                            {{ t('Hosts') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-multi-select
-                            name="post.hosts._ids"
-                            id="post.hosts._ids"
-                            [(ngModel)]="post.hosts._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [searchCallback]="loadHosts"
-                            [options]="hosts"
-                            oitcFormError [errors]="errors" errorField="hosts">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            id="summary"
+                            name="summary"
+                            [(ngModel)]="post.summary"
+                            cFormCheckInput
+                            class="checkbox-lg me-2 mt-0"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="summary">{{ t('Summary display') }}</label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('If checked, the report will only show a summary across all objects.') }}
                     </div>
+                </div>
 
-                    <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Services">
-                        <label cLabel for="post.services._ids">
-                            {{ t('Services') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-multi-select-optgroup
-                            name="post.services._ids"
-                            id="post.services._ids"
-                            optionValue="value"
-                            optionLabel="label"
-                            [options]="services"
-                            [(ngModel)]="post.services._ids"
-                            [searchCallback]="loadServices"
-                            class="flex-1"
-                            oitcFormError [errors]="errors" errorField="services">
-                        </oitc-multi-select-optgroup>
-                        <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            id="send_email"
+                            name="send_email"
+                            [(ngModel)]="post.send_email"
+                            cFormCheckInput
+                            class="checkbox-lg me-2 mt-0"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            type="checkbox"/>
+                        <label cFormCheckLabel
+                               for="send_email">{{ t('Send email') }}</label>
+                    </c-form-check>
+                </div>
 
-                    <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hostgroups">
-                        <label cLabel for="post.hostgroups._ids">
-                            {{ t('Host groups') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-multi-select
-                            name="post.hostgroups._ids"
-                            id="post.hostgroups._ids"
-                            [(ngModel)]="post.hostgroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="hostgroups"
-                            oitcFormError [errors]="errors" errorField="hostgroups">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="SendInterval">
+                        {{ t('Send interval') }}
+                    </label>
 
-                    <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Servicegroups">
-                        <label cLabel for="post.servicegroups._ids">
-                            {{ t('Service groups') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-multi-select
-                            name="post.servicegroups._ids"
-                            id="post.servicegroups._ids"
-                            [(ngModel)]="post.servicegroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="servicegroups"
-                            oitcFormError [errors]="errors" errorField="servicegroups">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors" errorField="servicegroups"></oitc-form-feedback>
-                    </div>
+                    <oitc-select
+                        [disabled]="!post.send_email"
+                        name="SendInterval"
+                        id="SendInterval"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.send_interval"
+                        [options]="SendIntervalSelect"
+                        oitcFormError [errors]="errors" errorField="send_interval">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="send_interval"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <div>
-                            <label cLabel>
-                                {{ t('Evaluation') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                        </div>
-                        <c-form-check inline>
-                            <input cFormCheckInput
-                                   id="evalHosts"
-                                   [(ngModel)]="post.evaluation"
-                                   [value]="InstantreportEvaluationTypes.Hosts"
-                                   name="evalHosts"
-                                   type="radio"
-                                   class="radio-lg me-2 mt-0"
-                            />
-                            <label cFormCheckLabel for="evalHosts">{{ t('Hosts') }}</label>
-                        </c-form-check>
-                        <c-form-check inline>
-                            <input cFormCheckInput
-                                   id="evalHostsAndServices"
-                                   [(ngModel)]="post.evaluation"
-                                   [value]="InstantreportEvaluationTypes.HostAndServices"
-                                   name="evalHostsAndServices"
-                                   type="radio"
-                                   class="radio-lg me-2 mt-0"
-                            />
-                            <label cFormCheckLabel for="evalHostsAndServices">{{ t('Hosts and Services') }}</label>
-                        </c-form-check>
-                        <c-form-check inline>
-                            <input cFormCheckInput
-                                   id="evalServices"
-                                   [(ngModel)]="post.evaluation"
-                                   [value]="InstantreportEvaluationTypes.Services"
-                                   name="evalServices"
-                                   type="radio"
-                                   class="radio-lg me-2 mt-0"
-                            />
-                            <label cFormCheckLabel for="evalServices">{{ t('Services') }}</label>
-                        </c-form-check>
-                        <div class="help-block">
-                            {{ t('Choose if only host, host and services or only services should be evaluated.') }}
-                        </div>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="UsersSelect">
+                        {{ t('Users to send') }}
+                    </label>
 
-                    <div class="mb-3">
-                        <label cLabel for="TimePeriodSelect">
-                            <oitc-label-link
-                                [objectId]="post.timeperiod_id"
-                                [route]="'/timeperiods/edit'"
-                                [permissions]="'timeperiods.edit'"
-                            >
-                                {{ t('Time period') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </oitc-label-link>
-                        </label>
+                    <oitc-multi-select
+                        [disabled]="!post.send_email"
+                        name="UsersSelect"
+                        id="UsersSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.users._ids"
+                        [options]="users"
+                        oitcFormError [errors]="errors" errorField="users">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="users"></oitc-form-feedback>
+                </div>
 
-                        <oitc-select
-                            name="TimePeriodSelect"
-                            id="TimePeriodSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.timeperiod_id"
-                            [options]="timeperiods"
-                            oitcFormError [errors]="errors" errorField="timeperiod_id">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="timeperiod_id"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Only outages during the selected time period will be considered') }}
-                        </div>
-                    </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Update instant report') }}
+                </button>
+                <button [fallbackUrl]="['instantreports', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
 
-                    <div class="mb-3">
-                        <label cLabel for="ReflectionState">
-                            {{ t('Reflection state') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
 
-                        <oitc-select
-                            name="ReflectionState"
-                            id="ReflectionState"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.reflection"
-                            [options]="ReflectionStateSelect"
-                            oitcFormError [errors]="errors" errorField="reflection">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="reflection"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-form-check>
-                            <input
-                                id="downtimes"
-                                name="downtimes"
-                                [(ngModel)]="post.downtimes"
-                                cFormCheckInput
-                                class="checkbox-lg me-2 mt-0"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                type="checkbox"/>
-                            <label cFormCheckLabel
-                                   for="downtimes">{{ t('Consider downtimes') }}</label>
-                        </c-form-check>
-                        <div class="help-block">
-                            {{ t('If checked, outages that occurred while a scheduled downtime was running will be considered as Ok.') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-form-check>
-                            <input
-                                id="summary"
-                                name="summary"
-                                [(ngModel)]="post.summary"
-                                cFormCheckInput
-                                class="checkbox-lg me-2 mt-0"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                type="checkbox"/>
-                            <label cFormCheckLabel
-                                   for="summary">{{ t('Summary display') }}</label>
-                        </c-form-check>
-                        <div class="help-block">
-                            {{ t('If checked, the report will only show a summary across all objects.') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-form-check>
-                            <input
-                                id="send_email"
-                                name="send_email"
-                                [(ngModel)]="post.send_email"
-                                cFormCheckInput
-                                class="checkbox-lg me-2 mt-0"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                type="checkbox"/>
-                            <label cFormCheckLabel
-                                   for="send_email">{{ t('Send email') }}</label>
-                        </c-form-check>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="SendInterval">
-                            {{ t('Send interval') }}
-                        </label>
-
-                        <oitc-select
-                            [disabled]="!post.send_email"
-                            name="SendInterval"
-                            id="SendInterval"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.send_interval"
-                            [options]="SendIntervalSelect"
-                            oitcFormError [errors]="errors" errorField="send_interval">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="send_interval"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="UsersSelect">
-                            {{ t('Users to send') }}
-                        </label>
-
-                        <oitc-multi-select
-                            [disabled]="!post.send_email"
-                            name="UsersSelect"
-                            id="UsersSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.users._ids"
-                            [options]="users"
-                            oitcFormError [errors]="errors" errorField="users">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="users"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Update instant report') }}
-                    </button>
-                    <button [fallbackUrl]="['instantreports', 'index']" cButton class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
-
-                </c-card-footer>
-            </c-card>
-        </form>
-    </ng-container>
-</oitc-coreui>
 

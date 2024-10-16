@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -58,7 +68,8 @@ import { RouterLink } from '@angular/router';
         RouterLink
     ],
     templateUrl: './hosts-add-to-hostgroup.component.html',
-    styleUrl: './hosts-add-to-hostgroup.component.css'
+    styleUrl: './hosts-add-to-hostgroup.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsAddToHostgroupComponent implements OnChanges {
     @Input({required: true}) public items: SelectKeyValue[] = [];
@@ -72,11 +83,16 @@ export class HostsAddToHostgroupComponent implements OnChanges {
     protected type: string = 'hostOnly';
 
     protected joinedHostIds: string = '';
+
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

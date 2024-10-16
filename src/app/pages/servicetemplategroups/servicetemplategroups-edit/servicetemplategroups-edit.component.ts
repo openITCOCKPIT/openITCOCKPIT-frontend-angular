@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -57,7 +57,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -85,7 +85,8 @@ import { HistoryService } from '../../../history.service';
         SelectComponent
     ],
     templateUrl: './servicetemplategroups-edit.component.html',
-    styleUrl: './servicetemplategroups-edit.component.css'
+    styleUrl: './servicetemplategroups-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
 
@@ -96,6 +97,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
+    private cdr = inject(ChangeDetectorRef);
 
     public post: ServiceTemplateGroupssGetEditPostServicetemplategroup = {
         container: {
@@ -132,6 +134,8 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
 
                 // Then force containerChange!
                 this.onContainerChange();
+
+                this.cdr.markForCheck();
             }));
     }
 
@@ -143,6 +147,8 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicetemplateGroupsService.updateServicetemplategroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -169,6 +175,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.ServicetemplateGroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot): void => {
+                this.cdr.markForCheck();
                 this.containers = result.containers;
             }))
     }
@@ -192,6 +199,7 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplateGroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
+                this.cdr.markForCheck();
             }))
     }
 }

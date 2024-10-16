@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ColComponent, RowComponent } from '@coreui/angular';
@@ -13,7 +13,8 @@ import { ColComponent, RowComponent } from '@coreui/angular';
         ColComponent
     ],
     templateUrl: './host-timeline-legend.component.html',
-    styleUrl: './host-timeline-legend.component.css'
+    styleUrl: './host-timeline-legend.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostTimelineLegendComponent {
 

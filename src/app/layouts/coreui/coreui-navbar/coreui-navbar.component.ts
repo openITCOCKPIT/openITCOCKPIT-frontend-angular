@@ -1,4 +1,14 @@
-import { booleanAttribute, Component, ElementRef, inject, Input, OnInit, Renderer2 } from '@angular/core';
+import {
+    booleanAttribute,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    Input,
+    OnInit,
+    Renderer2
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
@@ -30,7 +40,8 @@ import { SystemnameService } from '../../../services/systemname.service';
         AsyncPipe
     ],
     templateUrl: './coreui-navbar.component.html',
-    styleUrl: './coreui-navbar.component.css'
+    styleUrl: './coreui-navbar.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoreuiNavbarComponent implements OnInit {
     constructor(
@@ -49,6 +60,7 @@ export class CoreuiNavbarComponent implements OnInit {
     @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
     @Input({transform: booleanAttribute}) groupItems?: boolean;
     @Input({transform: booleanAttribute}) compact?: boolean;
+    private cdr = inject(ChangeDetectorRef);
 
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined
 
@@ -77,11 +89,12 @@ export class CoreuiNavbarComponent implements OnInit {
             .subscribe((result: NavigationInterface) => {
                 // Menu records are loaded
                 this.menu = result.menu;
+                this.cdr.markForCheck();
             })
         );
 
         this.subscriptions.add(this.sidebarService.sidebarState$.subscribe((next: SidebarAction) => {
-            // Subscribe which send shor or hide of the complete sidebar navigation
+            // Subscribe which send show or hide of the complete sidebar navigation
             if (next.visible === "toggle") {
                 // next.visible is toggle so we invert the current value for visible
                 this.visible = !this.visible;
@@ -89,6 +102,7 @@ export class CoreuiNavbarComponent implements OnInit {
                 // next.visible is true or false
                 this.visible = next.visible;
             }
+            this.cdr.markForCheck();
         }));
 
         // Detect if browser changes to mobile size
@@ -105,15 +119,17 @@ export class CoreuiNavbarComponent implements OnInit {
                 // Desktop
                 this.isUnfoldable = true;
             }
-
+            this.cdr.markForCheck();
         }));
 
     }
 
+    // Called by (click) which will mark the change detection
     public toggleUnfoldable() {
         this.unfoldable = !this.unfoldable;
     }
 
+    // Called by (click) which will mark the change detection
     public hideMenu() {
         this.sidebarService.toggleShowOrHideSidebar();
     }

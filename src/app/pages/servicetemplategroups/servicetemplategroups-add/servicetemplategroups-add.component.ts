@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -56,7 +56,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -84,7 +84,8 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent
     ],
     templateUrl: './servicetemplategroups-add.component.html',
-    styleUrl: './servicetemplategroups-add.component.css'
+    styleUrl: './servicetemplategroups-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
@@ -102,6 +103,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     protected containers: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -120,6 +122,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicetemplategroupsService.addServicetemplateGroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -154,6 +157,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplategroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot): void => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -190,6 +194,7 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplategroupsService.loadServicetemplatesByContainerId(this.post.container.parent_id, servicetemplateName, this.post.servicetemplates._ids)
             .subscribe((result: LoadServiceTemplatesRoot): void => {
                 this.servicetemplates = result.servicetemplates;
+                this.cdr.markForCheck();
             }))
     }
 }

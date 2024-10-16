@@ -1,5 +1,13 @@
-import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    Pipe,
+    PipeTransform
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -51,7 +59,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { KeyValue, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { HistoryService } from '../../../history.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
@@ -62,7 +70,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
     selector: 'oitc-users-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -103,7 +111,8 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
         NgOptionHighlightDirective
     ],
     templateUrl: './users-add.component.html',
-    styleUrl: './users-add.component.css'
+    styleUrl: './users-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersAddComponent implements OnDestroy, OnInit {
     private readonly subscriptions: Subscription = new Subscription();
@@ -123,12 +132,13 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected dateformats: UserDateformat[] = [];
     protected timezones: UserTimezonesSelect[] = [];
     protected localeOptions: UserLocaleOption[] = [];
-    protected usergroups : SelectKeyValue[] = [];
+    protected usergroups: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected containerPermissions: LoadContainerPermissionsRoot = {} as LoadContainerPermissionsRoot;
     protected tabRotationIntervalText: string = '';
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
+    private cdr = inject(ChangeDetectorRef);
 
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
@@ -142,13 +152,16 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 this.post.User.ContainersUsersMemberships[id] = 1;
             }
         });
-        console.log(this.selectedContainerIds);
+        this.cdr.markForCheck();
     }
 
     public addUser(): void {
         this.subscriptions.add(this.UsersService.addUser(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
+                    this.cdr.markForCheck();
+
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
                     const title: string = this.TranslocoService.translate('User');
@@ -238,6 +251,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadContainerRoles(params)
             .subscribe((result: LoadContainerRolesRoot) => {
                 this.containerRoles = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -250,6 +264,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.containerPermissions = {} as LoadContainerPermissionsRoot;
 
         if (this.post.User.usercontainerroles._ids.length === 0) {
+            this.cdr.markForCheck();
             return;
         }
         let params: LoadContainerPermissionsRequest = {
@@ -259,12 +274,14 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadContainerPermissions(params)
             .subscribe((result: LoadContainerPermissionsRoot) => {
                 this.containerPermissions = result;
+                this.cdr.markForCheck();
             }));
     }
     public loadContainers = (): void => {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -276,6 +293,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
 
                 this.serverTimeZone = result.serverTimeZone;
                 this.serverTime = result.serverTime;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -284,6 +302,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getLocaleOptions()
             .subscribe((result: UserLocaleOption[]) => {
                 this.localeOptions = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -291,6 +310,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getUsergroups()
             .subscribe((result: LoadUsergroupsRoot) => {
                 this.usergroups = result.usergroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -298,11 +318,13 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys.push(result);
+                this.cdr.markForCheck();
             })
         );
     }
 
     protected updateTabRotationInterval(): void {
+        this.cdr.markForCheck();
         if (this.post.User.dashboard_tab_rotation === 0) {
             this.tabRotationIntervalText = 'disabled';
             return;
@@ -318,12 +340,14 @@ export class UsersAddComponent implements OnDestroy, OnInit {
 
     protected deleteApiKey(index: number): void {
         this.post.User.apikeys.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
     protected refreshApiKey(index: number): void {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys[index].apikey = result.apikey;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -332,13 +356,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
         return index;
     }
 
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['apikeys'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['apikeys'][index] as unknown as GenericValidationError;
-    }
 }
 
 const keepOrder = (a: any, b: any) => a;

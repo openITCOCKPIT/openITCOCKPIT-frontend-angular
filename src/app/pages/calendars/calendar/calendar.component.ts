@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output,
+    signal,
+    ViewChild
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DateTime } from 'luxon';
 
@@ -79,12 +89,15 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
         JsonPipe
     ],
     templateUrl: './calendar.component.html',
-    styleUrl: './calendar.component.css'
+    styleUrl: './calendar.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent {
     @ViewChild('fullCalendar') fullCalendar!: FullCalendarComponent;
 
     private _events: CalendarEvent[] = [];
+
+    private cdr = inject(ChangeDetectorRef);
 
     @Input()
     set events(externalEvents: CalendarEvent[]) {
@@ -156,7 +169,7 @@ export class CalendarComponent {
     });
     currentEvents = signal<EventApi[]>([]);
 
-    constructor(private changeDetector: ChangeDetectorRef) {
+    constructor() {
     }
 
 
@@ -181,6 +194,7 @@ export class CalendarComponent {
 
         this.calendarOptions.update(options => ({...options, events: this.events}));
         this.eventsChange.emit(this.events); // Emit the changes
+        this.cdr.markForCheck();
     }
 
     // Handle event edit
@@ -197,11 +211,12 @@ export class CalendarComponent {
             show: true,
             id: 'editHolidayModal',
         });
+        this.cdr.markForCheck();
     }
 
     public handleEvents(events: EventApi[]) {
         this.currentEvents.set(events);
-        this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
+        this.cdr.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
     }
 
 
@@ -292,6 +307,7 @@ export class CalendarComponent {
             show: true,
             id: 'addNewHolidayModal',
         });
+        this.cdr.markForCheck();
     }
 
     public addNewHoliday() {
@@ -319,6 +335,7 @@ export class CalendarComponent {
             show: false,
             id: 'addNewHolidayModal',
         });
+        this.cdr.markForCheck();
     }
 
     public updateHoliday() {
@@ -354,5 +371,6 @@ export class CalendarComponent {
             show: false,
             id: 'editHolidayModal',
         });
+        this.cdr.markForCheck();
     }
 }

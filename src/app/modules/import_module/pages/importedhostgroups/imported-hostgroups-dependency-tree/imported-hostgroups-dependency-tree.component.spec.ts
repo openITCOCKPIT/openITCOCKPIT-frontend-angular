@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImportedHostgroupsDependencyTreeComponent } from './imported-hostgroups-dependency-tree.component';
 
 describe('ImportedHostgroupsDependencyTreeComponent', () => {
-  let component: ImportedHostgroupsDependencyTreeComponent;
-  let fixture: ComponentFixture<ImportedHostgroupsDependencyTreeComponent>;
+    let component: ImportedHostgroupsDependencyTreeComponent;
+    let fixture: ComponentFixture<ImportedHostgroupsDependencyTreeComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ImportedHostgroupsDependencyTreeComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [ImportedHostgroupsDependencyTreeComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(ImportedHostgroupsDependencyTreeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(ImportedHostgroupsDependencyTreeComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

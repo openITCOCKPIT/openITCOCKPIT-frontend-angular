@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -28,7 +28,6 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -78,7 +77,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownComponent,
@@ -121,7 +120,8 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     styleUrl: './users-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: UsersService} // Inject the ServicegroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
@@ -140,6 +140,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     protected hideFilter: boolean = true;
     protected usergroups: SelectKeyValue[] = [];
     protected resetPasswordUser: User = {} as User;
+    private cdr = inject(ChangeDetectorRef);
 
     public loadUsers() {
         this.SelectionServiceService.deselectAll();
@@ -147,6 +148,8 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.UsersService.getIndex(this.params)
             .subscribe((result: UsersIndexRoot) => {
                 this.result = result;
+                this.cdr.markForCheck();
+
             }));
     }
 
@@ -168,6 +171,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.UsersService.getUsergroups()
             .subscribe((result: LoadUsergroupsRoot) => {
                 this.usergroups = result.usergroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -231,6 +235,7 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetPasswordModal(user: User) {
+        this.cdr.markForCheck();
         this.resetPasswordUser = user;
         this.modalService.toggle({
             show: true,

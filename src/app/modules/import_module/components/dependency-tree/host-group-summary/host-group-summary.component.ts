@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
@@ -25,7 +25,8 @@ import { GetKeys } from '../../../../../classes/GetKeys';
         KeyValuePipe
     ],
     templateUrl: './host-group-summary.component.html',
-    styleUrl: './host-group-summary.component.css'
+    styleUrl: './host-group-summary.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostGroupSummaryComponent {
     @Input() hostgroupSummeryState!: HostgroupSummaryState;

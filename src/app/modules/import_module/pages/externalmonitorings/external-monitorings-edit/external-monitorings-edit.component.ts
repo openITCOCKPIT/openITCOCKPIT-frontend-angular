@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -55,7 +55,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-        CoreuiComponent,
+
         DynamicalFormFieldsComponent,
         FaIconComponent,
         FormControlDirective,
@@ -78,7 +78,8 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormLoaderComponent
     ],
     templateUrl: './external-monitorings-edit.component.html',
-    styleUrl: './external-monitorings-edit.component.css'
+    styleUrl: './external-monitorings-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     private id: number = 0;
@@ -112,6 +113,8 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     ];
     protected readonly Object = Object;
     public containers: SelectKeyValue[] = [];
+    private cdr = inject(ChangeDetectorRef);
+
 
     constructor(private route: ActivatedRoute) {
     }
@@ -125,6 +128,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -134,6 +138,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
                 .subscribe((result: ExternalMonitoringConfig) => {
                     this.errors = null;
                     this.formFields = result.config.formFields;
+                    this.cdr.markForCheck();
                 })
             );
         }
@@ -144,6 +149,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 //Fire on page load
                 this.post = result.externalMonitoring;
+                this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadConfigFieldsBySystemType();
             }));
@@ -152,6 +158,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalMonitoringsService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('External system');

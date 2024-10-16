@@ -1,10 +1,10 @@
 <li class="nav-group" [ngClass]="{'show':open}">
     <a class="nav-link nav-group-toggle" (click)="toggleGroup($event)">
-        <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-        {{ item.alias }}
+        <fa-icon [icon]="item().icon" class="nav-icon"></fa-icon>
+        {{ item().alias }}
     </a>
     <ul class="nav-group-items compact" [ngClass]="{'d-block':open}">
-        @for (groupItem of item.items; track $index) {
+        @for (groupItem of item().items; track $index) {
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="groupItem.angularUrl">
                     <fa-icon [icon]="groupItem.icon"
@@ -15,3 +15,4 @@
         }
     </ul>
 </li>
+

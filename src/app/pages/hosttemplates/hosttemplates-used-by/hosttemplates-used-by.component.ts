@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HosttemplatesService } from '../hosttemplates.service';
@@ -22,7 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { HostObjectCake2 } from '../../hosts/hosts.interface';
 import { HosttemplateEntity } from '../hosttemplates.interface';
@@ -49,7 +49,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         PermissionDirective,
@@ -71,13 +71,15 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         ColComponent,
         RowComponent,
         SelectAllComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './hosttemplates-used-by.component.html',
     styleUrl: './hosttemplates-used-by.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ContactsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesUsedByComponent implements OnInit, OnDestroy {
 
@@ -95,6 +97,7 @@ export class HosttemplatesUsedByComponent implements OnInit, OnDestroy {
 
     private router = inject(Router);
     private route = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.hosttemplateId = Number(this.route.snapshot.paramMap.get('id'));
@@ -113,6 +116,8 @@ export class HosttemplatesUsedByComponent implements OnInit, OnDestroy {
                 this.hosts = result.all_hosts;
                 this.hosttemplate = result.hosttemplate;
                 this.total = result.all_hosts.length;
+                this.cdr.markForCheck();
+
             }));
     }
 

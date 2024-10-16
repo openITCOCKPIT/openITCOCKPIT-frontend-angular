@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { SummaryState } from '../../../../../pages/hosts/summary_state.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -25,7 +25,8 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
         KeyValuePipe
     ],
     templateUrl: './host-summary.component.html',
-    styleUrl: './host-summary.component.css'
+    styleUrl: './host-summary.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostSummaryComponent {
     @Input() hostSummaryStat!: SummaryState;
@@ -36,8 +37,7 @@ export class HostSummaryComponent {
         {
             key: 'state',
             label: this.TranslocoService.translate('State'),
-            queryParams: {
-            }
+            queryParams: {}
         }, {
             key: 'acknowledged',
             label: this.TranslocoService.translate('Acknowledged'),

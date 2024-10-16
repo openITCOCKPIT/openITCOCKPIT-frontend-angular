@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -41,7 +41,7 @@ import {
     selector: 'oitc-documentations-view',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -70,7 +70,8 @@ import {
         ServicesBrowserMenuComponent
     ],
     templateUrl: './documentations-view.component.html',
-    styleUrl: './documentations-view.component.css'
+    styleUrl: './documentations-view.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentationsViewComponent implements OnInit, OnDestroy {
 
@@ -91,13 +92,18 @@ export class DocumentationsViewComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.uuid = String(this.route.snapshot.paramMap.get('uuid'));
         this.type = String(this.route.snapshot.paramMap.get('type'));
+
+        this.cdr.markForCheck();
+
         this.subscriptions.add(this.DocumentationsService.getView(this.uuid, this.type)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.documentation = result;
 
                 if (this.type === 'host') {

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     ButtonGroupComponent,
     CardBodyComponent,
@@ -54,7 +54,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -73,7 +73,7 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -107,13 +107,15 @@ import { IndexPage } from '../../../pages.interface';
         DropdownComponent,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        TableLoaderComponent
+        TableLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './timeperiods-index.component.html',
     styleUrl: './timeperiods-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: TimeperiodsService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -128,6 +130,7 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private TimeperiodsService = inject(TimeperiodsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -153,6 +156,7 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         this.subscriptions.add(this.TimeperiodsService.getIndex(this.params).subscribe(data => {
             this.timeperiods = data;
+            this.cdr.markForCheck();
         }));
     }
 

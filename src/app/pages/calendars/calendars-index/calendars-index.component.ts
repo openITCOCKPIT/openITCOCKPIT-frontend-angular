@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -61,7 +61,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-calendars-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -106,7 +106,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './calendars-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: CalendarsService} // Inject the CalendarsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -119,6 +120,7 @@ export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private CalendarsService = inject(CalendarsService)
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private _liveAnnouncer: LiveAnnouncer) {
     }
@@ -137,6 +139,7 @@ export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.CalendarsService.getIndex(this.params)
             .subscribe((result) => {
                 this.calendars = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -190,6 +193,7 @@ export class CalendarsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

@@ -1,5 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -63,7 +62,7 @@ import { ProfileChangePasswordComponent } from '../profile-change-password/profi
     selector: 'oitc-profile-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -114,7 +113,8 @@ import { ProfileChangePasswordComponent } from '../profile-change-password/profi
         ProfileChangePasswordComponent
     ],
     templateUrl: './profile-edit.component.html',
-    styleUrl: './profile-edit.component.css'
+    styleUrl: './profile-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileEditComponent implements OnInit, OnDestroy {
 
@@ -137,6 +137,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
     private readonly document = inject(DOCUMENT);
+    private cdr = inject(ChangeDetectorRef);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -152,15 +153,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UsersService.getLocaleOptions().subscribe(data => {
             this.localeOptions = data;
+            this.cdr.markForCheck();
         }));
 
         this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
             this.dateformates = data.dateformats;
             this.timezones = data.timezones;
+            this.cdr.markForCheck();
         }));
 
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.serverTimezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -172,6 +176,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             this.maxUploadLimit = data.maxUploadLimit;
 
             this.createDropzone();
+            this.cdr.markForCheck();
         }));
     }
 
@@ -187,6 +192,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.ProfileService.updateProfile(this.UserPost)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         this.notyService.genericSuccess();
                         this.UserErrors = null;
@@ -208,6 +214,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         if (this.UserPost) {
             this.subscriptions.add(this.ProfileService.deleteUserImage()
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         this.notyService.genericSuccess();
                         this.loadUser();
@@ -248,6 +255,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                 }
             });
             this.dropzoneCreated = true;
+            this.cdr.markForCheck();
         }
     }
 

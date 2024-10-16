@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { ColComponent, PageItemDirective, PageLinkDirective, PaginationComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DecimalPipe, NgFor, NgIf } from '@angular/common';
@@ -23,7 +23,8 @@ import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawe
         NgFor
     ],
     templateUrl: './paginator.component.html',
-    styleUrl: './paginator.component.css'
+    styleUrl: './paginator.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginatorComponent implements OnChanges {
 

@@ -1,7 +1,8 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -54,6 +55,7 @@ import {
     ServicestatusSimpleIconComponent
 } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { IndexPage } from '../../../pages.interface';
 
 @Component({
     selector: 'oitc-notifications-index',
@@ -63,7 +65,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -97,12 +99,14 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         PaginateOrScrollComponent,
         ServicestatusSimpleIconComponent,
         ContainerComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        CardFooterComponent
     ],
     templateUrl: './notifications-services.component.html',
-    styleUrl: './notifications-services.component.css'
+    styleUrl: './notifications-services.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotificationsServicesComponent implements OnInit, OnDestroy {
+export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexPage {
     private NotificationsService = inject(NotificationsService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -118,6 +122,8 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -139,6 +145,7 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.NotificationsService.getServices(this.params)
             .subscribe((result) => {
                 this.notifications = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -182,6 +189,9 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadNotifications();
         }
+    }
+
+    public onMassActionComplete(success: boolean) {
     }
 
 }

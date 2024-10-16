@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -30,7 +30,6 @@ import {
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
@@ -38,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { JsonPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -144,7 +143,7 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -208,14 +207,16 @@ import { IndexPage } from '../../../pages.interface';
         NgTemplateOutlet,
         FilterBookmarkComponent,
         ColumnsConfigExportModalComponent,
-        ColumnsConfigImportModalComponent
+        ColumnsConfigImportModalComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-index.component.html',
     styleUrl: './hosts-index.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     // Filter vars
@@ -295,6 +296,8 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public columnsTableKey: string = 'HostsIndexColumns';
     public showColumnConfig: boolean = false;
     public configString: string = ''
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
@@ -400,6 +403,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
                 this.satellites = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -452,15 +456,18 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             .subscribe((result) => {
                 this.hosts = result;
                 this.userFullname = result.username;
+                this.cdr.markForCheck();
             })
         );
     }
 
     // Show or hide the filter
+    // Called by (click) - no manual change detection required
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
     }
 
+    // Called by (click) - no manual change detection required
     public problemsOnly() {
         this.resetFilter();
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -40,7 +40,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -59,7 +59,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './hostgroups-copy.component.html',
-    styleUrl: './hostgroups-copy.component.css'
+    styleUrl: './hostgroups-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsCopyComponent implements OnInit, OnDestroy {
     public hostgroups: HostgroupsCopyPostResult[] = [];
@@ -71,6 +72,7 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -97,6 +99,7 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
                     Error: null
                 } as HostgroupsCopyPostResult);
             }
+            this.cdr.markForCheck();
         }));
     }
 
@@ -108,6 +111,7 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.HostgroupsService.saveHostgroupsCopy(this.hostgroups).subscribe({
                 next: (value: any) => {
+                    this.cdr.markForCheck();
                     this.notyService.genericSuccess();
                     this.HistoryService.navigateWithFallback(['/', 'hostgroups', 'index']);
                 },
@@ -122,9 +126,9 @@ export class HostgroupsCopyComponent implements OnInit, OnDestroy {
                             hostgroup.Error['name'] = <any>hostgroup.Error?.['container']['name'];
                         }
                     });
+                    this.cdr.markForCheck();
                 }
             })
         );
     }
 }
-

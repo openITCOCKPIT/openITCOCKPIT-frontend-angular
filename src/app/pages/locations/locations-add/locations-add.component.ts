@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -69,7 +69,7 @@ import { VectormapMarker } from '../../../components/vectormap/vactormap.interfa
         CardHeaderComponent,
         CardTitleDirective,
         CodeMirrorContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormControlDirective,
@@ -106,7 +106,8 @@ import { VectormapMarker } from '../../../components/vectormap/vactormap.interfa
         VectormapComponent
     ],
     templateUrl: './locations-add.component.html',
-    styleUrl: './locations-add.component.css'
+    styleUrl: './locations-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LocationsAddComponent implements OnInit, OnDestroy {
 
@@ -125,7 +126,7 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadContainers();
@@ -152,18 +153,21 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
     public loadContainers() {
         this.subscriptions.add(this.LocationsService.loadContainers().subscribe(containers => {
             this.containers = containers;
+            this.cdr.markForCheck();
         }));
     }
 
     public loadTimezones() {
         this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
             this.timezones = data.timezones;
+            this.cdr.markForCheck();
         }));
     }
 
     public submit() {
         this.subscriptions.add(this.LocationsService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Location');
@@ -209,6 +213,7 @@ export class LocationsAddComponent implements OnInit, OnDestroy {
             };
 
             this.markers = [marker];
+            this.cdr.markForCheck();
         }
     }
 

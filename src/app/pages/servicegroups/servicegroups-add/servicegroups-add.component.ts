@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -36,10 +36,10 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ServicegroupsService } from '../servicegroups.service';
 import {
-    Servicegroup,
     LoadContainersRoot,
     LoadServicesResponse,
     LoadServicetemplates,
+    Servicegroup,
     ServicesListService
 } from "../servicegroups.interface";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
@@ -58,7 +58,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -86,7 +86,8 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent
     ],
     templateUrl: './servicegroups-add.component.html',
-    styleUrl: './servicegroups-add.component.css'
+    styleUrl: './servicegroups-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsAddComponent implements OnInit, OnDestroy {
 
@@ -105,6 +106,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
     protected servicetemplates: SelectKeyValue[] = [];
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -131,6 +133,8 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicegroupsService.addServicegroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -171,6 +175,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -209,6 +214,8 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicegroupsService.loadServices(this.post.container.parent_id, search, this.post.services._ids)
             .subscribe((result: LoadServicesResponse) => {
+                this.cdr.markForCheck();
+
                 this.services = result.services;
 
                 // Preselect services if they were passed in the URL.
@@ -224,6 +231,8 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicegroupsService.loadServicetemplates(this.post.container.parent_id, search, this.post.servicetemplates._ids)
             .subscribe((result: LoadServicetemplates) => {
+                this.cdr.markForCheck();
+
                 this.servicetemplates = result.servicetemplates;
             }))
     }

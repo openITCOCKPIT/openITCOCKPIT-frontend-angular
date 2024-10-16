@@ -15,7 +15,6 @@ export interface TimezoneConfiguration {
 }
 
 
-
 @Injectable({
     providedIn: 'root'
 })

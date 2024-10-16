@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     EventEmitter,
@@ -39,7 +40,8 @@ import _ from 'lodash';
         }
     ],
     templateUrl: './multi-select-optgroup.component.html',
-    styleUrl: './multi-select-optgroup.component.css'
+    styleUrl: './multi-select-optgroup.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
     private init: boolean = false;
@@ -238,8 +240,10 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
             return;
         }
 
+        this.cdr.markForCheck();
+
         if (this.ngModel && this._options) {
-            let optionGroupValues:(string|number)[] = [];
+            let optionGroupValues: (string | number)[] = [];
 
             this._options.map(obj => {
                 obj.items.map((option: { value: number; }) => {

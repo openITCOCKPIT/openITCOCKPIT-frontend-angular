@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -7,7 +7,6 @@ import { AutomapsService } from '../automaps.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AutomapCopyPost } from '../automaps.interface';
 import { HistoryService } from '../../../history.service';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -34,7 +33,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
     selector: 'oitc-automaps-copy',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -58,7 +57,8 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
         CardFooterComponent
     ],
     templateUrl: './automaps-copy.component.html',
-    styleUrl: './automaps-copy.component.css'
+    styleUrl: './automaps-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsCopyComponent implements OnInit, OnDestroy {
 
@@ -71,6 +71,7 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -98,6 +99,7 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
                         Error: null
                     })
                 }
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -121,6 +123,7 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.automaps = error.error.result as AutomapCopyPost[];
             }

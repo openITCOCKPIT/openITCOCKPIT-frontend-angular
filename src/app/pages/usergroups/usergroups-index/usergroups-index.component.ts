@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -67,7 +67,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -101,7 +101,8 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     styleUrl: './usergroups-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: UsergroupsService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsIndexComponent implements OnInit, OnDestroy {
 
@@ -116,6 +117,7 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     protected usergroups: UsergroupsIndexRoot = {allUsergroups: [], _csrfToken: ''} as UsergroupsIndexRoot;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -134,12 +136,11 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected loadUsergroups() {
-
         this.SelectionServiceService.deselectAll();
-
         this.subscriptions.add(this.UsergroupsService.getIndex(this.params)
             .subscribe((result: UsergroupsIndexRoot) => {
                 this.usergroups = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -165,6 +166,7 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

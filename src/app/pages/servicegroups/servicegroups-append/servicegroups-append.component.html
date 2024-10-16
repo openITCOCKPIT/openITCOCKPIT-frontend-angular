@@ -1,86 +1,85 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
-                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                        {{ t('Service groups') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'chain']"></fa-icon>
-                    {{ t('Append services to service group') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Service groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                {{ t('Append services to service group') }}
+            </li>
+        </ol>
+    </nav>
 
-        <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('Append services') }}
-                        <small class="fw-300">
-                            {{ t('to service group') }}
-                        </small>
-                    </h5>
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Append services') }}
+                    <small class="fw-300">
+                        {{ t('to service group') }}
+                    </small>
+                </h5>
 
-                    <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
-                                    oitcBackButton
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                                {{ t('Back') }}
-                            </button>
-                        </c-nav-item>
-                    </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-                </c-card-header>
-                <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-                    <div class="mb-3">
-                        <label cLabel for="post.Servicegroup.id">
-                            {{ t('Service group') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-select
-                                name="post.Servicegroup.id"
-                                id="post.Servicegroup.id"
-                                [(ngModel)]="post.Servicegroup.id"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="servicegroups">
-                        </oitc-select>
-                    </div>
-
-
-                    <c-alert color="info">
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Please notice:')}}
-                        {{ t('Services that could not be assigned to the selected service group due to container permissions, will be removed automatically') }}
-                    </c-alert>
-
-                </c-card-body>
-                <c-card-footer class="text-end">
-
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Append service to group') }}
-                    </button>
-                    <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
+                <div class="mb-3">
+                    <label cLabel for="post.Servicegroup.id">
+                        {{ t('Service group') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="post.Servicegroup.id"
+                        id="post.Servicegroup.id"
+                        [(ngModel)]="post.Servicegroup.id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="servicegroups">
+                    </oitc-select>
+                </div>
 
 
-                </c-card-footer>
-            </c-card>
-        </form>
-    </ng-container>
-</oitc-coreui>
+                <c-alert color="info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Please notice:') }}
+                    {{ t('Services that could not be assigned to the selected service group due to container permissions, will be removed automatically') }}
+                </c-alert>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Append service to group') }}
+                </button>
+                <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+
+
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
+

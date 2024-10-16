@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -28,7 +28,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { HosttemplateContainerResult, HosttemplatePost, HosttemplateTypeResult, } from '../hosttemplates.interface';
 import { Subscription } from 'rxjs';
@@ -59,7 +59,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-hosttemplates-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
@@ -102,9 +102,11 @@ import { HistoryService } from '../../../history.service';
         ObjectUuidComponent,
         FormLoaderComponent,
         TranslocoPipe,
+        AsyncPipe,
     ],
     templateUrl: './hosttemplates-edit.component.html',
-    styleUrl: './hosttemplates-edit.component.css'
+    styleUrl: './hosttemplates-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HosttemplatesEditComponent implements OnInit, OnDestroy {
 
@@ -135,6 +137,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -166,12 +169,14 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HosttemplatesService.loadContainers(hosttemplateId)
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
 
     private setDetailsForType() {
         this.typeDetails = this.hosttemplateTypes.find(type => type.key === this.post.hosttemplatetype_id)?.value;
+        this.cdr.markForCheck();
     };
 
     private loadElements() {
@@ -190,6 +195,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
                 this.hostgroups = result.hostgroups;
                 this.exporters = result.exporters;
                 this.slas = result.slas;
+                this.cdr.markForCheck();
             })
         );
 
@@ -206,6 +212,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HosttemplatesService.loadCommandArgumentsForEdit(commandId, hosttemplateId)
             .subscribe((result) => {
                 this.post.hosttemplatecommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -233,24 +240,14 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
-    }
 
     public submit() {
         this.post.tags = this.tagsForSelect.join(',');
@@ -258,6 +255,7 @@ export class HosttemplatesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HosttemplatesService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Host template');

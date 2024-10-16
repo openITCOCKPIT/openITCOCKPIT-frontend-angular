@@ -1,203 +1,201 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                        {{ t('Hosts') }}
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                    {{ t('Hosts') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                {{ t('Deleted') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Deleted hosts') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'index']"
+                       *oitcPermission="['hosts', 'index']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                        {{ t('Monitored') }}
                     </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                    {{ t('Deleted') }}
-                </li>
-            </ol>
-        </nav>
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Deleted hosts') }}
-                    <small class="fw-300">
-                        {{ t('overview') }}
-                    </small>
-                </h5>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'notMonitored']"
+                       *oitcPermission="['hosts', 'notMonitored']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                        {{ t('Not monitored') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'disabled']"
+                       *oitcPermission="['hosts', 'disabled']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                        {{ t('Disabled') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'deletedHosts', 'index']"
+                       *oitcPermission="['deletedHosts', 'index']" class="nav-link active">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                        {{ t('Deleted') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
 
-                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'hosts', 'index']"
-                           *oitcPermission="['hosts', 'index']" class="nav-link">
-                            <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
-                            {{ t('Monitored') }}
-                        </a>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'hosts', 'notMonitored']"
-                           *oitcPermission="['hosts', 'notMonitored']" class="nav-link">
-                            <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                            {{ t('Not monitored') }}
-                        </a>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'hosts', 'disabled']"
-                           *oitcPermission="['hosts', 'disabled']" class="nav-link">
-                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                            {{ t('Disabled') }}
-                        </a>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'deletedHosts', 'index']"
-                           *oitcPermission="['deletedHosts', 'index']" class="nav-link active">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            {{ t('Deleted') }}
-                        </a>
-                    </c-nav-item>
-                </c-nav>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['hosts', 'add']" [routerLink]="['/', 'hosts', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button *oitcPermission="['hosts', 'add']" [routerLink]="['/', 'hosts', 'add']"
-                                cButton
-                                class="ripple"
-                                color="success"
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('New') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[DeletedHosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       cFormControl
+                                       name="Hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               name="params.Host.name_regex"
+                                               oitcDebounce
+                                               (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[DeletedHosts.name_regex]']"
+                                        />
+                                        <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                                    </label>
+                                </span>
+                            </c-input-group>
                         </c-col>
                     </c-row>
-                    <form cForm>
-                        <c-row class="mb-2">
-                            <c-col [xs]="12" [lg]="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[DeletedHosts.name]']"
-                                           [placeholder]="'Filter by host name' | transloco"
-                                           cFormControl
-                                           name="Hosts.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                    <span cInputGroupText>
-                                        <label>
-                                            {{ t('Enable RegEx') }}
-                                            <input type="checkbox"
-                                                   name="params.Host.name_regex"
-                                                   oitcDebounce
-                                                   (debouncedValue)="onFilterChange($event)"
-                                                   [(ngModel)]="params['filter[DeletedHosts.name_regex]']"
-                                            />
-                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                        </label>
-                                    </span>
-                                </c-input-group>
-                            </c-col>
-                        </c-row>
 
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                    {{ t('Reset filter') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </form>
-                </c-container>
-                <!-- End Filter -->
-
-
-                <oitc-table-loader *ngIf="!deletedHosts"></oitc-table-loader>
-                <table *ngIf="deletedHosts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th scope="col" mat-sort-header="DeletedHosts.name">
-                            {{ t('Host name') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DeletedHosts.uuid">
-                            {{ t('UUID') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DeletedHosts.created">
-                            {{ t('Date') }}
-                        </th>
-                        <th scope="col" mat-sort-header="DeletedHosts.deleted_perfdata">
-                            {{ t('Performance data deleted') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let deletedHost of deletedHosts.deletedHosts">
-                        <td>{{ deletedHost.DeletedHost.name }}</td>
-                        <td>{{ deletedHost.DeletedHost.uuid }}</td>
-                        <td>{{ deletedHost.DeletedHost.created }}</td>
-                        <td class="text-center">
-                            <span
-                                *ngIf="!deletedHost.DeletedHost.perfdataDeleted"
-                                class="badge border border-info text-info">
-                                {{ t('Pending') }}
-                            </span>
-                            <span
-                                *ngIf="deletedHost.DeletedHost.perfdataDeleted"
-                                class="badge border border-success text-success">
-                                {{ t('Yes') }}
-                            </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records
-                    *ngIf="deletedHosts && deletedHosts.deletedHosts.length === 0"></oitc-no-records>
-
-                <c-container
-                    [fluid]="true" class="mt-3">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="deletedHosts"
-                                [paginateOrScroll]="deletedHosts"></oitc-paginate-or-scroll>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
                         </c-col>
                     </c-row>
-                </c-container>
+                </form>
+            </c-container>
+            <!-- End Filter -->
 
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
-</oitc-coreui>
+
+            <oitc-table-loader *ngIf="!deletedHosts"></oitc-table-loader>
+            <table *ngIf="deletedHosts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col" mat-sort-header="DeletedHosts.name">
+                        {{ t('Host name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="DeletedHosts.uuid">
+                        {{ t('UUID') }}
+                    </th>
+                    <th scope="col" mat-sort-header="DeletedHosts.created">
+                        {{ t('Date') }}
+                    </th>
+                    <th scope="col" mat-sort-header="DeletedHosts.deleted_perfdata">
+                        {{ t('Performance data deleted') }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let deletedHost of deletedHosts.deletedHosts">
+                    <td>{{ deletedHost.DeletedHost.name }}</td>
+                    <td>{{ deletedHost.DeletedHost.uuid }}</td>
+                    <td>{{ deletedHost.DeletedHost.created }}</td>
+                    <td class="text-center">
+                        <span
+                            *ngIf="!deletedHost.DeletedHost.perfdataDeleted"
+                            class="badge border border-info text-info">
+                            {{ t('Pending') }}
+                        </span>
+                        <span
+                            *ngIf="deletedHost.DeletedHost.perfdataDeleted"
+                            class="badge border border-success text-success">
+                            {{ t('Yes') }}
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                *ngIf="deletedHosts && deletedHosts.deletedHosts.length === 0"></oitc-no-records>
+
+            <c-container
+                [fluid]="true" class="mt-3">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="deletedHosts"
+                            [paginateOrScroll]="deletedHosts"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
 

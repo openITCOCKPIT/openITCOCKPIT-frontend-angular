@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -39,7 +40,8 @@ import _ from 'lodash';
         }
     ],
     templateUrl: './multi-select.component.html',
-    styleUrl: './multi-select.component.css'
+    styleUrl: './multi-select.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     private init: boolean = false;
@@ -221,6 +223,8 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
             // Fix Expression has changed after it was checked
             return;
         }
+
+        this.cdr.markForCheck();
 
         if (this.ngModel && this._options) {
             this.ngModel = _.intersection(

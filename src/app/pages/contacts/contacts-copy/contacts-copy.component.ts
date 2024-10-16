@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -40,7 +40,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -59,7 +59,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './contacts-copy.component.html',
-    styleUrl: './contacts-copy.component.css'
+    styleUrl: './contacts-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsCopyComponent implements OnInit, OnDestroy {
     public contacts: ContactCopyPost[] = [];
@@ -71,6 +72,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -97,6 +99,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
                     Error: null
                 })
             }
+            this.cdr.markForCheck();
         }));
     }
 
@@ -114,6 +117,7 @@ export class ContactsCopyComponent implements OnInit, OnDestroy {
                 error: (error: HttpErrorResponse) => {
                     this.notyService.genericError();
                     this.contacts = error.error.result as ContactCopyPost[];
+                    this.cdr.markForCheck();
                 }
             })
         );

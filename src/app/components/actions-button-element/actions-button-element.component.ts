@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -41,7 +41,8 @@ import { NgTemplateOutlet } from '@angular/common';
         NgTemplateOutlet
     ],
     templateUrl: './actions-button-element.component.html',
-    styleUrl: './actions-button-element.component.css'
+    styleUrl: './actions-button-element.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActionsButtonElementComponent {
 

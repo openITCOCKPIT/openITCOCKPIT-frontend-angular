@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -52,7 +52,7 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { Sla } from '../../slas/Slas.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -79,7 +79,7 @@ import {
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
@@ -128,9 +128,11 @@ import {
         NgClass,
         PaginateOrScrollComponent,
         ContainerComponent,
+        AsyncPipe,
     ],
     templateUrl: './host-mapping-rules-assign-to-hosts.component.html',
     styleUrl: './host-mapping-rules-assign-to-hosts.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy {
 
@@ -151,6 +153,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     protected hosts: LoadHostsRoot = {} as LoadHostsRoot;
     public params!: HostMappingRulesLoadHostsParams;
     public sla: Sla = {} as Sla;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
 
@@ -167,6 +170,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
     public load() {
         this.subscriptions.add(this.HostMappingRulesService.loadAssignToHosts(this.slaId)
             .subscribe((result: HostMappingRulesAssignToHostsRoot) => {
+                this.cdr.markForCheck();
                 this.sla = result.sla;
                 if (result.sla.host_mapping_rule !== null) {
                     if (result.sla.host_mapping_rule.host_keywords !== null && typeof result.sla.host_mapping_rule.host_keywords === 'string' && result.sla.host_mapping_rule.host_keywords.length > 0) {
@@ -212,6 +216,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
 
         this.subscriptions.add(this.HostMappingRulesService.assignToHosts(this.post, this.slaId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Data');
@@ -251,6 +256,7 @@ export class HostMappingRulesAssignToHostsComponent implements OnInit, OnDestroy
             .subscribe((result: LoadHostsRoot) => {
                 this.hosts = result;
                 this.isHostsLoading = false;
+                this.cdr.markForCheck();
             }))
     }
 

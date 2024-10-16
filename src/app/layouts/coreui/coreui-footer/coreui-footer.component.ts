@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FooterComponent } from '@coreui/angular';
 
 @Component({
@@ -6,9 +6,13 @@ import { FooterComponent } from '@coreui/angular';
     standalone: true,
     imports: [],
     templateUrl: './coreui-footer.component.html',
-    styleUrl: './coreui-footer.component.css'
+    styleUrl: './coreui-footer.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoreuiFooterComponent extends FooterComponent {
+
+    private cdr = inject(ChangeDetectorRef);
+
     constructor() {
         super();
     }

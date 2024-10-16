@@ -1,29 +1,26 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <div class="min-vh-100 d-flex flex-row align-items-center">
-            <c-container>
-                <c-row class="justify-content-center row">
-                    <c-col md="6">
-                        <div class="clearfix">
-                            <h1 class="float-start display-3 me-4">
-                                403
-                            </h1>
-                            <h4
-                                class="pt-3">
-                                {{ t('Forbidden.') }}
-                            </h4>
-                            <p class="text-body-secondary float-start">
-                                {{ t('You do not have the required permissions. ') }}
-                            </p>
-                            <div>
-                                <img src="./assets/images/errors/error_403_kitty_512.png" class="img-fluid"/>
-                            </div>
+<ng-container *transloco="let t">
+    <div class="min-vh-100 d-flex flex-row align-items-center">
+        <c-container>
+            <c-row class="justify-content-center row">
+                <c-col md="6">
+                    <div class="clearfix">
+                        <h1 class="float-start display-3 me-4">
+                            403
+                        </h1>
+                        <h4
+                            class="pt-3">
+                            {{ t('Forbidden.') }}
+                        </h4>
+                        <p class="text-body-secondary float-start">
+                            {{ t('You do not have the required permissions. ') }}
+                        </p>
+                        <div>
+                            <img src="./assets/images/errors/error_403_kitty_512.png" class="img-fluid"/>
                         </div>
+                    </div>
 
-                    </c-col>
-                </c-row>
-            </c-container>
-        </div>
-    </ng-container>
-
-</oitc-coreui>
+                </c-col>
+            </c-row>
+        </c-container>
+    </div>
+</ng-container>

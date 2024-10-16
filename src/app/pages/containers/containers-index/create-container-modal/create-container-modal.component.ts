@@ -1,4 +1,16 @@
-import { Component, effect, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    output,
+    SimpleChanges
+} from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
     ButtonCloseDirective,
@@ -74,7 +86,8 @@ import { UserTimezonesSelect } from '../../../users/users.interface';
         JsonPipe
     ],
     templateUrl: './create-container-modal.component.html',
-    styleUrl: './create-container-modal.component.css'
+    styleUrl: './create-container-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -107,7 +120,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         effect(() => {
@@ -203,6 +216,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.subscriptions.add(this.LocationsService.add(this.locationPost)
             .subscribe((result) => {
                 this.isSaving = false;
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Location');
@@ -232,6 +246,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.isSaving = true;
         this.subscriptions.add(this.TenantsService.add(this.tenantPost)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.isSaving = false;
 
                 if (result.success) {
@@ -266,6 +281,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.subscriptions.add(this.ContainersService.add(this.nodePost)
             .subscribe((result) => {
                 this.isSaving = false;
+                this.cdr.markForCheck();
 
                 if (result.success) {
                     const response = result.data as GenericIdResponse;

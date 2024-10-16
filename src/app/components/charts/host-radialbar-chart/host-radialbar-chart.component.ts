@@ -1,4 +1,15 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { ApexGrid, ChartComponent } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -14,7 +25,8 @@ import { ChartAbsolutValue } from '../charts.interface';
         ChartComponent
     ],
     templateUrl: './host-radialbar-chart.component.html',
-    styleUrl: './host-radialbar-chart.component.css'
+    styleUrl: './host-radialbar-chart.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -31,6 +43,7 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ColorModeService = inject(ColorModeService);
+    private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {
         padding: {
@@ -63,7 +76,7 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
                     }
                 });
             }
-
+            this.cdr.markForCheck();
         }));
     }
 
@@ -82,6 +95,7 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
             this.chart.updateOptions({
                 series: this.chartData
             });
+            this.cdr.markForCheck();
         }
 
         if (changes['statusDataAbsolut'] && this.chart) {
@@ -95,6 +109,7 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
             this.chart.updateOptions({
                 series: this.chartData
             });
+            this.cdr.markForCheck();
         }
     }
 
@@ -199,5 +214,6 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
                 }
             ]
         };
+        this.cdr.markForCheck();
     }
 }

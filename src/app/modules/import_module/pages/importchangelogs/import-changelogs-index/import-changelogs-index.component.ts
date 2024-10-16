@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,7 +22,7 @@ import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component'
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -55,7 +55,7 @@ import { Sort } from '@angular/material/sort';
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,
@@ -78,10 +78,12 @@ import { Sort } from '@angular/material/sort';
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        AsyncPipe
     ],
     templateUrl: './import-changelogs-index.component.html',
-    styleUrl: './import-changelogs-index.component.css'
+    styleUrl: './import-changelogs-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -119,6 +121,8 @@ export class ImportChangelogsIndexComponent implements OnInit, OnDestroy, IndexP
             synchronization: true
         }
     };
+    private cdr = inject(ChangeDetectorRef);
+
 
     public loadChanges() {
         this.params['filter[Changelogs.action][]'] = [];
@@ -141,6 +145,7 @@ export class ImportChangelogsIndexComponent implements OnInit, OnDestroy, IndexP
         this.subscriptions.add(this.ImportChangelogsService.getIndex(this.params)
             .subscribe((result: ChangelogIndexRoot) => {
                 this.changes = result;
+                this.cdr.markForCheck();
             })
         );
     }
