@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { BadgeComponent } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -12,10 +12,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './online-offline.component.html',
-    styleUrl: './online-offline.component.css'
+    styleUrl: './online-offline.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OnlineOfflineComponent {
-
     @Input() public isOnline: boolean = false;
-
 }
