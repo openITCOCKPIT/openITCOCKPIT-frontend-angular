@@ -309,6 +309,9 @@ const coreRoutes: Routes = [{
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
 }, {
+    path: 'messagesOtd/index',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-index/messagesotd-index.component').then(m => m.MessagesotdIndexComponent)
+}, {
     path: 'timeperiods/index',
     loadComponent: () => import('./pages/timeperiods/timeperiods-index/timeperiods-index.component').then(m => m.TimeperiodsIndexComponent)
 }, {

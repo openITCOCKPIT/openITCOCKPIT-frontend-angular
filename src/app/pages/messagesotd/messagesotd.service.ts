@@ -18,12 +18,12 @@ export class MessagesOfTheDayService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: MessagesOtdIndexParams): Observable<MessageOfTheDay[]> {
-        return this.http.get<MessagesOtdIndexGet>(`${this.proxyPath}/messagesOtd/index.json`, {
+    public getIndex(params: MessagesOtdIndexParams): Observable<MessagesOtdIndexGet> {
+        return this.http.get<MessagesOtdIndexGet>(`${this.proxyPath}/messagesOtd/index.json?angular=true`, {
             params: params as {}
         }).pipe(
-            map(data => {
-                return data.messagesOtd;
+            map((data: MessagesOtdIndexGet) => {
+                return data;
             })
         )
     }

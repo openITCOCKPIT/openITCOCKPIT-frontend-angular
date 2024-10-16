@@ -3,7 +3,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 
 // INDEX RESPONSE
 export interface MessagesOtdIndexGet extends PaginateOrScroll {
-    messagesOtd: MessageOfTheDay[]
+    messagesOtd: EditableMessageOfTheDay[]
     _csrfToken: string
 }
 
