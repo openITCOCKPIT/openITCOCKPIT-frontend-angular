@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -58,7 +58,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './timeperiods-copy.component.html',
-    styleUrl: './timeperiods-copy.component.css'
+    styleUrl: './timeperiods-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
 
@@ -71,6 +72,7 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnInit(): void {
 
@@ -83,6 +85,7 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
         if (ids) {
             this.subscriptions.add(this.TimeperiodsService.getTimeperiodsCopy(ids).subscribe(timeperiods => {
                 for (let timeperiod of timeperiods) {
+                    this.cdr.markForCheck();
                     this.timeperiods.push(<TimeperiodCopyPost>{
                         Source: {
                             id: timeperiod.Timeperiod.id,
@@ -120,6 +123,7 @@ export class TimeperiodsCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.timeperiods = error.error.result as TimeperiodCopyPost[];
             }

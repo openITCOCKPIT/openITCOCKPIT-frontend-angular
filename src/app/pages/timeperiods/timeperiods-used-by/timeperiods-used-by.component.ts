@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TimeperiodsService } from '../timeperiods.service';
@@ -54,7 +54,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormLoaderComponent
     ],
     templateUrl: './timeperiods-used-by.component.html',
-    styleUrl: './timeperiods-used-by.component.css'
+    styleUrl: './timeperiods-used-by.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsUsedByComponent implements OnInit, OnDestroy {
 
@@ -69,6 +70,7 @@ export class TimeperiodsUsedByComponent implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.timeperiodId = Number(this.route.snapshot.paramMap.get('id'));
@@ -85,6 +87,7 @@ export class TimeperiodsUsedByComponent implements OnInit, OnDestroy {
                 this.timeperiod = result.timeperiod;
                 this.objects = result.objects;
                 this.total = result.total;
+                this.cdr.markForCheck();
             }));
     }
 
