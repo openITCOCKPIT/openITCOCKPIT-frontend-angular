@@ -246,7 +246,7 @@
                         </td>
 
                         <td class="width-50">
-                            <oitc-actions-button *ngIf="contact.Contact.allow_edit"
+                            <oitc-actions-button [allowEdit]="contact.Contact.allow_edit"
                                                  [permission]="'contacts.edit'"
                                                  [url]="'/contacts/edit/' + contact.Contact.id">
                                 <oitc-actions-button-element [permission]="'contacts.edit'"

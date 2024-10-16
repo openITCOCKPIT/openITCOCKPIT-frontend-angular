@@ -21,7 +21,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { UserMacrosModalComponent } from '../../commands/user-macros-modal/user-macros-modal.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -96,6 +96,7 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
         BadgeComponent,
         MacrosComponent,
         CardFooterComponent,
+        TranslocoPipe,
     ],
     templateUrl: './hosttemplates-add.component.html',
     styleUrl: './hosttemplates-add.component.css'

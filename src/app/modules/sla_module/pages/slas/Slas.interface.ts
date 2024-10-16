@@ -5,7 +5,7 @@ import { HostMappingRulesPost } from '../host-mapping-rules/HostMappingRules.int
 
 export interface SlasIndexRoot extends PaginateOrScroll {
     slas: Sla[]
-    _csrfToken: any
+    _csrfToken: string
 }
 
 export interface SlasEditRoot {
@@ -70,6 +70,13 @@ export interface Sla {
 export interface Timeperiod {
     id: number
     name: string
+    uuid?: string
+    container_id?: number
+    description?: string
+    calendar_id?: number
+    created?: string
+    modified?: string
+    timeperiod_timeranges?: TimeperiodTimerange[]
 }
 
 /***************************
@@ -139,7 +146,7 @@ export interface SlasHostsRoot extends PaginateOrScroll {
     sla: Sla
     hosts: Host[]
     success: boolean
-    _csrfToken: any
+    _csrfToken: string
 }
 
 export interface Host {
@@ -217,4 +224,185 @@ export function getDefaultSlasHostsParams(): SlasHostsParams {
         'filter[Hosts.name]': "",
     }
 }
+
+/***************************
+ *    generate action      *
+ ***************************/
+
+export interface SlasGenerateRoot {
+    slas: Sla[]
+    _csrfToken: string
+}
+
+export interface SlasGeneratePost {
+    Sla: {
+        id: number,
+        format: string,
+        from_date: Date | string,
+        to_date: Date | string,
+        evaluation: number
+    }
+}
+
+export interface SlasGenerateDownloadParams {
+    params: {
+        'angular': boolean,
+        'Sla[id]': number,
+        'Sla[evaluation]': number,
+        'Sla[from_date]': Date | string,
+        'Sla[to_date]': Date | string,
+    }
+    responseType: 'blob'
+}
+
+export interface SlasGeneratePostResponse {
+    success: boolean
+    sla: Sla
+    report: Report
+    logoUrl: string
+    _csrfToken: string
+}
+
+export interface Report {
+    sla: Sla
+    evaluation_time: EvaluationTime
+    timeperiod: Timeperiod
+    date_ranges: DateRange[]
+    hosts: ReportHostParent[][]
+}
+
+export interface TimeperiodTimerange {
+    id: number
+    timeperiod_id: number
+    day: number
+    start: string
+    end: string
+    weekday: string
+}
+
+export interface EvaluationTime {
+    start: number
+    start_human: string
+    end: number
+    end_human: string
+}
+
+export interface DateRange {
+    title: string
+    start: number
+    end: number
+    start_human: string
+    end_human: string
+}
+
+export interface ReportHostParent {
+    host: ReportHost
+    sla_log: SlaLogHost
+    services: ReportServiceParent[]
+}
+
+export interface ReportHost {
+    id: number
+    name: string
+    created: string
+}
+
+export interface SlaLogHost {
+    last_log_entry: LastLogEntryHost
+    outages: any[] | Outage[]
+    outages_in_downtime: any[]
+}
+
+export interface SlaLogService {
+    last_log_entry: LastLogEntryService
+    outages: any[] | Outage[]
+    outages_in_downtime: any[]
+}
+
+export interface ReportServiceParent {
+    service: ReportService
+    sla_log: SlaLogService
+}
+
+export interface ReportService {
+    id: number
+    servicename: string
+}
+
+export interface Outage {
+    host_id: number
+    service_id: number
+    sla_id: number
+    sla_availability_status_services_log_id: number
+    start_time: number
+    end_time: number
+    output: string
+    is_hardstate: boolean
+    in_downtime: boolean
+}
+
+export interface LastLogEntryHost {
+    id: number
+    host_id: number
+    sla_id: number
+    evaluation_total_time: number
+    total_time: number
+    minimal_availability_percent: number
+    determined_availability_percent: number
+    minimal_availability_time: number
+    determined_availability_time: number
+    determined_outage_time: number
+    determined_number_outages: number
+    up: number
+    down: number
+    unreachable: number
+    evaluation_start: string
+    evaluation_end: string
+    created: string
+    sla_host_outages: any[]
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    passed: boolean
+}
+
+export interface LastLogEntryService {
+    id: number
+    host_id: number
+    service_id: number
+    sla_id: number
+    evaluation_total_time: number
+    total_time: number
+    minimal_availability_percent: number
+    determined_availability_percent: number
+    minimal_availability_time: number
+    determined_availability_time: number
+    determined_outage_time: number
+    determined_number_outages: number
+    ok: number
+    warning: number
+    critical: number
+    unknown: number
+    evaluation_start: string
+    evaluation_end: string
+    created: string
+    sla_service_outages: Outage[]
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    passed: boolean
+}
+
+export interface ReportError {
+    error: boolean
+    message: string
+    objects: ReportErrorObject[]
+}
+
+export interface ReportErrorObject {
+    name: string
+    services: string[]
+}
+
+
 

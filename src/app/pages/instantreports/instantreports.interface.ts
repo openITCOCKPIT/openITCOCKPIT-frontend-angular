@@ -1,5 +1,6 @@
-import { InstantreportEvaluationTypes, InstantreportObjectTypes } from './instantreports.enums';
+import { InstantreportEvaluationTypes, InstantreportFormats, InstantreportObjectTypes } from './instantreports.enums';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { DateTime } from 'luxon';
 
 /**********************
  *    Index action    *
@@ -124,3 +125,99 @@ export interface InstantreportPost {
     modified?: string
 }
 
+/**********************
+ *  Generate action   *
+ **********************/
+export interface InstantreportGenerateParams {
+    instantreport_id: number,
+    report_format: InstantreportFormats
+    from_date: string
+    to_date: string
+}
+
+export function getDefaultInstantreportGenerateParams(): InstantreportGenerateParams {
+    const now = DateTime.now();
+
+    return {
+        instantreport_id: 0,
+        report_format: InstantreportFormats.HTML,
+        from_date: now.minus({months: 1}).toFormat('yyyy-MM-dd'),
+        to_date: now.toFormat('yyyy-MM-dd')
+    }
+}
+
+export interface InstantreportsReportPdfParams {
+    'angular': true,
+    'data[instantreport_id]': number,
+    'data[from_date]': string,
+    'data[to_date]': string
+}
+
+export interface InstantreportsReportHtmlParams {
+    instantreport_id: number,
+    report_format: InstantreportFormats.HTML
+    from_date: string,
+    to_date: string
+}
+
+
+export interface InstantreportGenerateResponse {
+    instantReport: {
+        hosts: {
+            [key: string]: {
+                Host: {
+                    id: number,
+                    name: string,
+                    reportData: {
+                        "0": number,
+                        "1": number, // duration in seconds
+                        "2": number, // duration in seconds
+                        "percentage": string[] // "Up (75.916%)", "Down (0%)", "Unreachable (24.084%)"
+                    },
+                },
+                Services: {
+                    [key: string]: {
+                        Service: {
+                            name: string,
+                            id: number,
+                            reportData: {
+                                "0": number // duration in seconds
+                                "1": number // duration in seconds
+                                "2": number // duration in seconds
+                                "3": number // duration in seconds
+                                "percentage": string[] //  "Ok (100%)", "Warning (0%)", "Critical (0%)", "Unknown (0%)"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        reportDetails: {
+            name: string,
+            evaluation: InstantreportEvaluationTypes,
+            type: InstantreportObjectTypes,
+            summary: number // 0 or 1
+            totalTime: number// time in seconds e.g2602774,
+            from: string // "00:00:00 - 01.08.2024",
+            to: string // "23:59:59 - 01.10.2024",
+            summary_hosts?: {
+                reportData: {
+                    "0": number // duration in seconds,
+                    "1": number // duration in seconds,
+                    "2": number // duration in seconds,
+                    percentage: string[] //"Up (78.251%)", "Down (8.013%)", "Unreachable (13.736%)"
+                }
+            }
+            summary_services: {
+                reportData: {
+                    "0": number // duration in seconds,
+                    "1": number // duration in seconds,
+                    "2": number // duration in seconds,
+                    "3": number // duration in seconds,
+                    percentage: string[] //"Ok (54.251%)", "Warning (2.385%)", "Critical (24.314%)", "Unknown (19.049%)"
+                }
+            },
+        }
+    }
+    _csrfToken: string
+}

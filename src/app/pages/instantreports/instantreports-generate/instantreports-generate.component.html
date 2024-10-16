@@ -49,9 +49,170 @@
 
             </c-card-header>
             <c-card-body>
+
+                <!-- Generate Report Form -->
+                <ng-container *ngIf="selectedTab === 'generate'">
+                    <div class="mb-3">
+                        <label cLabel for="InstantreportSelect">
+                            {{ t('Instant report') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <oitc-select
+                                name="InstantreportSelect"
+                                id="InstantreportSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="instantreports"
+                                [(ngModel)]="params.instantreport_id"
+                                class="flex-1"
+                            >
+                            </oitc-select>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="ReportFormat">
+                            {{ t('Report format') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <oitc-select
+                                name="ReportFormat"
+                                id="ReportFormat"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="ReportFormatsSelect"
+                                [(ngModel)]="params.report_format"
+                                class="flex-1"
+                            >
+                            </oitc-select>
+                        </c-input-group>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="from_date">
+                            {{ t('From') }}
+                        </label>
+
+                        <input cFormControl id="from_date" type="date"
+                               name="from_date" placeholder="{{ t('MM.HH.YYYY') }}"
+                               oitcFormError [errors]="errors" errorField="from_date"
+                               [(ngModel)]="params.from_date">
+                        <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="to_date">
+                            {{ t('To') }}
+                        </label>
+
+                        <input cFormControl id="to_date" type="date"
+                               name="to_date" placeholder="{{ t('MM.HH.YYYY') }}"
+                               oitcFormError [errors]="errors" errorField="to_date"
+                               [(ngModel)]="params.to_date">
+                        <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                    </div>
+                </ng-container>
+                <!-- End Generate Report Form -->
+
+                <!-- Report -->
+                <ng-container *ngIf="selectedTab === 'report'">
+                    @if (report) {
+
+                        <c-row class="mb-3">
+                            <c-col [xs]="12" class="h5">
+                                <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                {{ report.instantReport.reportDetails.name }}
+                            </c-col>
+                            <c-col [xs]="12">
+                                <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                                {{ t('Analysis period: ') }}
+                                {{ report.instantReport.reportDetails.from }}
+                                {{ t('to') }}
+                                {{ report.instantReport.reportDetails.to }}
+                            </c-col>
+                        </c-row>
+
+
+                        <!-- Summary only report -->
+                        <ng-container *ngIf="report.instantReport.reportDetails.summary == 1">
+
+                            <c-row>
+                                <c-col [xs]="12" [md]="6" class="d-flex">
+                                    <c-card class="mb-3 flex-1">
+                                        <c-card-header>
+                                            <h5 cCardTitle>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                {{ t('Hosts summary') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <oitc-host-radialbar-chart
+                                                [statusDataAbsolut]="getSummaryDataAsPercentag(report.instantReport.reportDetails.summary_hosts?.reportData, 'host')"
+                                            ></oitc-host-radialbar-chart>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+
+                                <c-col [xs]="12" [md]="6" class="d-flex">
+                                    <c-card class="mb-3 flex-1">
+                                        <c-card-header>
+                                            <h5 cCardTitle>
+                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                {{ t('Services summary') }}
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <oitc-service-radialbar-chart
+                                                [statusDataAbsolut]="getSummaryDataAsPercentag(report.instantReport.reportDetails.summary_services?.reportData, 'service')"
+                                            ></oitc-service-radialbar-chart>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+                        </ng-container>
+
+                        <!-- Detailed report -->
+                        <ng-container *ngIf="report.instantReport.reportDetails.summary == 0">
+                            <c-row>
+                                <c-col [xs]="12" *ngFor="let host of Object.values(report.instantReport.hosts)">
+                                    <c-card class="mb-3 flex-1">
+                                        <c-card-header>
+                                            <h5 cCardTitle>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                <oitc-label-link
+                                                    [objectId]="host.Host.id"
+                                                    [route]="'/hosts/browser'"
+                                                    [permissions]="'hosts.browser'">
+                                                    {{ host.Host.name }}
+                                                </oitc-label-link>
+                                            </h5>
+                                        </c-card-header>
+                                        <c-card-body>
+                                            <c-col>
+                                                <c-row [xs]="12">
+                                                    <oitc-host-pie-echart
+                                                        [chartData]="test"
+                                                    ></oitc-host-pie-echart>
+                                                </c-row>
+
+                                            </c-col>
+
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+                        </ng-container>
+                    }
+
+                </ng-container>
+                <!-- End Report -->
+
             </c-card-body>
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="button"
+                        *ngIf="selectedTab === 'generate'"
                         (click)="generateReport()"
                         [disabled]="isGeneratingReport">
                     <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="isGeneratingReport"></fa-icon>

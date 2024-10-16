@@ -28,7 +28,6 @@ import { ContainersIndexContainer, ContainersIndexNested, DataForCreateContainer
 import { NestLoaderComponent } from '../../../layouts/primeng/loading/nest-loader/nest-loader.component';
 import { ContainerNestComponent } from './container-nest/container-nest.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
@@ -160,38 +159,6 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe(containers => {
             this.containers = containers;
         }));
-    }
-
-
-    public getIconByContainerType(containerType: number): IconProp {
-        switch (containerType) {
-            case ContainerTypesEnum.CT_GLOBAL:
-                return ['fas', 'globe'];
-
-            case ContainerTypesEnum.CT_TENANT:
-                return ['fas', 'home'];
-
-            case ContainerTypesEnum.CT_LOCATION:
-                return ['fas', 'location-arrow'];
-
-            case ContainerTypesEnum.CT_NODE:
-                return ['fas', 'link'];
-
-            case ContainerTypesEnum.CT_CONTACTGROUP:
-                return ['fas', 'users'];
-
-            case ContainerTypesEnum.CT_HOSTGROUP:
-                return ['fas', 'server'];
-
-            case ContainerTypesEnum.CT_SERVICEGROUP:
-                return ['fas', 'cogs'];
-
-            case ContainerTypesEnum.CT_SERVICETEMPLATEGROUP:
-                return ['fas', 'pen-to-square'];
-
-            default:
-                return ['fas', 'question'];
-        }
     }
 
     public toggleCreateContainerModal(container: ContainersIndexContainer): void {
