@@ -169,7 +169,12 @@
                         <td>{{ messageOfTheDay.title }}</td>
                         <td>{{ messageOfTheDay.description }}</td>
                         <td>{{ messageOfTheDay.date }}</td>
-                        <td>{{ messageOfTheDay.expiration_duration }}</td>
+                        <td>
+                            <span *ngIf="messageOfTheDay.expiration_duration">{{ messageOfTheDay.expiration_duration }}</span>
+                            <span *ngIf="! messageOfTheDay.expiration_duration">
+                                <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
+                            </span>
+                        </td>
                         <td class="width-50">
                             <oitc-actions-button [allowEdit]="messageOfTheDay.id"
                                                  [permission]="'messagesOtd.edit'"

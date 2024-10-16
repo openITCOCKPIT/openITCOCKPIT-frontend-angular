@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GenericSuccessResponse, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericSuccessResponse,
+    GenericValidationError
+} from '../../generic-responses';
 import {
     CurrentMessageOfTheDay,
     EditableMessageOfTheDay,
@@ -28,17 +33,22 @@ export class MessagesOfTheDayService {
         )
     }
 
-    public addMessageOfTheDay(messageOfTheDay: MessageOfTheDay): Observable<boolean | GenericValidationError> {
+    public addMessageOfTheDay(messageOfTheDay: MessageOfTheDay): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/messagesOtd/add.json?angular=true`, messageOfTheDay)
+        return this.http.post<GenericResponseWrapper>(`${proxyPath}/messagesOtd/add.json?angular=true`, {MessagesOtd: messageOfTheDay})
             .pipe(
                 map(data => {
-                    // Return true on 200 Ok
-                    return true;
+                    return {
+                        success: true,
+                        data: data as unknown as GenericIdResponse
+                    };
                 }),
                 catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of(err);
+                    const err: GenericValidationError = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
                 })
             );
     }
