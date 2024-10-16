@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -28,7 +28,6 @@ import { UsergroupsService } from '../usergroups.service';
 import { HistoryService } from '../../../history.service';
 import { UsergroupsCopyGetRoot, UsergroupsCopyPostRoot } from '../usergroups.interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ServiceTemplateGroupsGetCopyPostData } from '../../servicetemplategroups/servicetemplategroups.interface';
 
 @Component({
     selector: 'oitc-usergroups-copy',
@@ -58,7 +57,8 @@ import { ServiceTemplateGroupsGetCopyPostData } from '../../servicetemplategroup
         RouterLink
     ],
     templateUrl: './usergroups-copy.component.html',
-    styleUrl: './usergroups-copy.component.css'
+    styleUrl: './usergroups-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsCopyComponent implements OnInit, OnDestroy {
 
@@ -72,6 +72,7 @@ export class UsergroupsCopyComponent implements OnInit, OnDestroy {
     protected usergroups: UsergroupsCopyPostRoot = {
         data: []
     } as UsergroupsCopyPostRoot;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -83,6 +84,7 @@ export class UsergroupsCopyComponent implements OnInit, OnDestroy {
         }
 
         this.subscriptions.add(this.UsergroupsService.getUsergroupsCopy(ids).subscribe((usergroups: UsergroupsCopyGetRoot) => {
+            this.cdr.markForCheck();
             for (let usergroup of usergroups.usergroups) {
                 this.usergroups.data.push(
                     {
@@ -109,10 +111,12 @@ export class UsergroupsCopyComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.UsergroupsService.saveUsergroupsCopy(this.usergroups).subscribe({
                 next: (value: any) => {
+                    this.cdr.markForCheck();
                     this.notyService.genericSuccess();
                     this.HistoryService.navigateWithFallback(['/', 'usergroups', 'index']);
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
                     this.notyService.genericError();
                     this.usergroups.data = error.error.result;
                 }
