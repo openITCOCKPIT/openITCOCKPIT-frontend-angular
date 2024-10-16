@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnDestroy, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    Output
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     FormControlDirective,
@@ -71,6 +80,7 @@ export class EditContainerModalComponent implements OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -99,6 +109,7 @@ export class EditContainerModalComponent implements OnDestroy {
             this.subscriptions.add(this.ContainersService.edit(post)
                 .subscribe((result) => {
                     this.isSaving = false;
+                    this.cdr.markForCheck();
 
                     if (result.success) {
                         const response = result.data as GenericIdResponse;

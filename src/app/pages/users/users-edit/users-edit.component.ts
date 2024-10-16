@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -68,6 +68,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -113,10 +114,12 @@ import { KeyFilterModule } from 'primeng/keyfilter';
         RouterLink,
         NgOptionHighlightDirective,
         FormLoaderComponent,
-        KeyFilterModule
+        KeyFilterModule,
+        BadgeOutlineComponent
     ],
     templateUrl: './users-edit.component.html',
-    styleUrl: './users-edit.component.css'
+    styleUrl: './users-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersEditComponent implements OnDestroy, OnInit {
     private readonly subscriptions: Subscription = new Subscription();
@@ -128,6 +131,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     private readonly profileService: ProfileService = inject(ProfileService);
     private readonly ContactService: ContactsService = inject(ContactsService);
     private readonly route = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     protected createAnother: boolean = false;
     protected post: UpdateUser = this.getDefaultPost();
@@ -166,11 +170,13 @@ export class UsersEditComponent implements OnDestroy, OnInit {
             }
             this.post.User.ContainersUsersMemberships[id] = value;
         });
+        this.cdr.markForCheck();
     }
 
     public updateUser(): void {
         this.subscriptions.add(this.UsersService.updateUser(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
                     const title: string = this.TranslocoService.translate('User');
@@ -270,6 +276,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.UsersService.getEdit(id)
             .subscribe((result: EditUserGet) => {
+                this.cdr.markForCheck();
                 this.post.User = result.user;
                 this.UserType = result.UserTypes[0];
                 // Add empty passwords field, otherwise they are undefined.
@@ -312,6 +319,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadContainerRoles(params)
             .subscribe((result: LoadContainerRolesRoot) => {
                 this.containerRoles = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -330,6 +338,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         }
         this.subscriptions.add(this.UsersService.loadContainerPermissions(params)
             .subscribe((result: LoadContainerPermissionsRoot) => {
+                this.cdr.markForCheck();
                 this.containerPermissions = result;
 
                 // Traverse this.containerPermissions.userContainerRoleContainerPermissions and append the containerPermission.container_id to this.containerRoleContainerIds.
@@ -341,6 +350,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     public loadContainers = (): void => {
         this.subscriptions.add(this.UsersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: LoadContainersResponse) => {
+                this.cdr.markForCheck();
                 this.containers = result.containers;
                 this.containerIdsWithWritePermissions = result.containerIdsWithWritePermissions;
             }));
@@ -351,6 +361,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     public loadDateformats = (): void => {
         this.subscriptions.add(this.UsersService.getDateformats()
             .subscribe((result: UserDateformatsRoot) => {
+                this.cdr.markForCheck();
                 this.dateformats = result.dateformats;
                 this.timezones = result.timezones;
 
@@ -363,6 +374,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getLocaleOptions()
             .subscribe((result: UserLocaleOption[]) => {
                 this.localeOptions = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -370,6 +382,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.getUsergroups()
             .subscribe((result: LoadUsergroupsRoot) => {
                 this.usergroups = result.usergroups;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -377,6 +390,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.UsersService.loadLdapUserByString(search)
             .subscribe((result: LoadLdapUserByStringRoot) => {
                 this.samaccountnames = result.ldapUsers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -389,6 +403,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     private loadLdapUserDetails(): void {
         this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
             .subscribe((result: LoadLdapUserDetailsRoot) => {
+                this.cdr.markForCheck();
                 this.ldapUserDetails = result.ldapUser;
 
                 this.ldapUserDetails.ldapgroupIds = this.ldapUserDetails.ldapgroups.map((entry) => {
@@ -417,6 +432,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     }
 
     protected onLdapUserChange(event: any): void {
+        this.cdr.markForCheck();
         // Fetch the entries from this.ldapUsers that matches this.samaccountname.
         let ldapUser = this.samaccountnames.find((entry) => {
             return entry.samaccountname === this.post.User.samaccountname;
@@ -433,6 +449,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys.push(result);
+                this.cdr.markForCheck();
             })
         );
     }
@@ -441,10 +458,13 @@ export class UsersEditComponent implements OnDestroy, OnInit {
         this.subscriptions.add(this.ContactService.ldapConfiguration()
             .subscribe((result) => {
                 this.ldapConfig = result.ldapConfig;
+                this.cdr.markForCheck();
             }))
     }
 
     protected updateTabRotationInterval(): void {
+        this.cdr.markForCheck();
+
         if (this.post.User.dashboard_tab_rotation === 0) {
             this.tabRotationIntervalText = 'disabled';
             return;
@@ -460,26 +480,20 @@ export class UsersEditComponent implements OnDestroy, OnInit {
 
     protected deleteApiKey(index: number): void {
         this.post.User.apikeys.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
     protected refreshApiKey(index: number): void {
         this.subscriptions.add(this.profileService.generateNewApiKey()
             .subscribe((result) => {
                 this.post.User.apikeys[index].apikey = result.apikey;
+                this.cdr.markForCheck();
             })
         );
     }
 
     protected trackByIndex(index: number, item: any): number {
         return index;
-    }
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['apikeys'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['apikeys'][index] as unknown as GenericValidationError;
     }
 
 }

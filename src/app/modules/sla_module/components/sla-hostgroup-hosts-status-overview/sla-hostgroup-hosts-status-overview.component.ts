@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgForOf, NgIf, NgStyle } from '@angular/common';
@@ -83,15 +83,17 @@ import { FormsModule } from '@angular/forms';
         FormsModule
     ],
     templateUrl: './sla-hostgroup-hosts-status-overview.component.html',
-    styleUrl: './sla-hostgroup-hosts-status-overview.component.css'
+    styleUrl: './sla-hostgroup-hosts-status-overview.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestroy, OnChanges {
+export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
 
-    @Input() hostgroupId: number = 0;
+    public hostgroupId = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
     public readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly SlaHostgroupHostsStatusOverviewService = inject(SlaHostgroupHostsStatusOverviewService);
+    private cdr = inject(ChangeDetectorRef);
 
     public params: SlaHostgroupHostsStatusOverviewParams = getDefaultSlaHostgroupHostsStatusOverviewParams();
     protected containers: SelectKeyValue[] = [];
@@ -113,24 +115,15 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
         to: null
     };
 
-    ngOnChanges(changes: SimpleChanges): void {
-        //this is necessary to update the component if the hostgroupId was changed
-        this.loadSlaHostgroupHostsStatus();
+    constructor() {
+        effect(() => {
+            this.loadSlaHostgroupHostsStatus();
+        });
     }
 
     // Show or hide the filter
     public toggleFilter() {
         this.hideFilter = !this.hideFilter;
-    }
-
-
-    public ngOnInit() {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.loadSlaHostgroupHostsStatus();
-        }));
     }
 
     public ngOnDestroy() {
@@ -154,11 +147,11 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
 
         this.isLoading = true;
 
-        if (this.hostgroupId > 0) {
+        if (this.hostgroupId() > 0) {
 
             this.params['filter[determined_availability][]'] = [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100];
 
-            this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadSlaHostgroupHostsStatusOverview(this.hostgroupId, this.params)
+            this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadSlaHostgroupHostsStatusOverview(this.hostgroupId(), this.params)
                 .subscribe((result: SlaHostgroupHostsStatusOverviewRoot) => {
                     this.isLoading = false;
                     this.slaStatusOverview = result.slaStatusOverview;
@@ -166,6 +159,7 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
                     this.hostsNotInSla = result.hostsNotInSla;
                     this.heatmapData = result.heatmapData;
                     this.loadContainers();
+                    this.cdr.markForCheck();
                 }));
         }
     }
@@ -174,6 +168,7 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
         this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -185,7 +180,7 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnInit, OnDestr
 
         let urlParams = {
             'angular': true,
-            'hostgroupId': this.hostgroupId,
+            'hostgroupId': this.hostgroupId(),
             'filter[Hosts.name]': this.params['filter[Hosts.name]'],
             'filter[Hosts.container_id][]': this.params['filter[Hosts.container_id][]'],
             'filter[determined_availability][]': [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100]

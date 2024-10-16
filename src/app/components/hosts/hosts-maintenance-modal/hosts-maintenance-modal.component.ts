@@ -129,7 +129,7 @@ export class HostsMaintenanceModalComponent implements OnInit, OnDestroy {
         }
         this.isSend = true;
         this.subscriptions.add(this.DowntimesDefaultsService.validateDowntimesInput(validate).subscribe((result: any): void => {
-
+            this.cdr.markForCheck();
             if (!result.success) {
                 this.errors = result.data.Downtime;
                 this.isSend = false;
