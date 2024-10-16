@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TenantPost } from '../tenant.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -66,7 +66,8 @@ import { RouterLink } from '@angular/router';
         RouterLink
     ],
     templateUrl: './tenants-add.component.html',
-    styleUrl: './tenants-add.component.css'
+    styleUrl: './tenants-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TenantsAddComponent implements OnInit, OnDestroy {
 
@@ -80,6 +81,7 @@ export class TenantsAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
     }
@@ -110,6 +112,7 @@ export class TenantsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.TenantsService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Tenant');

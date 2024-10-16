@@ -1,11 +1,13 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-    AlertComponent, AlertHeadingDirective,
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -74,7 +76,8 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
         AlertHeadingDirective
     ],
     templateUrl: './systemfailures-add.component.html',
-    styleUrl: './systemfailures-add.component.css'
+    styleUrl: './systemfailures-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemfailuresAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
@@ -88,6 +91,7 @@ export class SystemfailuresAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.SystemfailuresService.loadDefaults()
@@ -100,6 +104,7 @@ export class SystemfailuresAddComponent implements OnInit, OnDestroy {
                 this.post.to_time = result.defaultValues.to_time;
                 this.post.comment = result.defaultValues.comment;
                 this.post.author = result.author;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -127,6 +132,7 @@ export class SystemfailuresAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SystemfailuresService.createSystemfailure(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -80,7 +80,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent
     ],
     templateUrl: './timeperiods-edit.component.html',
-    styleUrl: './timeperiods-edit.component.css'
+    styleUrl: './timeperiods-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
@@ -106,16 +107,18 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
     public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('(00:00)');
     public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('(24:00)');
+    private cdr = inject(ChangeDetectorRef);
 
-    ngOnInit() {
+    public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.TimeperiodsService.getEdit(id).subscribe(data => {
             this.init(data.timeperiod);
+            this.cdr.markForCheck();
         }));
         this.loadContainer();
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
@@ -152,11 +155,12 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimeperiodsService.getContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     };
 
-    trackByIndex(index: number, item: any): number {
+    public trackByIndex(index: number, item: any): number {
         return index;
     }
 
@@ -164,6 +168,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
                 this.calendars = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -188,6 +193,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
                     })
                 .value();
         }
+        this.cdr.markForCheck();
     };
 
     public addTimerange() {
@@ -212,6 +218,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
                     })
                 .value();
         }
+        this.cdr.markForCheck();
     }
 
     public hasTimeRange(errors: any, range: any) {
@@ -248,6 +255,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.TimeperiodsService.updateTimeperiod(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -291,7 +299,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
     // Empty value will be saved as 0 but it does not show the placeholder in the select
     private convertContainerIdEmptyValue() {
-
+        this.cdr.markForCheck();
         if (this.post.calendar_id === 0) {
             this.post.calendar_id = null;
         } else if (this.post.calendar_id === null) {

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     ButtonGroupComponent,
     CardBodyComponent,
@@ -114,7 +114,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './timeperiods-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: TimeperiodsService} // Inject the CommandsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -129,6 +130,7 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private TimeperiodsService = inject(TimeperiodsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -154,6 +156,7 @@ export class TimeperiodsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         this.subscriptions.add(this.TimeperiodsService.getIndex(this.params).subscribe(data => {
             this.timeperiods = data;
+            this.cdr.markForCheck();
         }));
     }
 

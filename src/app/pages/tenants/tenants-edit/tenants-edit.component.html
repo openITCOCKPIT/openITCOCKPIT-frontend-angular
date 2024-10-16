@@ -1,145 +1,143 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['tenants', 'index']" [routerLink]="['/', 'tenants', 'index']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Tenants') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                    {{ t('Edit') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['tenants', 'index']" [routerLink]="['/', 'tenants', 'index']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Tenants') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
 
-        <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
 
-        <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3" *ngIf="post">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('Edit tenant:') }}
-                        <small class="fw-300">
-                            {{ post.container.name }}
-                        </small>
-                    </h5>
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3" *ngIf="post">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit tenant:') }}
+                    <small class="fw-300">
+                        {{ post.container.name }}
+                    </small>
+                </h5>
 
-                    <c-nav class="card-toolbar card-header-pills">
-                        <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['tenants', 'index']" cButton class="ripple" color="default"
-                                    oitcBackButton
-                                    size="xs">
-                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                                {{ t('Back') }}
-                            </button>
-                        </c-nav-item>
-                    </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['tenants', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-                </c-card-header>
-                <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-                    <div class="mb-3">
-                        <label cLabel for="Name">
-                            {{ t('Name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl id="Name" type="text"
-                               name="Name"
-                               oitcFormError [errors]="errors" errorField="container.name"
-                               [(ngModel)]="post.container.name">
-                        <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="Name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Name" type="text"
+                           name="Name"
+                           oitcFormError [errors]="errors" errorField="container.name"
+                           [(ngModel)]="post.container.name">
+                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="Description">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl id="Description" type="text"
-                               name="Description"
-                               oitcFormError [errors]="errors" errorField="description"
-                               [(ngModel)]="post.description">
-                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="Description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl id="Description" type="text"
+                           name="Description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="firstname">
-                            {{ t('First name') }}
-                        </label>
-                        <input cFormControl id="firstname" type="text"
-                               name="firstname"
-                               oitcFormError [errors]="errors" errorField="firstname"
-                               [(ngModel)]="post.firstname">
-                        <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="firstname">
+                        {{ t('First name') }}
+                    </label>
+                    <input cFormControl id="firstname" type="text"
+                           name="firstname"
+                           oitcFormError [errors]="errors" errorField="firstname"
+                           [(ngModel)]="post.firstname">
+                    <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="lastname">
-                            {{ t('Last name') }}
-                        </label>
-                        <input cFormControl id="lastname" type="text"
-                               name="lastname"
-                               oitcFormError [errors]="errors" errorField="lastname"
-                               [(ngModel)]="post.lastname">
-                        <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="lastname">
+                        {{ t('Last name') }}
+                    </label>
+                    <input cFormControl id="lastname" type="text"
+                           name="lastname"
+                           oitcFormError [errors]="errors" errorField="lastname"
+                           [(ngModel)]="post.lastname">
+                    <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="street">
-                            {{ t('Street') }}
-                        </label>
-                        <input cFormControl id="street" type="text"
-                               name="street"
-                               oitcFormError [errors]="errors" errorField="street"
-                               [(ngModel)]="post.street">
-                        <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="street">
+                        {{ t('Street') }}
+                    </label>
+                    <input cFormControl id="street" type="text"
+                           name="street"
+                           oitcFormError [errors]="errors" errorField="street"
+                           [(ngModel)]="post.street">
+                    <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="zipcode">
-                            {{ t('Zip code') }}
-                        </label>
-                        <input cFormControl id="zipcode" type="text"
-                               name="zipcode"
-                               oitcFormError [errors]="errors" errorField="zipcode"
-                               [(ngModel)]="post.zipcode">
-                        <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="zipcode">
+                        {{ t('Zip code') }}
+                    </label>
+                    <input cFormControl id="zipcode" type="text"
+                           name="zipcode"
+                           oitcFormError [errors]="errors" errorField="zipcode"
+                           [(ngModel)]="post.zipcode">
+                    <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
+                </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="city">
-                            {{ t('City') }}
-                        </label>
-                        <input cFormControl id="city" type="text"
-                               name="city"
-                               oitcFormError [errors]="errors" errorField="city"
-                               [(ngModel)]="post.city">
-                        <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
-                    </div>
+                <div class="mb-3">
+                    <label cLabel for="city">
+                        {{ t('City') }}
+                    </label>
+                    <input cFormControl id="city" type="text"
+                           name="city"
+                           oitcFormError [errors]="errors" errorField="city"
+                           [(ngModel)]="post.city">
+                    <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
+                </div>
 
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Update tenant') }}
-                    </button>
-                    <button [fallbackUrl]="['tenants', 'index']" cButton class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Update tenant') }}
+                </button>
+                <button [fallbackUrl]="['tenants', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
 
-                </c-card-footer>
-            </c-card>
-        </form>
-    </ng-container>
-</oitc-coreui>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
 
 
 
