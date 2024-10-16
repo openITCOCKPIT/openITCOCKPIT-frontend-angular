@@ -54,7 +54,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-serviceescalations-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -50,7 +50,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

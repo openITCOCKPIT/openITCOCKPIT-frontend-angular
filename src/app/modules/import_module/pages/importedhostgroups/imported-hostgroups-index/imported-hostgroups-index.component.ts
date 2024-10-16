@@ -81,7 +81,7 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

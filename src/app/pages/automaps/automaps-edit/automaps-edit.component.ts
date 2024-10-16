@@ -53,7 +53,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

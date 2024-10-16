@@ -28,7 +28,7 @@ import { RouterLink } from '@angular/router';
         ButtonCloseDirective,
         ModalTitleDirective,
         FaIconComponent,
-        CoreuiComponent,
+
         TranslocoDirective,
         ModalToggleDirective,
         RouterLink,

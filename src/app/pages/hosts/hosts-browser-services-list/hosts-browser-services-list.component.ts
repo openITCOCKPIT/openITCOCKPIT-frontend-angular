@@ -123,7 +123,7 @@ import { HoststatusObject } from '../hosts.interface';
     selector: 'oitc-hosts-browser-services-list',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,

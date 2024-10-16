@@ -70,7 +70,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -81,7 +81,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-        CoreuiComponent,
+
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,

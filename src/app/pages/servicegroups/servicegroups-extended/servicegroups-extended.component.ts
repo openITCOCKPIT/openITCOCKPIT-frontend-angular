@@ -117,7 +117,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormDirective,

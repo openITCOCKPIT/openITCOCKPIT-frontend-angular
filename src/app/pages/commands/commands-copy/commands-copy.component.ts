@@ -35,7 +35,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-commands-copy',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,

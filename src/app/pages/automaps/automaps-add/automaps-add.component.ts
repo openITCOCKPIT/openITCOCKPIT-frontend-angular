@@ -48,7 +48,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-automaps-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

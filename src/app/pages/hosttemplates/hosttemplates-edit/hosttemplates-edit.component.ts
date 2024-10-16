@@ -59,7 +59,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-hosttemplates-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,

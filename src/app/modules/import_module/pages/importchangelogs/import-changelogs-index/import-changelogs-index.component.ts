@@ -55,7 +55,7 @@ import { Sort } from '@angular/material/sort';
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

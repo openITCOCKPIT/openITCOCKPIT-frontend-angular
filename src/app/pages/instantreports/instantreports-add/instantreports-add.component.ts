@@ -58,7 +58,7 @@ import { HistoryService } from '../../../history.service';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

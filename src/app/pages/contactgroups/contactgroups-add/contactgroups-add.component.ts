@@ -52,7 +52,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

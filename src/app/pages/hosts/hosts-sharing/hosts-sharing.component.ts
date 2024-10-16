@@ -65,7 +65,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CodeMirrorContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormControlDirective,

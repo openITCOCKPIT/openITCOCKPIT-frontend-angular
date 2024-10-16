@@ -40,7 +40,7 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

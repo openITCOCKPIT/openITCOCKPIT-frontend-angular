@@ -97,7 +97,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
     selector: 'oitc-commands-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,

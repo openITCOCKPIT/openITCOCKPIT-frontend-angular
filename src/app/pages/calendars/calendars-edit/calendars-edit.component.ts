@@ -44,7 +44,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

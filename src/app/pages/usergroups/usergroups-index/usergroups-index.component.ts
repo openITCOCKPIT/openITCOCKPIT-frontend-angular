@@ -67,7 +67,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

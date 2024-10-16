@@ -30,7 +30,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

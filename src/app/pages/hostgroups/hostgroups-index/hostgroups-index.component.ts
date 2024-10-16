@@ -69,7 +69,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-hostgroups-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,

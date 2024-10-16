@@ -140,7 +140,7 @@ import {
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         HostsBrowserMenuComponent,
         NgIf,
         QueryHandlerCheckerComponent,

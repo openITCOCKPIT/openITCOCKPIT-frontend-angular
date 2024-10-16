@@ -49,7 +49,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
     selector: 'oitc-hostescalations-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

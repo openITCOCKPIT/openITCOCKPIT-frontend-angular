@@ -39,7 +39,7 @@ import { GenericValidationError } from '../../../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

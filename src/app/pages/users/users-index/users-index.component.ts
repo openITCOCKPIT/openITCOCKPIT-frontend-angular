@@ -78,7 +78,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownComponent,

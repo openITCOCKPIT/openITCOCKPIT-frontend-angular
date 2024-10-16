@@ -44,7 +44,7 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormDirective,
         FormsModule,

@@ -62,7 +62,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

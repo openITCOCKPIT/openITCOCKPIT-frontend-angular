@@ -50,7 +50,7 @@ import { HistoryService } from '../../../history.service';
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormDirective,
         FormsModule,

@@ -64,7 +64,7 @@ import { IndexPage } from '../../../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

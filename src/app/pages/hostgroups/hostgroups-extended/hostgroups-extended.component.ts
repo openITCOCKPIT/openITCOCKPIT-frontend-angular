@@ -135,7 +135,7 @@ import { ServicesService } from '../../services/services.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormDirective,

@@ -56,7 +56,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

@@ -115,7 +115,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         ColumnsConfigImportModalComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,

@@ -66,7 +66,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         CreditsComponent,
         FaIconComponent,
         FormControlDirective,

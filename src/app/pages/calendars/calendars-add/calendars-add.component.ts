@@ -58,7 +58,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-calendars-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

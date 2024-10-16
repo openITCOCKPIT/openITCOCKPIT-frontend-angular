@@ -62,7 +62,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-contactgroups-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,

@@ -20,7 +20,7 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
         FormsModule,
         NgIf,
         TranslocoPipe,
-        CoreuiComponent,
+
         TranslocoDirective,
         FormErrorDirective,
         NgSelectModule,

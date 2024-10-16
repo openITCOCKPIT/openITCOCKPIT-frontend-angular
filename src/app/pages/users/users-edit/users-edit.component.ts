@@ -83,7 +83,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

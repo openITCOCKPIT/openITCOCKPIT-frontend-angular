@@ -64,7 +64,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

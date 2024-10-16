@@ -50,7 +50,7 @@ import { ConsoleCopyComponent } from '../../../components/console-copy/console-c
     selector: 'oitc-packetmanager-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -64,7 +64,7 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

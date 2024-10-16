@@ -50,7 +50,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormDirective,

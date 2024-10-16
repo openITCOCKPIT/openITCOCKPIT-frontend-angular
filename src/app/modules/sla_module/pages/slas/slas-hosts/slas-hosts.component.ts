@@ -63,7 +63,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

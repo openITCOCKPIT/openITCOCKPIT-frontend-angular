@@ -41,7 +41,7 @@ import {
     selector: 'oitc-documentations-view',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

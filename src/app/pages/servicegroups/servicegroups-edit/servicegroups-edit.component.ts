@@ -60,7 +60,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -232,7 +232,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadServicetemplates(this.post.container.parent_id, search, this.post.servicetemplates._ids)
             .subscribe((result: LoadServicetemplates) => {
                 this.cdr.markForCheck();
-                
+
                 this.servicetemplates = result.servicetemplates;
             }))
     }

@@ -35,7 +35,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

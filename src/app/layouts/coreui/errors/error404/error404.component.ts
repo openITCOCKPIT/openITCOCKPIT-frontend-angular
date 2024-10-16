@@ -7,7 +7,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
     selector: 'oitc-error404',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         ContainerComponent,
         RowComponent,
         ColComponent,

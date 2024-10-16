@@ -57,7 +57,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
     selector: 'oitc-exports-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         QueryHandlerCheckerComponent,

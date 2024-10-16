@@ -144,7 +144,7 @@ import { IndexPage } from '../../../pages.interface';
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,

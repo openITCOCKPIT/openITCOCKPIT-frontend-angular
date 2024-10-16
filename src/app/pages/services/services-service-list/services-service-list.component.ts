@@ -132,7 +132,7 @@ import {
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,

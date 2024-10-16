@@ -60,7 +60,7 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
     selector: 'oitc-serviceescalations-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

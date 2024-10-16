@@ -63,7 +63,7 @@ import { ProfileChangePasswordComponent } from '../profile-change-password/profi
     selector: 'oitc-profile-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

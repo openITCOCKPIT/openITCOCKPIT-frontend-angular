@@ -43,7 +43,7 @@ import { RouterLink } from '@angular/router';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

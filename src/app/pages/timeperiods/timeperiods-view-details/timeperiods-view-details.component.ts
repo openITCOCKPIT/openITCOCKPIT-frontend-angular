@@ -34,7 +34,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
         ColComponent,
         FullCalendarModule,
         ObjectUuidComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

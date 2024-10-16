@@ -39,7 +39,7 @@ import { HttpErrorResponse } from '@angular/common/http';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,

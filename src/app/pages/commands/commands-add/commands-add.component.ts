@@ -79,7 +79,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-commands-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,

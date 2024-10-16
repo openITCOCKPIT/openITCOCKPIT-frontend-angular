@@ -71,7 +71,7 @@ import { IndexPage } from '../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

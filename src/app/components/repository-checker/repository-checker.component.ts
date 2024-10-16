@@ -12,7 +12,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
     selector: 'oitc-repository-checker',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         AlertComponent,
         FaIconComponent,

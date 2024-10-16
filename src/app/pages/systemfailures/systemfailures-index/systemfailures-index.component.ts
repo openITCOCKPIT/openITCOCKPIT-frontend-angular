@@ -69,7 +69,7 @@ import { IndexPage } from '../../../pages.interface';
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

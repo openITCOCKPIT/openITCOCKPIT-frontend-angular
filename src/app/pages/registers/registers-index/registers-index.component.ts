@@ -34,7 +34,7 @@ import { CreditsComponent } from '../credits/credits.component';
     selector: 'oitc-registers-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,

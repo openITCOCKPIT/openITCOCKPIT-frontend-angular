@@ -44,7 +44,7 @@ import { NgIf } from '@angular/common';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

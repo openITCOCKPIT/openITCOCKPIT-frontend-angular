@@ -36,7 +36,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NgForOf,

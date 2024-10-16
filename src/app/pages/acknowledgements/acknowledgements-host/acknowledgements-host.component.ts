@@ -61,7 +61,7 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

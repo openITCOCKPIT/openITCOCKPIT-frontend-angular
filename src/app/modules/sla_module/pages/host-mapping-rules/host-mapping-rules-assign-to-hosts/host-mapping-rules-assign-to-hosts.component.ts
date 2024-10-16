@@ -79,7 +79,7 @@ import {
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

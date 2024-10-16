@@ -46,7 +46,7 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -75,7 +75,7 @@ import { GenericResponseWrapper } from '../../../generic-responses';
 export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     private readonly Subscription: Subscription = new Subscription();
     private readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    private readonly notyService : NotyService= inject(NotyService);
+    private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);

@@ -147,7 +147,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-services-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
@@ -876,7 +876,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     protected confirmAddServicesToServicegroup(service?: ServiceObject): void {
         this.cdr.markForCheck();
-        
+
         let items: SelectKeyValue[] = [];
 
         if (service) {

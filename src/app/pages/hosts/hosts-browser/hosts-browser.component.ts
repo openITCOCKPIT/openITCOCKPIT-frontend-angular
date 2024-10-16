@@ -119,7 +119,7 @@ import {
     selector: 'oitc-hosts-browser',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         QueryHandlerCheckerComponent,
         FaIconComponent,

@@ -9,7 +9,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
     imports: [
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         RowComponent,
         TranslocoDirective
     ],

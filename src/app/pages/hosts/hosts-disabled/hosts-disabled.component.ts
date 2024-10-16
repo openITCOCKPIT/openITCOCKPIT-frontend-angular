@@ -108,7 +108,7 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DowntimeIconComponent,

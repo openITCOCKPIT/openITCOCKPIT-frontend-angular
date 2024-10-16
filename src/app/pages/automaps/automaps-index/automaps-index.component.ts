@@ -71,7 +71,7 @@ import {
     selector: 'oitc-automaps-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

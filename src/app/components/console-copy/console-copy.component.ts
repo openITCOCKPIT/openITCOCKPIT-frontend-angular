@@ -12,7 +12,7 @@ import { ButtonDirective } from '@coreui/angular';
     imports: [
         FaIconComponent,
         TrustAsHtmlPipe,
-        CoreuiComponent,
+
         TranslocoDirective,
         MatTooltip,
         TranslocoPipe,

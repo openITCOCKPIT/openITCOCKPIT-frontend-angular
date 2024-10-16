@@ -81,7 +81,7 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DropdownComponent,
         DropdownItemDirective,

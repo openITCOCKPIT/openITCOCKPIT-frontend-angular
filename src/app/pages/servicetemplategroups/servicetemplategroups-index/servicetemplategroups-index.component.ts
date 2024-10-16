@@ -64,7 +64,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-servicetemplategroups-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,

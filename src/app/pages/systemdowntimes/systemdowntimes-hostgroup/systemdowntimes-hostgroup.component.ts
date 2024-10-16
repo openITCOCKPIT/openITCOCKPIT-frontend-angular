@@ -67,7 +67,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

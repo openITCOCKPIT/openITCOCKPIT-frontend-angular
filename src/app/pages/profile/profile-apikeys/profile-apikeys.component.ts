@@ -59,7 +59,7 @@ import { UsersService } from '../../users/users.service';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

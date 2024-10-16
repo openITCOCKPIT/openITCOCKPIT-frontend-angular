@@ -53,7 +53,7 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,

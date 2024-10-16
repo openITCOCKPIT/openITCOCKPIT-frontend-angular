@@ -86,7 +86,7 @@ import {
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

@@ -66,7 +66,7 @@ import {
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

@@ -69,7 +69,7 @@ import { VectormapMarker } from '../../../components/vectormap/vactormap.interfa
         CardHeaderComponent,
         CardTitleDirective,
         CodeMirrorContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormControlDirective,

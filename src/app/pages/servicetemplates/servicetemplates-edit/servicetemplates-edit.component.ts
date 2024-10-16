@@ -71,7 +71,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,

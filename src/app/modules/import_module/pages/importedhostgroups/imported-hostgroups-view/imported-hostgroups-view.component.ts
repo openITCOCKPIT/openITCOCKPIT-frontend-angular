@@ -41,7 +41,7 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
     selector: 'oitc-imported-hostgroups-view',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -48,7 +48,7 @@ import { GenericKeyValue } from '../../../generic.interfaces';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -76,7 +76,7 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,

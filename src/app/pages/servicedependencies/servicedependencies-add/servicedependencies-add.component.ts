@@ -59,7 +59,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-servicedependencies-add',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

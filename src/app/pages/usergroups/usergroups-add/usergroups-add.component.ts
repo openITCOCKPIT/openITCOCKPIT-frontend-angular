@@ -67,7 +67,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

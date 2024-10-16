@@ -34,7 +34,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
     selector: 'oitc-automaps-copy',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

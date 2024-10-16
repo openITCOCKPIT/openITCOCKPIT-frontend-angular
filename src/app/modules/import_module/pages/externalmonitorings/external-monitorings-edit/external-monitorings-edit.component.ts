@@ -55,7 +55,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-        CoreuiComponent,
+
         DynamicalFormFieldsComponent,
         FaIconComponent,
         FormControlDirective,

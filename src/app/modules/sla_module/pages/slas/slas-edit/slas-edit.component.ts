@@ -65,7 +65,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,

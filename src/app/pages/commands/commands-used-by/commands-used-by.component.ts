@@ -30,7 +30,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     selector: 'oitc-commands-used-by',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -70,7 +70,7 @@ import { CodeMirrorContainerComponent } from '../../components/code-mirror-conta
     selector: 'app-start-page',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         RouterModule,
         AsyncPipe,
         JsonPipe,

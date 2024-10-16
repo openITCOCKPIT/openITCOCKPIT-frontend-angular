@@ -61,7 +61,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-calendars-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

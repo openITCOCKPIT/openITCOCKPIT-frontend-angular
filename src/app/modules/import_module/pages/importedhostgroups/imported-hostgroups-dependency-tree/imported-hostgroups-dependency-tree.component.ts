@@ -34,7 +34,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
     selector: 'oitc-imported-hostgroups-dependency-tree',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardComponent,
         CardHeaderComponent,

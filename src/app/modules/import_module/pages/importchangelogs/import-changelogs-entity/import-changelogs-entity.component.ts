@@ -51,7 +51,7 @@ import { getDefaultImportChangelogsEntityParams, ImportChangelogsEntityParams } 
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,

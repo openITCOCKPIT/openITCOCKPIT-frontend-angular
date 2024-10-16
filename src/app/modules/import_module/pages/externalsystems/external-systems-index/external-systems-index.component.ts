@@ -68,7 +68,7 @@ import { IndexPage } from '../../../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         TranslocoDirective,
         RouterLink,
@@ -207,7 +207,7 @@ export class ExternalSystemsIndexComponent implements OnInit, OnDestroy, IndexPa
         // Pass selection to the modal
         this.selectedItems = items;
         this.cdr.markForCheck();
-        
+
         // open modal
         this.modalService.toggle({
             show: true,

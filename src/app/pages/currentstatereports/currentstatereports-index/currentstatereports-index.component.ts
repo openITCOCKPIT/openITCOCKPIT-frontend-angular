@@ -76,7 +76,7 @@ import { saveAs } from 'file-saver';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,

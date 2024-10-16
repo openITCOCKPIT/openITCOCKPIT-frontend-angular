@@ -68,7 +68,7 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

@@ -73,7 +73,7 @@ import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/dis
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

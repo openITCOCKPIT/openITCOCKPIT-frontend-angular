@@ -67,7 +67,7 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         DecimalPipe,
         FaIconComponent,
         InputGroupComponent,

@@ -29,7 +29,7 @@ import { MetricsInfoResponse } from '../metrics.interface';
     selector: 'oitc-metrics-info',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

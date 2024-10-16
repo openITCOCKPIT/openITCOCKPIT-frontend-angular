@@ -70,7 +70,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
     selector: 'oitc-users-ldap',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,

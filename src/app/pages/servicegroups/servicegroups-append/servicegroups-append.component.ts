@@ -46,7 +46,7 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,

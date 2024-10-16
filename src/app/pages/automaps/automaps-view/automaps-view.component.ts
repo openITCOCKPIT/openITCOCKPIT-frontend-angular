@@ -29,7 +29,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
     selector: 'oitc-automaps-view',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         QueryHandlerCheckerComponent,

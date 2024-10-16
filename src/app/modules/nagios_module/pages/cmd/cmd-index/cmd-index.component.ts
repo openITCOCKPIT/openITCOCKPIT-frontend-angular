@@ -105,7 +105,7 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,

@@ -62,7 +62,7 @@ import { HostPieEchartComponent } from '../../../components/charts/host-pie-echa
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormDirective,
         FormLoaderComponent,

@@ -44,7 +44,7 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
     selector: 'oitc-settings-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -122,15 +122,15 @@ export class SettingsEditComponent implements OnInit, OnDestroy {
     protected updatePagerdutySettings(): void {
         this.subscriptions.add(
             this.pagerdutySettingsService.setPagerdutySettings(this.post).subscribe((result: GenericResponseWrapper): void => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    this.errors = null;
-                    this.post = result.data as PagerdutySettings;
-                    this.notyService.genericSuccess();
-                    return;
-                }
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        this.errors = null;
+                        this.post = result.data as PagerdutySettings;
+                        this.notyService.genericSuccess();
+                        return;
+                    }
 
-                this.errors = result.data as GenericValidationError;
+                    this.errors = result.data as GenericValidationError;
                     this.notyService.genericError();
                 }
             )
