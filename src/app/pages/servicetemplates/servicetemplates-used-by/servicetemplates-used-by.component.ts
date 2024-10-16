@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -93,7 +93,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     styleUrl: './servicetemplates-used-by.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     public hostsWithServices: HostWithServices[] = [];
@@ -109,6 +110,7 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     protected PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
     private router = inject(Router);
     private route = inject(ActivatedRoute);
@@ -130,6 +132,7 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
                 this.hostsWithServices = result.hostsWithServices;
                 this.servicetemplate = result.servicetemplate;
                 this.total = result.count
+                this.cdr.markForCheck();
             }));
     }
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -103,13 +103,14 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './servicetemplates-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicetemplatesService} // Inject the ServicetemplatesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public params: ServicetemplatesIndexParams = getDefaultServicetemplatesIndexParams();
     public servicetemplates?: ServicetemplateIndexRoot;
-    public hideFilter: boolean = false;
+    public hideFilter: boolean = true;
 
     public servicetemplateTypes: any[] = [];
     public selectedItems: DeleteAllItem[] = [];
@@ -120,6 +121,7 @@ export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexP
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -149,6 +151,7 @@ export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexP
         this.subscriptions.add(this.ServicetemplatesService.getIndex(this.params)
             .subscribe((result) => {
                 this.servicetemplates = result;
+                this.cdr.markForCheck();
             })
         );
     }
