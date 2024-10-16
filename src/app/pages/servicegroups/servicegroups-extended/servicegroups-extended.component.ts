@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -15,7 +15,9 @@ import {
     DropdownDividerDirective,
     DropdownItemDirective,
     DropdownMenuDirective,
-    DropdownToggleDirective, FormCheckInputDirective, FormCheckLabelDirective,
+    DropdownToggleDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -24,7 +26,8 @@ import {
     ModalService,
     NavComponent,
     NavItemComponent,
-    RowComponent, RowDirective,
+    RowComponent,
+    RowDirective,
     TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
@@ -46,9 +49,7 @@ import {
     getDefaultServicegroupsExtendedParams,
     ServiceGroupExtendedRoot,
     ServicegroupsExtendedParams,
-    ServicegroupsExtendedServiceListParams,
-    ServicegroupsLoadServicegroupsByStringParams,
-    LoadServicesForServices, Service
+    ServicegroupsLoadServicegroupsByStringParams
 } from '../servicegroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -64,7 +65,9 @@ import {
 import {
     ExternalCommandsService,
     ServiceAcknowledgeItem,
-    ServiceDowntimeItem, ServiceNotifcationItem, ServiceResetItem,
+    ServiceDowntimeItem,
+    ServiceNotifcationItem,
+    ServiceResetItem,
 } from '../../../services/external-commands.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -170,16 +173,21 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         HoststatusIconComponent,
         ServicestatusSimpleIconComponent,
         DisableModalComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        NgClass
     ],
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
+
+    public selectedItems: any[] = [];
+    public serviceParams: ServicegroupsExtendedParams = getDefaultServicegroupsExtendedParams();
 
     private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -188,8 +196,14 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+
+    private cdr = inject(ChangeDetectorRef);
+
     private userFullname: string = '';
 
+    protected readonly AcknowledgementTypes = AcknowledgementTypes;
     protected servicegroupId: number = 0;
     protected servicegroups: SelectKeyValue[] = [];
     protected servicegroupExtended: ServiceGroupExtendedRoot = {
@@ -198,7 +212,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 container: {
                     name: ''
                 },
-                uuid : '',
+                uuid: '',
             },
             StatusSummary: {
                 ok: 0,
@@ -224,6 +238,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         }
     };
 
+
     public ngOnInit() {
         // Fetch the id from the URL
         this.servicegroupId = Number(this.route.snapshot.paramMap.get('id'));
@@ -234,6 +249,8 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
 
         // Load all Servicegroups for the dropdown
         this.loadServicegroups('');
+
+        this.cdr.markForCheck();
     }
 
     protected onServicegroupChange(): void {
@@ -241,9 +258,10 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicegroupExtended();
 
         this.serviceParams.selected = this.servicegroupId;
+
+        this.cdr.markForCheck();
     }
 
-    public selectedItems: any[] = [];
 
     public toggleResetCheckModal() {
         this.selectedItems = this.servicegroupExtended.servicegroup.Services.map((service) => {
@@ -254,6 +272,8 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 satelliteId: 0
             };
         });
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: true,
@@ -272,11 +292,11 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.ngOnInit();
     }
 
-    private ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
 
     private loadServicegroupExtended(): void {
         this.subscriptions.add(this.ServicegroupsService.loadServicegroupWithServicesById(this.servicegroupId, this.serviceParams)
             .subscribe((result: ServiceGroupExtendedRoot) => {
+                this.cdr.markForCheck();
                 // Then put post where it belongs. Also unpack that bullshit
                 this.servicegroupExtended = result;
                 this.userFullname = result.username;
@@ -296,6 +316,8 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
 
                 // Then load the selected data.
                 this.onServicegroupChange();
+
+                this.cdr.markForCheck();
             }));
     }
 
@@ -394,11 +416,10 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
 
-    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
-
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -420,7 +441,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicegroupExtended();
     }
 
-    public serviceParams: ServicegroupsExtendedParams = getDefaultServicegroupsExtendedParams();
 
     // Callback for Paginator or Scroll Index Component
     public onServicePaginatorChange(change: PaginatorChangeEvent): void {
@@ -429,7 +449,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicegroupExtended();
     }
 
-    protected readonly AcknowledgementTypes = AcknowledgementTypes;
 
     public resetChecktime() {
         const items = this.servicegroupExtended.servicegroup.Services.map((service): ServiceResetItem => {
@@ -538,20 +557,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 this.onMassActionComplete(true)
             }, 5000);
         }));
-    }
-
-    getBackgroundClass(hostStatusId: number): string {
-        switch (hostStatusId) {
-            case 0:
-                return 'bg-success';
-            case 1:
-                return 'bg-warning';
-            case 2:
-                return 'bg-critical';
-            case 3:
-            default:
-                return 'bg-unknown';
-        }
     }
 
     protected onMassActionComplete(event: boolean): void {

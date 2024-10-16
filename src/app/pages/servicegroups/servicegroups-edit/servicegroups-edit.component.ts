@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -36,11 +36,12 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ServicegroupsService } from '../servicegroups.service';
 import {
-    Servicegroup,
-    ServicegroupsEditGet,
     LoadContainersRoot,
     LoadServicesResponse,
-    LoadServicetemplates, ServicesListService
+    LoadServicetemplates,
+    Servicegroup,
+    ServicegroupsEditGet,
+    ServicesListService
 } from "../servicegroups.interface";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
@@ -88,7 +89,8 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './servicegroups-edit.component.html',
-    styleUrl: './servicegroups-edit.component.css'
+    styleUrl: './servicegroups-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsEditComponent implements OnInit, OnDestroy {
 
@@ -100,6 +102,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError | null = null;
     public createAnother: boolean = false;
+    private cdr = inject(ChangeDetectorRef);
 
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
@@ -141,6 +144,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
 
                 // Then force containerChange!
                 this.onContainerChange();
+                this.cdr.markForCheck();
             }));
     }
 
@@ -152,6 +156,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicegroupsService.updateServicegroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -191,6 +196,7 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicegroupsService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -211,6 +217,8 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicegroupsService.loadServices(this.post.container.parent_id, search, this.post.services._ids)
             .subscribe((result: LoadServicesResponse) => {
+                this.cdr.markForCheck();
+
                 this.services = result.services;
             }))
     }
@@ -223,6 +231,8 @@ export class ServicegroupsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServicegroupsService.loadServicetemplates(this.post.container.parent_id, search, this.post.servicetemplates._ids)
             .subscribe((result: LoadServicetemplates) => {
+                this.cdr.markForCheck();
+                
                 this.servicetemplates = result.servicetemplates;
             }))
     }

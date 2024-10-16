@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { HistoryService } from '../../../history.service';
 import {
@@ -32,7 +32,7 @@ import { ServicegroupsService } from '../servicegroups.service';
 import { ServicegroupAppend, ServicegroupsLoadServicegroupsByStringParams } from '../servicegroups.interface';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericResponseWrapper } from '../../../generic-responses';
 
@@ -69,7 +69,8 @@ import { GenericResponseWrapper } from '../../../generic-responses';
         RouterLink
     ],
     templateUrl: './servicegroups-append.component.html',
-    styleUrl: './servicegroups-append.component.css'
+    styleUrl: './servicegroups-append.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
     private readonly Subscription: Subscription = new Subscription();
@@ -78,6 +79,8 @@ export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
+
     protected post: ServicegroupAppend = {
         Servicegroup: {
             services: {
@@ -96,6 +99,8 @@ export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
 
         this.Subscription.add(this.ServicegroupsService.appendServices(this.post).subscribe((result: GenericResponseWrapper) => {
 
+            this.cdr.markForCheck();
+
             const title = this.TranslocoService.translate('Service group');
             const msg = this.TranslocoService.translate('saved successfully');
             const url = ['servicegroups', 'edit', this.post.Servicegroup.id];
@@ -110,6 +115,7 @@ export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.Subscription.add(this.ServicegroupsService.loadServicegroupsByString({} as ServicegroupsLoadServicegroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
             this.servicegroups = data;
+            this.cdr.markForCheck();
         }));
     }
 
