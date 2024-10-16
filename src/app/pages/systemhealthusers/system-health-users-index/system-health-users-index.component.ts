@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -103,7 +103,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './system-health-users-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemHealthUsersService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SystemHealthUsersService: SystemHealthUsersService = inject(SystemHealthUsersService);
@@ -118,7 +119,7 @@ export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy, Index
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -138,6 +139,7 @@ export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy, Index
         this.subscriptions.add(this.SystemHealthUsersService.getIndex(this.params)
             .subscribe((result: SystemHealthUsersIndex) => {
                 this.systemHealthUsers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -195,6 +197,7 @@ export class SystemHealthUsersIndexComponent implements OnInit, OnDestroy, Index
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

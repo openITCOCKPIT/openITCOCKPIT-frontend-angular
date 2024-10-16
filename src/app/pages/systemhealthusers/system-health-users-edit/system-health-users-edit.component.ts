@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -70,7 +70,8 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './system-health-users-edit.component.html',
-    styleUrl: './system-health-users-edit.component.css'
+    styleUrl: './system-health-users-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemHealthUsersEditComponent implements OnInit, OnDestroy {
     private readonly SystemHealthUsersService: SystemHealthUsersService = inject(SystemHealthUsersService);
@@ -93,11 +94,13 @@ export class SystemHealthUsersEditComponent implements OnInit, OnDestroy {
         },
         id: 0
     };
+    private cdr = inject(ChangeDetectorRef);
 
 
     public submit() {
         this.subscriptions.add(this.SystemHealthUsersService.updateSystemHealthUser(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -128,6 +131,7 @@ export class SystemHealthUsersEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.SystemHealthUsersService.getEdit(id)
             .subscribe((result: SystemHealthUserEditGet) => {
+                this.cdr.markForCheck();
                 this.post = {
                     SystemHealthUser: result.systemHealthUser,
                     User: result.user,
