@@ -262,6 +262,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public synchronizeWithMonitoring() {
         this.subscriptions.add(this.ImportedhostgroupsService.synchronizeWithMonitoring()
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
                     return;

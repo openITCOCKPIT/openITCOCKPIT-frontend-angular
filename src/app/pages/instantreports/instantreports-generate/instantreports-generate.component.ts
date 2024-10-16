@@ -210,6 +210,7 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
             this.isGeneratingReport = true;
             this.subscriptions.add(this.InstantreportsService.generateReportHtml(params)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     this.isGeneratingReport = false;
                     if (result.success) {
                         // Success - Form data is valid - now we can generate the report

@@ -1,5 +1,6 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     effect,
     inject,
@@ -119,7 +120,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
-
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         effect(() => {
@@ -215,6 +216,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.subscriptions.add(this.LocationsService.add(this.locationPost)
             .subscribe((result) => {
                 this.isSaving = false;
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Location');
@@ -244,6 +246,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.isSaving = true;
         this.subscriptions.add(this.TenantsService.add(this.tenantPost)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.isSaving = false;
 
                 if (result.success) {
@@ -278,6 +281,7 @@ export class CreateContainerModalComponent implements OnInit, OnChanges, OnDestr
         this.subscriptions.add(this.ContainersService.add(this.nodePost)
             .subscribe((result) => {
                 this.isSaving = false;
+                this.cdr.markForCheck();
 
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
