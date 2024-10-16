@@ -292,7 +292,7 @@ export class UsersEditComponent implements OnDestroy, OnInit {
                 // Clear those ContainerRoleIds that are not available for the user and would cause an empty böbbel in the oitc-multi select.
                 let selectedContainerRoleIds = new Set(this.containers.map(item => item.key));
                 this.invisibleContainerRoleIds = this.post.User.usercontainerroles._ids.filter(key => !selectedContainerRoleIds.has(key));
-                this.post.User.usercontainerroles._ids = this.post.User.usercontainerroles._ids.filter(key => selectedContainerRoleIds.has(key));
+                // this.post.User.usercontainerroles._ids = this.post.User.usercontainerroles._ids.filter(key => selectedContainerRoleIds.has(key));
 
                 // Force the update of the rotation slider's text.
                 this.updateTabRotationInterval()
