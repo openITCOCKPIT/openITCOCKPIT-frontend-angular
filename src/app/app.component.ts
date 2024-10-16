@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -35,7 +35,8 @@ import { LayoutService } from './layouts/coreui/layout.service';
         ShadowOnScrollDirective
     ],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.css'
+    styleUrl: './app.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnDestroy, AfterViewInit {
 
@@ -50,7 +51,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private IconSetService: IconSetService,
                 private selectConfig: NgSelectConfig,
                 private TranslocoService: TranslocoService,
-                private colorService: ColorModeService
+                private colorService: ColorModeService,
+                private cdr: ChangeDetectorRef
     ) {
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
