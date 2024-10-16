@@ -197,14 +197,14 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, Ind
             // User just want to delete a single command
             items = [{
                 id: servicedependency.id,
-                displayName: this.TranslocoService.translate('Service dependency #{id}', {id: servicedependency.id})
+                displayName: this.TranslocoService.translate('Service dependency #{0}', {'0': servicedependency.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Service dependency #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Service dependency #{0}', {'0': item.id})
                 };
             });
         }

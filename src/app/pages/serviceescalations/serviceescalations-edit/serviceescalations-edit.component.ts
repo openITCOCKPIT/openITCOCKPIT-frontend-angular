@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -97,7 +97,8 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         ObjectUuidComponent
     ],
     templateUrl: './serviceescalations-edit.component.html',
-    styleUrl: './serviceescalations-edit.component.css'
+    styleUrl: './serviceescalations-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
@@ -133,6 +134,8 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.ServiceescalationsService.getEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.get = result.serviceescalation;
                 this.post = {
                     id: this.get.id,
@@ -184,6 +187,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServiceescalationsService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -197,6 +201,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServiceescalationsService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicegroups = result.servicegroups;
                 this.servicegroups = this.servicegroups.map(obj => ({
                     ...obj,
@@ -220,6 +225,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.services = result.services;
                 this.services.map(obj => {
                     obj.items.map(service => {
@@ -246,6 +252,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServiceescalationsService.loadExcludedServices(containerId, searchString, this.post.services_excluded._ids, this.post.servicegroups._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.services_excluded = result.excludedServices;
                 this.services_excluded.map(obj => {
                     //currentServicesExcludedIds.push(obj.key);
@@ -273,6 +280,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.ServiceescalationsService.loadExcludedServicegroups(containerId, searchString, this.post.services._ids, this.post.servicegroups_excluded._ids)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicegroups_excluded = result.excludedServicegroups;
                 this.servicegroups_excluded = this.servicegroups_excluded.map(obj => {
                     return {
@@ -305,6 +313,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedServices() {
+        this.cdr.markForCheck();
         if (this.services_excluded.length === 0) {
             return;
         }
@@ -319,6 +328,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenServicegroups() {
+        this.cdr.markForCheck();
         if (this.servicegroups.length === 0) {
             return;
         }
@@ -328,6 +338,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public processChosenExcludedServicegroups() {
+        this.cdr.markForCheck();
         if (this.servicegroups_excluded.length === 0) {
             return;
         }
@@ -340,6 +351,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ServiceescalationsService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service escalation');

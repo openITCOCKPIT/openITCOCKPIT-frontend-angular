@@ -198,14 +198,14 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy, IndexPa
             // User just want to delete a single command
             items = [{
                 id: hostescalation.id,
-                displayName: this.TranslocoService.translate('Host escalation #{id}', {id: hostescalation.id})
+                displayName: this.TranslocoService.translate('Host escalation #{0}', {"0": hostescalation.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Host escalation #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Host escalation #{0}', {"0": item.id})
                 };
             });
         }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -112,7 +112,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './serviceescalations-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServiceescalationsService} // Inject the ServiceescalationsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceescalationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService = inject(TranslocoService);
@@ -135,6 +136,8 @@ export class ServiceescalationsIndexComponent implements OnInit, OnDestroy, Inde
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -160,6 +163,7 @@ export class ServiceescalationsIndexComponent implements OnInit, OnDestroy, Inde
         this.subscriptions.add(this.ServiceescalationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.serviceescalations = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -194,14 +198,14 @@ export class ServiceescalationsIndexComponent implements OnInit, OnDestroy, Inde
             // User just want to delete a single command
             items = [{
                 id: serviceescalation.id,
-                displayName: this.TranslocoService.translate('Service escalation #{id}', {id: serviceescalation.id})
+                displayName: this.TranslocoService.translate('Service escalation #{0}', {'0': serviceescalation.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Service escalation #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Service escalation #{0}', {'id': item.id})
                 };
             });
         }

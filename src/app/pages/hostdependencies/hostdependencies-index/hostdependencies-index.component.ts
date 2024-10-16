@@ -198,14 +198,14 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
             // User just want to delete a single command
             items = [{
                 id: hostdependency.id,
-                displayName: this.TranslocoService.translate('Host dependency #{id}', {id: hostdependency.id})
+                displayName: this.TranslocoService.translate('Host dependency #{0}', {'0': hostdependency.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Host dependency #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Host dependency #{0}', {'0': item.id})
                 };
             });
         }
