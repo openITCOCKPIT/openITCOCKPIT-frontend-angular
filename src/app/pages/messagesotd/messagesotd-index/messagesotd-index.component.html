@@ -11,7 +11,7 @@
                 <li class="breadcrumb-item">
                     <a *oitcPermission="['messagesOtd', 'index']"
                        [routerLink]="['/', 'messagesOtd', 'index']">
-                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                        <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
                         {{ t('Messages of the day') }}
                     </a>
                 </li>
@@ -24,7 +24,7 @@
 
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Message oif the day') }}
+                <h5 cCardTitle>{{ t('Message of the day') }}
                     <small class="fw-300">
                         {{ t('overview') }}
                     </small>
@@ -115,7 +115,7 @@
                                            cFormControl
                                            name="filter[MessagesOtd.date]"
                                            oitcDebounce
-                                           type="text"
+                                           type="date"
                                     />
                                 </c-input-group>
                             </c-col>
