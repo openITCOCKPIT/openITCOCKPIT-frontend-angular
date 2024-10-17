@@ -25,4 +25,8 @@ export const slaModuleRoutes: Routes = [
         path: 'sla_module/host_mapping_rules/assignToHosts/:id',
         loadComponent: () => import('./pages/host-mapping-rules/host-mapping-rules-assign-to-hosts/host-mapping-rules-assign-to-hosts.component').then(m => m.HostMappingRulesAssignToHostsComponent)
     },
+    {
+        path: 'sla_module/sla_availability_status_hosts_log/index/:id',
+        loadComponent: () => import('./pages/sla-availability-status-hosts-log/sla-availability-status-hosts-log-index/sla-availability-status-hosts-log-index.component').then(m => m.SlaAvailabilityStatusHostsLogIndexComponent)
+    },
 ];
