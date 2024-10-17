@@ -129,6 +129,7 @@ canvas {
 
 .login-side-right {
     background: rgba(25, 33, 49, 0.4);
+    margin-left: auto;
 }
 
 /** fix button with icons **/

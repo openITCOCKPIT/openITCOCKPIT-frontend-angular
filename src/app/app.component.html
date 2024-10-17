@@ -1,10 +1,10 @@
 <oitc-global-loader></oitc-global-loader>
 <div class="main-container">
     <!--sidebar-->
-    <oitc-coreui-navbar>
+    <oitc-coreui-navbar *ngIf="(this.LayoutService.layout$ | async) == LayoutOptions.Default">
     </oitc-coreui-navbar>
     <div id="right" class="column">
-        <div class="top-right">
+        <div class="top-right" *ngIf="(this.LayoutService.layout$ | async) == LayoutOptions.Default">
             <!--app-header-->
             <oitc-coreui-header [cShadowOnScroll]="'sm'"
                                 class="w-100 shadow-sm p-0"
@@ -14,7 +14,8 @@
         <div class="bottom">
             <!--main-->
             <!--app-body-->
-            <c-container [fluid]="true" class="" id="mainContentContainer">
+            <c-container [fluid]="true" id="mainContentContainer"
+                         [ngClass]="{'p-0': (this.LayoutService.layout$ | async) == LayoutOptions.Blank}">
                 <!-- Content will be here -->
                 <router-outlet/>
             </c-container>

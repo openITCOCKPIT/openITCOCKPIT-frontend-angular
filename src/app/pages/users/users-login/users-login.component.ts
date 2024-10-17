@@ -27,6 +27,8 @@ import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine"
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
+import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'oitc-users-login',
@@ -67,6 +69,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     protected disableLogin: boolean = false;
     private subscriptions: Subscription = new Subscription();
+    private readonly LayoutService: LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
 
     protected post: { email: string, password: string, remember_me: boolean } = {
@@ -140,6 +143,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly NotyService: NotyService = inject(NotyService);
     protected description: string = '';
     private readonly AuthService: AuthService = inject(AuthService);
+    private router: Router = inject(Router);
     private _csrfToken: string = '';
 
     constructor(private readonly ngParticlesService: NgParticlesService) {
@@ -149,9 +153,14 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
+        // Switch back to the default layout otherwise we screw up the layout for the next page
+        this.LayoutService.setLayout(LayoutOptions.Default);
     }
 
     ngOnInit(): void {
+        // Switch to a blank layout for the login screen
+        this.LayoutService.setLayout(LayoutOptions.Blank);
+
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
             this.cdr.markForCheck();
 
@@ -232,7 +241,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             if (data.success) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
-                window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
+                //window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
+
+                this.router.navigate(['/', 'hosts', 'index']); //todo replace with last page
+
                 return;
             }
 
