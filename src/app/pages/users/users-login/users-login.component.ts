@@ -28,7 +28,7 @@ import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, i
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'oitc-users-login',
@@ -65,7 +65,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected isSsoEnabled: boolean = true;
     protected forceRedirectSsousersToLoginScreen: boolean = false;
     protected hasValidSslCertificate: boolean = false;
-    protected disableLoginAnimation: boolean = false;
+    protected loginAnimation: boolean = true;
+    protected disableAnimation: boolean = false;
 
     protected disableLogin: boolean = false;
     private subscriptions: Subscription = new Subscription();
@@ -144,6 +145,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected description: string = '';
     private readonly AuthService: AuthService = inject(AuthService);
     private router: Router = inject(Router);
+    public readonly route: ActivatedRoute = inject(ActivatedRoute);
     private _csrfToken: string = '';
 
     constructor(private readonly ngParticlesService: NgParticlesService) {
@@ -171,6 +173,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.logoUrl = data.logoUrl;
             this.customLoginBackgroundHtml = data.customLoginBackgroundHtml;
             this.isCustomLoginBackground = data.isCustomLoginBackground;
+            this.loginAnimation = !data.disableAnimation;
+            this.disableLogin = data.disableAnimation; // Server wants us to not have this feature at all
 
             switch (data.images.particles) {
                 case 'none':
@@ -192,9 +196,12 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     this.particlesOptions = this.getDefaultConfig();
                     break;
             }
-            this.ngParticlesService.init(async (engine: Engine) => {
-                await loadFull(engine);
-            });
+
+            if (this.loginAnimation) {
+                this.ngParticlesService.init(async (engine: Engine) => {
+                    await loadFull(engine);
+                });
+            }
 
 
             this._csrfToken = data._csrfToken;
