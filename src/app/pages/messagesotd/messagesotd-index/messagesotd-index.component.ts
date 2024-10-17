@@ -201,7 +201,7 @@ export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
                 console.warn(item);
                 return {
                     id: item.id,
-                    displayName: item.container.name
+                    displayName: item.title
                 };
             });
         }

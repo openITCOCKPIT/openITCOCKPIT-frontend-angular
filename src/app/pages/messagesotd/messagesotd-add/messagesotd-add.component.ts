@@ -7,12 +7,19 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   CardTitleDirective,
-  ColComponent, DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
+  ColComponent,
+  DropdownComponent,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
   FormCheckComponent,
   FormCheckInputDirective,
   FormControlDirective,
   FormDirective,
-  FormLabelDirective, InputGroupComponent, InputGroupTextDirective, ModalBodyComponent,
+  FormLabelDirective,
+  InputGroupComponent,
+  InputGroupTextDirective,
+  ModalBodyComponent,
   NavComponent,
   NavItemComponent,
   RowComponent
@@ -100,6 +107,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly HistoryService: HistoryService = inject(HistoryService);
 
+  protected post: MessageOfTheDay = this.getDefaultPost();
   protected usergroups: SelectKeyValue[] = [];
   protected readonly styles: SelectKeyValueString[] = [
     {key: 'info', value: 'Info'} as SelectKeyValueString,
@@ -111,8 +119,6 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
   protected errors: GenericValidationError = {} as GenericValidationError;
   protected html: string = '';
   protected createAnother: boolean = false;
-  protected post: MessageOfTheDay = this.getDefaultPost();
-  protected containers: SelectKeyValue[] = [];
 
   constructor() {
     this.post = this.getDefaultPost();
@@ -157,6 +163,7 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
               return;
             }
             this.post = this.getDefaultPost();
+            this.html = '';
             this.ngOnInit();
             this.notyService.scrollContentDivToTop();
             this.errors = {} as GenericValidationError;

@@ -312,6 +312,9 @@ const coreRoutes: Routes = [{
     path: 'messagesOtd/add',
     loadComponent: () => import('./pages/messagesotd/messagesotd-add/messagesotd-add.component').then(m => m.MessagesotdAddComponent)
 }, {
+    path: 'messagesOtd/edit/:id',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-edit/messagesotd-edit.component').then(m => m.MessagesotdEditComponent)
+}, {
     path: 'messagesOtd/index',
     loadComponent: () => import('./pages/messagesotd/messagesotd-index/messagesotd-index.component').then(m => m.MessagesotdIndexComponent)
 }, {

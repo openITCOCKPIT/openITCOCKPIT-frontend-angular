@@ -15,6 +15,7 @@ import {
     MessagesOtdIndexGet,
     MessagesOtdIndexParams
 } from './messagesotd.interface';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -62,31 +63,39 @@ export class MessagesOfTheDayService {
     }
 
     public getEdit(id: number): Observable<EditableMessageOfTheDay> {
-        return this.http.get<EditableMessageOfTheDay>(`${this.proxyPath}/messagesOtd/edit/${id}.json`, {
-            params: {
-                angular: 'true'
-            }
-        });
+        return this.http.get<{
+            messageOtd: EditableMessageOfTheDay
+        }>(`${this.proxyPath}/messagesOtd/edit/${id}.json?angular=true`)
+            .pipe(
+                map((data: { messageOtd: EditableMessageOfTheDay }) => {
+                    return data.messageOtd;
+                })
+            )
     }
 
-    public updateMessageOfTheDay(messageOfTheDay: EditableMessageOfTheDay): Observable<boolean | GenericValidationError> {
+    public updateMessageOfTheDay(messageOfTheDay: EditableMessageOfTheDay): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/messagesOtd/edit/${messageOfTheDay.id}.json?angular=true`, messageOfTheDay)
+        return this.http.post<any>(`${proxyPath}/messagesOtd/edit/${messageOfTheDay.id}.json?angular=true`, {MessagesOtd: messageOfTheDay})
             .pipe(
                 map(data => {
-                    // Return true on 200 Ok
-                    return true;
+                    return {
+                        success: true,
+                        data: data as unknown as GenericIdResponse
+                    };
                 }),
                 catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of(err);
+                    const err: GenericValidationError = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
                 })
             );
     }
 
-    public delete(id: number): Observable<GenericSuccessResponse> {
+    public delete(item: DeleteAllItem): Observable<GenericSuccessResponse> {
         const proxyPath = this.proxyPath;
-        return this.http.post<GenericSuccessResponse>(`${proxyPath}/messagesOtd/delete/${id}.json?angular=true`, {})
+        return this.http.post<GenericSuccessResponse>(`${proxyPath}/messagesOtd/delete/${item.id}.json?angular=true`, {})
             .pipe(
                 map(data => {
                     return data;
