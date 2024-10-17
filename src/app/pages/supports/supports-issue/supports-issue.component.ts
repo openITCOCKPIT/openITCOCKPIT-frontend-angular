@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -24,7 +24,7 @@ import { NgIf } from '@angular/common';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -34,7 +34,8 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './supports-issue.component.html',
-    styleUrl: './supports-issue.component.css'
+    styleUrl: './supports-issue.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SupportsIssueComponent implements OnInit, OnDestroy {
 
@@ -42,11 +43,13 @@ export class SupportsIssueComponent implements OnInit, OnDestroy {
 
     private SupportsService = inject(SupportsService);
     private readonly subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
         this.subscriptions.add(this.SupportsService.getHasLicense().subscribe(result => {
             this.hasLicense = result;
+            this.cdr.markForCheck();
         }));
     }
 

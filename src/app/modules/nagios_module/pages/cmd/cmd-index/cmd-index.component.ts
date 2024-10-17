@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -35,7 +35,6 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../../../layouts/coreui/disable-modal/disable-modal.component';
@@ -105,7 +104,7 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -167,7 +166,8 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         ApikeyDocModalComponent
     ],
     templateUrl: './cmd-index.component.html',
-    styleUrl: './cmd-index.component.css'
+    styleUrl: './cmd-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CmdIndexComponent implements OnInit, OnDestroy {
 
@@ -188,6 +188,8 @@ export class CmdIndexComponent implements OnInit, OnDestroy {
 
     private externalCommandsResult: ExternalCommandDefinitionRoot = {};
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit() {
 
         this.subscriptions.add(this.ExternalCommandsService.getExternalCommandsWithParams()
@@ -207,6 +209,7 @@ export class CmdIndexComponent implements OnInit, OnDestroy {
 
                 // Trigger the change event to display the first command
                 this.onCommandChange();
+                this.cdr.markForCheck();
             })
         );
     }

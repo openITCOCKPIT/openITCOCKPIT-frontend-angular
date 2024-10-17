@@ -23,7 +23,18 @@
  *     confirmation.
  */
 
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
@@ -75,7 +86,8 @@ type NewBookmark = {
         NgClass
     ],
     templateUrl: './filter-bookmark-save-modal.component.html',
-    styleUrl: './filter-bookmark-save-modal.component.css'
+    styleUrl: './filter-bookmark-save-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     public newBookmark: NewBookmark = {
@@ -100,6 +112,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     private BookmarksService: BookmarksService = inject(BookmarksService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public hideModal() {
@@ -110,6 +123,9 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
             filter: '',
             favorite: false
         };
+
+        this.cdr.markForCheck();
+
         this.modalService.toggle({
             show: false,
             id: 'filterBookmarkSaveModal'
@@ -128,6 +144,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.BookmarksService.add(post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as BookmarkResponse;
                     const title = this.TranslocoService.translate('Bookmark');
@@ -158,6 +175,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.BookmarksService.update(this.bookmark, this.bookmark.id)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         const title = this.TranslocoService.translate('Bookmark');
                         const msg = this.TranslocoService.translate('updated successfully');
@@ -180,6 +198,8 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
             if (state.id === 'filterBookmarkSaveModal' && state.show === true) {
+
+                this.cdr.markForCheck();
 
                 if (this.actionType === 'edit' && this.bookmark !== null) {
                     this.newBookmark.name = this.bookmark.name;

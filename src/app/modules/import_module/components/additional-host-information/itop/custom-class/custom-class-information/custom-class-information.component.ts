@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
@@ -10,7 +10,8 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
         NgClass
     ],
     templateUrl: './custom-class-information.component.html',
-    styleUrl: './custom-class-information.component.css'
+    styleUrl: './custom-class-information.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomClassInformationComponent implements OnInit {
     @Input() customInfo!: any;

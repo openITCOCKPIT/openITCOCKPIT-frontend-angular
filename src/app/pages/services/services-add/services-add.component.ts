@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -31,7 +31,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -75,7 +75,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -111,10 +111,12 @@ import { HistoryService } from '../../../history.service';
         TemplateDiffComponent,
         TemplateDiffBtnComponent,
         UiBlockerComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        AsyncPipe
     ],
     templateUrl: './services-add.component.html',
-    styleUrl: './services-add.component.css'
+    styleUrl: './services-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesAddComponent {
     public hosts: SelectKeyValue[] | undefined;
@@ -161,6 +163,7 @@ export class ServicesAddComponent {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -182,7 +185,7 @@ export class ServicesAddComponent {
             if (this.hostId > 0) {
                 this.loadElements();
             }
-
+            this.cdr.markForCheck();
         });
 
     }
@@ -268,6 +271,7 @@ export class ServicesAddComponent {
         this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
             .subscribe((result) => {
                 this.hosts = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -277,6 +281,7 @@ export class ServicesAddComponent {
             .subscribe((result) => {
                 this.commands = result.commands;
                 this.eventhandlerCommands = result.eventhandlerCommands;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -298,6 +303,7 @@ export class ServicesAddComponent {
                 this.contactgroups = result.contactgroups;
                 this.existingServices = result.existingServices;
                 this.isSlaHost = result.isSlaHost;
+                this.cdr.markForCheck();
             })
         );
 
@@ -313,6 +319,7 @@ export class ServicesAddComponent {
         this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId)
             .subscribe((result) => {
                 this.post.servicecommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -323,6 +330,7 @@ export class ServicesAddComponent {
 
         if (!eventHandlerCommandId) {
             //"None" selected
+            this.cdr.markForCheck();
             this.post.serviceeventcommandargumentvalues = [];
             return;
         }
@@ -330,6 +338,7 @@ export class ServicesAddComponent {
         this.subscriptions.add(this.ServicesService.loadEventHandlerCommandArguments(eventHandlerCommandId)
             .subscribe((result) => {
                 this.post.serviceeventcommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -347,6 +356,7 @@ export class ServicesAddComponent {
 
         this.subscriptions.add(this.ServicesService.loadServicetemplate(servicetemplateId, this.post.host_id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicetemplate = result.servicetemplate.Servicetemplate;
                 this.setValuesFromServicetemplate();
 
@@ -372,6 +382,7 @@ export class ServicesAddComponent {
     public checkForDuplicateServicename() {
         const existingServicesNames: string[] = Object.values(this.existingServices);
         this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        this.cdr.markForCheck();
     }
 
     public onCommandChange() {
@@ -383,6 +394,7 @@ export class ServicesAddComponent {
     }
 
     public onDisableInheritanceChange() {
+        this.cdr.markForCheck();
         if (
             this.data.areContactsInheritedFromHosttemplate === false &&
             this.data.areContactsInheritedFromHost === false &&
@@ -403,6 +415,8 @@ export class ServicesAddComponent {
         if (!this.servicetemplate) {
             return;
         }
+
+        this.cdr.markForCheck();
 
         const fields = [
             'name',
@@ -512,23 +526,12 @@ export class ServicesAddComponent {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
-    }
-
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -537,6 +540,7 @@ export class ServicesAddComponent {
 
         this.subscriptions.add(this.ServicesService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service');

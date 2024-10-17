@@ -1,4 +1,4 @@
-import { Component, inject, input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
 import { CommonModule, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -35,7 +35,8 @@ import { ContainersService } from '../../containers.service';
         CommonModule
     ],
     templateUrl: './container-nest.component.html',
-    styleUrl: './container-nest.component.css'
+    styleUrl: './container-nest.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainerNestComponent {
 

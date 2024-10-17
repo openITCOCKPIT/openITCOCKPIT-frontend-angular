@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -38,7 +39,8 @@ import { JsonPipe } from '@angular/common';
         }
     ],
     templateUrl: './select.component.html',
-    styleUrl: './select.component.css'
+    styleUrl: './select.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     private init: boolean = false;
@@ -214,6 +216,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
             return;
         }
 
+        this.cdr.markForCheck();
 
         if (this.ngModel && this._options) {
             // Check if the selected values are still in the options

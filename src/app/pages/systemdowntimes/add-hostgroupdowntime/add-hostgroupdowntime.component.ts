@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -47,7 +47,7 @@ import { HistoryService } from '../../../history.service';
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormDirective,
         FormsModule,
@@ -78,7 +78,8 @@ import { HistoryService } from '../../../history.service';
         DurationInputComponent
     ],
     templateUrl: './add-hostgroupdowntime.component.html',
-    styleUrl: './add-hostgroupdowntime.component.css'
+    styleUrl: './add-hostgroupdowntime.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
     public hostgroups: SelectKeyValueWithDisabled[] = [];
@@ -87,7 +88,6 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
     public get!: SystemdowntimesGet;
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    private router: Router = inject(Router);
     private readonly HostgroupsService = inject(HostgroupsService);
     private readonly SystemdowntimesService = inject(SystemdowntimesService);
     private subscriptions: Subscription = new Subscription();
@@ -103,6 +103,7 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
     };
     public weekdaysForSelect: any[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.weekdaysForSelect = this.getWeekdays();
@@ -117,6 +118,7 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
                 this.post.comment = result.defaultValues.comment;
                 this.post.duration = result.defaultValues.duration;
                 this.post.downtimetype_id = result.defaultValues.downtimetype_id;
+                this.cdr.markForCheck();
             }));
         this.loadHostgroups('');
 
@@ -152,6 +154,7 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public loadHostgroups = (searchString: string) => {
@@ -168,6 +171,7 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString(params)
             .subscribe((result) => {
                 this.hostgroups = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -180,9 +184,8 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SystemdowntimesService.createHostgroupdowntime(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
-
                     const title = this.TranslocoService.translate('Downtime');
                     const msg = this.TranslocoService.translate('created successfully');
 

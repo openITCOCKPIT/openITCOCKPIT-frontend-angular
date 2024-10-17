@@ -1,4 +1,15 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { EnableOrDisableFlapDetectionItem, ExternalCommandsService } from '../../../services/external-commands.service';
 import {
     ButtonCloseDirective,
@@ -39,7 +50,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './hosts-disable-flapdetection-modal.component.html',
-    styleUrl: './hosts-disable-flapdetection-modal.component.css'
+    styleUrl: './hosts-disable-flapdetection-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsDisableFlapdetectionModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: EnableOrDisableFlapDetectionItem[] = [];
@@ -52,6 +64,7 @@ export class HostsDisableFlapdetectionModalComponent implements OnInit, OnDestro
     private readonly notyService: NotyService = inject(NotyService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     @ViewChild('modal') private modal!: ModalComponent;
@@ -59,6 +72,8 @@ export class HostsDisableFlapdetectionModalComponent implements OnInit, OnDestro
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

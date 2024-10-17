@@ -1,4 +1,15 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import {
     ApexChart,
     ApexGrid,
@@ -35,7 +46,8 @@ export type ChartOptions = {
         NgApexchartsModule
     ],
     templateUrl: './host-pie-chart.component.html',
-    styleUrl: './host-pie-chart.component.css'
+    styleUrl: './host-pie-chart.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -47,6 +59,7 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ColorModeService = inject(ColorModeService);
+    private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {};
 
@@ -72,6 +85,7 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 });
             }
+            this.cdr.markForCheck();
 
         }));
     }
@@ -86,6 +100,7 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
             this.chart.updateOptions({
                 series: this.statusDataPercentage
             });
+            this.cdr.markForCheck();
         }
     }
 
@@ -178,6 +193,7 @@ export class HostPieChartComponent implements OnInit, OnChanges, OnDestroy {
                 }
             ]
         };
+        this.cdr.markForCheck();
     }
 
 

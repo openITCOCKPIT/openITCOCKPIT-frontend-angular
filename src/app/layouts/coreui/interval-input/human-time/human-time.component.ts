@@ -1,4 +1,4 @@
-import { Component, inject, Input, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 
 
@@ -7,34 +7,28 @@ import { TranslocoService } from '@jsverse/transloco';
     standalone: true,
     imports: [],
     templateUrl: './human-time.component.html',
-    styleUrl: './human-time.component.css'
+    styleUrl: './human-time.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HumanTimeComponent {
-    private _seconds: number = 0;
     public humanTime: string = '';
+    public seconds = input<number>(0);
 
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
-    @Input()
-    set seconds(value: number) {
-        this._seconds = value;
-        this.onSecondsChanged();
-    }
-
-    get seconds(): number {
-        return this._seconds;
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['seconds']) {
+    constructor() {
+        effect(() => {
             this.onSecondsChanged();
-        }
+        });
     }
 
     private onSecondsChanged(): void {
-        let hours = Math.floor(this.seconds / 3600);
-        let minutes = Math.floor((this.seconds % 3600) / 60);
-        let seconds = this.seconds % 60;
+        const seconds = this.seconds();
+
+        let hours = Math.floor(seconds / 3600);
+        let minutes = Math.floor((seconds % 3600) / 60);
+        let secondsMod = seconds % 60;
 
         let hText = this.TranslocoService.translate('hour');
         let mText = this.TranslocoService.translate('minute');
@@ -48,7 +42,7 @@ export class HumanTimeComponent {
             mText = this.TranslocoService.translate('minutes');
         }
 
-        if (seconds > 1) {
+        if (secondsMod > 1) {
             sText = this.TranslocoService.translate('seconds');
         }
 
@@ -65,12 +59,13 @@ export class HumanTimeComponent {
             this.humanTime += minutes + ' ' + mText;
         }
 
-        if (seconds > 0) {
+        if (secondsMod > 0) {
             if (minutes > 0 || hours > 0) {
                 this.humanTime += ' ' + this.TranslocoService.translate('and') + ' ';
             }
-            this.humanTime += seconds + ' ' + sText;
+            this.humanTime += secondsMod + ' ' + sText;
         }
 
+        this.cdr.markForCheck();
     }
 }

@@ -1,1 +1,3 @@
-fieldset.hostWithServicesToDeploy > div {padding-left:10px;}
+fieldset.hostWithServicesToDeploy > div {
+    padding-left: 10px;
+}

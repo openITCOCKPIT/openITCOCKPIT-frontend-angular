@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
@@ -21,12 +21,11 @@ import { SystemnameService } from '../../../../../services/systemname.service';
         AsyncPipe
     ],
     templateUrl: './not-in-monitoring.component.html',
-    styleUrl: './not-in-monitoring.component.css'
+    styleUrl: './not-in-monitoring.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotInMonitoringComponent {
     @Input() selectedNode!: NodeExtended;
 
     public readonly SystemnameService = inject(SystemnameService);
-
-
 }

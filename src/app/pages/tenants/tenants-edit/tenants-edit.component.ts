@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TenantPost } from '../tenant.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -42,7 +41,7 @@ import { NgIf } from '@angular/common';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -63,7 +62,8 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './tenants-edit.component.html',
-    styleUrl: './tenants-edit.component.css'
+    styleUrl: './tenants-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TenantsEditComponent implements OnInit, OnDestroy {
 
@@ -78,6 +78,7 @@ export class TenantsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.route.queryParams.subscribe(params => {
@@ -93,12 +94,15 @@ export class TenantsEditComponent implements OnInit, OnDestroy {
     public loadTenant(id: number) {
         this.subscriptions.add(this.TenantsService.getTenantEdit(id).subscribe(tenant => {
             this.post = tenant;
+            this.cdr.markForCheck();
         }));
     }
 
     public submit() {
         this.subscriptions.add(this.TenantsService.saveTenantEdit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Tenant');

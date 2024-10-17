@@ -278,7 +278,7 @@
                                     </h5>
                                 </c-card-header>
                                 <c-card-body>
-                                    @if (PermissionsService.hasPermission(['hosts', 'browser'])) {
+                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
                                             {{ result.host.Host.hostname }}
                                         </a>
@@ -401,7 +401,7 @@
 
                 <div class="pt-3">
                     <oitc-services-browser-chart
-                        *ngIf="result && result.mergedService.has_graph"
+                        *ngIf="result && result.mergedService.has_graph && timezone"
                         [hostUuid]="String(result.host.Host.uuid)"
                         [serviceUuid]="String(result.mergedService.uuid)"
                         [availableDataSources]="availableDataSources"

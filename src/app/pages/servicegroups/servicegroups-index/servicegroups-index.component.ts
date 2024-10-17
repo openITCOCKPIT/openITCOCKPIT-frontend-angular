@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
@@ -67,7 +67,7 @@ import { IndexPage } from '../../../pages.interface';
     selector: 'oitc-servicegroups-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         DeleteAllModalComponent,
         FaIconComponent,
@@ -118,7 +118,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './servicegroups-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicegroupsService} // Inject the ServicegroupsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
@@ -132,7 +133,9 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
     protected selectedItems: DeleteAllItem[] = [];
     protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: undefined, _csrfToken: ''}
     private readonly router = inject(Router);
-    protected hideFilter: boolean = false;
+    protected hideFilter: boolean = true;
+    private cdr = inject(ChangeDetectorRef);
+
 
     // Show or hide the filter
     public toggleFilter() {
@@ -193,6 +196,7 @@ export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage
         this.subscriptions.add(this.ServicegroupsService.getIndex(this.params)
             .subscribe((result: ServicegroupsIndexRoot) => {
                 this.servicegroups = result;
+                this.cdr.markForCheck();
             }));
     }
 

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, of, tap } from "rxjs";
 import { PROXY_PATH } from "../tokens/proxy-path.token";
 import { LoginResponse } from './auth.interface';
 import { GenericValidationError } from '../generic-responses';

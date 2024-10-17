@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ColComponent, ContainerComponent, PopoverDirective, RowComponent } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -44,12 +44,14 @@ import { NgClass } from '@angular/common';
     ],
     templateUrl: './regex-helper-tooltip.component.html',
     styleUrl: './regex-helper-tooltip.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
     // encapsulation: ViewEncapsulation.Emulated,
 })
 export class RegexHelperTooltipComponent {
     public light: boolean = false
 
-    lightSwitch () {
+    // triggered by mouseover event - no manual change detection required
+    lightSwitch() {
         this.light = !this.light;
     }
 

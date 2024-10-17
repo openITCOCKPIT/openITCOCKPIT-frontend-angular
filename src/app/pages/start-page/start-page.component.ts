@@ -23,14 +23,13 @@
  *     confirmation.
  */
 
-import {Component, inject, OnDestroy} from '@angular/core';
-import {HeaderComponent} from "../../components/header/header.component";
-import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {AsyncPipe, DOCUMENT, JsonPipe, NgIf} from "@angular/common";
-import {Subscription} from "rxjs";
-import {PermissionDirective} from "../../permissions/permission.directive";
-import {CoreuiComponent} from '../../layouts/coreui/coreui.component';
-import {faAsterisk, faCircleInfo, faCoffee, faCog, faMouse} from "@fortawesome/free-solid-svg-icons";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
+import { Subscription } from "rxjs";
+import { PermissionDirective } from "../../permissions/permission.directive";
+import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
+import { faAsterisk, faCircleInfo, faCoffee, faCog, faMouse } from "@fortawesome/free-solid-svg-icons";
 import {
     ButtonToolbarComponent,
     CardBodyComponent,
@@ -55,22 +54,23 @@ import {
     NavItemComponent,
     NavLinkDirective
 } from '@coreui/angular';
-import {XsButtonDirective} from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {RequiredIconComponent} from "../../components/required-icon/required-icon.component";
-import {TranslocoDirective} from "@jsverse/transloco";
-import {ActionsButtonComponent} from '../../components/actions-button/actions-button.component';
-import {ActionsButtonElementComponent} from '../../components/actions-button-element/actions-button-element.component';
-import {CodeMirrorContainerComponent} from '../../components/code-mirror-container/code-mirror-container.component';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { RequiredIconComponent } from "../../components/required-icon/required-icon.component";
+import { TranslocoDirective } from "@jsverse/transloco";
+import { ActionsButtonComponent } from '../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../components/actions-button-element/actions-button-element.component';
+import { CodeMirrorContainerComponent } from '../../components/code-mirror-container/code-mirror-container.component';
 
 
 @Component({
     selector: 'app-start-page',
     standalone: true,
     imports: [
-        CoreuiComponent,
-        HeaderComponent,
+
         RouterModule,
         AsyncPipe,
         JsonPipe,
@@ -107,7 +107,8 @@ import {CodeMirrorContainerComponent} from '../../components/code-mirror-contain
         CodeMirrorContainerComponent
     ],
     templateUrl: './start-page.component.html',
-    styleUrl: './start-page.component.css'
+    styleUrl: './start-page.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StartPageComponent implements OnDestroy {
     public readonly route = inject(ActivatedRoute);
@@ -122,6 +123,7 @@ export class StartPageComponent implements OnDestroy {
     protected readonly faMouse = faMouse;
     private readonly subscription = new Subscription();
     private readonly document = inject(DOCUMENT);
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         this.route.queryParams.subscribe({
@@ -142,20 +144,14 @@ export class StartPageComponent implements OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    public callPeter() {
-        type WindowWithPeter = {
-            callPeter: () => void
-        } & Window;
-
-        (this.document.defaultView as unknown as WindowWithPeter).callPeter();
-    }
-
     public clickTest() {
         alert("Clicked!!!");
     }
 
     public switchAllowEdit() {
         this.allowEdit = !this.allowEdit;
+        this.cdr.markForCheck();
+
     }
 
 }

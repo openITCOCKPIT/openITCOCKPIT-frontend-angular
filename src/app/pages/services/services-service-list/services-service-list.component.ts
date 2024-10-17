@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -40,7 +40,7 @@ import { FormsModule } from '@angular/forms';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -118,7 +118,6 @@ import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 
-
 @Component({
     selector: 'oitc-services-service-list',
     standalone: true,
@@ -133,7 +132,7 @@ import {
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DisableModalComponent,
@@ -190,7 +189,8 @@ import {
         ServiceAcknowledgeModalComponent,
         ServiceMaintenanceModalComponent,
         EnableModalComponent,
-        ServiceAddToServicegroupModalComponent
+        ServiceAddToServicegroupModalComponent,
+        AsyncPipe
     ],
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',
@@ -198,7 +198,8 @@ import {
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
@@ -237,6 +238,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -250,6 +252,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             this.loadHosts('');
             this.loadHost();
             this.load();
+            this.cdr.markForCheck();
         });
 
     }
@@ -261,6 +264,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -280,6 +284,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.loadHostsByString(params, false)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.hosts = result;
             })
         );
@@ -293,6 +298,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.HostsService.loadHostById(this.hostId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.host = result;
             })
         );
@@ -328,6 +334,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicesService.getServicesIndexViaGet(this.params)
             .subscribe((services) => {
+                this.cdr.markForCheck();
                 this.services = services;
                 this.userFullname = services.username;
             })
@@ -343,6 +350,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
             .subscribe((services) => {
+                this.cdr.markForCheck();
                 this.notMonitoredServices = services;
             })
         );
@@ -357,6 +365,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicesService.getDisabled(this.params)
             .subscribe((services) => {
+                this.cdr.markForCheck();
                 this.disabledServices = services;
             })
         );
@@ -371,6 +380,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicesService.getServicesDeleted(this.params)
             .subscribe((services) => {
+                this.cdr.markForCheck();
                 this.deletedServices = services;
             })
         );
@@ -383,6 +393,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
     public changeTab(tab: string): void {
         if (tab !== this.activeTab) {
+            this.cdr.markForCheck();
             this.activeTab = tab;
 
             // clear old data

@@ -1,4 +1,13 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import {
     BadgeComponent,
     ColComponent,
@@ -14,7 +23,7 @@ import { Subscription } from 'rxjs';
 import { HostsService } from '../hosts.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HostBrowserMenu } from '../hosts.interface';
-import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -58,15 +67,17 @@ export interface HostBrowserMenuConfig {
         PermissionDirective,
         TitleCasePipe,
         HoststatusIconComponent,
-        BrowserMenuLoaderComponent
+        BrowserMenuLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-browser-menu.component.html',
-    styleUrl: './hosts-browser-menu.component.css'
+    styleUrl: './hosts-browser-menu.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsBrowserMenuComponent implements OnInit, OnDestroy, OnChanges {
+export class HostsBrowserMenuComponent implements OnInit, OnDestroy {
 
-    @Input() config!: HostBrowserMenuConfig;
-    @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
+    public config = input.required<HostBrowserMenuConfig>();
+    public lastUpdated = input<Date>(); // Change the date to trigger an update from an external component
 
     public data?: HostBrowserMenu;
     public hostStatusTextClass: string = '';
@@ -77,21 +88,20 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy, OnChanges {
     private readonly HostsService = inject(HostsService);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService)
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private cdr = inject(ChangeDetectorRef);
+
+    constructor() {
+        effect(() => {
+            this.loadData();
+        });
+    }
 
     public ngOnInit() {
-        if (!this.lastUpdated) {
+        const lastUpdated = this.lastUpdated();
+        if (!lastUpdated) {
             // If lastUpdate is undefined, load the current status data.
             // If lastUpdate is set to a date time, the OnChange Method will be triggered and do the loading instead.
             // This is to avoid duplicate loading of data.
-            this.loadData();
-        }
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        // When the lastUpdated date changes, reload the data
-        // This is used to trigger a reload from an external component
-        // such as hosts/browser or services/browser
-        if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
             this.loadData();
         }
     }
@@ -101,8 +111,9 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public loadData() {
-        this.subscriptions.add(this.HostsService.getHostBrowserMenuConfig(this.config.hostId)
+        this.subscriptions.add(this.HostsService.getHostBrowserMenuConfig(this.config().hostId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.isLoading = false;
                 this.data = result;
 

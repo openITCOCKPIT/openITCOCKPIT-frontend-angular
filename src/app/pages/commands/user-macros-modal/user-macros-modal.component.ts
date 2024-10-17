@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import {
     ButtonCloseDirective,
     ModalBodyComponent,
@@ -43,7 +43,8 @@ import { MacrosService } from '../../macros/macros.service';
         ModalFooterComponent
     ],
     templateUrl: './user-macros-modal.component.html',
-    styleUrl: './user-macros-modal.component.css'
+    styleUrl: './user-macros-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserMacrosModalComponent implements OnDestroy {
 
@@ -51,6 +52,7 @@ export class UserMacrosModalComponent implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private MacrosService = inject(MacrosService);
+    private cdr = inject(ChangeDetectorRef);
 
     public construct() {
     }
@@ -63,6 +65,7 @@ export class UserMacrosModalComponent implements OnDestroy {
         this.subscriptions.add(this.MacrosService.getIndex()
             .subscribe((result) => {
                 this.macros = result;
+                this.cdr.markForCheck();
             })
         );
     }

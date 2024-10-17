@@ -1,14 +1,13 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { Report, ReportError, Sla, SlasGeneratePost, SlasGeneratePostResponse } from '../Slas.interface';
-import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasGenerateReportFormatEnum, SlasGenerateTabs } from '../slas.enum';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
@@ -63,7 +62,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
@@ -107,9 +106,11 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
         MatSortHeader,
         TableDirective,
         BadgeComponent,
+        AsyncPipe,
     ],
     templateUrl: './slas-generate.component.html',
     styleUrl: './slas-generate.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasGenerateComponent implements OnInit, OnDestroy {
 
@@ -117,9 +118,6 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
-    private readonly HistoryService: HistoryService = inject(HistoryService);
-    private router: Router = inject(Router);
-
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
@@ -149,6 +147,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
 
     public from = "";
     public to = "";
+    private cdr = inject(ChangeDetectorRef);
 
     private getDefaultPost(id: number): SlasGeneratePost {
         let now = new Date();
@@ -168,6 +167,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
         this.post = this.getDefaultPost(this.slaId);
         this.from = formatDate(this.post.Sla.from_date, 'yyyy-MM-dd', 'en-US');
         this.to = formatDate(this.post.Sla.to_date, 'yyyy-MM-dd', 'en-US');
+        this.cdr.markForCheck();
         this.loadSlas();
     }
 
@@ -179,6 +179,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SlasService.loadGenerateReport()
             .subscribe((result) => {
                 this.slas = result.slas;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -194,8 +195,8 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
             this.reportWasGenerated = false;
             this.subscriptions.add(this.SlasService.generateReportPost(this.post)
                 .subscribe((POSTresult) => {
+                    this.cdr.markForCheck();
                     if (POSTresult.success) {
-
                         this.errors = null;
                         this.report_error = null;
 
@@ -209,11 +210,11 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                         };
 
                         if (this.post.Sla.format === 'pdf') {
-
                             this.subscriptions.add(this.SlasService.generateReportPdf({
                                 params: GETParams,
                                 responseType: 'blob'
                             }).subscribe((res) => {
+                                this.cdr.markForCheck();
                                 this.isGenerating = false;
                                 let blob = new Blob([res], {type: "application/pdf"});
                                 saveAs(blob, POSTresult.data.filename);
@@ -225,6 +226,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                                 params: GETParams,
                                 responseType: 'blob'
                             }).subscribe((res) => {
+                                this.cdr.markForCheck();
                                 this.isGenerating = false;
                                 let blob = new Blob([res], {type: "application/zip"});
                                 saveAs(blob, POSTresult.data.filename);
@@ -254,6 +256,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
             this.post.Sla.to_date = formatDate(new Date(this.to), 'dd.MM.y', 'en-US');
             this.subscriptions.add(this.SlasService.generateReportPost(this.post)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
 
                         const response = result.data as SlasGeneratePostResponse;
@@ -267,7 +270,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
                         this.report = response.report;
                         this.sla = response.sla;
                         this.logoUrl = response.logoUrl;
-
+                        this.cdr.markForCheck();
                         this.notyService.genericSuccess(this.reportMessage.successMessage);
                         return;
                     }

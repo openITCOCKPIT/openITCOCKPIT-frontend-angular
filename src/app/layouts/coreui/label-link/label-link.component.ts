@@ -1,7 +1,8 @@
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'oitc-label-link',
@@ -9,10 +10,12 @@ import { NgIf, NgTemplateOutlet } from '@angular/common';
     imports: [
         RouterLink,
         NgTemplateOutlet,
-        NgIf
+        NgIf,
+        AsyncPipe
     ],
     templateUrl: './label-link.component.html',
-    styleUrl: './label-link.component.css'
+    styleUrl: './label-link.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LabelLinkComponent {
 
@@ -20,9 +23,14 @@ export class LabelLinkComponent {
     public permissions = input<string[] | string>([]);
     public route = input<string>('');
 
+    public hasPermission$: Observable<boolean> = new Observable<boolean>();
+
     public PermissionService: PermissionsService = inject(PermissionsService);
 
-    public hasPermission(): boolean {
-        return this.PermissionService.hasPermission(this.permissions());
+    public constructor() {
+        effect(() => {
+            this.hasPermission$ = this.PermissionService.hasPermissionObservable(this.permissions());
+        });
     }
+
 }

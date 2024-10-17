@@ -88,17 +88,6 @@ export class PermissionsService {
         });
     }
 
-    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
-    public hasPermission(checkChunks: string | string[], negate: boolean = false): boolean {
-        let permissions = this.permissions$$.getValue();
-        let hasPermission = this.checkPermission(checkChunks, permissions);
-
-        if (negate) {
-            return !hasPermission;
-        }
-
-        return hasPermission;
-    }
 
     // USE this method for Components and Services
     public hasPermissionObservable(checkChunks: string | string[]): Observable<boolean> {
@@ -108,11 +97,6 @@ export class PermissionsService {
             }),
             map(permissions => this.checkPermission(checkChunks, permissions))
         );
-    }
-
-    // 🧧 ONLY USE THIS IN TEMPLATES AS IT WILL BE EMPTY IN THE BEGINNING
-    public hasModule(module: string): boolean {
-        return this.modules$$.getValue().includes(module);
     }
 
     // USE this method for Components and Services

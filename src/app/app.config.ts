@@ -23,18 +23,16 @@
  *     confirmation.
  */
 
-import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
+import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { snmpTrapModuleRoutes } from '../app/modules/snmp_trap_module/snmp_trap_module.routes';
 import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
 import { AuthService } from "./auth/auth.service";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { PROXY_PATH } from "./tokens/proxy-path.token";
 import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { DropdownService } from '@coreui/angular';
@@ -46,7 +44,7 @@ export const appConfig: ApplicationConfig = {
     providers: [
         {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
         {provide: PROXY_PATH, useValue: ''},
-        { provide: Window, useValue: window },
+        {provide: Window, useValue: window},
         {provide: AuthService, useClass: AuthService},
         provideHttpClient(
             withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),

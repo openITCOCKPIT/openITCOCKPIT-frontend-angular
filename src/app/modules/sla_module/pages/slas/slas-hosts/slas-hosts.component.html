@@ -1,235 +1,259 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Level Agreement Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['slamodule', 'slas', 'index']"
+                   [routerLink]="['/', 'sla_module', 'slas', 'index']">
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                    {{ t('Service Level Agreements') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                {{ t('Service Level Agreement Affected Hosts') }}
+            </li>
+        </ol>
+    </nav>
 
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                    {{ t('Service Level Agreement Module') }}
-                </li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['slamodule', 'slas', 'index']"
-                       [routerLink]="['/', 'sla_module', 'slas', 'index']">
-                        <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                        {{ t('Service Level Agreements') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    {{ t('Service Level Agreement Affected Hosts') }}
-                </li>
-            </ol>
-        </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service Level Agreements') }}
+                <small class="fw-300">
+                    {{ t('Affected hosts') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Service Level Agreements') }}
-                    <small class="fw-300">
-                        {{ t('Affected hosts') }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <c-alert
+                class="bg-transparent fade show w-100 margin-10 border-primary text-default d-flex flex-row-reverse justify-content-between"
+                role="alert">
+                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
+                    <span>
+                        <a class="btn btn-outline-primary btn-sm btn-w-m waves-effect waves-themed pull-right"
+                           *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit"
+                           [routerLink]="['/', 'sla_module', 'slas', 'edit', slaAndHosts.sla.id]">
+                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                            {{ t('Go to "SLA configuration"') }}
+                        </a>
+                    </span>
+                }
+
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon margin-right-5">
+                        <span class="icon-stack fa-3x">
+                            <i class="base-2 icon-stack-3x text-primary-600"></i>
+                            <i class="base-3 icon-stack-2x text-primary-700"></i>
+                            <i class="fas fa-award icon-stack-1x text-white"></i>
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <span class="h4 text-primary">
+                            {{ t('Service level Agreement: ') }}
+                            @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
+                                <a [routerLink]="['/', 'sla_module', 'slas', 'edit', slaAndHosts.sla.id]"
+                                   *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit">
+                                    "{{ slaAndHosts.sla.name }}"
+                                </a>
+                            } @else {
+                                "{{ slaAndHosts?.sla?.name }}"
+                            }
+                        </span>
+                        <br>
+                        {{ t('Overview of all affected hosts.  Please refresh your configuration after configuration changes!') }}
+                    </div>
+                </div>
+            </c-alert>
+
+            <hr>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
 
-                <c-alert
-                    class="bg-transparent fade show w-100 margin-10 border-primary text-default d-flex flex-row-reverse justify-content-between"
-                    role="alert">
-                    @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
-                        <span>
-                            <a class="btn btn-outline-primary btn-sm btn-w-m waves-effect waves-themed pull-right"
-                               *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit"
-                               [routerLink]="['/', 'sla_module', 'slas', 'edit', slaAndHosts.sla.id]">
-                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                {{ t('Go to "SLA configuration"') }}
-                            </a>
-                        </span>
-                    }
-
-                    <div class="d-flex align-items-center">
-                        <div class="alert-icon margin-right-5">
-                            <span class="icon-stack fa-3x">
-                                <i class="base-2 icon-stack-3x text-primary-600"></i>
-                                <i class="base-3 icon-stack-2x text-primary-700"></i>
-                                <i class="fas fa-award icon-stack-1x text-white"></i>
-                            </span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="h4 text-primary">
-                                {{ t('Service level Agreement: ') }}
-                                @if (this.PermissionsService.hasPermission(['slamodule', 'slas', 'edit'])) {
-                                    <a [routerLink]="['/', 'sla_module', 'slas', 'edit', slaAndHosts.sla.id]"
-                                       *ngIf="slaAndHosts && slaAndHosts.sla.allowEdit">
-                                        "{{ slaAndHosts.sla.name }}"
-                                    </a>
-                                } @else {
-                                    "{{ slaAndHosts?.sla?.name }}"
-                                }
-                            </span>
-                            <br>
-                            {{ t('Overview of all affected hosts.  Please refresh your configuration after configuration changes!') }}
-                        </div>
-                    </div>
-                </c-alert>
-
-                <hr>
-
-                <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                     <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       aria-label="Host Name"
+                                       cFormControl
+                                       name="hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
                         </c-col>
                     </c-row>
-                    <form cForm>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
 
-                        <c-row>
-                            <c-col md="6">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Hosts.name]']"
-                                           [placeholder]="'Filter by host name' | transloco"
-                                           aria-label="Host Name"
-                                           cFormControl
-                                           name="hosts.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                        </c-row>
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                    {{ t('Reset Filter') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </form>
-                </c-container>
-                <!-- End Filter -->
-
-                <oitc-table-loader *ngIf="!slaAndHosts"></oitc-table-loader>
-                <table *ngIf="slaAndHosts" bordered cTable class="mt-2 mb-2" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
+            <oitc-table-loader *ngIf="!slaAndHosts"></oitc-table-loader>
+            <table *ngIf="slaAndHosts" bordered cTable class="mt-2 mb-2" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col" mat-sort-header="Hosts.name" class="bg-secondary bg-opacity-10">
+                        {{ t('Host') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Hosts.address" class="bg-secondary bg-opacity-10">
+                        {{ t('Address') }}
+                    </th>
+                    <th scope="col" class="bg-secondary bg-opacity-10">
+                        {{ t('Container') }}
+                    </th>
+                    <th scope="col" class="bg-secondary bg-opacity-10">
+                        {{ t('Direct assignment or via the host template') }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let host of slaAndHosts.hosts; let i = index">
                     <tr>
-                        <th scope="col" mat-sort-header="Hosts.name" class="bg-secondary bg-opacity-10">
-                            {{ t('Host') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Hosts.address" class="bg-secondary bg-opacity-10">
-                            {{ t('Address') }}
-                        </th>
-                        <th scope="col" class="bg-secondary bg-opacity-10">
-                            {{ t('Container') }}
-                        </th>
-                        <th scope="col" class="bg-secondary bg-opacity-10">
-                            {{ t('Direct assignment or via the host template') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <ng-container *ngFor="let host of slaAndHosts.hosts; let i = index">
-                        <tr>
-                            <td>
-                                <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
-                                @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', host.id]">
-                                        {{ host.name }}
-                                    </a>
-                                } @else {
+                        <td>
+                            <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
+                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                <a [routerLink]="['/', 'hosts', 'browser', host.id]">
                                     {{ host.name }}
-                                }
+                                </a>
+                            } @else {
+                                {{ host.name }}
+                            }
+                        </td>
+                        <td>{{ host.address }}</td>
+
+
+                        <td>
+                            {{ host.primary_container }}
+                        </td>
+                        <td>
+                            <fa-icon [icon]="['fas', 'file-contract']"
+                                     class="text-primary-700 margin-right-5"></fa-icon>
+                            <fa-icon [icon]="['fas', 'arrow-right-long']" class="margin-right-5"></fa-icon>
+                            <span [hidden]="host.sla_id === 0">
+                                <span>
+                                    <fa-icon [icon]="['fas', 'desktop']"
+                                             class="text-primary-700 width-15"></fa-icon>
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                            {{ host.name }}
+                                        </a>
+                                        <span [hidden]="host.allowEdit">
+                                            {{ host.name }}
+                                        </span>
+                                    } @else {
+                                        {{ host.name }}
+                                    }
+                                </span>
+                            </span>
+                            <span [hidden]="host.sla_id > 0">
+                                <span>
+                                    <fa-icon [icon]="['fas', 'pencil-square']"
+                                             class="text-primary-700 width-15"></fa-icon>
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosttemplates', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'hosttemplates', 'edit', host.hosttemplate.id]">
+                                            {{ host.hosttemplate.name }}
+                                        </a>
+                                        <span [hidden]="host.hosttemplate.allowEdit">
+                                            {{ host.hosttemplate.name }}
+                                        </span>
+                                    } @else {
+                                        {{ host.hosttemplate.name }}
+                                    }
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                    <ng-container *ngIf="host.services.length > 0">
+                        <tr>
+                            <th colspan="2" class="bg-secondary bg-opacity-10">
+                                {{ t('Service') }}
+                            </th>
+                            <th class="bg-secondary bg-opacity-10">
+                                {{ t('SLA relevant') }}
+                            </th>
+                            <th class="bg-secondary bg-opacity-10">
+                                {{ t('SLA relevance is defined in service or service template') }}
+                            </th>
+                        </tr>
+                        <tr *ngFor="let service of host.services">
+                            <td colspan="2">
+                                <span>
+                                    <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
+                                        <a [routerLink]="['/', 'services', 'edit', service.id]">
+                                            {{ service.servicename }}
+                                        </a>
+                                        <span [hidden]="host.allowEdit">
+                                            {{ service.servicename }}
+                                        </span>
+                                    } @else {
+                                        {{ service.servicename }}
+                                    }
+                                </span>
                             </td>
-                            <td>{{ host.address }}</td>
-
-
-                            <td>
-                                {{ host.primary_container }}
+                            <td class="text-center">
+                                <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                         [hidden]="!service.is_sla_relevant"></fa-icon>
+                                <fa-icon [icon]="['fas', 'xmark']" class="text-danger"
+                                         [hidden]="service.is_sla_relevant"></fa-icon>
                             </td>
                             <td>
                                 <fa-icon [icon]="['fas', 'file-contract']"
                                          class="text-primary-700 margin-right-5"></fa-icon>
                                 <fa-icon [icon]="['fas', 'arrow-right-long']" class="margin-right-5"></fa-icon>
-                                <span [hidden]="host.sla_id === 0">
+                                <span [hidden]="service.sla_relevant === null">
                                     <span>
-                                        <fa-icon [icon]="['fas', 'desktop']"
+                                        <fa-icon [icon]="['fas', 'cog']"
                                                  class="text-primary-700 width-15"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['hosts', 'edit'])) {
-                                            <a [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                                {{ host.name }}
-                                            </a>
-                                            <span [hidden]="host.allowEdit">
-                                                {{ host.name }}
-                                            </span>
-                                        } @else {
-                                            {{ host.name }}
-                                        }
-                                    </span>
-                                </span>
-                                <span [hidden]="host.sla_id > 0">
-                                    <span>
-                                        <fa-icon [icon]="['fas', 'pencil-square']"
-                                                 class="text-primary-700 width-15"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['hosttemplates', 'edit'])) {
-                                            <a [routerLink]="['/', 'hosttemplates', 'edit', host.hosttemplate.id]">
-                                                {{ host.hosttemplate.name }}
-                                            </a>
-                                            <span [hidden]="host.hosttemplate.allowEdit">
-                                                {{ host.hosttemplate.name }}
-                                            </span>
-                                        } @else {
-                                            {{ host.hosttemplate.name }}
-                                        }
-                                    </span>
-                                </span>
-                            </td>
-                        </tr>
-                        <ng-container *ngIf="host.services.length > 0">
-                            <tr>
-                                <th colspan="2" class="bg-secondary bg-opacity-10">
-                                    {{ t('Service') }}
-                                </th>
-                                <th class="bg-secondary bg-opacity-10">
-                                    {{ t('SLA relevant') }}
-                                </th>
-                                <th class="bg-secondary bg-opacity-10">
-                                    {{ t('SLA relevance is defined in service or service template') }}
-                                </th>
-                            </tr>
-                            <tr *ngFor="let service of host.services">
-                                <td colspan="2">
-                                    <span>
-                                        <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
-                                        @if (this.PermissionsService.hasPermission(['services', 'edit'])) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
                                             <a [routerLink]="['/', 'services', 'edit', service.id]">
                                                 {{ service.servicename }}
                                             </a>
@@ -240,74 +264,47 @@
                                             {{ service.servicename }}
                                         }
                                     </span>
-                                </td>
-                                <td class="text-center">
-                                    <fa-icon [icon]="['fas', 'check']" class="text-success"
-                                             [hidden]="!service.is_sla_relevant"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'xmark']" class="text-danger"
-                                             [hidden]="service.is_sla_relevant"></fa-icon>
-                                </td>
-                                <td>
-                                    <fa-icon [icon]="['fas', 'file-contract']"
-                                             class="text-primary-700 margin-right-5"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'arrow-right-long']" class="margin-right-5"></fa-icon>
-                                    <span [hidden]="service.sla_relevant === null">
-                                        <span>
-                                            <fa-icon [icon]="['fas', 'cog']"
-                                                     class="text-primary-700 width-15"></fa-icon>
-                                            @if (this.PermissionsService.hasPermission(['services', 'edit'])) {
-                                                <a [routerLink]="['/', 'services', 'edit', service.id]">
-                                                    {{ service.servicename }}
-                                                </a>
-                                                <span [hidden]="host.allowEdit">
-                                                    {{ service.servicename }}
-                                                </span>
-                                            } @else {
-                                                {{ service.servicename }}
-                                            }
-                                        </span>
-                                    </span>
-                                    <span [hidden]="service.sla_relevant !== null">
-                                        <span>
-                                            <fa-icon [icon]="['fas', 'pencil-square']"
-                                                     class="text-primary-700 width-15"></fa-icon>
-                                            @if (this.PermissionsService.hasPermission(['servicetemplates', 'edit'])) {
-                                                <a [routerLink]="['/', 'servicetemplates', 'edit', service.servicetemplate.id]">
-                                                    {{ service.servicetemplate.template_name }}
-                                                </a>
-                                                <span [hidden]="service.servicetemplate.allowEdit">
-                                                    {{ service.servicetemplate.template_name }}
-                                                </span>
-                                            } @else {
+                                </span>
+                                <span [hidden]="service.sla_relevant !== null">
+                                    <span>
+                                        <fa-icon [icon]="['fas', 'pencil-square']"
+                                                 class="text-primary-700 width-15"></fa-icon>
+                                        @if (this.PermissionsService.hasPermissionObservable(['servicetemplates', 'edit'])|async) {
+                                            <a [routerLink]="['/', 'servicetemplates', 'edit', service.servicetemplate.id]">
                                                 {{ service.servicetemplate.template_name }}
-                                            }
-                                        </span>
+                                            </a>
+                                            <span [hidden]="service.servicetemplate.allowEdit">
+                                                {{ service.servicetemplate.template_name }}
+                                            </span>
+                                        } @else {
+                                            {{ service.servicetemplate.template_name }}
+                                        }
                                     </span>
-                                </td>
-                            </tr>
-                        </ng-container>
+                                </span>
+                            </td>
+                        </tr>
                     </ng-container>
-                    </tbody>
-                </table>
+                </ng-container>
+                </tbody>
+            </table>
 
-                <oitc-no-records
-                    *ngIf="slaAndHosts && slaAndHosts.hosts && slaAndHosts.hosts.length === 0"></oitc-no-records>
+            <oitc-no-records
+                *ngIf="slaAndHosts && slaAndHosts.hosts && slaAndHosts.hosts.length === 0"></oitc-no-records>
 
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="slaAndHosts"
-                                [paginateOrScroll]="slaAndHosts"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
-</oitc-coreui>
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="slaAndHosts"
+                            [paginateOrScroll]="slaAndHosts"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>

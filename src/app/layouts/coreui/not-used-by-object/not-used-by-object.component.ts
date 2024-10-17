@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular';
 
 @Component({
@@ -10,7 +10,8 @@ import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular'
         ContainerComponent
     ],
     templateUrl: './not-used-by-object.component.html',
-    styleUrl: './not-used-by-object.component.css'
+    styleUrl: './not-used-by-object.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotUsedByObjectComponent {
 

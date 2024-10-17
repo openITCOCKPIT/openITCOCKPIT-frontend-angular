@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -30,7 +30,6 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -63,7 +62,7 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -97,7 +96,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './tenants-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: TenantsService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TenantsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -114,6 +114,7 @@ export class TenantsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -135,6 +136,7 @@ export class TenantsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(
             this.TenantsService.getIndex(this.params).subscribe((tenants) => {
                 this.tenants = tenants;
+                this.cdr.markForCheck();
             })
         );
     }

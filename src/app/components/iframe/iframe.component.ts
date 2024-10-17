@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
 
@@ -9,20 +9,22 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './iframe.component.html',
-    styleUrl: './iframe.component.css'
+    styleUrl: './iframe.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class IframeComponent implements OnChanges {
-    @Input() url: string = '';
-    trustedUrl: SafeResourceUrl | null = null;
+export class IframeComponent {
+
+    public url = input<string>('');
+    public trustedUrl: SafeResourceUrl | null = null;
+
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor(private sanitizer: DomSanitizer) {
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['url']) {
-            this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
-        }
+        effect(() => {
+            this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url());
+            this.cdr.markForCheck();
+        });
     }
 }
 

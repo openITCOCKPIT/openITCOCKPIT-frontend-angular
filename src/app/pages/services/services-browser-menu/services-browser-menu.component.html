@@ -23,7 +23,7 @@
                         <!-- &#9675; --> <!-- Circle Outline -->
                         &#9679; <!-- Circle Filled -->
                     </span>
-                    @if (this.PermissionsService.hasPermission(['hosts', 'browser'])) {
+                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                         <a [routerLink]="['/', 'hosts', 'browser', data.hostId]">
                             {{ data.hostName }}
                         </a>
@@ -39,7 +39,7 @@
         </c-col>
         <c-col xs="12" sm="5" lg="5" class="text-end">
             @if (data) {
-                @if (config.showBackButton && this.PermissionsService.hasPermission(['services', 'browser'])) {
+                @if (config.showBackButton && ( this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async )) {
                     <button cButton color="primary"
                             class="me-2 ripple"
                             [routerLink]="['/', 'services', 'browser', data.serviceId]">
@@ -57,7 +57,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['documentations', 'view'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['documentations', 'view'])|async) {
                     <button cButton color="default" class="position-relative me-2"
                             [routerLink]="'/documentations/view/' + data.serviceUuid +'/service'"
                             [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
@@ -69,7 +69,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['notifications', 'serviceNotification'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['notifications', 'serviceNotification'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'notifications', 'serviceNotification', data.serviceId]"
@@ -78,7 +78,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['servicechecks', 'index'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['servicechecks', 'index'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'servicechecks', 'index', data.serviceId]"
@@ -87,7 +87,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['statehistories', 'service'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['statehistories', 'service'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'statehistories', 'service', data.serviceId]"
@@ -96,7 +96,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['acknowledgements', 'service'])) {
+                @if (this.PermissionsService.hasPermissionObservable(['acknowledgements', 'service'])|async) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'acknowledgements', 'service', data.serviceId]"
@@ -113,7 +113,7 @@
                     <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
                 </a>
 
-                @if (this.PermissionsService.hasPermission(['hosts', 'edit']) && data.allowEdit) {
+                @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'edit'])|async ) && data.allowEdit) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'hosts', 'edit', data.hostId]"
@@ -122,7 +122,7 @@
                     </button>
                 }
 
-                @if (this.PermissionsService.hasPermission(['services', 'edit']) && data.allowEdit) {
+                @if (( this.PermissionsService.hasPermissionObservable(['services', 'edit'])|async ) && data.allowEdit) {
                     <button cButton color="default"
                             class="ripple me-2"
                             [routerLink]="['/', 'services', 'edit', data.serviceId]"

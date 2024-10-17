@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -63,7 +63,7 @@ import {
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,
@@ -96,7 +96,8 @@ import {
         CardFooterComponent
     ],
     templateUrl: './acknowledgements-service.component.html',
-    styleUrl: './acknowledgements-service.component.css'
+    styleUrl: './acknowledgements-service.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AcknowledgementsServiceComponent implements OnInit, OnDestroy {
     private serviceId: number = 0;
@@ -119,6 +120,7 @@ export class AcknowledgementsServiceComponent implements OnInit, OnDestroy {
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
@@ -130,6 +132,7 @@ export class AcknowledgementsServiceComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
+        this.cdr.markForCheck();
 
     }
 
@@ -146,6 +149,7 @@ export class AcknowledgementsServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.AcknowledgementsService.getAcknowledgementsService(this.serviceId, this.params)
             .subscribe((result) => {
                 this.serviceAcknowledgements = result;
+                this.cdr.markForCheck();
             })
         );
     }

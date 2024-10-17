@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
     ButtonGroupComponent,
     DropdownComponent,
@@ -52,7 +52,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
         RouterLink
     ],
     templateUrl: './actions-button.component.html',
-    styleUrl: './actions-button.component.css'
+    styleUrl: './actions-button.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActionsButtonComponent {
 

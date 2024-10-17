@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,7 +22,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -55,7 +55,7 @@ import { Sort } from '@angular/material/sort';
         ChangelogsEntryComponent,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,
@@ -80,10 +80,12 @@ import { Sort } from '@angular/material/sort';
         RouterLink,
         NoRecordsComponent,
         NgClass,
-        SlaHostgroupHostsStatusOverviewComponent
+        SlaHostgroupHostsStatusOverviewComponent,
+        AsyncPipe
     ],
     templateUrl: './changelogs-index.component.html',
-    styleUrl: './changelogs-index.component.css'
+    styleUrl: './changelogs-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
@@ -128,7 +130,9 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             deactivate: true,
             export: true
         }
-    }
+    };
+    private cdr = inject(ChangeDetectorRef);
+
 
     public loadChanges() {
         this.params['filter[Changelogs.action][]'] = [];
@@ -151,6 +155,7 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.subscriptions.add(this.ChangelogsService.getIndex(this.params)
             .subscribe((result: ChangelogIndexRoot) => {
                 this.changes = result;
+                this.cdr.markForCheck();
             })
         );
     }

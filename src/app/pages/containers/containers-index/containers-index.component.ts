@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -9,7 +9,6 @@ import {
     ModalService,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -42,7 +41,6 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -72,7 +70,8 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
     styleUrl: './containers-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ContainersService} // Inject the ContainersService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainersIndexComponent implements OnInit, OnDestroy {
 
@@ -102,6 +101,7 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
 
@@ -152,12 +152,14 @@ export class ContainersIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByContainerId(id).subscribe(containers => {
             this.nestedContainers = containers;
             this.isLoading = false;
+            this.cdr.markForCheck();
         }));
     }
 
     public loadContainersForSelect(): void {
         this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe(containers => {
             this.containers = containers;
+            this.cdr.markForCheck();
         }));
     }
 

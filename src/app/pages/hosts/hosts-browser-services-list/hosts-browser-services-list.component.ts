@@ -1,5 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
@@ -113,7 +122,7 @@ import { HoststatusObject } from '../hosts.interface';
     selector: 'oitc-hosts-browser-services-list',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,
@@ -179,7 +188,8 @@ import { HoststatusObject } from '../hosts.interface';
         {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
         {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -219,6 +229,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
     private readonly modalService = inject(ModalService);
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
 
+    private cdr = inject(ChangeDetectorRef);
+
     constructor(private route: ActivatedRoute) {
     }
 
@@ -257,6 +269,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -295,6 +308,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             .subscribe((services) => {
                 this.services = services;
                 this.userFullname = services.username;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -309,6 +323,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
             .subscribe((services) => {
                 this.notMonitoredServices = services;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -323,6 +338,7 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         this.subscriptions.add(this.ServicesService.getDisabled(this.params)
             .subscribe((services) => {
                 this.disabledServices = services;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -337,10 +353,12 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         this.subscriptions.add(this.ServicesService.getServicesDeleted(this.params)
             .subscribe((services) => {
                 this.deletedServices = services;
+                this.cdr.markForCheck();
             })
         );
     }
 
+    // Called by (click) - no manual change detection required
     public changeTab(tab: string): void {
         if (tab !== this.activeTab) {
             this.activeTab = tab;

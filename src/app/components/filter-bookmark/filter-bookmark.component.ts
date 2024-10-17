@@ -23,7 +23,17 @@
  *     confirmation.
  */
 
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -111,7 +121,8 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
     styleUrl: './filter-bookmark.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: BookmarksService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBookmarkComponent implements OnInit, OnDestroy {
     @Input({required: true}) public plugin: string = '';
@@ -141,17 +152,21 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
 
-    constructor (private router: Router, private activatedRoute: ActivatedRoute) {
+    private cdr = inject(ChangeDetectorRef);
+
+
+    constructor(private router: Router, private activatedRoute: ActivatedRoute) {
         // subscribe to router event
         // console.log(activatedRoute)
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             if (params['filter'] && params['filter'] !== '') {
-                this.filterUuid = params['filter']
+                this.filterUuid = params['filter'];
+                this.cdr.markForCheck();
             }
         });
     }
 
-    loadBookmarks (id: number | null) {
+    loadBookmarks(id: number | null) {
         if (this.filterUuid != null) {
             this.params['queryFilter'] = this.filterUuid;
         }
@@ -160,6 +175,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         this.params.action = this.action;
         this.subscriptions.add(this.BookmarksService.getBookmarksIndex(this.params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.bookmarks = result.bookmarks || [];
                 if (result.bookmark !== null && result.bookmark.ownership === true) {
                     this.selectedBookmark = result.bookmark;
@@ -181,6 +197,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
                         if (result.bookmark !== null) {
                             this.selected.emit(result.bookmark.filter);
                             this.showEdit = false;
+                            this.cdr.markForCheck();
                         }
                     }, 300);
 
@@ -200,7 +217,8 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     }
 
-    computeBookmarkUrl () {
+    // Called by (click) - no manual change detection required
+    computeBookmarkUrl() {
         if (this.selectedBookmark && this.selectedBookmark.uuid != '') {
             const baseUrl = location.href;
             let stringParams: HttpParams = new HttpParams();
@@ -217,7 +235,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     }
 
-    onBookmarkChange () {
+    onBookmarkChange() {
         if (this.selectedBookmarkId === null) {
             this.selected.emit('');
             this.showEdit = false;
@@ -242,11 +260,12 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
     }
 
-    updateBookmark () {
+    updateBookmark() {
         if (this.selectedBookmark) {
             this.selectedBookmark.filter = JSON.parse(JSON.stringify(this.filter));
             this.subscriptions.add(this.BookmarksService.update(this.selectedBookmark, this.selectedBookmark.id)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         if (this.selectedBookmark) {
                             const title = this.TranslocoService.translate('Bookmark');
@@ -264,7 +283,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
     }
 
-    editBookmark () {
+    editBookmark() {
         this.actionType = 'edit';
         setTimeout(() => {
             this.modalService.toggle({
@@ -275,7 +294,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     }
 
-    showNewBookmarkModel () {
+    showNewBookmarkModel() {
         this.actionType = 'create';
         setTimeout(() => {
             this.modalService.toggle({
@@ -285,12 +304,12 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }, 0);
     }
 
-    savedNewBookmark (id: string) {
+    savedNewBookmark(id: string) {
         this.loadBookmarks(Number(id));
         this.showEdit = true;
     }
 
-    toggleDeleteAllModal () {
+    toggleDeleteAllModal() {
         let items: DeleteAllItem[] = [];
         if (this.selectedBookmark) {
             // User just want to delete a single command
@@ -309,11 +328,12 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnInit () {
+    ngOnInit() {
         this.loadBookmarks(null);
     }
 
-    deleted ($result: boolean) {
+    deleted($result: boolean) {
+        this.cdr.markForCheck();
         if ($result) {
             this.selectedBookmark = null;
             this.selectedBookmarkId = null;
@@ -329,7 +349,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
 
     }
 
-    ngOnDestroy () {
+    ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 

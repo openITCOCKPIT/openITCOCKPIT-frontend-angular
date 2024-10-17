@@ -1,9 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     AlertComponent,
     ColComponent,
     FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -24,6 +26,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
 import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
+import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 
 @Component({
     selector: 'oitc-users-login',
@@ -46,9 +49,12 @@ import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
         NgxParticlesModule,
         NgForOf,
         NgStyle,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
     ],
     templateUrl: './users-login.component.html',
-    styleUrl: './users-login.component.css'
+    styleUrl: './users-login.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
@@ -61,11 +67,12 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     protected disableLogin: boolean = false;
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     protected post: { email: string, password: string, remember_me: boolean } = {
         email: '',
         password: '',
-        remember_me: false
+        remember_me: true
     };
 
     protected particlesOptions: any = {
@@ -128,9 +135,11 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     };
 
     protected images: LoginImage[] = [];
-    protected customLoginBackgroundHtml: string ='';
+    protected customLoginBackgroundHtml: string = '';
     protected isCustomLoginBackground: boolean = false;
     private readonly NotyService: NotyService = inject(NotyService);
+    protected description: string = '';
+    private readonly AuthService: AuthService = inject(AuthService);
     private _csrfToken: string = '';
 
     constructor(private readonly ngParticlesService: NgParticlesService) {
@@ -144,6 +153,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscriptions.add(this.UsersService.getLoginDetails().subscribe(data => {
+            this.cdr.markForCheck();
+
             this.images = data.images.images;
             this.isSsoEnabled = data.isSsoEnabled;
             this.forceRedirectSsousersToLoginScreen = data.forceRedirectSsousersToLoginScreen;
@@ -202,15 +213,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         }));
     }
 
-    protected description: string = '';
 
-    getBackgroundUrl(image: string): string {
-        return `url('${image}')`;
-    }
-    particlesLoaded(container: Container): void {
+    public particlesLoaded(container: Container): void {
     }
 
-    private readonly AuthService: AuthService = inject(AuthService);
 
     protected submit(): void {
 
@@ -222,8 +228,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         //AngularJS $httpParamSerializerJQLike is going to encode the data for us...
 
         this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe((data: any) => {
-
-            console.warn(data);
+            this.cdr.markForCheck();
             if (data.success) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
@@ -236,7 +241,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.disableLogin = false;
 
             if (data.hasOwnProperty('errors')) {
-                let errors: {[key:string]: string[]} = data.errors as unknown as  {[key:string]: string[]};
+                let errors: { [key: string]: string[] } = data.errors as unknown as { [key: string]: string[] };
                 for (let key in errors) {
                     if (typeof errors[key] === "string") {
                         this.NotyService.genericError(errors[key] as unknown as string);
@@ -278,7 +283,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
 
     };
 
-    getLocalStorageItemWithDefaultAndRemoveItem = function (key: string, defaultValue: any) {
+    private getLocalStorageItemWithDefaultAndRemoveItem = function (key: string, defaultValue: any) {
         var val = window.localStorage.getItem(key);
         if (val === null) {
             return defaultValue;
@@ -744,4 +749,5 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             "fpsLimit": 30
         };
     };
+    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
 }

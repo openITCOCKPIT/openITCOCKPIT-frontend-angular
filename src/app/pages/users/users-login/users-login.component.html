@@ -3,20 +3,21 @@
     <ng-container *ngIf="! isCustomLoginBackground">
         <div class="login-screen">
             <figure *ngFor="let image of images"
-                    [ngStyle]="{'background-image': getBackgroundUrl('/img/login/' + image.image)}">
+                    [style.background-image]="'url(/img/login/' + image.image + ')'">
                 <figcaption>{{ image.credit }} {{ description }}</figcaption>
             </figure>
         </div>
     </ng-container>
     <ng-container *ngIf="isCustomLoginBackground">
-        <div class="login-screen" [ngStyle]="{'background-image': getBackgroundUrl(customLoginBackgroundHtml	)}">
+        <div class="login-screen"
+             [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
         </div>
     </ng-container>
     <!-- PRTCLS -->
     <ngx-particles
-            id="prtcls"
-            [options]="particlesOptions"
-            (particlesLoaded)="particlesLoaded($event)"
+        id="prtcls"
+        [options]="particlesOptions"
+        (particlesLoaded)="particlesLoaded($event)"
     ></ngx-particles>
 
     <!-- FORM -->
@@ -31,9 +32,9 @@
             <h4 class="fw-300 mb-5 text-white">{{ t('Login') }}</h4>
 
             <div *ngIf="isSsoEnabled" class="form-group mb-5">
-                <a      id="sso-redirect-href"
-                        href="/users/login?redirect_sso=true"
-                        class="btn btn-primary btn-lg w-100">
+                <a id="sso-redirect-href"
+                   href="/users/login?redirect_sso=true"
+                   class="btn btn-primary btn-lg w-100">
                     <i class="fas fa-sign-in-alt"></i>
                     {{ t('Login through Single sign-on') }}
                 </a>
@@ -77,23 +78,26 @@
 
                 <c-row class="mb-3">
                     <c-col md="4">
-                        <c-form-check>
+
+                        <c-form-check class="mb-2">
                             <input cFormCheckInput
-                                   name="post.remember_me"
-                                   id="post.remember_me"
-                                   type="checkbox"
-                                   trueFalseValue
-                                   [(ngModel)]="post.remember_me"/>
-                            <label cFormCheckLabel for="post.remember_me" class="text-white">
+                                   id="remember_me" type="checkbox"
+                                   class="checkbox-lg checkbox-primary"
+                                   name="remember_me"
+                                   [(ngModel)]="post.remember_me"
+                            />
+                            <label cFormCheckLabel class="ms-1 mt-1 text-white"
+                                   for="remember_me">
                                 {{ t('Remember me') }}
                             </label>
                         </c-form-check>
+
                     </c-col>
                     <c-col md="8" class="text-end">
                         <button
-                                type="submit"
-                                class="btn btn-primary text-end"
-                                [disabled]="disableLogin">
+                            type="submit"
+                            class="btn btn-primary text-end"
+                            [disabled]="disableLogin">
                             <span>
                                 <i class="fa fa-spinner fa-spin" *ngIf="disableLogin"></i>
                             </span>
@@ -115,8 +119,8 @@
                         </div>
                         <div class="peer">
                             <a
-                                    href="/"
-                                    class="btn btn-primary">
+                                href="/"
+                                class="btn btn-primary">
                                 {{ t('Start') }}
                             </a>
                         </div>

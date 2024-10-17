@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { Customvariable } from '../../pages/contacts/contacts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GenericValidationError } from '../../generic-responses';
@@ -20,7 +19,7 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
         FormsModule,
         NgIf,
         TranslocoPipe,
-        CoreuiComponent,
+
         TranslocoDirective,
         FormErrorDirective,
         NgSelectModule,
@@ -28,25 +27,28 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
         RequiredIconComponent
     ],
     templateUrl: './macros.component.html',
-    styleUrl: './macros.component.css'
+    styleUrl: './macros.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MacrosComponent implements OnInit {
 
-    @Input() public macro: Customvariable = {} as Customvariable;
-    @Input() public macroName: string = '';
+    @Input() public macro!: Customvariable;
+
+    @Input() public macroName: 'CONTACT' | 'HOST' | 'SERVICE' = 'HOST';
     @Input() public index: number = 0;
     @Input() public deleteMacroCallback: Function = () => {
     };
-    @Input() public errors: Function = (index: number): GenericValidationError => {
-        return {} as GenericValidationError;
-    };
+    @Input() public errors: GenericValidationError | null = null;
 
     protected textClass: string = 'text-primary';
+    private cdr = inject(ChangeDetectorRef);
 
     protected updateName(): void {
         let name = this.macro.name.toUpperCase();
         name = name.replace(/[^\d\w\_]/g, '');
         this.macro.name = name;
+        this.cdr.markForCheck();
+
     }
 
     public ngOnInit() {
@@ -63,13 +65,10 @@ export class MacrosComponent implements OnInit {
 
     public togglePassword() {
         this.macro.password = this.macro.password === 0 ? 1 : 0;
+        this.cdr.markForCheck();
     }
 
     public deleteMacro() {
         this.deleteMacroCallback(this.index);
-    }
-
-    public getErrors(): GenericValidationError {
-        return this.errors(this.index);
     }
 }

@@ -1,279 +1,277 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
+<ng-container *transloco="let t">
 
-        <oitc-services-browser-menu
-            *ngIf="serviceBrowserConfig"
-            [config]="serviceBrowserConfig">
-        </oitc-services-browser-menu>
+    <oitc-services-browser-menu
+        *ngIf="serviceBrowserConfig"
+        [config]="serviceBrowserConfig">
+    </oitc-services-browser-menu>
 
-        <c-card class="mb-3 mt-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Service') }}
-                    <small class="fw-300">
-                        {{ t('notifications') }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="loadNotifications()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
-                        </button>
-                    </c-nav-item>
-                    <c-nav-item class="px-1">
-                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+    <c-card class="mb-3 mt-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service') }}
+                <small class="fw-300">
+                    {{ t('notifications') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadNotifications()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
                             <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                             {{ t('Filter') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <!-- Filter -->
-                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
                     <c-row>
-                        <c-col>
-                            <h6 class="pb-2 mb-3 border-bottom">
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Filter') }}
-                            </h6>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[NotificationServices.output]']"
+                                       [placeholder]="'Filter by output' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Notifications.output"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Commands.name]']"
+                                       [placeholder]="'Filter by notification method' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Commands.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Contacts.name]']"
+                                       [placeholder]="'Filter by contact name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Contacts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
                         </c-col>
                     </c-row>
-                    <form cForm>
-                        <c-row>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        {{ t('From') }}
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="from"
-                                           [placeholder]="'From date' | transloco"
-                                           aria-label="from"
-                                           name="from"
-                                           cFormControl
-                                           oitcDebounce
-                                           type="datetime-local"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        {{ t('To') }}
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="to"
-                                           [placeholder]="'From date' | transloco"
-                                           aria-label="to"
-                                           name="to"
-                                           cFormControl
-                                           oitcDebounce
-                                           type="datetime-local"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[NotificationServices.output]']"
-                                           [placeholder]="'Filter by output' | transloco"
-                                           aria-label="name"
-                                           cFormControl
-                                           name="Notifications.output"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Commands.name]']"
-                                           [placeholder]="'Filter by notification method' | transloco"
-                                           aria-label="name"
-                                           cFormControl
-                                           name="Commands.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                            <c-col md="6" class="mb-2">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Contacts.name]']"
-                                           [placeholder]="'Filter by contact name' | transloco"
-                                           aria-label="name"
-                                           cFormControl
-                                           name="Contacts.name"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
-                            </c-col>
-                        </c-row>
-                        <c-row class="my-3">
-                            <c-col [xs]="12" lg="2">
-                                <fieldset>
-                                    <h5>
-                                        {{ t('States') }}
-                                    </h5>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-success"
-                                            name="stateFilter.ok"
-                                            id="stateFilter.ok"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.ok"/>
+                    <c-row class="my-3">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('States') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-success"
+                                        name="stateFilter.ok"
+                                        id="stateFilter.ok"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="stateFilter.ok"/>
 
-                                        <label cFormCheckLabel
-                                               for="stateFilter.ok">{{ t('Ok') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-warning"
-                                            name="stateFilter.warning"
-                                            id="stateFilter.warning"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.warning"/>
-                                        <label cFormCheckLabel
-                                               for="stateFilter.warning">{{ t('Warning') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-danger"
-                                            name="stateFilter.critical"
-                                            id="stateFilter.critical"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.critical"/>
-                                        <label cFormCheckLabel
-                                               for="stateFilter.critical">{{ t('Critical') }}</label>
-                                    </c-form-check>
-                                    <c-form-check>
-                                        <input
-                                            (debouncedValue)="onFilterChange($event)"
-                                            cFormCheckInput
-                                            class="checkbox-secondary"
-                                            name="stateFilter.unknown"
-                                            id="stateFilter.unknown"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="stateFilter.unknown"/>
-                                        <label cFormCheckLabel
-                                               for="stateFilter.unknown">{{ t('Unknown') }}</label>
-                                    </c-form-check>
-                                </fieldset>
-                            </c-col>
-                        </c-row>
-                        <c-row class="mt-2">
-                            <c-col class="text-end">
-                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                    {{ t('Reset filter') }}
-                                </button>
-                            </c-col>
-                        </c-row>
-                    </form>
-                </c-container>
-                <!-- End Filter -->
-
-                <oitc-table-loader *ngIf="!notifications"></oitc-table-loader>
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       *ngIf="notifications"
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="width-50 text-center" scope="col" mat-sort-header="NotificationServices.state">
-                            {{ t('State') }}
-                        </th>
-                        <th scope="col" mat-sort-header="NotificationServices.start_time">
-                            {{ t('Date') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Contacts.name">
-                            {{ t('Contact') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Commands.name">
-                            {{ t('Notification Method') }}
-                        </th>
-                        <th scope="col" mat-sort-header="NotificationServices.output">
-                            {{ t('Output') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let notification of notifications.all_notifications">
-                        <td class="text-center">
-                            <oitc-servicestatus-simple-icon
-                                [servicestatus]="notification.NotificationService.state"></oitc-servicestatus-simple-icon>
-                        </td>
-                        <td>
-                            {{ notification.NotificationService.start_time }}
-                        </td>
-                        <td>
-                            <a *oitcPermission="['contacts', 'edit']"
-                               [routerLink]="['/', 'contacts', 'edit', notification.Contact.id]">
-                                {{ notification.Contact.name }}
-                            </a>
-                            <span *oitcPermission="['contacts', 'edit']; negate: true">
-                                {{ notification.Contact.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <a *oitcPermission="['commands', 'edit']"
-                               [routerLink]="['/', 'commands', 'edit', notification.Command.id]">
-                                {{ notification.Command.name }}
-                            </a>
-                            <span *oitcPermission="['commands', 'edit']; negate: true">
-                                {{ notification.Command.name }}
-                            </span>
-                        </td>
-                        <td>
-                            {{ notification.NotificationService.output }}
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-                <oitc-no-records
-                    *ngIf="notifications && notifications.all_notifications.length === 0"></oitc-no-records>
-                <c-container
-                    [fluid]="true" class="mb-3 py-3">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="notifications"
-                                [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
+                                    <label cFormCheckLabel
+                                           for="stateFilter.ok">{{ t('Ok') }}</label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-warning"
+                                        name="stateFilter.warning"
+                                        id="stateFilter.warning"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="stateFilter.warning"/>
+                                    <label cFormCheckLabel
+                                           for="stateFilter.warning">{{ t('Warning') }}</label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-danger"
+                                        name="stateFilter.critical"
+                                        id="stateFilter.critical"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="stateFilter.critical"/>
+                                    <label cFormCheckLabel
+                                           for="stateFilter.critical">{{ t('Critical') }}</label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-secondary"
+                                        name="stateFilter.unknown"
+                                        id="stateFilter.unknown"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="stateFilter.unknown"/>
+                                    <label cFormCheckLabel
+                                           for="stateFilter.unknown">{{ t('Unknown') }}</label>
+                                </c-form-check>
+                            </fieldset>
                         </c-col>
                     </c-row>
-                </c-container>
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
-</oitc-coreui>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-table-loader *ngIf="!notifications"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   *ngIf="notifications"
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col" mat-sort-header="NotificationServices.state">
+                        {{ t('State') }}
+                    </th>
+                    <th scope="col" mat-sort-header="NotificationServices.start_time">
+                        {{ t('Date') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Contacts.name">
+                        {{ t('Contact') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Commands.name">
+                        {{ t('Notification Method') }}
+                    </th>
+                    <th scope="col" mat-sort-header="NotificationServices.output">
+                        {{ t('Output') }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let notification of notifications.all_notifications">
+                    <td class="text-center">
+                        <oitc-servicestatus-simple-icon
+                            [servicestatus]="notification.NotificationService.state"></oitc-servicestatus-simple-icon>
+                    </td>
+                    <td>
+                        {{ notification.NotificationService.start_time }}
+                    </td>
+                    <td>
+                        <a *oitcPermission="['contacts', 'edit']"
+                           [routerLink]="['/', 'contacts', 'edit', notification.Contact.id]">
+                            {{ notification.Contact.name }}
+                        </a>
+                        <span *oitcPermission="['contacts', 'edit']; negate: true">
+                            {{ notification.Contact.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <a *oitcPermission="['commands', 'edit']"
+                           [routerLink]="['/', 'commands', 'edit', notification.Command.id]">
+                            {{ notification.Command.name }}
+                        </a>
+                        <span *oitcPermission="['commands', 'edit']; negate: true">
+                            {{ notification.Command.name }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ notification.NotificationService.output }}
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+            <oitc-no-records
+                *ngIf="notifications && notifications.all_notifications.length === 0"></oitc-no-records>
+            <c-container
+                [fluid]="true" class="mb-3 py-3">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="notifications"
+                            [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { GenericValidationError } from '../../../generic-responses';
 import { NgForOf, NgIf } from '@angular/common';
 import _ from 'lodash';
@@ -11,34 +11,37 @@ import _ from 'lodash';
         NgForOf
     ],
     templateUrl: './form-feedback.component.html',
-    styleUrl: './form-feedback.component.css'
+    styleUrl: './form-feedback.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormFeedbackComponent {
 
-    @Input() public errors?: GenericValidationError | null = null;
-    // field like "name" or path like "containers.name"
-    @Input({required: true}) errorField: string = '';
+    public errors = input<GenericValidationError | null | undefined>(null);
+    public errorField = input.required<string>();
 
-    public hasError(): boolean {
-        const errors = _.result(this.errors, this.errorField);
-        if (errors) {
-            return true;
-        }
+    public hasError: boolean = false;
+    public errorMessages: string[] = [];
 
-        return false;
-    }
+    private cdr = inject(ChangeDetectorRef);
 
-    public getErrors(): string[] {
-        if (!this.errors) {
-            return [];
-        }
+    constructor() {
+        effect(() => {
+            const errors = this.errors();
+            const errorField = this.errorField();
 
-        const errors = _.result(this.errors, this.errorField);
-        if (!errors) {
-            return [];
-        }
+            if (errors && errorField) {
+                const fieldErrorMessages = _.result(errors, errorField);
 
-        return Object.values(errors);
+                this.hasError = false;
+                this.errorMessages = [];
+                if (fieldErrorMessages) {
+                    this.hasError = true;
+                    this.errorMessages = Object.values(fieldErrorMessages);
+                }
+                this.cdr.markForCheck();
+            }
+
+        });
     }
 
 }

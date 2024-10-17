@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass } from '@angular/common';
 import _ from 'lodash';
@@ -15,7 +25,8 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './template-diff.component.html',
-    styleUrl: './template-diff.component.css'
+    styleUrl: './template-diff.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateDiffComponent implements OnChanges {
 
@@ -30,6 +41,7 @@ export class TemplateDiffComponent implements OnChanges {
 
 
     private readonly TranslocoService = inject(TranslocoService);
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['value']) {
@@ -41,6 +53,7 @@ export class TemplateDiffComponent implements OnChanges {
         this.value = this.templateValue;
         this.valueChange.emit(this.value);
         this.valueResetted.emit(this.value);
+        this.cdr.markForCheck();
     }
 
     public getPopoverContent(): string {
@@ -65,6 +78,8 @@ export class TemplateDiffComponent implements OnChanges {
     }
 
     runDiff() {
+        this.cdr.markForCheck();
+
         if (this.templateValue === null && this.value === null) {
             this.hasDiff = false;
             return;

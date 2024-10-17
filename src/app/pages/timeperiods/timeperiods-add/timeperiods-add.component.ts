@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -48,7 +48,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormDirective,
@@ -76,7 +76,8 @@ import { HistoryService } from '../../../history.service';
         DebounceDirective
     ],
     templateUrl: './timeperiods-add.component.html',
-    styleUrl: './timeperiods-add.component.css'
+    styleUrl: './timeperiods-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
@@ -110,12 +111,13 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
     public readonly weekdays: { key: string, value: string }[] = this.WeekdaysService.getWeekdays();
     public startPlaceholder = this.TranslocoService.translate('Start') + ' ' + this.TranslocoService.translate('(00:00)');
     public endPlaceholder = this.TranslocoService.translate('End') + ' ' + this.TranslocoService.translate('(24:00)');
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.subscriptions.add(this.TimeperiodsService.getAdd()
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -123,7 +125,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    trackByIndex(index: number, item: any): number {
+    public trackByIndex(index: number, item: any): number {
         return index;
     }
 
@@ -131,6 +133,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.TimeperiodsService.getCalendars(searchString, this.post.container_id)
             .subscribe((result) => {
                 this.calendars = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -159,6 +162,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
                     })
                 .value();
         }
+        this.cdr.markForCheck();
     }
 
     public removeTimerange(rangeIndex: any) {
@@ -181,6 +185,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
                     })
                 .value();
         }
+        this.cdr.markForCheck();
     };
 
     public hasTimeRange(errors: any, range: any) {
@@ -214,6 +219,7 @@ export class TimeperiodsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.TimeperiodsService.createTimeperiod(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as TimeperiodAddResponse;
 

@@ -17,7 +17,7 @@ export interface BookmarkResponse {
     bookmark: BookmarksObject
 }
 
-export interface BookmarksParams  {
+export interface BookmarksParams {
     angular: boolean
     plugin: string
     controller: string

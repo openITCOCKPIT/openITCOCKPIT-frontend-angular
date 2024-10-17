@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -57,7 +67,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         XsButtonDirective
     ],
     templateUrl: './service-reset-checktime-modal.component.html',
-    styleUrl: './service-reset-checktime-modal.component.css'
+    styleUrl: './service-reset-checktime-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
 
@@ -80,10 +91,14 @@ export class ServiceResetChecktimeModalComponent implements OnInit, OnDestroy {
 
     protected resetType: 'hostOnly' | 'hostAndServices' = 'hostAndServices';
 
+    private cdr = inject(ChangeDetectorRef);
+
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
         this.errors = {};
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -58,7 +68,8 @@ import { RouterLink } from '@angular/router';
         RouterLink
     ],
     templateUrl: './service-add-to-servicegroup-modal.component.html',
-    styleUrl: './service-add-to-servicegroup-modal.component.css'
+    styleUrl: './service-add-to-servicegroup-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceAddToServicegroupModalComponent implements OnChanges {
     @Input({required: true}) public items: SelectKeyValue[] = [];
@@ -71,11 +82,15 @@ export class ServiceAddToServicegroupModalComponent implements OnChanges {
     protected joinedServiceIds: string = '';
     protected state?: any
     protected type: string = 'serviceOnly';
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('modal') private modal!: ModalComponent;
 
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

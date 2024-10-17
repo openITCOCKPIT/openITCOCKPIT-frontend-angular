@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -38,7 +38,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NgForOf,
@@ -54,7 +54,8 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormLoaderComponent
     ],
     templateUrl: './contactgroups-used-by.component.html',
-    styleUrl: './contactgroups-used-by.component.css'
+    styleUrl: './contactgroups-used-by.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
     public contactgroup?: ContactgroupsUsedByRootContainer | null;
@@ -68,10 +69,12 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
     private contactgroupId: number = 0;
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.contactgroupId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy() {
@@ -81,6 +84,7 @@ export class ContactgroupsUsedByComponent implements OnInit, OnDestroy {
     public load() {
         this.subscriptions.add(this.ContactgroupsService.usedBy(this.contactgroupId)
             .subscribe((result: ContactgroupsUsedByRoot) => {
+                this.cdr.markForCheck();
                 this.contactgroup = {
                     name: result.contactgroupWithRelations.container.name
                 }

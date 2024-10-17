@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -67,7 +67,7 @@ import { IndexPage } from '../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -112,7 +112,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './hostescalations-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostescalationsService} // Inject the HostescalationsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostescalationsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService = inject(TranslocoService);
@@ -135,6 +136,7 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy, IndexPa
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -161,6 +163,7 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy, IndexPa
         this.subscriptions.add(this.HostescalationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.hostescalations = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -195,14 +198,14 @@ export class HostescalationsIndexComponent implements OnInit, OnDestroy, IndexPa
             // User just want to delete a single command
             items = [{
                 id: hostescalation.id,
-                displayName: this.TranslocoService.translate('Host escalation #{id}', {id: hostescalation.id})
+                displayName: this.TranslocoService.translate('Host escalation #{0}', {"0": hostescalation.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Host escalation #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Host escalation #{0}', {"0": item.id})
                 };
             });
         }

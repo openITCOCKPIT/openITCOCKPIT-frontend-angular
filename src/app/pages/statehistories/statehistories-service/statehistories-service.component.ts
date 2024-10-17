@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -64,7 +64,7 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         FaIconComponent,
         FormCheckComponent,
@@ -98,13 +98,15 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         CardFooterComponent
     ],
     templateUrl: './statehistories-service.component.html',
-    styleUrl: './statehistories-service.component.css'
+    styleUrl: './statehistories-service.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
     private serviceId: number = 0;
     private StatehistoryService = inject(StatehistoryService)
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
 
     public params: StatehistoryServiceParams = getDefaultStatehistoryServiceParams();
     public stateFilter: ServiceNotificationsStateFilter = {
@@ -137,7 +139,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
-
+        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -162,6 +164,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatehistoryService.getStatehistoryService(this.serviceId, this.params)
             .subscribe((result) => {
                 this.servicestatehistories = result;
+                this.cdr.markForCheck();
             })
         );
     }

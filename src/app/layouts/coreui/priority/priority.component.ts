@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgForOf } from '@angular/common';
 
@@ -11,11 +11,12 @@ import { NgClass, NgForOf } from '@angular/common';
         NgForOf
     ],
     templateUrl: './priority.component.html',
-    styleUrl: './priority.component.css'
+    styleUrl: './priority.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PriorityComponent implements OnChanges {
-    @Input() priority: number = 1;
-    @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
+export class PriorityComponent {
+    public priority = input<number>(1)
+    public onChange = output<number>();
 
     public priorityClass: string[] = [
         'text-muted',
@@ -33,12 +34,13 @@ export class PriorityComponent implements OnChanges {
         'critical'
     ];
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['priority']) {
-            this.setPriorityClasses(changes['priority'].currentValue);
-        }
-    }
+    private cdr = inject(ChangeDetectorRef);
 
+    constructor() {
+        effect(() => {
+            this.setPriorityClasses(this.priority());
+        });
+    }
 
     private setPriorityClasses(priority: number) {
         let index = priority - 1; // Adjust to array index
@@ -52,6 +54,7 @@ export class PriorityComponent implements OnChanges {
                 this.priorityClass[i] = 'text-muted';
             }
         }
+        this.cdr.markForCheck();
     }
 
     public hoverPriority(priority: number) {
@@ -59,12 +62,12 @@ export class PriorityComponent implements OnChanges {
     }
 
     public mouseleave() {
-        this.setPriorityClasses(this.priority);
+        this.setPriorityClasses(this.priority());
     }
 
     public setPriority(priority: number) {
-        this.priority = priority;
-        //this.setPriorityClasses(priority); // done via ngOnChanges
+        this.setPriorityClasses(priority);
         this.onChange.emit((priority));
     }
 }
+

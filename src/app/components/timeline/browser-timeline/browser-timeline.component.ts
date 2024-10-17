@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
 import { Observable, Subscription } from 'rxjs';
@@ -22,7 +33,8 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
         NgIf
     ],
     templateUrl: './browser-timeline.component.html',
-    styleUrl: './browser-timeline.component.css'
+    styleUrl: './browser-timeline.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
@@ -52,6 +64,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
     private visTimelineInit: boolean = true; // true = timeline is initializing, false = timeline is ready
     private timeout: any = null; // for debouncing
     private changeTimeout: any = null; // for debouncing
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -96,6 +109,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 // Emit event that we change our range
                 this.onTimerangeChange.emit(this.timerange);
 
+                this.cdr.markForCheck();
                 return;
             }
         }
@@ -104,6 +118,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.subscriptions.add(this.HostsService.loadTimeline(this.objectId, startTimestamp, endTimestamp)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.isLoading = false;
                 this.data = result;
 
@@ -181,6 +196,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 // Emit event that we change our range
                 this.onTimerangeChange.emit(this.timerange);
 
+                this.cdr.markForCheck();
                 return;
             }
         }
@@ -189,6 +205,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.subscriptions.add(this.ServicesService.loadTimeline(this.objectId, startTimestamp, endTimestamp)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.isLoading = false;
                 this.data = result;
 
@@ -273,6 +290,8 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
         let start = new Date(timerange.start * 1000);
         let end = new Date(timerange.end * 1000);
 
+        this.cdr.markForCheck();
+
         if (timerange.start >= this.visTimelineStart && timerange.end <= this.visTimelineEnd) {
             // Timerange is already loaded
             // Just zoom in
@@ -333,6 +352,8 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         clearTimeout(this.changeTimeout);
                         this.changeTimeout = null;
                     }
+
+                    this.cdr.markForCheck();
 
                     this.changeTimeout = setTimeout(() => {
                         this.changeTimeout = null;
@@ -403,6 +424,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                             visTimelineStartAsTimestamp,
                             visTimelineEndAsTimestamp
                         );
+                        this.cdr.markForCheck();
                     }, 500);
 
                 });

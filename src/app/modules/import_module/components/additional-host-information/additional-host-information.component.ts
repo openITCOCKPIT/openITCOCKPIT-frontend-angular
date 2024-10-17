@@ -1,4 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import { AdditionalHostInformationResult } from '../../pages/externalsystems/external-systems.interface';
@@ -19,7 +29,8 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
         ItopOverviewComponent
     ],
     templateUrl: './additional-host-information.component.html',
-    styleUrl: './additional-host-information.component.css'
+    styleUrl: './additional-host-information.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdditionalHostInformationComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -32,6 +43,8 @@ export class AdditionalHostInformationComponent implements OnInit, OnChanges, On
     private subscriptions: Subscription = new Subscription();
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
     }
@@ -58,6 +71,7 @@ export class AdditionalHostInformationComponent implements OnInit, OnChanges, On
         this.subscriptions.add(this.ExternalSystemsService.getAdditionalHostInformation(this.hostId)
             .subscribe((result) => {
                 this.result = result;
+                this.cdr.markForCheck();
             })
         );
     }

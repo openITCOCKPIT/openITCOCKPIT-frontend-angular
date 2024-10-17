@@ -83,7 +83,7 @@ export interface User {
         parent_id: any
         lft: number
         rght: number
-        _joinData:  {
+        _joinData: {
             id: number
             user_id: number
             container_id: number
@@ -92,8 +92,6 @@ export interface User {
     }[]
     system_health_user: any
 }
-
-
 
 
 export interface SystemHealthUserAddRoot {
@@ -119,6 +117,7 @@ export interface SystemHealthUserDetails {
     firstname: string
     lastname: string
 }
+
 export interface SystemHealthUserEditPost {
     SystemHealthUser: SystemHealthUserAdd
     User: SystemHealthUserDetails

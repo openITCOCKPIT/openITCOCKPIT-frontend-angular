@@ -19,7 +19,7 @@
                    [(ngModel)]="macro.name"
                    (ngModelChange)="updateName()"
             >
-            <oitc-form-feedback [errors]="getErrors()" errorField="name"></oitc-form-feedback>
+            <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.name"></oitc-form-feedback>
         </div>
         <div class="col-lg-4 form-group">
             <label class="form-label">
@@ -29,7 +29,7 @@
             <input class="form-control w-100" type="text"
                    name="value"
                    [(ngModel)]="macro.value">
-            <oitc-form-feedback [errors]="getErrors()" errorField="value"></oitc-form-feedback>
+            <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.value"></oitc-form-feedback>
         </div>
         <div class="col-md-1 col-lg-1">
             <a class="btn btn-default ripple"

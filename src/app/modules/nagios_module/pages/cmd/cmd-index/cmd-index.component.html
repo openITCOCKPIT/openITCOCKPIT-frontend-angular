@@ -1,170 +1,168 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['nagios_module', 'cmd', 'index']"
-                       [routerLink]="['/', 'nagios_module', 'cmd', 'index']">
-                        <fa-icon [icon]="['fas', 'engine']"></fa-icon>
-                        {{ t('Monitoring Engine') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'code']"></fa-icon>
-                    {{ t('External commands') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['nagios_module', 'cmd', 'index']"
+                   [routerLink]="['/', 'nagios_module', 'cmd', 'index']">
+                    <fa-icon [icon]="['fas', 'engine']"></fa-icon>
+                    {{ t('Monitoring Engine') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'code']"></fa-icon>
+                {{ t('External commands') }}
+            </li>
+        </ol>
+    </nav>
 
-        <oitc-query-handler-checker></oitc-query-handler-checker>
+    <oitc-query-handler-checker></oitc-query-handler-checker>
 
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('External commands') }}
-                    <small class="fw-300">
-                        {{ t('overview') }}
-                    </small>
-                </h5>
-            </c-card-header>
-            <c-card-body>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('External commands') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
 
-                <div class="row">
-                    <div class="col-12">
-                        <c-alert color="info">
-                            <h4 cAlertHeading>
-                                <fa-icon [icon]="['fas', 'question-circle']" class="fa-lg"></fa-icon>
-                                {{ t('What is this API for?') }}
-                            </h4>
-                            <p class="mb-0">
-                                {{ t('This API can be used by third party application to send commands to the monitoring backend.') }}
-                                <br>
-                                {{ t('This could be useful to transfer passive check results or to acknowledge host or service states.') }}
-                                <br/>
-                                <code>hostUuid</code> {{ t('and') }} <code>serviceUuid</code>
-                                {{ t('can also be passed by their name, e.g. "localhost" or "Ping". It is recommended to use the UUIDs when possible.') }}
-                            </p>
-                        </c-alert>
-                    </div>
+            <div class="row">
+                <div class="col-12">
+                    <c-alert color="info">
+                        <h4 cAlertHeading>
+                            <fa-icon [icon]="['fas', 'question-circle']" class="fa-lg"></fa-icon>
+                            {{ t('What is this API for?') }}
+                        </h4>
+                        <p class="mb-0">
+                            {{ t('This API can be used by third party application to send commands to the monitoring backend.') }}
+                            <br>
+                            {{ t('This could be useful to transfer passive check results or to acknowledge host or service states.') }}
+                            <br/>
+                            <code>hostUuid</code> {{ t('and') }} <code>serviceUuid</code>
+                            {{ t('can also be passed by their name, e.g. "localhost" or "Ping". It is recommended to use the UUIDs when possible.') }}
+                        </p>
+                    </c-alert>
+                </div>
+            </div>
+
+            <c-container class="mb-3" [fluid]="true">
+
+                <div class="mb-3">
+                    <label cLabel for="external_command">
+                        {{ t('Command type') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-select
+                        name="external_command"
+                        id="external_command"
+                        [optionValue]="'key'"
+                        [optionLabel]="'value'"
+                        [(ngModel)]="selectedCommandIndex"
+                        [options]="externalCommands"
+                        (onChange)="onCommandChange()">
+                    </oitc-select>
                 </div>
 
-                <c-container class="mb-3" [fluid]="true">
+                <c-row>
+                    <c-col [xs]="12" [lg]="3" class="code-font">
+                        <table cTable class="mb-0 table table-fit" hover striped>
+                            <thead>
+                            <tr>
+                                <th>{{ t('Parameter') }}</th>
+                                <th>{{ t('Default value') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if (!currentCommandParams) {
+                                    <tr>
+                                        <td class="text-align-left text-info" colspan="2">
+                                            <i>{{ t('No parameters') }}</i>
+                                        </td>
+                                    </tr>
+                                } @else {
+                                    <tr *ngFor="let param of currentCommandParams | keyvalue">
+                                        <td>{{ param.key }}</td>
+                                        <td>
+                                            @if (param.value === null) {
+                                                <i class="text-danger">{{ t('required') }}</i>
+                                            } @else {
+                                                <code>
+                                                    {{ param.value }}
+                                                </code>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </c-col>
+                    <c-col [xs]="12" [lg]="9">
+                        <div class="mb-3">
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary text-white min-width-70">
+                                    GET
+                                </span>
+                                <input
+                                    name="get_nag_command"
+                                    [(ngModel)]="currentCommandAsGetRequest"
+                                    readonly
+                                    disabled
+                                    cFormControl/>
+                            </c-input-group>
+                        </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="external_command">
-                            {{ t('Command type') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
+                        <div class="mb-3">
+                            <c-input-group>
+                                <span cInputGroupText class="bg-success text-white min-width-70">
+                                    POST
+                                </span>
+                                <textarea
+                                    rows="3"
+                                    name="post_nag_command"
+                                    [(ngModel)]="currentCommandAsPostRequest"
+                                    readonly
+                                    disabled
+                                    cFormControl></textarea>
+                            </c-input-group>
+                        </div>
 
-                        <oitc-select
-                            name="external_command"
-                            id="external_command"
-                            [optionValue]="'key'"
-                            [optionLabel]="'value'"
-                            [(ngModel)]="selectedCommandIndex"
-                            [options]="externalCommands"
-                            (onChange)="onCommandChange()">
-                        </oitc-select>
-                    </div>
+                        <div class="mb-3 help-block">
+                            {{ t('You need to create an openITCOCKPIT user defined API key first.') }}
+                            <br/>
+                            <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                            <br/>
+                            <br/>
+                            <code>.json</code>
+                            {{ t('is not required in the URL and can be removed.') }}
+                        </div>
 
-                    <c-row>
-                        <c-col [xs]="12" [lg]="3" class="code-font">
-                            <table cTable class="mb-0 table table-fit" hover striped>
-                                <thead>
-                                <tr>
-                                    <th>{{ t('Parameter') }}</th>
-                                    <th>{{ t('Default value') }}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @if (!currentCommandParams) {
-                                        <tr>
-                                            <td class="text-align-left text-info" colspan="2">
-                                                <i>{{ t('No parameters') }}</i>
-                                            </td>
-                                        </tr>
-                                    } @else {
-                                        <tr *ngFor="let param of currentCommandParams | keyvalue">
-                                            <td>{{ param.key }}</td>
-                                            <td>
-                                                @if (param.value === null) {
-                                                    <i class="text-danger">{{ t('required') }}</i>
-                                                } @else {
-                                                    <code>
-                                                        {{ param.value }}
-                                                    </code>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </c-col>
-                        <c-col [xs]="12" [lg]="9">
-                            <div class="mb-3">
-                                <c-input-group>
-                                    <span cInputGroupText class="bg-primary text-white min-width-70">
-                                        GET
-                                    </span>
-                                    <input
-                                        name="get_nag_command"
-                                        [(ngModel)]="currentCommandAsGetRequest"
-                                        readonly
-                                        disabled
-                                        cFormControl/>
-                                </c-input-group>
-                            </div>
+                        <div class="mb-3 help-block"
+                             *ngIf="currentCommandName !== 'ACKNOWLEDGE_OTRS_HOST_SVC_PROBLEM'">
+                            <a [href]="'https://www.naemon.io/documentation/developer/externalcommands/'+currentCommandForNaemonIoDocs+'.html'"
+                               target="_blank">
+                                {{ t('External documentation') }}
+                            </a>
+                            <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                        </div>
 
-                            <div class="mb-3">
-                                <c-input-group>
-                                    <span cInputGroupText class="bg-success text-white min-width-70">
-                                        POST
-                                    </span>
-                                    <textarea
-                                        rows="3"
-                                        name="post_nag_command"
-                                        [(ngModel)]="currentCommandAsPostRequest"
-                                        readonly
-                                        disabled
-                                        cFormControl></textarea>
-                                </c-input-group>
-                            </div>
-
-                            <div class="mb-3 help-block">
-                                {{ t('You need to create an openITCOCKPIT user defined API key first.') }}
-                                <br/>
-                                <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
-                                <br/>
-                                <br/>
-                                <code>.json</code>
-                                {{ t('is not required in the URL and can be removed.') }}
-                            </div>
-
-                            <div class="mb-3 help-block"
-                                 *ngIf="currentCommandName !== 'ACKNOWLEDGE_OTRS_HOST_SVC_PROBLEM'">
-                                <a [href]="'https://www.naemon.io/documentation/developer/externalcommands/'+currentCommandForNaemonIoDocs+'.html'"
-                                   target="_blank">
-                                    {{ t('External documentation') }}
-                                </a>
-                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                            </div>
-
-                        </c-col>
-                    </c-row>
+                    </c-col>
+                </c-row>
 
 
-                </c-container>
+            </c-container>
 
 
-            </c-card-body>
-            <c-card-footer>
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </ng-container>
-</oitc-coreui>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
@@ -86,7 +86,7 @@ import {
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -135,7 +135,8 @@ import {
         DynamicalFormFieldsComponent
     ],
     templateUrl: './external-monitorings-add.component.html',
-    styleUrl: './external-monitorings-add.component.css'
+    styleUrl: './external-monitorings-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
@@ -168,7 +169,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     ];
 
     public containers: SelectKeyValue[] = [];
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -178,6 +179,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -198,6 +200,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalMonitoringsService.createExternalMonitoring(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -243,6 +246,7 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
                     }
 
                     this.formFields = result.config.formFields;
+                    this.cdr.markForCheck();
                 })
             );
         }

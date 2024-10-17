@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
@@ -8,7 +8,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         SkeletonModule
     ],
     templateUrl: './nest-loader.component.html',
-    styleUrl: './nest-loader.component.css'
+    styleUrl: './nest-loader.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NestLoaderComponent {
 

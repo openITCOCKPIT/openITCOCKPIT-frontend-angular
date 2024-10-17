@@ -1,4 +1,13 @@
-import { Component, inject, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    Pipe,
+    PipeTransform
+} from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -58,7 +67,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -99,7 +108,8 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         DropdownDividerDirective
     ],
     templateUrl: './usergroups-add.component.html',
-    styleUrl: './usergroups-add.component.css'
+    styleUrl: './usergroups-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected readonly keepOrder = keepOrder;
@@ -118,7 +128,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
     protected post: UsergroupsAddRoot = this.getDefaultPost() as UsergroupsAddRoot;
-
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadAcos();
@@ -128,6 +138,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     private loadAcos(): void {
         this.subscriptions.add(this.UsergroupsService.loadAcos().subscribe((acoRoot: AcoRoot) => {
             this.acos = acoRoot;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -155,6 +166,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected loadLdapGroups = (search: string = '') => {
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -162,8 +174,9 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UsergroupsService.addUsergroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
-                    const response: {usergroup: GenericIdResponse} = result.data as {usergroup: GenericIdResponse};
+                    const response: { usergroup: GenericIdResponse } = result.data as { usergroup: GenericIdResponse };
 
                     const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('added successfully');
@@ -225,9 +238,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.cdr.markForCheck();
     };
 
 }
+
 const keepOrder = (a: any, b: any) => a;
 
 // This pipe uses the angular keyvalue pipe. but doesn't change order.
@@ -236,9 +251,7 @@ const keepOrder = (a: any, b: any) => a;
     name: 'defaultOrderKeyvalue'
 })
 export class DefaultOrderKeyValuePipe extends KeyValuePipe implements PipeTransform {
-
     override transform(value: any, ...args: any[]): any {
         return super.transform(value, keepOrder);
     }
-
 }

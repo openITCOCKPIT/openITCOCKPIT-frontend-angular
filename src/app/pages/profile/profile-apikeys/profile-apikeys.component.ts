@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     ButtonCloseDirective,
@@ -27,7 +27,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -59,7 +58,7 @@ import { UsersService } from '../../users/users.service';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -92,7 +91,8 @@ import { UsersService } from '../../users/users.service';
         ModalToggleDirective
     ],
     templateUrl: './profile-apikeys.component.html',
-    styleUrl: './profile-apikeys.component.css'
+    styleUrl: './profile-apikeys.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileApikeysComponent implements OnInit, OnDestroy {
 
@@ -117,6 +117,7 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadApiKeys();
@@ -125,6 +126,7 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public loadApiKeys() {
         this.subscriptions.add(this.ProfileService.getApiKeys().subscribe(data => {
             this.Apikeys = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -135,6 +137,7 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public loadNewApiKey() {
         this.subscriptions.add(this.ProfileService.generateNewApiKey()
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 const currentDescription = this.ApikeyCreatePost.description;
                 this.ApikeyCreatePost = result;
                 this.ApikeyCreatePost.description = currentDescription;
@@ -145,6 +148,7 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public submitNewApiKey() {
         this.subscriptions.add(this.ProfileService.saveNewApiKey(this.ApikeyCreatePost.description)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericMessageResponse;
 
@@ -177,6 +181,8 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public editApiKey(id: number) {
         this.subscriptions.add(this.ProfileService.getApiKeyEdit(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.ApiKeyEditPost = result.apikey;
                 this.ApiKeyEditQrCode = result.qrcode;
 
@@ -191,6 +197,8 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
     public deleteApiKey(id: number) {
         this.subscriptions.add(this.ProfileService.deleteApiKey(id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const response = result.data as GenericMessageResponse;
 
@@ -218,6 +226,8 @@ export class ProfileApikeysComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.ProfileService.updateApiKey(this.ApiKeyEditPost.id, this.ApiKeyEditPost.description)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
+
                     if (result.success) {
                         const response = result.data as GenericMessageResponse;
 

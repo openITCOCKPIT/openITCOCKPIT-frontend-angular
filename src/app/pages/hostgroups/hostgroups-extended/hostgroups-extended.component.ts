@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -135,7 +135,7 @@ import { ServicesService } from '../../services/services.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormDirective,
@@ -194,14 +194,16 @@ import { ServicesService } from '../../services/services.service';
         FormCheckLabelDirective,
         NgClass,
         SlaHostgroupHostsStatusOverviewComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        AsyncPipe
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [
         {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
@@ -273,6 +275,12 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             }
         }
     };
+    public selectedItems: any[] = [];
+    public hostParams: HostgroupsExtendedParams = getDefaultHostgroupsExtendedParams();
+    protected readonly AcknowledgementTypes = AcknowledgementTypes;
+    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         // Fetch the id from the URL
@@ -283,6 +291,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         if (selectedTab !== null) {
             this.changeTab(selectedTab as HostgroupExtendedTabs);
         }
+        this.cdr.markForCheck();
 
         // Fetch the users timezone
         this.getUserTimezone();
@@ -301,7 +310,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadAdditionalInformation();
     }
 
-    public selectedItems: any[] = [];
 
     public toggleResetCheckModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host) => {
@@ -333,6 +341,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private loadHostgroupExtended(): void {
         this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams)
             .subscribe((result: HostgroupExtendedRoot) => {
+                this.cdr.markForCheck();
                 // Then put post where it belongs. Also unpack that bullshit
                 this.hostgroupExtended = result.hostgroup;
                 this.userFullname = result.username;
@@ -364,6 +373,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             .subscribe((result: SelectKeyValue[]) => {
                 // Put the hostgroups to the instance
                 this.hostgroups = result;
+                this.cdr.markForCheck();
 
                 // Then load the selected data.
                 this.onHostgroupChange();
@@ -373,6 +383,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     private loadAdditionalInformation(): void {
         this.subscriptions.add(this.HostgroupsService.loadAdditionalInformation(this.hostgroupId)
             .subscribe((result: HostgroupAdditionalInformation) => {
+                this.cdr.markForCheck();
                 this.AdditionalInformationExists = result.AdditionalInformationExists;
             }));
     }
@@ -412,6 +423,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
         // open modal
         this.modalService.toggle({
             show: true,
@@ -419,6 +431,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     public toggleDeleteAllServicesModal(service?: ServicesList) {
         let items: DeleteAllItem[] = [];
         // Override the used service to be ServicesService.
@@ -449,6 +462,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     public toggleDowntimeModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDowntimeItem => {
             return {
@@ -473,6 +487,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
 
+    // Called by (click) - no manual change detection required
     public disableNotifications() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostDisableNotificationsItem => {
             return {
@@ -494,6 +509,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     public enableNotifications() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host): HostEnableNotificationsItem => {
             return {
@@ -515,6 +531,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleHostServicelist(hostId: number): void {
         this.hostgroupExtended.Hosts.map((element) => {
             if (element.Host.id !== hostId) {
@@ -528,6 +545,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         })
     }
 
+    // Called by (click) - no manual change detection required
     private loadServicesList(element: HostGroupExtendedHost): void {
         element.serviceParams['filter[Servicestatus.current_state][]'] = [];
         if (element.Servicestatus.current_state.ok) {
@@ -551,8 +569,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
 
-    private readonly TimezoneService: TimezoneService = inject(TimezoneService);
-
+    // Called by (click) - no manual change detection required
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
@@ -579,8 +596,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.loadServicesList(element);
     }
 
-    public hostParams: HostgroupsExtendedParams = getDefaultHostgroupsExtendedParams();
-
     // Callback for Paginator or Scroll Index Component
     public onHostPaginatorChange(change: PaginatorChangeEvent): void {
         this.hostParams.page = change.page;
@@ -593,8 +608,6 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         host.serviceParams.scroll = change.scroll;
         this.loadServicesList(host);
     }
-
-    protected readonly AcknowledgementTypes = AcknowledgementTypes;
 
     public toggleDisableModal(host?: HostObject) {
         let items: DisableItem[] = [];
@@ -619,6 +632,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: true,
@@ -626,6 +640,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         });
     }
 
+    // Called by (click) - no manual change detection required
     public acknowledgeStatus() {
         let items: HostAcknowledgeItem[] = this.hostgroupExtended.Hosts.map((host: HostGroupExtendedHost): HostAcknowledgeItem => {
             return {
@@ -653,6 +668,4 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     public changeTab(newTab: HostgroupExtendedTabs): void {
         this.selectedTab = newTab;
     }
-
-    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
 }

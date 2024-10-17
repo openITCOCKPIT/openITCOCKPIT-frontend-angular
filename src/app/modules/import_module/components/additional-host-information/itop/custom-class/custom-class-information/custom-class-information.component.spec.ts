@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CustomClassInformationComponent } from './custom-class-information.component';
 
 describe('CustomClassInformationComponent', () => {
-  let component: CustomClassInformationComponent;
-  let fixture: ComponentFixture<CustomClassInformationComponent>;
+    let component: CustomClassInformationComponent;
+    let fixture: ComponentFixture<CustomClassInformationComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CustomClassInformationComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CustomClassInformationComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(CustomClassInformationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(CustomClassInformationComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

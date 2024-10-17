@@ -1,5 +1,5 @@
-import {inject, Injectable} from '@angular/core';
-import {PROXY_PATH} from '../../tokens/proxy-path.token';
+import { inject, Injectable } from '@angular/core';
+import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { HttpClient } from '@angular/common/http';
 import {
     ServiceTemplateGroupsIndexRoot,
@@ -20,9 +20,9 @@ import {
     AllocateToHostGet,
     AllocateToMatchingHostgroupResponse, LoadHostsByStringResponse
 } from './servicetemplategroups.interface';
-import {catchError, map, Observable, of} from 'rxjs';
-import {GenericIdResponse, GenericResponseWrapper, GenericValidationError} from '../../generic-responses';
-import {DeleteAllItem} from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -73,7 +73,7 @@ export class ServicetemplategroupsService {
         return this.http.get<LoadContainersRoot>(`${proxyPath}/servicetemplategroups/loadContainers.json?angular=true`);
     }
 
-    public loadServicetemplatesByContainerId(containerId: number, servicetemplatesTemplateName: string, selected:number[]): Observable<LoadServiceTemplatesRoot> {
+    public loadServicetemplatesByContainerId(containerId: number, servicetemplatesTemplateName: string, selected: number[]): Observable<LoadServiceTemplatesRoot> {
         const proxyPath: string = this.proxyPath;
         let selectedString = '';
         for (let i = 0; i < selected.length; i++) {

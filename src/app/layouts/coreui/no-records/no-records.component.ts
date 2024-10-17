@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular';
 
@@ -12,7 +12,8 @@ import { ColComponent, ContainerComponent, RowComponent } from '@coreui/angular'
         RowComponent
     ],
     templateUrl: './no-records.component.html',
-    styleUrl: './no-records.component.css'
+    styleUrl: './no-records.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoRecordsComponent {
 

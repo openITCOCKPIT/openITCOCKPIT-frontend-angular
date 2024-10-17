@@ -1,4 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PrometheusAlertRule, PrometheusMetricDetails } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { ColComponent, RowComponent, TableDirective } from '@coreui/angular';
@@ -20,7 +30,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './prometheus-service-browser.component.html',
-    styleUrl: './prometheus-service-browser.component.css'
+    styleUrl: './prometheus-service-browser.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrometheusServiceBrowserComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -36,6 +47,8 @@ export class PrometheusServiceBrowserComponent implements OnInit, OnDestroy, OnC
 
     private subscriptions: Subscription = new Subscription();
     private readonly PrometheusQueryService = inject(PrometheusQueryService);
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit(): void {
     }
@@ -72,6 +85,7 @@ export class PrometheusServiceBrowserComponent implements OnInit, OnDestroy, OnC
 
                 return metricDetails;
             });
+            this.cdr.markForCheck();
         }));
     }
 

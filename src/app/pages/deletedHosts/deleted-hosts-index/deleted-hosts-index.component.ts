@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -66,7 +66,7 @@ import { IndexPage } from '../../../pages.interface';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -99,7 +99,8 @@ import { IndexPage } from '../../../pages.interface';
         RegexHelperTooltipComponent
     ],
     templateUrl: './deleted-hosts-index.component.html',
-    styleUrl: './deleted-hosts-index.component.css'
+    styleUrl: './deleted-hosts-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeletedHostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -112,6 +113,7 @@ export class DeletedHostsIndexComponent implements OnInit, OnDestroy, IndexPage 
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.load();
@@ -125,6 +127,7 @@ export class DeletedHostsIndexComponent implements OnInit, OnDestroy, IndexPage 
         this.subscriptions.add(this.DeletedHostsService.getIndex(this.params)
             .subscribe((result) => {
                 this.deletedHosts = result;
+                this.cdr.markForCheck();
             })
         );
     }

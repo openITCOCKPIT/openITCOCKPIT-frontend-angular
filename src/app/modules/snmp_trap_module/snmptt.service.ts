@@ -8,7 +8,7 @@ import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delet
 @Injectable({
     providedIn: 'root'
 })
-export class SnmpttService implements DeleteAllModalService{
+export class SnmpttService implements DeleteAllModalService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 

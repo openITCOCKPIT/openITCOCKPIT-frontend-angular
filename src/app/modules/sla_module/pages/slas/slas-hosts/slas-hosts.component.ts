@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
@@ -36,7 +36,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -63,7 +63,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -96,13 +96,15 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         FaStackComponent,
         FaStackItemSizeDirective,
         BackButtonDirective,
-        AlertComponent
+        AlertComponent,
+        AsyncPipe
     ],
     templateUrl: './slas-hosts.component.html',
     styleUrl: './slas-hosts.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SlasService} // Inject the ContactsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasHostsComponent implements OnInit, OnDestroy {
 
@@ -118,9 +120,11 @@ export class SlasHostsComponent implements OnInit, OnDestroy {
     public slaAndHosts?: SlasHostsRoot;
     public params: SlasHostsParams = getDefaultSlasHostsParams();
     protected slaId: number = 0;
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.slaId = Number(this.route.snapshot.paramMap.get('id'));
+        this.cdr.markForCheck();
         this.loadSlaHosts();
     }
 
@@ -132,6 +136,7 @@ export class SlasHostsComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SlasService.getSlaHosts(this.slaId, this.params)
             .subscribe((result: SlasHostsRoot) => {
                 this.slaAndHosts = result;
+                this.cdr.markForCheck();
             }));
 
     }

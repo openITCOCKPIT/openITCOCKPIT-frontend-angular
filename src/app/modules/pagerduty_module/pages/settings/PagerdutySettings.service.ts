@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { PagerdutySettings, PagerdutySettingsGet, PagerdutySettingsPostResponse } from './PagerdutySettings.interface';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,7 @@ export class PagerdutySettingsService {
                 // Return true on 200 Ok
                 return {
                     success: true,
-                    data: data.settings  as PagerdutySettings
+                    data: data.settings as PagerdutySettings
                 };
             }),
             catchError((error: any) => {

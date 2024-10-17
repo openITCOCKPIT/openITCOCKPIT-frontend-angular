@@ -169,6 +169,7 @@ export class ContactsService implements DeleteAllModalService {
         const proxyPath: string = this.proxyPath;
         return this.http.get<LoadContainersRoot>(`${proxyPath}/contacts/loadContainers.json?angular=true`);
     }
+
     public loadUsersByContainerId(params: LoadUsersByContainerIdRequest): Observable<LoadUsersByContainerId> {
         const proxyPath = this.proxyPath;
         return this.http.get<LoadUsersByContainerId>(`${proxyPath}/contacts/loadUsersByContainerId.json?angular=true`, {

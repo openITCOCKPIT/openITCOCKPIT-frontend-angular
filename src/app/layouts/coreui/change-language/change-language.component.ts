@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
     DropdownComponent,
@@ -20,7 +20,8 @@ import { IconDirective } from '@coreui/icons-angular';
         TranslocoDirective
     ],
     templateUrl: './change-language.component.html',
-    styleUrl: './change-language.component.css'
+    styleUrl: './change-language.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangeLanguageComponent {
     public currentLanguage = 'en_US';

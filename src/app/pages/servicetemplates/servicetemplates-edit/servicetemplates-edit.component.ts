@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -29,7 +29,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -71,7 +71,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -104,10 +104,12 @@ import { HistoryService } from '../../../history.service';
         NgClass,
         ObjectUuidComponent,
         FormLoaderComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        AsyncPipe
     ],
     templateUrl: './servicetemplates-edit.component.html',
-    styleUrl: './servicetemplates-edit.component.css'
+    styleUrl: './servicetemplates-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
     public servicetemplateTypes: ServicetemplateTypeResult[] = [];
@@ -138,6 +140,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
     }
@@ -159,6 +162,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
 
                 this.loadContainers(id);
                 this.loadElements();
+                this.cdr.markForCheck();
             }));
     }
 
@@ -171,12 +175,14 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplatesService.loadContainers(servicetemplateId)
             .subscribe((result) => {
                 this.containers = result;
+                this.cdr.markForCheck();
             })
         );
     }
 
     private setDetailsForType() {
         this.typeDetails = this.servicetemplateTypes.find(type => type.key === this.post.servicetemplatetype_id)?.value;
+        this.cdr.markForCheck();
     };
 
     private loadElements() {
@@ -188,6 +194,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicetemplatesService.loadElements(containerId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.timeperiods = result.timeperiods;
                 this.checkperiods = result.checkperiods;
                 this.contacts = result.contacts;
@@ -210,6 +217,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplatesService.loadCommandArguments(commandId, servicetemplateId)
             .subscribe((result) => {
                 this.post.servicetemplatecommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -221,6 +229,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
 
         if (!eventHandlerCommandId || !servicetemplateId) {
             //"None" selected
+            this.cdr.markForCheck();
             this.post.servicetemplateeventcommandargumentvalues = [];
             return;
         }
@@ -228,6 +237,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicetemplatesService.loadEventHandlerCommandArguments(eventHandlerCommandId, servicetemplateId)
             .subscribe((result) => {
                 this.post.servicetemplateeventcommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -259,23 +269,12 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
-    }
-
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -284,6 +283,7 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.ServicetemplatesService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service template');
