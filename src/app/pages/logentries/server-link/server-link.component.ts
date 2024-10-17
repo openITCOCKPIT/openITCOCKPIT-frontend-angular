@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    Input
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,7 +14,8 @@ import { Router } from '@angular/router';
     standalone: true,
     imports: [],
     templateUrl: './server-link.component.html',
-    styleUrl: './server-link.component.css'
+    styleUrl: './server-link.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServerLinkComponent implements AfterViewInit {
 
@@ -14,6 +23,9 @@ export class ServerLinkComponent implements AfterViewInit {
 
     constructor(private router: Router, private ref: ElementRef) {
     }
+
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngAfterViewInit(): void {
         // This is a workaround to make the routerLink directive work in dynamic HTML

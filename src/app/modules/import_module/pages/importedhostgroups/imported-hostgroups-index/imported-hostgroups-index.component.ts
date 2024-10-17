@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -81,7 +81,7 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -130,7 +130,8 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
     ],
     templateUrl: './imported-hostgroups-index.component.html',
-    styleUrl: './imported-hostgroups-index.component.css'
+    styleUrl: './imported-hostgroups-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
@@ -150,6 +151,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public allImportedGroups?: ImportedhostgroupsIndexRoot;
     private readonly notyService = inject(NotyService);
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
     }
@@ -186,6 +188,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
                 this.allImportedGroups = result;
                 this.importedhostgroups = result.importedhostgroups;
                 this.externalSystems = result.externalSystems;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -240,6 +243,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({
@@ -258,6 +262,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public synchronizeWithMonitoring() {
         this.subscriptions.add(this.ImportedhostgroupsService.synchronizeWithMonitoring()
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
                     return;

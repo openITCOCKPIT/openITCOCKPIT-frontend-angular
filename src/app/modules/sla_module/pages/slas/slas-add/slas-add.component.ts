@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SlasService } from '../Slas.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -64,7 +64,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
@@ -98,9 +98,11 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
         FaStackComponent,
         FaStackItemSizeDirective,
         PermissionDirective,
+        AsyncPipe,
     ],
     templateUrl: './slas-add.component.html',
     styleUrl: './slas-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlasAddComponent implements OnInit, OnDestroy {
 
@@ -152,6 +154,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
         pdf: 1 << 1,
         zip: 1 << 2
     };
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -189,6 +192,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
     public submit(redirectToHostMappingRules: boolean = false): void {
         this.subscriptions.add(this.SlasService.add(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as SlaPostResponse;
                     const title = this.TranslocoService.translate('SLA');
@@ -221,6 +225,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SlasService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -235,6 +240,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.SlasService.loadUsers(params)
                 .subscribe((result: LoadUsersRoot) => {
                     this.users = result.users;
+                    this.cdr.markForCheck();
                 }))
         }
     }
@@ -249,6 +255,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.SlasService.loadTimeperiods(params)
                 .subscribe((result: LoadTimeperiodsRoot) => {
                     this.timeperiods = result.timeperiods;
+                    this.cdr.markForCheck();
                 }))
         }
     }
@@ -265,6 +272,7 @@ export class SlasAddComponent implements OnInit, OnDestroy {
             this.post.report_format = 2;
             this.files = [];
             this.send_zip = 0;
+            this.cdr.markForCheck();
         }
     }
 
@@ -276,5 +284,6 @@ export class SlasAddComponent implements OnInit, OnDestroy {
             return a | b;
         }, 0);
         this.post.report_format |= this.send_zip;
+        this.cdr.markForCheck();
     }
 }

@@ -1,4 +1,15 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -41,7 +52,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './delete-all-modal.component.html',
-    styleUrl: './delete-all-modal.component.css'
+    styleUrl: './delete-all-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
@@ -59,7 +71,9 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
     @ViewChild('modal') private modal!: ModalComponent;
+
 
     constructor(@Inject(DELETE_SERVICE_TOKEN) private deleteService: any) {
     }
@@ -79,6 +93,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,
@@ -131,6 +146,7 @@ export class DeleteAllModalComponent implements OnInit, OnDestroy {
 
                 },
                 error: (error: HttpErrorResponse) => {
+                    this.cdr.markForCheck();
                     const responseError = error.error as DeleteAllResponse;
                     issueCount++
                     this.hasErrors = true;

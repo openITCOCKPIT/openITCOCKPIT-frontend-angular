@@ -1,5 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -36,7 +35,7 @@ import { ProxyService } from '../proxy.service';
     selector: 'oitc-proxy-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -63,7 +62,8 @@ import { ProxyService } from '../proxy.service';
         XsButtonDirective
     ],
     templateUrl: './proxy-index.component.html',
-    styleUrl: './proxy-index.component.css'
+    styleUrl: './proxy-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProxyIndexComponent implements OnInit, OnDestroy {
 
@@ -78,11 +78,13 @@ export class ProxyIndexComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private ProxyService = inject(ProxyService);
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.subscriptions.add(
             this.ProxyService.getProxySettings().subscribe(data => {
                 this.post = data;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -96,6 +98,8 @@ export class ProxyIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(
             this.ProxyService.saveProxySettings(this.post).subscribe(data => {
+                this.cdr.markForCheck();
+
                 if (data.success) {
                     this.notyService.genericSuccess();
                 } else {

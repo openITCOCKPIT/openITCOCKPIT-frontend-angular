@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     BadgeComponent,
@@ -76,7 +76,7 @@ import { saveAs } from 'file-saver';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -121,7 +121,8 @@ import { saveAs } from 'file-saver';
         AlertComponent
     ],
     templateUrl: './currentstatereports-index.component.html',
-    styleUrl: './currentstatereports-index.component.css'
+    styleUrl: './currentstatereports-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
     public TranslocoService: TranslocoService = inject(TranslocoService);
@@ -169,6 +170,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
     private readonly ServicesService: ServicesService = inject(ServicesService);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.loadServices('');
@@ -194,6 +196,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ServicesService.loadServicesByString(params)
             .subscribe((result) => {
                 this.services = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -240,6 +243,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.CurrentstatereportsService.validateReportFormForPdf(params)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
                         // Success - Form data is valid - now we can generate the report
                         const filename = result.data.filename;
@@ -315,6 +319,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
 
             this.subscriptions.add(this.CurrentstatereportsService.createReportHtml(params)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     this.isGeneratingReport = false;
                     if (result.success) {
                         // Success

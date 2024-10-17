@@ -1,104 +1,103 @@
-<oitc-coreui>
-    <ng-container *transloco="let t">
-        <nav aria-label="breadcrumb" class="mt-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a [routerLink]="['/']">
-                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        {{ t('Home') }}
-                    </a></li>
-                <li class="breadcrumb-item">
-                    <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                        <fa-icon [icon]="['fas', 'globe']"></fa-icon>
-                        {{ t('HTTP-Proxy') }}
-                    </a>
-                </li>
-                <li aria-current="page" class="breadcrumb-item active">
-                    <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
-                    {{ t('Configuration') }}
-                </li>
-            </ol>
-        </nav>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
+                    <fa-icon [icon]="['fas', 'globe']"></fa-icon>
+                    {{ t('HTTP-Proxy') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                {{ t('Configuration') }}
+            </li>
+        </ol>
+    </nav>
 
-        <form cForm (ngSubmit)="submit()">
-            <c-card class="mb-3">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('HTTP-Proxy') }}
-                        <small class="fw-300">
-                            {{ t('Edit configuration') }}
-                        </small>
-                    </h5>
-                </c-card-header>
-                <c-card-body>
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('HTTP-Proxy') }}
+                    <small class="fw-300">
+                        {{ t('Edit configuration') }}
+                    </small>
+                </h5>
+            </c-card-header>
+            <c-card-body>
 
-                    <div class="row">
-                        <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
 
-                            <div class="mb-3">
-                                <label cLabel for="ipaddress">
-                                    {{ t('IP address') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <input cFormControl id="ipaddress" required type="text"
-                                       name="ipaddress"
-                                       placeholder="proxy.example.org"
-                                       oitcFormError [errors]="errors" errorField="ipaddress"
-                                       [(ngModel)]="post.ipaddress">
-                                <oitc-form-feedback [errors]="errors" errorField="ipaddress"></oitc-form-feedback>
-                            </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="port">
-                                    {{ t('Port') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <input cFormControl id="port" required type="number"
-                                       name="port"
-                                       min="1"
-                                       max="65535"
-                                       placeholder="8080"
-                                       oitcFormError [errors]="errors" errorField="port"
-                                       [(ngModel)]="post.port">
-                                <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
-                            </div>
-
-                            <div class="mb-3">
-                                <c-form-check>
-                                    <input
-                                        cFormCheckInput
-                                        name="enabled"
-                                        id="enabled"
-                                        type="checkbox"
-                                        oitcFormError [errors]="errors" errorField="enabled"
-                                        [(ngModel)]="post.enabled"/>
-                                    <label cFormCheckLabel for="enabled">
-                                        {{ t('Enable proxy') }}
-                                    </label>
-                                </c-form-check>
-                                <oitc-form-feedback [errors]="errors" errorField="enabled"></oitc-form-feedback>
-                                <div class="help-block">
-                                    {{ t('If disabled the proxy server will not be used.') }}
-                                </div>
-                            </div>
-
+                        <div class="mb-3">
+                            <label cLabel for="ipaddress">
+                                {{ t('IP address') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="ipaddress" required type="text"
+                                   name="ipaddress"
+                                   placeholder="proxy.example.org"
+                                   oitcFormError [errors]="errors" errorField="ipaddress"
+                                   [(ngModel)]="post.ipaddress">
+                            <oitc-form-feedback [errors]="errors" errorField="ipaddress"></oitc-form-feedback>
                         </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="port">
+                                {{ t('Port') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="port" required type="number"
+                                   name="port"
+                                   min="1"
+                                   max="65535"
+                                   placeholder="8080"
+                                   oitcFormError [errors]="errors" errorField="port"
+                                   [(ngModel)]="post.port">
+                            <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
+                        </div>
+
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="enabled"
+                                    id="enabled"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="enabled"
+                                    [(ngModel)]="post.enabled"/>
+                                <label cFormCheckLabel for="enabled">
+                                    {{ t('Enable proxy') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors" errorField="enabled"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If disabled the proxy server will not be used.') }}
+                            </div>
+                        </div>
+
                     </div>
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <button cButton class="ripple" color="primary" type="submit">
-                        {{ t('Save configuration') }}
-                    </button>
-                    <button [fallbackUrl]="['dashboards', 'index']" cButton class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
+                </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save configuration') }}
+                </button>
+                <button [fallbackUrl]="['dashboards', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
 
 
-                </c-card-footer>
-            </c-card>
-        </form>
+            </c-card-footer>
+        </c-card>
+    </form>
 
-    </ng-container>
-</oitc-coreui>
+</ng-container>
+

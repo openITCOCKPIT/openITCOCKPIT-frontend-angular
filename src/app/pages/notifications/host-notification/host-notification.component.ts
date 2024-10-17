@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -66,7 +66,7 @@ import {
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -105,7 +105,8 @@ import {
         CardFooterComponent
     ],
     templateUrl: './host-notification.component.html',
-    styleUrl: './host-notification.component.css'
+    styleUrl: './host-notification.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostNotificationComponent implements OnInit, OnDestroy {
     private hostId: number = 0;
@@ -126,6 +127,8 @@ export class HostNotificationComponent implements OnInit, OnDestroy {
 
     public hostBrowserConfig?: HostBrowserMenuConfig;
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit(): void {
         this.hostId = Number(this.route.snapshot.paramMap.get('id'));
         this.loadNotifications();
@@ -136,6 +139,7 @@ export class HostNotificationComponent implements OnInit, OnDestroy {
             showReschedulingButton: false,
             showBackButton: true
         };
+        this.cdr.markForCheck();
 
     }
 
@@ -151,6 +155,7 @@ export class HostNotificationComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.NotificationsService.getHostNotifications(this.hostId, this.params)
             .subscribe((result) => {
                 this.notifications = result;
+                this.cdr.markForCheck();
             })
         );
     }

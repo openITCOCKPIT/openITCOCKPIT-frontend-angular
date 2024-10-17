@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     ButtonGroupComponent,
@@ -33,7 +41,8 @@ import { HumanTimeComponent } from './human-time/human-time.component';
         InputGroupComponent
     ],
     templateUrl: './interval-input.component.html',
-    styleUrl: './interval-input.component.css'
+    styleUrl: './interval-input.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IntervalInputComponent {
     private readonly TranslocoService = inject(TranslocoService);
@@ -46,6 +55,8 @@ export class IntervalInputComponent {
     /** The selected interval in seconds */
     @Input() public selectedInterval: number = 0;
     @Output() selectedIntervalChange = new EventEmitter<number>();
+
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         this.interval = [
@@ -110,6 +121,7 @@ export class IntervalInputComponent {
                 long: this.TranslocoService.translate('4 hours')
             },
         ];
+        //this.cdr.markForCheck();
     }
 
     public updateInterval() {

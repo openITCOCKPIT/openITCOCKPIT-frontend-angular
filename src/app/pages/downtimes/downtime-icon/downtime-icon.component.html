@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @if (this.PermissionsService.hasPermission([type, 'browser'])) {
+    @if (this.PermissionsService.hasPermissionObservable([type, 'browser'])|async) {
 
         <span
             (mouseenter)="loadDowntimeDetails()"

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import {
     CardBodyComponent,
@@ -54,7 +54,8 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
         DependencyTreeComponent
     ],
     templateUrl: './itop-overview.component.html',
-    styleUrl: './itop-overview.component.css'
+    styleUrl: './itop-overview.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItopOverviewComponent {
 
@@ -63,8 +64,10 @@ export class ItopOverviewComponent {
     @Input() public hostname: string = '';
 
     public selectedTab: 'information' | 'dependencyTree' = 'information';
+    private cdr = inject(ChangeDetectorRef);
 
     public setSelectedTab(newTab: 'information' | 'dependencyTree'): void {
         this.selectedTab = newTab;
+        this.cdr.markForCheck();
     }
 }

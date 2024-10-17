@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -41,7 +41,7 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
     selector: 'oitc-imported-hostgroups-view',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -76,7 +76,8 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
         FormSelectDirective
     ],
     templateUrl: './imported-hostgroups-view.component.html',
-    styleUrl: './imported-hostgroups-view.component.css'
+    styleUrl: './imported-hostgroups-view.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportedHostgroupsViewComponent implements OnInit, OnDestroy {
     public id: number = 0;
@@ -89,6 +90,7 @@ export class ImportedHostgroupsViewComponent implements OnInit, OnDestroy {
 
     private ImportedhostgroupsService = inject(ImportedhostgroupsService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -107,6 +109,7 @@ export class ImportedHostgroupsViewComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.containerPath = result.containerPath;
+                this.cdr.markForCheck();
             }));
     }
 

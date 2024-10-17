@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import {
     DropdownComponent,
     DropdownItemDirective,
@@ -23,12 +31,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './dropdown-colorpicker.component.html',
-    styleUrl: './dropdown-colorpicker.component.css'
+    styleUrl: './dropdown-colorpicker.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DropdownColorpickerComponent {
 
     @Input() colors: string[] = [];
     @Output() selectedColor = new EventEmitter<string>();
+
+    private cdr = inject(ChangeDetectorRef);
 
     selectColor(color: string) {
         this.selectedColor.emit(color);

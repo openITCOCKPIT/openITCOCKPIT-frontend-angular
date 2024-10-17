@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -46,7 +46,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -65,7 +65,8 @@ import { HistoryService } from '../../../history.service';
         NgIf
     ],
     templateUrl: './servicetemplates-copy.component.html',
-    styleUrl: './servicetemplates-copy.component.css'
+    styleUrl: './servicetemplates-copy.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     public servicetemplates: ServicetemplateCopyPost[] = [];
@@ -78,6 +79,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
@@ -107,6 +109,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
 
                 this.commands = response.commands;
                 this.eventhandlerCommands = response.eventhandlerCommands;
+                this.cdr.markForCheck();
             }));
         }
     }
@@ -118,10 +121,12 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     public loadCommandArguments(sourceServicetemplateId: number, commandId: number, index: number) {
         this.subscriptions.add(this.ServicetemplatesService.loadCommandArguments(commandId, sourceServicetemplateId).subscribe(response => {
             this.servicetemplates[index].Servicetemplate.servicetemplatecommandargumentvalues = response;
+            this.cdr.markForCheck();
         }));
     }
 
     private removeFieldsFromServicetemplatecommandargumentvalues(servicetemplatecommandargumentvalues: ServicetemplateCommandArgument[]) {
+        this.cdr.markForCheck();
         if (servicetemplatecommandargumentvalues.length === 0) {
             return [];
         }
@@ -149,6 +154,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
                 //
                 // The Server returns everything as the frontend expect it
 
+                this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.servicetemplates = error.error.result as ServicetemplateCopyPost[];
             }

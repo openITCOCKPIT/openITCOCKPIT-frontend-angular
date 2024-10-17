@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -13,7 +13,6 @@ import {
     FormDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -39,7 +38,7 @@ import { GenericValidationError } from '../../../../../generic-responses';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -57,7 +56,8 @@ import { GenericValidationError } from '../../../../../generic-responses';
         RouterLink
     ],
     templateUrl: './msteamssettings-index.component.html',
-    styleUrl: './msteamssettings-index.component.css'
+    styleUrl: './msteamssettings-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MsteamssettingsIndexComponent implements OnInit, OnDestroy {
 
@@ -68,10 +68,12 @@ export class MsteamssettingsIndexComponent implements OnInit, OnDestroy {
 
     protected post: TeamsSettings = {} as TeamsSettings;
     protected errors: GenericValidationError | null = null;
+    private cdr = inject(ChangeDetectorRef);
 
     protected submit(): void {
         this.subscriptions.add(
             this.MsteamssettingsService.saveMsteamsSettings(this.post).subscribe((response) => {
+                this.cdr.markForCheck();
                 if (response.success) {
                     this.errors = null;
                     this.notyService.genericSuccess();
@@ -87,6 +89,7 @@ export class MsteamssettingsIndexComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.MsteamssettingsService.getMsteamsSettings().subscribe((data: TeamsSettings) => {
                 this.post = data;
+                this.cdr.markForCheck();
             })
         );
     }

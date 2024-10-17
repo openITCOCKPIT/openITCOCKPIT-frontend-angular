@@ -1,4 +1,13 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    forwardRef,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { DynamicalFormField } from './dynamical-form-fields.interface';
 import { DebounceDirective } from '../../directives/debounce.directive';
 import {
@@ -52,6 +61,7 @@ import { SelectComponent } from '../../layouts/primeng/select/select/select.comp
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicalFormFieldsComponent implements ControlValueAccessor {
     @Input() public errors: GenericValidationError | null = null;
@@ -69,6 +79,7 @@ export class DynamicalFormFieldsComponent implements ControlValueAccessor {
 
 
     protected readonly Object = Object;
+    private cdr = inject(ChangeDetectorRef);
 
 
     //  Updates the component's value.

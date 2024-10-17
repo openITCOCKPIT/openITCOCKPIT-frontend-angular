@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { NgClass, NgIf } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
@@ -14,7 +14,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         FaIconComponent
     ],
     templateUrl: './servicestatus-simple-icon.component.html',
-    styleUrl: './servicestatus-simple-icon.component.css'
+    styleUrl: './servicestatus-simple-icon.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicestatusSimpleIconComponent {
     private readonly TranslocoService = inject(TranslocoService);
@@ -22,6 +23,7 @@ export class ServicestatusSimpleIconComponent {
     public state?: number = -1; //Not found in monitoring
     public isHardstate: boolean = true;
     public humanState: string = this.TranslocoService.translate('not in monitoring');
+    private cdr = inject(ChangeDetectorRef);
 
     @Input()
     set servicestatus(value: number | undefined) {
@@ -48,6 +50,7 @@ export class ServicestatusSimpleIconComponent {
                     this.humanState = this.TranslocoService.translate('unknown');
                     break;
             }
+            this.cdr.markForCheck();
         }
     }
 

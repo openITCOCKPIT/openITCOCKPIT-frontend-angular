@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
@@ -8,7 +8,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         SkeletonModule
     ],
     templateUrl: './block-loader.component.html',
-    styleUrl: './block-loader.component.css'
+    styleUrl: './block-loader.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 // This loader can be used to show a block of data that is being loaded.

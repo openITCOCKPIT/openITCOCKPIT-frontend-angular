@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -42,7 +42,7 @@ import { HistoryService } from '../../../history.service';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -66,7 +66,8 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent
     ],
     templateUrl: './system-health-users-add.component.html',
-    styleUrl: './system-health-users-add.component.css'
+    styleUrl: './system-health-users-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemHealthUsersAddComponent implements OnInit, OnDestroy {
     private readonly SystemHealthUsersService: SystemHealthUsersService = inject(SystemHealthUsersService);
@@ -78,7 +79,7 @@ export class SystemHealthUsersAddComponent implements OnInit, OnDestroy {
     protected post: SystemHealthUserAdd = this.getClearForm();
     protected users: User[] = [];
     protected createAnother: boolean = false;
-
+    private cdr = inject(ChangeDetectorRef);
 
     public getClearForm(): SystemHealthUserAdd {
         return {
@@ -92,6 +93,7 @@ export class SystemHealthUsersAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.SystemHealthUsersService.createSystemHealthUsers(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -132,6 +134,7 @@ export class SystemHealthUsersAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SystemHealthUsersService.loadUsers()
             .subscribe((result: LoadUsersRoot) => {
                 this.users = result.users;
+                this.cdr.markForCheck();
             })
         );
     }

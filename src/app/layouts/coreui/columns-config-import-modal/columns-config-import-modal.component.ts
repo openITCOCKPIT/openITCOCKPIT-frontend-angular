@@ -23,7 +23,16 @@
  *     confirmation.
  */
 
-import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective,
@@ -60,7 +69,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './columns-config-import-modal.component.html',
-    styleUrl: './columns-config-import-modal.component.css'
+    styleUrl: './columns-config-import-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnsConfigImportModalComponent {
     public configString: string = '';
@@ -71,16 +81,21 @@ export class ColumnsConfigImportModalComponent {
     @Output() toImport = new EventEmitter<boolean[]>();
     private readonly modalService = inject(ModalService);
     @ViewChild('modal') private modal!: ModalComponent;
+    private cdr = inject(ChangeDetectorRef);
 
     public hideModal() {
         this.error = false;
         this.configString = '';
+
+        this.cdr.markForCheck();
+
         this.modalService.toggle({
             show: false,
             id: 'columnsConfigImportModal'
         });
     }
 
+    // Called by (click) - no manual change detection required
     public sendConfig() {
         try {
             var configObject = JSON.parse(this.configString);

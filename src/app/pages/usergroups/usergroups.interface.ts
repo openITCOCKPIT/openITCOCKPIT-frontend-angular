@@ -148,7 +148,7 @@ export interface AcoRoot {
 export interface child {
     id: number
     parent_id: number
-    model:  any
+    model: any
     foreign_key: any
     alias: string
     lft: number

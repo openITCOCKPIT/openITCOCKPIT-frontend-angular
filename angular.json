@@ -5,7 +5,13 @@
     "projects": {
         "frontend-angular": {
             "projectType": "application",
-            "schematics": {},
+            "schematics": {
+                "@schematics/angular": {
+                    "component": {
+                        "changeDetection": "OnPush"
+                    }
+                }
+            },
             "root": "",
             "sourceRoot": "src",
             "i18n": {
@@ -40,7 +46,6 @@
                             "src/material.scss"
                         ],
                         "scripts": [
-                            "src/peter.js"
                         ],
                         "loader": {
                             ".svg": "text"

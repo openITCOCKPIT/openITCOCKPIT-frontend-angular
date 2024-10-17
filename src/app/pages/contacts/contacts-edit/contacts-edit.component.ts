@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     BadgeComponent,
@@ -63,7 +63,7 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -93,14 +93,13 @@ import { HistoryService } from '../../../history.service';
         FormLoaderComponent
     ],
     templateUrl: './contacts-edit.component.html',
-    styleUrl: './contacts-edit.component.css'
+    styleUrl: './contacts-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsEditComponent implements OnInit, OnDestroy {
-
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     protected users: UserByContainer[] = [];
-    private router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public errors: GenericValidationError = {} as GenericValidationError;
@@ -124,12 +123,14 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     protected selectedContainers: number[] = [];
     protected containersSelection: number[] = [];
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.loadCommands();
         this.contactId = Number(this.route.snapshot.paramMap.get('id'));
         this.subscriptions.add(this.ContactService.getEdit(this.contactId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 // Then put post where it belongs. Also unpack that bullshit
                 this.post = result.contact.Contact;
                 this.requiredContainers = result.requiredContainers;
@@ -154,6 +155,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         this.post.containers._ids = this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers);
         this.subscriptions.add(this.ContactService.updateContact(this.post)
             .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response: GenericIdResponse = result.data as GenericIdResponse;
 
@@ -177,6 +179,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                     if (typeof (this.errors['customvariables']['custom']) === "string") {
                         this.hasMacroErrors = true;
                     }
+                    this.cdr.markForCheck();
                 }
             })
         );
@@ -185,6 +188,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadContainers(): void {
         this.subscriptions.add(this.ContactService.loadContainers()
             .subscribe((result: LoadContainersRoot) => {
+                this.cdr.markForCheck();
                 // Fetch all containers.
                 this.allContainers = result.containers;
 
@@ -195,6 +199,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 if (this.requiredContainers.length === 0) {
                     this.containersSelection = this.selectedContainers;
                     this.containers = this.allContainers;
+                    this.cdr.markForCheck();
                     return;
                 }
 
@@ -222,12 +227,14 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
                 }
                 this.containers = newContainers;
                 this.containersSelection = newPostIds;
+                this.cdr.markForCheck();
             }))
     }
 
     private loadUsers() {
         if (this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
             this.users = [];
+            this.cdr.markForCheck();
             return;
         }
         const param = {
@@ -236,6 +243,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContactService.loadUsersByContainerId(param)
             .subscribe((result: LoadUsersByContainerIdRoot) => {
                 this.users = result.users;
+                this.cdr.markForCheck();
             }))
     }
 
@@ -243,6 +251,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private loadTimeperiods() {
         if (this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
             this.timeperiods = [];
+            this.cdr.markForCheck();
             return;
         }
         const param: LoadTimeperiodsPost = {
@@ -250,6 +259,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         };
         this.subscriptions.add(this.ContactService.loadTimeperiods(param).subscribe((result: LoadTimeperiodsRoot) => {
             this.timeperiods = result.timeperiods;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -259,6 +269,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             this.notificationCommands = result.notificationCommands;
             this.hostPushCommandId = result.hostPushComamndId;
             this.servicePushCommandId = result.servicePushComamndId;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -267,12 +278,14 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         if (this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers).length === 0) {
             this.users = [];
             this.timeperiods = [];
+            this.cdr.markForCheck();
             return;
         }
         this.loadUsers();
         this.loadTimeperiods();
     }
 
+    // Called by (click) - no manual change detection required
     public addMacro() {
         this.post.customvariables.push({
             name: '',
@@ -280,8 +293,10 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
             password: 0,
             value: '',
         });
+
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleServiceBrowserCheckbox(): void {
         if (this.post.service_push_notifications_enabled !== 1) {
             if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) === -1) {
@@ -294,6 +309,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected toggleHostBrowserCheckbox(): void {
         if (this.post.host_push_notifications_enabled !== 1) {
             if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) === -1) {
@@ -306,6 +322,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateServiceBrowserNotification(): void {
         if (this.post.service_commands._ids.indexOf(this.servicePushCommandId) !== -1) {
             this.post.service_push_notifications_enabled = 1;
@@ -314,6 +331,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     protected updateHostBrowserNotification(): void {
         if (this.post.host_commands._ids.indexOf(this.hostPushCommandId) !== -1) {
             this.post.host_push_notifications_enabled = 1;
@@ -322,18 +340,11 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called by (click) - no manual change detection required
     /*******************
      * ARROW functions *
      *******************/
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
-    }
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
     }
 }

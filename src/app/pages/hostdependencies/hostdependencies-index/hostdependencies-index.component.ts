@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -67,7 +67,7 @@ import { IndexPage } from '../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -112,7 +112,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './hostdependencies-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostdependenciesService} // Inject the HostdependenciesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService = inject(TranslocoService);
@@ -135,6 +136,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -161,6 +163,7 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
         this.subscriptions.add(this.HostdependenciesService.getIndex(this.params)
             .subscribe((result) => {
                 this.hostdependencies = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -195,14 +198,14 @@ export class HostdependenciesIndexComponent implements OnInit, OnDestroy, IndexP
             // User just want to delete a single command
             items = [{
                 id: hostdependency.id,
-                displayName: this.TranslocoService.translate('Host dependency #{id}', {id: hostdependency.id})
+                displayName: this.TranslocoService.translate('Host dependency #{0}', {'0': hostdependency.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Host dependency #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Host dependency #{0}', {'0': item.id})
                 };
             });
         }

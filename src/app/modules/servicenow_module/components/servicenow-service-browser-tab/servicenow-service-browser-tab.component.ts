@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { ServicenowServiceBrowserResult } from '../../servicenow.interface';
 import { GenericValidationError } from '../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -49,13 +49,14 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         XsButtonDirective
     ],
     templateUrl: './servicenow-service-browser-tab.component.html',
-    styleUrl: './servicenow-service-browser-tab.component.css'
+    styleUrl: './servicenow-service-browser-tab.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ServicenowServiceBrowserTabComponent implements OnInit, OnChanges, OnDestroy {
+export class ServicenowServiceBrowserTabComponent implements OnDestroy {
 
-    @Input() serviceUuid: string = '';
-    @Input() lastUpdated?: Date; // Change the date to trigger an update from an external component
-    @Input() allowEdit: boolean = false;
+    serviceUuid = input<string>('');
+    lastUpdated = input<Date>(); // Change the date to trigger an update from an external component
+    allowEdit = input<boolean>(false);
 
     public result?: ServicenowServiceBrowserResult;
     public errors: GenericValidationError | null = null;
@@ -65,22 +66,20 @@ export class ServicenowServiceBrowserTabComponent implements OnInit, OnChanges, 
     private readonly ServicenowService = inject(ServicenowService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
 
-    public ngOnInit(): void {
-    }
+    constructor() {
+        effect(() => {
+            if (this.serviceUuid() !== '') {
+                this.load();
+                return;
+            }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['serviceUuid']) {
-            this.load();
-            return;
-        }
-
-        // Parent component wants to trigger an update
-        if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
-            this.load();
-            return;
-        }
-
+            if (this.lastUpdated()) {
+                this.load();
+                return;
+            }
+        });
     }
 
     public ngOnDestroy(): void {
@@ -88,9 +87,10 @@ export class ServicenowServiceBrowserTabComponent implements OnInit, OnChanges, 
     }
 
     public load(): void {
-        this.subscriptions.add(this.ServicenowService.getServicespecificSettings(this.serviceUuid)
+        this.subscriptions.add(this.ServicenowService.getServicespecificSettings(this.serviceUuid())
             .subscribe((result) => {
                 this.result = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -98,10 +98,11 @@ export class ServicenowServiceBrowserTabComponent implements OnInit, OnChanges, 
     public submit() {
         if (this.result && this.result.settings) {
 
-            this.result.settings.ServicenowServicespecificSettings.service_uuid = this.serviceUuid;
+            this.result.settings.ServicenowServicespecificSettings.service_uuid = this.serviceUuid();
 
             this.subscriptions.add(this.ServicenowService.saveServicespecificSettings(this.result.settings.ServicenowServicespecificSettings)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     if (result.success) {
 
                         // Store id to update the record

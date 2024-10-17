@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Scroll } from '../paginator.interface';
 import { ColComponent, PageItemDirective, PageLinkDirective, PaginationComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,7 +21,8 @@ import { NgIf } from '@angular/common';
         ColComponent
     ],
     templateUrl: './scroll-index.component.html',
-    styleUrl: './scroll-index.component.css'
+    styleUrl: './scroll-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrollIndexComponent {
 

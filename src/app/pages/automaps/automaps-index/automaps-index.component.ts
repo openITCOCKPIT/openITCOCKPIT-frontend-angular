@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutomapsService } from '../automaps.service';
@@ -6,7 +6,6 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -41,7 +40,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import {
     AutomapEntity,
@@ -71,7 +70,7 @@ import {
     selector: 'oitc-automaps-index',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -116,13 +115,15 @@ import {
         NoRecordsComponent,
         SelectAllComponent,
         CardFooterComponent,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        AsyncPipe
     ],
     templateUrl: './automaps-index.component.html',
     styleUrl: './automaps-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService} // Inject the AutomapsService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -141,6 +142,7 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
     private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -196,6 +198,7 @@ export class AutomapsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         this.subscriptions.add(this.AutomapsService.getIndex(this.params).subscribe(automaps => {
             this.automaps = automaps;
+            this.cdr.markForCheck();
         }));
     }
 

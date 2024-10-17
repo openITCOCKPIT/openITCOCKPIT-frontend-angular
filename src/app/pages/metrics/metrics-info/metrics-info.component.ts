@@ -1,5 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -9,7 +8,13 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent, ContainerComponent, NavComponent, NavItemComponent, RowComponent, TableDirective
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { NgForOf, NgIf } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -23,7 +28,7 @@ import { MetricsInfoResponse } from '../metrics.interface';
     selector: 'oitc-metrics-info',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -47,7 +52,8 @@ import { MetricsInfoResponse } from '../metrics.interface';
         RouterLink
     ],
     templateUrl: './metrics-info.component.html',
-    styleUrl: './metrics-info.component.css'
+    styleUrl: './metrics-info.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MetricsInfoComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -57,11 +63,14 @@ export class MetricsInfoComponent implements OnInit, OnDestroy {
     protected metrics: string = '';
     protected serverAddress: string = '';
 
+    private cdr = inject(ChangeDetectorRef);
+
     public ngOnInit() {
         this.subscriptions.add(this.metricsService.getInfo().subscribe((data: MetricsInfoResponse): void => {
             this.hostname = data.systemname;
             this.metrics = data.metrics;
             this.serverAddress = data.serverAddress;
+            this.cdr.markForCheck();
         }));
     }
 

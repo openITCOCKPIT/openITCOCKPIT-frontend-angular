@@ -1,19 +1,21 @@
-
-import { inject, Injectable} from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, map } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { map, Observable } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";
-import { PopoverGraphInterface, PerfParams } from "./popover-graph.interface";
+import { PerfParams, PopoverGraphInterface } from "./popover-graph.interface";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PopoverGraphService {
     private readonly http = inject(HttpClient);
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
-  constructor() { }
+
+    constructor() {
+    }
+
     public getPerfdata(params: PerfParams): Observable<PopoverGraphInterface> {
         const proxyPath = this.proxyPath;
 

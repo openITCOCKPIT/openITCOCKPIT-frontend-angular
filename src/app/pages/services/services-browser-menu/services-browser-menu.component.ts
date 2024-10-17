@@ -1,4 +1,14 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HostsService } from '../../hosts/hosts.service';
 import { ServicesService } from '../services.service';
@@ -21,7 +31,7 @@ import {
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -64,10 +74,12 @@ export interface ServiceBrowserMenuConfig {
         NgClass,
         RouterLink,
         TooltipDirective,
-        HoststatusSimpleIconComponent
+        HoststatusSimpleIconComponent,
+        AsyncPipe
     ],
     templateUrl: './services-browser-menu.component.html',
-    styleUrl: './services-browser-menu.component.css'
+    styleUrl: './services-browser-menu.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -85,6 +97,8 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
     private readonly ServicesService = inject(ServicesService);
     public readonly PermissionsService: PermissionsService = inject(PermissionsService)
     private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private cdr = inject(ChangeDetectorRef);
+
 
     public ngOnInit() {
         if (!this.lastUpdated) {
@@ -111,6 +125,8 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
     public loadData() {
         this.subscriptions.add(this.ServicesService.getServiceBrowserMenuConfig(this.config.serviceId)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.isLoading = false;
                 this.data = result;
 

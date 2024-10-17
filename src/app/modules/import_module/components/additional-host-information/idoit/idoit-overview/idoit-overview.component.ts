@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
@@ -13,13 +13,11 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { HostgroupExtendedTabs } from '../../../../../../pages/hostgroups/hostgroups.enum';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 import { IdoitStatus } from '../idoit.enum';
-import { HostBrowserTabs } from '../../../../../../pages/hosts/hosts.enum';
 import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tree.component';
 
 @Component({
@@ -46,7 +44,8 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
         NgClass
     ],
     templateUrl: './idoit-overview.component.html',
-    styleUrl: './idoit-overview.component.css'
+    styleUrl: './idoit-overview.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IdoitOverviewComponent {
 
@@ -54,13 +53,12 @@ export class IdoitOverviewComponent {
     @Input() public hostId: number = 0;
     @Input() public hostname: string = '';
 
-    protected readonly HostgroupExtendedTabs = HostgroupExtendedTabs;
     protected readonly IdoitStatus = IdoitStatus;
-    protected readonly HostBrowserTabs = HostBrowserTabs;
-
     public selectedTab: 'information' | 'dependencyTree' = 'information';
+    private cdr = inject(ChangeDetectorRef);
 
     public setSelectedTab(newTab: 'information' | 'dependencyTree'): void {
         this.selectedTab = newTab;
+        this.cdr.markForCheck();
     }
 }

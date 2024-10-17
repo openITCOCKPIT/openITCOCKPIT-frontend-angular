@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { ScrollIndexComponent } from '../scroll-index/scroll-index.component';
 import { PaginateOrScroll, PaginatorChangeEvent } from '../paginator.interface';
@@ -20,7 +20,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './paginate-or-scroll.component.html',
-    styleUrl: './paginate-or-scroll.component.css'
+    styleUrl: './paginate-or-scroll.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginateOrScrollComponent {
 

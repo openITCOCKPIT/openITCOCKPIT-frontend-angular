@@ -1,11 +1,23 @@
-import { booleanAttribute, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import {
+    booleanAttribute,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    input,
+    Input,
+    OnDestroy,
+    OnInit,
+    Renderer2
+} from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MenuLink } from '../../../../components/navigation/navigation.interface';
 import { filter } from 'rxjs/operators';
 import { NavbarGroupService } from './navbar-group.service';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 
 @Component({
@@ -14,12 +26,14 @@ import { NgClass } from '@angular/common';
     imports: [
         FaIconComponent,
         RouterLink,
-        NgClass
+        NgClass,
+        NgIf
     ],
     templateUrl: './navbar-group.component.html',
-    styleUrl: './navbar-group.component.css'
+    styleUrl: './navbar-group.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavbarGroupComponent implements OnInit {
+export class NavbarGroupComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private renderer: Renderer2,
@@ -31,19 +45,21 @@ export class NavbarGroupComponent implements OnInit {
         ) as Observable<NavigationEnd>;
     }
 
-    @Input({required: true}) item!: MenuLink;
     @Input() show?: boolean;
     @Input({transform: booleanAttribute}) compact?: boolean;
 
+    public item = input.required<MenuLink>();
 
     public navigationEndObservable: Observable<NavigationEnd>;
     public open: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.navbarGroupService.sidebarNavGroupState$.subscribe(next => {
-            if (next.id !== String(this.item.alias) && next.open) {
+            const item = this.item();
+            if (next.id !== String(item.alias) && next.open) {
                 // Some other group got opened in the main menu, so we close our menu (if we are open)
                 if (this.open) {
                     this.openOrClose();
@@ -54,11 +70,13 @@ export class NavbarGroupComponent implements OnInit {
 
     public openOrClose() {
         this.open = !this.open;
+        this.cdr.markForCheck();
 
         // Tell the world - that we are now open (or closed)
+        const item = this.item();
         this.navbarGroupService.toggle({
             open: this.open,
-            id: String(this.item.alias)
+            id: String(item.alias)
         });
     }
 

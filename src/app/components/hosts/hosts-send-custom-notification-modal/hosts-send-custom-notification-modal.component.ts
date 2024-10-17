@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -56,7 +66,8 @@ import { Subscription } from 'rxjs';
         FormsModule
     ],
     templateUrl: './hosts-send-custom-notification-modal.component.html',
-    styleUrl: './hosts-send-custom-notification-modal.component.css'
+    styleUrl: './hosts-send-custom-notification-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsSendCustomNotificationModalComponent implements OnDestroy {
     @Input({required: true}) public items: SendCustomNotificationItem[] = [];
@@ -75,10 +86,13 @@ export class HostsSendCustomNotificationModalComponent implements OnDestroy {
         force: true,
         broadcast: false
     };
+    private cdr = inject(ChangeDetectorRef);
 
     public hideModal() {
         this.isSend = false;
         this.error = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

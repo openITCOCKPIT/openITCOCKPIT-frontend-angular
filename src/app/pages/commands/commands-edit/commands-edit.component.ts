@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -80,7 +80,7 @@ import { HistoryService } from '../../../history.service';
     selector: 'oitc-commands-edit',
     standalone: true,
     imports: [
-        CoreuiComponent,
+
         TranslocoDirective,
         CardBodyComponent,
         CardComponent,
@@ -143,7 +143,8 @@ import { HistoryService } from '../../../history.service';
         CodeMirrorContainerComponent,
     ],
     templateUrl: './commands-edit.component.html',
-    styleUrl: './commands-edit.component.css'
+    styleUrl: './commands-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommandsEditComponent implements OnInit, OnDestroy {
     public post: CommandPost = {
@@ -175,6 +176,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -184,6 +186,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
                 this.post = result.command;
                 this.defaultMacros = result.defaultMacros;
                 this.sortArgumentsByName();
+                this.cdr.markForCheck();
             }));
         this.loadMacros();
     }
@@ -192,7 +195,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    trackByIndex(index: number, item: any): number {
+    public trackByIndex(index: number, item: any): number {
         return index;
     }
 
@@ -200,6 +203,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MacrosService.getIndex()
             .subscribe((result) => {
                 this.macros = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -226,13 +230,16 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
 
         // Sortcommand arguemnts by name
         this.sortArgumentsByName();
+        this.cdr.markForCheck();
     }
 
     public removeArgument(index: number) {
         this.post.commandarguments.splice(index, 1);
+        this.cdr.markForCheck();
     }
 
     public checkForMisingArguments() {
+        this.cdr.markForCheck();
         const commandLine = this.post.command_line;
         const usedCommandLineArgs: string[] = commandLine.match(/(\$ARG\d+\$)/g) ?? [];
         const definedCommandArguments = this.post.commandarguments.map(arg => arg.name);
@@ -270,6 +277,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.CommandsService.updateCommand(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
@@ -304,6 +312,7 @@ export class CommandsEditComponent implements OnInit, OnDestroy {
                 sensitivity: 'base'
             });
         });
+        this.cdr.markForCheck();
     }
 
     protected readonly CommandTypesEnum = CommandTypesEnum;

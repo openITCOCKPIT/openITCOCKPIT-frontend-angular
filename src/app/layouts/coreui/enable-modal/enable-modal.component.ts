@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Inject, inject, Input, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -41,14 +51,14 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         XsButtonDirective
     ],
     templateUrl: './enable-modal.component.html',
-    styleUrl: './enable-modal.component.css'
+    styleUrl: './enable-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EnableModalComponent {
     @Input({required: true}) public items: EnableItem[] = [];
     @Input({required: false}) public enableMessage: string = '';
     @Input({required: false}) public helpMessage: string = '';
     @Output() completed = new EventEmitter<boolean>();
-
 
     public isEnable: boolean = false;
     public percentage: number = 0;
@@ -57,6 +67,7 @@ export class EnableModalComponent {
 
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
     @ViewChild('modal') private modal!: ModalComponent;
 
     constructor(@Inject(ENABLE_SERVICE_TOKEN) private enableService: any) {
@@ -76,6 +87,8 @@ export class EnableModalComponent {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

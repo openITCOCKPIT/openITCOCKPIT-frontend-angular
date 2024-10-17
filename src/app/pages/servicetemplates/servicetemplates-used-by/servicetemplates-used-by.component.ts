@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -25,7 +25,7 @@ import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -63,7 +63,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        CoreuiComponent,
+
         DeleteAllModalComponent,
         DropdownDividerDirective,
         FaIconComponent,
@@ -86,13 +86,15 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         FormCheckInputDirective,
         FormCheckLabelDirective,
         PaginatorModule,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AsyncPipe
     ],
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     public hostsWithServices: HostWithServices[] = [];
@@ -108,6 +110,7 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     protected PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private cdr = inject(ChangeDetectorRef);
 
     private router = inject(Router);
     private route = inject(ActivatedRoute);
@@ -129,6 +132,7 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
                 this.hostsWithServices = result.hostsWithServices;
                 this.servicetemplate = result.servicetemplate;
                 this.total = result.count
+                this.cdr.markForCheck();
             }));
     }
 

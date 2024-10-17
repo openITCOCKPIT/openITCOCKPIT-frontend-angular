@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { TimeperiodsService } from '../timeperiods.service';
@@ -34,7 +34,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
         ColComponent,
         FullCalendarModule,
         ObjectUuidComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         CardComponent,
         CardHeaderComponent,
@@ -47,7 +47,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './timeperiods-view-details.component.html',
-    styleUrl: './timeperiods-view-details.component.css'
+    styleUrl: './timeperiods-view-details.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
 
@@ -125,6 +126,7 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
 
     private TimeperiodsService = inject(TimeperiodsService);
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
 
     ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -135,6 +137,7 @@ export class TimeperiodsViewDetailsComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(forkJoin(request).subscribe(
             (result) => {
+                this.cdr.markForCheck();
                 this.timeperiod = result.timeperiod;
                 this.user = result.user;
 

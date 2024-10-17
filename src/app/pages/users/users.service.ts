@@ -64,6 +64,7 @@ export class UsersService {
             })
         );
     }
+
     public loadContainerRoles(params: LoadContainerRolesRequest): Observable<LoadContainerRolesRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<LoadContainerRolesRoot>(`${proxyPath}/users/loadContainerRoles.json`, {
@@ -164,7 +165,7 @@ export class UsersService {
                 map(data => {
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.user as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -185,7 +186,7 @@ export class UsersService {
                 map(data => {
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.user as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -215,7 +216,7 @@ export class UsersService {
                 map(data => {
                     return {
                         success: true,
-                        data: data as GenericIdResponse
+                        data: data.user as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

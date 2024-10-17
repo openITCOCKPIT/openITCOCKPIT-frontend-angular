@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -31,7 +31,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
@@ -78,7 +78,7 @@ import { HistoryService } from '../../../history.service';
         CardHeaderComponent,
         CardTitleDirective,
         CheckAttemptsInputComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -116,10 +116,12 @@ import { HistoryService } from '../../../history.service';
         NgClass,
         FakeSelectComponent,
         FormLoaderComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        AsyncPipe
     ],
     templateUrl: './services-edit.component.html',
-    styleUrl: './services-edit.component.css'
+    styleUrl: './services-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesEditComponent {
     public host?: HostEntity;
@@ -164,6 +166,7 @@ export class ServicesEditComponent {
     private readonly notyService = inject(NotyService);
     private router: Router = inject(Router);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private cdr = inject(ChangeDetectorRef);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -175,6 +178,7 @@ export class ServicesEditComponent {
             const id = Number(this.route.snapshot.paramMap.get('id'));
             this.subscriptions.add(this.ServicesService.getEdit(id)
                 .subscribe((result) => {
+                    this.cdr.markForCheck();
                     this.post = result.service.Service;
                     this.host = result.host.Host;
                     this.servicetemplate = result.servicetemplate.Servicetemplate;
@@ -218,6 +222,7 @@ export class ServicesEditComponent {
             .subscribe((result) => {
                 this.commands = result.commands;
                 this.eventhandlerCommands = result.eventhandlerCommands;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -240,6 +245,7 @@ export class ServicesEditComponent {
                 this.contactgroups = result.contactgroups;
                 this.existingServices = result.existingServices;
                 this.isSlaHost = result.isSlaHost;
+                this.cdr.markForCheck();
             })
         );
 
@@ -256,6 +262,7 @@ export class ServicesEditComponent {
         this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId, serviceId)
             .subscribe((result) => {
                 this.post.servicecommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -267,6 +274,7 @@ export class ServicesEditComponent {
 
         if (!eventHandlerCommandId) {
             //"None" selected
+            this.cdr.markForCheck();
             this.post.serviceeventcommandargumentvalues = [];
             return;
         }
@@ -278,6 +286,7 @@ export class ServicesEditComponent {
         this.subscriptions.add(this.ServicesService.loadEventHandlerCommandArguments(eventHandlerCommandId, serviceId)
             .subscribe((result) => {
                 this.post.serviceeventcommandargumentvalues = result;
+                this.cdr.markForCheck();
             })
         );
 
@@ -295,6 +304,7 @@ export class ServicesEditComponent {
 
         this.subscriptions.add(this.ServicesService.loadServicetemplate(servicetemplateId, this.post.host_id)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.servicetemplate = result.servicetemplate.Servicetemplate;
                 this.setValuesFromServicetemplate();
 
@@ -320,6 +330,7 @@ export class ServicesEditComponent {
     public checkForDuplicateServicename() {
         const existingServicesNames: string[] = Object.values(this.existingServices);
         this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        this.cdr.markForCheck();
     }
 
     public onCommandChange() {
@@ -331,6 +342,7 @@ export class ServicesEditComponent {
     }
 
     public onDisableInheritanceChange() {
+        this.cdr.markForCheck();
         if (
             this.data.areContactsInheritedFromHosttemplate === false &&
             this.data.areContactsInheritedFromHost === false &&
@@ -367,6 +379,8 @@ export class ServicesEditComponent {
         if (!this.servicetemplate) {
             return;
         }
+
+        this.cdr.markForCheck();
 
         const fields = [
             'name',
@@ -476,23 +490,12 @@ export class ServicesEditComponent {
             password: 0,
             value: '',
         });
+        this.cdr.markForCheck();
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
-    }
-
-
-    protected getMacroErrors = (index: number): GenericValidationError => {
-        // No error, here.
-        if (!this.errors) {
-            return {} as GenericValidationError;
-        }
-
-        if (this.errors['customvariables'] === undefined) {
-            return {} as GenericValidationError;
-        }
-        return this.errors['customvariables'][index] as unknown as GenericValidationError;
+        this.cdr.markForCheck();
     }
 
     public submit() {
@@ -501,6 +504,7 @@ export class ServicesEditComponent {
 
         this.subscriptions.add(this.ServicesService.edit(this.post)
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service');

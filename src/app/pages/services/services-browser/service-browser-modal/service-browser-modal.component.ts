@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output
+} from '@angular/core';
 import {
     AlertComponent,
     BadgeComponent,
@@ -34,7 +44,7 @@ import {
 import {
     HostsSendCustomNotificationModalComponent
 } from '../../../../components/hosts/hosts-send-custom-notification-modal/hosts-send-custom-notification-modal.component';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -134,14 +144,16 @@ import {
         BorderDirective,
         RouterLink,
         CancelHostdowntimeModalComponent,
-        CancelServicedowntimeModalComponent
+        CancelServicedowntimeModalComponent,
+        AsyncPipe
     ],
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: DowntimesService}, // Inject the DowntimesService into the CancelAllModalComponent
         {provide: DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN, useClass: AcknowledgementsService} // Inject the DowntimesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
 
@@ -167,6 +179,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
+    private cdr = inject(ChangeDetectorRef);
 
     public hideModal() {
         this.modalService.toggle({
@@ -180,6 +193,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
         this.selectedItems = [];
         this.availableDataSources = [];
         this.result = undefined;
+        this.cdr.markForCheck();
     }
 
     public ngOnInit(): void {
@@ -189,6 +203,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
             if (state.id === 'automapServiceDetailsModal') {
                 this.resetModal();
                 this.loadService();
+                this.cdr.markForCheck();
             }
 
         }));
@@ -203,6 +218,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.timezone = data;
+            this.cdr.markForCheck();
         }));
     }
 
@@ -217,6 +233,7 @@ export class ServiceBrowserModalComponent implements OnInit, OnDestroy {
                     value: gauge.metric // Name of the metric to display in select
                 });
             }
+            this.cdr.markForCheck();
         }));
     }
 

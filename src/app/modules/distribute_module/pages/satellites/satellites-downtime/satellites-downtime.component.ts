@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -27,7 +27,6 @@ import {
     TableDirective,
     TemplateIdDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -38,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { SatellitesService } from '../satellites.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -68,7 +67,7 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -111,13 +110,15 @@ import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/sys
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
+        AsyncPipe
     ],
     templateUrl: './satellites-downtime.component.html',
     styleUrl: './satellites-downtime.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemdowntimesService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
     private SatellitesService = inject(SatellitesService);
@@ -131,6 +132,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -150,6 +152,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.SatellitesService.getSatelliteSystemdowntimes(this.params)
             .subscribe((result) => {
                 this.satelliteSystemdowntimes = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -207,6 +210,7 @@ export class SatellitesDowntimeComponent implements OnInit, OnDestroy {
 
         // Pass selection to the modal
         this.selectedItems = items;
+        this.cdr.markForCheck();
 
         // open modal
         this.modalService.toggle({

@@ -1,4 +1,16 @@
-import { Component, EventEmitter, Inject, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Inject,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -42,7 +54,8 @@ import { DeleteAcknowledgementItem } from '../../../pages/acknowledgements/ackno
         XsButtonDirective
     ],
     templateUrl: './delete-acknowledgements-modal.component.html',
-    styleUrl: './delete-acknowledgements-modal.component.css'
+    styleUrl: './delete-acknowledgements-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 // This component can be used to delete acknowledgements for hosts and services.
@@ -60,6 +73,9 @@ export class DeleteAcknowledgementsModalComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
     private subscriptions: Subscription = new Subscription();
+    private cdr = inject(ChangeDetectorRef);
+
+
     @ViewChild('modal') private modal!: ModalComponent;
 
     constructor(@Inject(DELETE_ACKNOWLEDGEMENT_SERVICE_TOKEN) private deleteAcknowledgementService: any) {
@@ -77,6 +93,8 @@ export class DeleteAcknowledgementsModalComponent implements OnInit, OnDestroy {
     public hideModal() {
         this.isDeleting = false;
         this.percentage = 0;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

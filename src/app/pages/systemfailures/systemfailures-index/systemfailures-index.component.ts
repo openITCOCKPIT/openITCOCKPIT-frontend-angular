@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -61,7 +61,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { Statistics } from '../../statistics/statistics.enum';
 import { IndexPage } from '../../../pages.interface';
 
 
@@ -70,7 +69,7 @@ import { IndexPage } from '../../../pages.interface';
     standalone: true,
     imports: [
         CardComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -120,7 +119,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './systemfailures-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SystemfailuresIndexComponent implements OnInit, OnDestroy, IndexPage {
     private SystemfailuresService = inject(SystemfailuresService)
@@ -135,6 +135,7 @@ export class SystemfailuresIndexComponent implements OnInit, OnDestroy, IndexPag
     private readonly modalService = inject(ModalService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit(): void {
@@ -154,6 +155,7 @@ export class SystemfailuresIndexComponent implements OnInit, OnDestroy, IndexPag
         this.subscriptions.add(this.SystemfailuresService.getIndex(this.params)
             .subscribe((result) => {
                 this.systemfailures = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -227,5 +229,4 @@ export class SystemfailuresIndexComponent implements OnInit, OnDestroy, IndexPag
         }
     }
 
-    protected readonly Statistics = Statistics;
 }

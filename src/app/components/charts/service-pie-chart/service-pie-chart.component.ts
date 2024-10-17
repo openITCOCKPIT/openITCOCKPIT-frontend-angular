@@ -1,4 +1,15 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import {
     ApexChart,
     ApexGrid,
@@ -33,7 +44,8 @@ export type ChartOptions = {
         NgApexchartsModule
     ],
     templateUrl: './service-pie-chart.component.html',
-    styleUrl: './service-pie-chart.component.css'
+    styleUrl: './service-pie-chart.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -45,6 +57,7 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ColorModeService = inject(ColorModeService);
+    private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {};
     public apexStroke: ApexStroke = {};
@@ -70,6 +83,7 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     }
                 });
+                this.cdr.markForCheck();
             }
 
         }));
@@ -85,6 +99,7 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
             this.chart.updateOptions({
                 series: this.statusDataPercentage
             });
+            this.cdr.markForCheck();
         }
     }
 
@@ -178,5 +193,6 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
                 }
             ]
         };
+        this.cdr.markForCheck();
     }
 }

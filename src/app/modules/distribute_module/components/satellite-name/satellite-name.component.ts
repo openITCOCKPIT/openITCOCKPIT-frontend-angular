@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../../pages/satellites/satellites.service';
@@ -13,34 +13,34 @@ import { SkeletonModule } from 'primeng/skeleton';
         SkeletonModule
     ],
     templateUrl: './satellite-name.component.html',
-    styleUrl: './satellite-name.component.css'
+    styleUrl: './satellite-name.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SatelliteNameComponent implements OnInit, OnDestroy, OnChanges {
+export class SatelliteNameComponent implements OnDestroy {
 
-    @Input() satelliteId: number = 0;
+    public satelliteId = input<number>(0);
+
     public satellite?: SatelliteEntityCake2;
 
     private subscriptions: Subscription = new Subscription();
     private readonly SatellitesService = inject(SatellitesService);
+    private cdr = inject(ChangeDetectorRef);
 
-    public ngOnInit() {
-        //this.load();
+    constructor() {
+        effect(() => {
+            this.load();
+        });
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes['satelliteId']) {
-            this.load();
-        }
-    }
-
     public load() {
         this.subscriptions.add(
-            this.SatellitesService.getSatelliteById(this.satelliteId).subscribe((data) => {
-                this.satellite = data
+            this.SatellitesService.getSatelliteById(this.satelliteId()).subscribe((data) => {
+                this.satellite = data;
+                this.cdr.markForCheck();
             })
         );
     }

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -67,7 +67,7 @@ import { IndexPage } from '../../../pages.interface';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        CoreuiComponent,
+
         FaIconComponent,
         NavComponent,
         NavItemComponent,
@@ -112,7 +112,8 @@ import { IndexPage } from '../../../pages.interface';
     styleUrl: './servicedependencies-index.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ServicedependenciesService} // Inject the ServicedependenciesService into the DeleteAllModalComponent
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly TranslocoService = inject(TranslocoService);
@@ -135,6 +136,7 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, Ind
     public readonly router = inject(Router);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -160,6 +162,7 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, Ind
         this.subscriptions.add(this.ServicedependenciesService.getIndex(this.params)
             .subscribe((result) => {
                 this.servicedependencies = result;
+                this.cdr.markForCheck();
             })
         );
     }
@@ -194,14 +197,14 @@ export class ServicedependenciesIndexComponent implements OnInit, OnDestroy, Ind
             // User just want to delete a single command
             items = [{
                 id: servicedependency.id,
-                displayName: this.TranslocoService.translate('Service dependency #{id}', {id: servicedependency.id})
+                displayName: this.TranslocoService.translate('Service dependency #{0}', {'0': servicedependency.id})
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: this.TranslocoService.translate('Service dependency #{id}', {id: item.id})
+                    displayName: this.TranslocoService.translate('Service dependency #{0}', {'0': item.id})
                 };
             });
         }

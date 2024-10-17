@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -10,7 +10,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         TranslocoDirective
     ],
     templateUrl: './service-timeline-legend.component.html',
-    styleUrl: './service-timeline-legend.component.css'
+    styleUrl: './service-timeline-legend.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceTimelineLegendComponent {
 

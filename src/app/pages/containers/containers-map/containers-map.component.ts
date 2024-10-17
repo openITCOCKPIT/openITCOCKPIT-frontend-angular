@@ -1,4 +1,12 @@
-import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    inject,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
@@ -45,7 +53,7 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
         CardHeaderComponent,
         CardTitleDirective,
         ColComponent,
-        CoreuiComponent,
+
         FaIconComponent,
         InputGroupComponent,
         InputGroupTextDirective,
@@ -65,7 +73,8 @@ import { ClusterOptions } from 'vis-network/declarations/network/Network';
         TranslocoPipe
     ],
     templateUrl: './containers-map.component.html',
-    styleUrl: './containers-map.component.css'
+    styleUrl: './containers-map.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContainersMapComponent implements OnInit, OnDestroy {
 
@@ -88,6 +97,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private readonly document = inject(DOCUMENT);
+    private cdr = inject(ChangeDetectorRef);
 
     @HostListener('fullscreenchange', ['$event'])
     handleFullscreenchangeEvent(Event: Event) {
@@ -120,6 +130,7 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ContainersService.loadAllContainers().subscribe(containers => {
             // Filter the ROOT_CONTAINER as it has to many dependencies to display
             this.containers = containers.filter(c => c.key !== ROOT_CONTAINER);
+            this.cdr.markForCheck();
         }));
     }
 
@@ -139,6 +150,8 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
             const nodes = containerTree.containerMap.nodes;
             const cluster = containerTree.containerMap.cluster;
             this.isLoading = false;
+
+            this.cdr.markForCheck();
 
             this.renderVisNetwork(edges, nodes, cluster);
         }));
@@ -567,6 +580,8 @@ export class ContainersMapComponent implements OnInit, OnDestroy {
             });
             network.once('stabilizationIterationsDone', () => {
                 this.showProgressbar = false;
+
+                this.cdr.markForCheck();
 
                 // Force the network to stop moving
                 network.setOptions({physics: false});

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     AcknowledgementIconComponent
 } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -34,7 +34,6 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
@@ -53,7 +52,7 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -108,7 +107,7 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         ColComponent,
         ContainerComponent,
         CopyToClipboardComponent,
-        CoreuiComponent,
+
         DebounceDirective,
         DeleteAllModalComponent,
         DowntimeIconComponent,
@@ -160,16 +159,18 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         RouterLink,
         TooltipDirective,
         HoststatusSimpleIconComponent,
-        EnableModalComponent
+        EnableModalComponent,
+        AsyncPipe
     ],
     templateUrl: './hosts-disabled.component.html',
     styleUrl: './hosts-disabled.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
         {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsDisabledComponent {
+export class HostsDisabledComponent implements OnInit, OnDestroy {
     // Filter vars
     public params: HostsDisabledParams = getDefaultHostsDisabledParams();
     // Filter end
@@ -189,6 +190,7 @@ export class HostsDisabledComponent {
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     public ngOnInit() {
@@ -196,6 +198,7 @@ export class HostsDisabledComponent {
 
         this.subscriptions.add(this.HostsService.getSatellites()
             .subscribe((result) => {
+                this.cdr.markForCheck();
                 this.satellites = result;
             })
         );
@@ -210,6 +213,8 @@ export class HostsDisabledComponent {
 
         this.subscriptions.add(this.HostsService.getHostsDisabled(this.params)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 this.hosts = result;
             })
         );

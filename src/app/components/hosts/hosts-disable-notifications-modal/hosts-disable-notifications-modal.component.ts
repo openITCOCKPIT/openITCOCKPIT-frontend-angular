@@ -1,4 +1,15 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import {
     ButtonCloseDirective,
     CardBodyComponent,
@@ -58,7 +69,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         CardBodyComponent
     ],
     templateUrl: './hosts-disable-notifications-modal.component.html',
-    styleUrl: './hosts-disable-notifications-modal.component.css'
+    styleUrl: './hosts-disable-notifications-modal.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsDisableNotificationsModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public items: HostDisableNotificationsItem[] = [];
@@ -75,6 +87,7 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     private readonly subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
 
+    private cdr = inject(ChangeDetectorRef);
 
     public type: string = 'hostOnly';
     @ViewChild('modal') private modal!: ModalComponent;
@@ -82,6 +95,8 @@ export class HostsDisableNotificationsModalComponent implements OnInit, OnDestro
     public hideModal() {
         this.isSend = false;
         this.hasErrors = false;
+
+        this.cdr.markForCheck();
 
         this.modalService.toggle({
             show: false,

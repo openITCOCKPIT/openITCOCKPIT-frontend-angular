@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy } from '@angular/core';
 import { ProfilePasswordPost } from '../profile.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -52,9 +52,10 @@ import { NgIf } from '@angular/common';
         NgIf
     ],
     templateUrl: './profile-change-password.component.html',
-    styleUrl: './profile-change-password.component.css'
+    styleUrl: './profile-change-password.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileChangePasswordComponent implements OnInit, OnDestroy {
+export class ProfileChangePasswordComponent implements OnDestroy {
     public PasswordPost: ProfilePasswordPost = {
         current_password: null,
         password: null,
@@ -62,16 +63,14 @@ export class ProfileChangePasswordComponent implements OnInit, OnDestroy {
     };
     public PasswordErrors: GenericValidationError | null = null;
 
-    private subscriptions: Subscription = new Subscription();
+    public isLdapUser = input<boolean>(false);
 
+    private subscriptions: Subscription = new Subscription();
     private readonly ProfileService = inject(ProfileService);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
 
-    @Input() public isLdapUser: boolean = false;
-
-    public ngOnInit() {
-    }
+    private cdr = inject(ChangeDetectorRef);
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -80,6 +79,8 @@ export class ProfileChangePasswordComponent implements OnInit, OnDestroy {
     public submitPassword() {
         this.subscriptions.add(this.ProfileService.changePassword(this.PasswordPost)
             .subscribe((result) => {
+                this.cdr.markForCheck();
+
                 if (result.success) {
                     const msg = this.TranslocoService.translate('Password changed successfully.');
                     this.notyService.genericSuccess(msg);

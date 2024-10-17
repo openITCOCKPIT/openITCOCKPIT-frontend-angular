@@ -118,10 +118,11 @@ canvas {
 /** login side panel */
 
 .login-side-bg {
-    position:fixed;
+    position: fixed;
     --cui-gutter-x: 0;
 
 }
+
 .login-side-bg .btn {
     margin-right: 5px;
 }

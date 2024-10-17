@@ -1,5 +1,7 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ContentChild,
     ElementRef,
@@ -20,13 +22,16 @@ import { MacroIndex } from "../../pages/macros/macros.interface";
 import { NgModel } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { LayoutService } from '../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-code-mirror-container',
     standalone: true,
     imports: [],
     templateUrl: './code-mirror-container.component.html',
-    styleUrl: './code-mirror-container.component.css'
+    styleUrl: './code-mirror-container.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
     @ViewChild('container', {static: true}) containerRef!: ElementRef<HTMLDivElement>;
@@ -36,6 +41,16 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
     private autocompleteExtension: any;
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly LayoutService = inject(LayoutService);
+    private cdr = inject(ChangeDetectorRef);
+
+    private theme: 'light' | 'dark' = 'light';
+
+    constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = theme;
+        }));
+    }
 
     private defaultHighlightPatterns: HighlightPattern[] = [
         {
@@ -72,7 +87,12 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
 
     private formControlStyle = EditorView.editorAttributes.of({class: "form-control"});
 
-    private baseExtensions = [this.formControlStyle, this.borderFocusStyle, basicSetup, keymap.of([...defaultKeymap])];
+    private baseExtensions = [
+        this.formControlStyle,
+        this.borderFocusStyle,
+        basicSetup,
+        keymap.of([...defaultKeymap])
+    ];
 
     private _highlightPatterns: HighlightPattern[] =
         this.defaultHighlightPatterns;
@@ -112,6 +132,7 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
         this.addMacrosToHighlight();
         this.addMacrosToAutocompletion();
         this.updateCodemirrorExtension(CodeMirrorUpdateType.MACROS);
+        this.cdr.markForCheck();
     };
 
     ngAfterViewInit() {
@@ -138,13 +159,17 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
                 this._highlightPatterns
             );
 
+            if (this.theme === 'dark') {
+                this.baseExtensions.push(oneDark);
+            }
+
             const state = EditorState.create({
                 doc: textarea.value,
                 extensions: [
                     this.baseExtensions,
                     updateValueChangeCodemirrorListener,
                     this.customHighlightExtension,
-                    this.autocompleteExtension,
+                    this.autocompleteExtension
                 ],
             });
 
@@ -171,6 +196,7 @@ export class CodeMirrorContainerComponent implements AfterViewInit, OnDestroy {
 
     // update the codemirror extension based on the given value
     private updateCodemirrorExtension(updateType: string) {
+        this.cdr.markForCheck();
 
         switch (updateType) {
             case CodeMirrorUpdateType.HIGHLIGHT:

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    Output
+} from '@angular/core';
 import { IntervalInput } from '../interval-input/interval-input.interface';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -31,7 +39,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         NgClass
     ],
     templateUrl: './duration-input.component.html',
-    styleUrl: './duration-input.component.css'
+    styleUrl: './duration-input.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DurationInputComponent {
     private readonly TranslocoService = inject(TranslocoService);
@@ -44,6 +53,8 @@ export class DurationInputComponent {
     /** The selected interval in minutes */
     @Input() public selectedInterval: number = 0;
     @Output() selectedIntervalChange = new EventEmitter<number>();
+
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         this.interval = [

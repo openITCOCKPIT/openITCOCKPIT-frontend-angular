@@ -1,4 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 
 import {
     ApexAxisChartSeries,
@@ -48,7 +57,8 @@ declare global {
         NgIf
     ],
     templateUrl: './sparkline-stats.component.html',
-    styleUrl: './sparkline-stats.component.css'
+    styleUrl: './sparkline-stats.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SparklineStatsComponent implements OnChanges {
 
@@ -59,6 +69,9 @@ export class SparklineStatsComponent implements OnChanges {
     @Input() public maxValues: number = 35;
 
     public values: number[] = [];
+
+    private cdr = inject(ChangeDetectorRef);
+
 
 //    ngOnChanges(changes: SimpleChanges) {
 //        // REMOVE ME WHEN APEXCHARTS IS READY FOR ANGULAR !(
@@ -75,6 +88,7 @@ export class SparklineStatsComponent implements OnChanges {
          * As workaround we update lastUpdate with a new Date() object to trigger a change event.
          */
 
+        this.cdr.markForCheck();
         if (changes.hasOwnProperty('value')) {
             const newValue = changes['value'].currentValue;
             if (newValue !== null) {

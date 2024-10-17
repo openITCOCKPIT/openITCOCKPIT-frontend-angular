@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { GlobalLoadingService } from '../../../global-loading.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
@@ -15,12 +15,15 @@ import { Subscription } from 'rxjs';
             state('hidden', style({opacity: 0, display: 'none'})),
             transition('visible => hidden', animate('0.6s ease-out')),
             transition('hidden => visible', style('*')),
-        ])]
+        ])],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlobalLoaderComponent implements OnInit, OnDestroy {
 
     public isLoaderVisible: boolean = true;
     private subscriptions: Subscription = new Subscription();
+
+    private cdr = inject(ChangeDetectorRef);
 
     constructor(public loader: GlobalLoadingService) {
     }
@@ -28,6 +31,7 @@ export class GlobalLoaderComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.subscriptions.add(this.loader.isLoading$.subscribe(loading => {
             this.isLoaderVisible = loading;
+            this.cdr.markForCheck();
         }));
     }
 

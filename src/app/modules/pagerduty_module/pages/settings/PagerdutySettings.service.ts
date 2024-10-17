@@ -59,7 +59,7 @@ export class PagerdutySettingsService {
                 // Return true on 200 Ok
                 return {
                     success: true,
-                    data: data.settings  as PagerdutySettings
+                    data: data.settings as PagerdutySettings
                 };
             }),
             catchError((error: any) => {
