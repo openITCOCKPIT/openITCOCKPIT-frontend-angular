@@ -88,6 +88,52 @@
                     </div>
 
                     <!-- expiration custom shit -->
+                    <div class="mb-3">
+                        <label cLabel for="post.expiration_duration">
+                            {{ t('Expiration') }}
+                            <oitc-required-icon *ngIf="post.expire" />
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <c-dropdown>
+                                    <button *ngIf="post.expire"
+                                            cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                        {{ t('expiration duration') }}
+                                    </button>
+                                    <button *ngIf="! post.expire"
+                                            cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                        {{ t('no expiration') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li cDropdownItem (click)="setExpiration(true)">
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            {{ t('expiration duration') }}
+                                        </li>
+                                        <li cDropdownItem (click)="setExpiration(false)">
+                                            <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                            {{ t('no expiration') }}
+                                        </li>
+                                    </ul>
+                                </c-dropdown>
+                            </span>
+                            <input cFormControl
+                                   id="post.expiration_duration"
+                                   type="number"
+                                   name="post.expiration_duration"
+                                   oitcFormError [errors]="errors" errorField="expiration_duration"
+                                   [disabled]="! post.expire"
+                                   [(ngModel)]="post.expiration_duration" />
+                            <span cInputGroupText>
+                                {{t('in days')}}
+                            </span>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="expiration_duration"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Leave this field blank to receive a permanent message of the day. The message will be displayed from the defined date. For temporary messages, set the expiration time in days.') }}
+                        </div>
+                    </div>
 
                     <div class="mb-3">
                         <label cLabel for="post.usergroups._ids">
@@ -153,7 +199,34 @@
                             <oitc-form-feedback [errors]="errors" errorField="content"></oitc-form-feedback>
                         </c-col>
                         <c-col md="6">
-                            <div [innerHTML]=" html | trustAsHtml"></div>
+                            <c-card>
+                                <c-card-body [class]="'title-border-' + post.style">
+                                    <c-row>
+                                        <c-col md="1">
+                                            <fa-stack size="2x">
+                                                <fa-icon [icon]="['fas', 'comment']" [class]="'text-' + post.style"
+                                                         stackItemSize="2x"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'exclamation']" class="text-white"
+                                                         stackItemSize="1x"
+                                                         transform="right-10"></fa-icon>
+                                            </fa-stack>
+                                        </c-col>
+                                        <c-col md="11">
+                                            <h4 [class]="'title-border title-border-bottom-' + post.style">
+                                                {{ post.title }}
+                                            </h4>
+                                            <p>
+                                                <i>
+                                                    {{ post.description }}
+                                                </i>
+                                            </p>
+                                            <p [innerHTML]=" html | trustAsHtml">
+                                            </p>
+                                        </c-col>
+                                    </c-row>
+                                </c-card-body>
+                            </c-card>
+
                         </c-col>
                     </c-row>
 

@@ -7,18 +7,18 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   CardTitleDirective,
-  ColComponent,
+  ColComponent, DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
   FormCheckComponent,
   FormCheckInputDirective,
   FormControlDirective,
   FormDirective,
-  FormLabelDirective,
+  FormLabelDirective, InputGroupComponent, InputGroupTextDirective, ModalBodyComponent,
   NavComponent,
   NavItemComponent,
   RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
@@ -75,7 +75,16 @@ import { BbCodeEditorComponent } from '../../documentations/bb-code-editor/bb-co
     RowComponent,
     ColComponent,
     TrustAsHtmlPipe,
-    BbCodeEditorComponent
+    BbCodeEditorComponent,
+    FaStackComponent,
+    FaStackItemSizeDirective,
+    ModalBodyComponent,
+    InputGroupComponent,
+    DropdownComponent,
+    DropdownMenuDirective,
+    InputGroupTextDirective,
+    DropdownToggleDirective,
+    DropdownItemDirective
   ],
   templateUrl: './messagesotd-add.component.html',
   styleUrl: './messagesotd-add.component.css'
@@ -162,6 +171,10 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
           }
         })
     );
+  }
+
+  protected setExpiration(expiration: boolean): void {
+    this.post.expire = expiration;
   }
 
   public ngOnInit() {

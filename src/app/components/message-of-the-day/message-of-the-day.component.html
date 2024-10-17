@@ -32,8 +32,7 @@
                             {{ messageOfTheDay.messageOtd.description }}
                         </i>
                     </p>
-                    <p>
-                        {{ messageOfTheDay.messageOtd.content }}
+                    <p [innerHTML]="html | trustAsHtml">
                     </p>
                 </c-col>
             </c-row>

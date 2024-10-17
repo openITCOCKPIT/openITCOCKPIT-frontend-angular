@@ -43,6 +43,8 @@ import { Subscription } from 'rxjs';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MessagesOfTheDayService } from '../../pages/messagesotd/messagesotd.service';
 import { CurrentMessageOfTheDay, MessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
+import { BbCodeParserService } from '../../services/bb-code-parser.service';
+import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
 
 
 type NewBookmark = {
@@ -71,7 +73,8 @@ type NewBookmark = {
         NgClass,
         ColComponent,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        TrustAsHtmlPipe
     ],
     templateUrl: './message-of-the-day.component.html',
     styleUrl: './message-of-the-day.component.css'
@@ -81,7 +84,9 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly MessagesOfTheDayService = inject(MessagesOfTheDayService);
+    private readonly BbCodeParserService = inject(BbCodeParserService);
 
+    protected html: string = '';
     protected messageOfTheDay: CurrentMessageOfTheDay = {
         messageOtdAvailable: false,
         messageOtd: {} as MessageOfTheDay,
@@ -106,6 +111,7 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
         // Fetch current message of the day.
         this.subscriptions.add(this.MessagesOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
             this.messageOfTheDay = message;
+            this.html = this.BbCodeParserService.parse(message.messageOtd.content);
 
             if (this.messageOfTheDay.showMessageAfterLogin) {
                 this.showModal();
