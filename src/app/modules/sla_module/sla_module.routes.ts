@@ -29,4 +29,8 @@ export const slaModuleRoutes: Routes = [
         path: 'sla_module/sla_availability_status_hosts_log/index/:id',
         loadComponent: () => import('./pages/sla-availability-status-hosts-log/sla-availability-status-hosts-log-index/sla-availability-status-hosts-log-index.component').then(m => m.SlaAvailabilityStatusHostsLogIndexComponent)
     },
+    {
+        path: 'sla_module/sla_availability_status_services_log/index/:id',
+        loadComponent: () => import('./pages/sla-availability-status-services-log/sla-availability-status-services-log-index/sla-availability-status-services-log-index.component').then(m => m.SlaAvailabilityStatusServicesLogIndexComponent)
+    },
 ];
