@@ -149,6 +149,9 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
                 this.post = result;
                 this.post.expire = this.post.expiration_duration > 0;
                 this.html = this.BbCodeParserService.parse(this.post.content);
+
+                // Transform any given date into the YYYY-mm-dd format for the date input field:
+                // this.post.date =
             }));
     }
 
