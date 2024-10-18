@@ -121,7 +121,7 @@
                             <h4>
                                 <legend>
                                     <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
-                                        <input type="checkbox"
+                                        <input type="checkbox" cFormCheckInput
                                                id="{{hostWithServicesToDeploy.host.id}}_ALL"
                                                (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
                                                [ngModelOptions]="{standalone: true}"
@@ -140,7 +140,7 @@
                             <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                 <label
                                     for="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}">
-                                    <input type="checkbox"
+                                    <input type="checkbox" cFormCheckInput
                                            [ngModelOptions]="{standalone: true}"
                                            [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"
                                            (ngModelChange)="handleServiceCheckboxClick(hostWithServicesToDeploy.host.id)"
