@@ -158,7 +158,7 @@ export class ServicetemplategroupsService {
     }
 
     public allocateToHostGet(servicetemplategroupId: number, hostId: number): Observable<AllocateToHostGet> {
-        return this.http.get<AllocateToHostGet>(`${this.proxyPath}/servicetemplategroups/allocateToHost/${this.proxyPath}.json?angular=true&hostId=${hostId}`);
+        return this.http.get<AllocateToHostGet>(`${this.proxyPath}/servicetemplategroups/allocateToHost/${servicetemplategroupId}.json?angular=true&hostId=${hostId}`);
     }
 
     public loadHostsByString(containerId: number, hostsName: string): Observable<LoadHostsByStringResponse> {
