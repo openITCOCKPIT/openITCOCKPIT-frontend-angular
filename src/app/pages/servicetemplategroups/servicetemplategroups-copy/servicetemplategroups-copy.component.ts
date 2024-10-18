@@ -10,7 +10,6 @@ import {
     FormLabelDirective,
     NavComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -66,16 +65,16 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsCopyComponent implements OnInit, OnDestroy {
-    public servicetemplategroups: ServiceTemplateGroupsGetCopyPostData[] = [];
-    public errors: GenericValidationError | null = null;
-    private subscriptions: Subscription = new Subscription();
-    private ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
     private readonly notyService: NotyService = inject(NotyService);
-
-    private router: Router = inject(Router);
-    private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
+    private readonly cdr = inject(ChangeDetectorRef);
+
+    protected servicetemplategroups: ServiceTemplateGroupsGetCopyPostData[] = [];
+    protected errors: GenericValidationError | null = null;
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);

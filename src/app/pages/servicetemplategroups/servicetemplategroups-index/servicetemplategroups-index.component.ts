@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
@@ -119,21 +118,19 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
-    public params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
-
-    protected readonly route: ActivatedRoute = inject(ActivatedRoute);
+    protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
     protected selectedItems: DeleteAllItem[] = [];
+    protected readonly router: Router = inject(Router);
+    protected hideFilter: boolean = true;
     protected servicetemplategroups: ServiceTemplateGroupsIndexRoot = {
         all_servicetemplategroups: [],
         _csrfToken: ''
     }
-    protected readonly router: Router = inject(Router);
-    protected hideFilter: boolean = true;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private cdr = inject(ChangeDetectorRef);
-
 
     // Show or hide the filter
     public toggleFilter() {
