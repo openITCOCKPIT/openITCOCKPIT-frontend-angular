@@ -122,7 +122,7 @@
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
                             <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
-                                <input type="checkbox"
+                                <input type="checkbox" cFormCheckInput
                                        id="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}"
                                        [ngModelOptions]="{standalone: true}"
                                        [(ngModel)]="hostWithServicesToDeploy.createServiceOnTargetHost"
