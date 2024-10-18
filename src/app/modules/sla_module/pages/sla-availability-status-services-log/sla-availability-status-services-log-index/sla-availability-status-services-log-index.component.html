@@ -20,14 +20,14 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
-                {{ t('SLA Host Overview') }}
+                {{ t('SLA Service Overview') }}
             </li>
         </ol>
     </nav>
 
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('SLA Host Status Log') }}
+            <h5 cCardTitle>{{ t('SLA Service Status Log') }}
                 <small class="fw-300">
                     {{ t('overview') }}
                 </small>
@@ -49,20 +49,22 @@
         </c-card-header>
         <c-card-body>
 
-            <p-skeleton width="10rem" styleClass="mb-2" *ngIf="!slaHostAndStatusLog && isLoading"/>
-            <span class="padding-left-10 font-md" *ngIf="slaHostAndStatusLog && !isLoading">
-                <fa-icon [icon]="['fas', 'desktop']" class="fa fa-fw margin-right-5"></fa-icon>
-                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
-                    <a [routerLink]="['/', 'hosts', 'browser', slaHostAndStatusLog.host.id]">{{ slaHostAndStatusLog.host.name }}</a>
-                    (
-                    <oitc-copy-to-clipboard [data]="slaHostAndStatusLog.host.address">
-                        {{ slaHostAndStatusLog.host.address }}
-                    </oitc-copy-to-clipboard>
-                    )
+            <p-skeleton width="10rem" styleClass="mb-2" *ngIf="!slaServiceAndStatusLog && isLoading"/>
+            <span class="padding-left-10 font-md" *ngIf="slaServiceAndStatusLog && !isLoading">
+                <fa-icon [icon]="['fas', 'cog']" class="fa fa-fw margin-right-5"></fa-icon>
+                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
+                    <a [routerLink]="['/', 'services', 'browser', slaServiceAndStatusLog.service.id]">{{ slaServiceAndStatusLog.service.servicename }}</a>
                 } @else {
-                    {{ slaHostAndStatusLog.host.name }} ({{ slaHostAndStatusLog.host.address }})
+                    {{ slaServiceAndStatusLog.service.servicename }}
                 }
-
+            </span>
+            <span>
+                {{ t('on') }}
+                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                    <a [routerLink]="['/', 'hosts', 'browser', slaServiceAndStatusLog.service.host.id]">{{ slaServiceAndStatusLog.service.host.name }}</a>
+                } @else {
+                    {{ slaServiceAndStatusLog.service.host.name }}
+                }
             </span>
 
             <!-- Filter -->
@@ -122,8 +124,8 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!slaHostAndStatusLog && isLoading"></oitc-table-loader>
-            <table *ngIf="slaHostAndStatusLog && !isLoading" bordered cTable class="mt-2 mb-2" hover striped matSort
+            <oitc-table-loader *ngIf="!slaServiceAndStatusLog && isLoading"></oitc-table-loader>
+            <table *ngIf="slaServiceAndStatusLog && !isLoading" bordered cTable class="mt-2 mb-2" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
                 <thead>
@@ -131,7 +133,7 @@
                     <th scope="col">
                         {{ t('Evaluation range') }}
                     </th>
-                    <th scope="col" class="col-2">
+                    <th scope="col" class="col-3">
                         {{ t('State summary') }}
                     </th>
                     <th scope="col" class="col-5">
@@ -149,41 +151,44 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let hostStatus of slaHostAndStatusLog.slaHostStatusLog; let i = index; let last = last"
+                <tr *ngFor="let serviceStatus of slaServiceAndStatusLog.slaServiceStatusLog; let i = index; let last = last"
                     class="pl-1">
                     <td>
                         <ul class="evaluation-range timeline">
                             <li class="m-1 pl-1 start">
-                                {{ hostStatus.start }}
+                                {{ serviceStatus.start }}
                             </li>
                             <li class="m-1 pl-1 end">
-                                {{ hostStatus.end }}
+                                {{ serviceStatus.end }}
                             </li>
                         </ul>
                     </td>
                     <td>
                         <div class="btn-group btn-group-justified w-100">
-                            <c-badge color="success" class="col-4 rounded-0 rounded-start">
-                                {{ hostStatus.up_human_readable }}
+                            <c-badge color="success" class="col-3 rounded-0 rounded-start">
+                                {{ serviceStatus.ok_human_readable }}
                             </c-badge>
-                            <c-badge color="danger" class="col-4 rounded-0">
-                                {{ hostStatus.down_human_readable }}
+                            <c-badge color="warning" class="col-3 rounded-0">
+                                {{ serviceStatus.warning_human_readable }}
                             </c-badge>
-                            <c-badge color="secondary" class="col-4 rounded-0 rounded-end">
-                                {{ hostStatus.unreachable_human_readable }}
+                            <c-badge color="danger" class="col-3 rounded-0">
+                                {{ serviceStatus.critical_human_readable }}
+                            </c-badge>
+                            <c-badge color="secondary" class="col-3 rounded-0 rounded-end">
+                                {{ serviceStatus.unknown_human_readable }}
                             </c-badge>
                         </div>
                     </td>
                     <td>
                         <fa-icon [icon]="['fas', 'clock']" class="text-primary"></fa-icon>
-                        {{ hostStatus.determined_outage_time_human_readable }}
+                        {{ serviceStatus.determined_outage_time_human_readable }}
 
                         <ul class="list-unstyled p-2"
-                            *ngIf="hostStatus.sla_host_outages.length > 0">
+                            *ngIf="serviceStatus.sla_service_outages.length > 0">
                             <div class="border-primary border-bottom pb-1">
                                 {{ t('Outages') }}
                             </div>
-                            <li *ngFor="let outage of hostStatus.sla_host_outages|filter:{in_downtime:false}"
+                            <li *ngFor="let outage of serviceStatus.sla_service_outages|filter:{in_downtime:false}"
                                 class="padding-left-15 pb-2">
                                 <fa-icon [icon]="['fas', 'bolt']" class="text-danger"></fa-icon>
                                 {{ outage.start }}
@@ -194,7 +199,7 @@
                                     {{ outage.output }}
                                 </code>
                             </li>
-                            <li *ngFor="let outage of hostStatus.sla_host_outages|filter:{in_downtime:true}"
+                            <li *ngFor="let outage of serviceStatus.sla_service_outages|filter:{in_downtime:true}"
                                 class="padding-left-15 cursor-help" [title]="'In downtime' | transloco">
                                 <fa-icon [icon]="['fas', 'power-off']" class="text-primary"></fa-icon>
                                 {{ outage.start }}
@@ -209,20 +214,20 @@
                         </ul>
                     </td>
                     <td>
-                        {{ hostStatus.minimal_availability_percent }}%
+                        {{ serviceStatus.minimal_availability_percent }}%
                     </td>
-                    <td class="text-{{hostStatus.state}}">
-                        {{ hostStatus.determined_availability_percent }}%
+                    <td class="text-{{serviceStatus.state}}">
+                        {{ serviceStatus.determined_availability_percent }}%
                     </td>
                     <td>
-                        <c-badge [hidden]="hostStatus.state === 'danger'"
-                                 textColor="{{hostStatus.state}}"
-                                 class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                        <c-badge [hidden]="serviceStatus.state === 'danger'"
+                                 textColor="{{serviceStatus.state}}"
+                                 class="badge-border w-100 text-{{serviceStatus.state}} border-{{serviceStatus.state}}">
                             {{ t('PASSED') }}
                         </c-badge>
-                        <c-badge [hidden]="hostStatus.state !== 'danger'"
-                                 textColor="{{hostStatus.state}}"
-                                 class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                        <c-badge [hidden]="serviceStatus.state !== 'danger'"
+                                 textColor="{{serviceStatus.state}}"
+                                 class="badge-border w-100 text-{{serviceStatus.state}} border-{{serviceStatus.state}}">
                             {{ t('FAILED') }}
                         </c-badge>
                     </td>
@@ -242,7 +247,7 @@
             </table>
 
             <oitc-no-records
-                *ngIf="slaHostAndStatusLog && slaHostAndStatusLog.slaHostStatusLog && slaHostAndStatusLog.slaHostStatusLog.length === 0"></oitc-no-records>
+                *ngIf="slaServiceAndStatusLog && slaServiceAndStatusLog.slaServiceStatusLog && slaServiceAndStatusLog.slaServiceStatusLog.length === 0"></oitc-no-records>
 
             <c-container
                 [fluid]="true">
@@ -250,8 +255,8 @@
                     <c-col>
                         <oitc-paginate-or-scroll
                             (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="slaHostAndStatusLog"
-                            [paginateOrScroll]="slaHostAndStatusLog"></oitc-paginate-or-scroll>
+                            *ngIf="slaServiceAndStatusLog"
+                            [paginateOrScroll]="slaServiceAndStatusLog"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
