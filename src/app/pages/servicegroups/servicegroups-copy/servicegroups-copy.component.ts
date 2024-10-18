@@ -40,7 +40,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -63,17 +62,16 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsCopyComponent implements OnInit, OnDestroy {
-    public servicegroups: ServicegroupsCopyPostResult[] = [];
-    public errors: GenericValidationError | null = null;
-    private subscriptions: Subscription = new Subscription();
-    private ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     private readonly notyService: NotyService = inject(NotyService);
-
-    private router: Router = inject(Router);
-    private route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
+    private readonly cdr = inject(ChangeDetectorRef);
 
+    protected servicegroups: ServicegroupsCopyPostResult[] = [];
+    protected errors: GenericValidationError | null = null;
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);

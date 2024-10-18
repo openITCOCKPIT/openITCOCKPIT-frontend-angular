@@ -39,7 +39,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -68,11 +67,11 @@ export class UsergroupsCopyComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected usergroups: UsergroupsCopyPostRoot = {
         data: []
     } as UsergroupsCopyPostRoot;
-    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);

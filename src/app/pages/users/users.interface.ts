@@ -338,7 +338,8 @@ export interface LoginGetRoot {
     forceRedirectSsousersToLoginScreen: boolean
     errorMessages: any[]
     customLoginBackgroundHtml: string
-    isCustomLoginBackground: boolean
+    isCustomLoginBackground: boolean,
+    disableAnimation: boolean
 }
 
 export interface LoginImage {
