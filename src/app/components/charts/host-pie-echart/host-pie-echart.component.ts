@@ -1,21 +1,11 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
-import { ColorModeService } from '@coreui/angular';
 import { PieChartMetric } from '../charts.interface';
+import { TranslocoService } from '@jsverse/transloco';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-host-pie-echart',
@@ -30,58 +20,36 @@ import { PieChartMetric } from '../charts.interface';
     styleUrl: './host-pie-echart.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
+export class HostPieEchartComponent implements OnDestroy {
 
-    @Input() public chartData: PieChartMetric[] = [];
+    public chartData = input<PieChartMetric[]>([]);
 
     public theme: null | 'dark' = null;
     public chartOption: EChartsOption = {};
+
     public echartsInstance: any;
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ColorModeService = inject(ColorModeService);
+    private readonly LayoutService = inject(LayoutService);
+    private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
-        const colorMode$ = toObservable(this.ColorModeService.colorMode);
-
-        this.subscriptions.add(colorMode$.subscribe((theme) => {
-            //console.log('Change in theme detected', theme);
-            const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            switch (theme) {
-                case 'light':
-                    this.theme = null;
-                    break;
-
-                case 'dark':
-                    this.theme = 'dark';
-                    break;
-
-                case 'auto':
-                    if (osSystemDarkModeEnabled) {
-                        this.theme = 'dark';
-                    } else {
-                        this.theme = null;
-                    }
-                    break;
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = null;
+            if (theme === 'dark') {
+                this.theme = 'dark';
             }
 
+            this.cdr.markForCheck();
         }));
-    }
 
-    public ngOnInit(): void {
-
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-        if (changes['chartData']) {
-
-            console.log("renderChart");
+        effect(() => {
             this.renderChart();
-        }
-
+            this.cdr.markForCheck();
+        });
     }
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -95,12 +63,24 @@ export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
     private renderChart() {
         this.chartOption = {
             title: {
-                text: 'Referer of a Website',
-                subtext: 'Fake Data',
+                text: this.TranslocoService.translate('Host availability'),
+                //subtext: 'Fake Data',
                 left: 'center'
             },
+            color: [
+                "#00bc4c", "#bf0000", "#6b737c"
+            ],
             tooltip: {
-                trigger: 'item'
+                trigger: 'item',
+                formatter: (params: any) => {
+                    const html = `<div class="row">
+                        <div class="col-12">
+                            ${params.marker} ${params.name}
+                        </div>
+                        </div>`;
+
+                    return html;
+                }
             },
             legend: {
                 orient: 'vertical',
@@ -108,16 +88,24 @@ export class HostPieEchartComponent implements OnInit, OnChanges, OnDestroy {
             },
             series: [
                 {
-                    name: 'Access From',
+                    //name: 'Access From',
                     type: 'pie',
-                    radius: '50%',
-                    data: this.chartData,
+                    radius: '70%',
+                    data: this.chartData(),
                     emphasis: {
+                        scale: true,
+                        scaleSize: 20,
                         itemStyle: {
                             shadowBlur: 10,
                             shadowOffsetX: 0,
                             shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
+                    },
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
                     }
                 }
             ]

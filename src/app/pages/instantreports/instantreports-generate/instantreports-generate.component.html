@@ -118,7 +118,6 @@
             <!-- Report -->
             <ng-container *ngIf="selectedTab === 'report'">
                 @if (report) {
-
                     <c-row class="mb-3">
                         <c-col [xs]="12" class="h5">
                             <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
@@ -133,76 +132,8 @@
                         </c-col>
                     </c-row>
 
+                    <oitc-instantreport-viewer [report]="report"></oitc-instantreport-viewer>
 
-                    <!-- Summary only report -->
-                    <ng-container *ngIf="report.instantReport.reportDetails.summary == 1">
-
-                        <c-row>
-                            <c-col [xs]="12" [md]="6" class="d-flex">
-                                <c-card class="mb-3 flex-1">
-                                    <c-card-header>
-                                        <h5 cCardTitle>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            {{ t('Hosts summary') }}
-                                        </h5>
-                                    </c-card-header>
-                                    <c-card-body>
-                                        <oitc-host-radialbar-chart
-                                            [statusDataAbsolut]="getSummaryDataAsPercentag(report.instantReport.reportDetails.summary_hosts?.reportData, 'host')"
-                                        ></oitc-host-radialbar-chart>
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-
-                            <c-col [xs]="12" [md]="6" class="d-flex">
-                                <c-card class="mb-3 flex-1">
-                                    <c-card-header>
-                                        <h5 cCardTitle>
-                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                            {{ t('Services summary') }}
-                                        </h5>
-                                    </c-card-header>
-                                    <c-card-body>
-                                        <oitc-service-radialbar-chart
-                                            [statusDataAbsolut]="getSummaryDataAsPercentag(report.instantReport.reportDetails.summary_services?.reportData, 'service')"
-                                        ></oitc-service-radialbar-chart>
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-                    </ng-container>
-
-                    <!-- Detailed report -->
-                    <ng-container *ngIf="report.instantReport.reportDetails.summary == 0">
-                        <c-row>
-                            <c-col [xs]="12" *ngFor="let host of Object.values(report.instantReport.hosts)">
-                                <c-card class="mb-3 flex-1">
-                                    <c-card-header>
-                                        <h5 cCardTitle>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <oitc-label-link
-                                                [objectId]="host.Host.id"
-                                                [route]="'/hosts/browser'"
-                                                [permissions]="'hosts.browser'">
-                                                {{ host.Host.name }}
-                                            </oitc-label-link>
-                                        </h5>
-                                    </c-card-header>
-                                    <c-card-body>
-                                        <c-col>
-                                            <c-row [xs]="12">
-                                                <oitc-host-pie-echart
-                                                    [chartData]="test"
-                                                ></oitc-host-pie-echart>
-                                            </c-row>
-
-                                        </c-col>
-
-                                    </c-card-body>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-                    </ng-container>
                 }
 
             </ng-container>

@@ -23,9 +23,8 @@ import {
 } from 'ng-apexcharts';
 
 import { TranslocoService } from '@jsverse/transloco';
-import { ColorModeService } from '@coreui/angular';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -56,17 +55,15 @@ export class ServicePieChartComponent implements OnInit, OnChanges, OnDestroy {
 
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
-    private readonly ColorModeService = inject(ColorModeService);
+    private readonly LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {};
     public apexStroke: ApexStroke = {};
 
     constructor() {
-        const colorMode$ = toObservable(this.ColorModeService.colorMode);
-
         // Subscribe to the color mode changes (drop down menu in header)
-        this.subscription.add(colorMode$.subscribe((theme) => {
+        this.subscription.add(this.LayoutService.theme$.subscribe((theme) => {
             //console.log('Change in theme detected', theme);
             if (this.chart && this.chartOptions) {
 

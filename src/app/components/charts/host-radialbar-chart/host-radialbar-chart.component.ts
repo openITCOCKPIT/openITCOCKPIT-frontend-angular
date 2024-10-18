@@ -12,11 +12,10 @@ import {
 } from '@angular/core';
 import { ApexGrid, ChartComponent } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { ChartOptions } from '../host-pie-chart/host-pie-chart.component';
 import { TranslocoService } from '@jsverse/transloco';
-import { ColorModeService } from '@coreui/angular';
 import { ChartAbsolutValue } from '../charts.interface';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-host-radialbar-chart',
@@ -42,7 +41,7 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
 
     private subscription: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
-    private readonly ColorModeService = inject(ColorModeService);
+    private readonly LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
 
     public apexGridOptions: ApexGrid = {
@@ -55,10 +54,8 @@ export class HostRadialbarChartComponent implements OnInit, OnChanges, OnDestroy
     };
 
     constructor() {
-        const colorMode$ = toObservable(this.ColorModeService.colorMode);
-
         // Subscribe to the color mode changes (drop down menu in header)
-        this.subscription.add(colorMode$.subscribe((theme) => {
+        this.subscription.add(this.LayoutService.theme$.subscribe((theme) => {
             //console.log('Change in theme detected', theme);
             if (this.chart && this.chartOptions) {
 

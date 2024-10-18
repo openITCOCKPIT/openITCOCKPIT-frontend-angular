@@ -16,7 +16,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
@@ -52,6 +51,7 @@ import {
 } from '../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { HostPieEchartComponent } from '../../../components/charts/host-pie-echart/host-pie-echart.component';
+import { InstantreportViewerComponent } from './instantreport-viewer/instantreport-viewer.component';
 
 @Component({
     selector: 'oitc-instantreports-generate',
@@ -90,7 +90,8 @@ import { HostPieEchartComponent } from '../../../components/charts/host-pie-echa
         ServiceRadialbarChartComponent,
         NgForOf,
         LabelLinkComponent,
-        HostPieEchartComponent
+        HostPieEchartComponent,
+        InstantreportViewerComponent
     ],
     templateUrl: './instantreports-generate.component.html',
     styleUrl: './instantreports-generate.component.css',
@@ -120,10 +121,10 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
     },
         {
             name: "faasdasdoo",
-            value: 10300
+            value: 1030
         },
         {
-            name: "foo",
+            name: "sa",
             value: 1234
         }];
 

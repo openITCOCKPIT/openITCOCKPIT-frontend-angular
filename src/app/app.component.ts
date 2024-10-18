@@ -81,13 +81,20 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             if (theme === 'dark') {
                 this.document.body.classList.add('dark-theme');
                 this.LayoutService.setTheme('dark');
+            } else if (theme === 'auto') {
+                const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (osSystemDarkModeEnabled) {
+                    this.LayoutService.setTheme('dark');
+                } else {
+                    this.LayoutService.setTheme('light');
+                }
             } else {
                 this.document.body.classList.remove('dark-theme');
                 this.LayoutService.setTheme('light');
             }
 
         }));
-        
+
     }
 
     public ngOnDestroy(): void {
