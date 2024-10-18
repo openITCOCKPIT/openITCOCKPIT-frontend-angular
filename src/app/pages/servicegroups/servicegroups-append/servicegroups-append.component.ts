@@ -79,8 +79,9 @@ export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
-    private cdr = inject(ChangeDetectorRef);
+    private readonly cdr = inject(ChangeDetectorRef);
 
+    protected servicegroups: SelectKeyValue[] = [];
     protected post: ServicegroupAppend = {
         Servicegroup: {
             services: {
@@ -89,7 +90,6 @@ export class ServicegroupsAppendComponent implements OnInit, OnDestroy {
             id: 0
         }
     };
-    protected servicegroups: SelectKeyValue[] = [];
 
     protected submit(): void {
         const serviceIds = this.route.snapshot.paramMap.get('serviceids');
