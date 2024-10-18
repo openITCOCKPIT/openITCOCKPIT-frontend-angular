@@ -136,33 +136,36 @@
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="tmpFilter.Types.login" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
                                            id="login"
                                            name="login"
                                            oitcDebounce
                                            type="checkbox"/>
-                                    <label cFormCheckLabel for="login">
+                                    <label cFormCheckLabel for="login" class="ms-1 mt-1">
                                         {{ t('User Login') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="tmpFilter.Types.user_delete" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
                                            id="userDelete"
                                            name="userDelete"
                                            oitcDebounce
                                            type="checkbox"/>
-                                    <label cFormCheckLabel for="userDelete">
+                                    <label cFormCheckLabel for="userDelete" class="ms-1 mt-1">
                                         {{ t('User Delete') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="tmpFilter.Types.user_password_change" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
                                            id="userPasswordChange"
                                            name="userPAsswordChange"
                                            oitcDebounce
                                            type="checkbox"/>
-                                    <label cFormCheckLabel for="userPasswordChange">
+                                    <label cFormCheckLabel for="userPasswordChange" class="ms-1 mt-1">
                                         {{ t('User Password Change') }}
                                     </label>
                                 </c-form-check>

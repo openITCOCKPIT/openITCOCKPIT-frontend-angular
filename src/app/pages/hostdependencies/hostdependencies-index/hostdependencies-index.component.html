@@ -159,7 +159,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-success"
+                                        class="checkbox-lg checkbox-success"
                                         name="Hostdependencies.execution_fail_on_up"
                                         id="Hostdependencies.execution_fail_on_up"
                                         type="checkbox"
@@ -169,14 +169,14 @@
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_up]']"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.execution_fail_on_up">{{ t('Up') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="Hostdependencies.execution_fail_on_down"
                                         id="Hostdependencies.execution_fail_on_down"
                                         type="checkbox"
@@ -185,14 +185,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_down]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.execution_fail_on_down">{{ t('Down') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="Hostdependencies.execution_fail_on_unreachable"
                                         id="Hostdependencies.execution_fail_on_unreachable"
                                         type="checkbox"
@@ -201,14 +201,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_unreachable]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.execution_fail_on_unreachable">{{ t('Unreachable') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.execution_fail_on_pending"
                                         id="Hostdependencies.execution_fail_on_pending"
                                         type="checkbox"
@@ -217,14 +217,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.execution_fail_on_pending]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.execution_fail_on_pending">{{ t('Pending') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.execution_none"
                                         id="Hostdependencies.execution_none"
                                         type="checkbox"
@@ -233,7 +233,7 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.execution_none]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.execution_none">{{ t('Execution none') }}</label>
                                 </c-form-check>
                             </fieldset>
@@ -247,7 +247,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-success"
+                                        class="checkbox-lg checkbox-success"
                                         name="Hostdependencies.notification_fail_on_up"
                                         id="Hostdependencies.notification_fail_on_up"
                                         type="checkbox"
@@ -257,14 +257,14 @@
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_up]']"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.notification_fail_on_up">{{ t('Up') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="Hostdependencies.notification_fail_on_down"
                                         id="Hostdependencies.notification_fail_on_down"
                                         type="checkbox"
@@ -273,14 +273,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_down]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.notification_fail_on_down">{{ t('Down') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="Hostdependencies.notification_fail_on_unreachable"
                                         id="Hostdependencies.notification_fail_on_unreachable"
                                         type="checkbox"
@@ -289,14 +289,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_unreachable]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.notification_fail_on_unreachable">{{ t('Unreachable') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.notification_fail_on_pending"
                                         id="Hostdependencies.notification_fail_on_pending"
                                         type="checkbox"
@@ -305,14 +305,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.notification_fail_on_pending]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.notification_fail_on_pending">{{ t('Pending') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.notification_none"
                                         id="Hostdependencies.notification_none"
                                         type="checkbox"
@@ -321,7 +321,7 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostdependencies.notification_none]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.notification_none">{{ t('Notification none') }}</label>
                                 </c-form-check>
                             </fieldset>
@@ -335,7 +335,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.inherits_parent"
                                         id="Hostdependencies.inherits_parent"
                                         type="checkbox"
@@ -344,14 +344,14 @@
                                         [trueValue]="1"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[Hostdependencies.inherits_parent][0]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.inherits_parent">{{ t('Inherits parent') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="Hostdependencies.not_inherits_parent"
                                         id="Hostdependencies.not_inherits_parent"
                                         type="checkbox"
@@ -360,7 +360,7 @@
                                         [trueValue]="0"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[Hostdependencies.inherits_parent][1]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostdependencies.not_inherits_parent">{{ t('Not inherits parent') }}</label>
                                 </c-form-check>
                             </fieldset>

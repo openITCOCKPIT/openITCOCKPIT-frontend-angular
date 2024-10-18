@@ -7,6 +7,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckInputDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
@@ -21,7 +22,6 @@ import {
     ToasterComponent,
     ToastHeaderComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -100,7 +100,8 @@ import { HostSummaryStatusmapComponent } from './host-summary-statusmap/host-sum
         ToastComponent,
         ToastHeaderComponent,
         ToasterComponent,
-        HostSummaryStatusmapComponent
+        HostSummaryStatusmapComponent,
+        FormCheckInputDirective
     ],
     templateUrl: './statusmaps-index.component.html',
     styleUrl: './statusmaps-index.component.css',

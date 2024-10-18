@@ -207,7 +207,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-success"
+                                        class="checkbox-lg checkbox-success"
                                         name="Hostescalations.escalate_on_recovery"
                                         id="Hostescalations.escalate_on_recovery"
                                         type="checkbox"
@@ -217,14 +217,14 @@
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostescalations.escalate_on_recovery]']"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostescalations.escalate_on_recovery">{{ t('Up') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="Hostescalations.escalate_on_down"
                                         id="Hostescalations.escalate_on_down"
                                         type="checkbox"
@@ -233,14 +233,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostescalations.escalate_on_down]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostescalations.escalate_on_down">{{ t('Down') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="Hostescalations.escalate_on_unreachable"
                                         id="Hostescalations.escalate_on_unreachable"
                                         type="checkbox"
@@ -249,7 +249,7 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Hostescalations.escalate_on_unreachable]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Hostescalations.escalate_on_unreachable">{{ t('Unreachable') }}</label>
                                 </c-form-check>
                             </fieldset>

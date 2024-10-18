@@ -213,7 +213,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="filter.isRunning"
                                         id="filter.isRunning"
                                         type="checkbox"
@@ -222,14 +222,14 @@
                                         [trueValue]="true"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[isRunning]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.isRunning">{{ t('Is running') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="filter.DowntimeHosts.was_not_cancelled"
                                         id="filter.DowntimeHosts.was_not_cancelled"
                                         type="checkbox"
@@ -238,14 +238,14 @@
                                         [trueValue]="true"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[DowntimeHosts.was_not_cancelled]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeHosts.was_not_cancelled">{{ t('Was not cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="filter.DowntimeHosts.was_cancelled"
                                         id="filter.DowntimeHosts.was_cancelled"
                                         type="checkbox"
@@ -254,14 +254,14 @@
                                         [trueValue]="true"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[DowntimeHosts.was_cancelled]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeHosts.was_cancelled">{{ t('Was cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="filter.hideExpired"
                                         id="filter.hideExpired"
                                         type="checkbox"
@@ -270,7 +270,7 @@
                                         [trueValue]="true"
                                         [falseValue]="''"
                                         [(ngModel)]="params['filter[hideExpired]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.hideExpired">{{ t('Hide expired') }}</label>
                                 </c-form-check>
                             </fieldset>
