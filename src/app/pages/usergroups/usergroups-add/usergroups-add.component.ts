@@ -209,7 +209,6 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         );
     }
 
-
     protected forceTicks(actionToTick: string, tick: boolean) {
         for (let aco in this.acos.acos) {
             for (let controller in this.acos.acos[aco].children) {
@@ -238,7 +237,6 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         }
         this.cdr.markForCheck();
     };
-
 }
 
 const keepOrder = (a: any, b: any) => a;

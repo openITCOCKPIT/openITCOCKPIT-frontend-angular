@@ -69,7 +69,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
     selector: 'oitc-users-ldap',
     standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -124,6 +123,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly profileService: ProfileService = inject(ProfileService);
     private readonly ContactService: ContactsService = inject(ContactsService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected createAnother: boolean = false;
     protected post: AddFromLdapRoot = this.getDefaultPost();
@@ -142,9 +142,12 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected ldapConfig: LdapConfig = {} as LdapConfig;
     protected serverTime: string = '';
     protected serverTimeZone: string = '';
-    private cdr = inject(ChangeDetectorRef);
-
     protected usedContainerIdsBySource: { [key: string]: number[] } = {};
+    protected ldapUserDetails: LdapUserDetails = {
+        usergroupLdap: {
+            id: 0
+        }
+    } as LdapUserDetails;
 
     public onSelectedContainerIdsChange() {
         // Traverse all containerids and set the value to 1.
@@ -304,6 +307,7 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 });
             }));
     }
+
     public loadContainers = (): void => {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
@@ -347,12 +351,6 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
                 this.cdr.markForCheck();
             }))
     }
-
-    protected ldapUserDetails: LdapUserDetails = {
-        usergroupLdap: {
-            id: 0
-        }
-    } as LdapUserDetails;
 
     private loadLdapUserDetails(): void {
         this.subscriptions.add(this.UsersService.loadLdapUserDetails(this.post.User.samaccountname)
@@ -449,6 +447,4 @@ export class UsersLdapComponent implements OnDestroy, OnInit {
     protected trackByIndex(index: number, item: any): number {
         return index;
     }
-
-
 }

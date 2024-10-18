@@ -60,7 +60,6 @@ import { HttpErrorResponse } from '@angular/common/http';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsCopyComponent implements OnInit, OnDestroy {
-
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly notyService: NotyService = inject(NotyService);

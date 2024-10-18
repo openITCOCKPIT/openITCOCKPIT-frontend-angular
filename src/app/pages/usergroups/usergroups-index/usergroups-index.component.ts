@@ -103,7 +103,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsIndexComponent implements OnInit, OnDestroy {
-
     private readonly modalService: ModalService = inject(ModalService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
@@ -198,7 +197,6 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
         this.params.scroll = change.scroll;
         this.loadUsergroups();
     }
-
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {

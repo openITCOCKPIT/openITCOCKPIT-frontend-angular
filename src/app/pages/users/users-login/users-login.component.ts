@@ -60,25 +60,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
-    protected logoUrl: string = '';
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly LayoutService: LayoutService = inject(LayoutService);
+    private readonly cdr = inject(ChangeDetectorRef);
+    private readonly NotyService: NotyService = inject(NotyService);
+    private readonly AuthService: AuthService = inject(AuthService);
+    private readonly router: Router = inject(Router);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private _csrfToken: string = '';
 
+    protected logoUrl: string = '';
     protected isSsoEnabled: boolean = true;
     protected forceRedirectSsousersToLoginScreen: boolean = false;
     protected hasValidSslCertificate: boolean = false;
     protected loginAnimation: boolean = true;
     protected disableAnimation: boolean = false;
-
     protected disableLogin: boolean = false;
-    private subscriptions: Subscription = new Subscription();
-    private readonly LayoutService: LayoutService = inject(LayoutService);
-    private cdr = inject(ChangeDetectorRef);
-
-    protected post: { email: string, password: string, remember_me: boolean } = {
-        email: '',
-        password: '',
-        remember_me: true
-    };
-
+    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
     protected particlesOptions: any = {
         background: {
             color: {
@@ -137,20 +135,18 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         },
         detectRetina: true,
     };
-
     protected images: LoginImage[] = [];
     protected customLoginBackgroundHtml: string = '';
     protected isCustomLoginBackground: boolean = false;
-    private readonly NotyService: NotyService = inject(NotyService);
     protected description: string = '';
-    private readonly AuthService: AuthService = inject(AuthService);
-    private router: Router = inject(Router);
-    public readonly route: ActivatedRoute = inject(ActivatedRoute);
-    private _csrfToken: string = '';
+    protected post: { email: string, password: string, remember_me: boolean } = {
+        email: '',
+        password: '',
+        remember_me: true
+    };
 
     constructor(private readonly ngParticlesService: NgParticlesService) {
         localStorage.removeItem('browserUuid');
-
     }
 
     public ngOnDestroy() {
@@ -159,7 +155,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.LayoutService.setLayout(LayoutOptions.Default);
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         // Switch to a blank layout for the login screen
         this.LayoutService.setLayout(LayoutOptions.Blank);
 
@@ -229,10 +225,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         }));
     }
 
-
     public particlesLoaded(container: Container): void {
     }
-
 
     protected submit(): void {
 
@@ -277,7 +271,6 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         }));
 
     }
-
 
     protected isOAuthResponse = (hasSsoError: boolean) => {
         if (hasSsoError === true) {
@@ -768,5 +761,4 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             "fpsLimit": 30
         };
     };
-    protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
 }
