@@ -116,6 +116,7 @@
                                     <label>
                                         {{ t('Enable RegEx') }}
                                         <input type="checkbox"
+                                               cFormCheckInput
                                                name="filter.Host.name_regex"
                                                oitcDebounce
                                                (debouncedValue)="onFilterChange($event)"
@@ -144,6 +145,7 @@
                                     <label>
                                         {{ t('Enable RegEx') }}
                                         <input type="checkbox"
+                                               cFormCheckInput
                                                name="filter.Host.address_regex"
                                                oitcDebounce
                                                (debouncedValue)="onFilterChange($event)"

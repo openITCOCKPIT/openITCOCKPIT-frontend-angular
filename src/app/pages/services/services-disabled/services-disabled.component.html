@@ -111,6 +111,7 @@
                                         <input type="checkbox"
                                                name="filter.Host.name_regex"
                                                oitcDebounce
+                                               cFormCheckInput
                                                (debouncedValue)="onFilterChange($event)"
                                                [(ngModel)]="params['filter[Hosts.name_regex]']"
                                         />
@@ -137,6 +138,7 @@
                                     <label>
                                         {{ t('Enable RegEx') }}
                                         <input type="checkbox"
+                                               cFormCheckInput
                                                name="filter.Service.name_regex"
                                                oitcDebounce
                                                (debouncedValue)="onFilterChange($event)"
