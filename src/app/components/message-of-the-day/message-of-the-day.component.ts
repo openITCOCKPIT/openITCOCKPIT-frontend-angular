@@ -113,8 +113,10 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Fetch current message of the day.
         this.subscriptions.add(this.MessagesOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
-            this.messageOfTheDay = message;
-            this.html = this.BbCodeParserService.parse(message.messageOtd.content || '');
+            if (message.messageOtdAvailable) {
+                this.messageOfTheDay = message;
+                this.html = this.BbCodeParserService.parse(this.messageOfTheDay.messageOtd.content);
+            }
 
             if (this.messageOfTheDay.showMessageAfterLogin) {
                 this.showModal();

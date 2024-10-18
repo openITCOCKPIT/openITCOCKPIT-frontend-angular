@@ -154,12 +154,12 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
 
             const title: string = this.TranslocoService.translate('Message of the day');
             const msg: string = this.TranslocoService.translate('added successfully');
-            const url: (string | number)[] = ['messageOtd', 'edit', response.id];
+            const url: (string | number)[] = ['messagesOtd', 'edit', response.id];
 
             this.notyService.genericSuccess(msg, title, url);
 
             if (!this.createAnother) {
-              this.HistoryService.navigateWithFallback(['/messageOtd/index']);
+              this.HistoryService.navigateWithFallback(['/messagesOtd/index']);
               return;
             }
             this.post = this.getDefaultPost();

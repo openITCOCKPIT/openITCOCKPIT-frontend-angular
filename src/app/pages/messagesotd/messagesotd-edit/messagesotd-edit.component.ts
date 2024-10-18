@@ -171,7 +171,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    this.HistoryService.navigateWithFallback(['/messageOtd/index']);
+                    this.HistoryService.navigateWithFallback(['/messagesOtd/index']);
                     return;
                 }
 
