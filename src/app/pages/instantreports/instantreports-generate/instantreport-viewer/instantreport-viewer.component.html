@@ -56,12 +56,30 @@
                             </c-card-header>
                             <c-card-body>
                                 <c-col>
-                                    <c-row [xs]="12">
-
-                                        CHART HIER
-
+                                    <c-row [xs]="12" *ngIf="host.Host._pieChartMetrics">
+                                        <oitc-host-pie-echart
+                                            [chartData]="host.Host._pieChartMetrics"></oitc-host-pie-echart>
                                     </c-row>
 
+                                    @for (service of host.Services; track $index) {
+                                        <c-row [xs]="12" *ngIf="service.Service._chartAbsolutValues">
+                                            <span>
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                <a *oitcPermission="['services', 'browser']"
+                                                   [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                    {{ service.Service.name }}
+                                                </a>
+                                                <span *oitcPermission="['services', 'browser']; negate: true">
+                                                    {{ service.Service.name }}
+                                                </span>
+                                            </span>
+
+                                            <oitc-service-progressbar
+                                                [progressbarData]="service.Service._chartAbsolutValues"
+                                                [showPercentage]="false"
+                                                class="mb-2"></oitc-service-progressbar>
+                                        </c-row>
+                                    }
                                 </c-col>
 
                             </c-card-body>

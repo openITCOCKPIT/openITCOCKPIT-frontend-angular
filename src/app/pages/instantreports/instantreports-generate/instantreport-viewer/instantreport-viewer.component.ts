@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, 
 import {
     InstantreportGenerateResponse,
     InstantreportHtmlHostWithServices,
-    InstantreportReportDetails
+    InstantreportReportDetails,
+    InstantreportService
 } from '../../instantreports.interface';
 import {
     CardBodyComponent,
@@ -21,12 +22,17 @@ import {
     ServiceRadialbarChartComponent
 } from '../../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { PieChartMetric } from '../../../../components/charts/charts.interface';
+import { ChartAbsolutValue, PieChartMetric } from '../../../../components/charts/charts.interface';
 import { HostPieEchartComponent } from '../../../../components/charts/host-pie-echart/host-pie-echart.component';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import {
     ServicePieEchartComponent
 } from '../../../../components/charts/service-pie-echart/service-pie-echart.component';
+import { PermissionDirective } from '../../../../permissions/permission.directive';
+import { RouterLink } from '@angular/router';
+import {
+    ServiceProgressbarComponent
+} from '../../../../components/services/service-progressbar/service-progressbar.component';
 
 @Component({
     selector: 'oitc-instantreport-viewer',
@@ -46,7 +52,10 @@ import {
         HostPieEchartComponent,
         LabelLinkComponent,
         NgForOf,
-        ServicePieEchartComponent
+        ServicePieEchartComponent,
+        PermissionDirective,
+        RouterLink,
+        ServiceProgressbarComponent,
     ],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
@@ -76,7 +85,36 @@ export class InstantreportViewerComponent {
             if (report?.instantReport.hosts) {
                 for (const hostUuid in report.instantReport.hosts) {
                     const host = report.instantReport.hosts[hostUuid];
-                    const services = Object.values(host.Services);
+                    let services: InstantreportService[] = [];
+                    if (host.Host.Services) {
+                        services = Object.values(host.Host.Services);
+                    }
+
+                    let hostPieChartMetrics: PieChartMetric[] = [];
+                    for (let i = 0; i <= 2; i++) {
+                        hostPieChartMetrics.push({
+                            name: host.Host.reportData.percentage[i] || 'Error',
+                            // @ts-ignore
+                            value: host.Host.reportData[i.toString()] || 0
+                        });
+                    }
+
+                    host.Host._pieChartMetrics = hostPieChartMetrics;
+
+                    services.forEach(service => {
+                        let serviceChartAbsolutValues: ChartAbsolutValue[] = [];
+                        for (let i = 0; i <= 3; i++) {
+                            const total = service.Service.reportData['0'] + service.Service.reportData['1'] + service.Service.reportData['2'] + service.Service.reportData['3'];
+                            serviceChartAbsolutValues.push({
+                                Name: service.Service.reportData.percentage[i] || 'Error',
+                                // @ts-ignore
+                                Value: service.Service.reportData[i.toString()] || 0,
+                                Total: total
+                            });
+                        }
+                        service.Service._chartAbsolutValues = serviceChartAbsolutValues;
+                    });
+
                     this.hostsWithServices.push({
                             Host: host.Host,
                             Services: services
@@ -89,35 +127,20 @@ export class InstantreportViewerComponent {
                 this.hostSummary = [];
                 this.serviceSummary = [];
 
-                this.hostSummary.push({
-                    name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[0] || 'Error',
-                    value: report.instantReport.reportDetails.summary_hosts?.reportData['0'] || 0
-                });
-                this.hostSummary.push({
-                    name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[1] || 'Error',
-                    value: report.instantReport.reportDetails.summary_hosts?.reportData['1'] || 0
-                });
-                this.hostSummary.push({
-                    name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[2] || 'Error',
-                    value: report.instantReport.reportDetails.summary_hosts?.reportData['2'] || 0
-                });
-
-                this.serviceSummary.push({
-                    name: report.instantReport.reportDetails.summary_services?.reportData.percentage[0] || 'Error',
-                    value: report.instantReport.reportDetails.summary_services?.reportData['0'] || 0
-                });
-                this.serviceSummary.push({
-                    name: report.instantReport.reportDetails.summary_services?.reportData.percentage[1] || 'Error',
-                    value: report.instantReport.reportDetails.summary_services?.reportData['1'] || 0
-                });
-                this.serviceSummary.push({
-                    name: report.instantReport.reportDetails.summary_services?.reportData.percentage[2] || 'Error',
-                    value: report.instantReport.reportDetails.summary_services?.reportData['2'] || 0
-                });
-                this.serviceSummary.push({
-                    name: report.instantReport.reportDetails.summary_services?.reportData.percentage[3] || 'Error',
-                    value: report.instantReport.reportDetails.summary_services?.reportData['3'] || 0
-                });
+                for (let i = 0; i <= 2; i++) {
+                    this.hostSummary.push({
+                        name: report.instantReport.reportDetails.summary_hosts?.reportData.percentage[i] || 'Error',
+                        // @ts-ignore
+                        value: report.instantReport.reportDetails.summary_hosts?.reportData[i.toString()] || 0
+                    });
+                }
+                for (let i = 0; i <= 3; i++) {
+                    this.serviceSummary.push({
+                        name: report.instantReport.reportDetails.summary_services?.reportData.percentage[i] || 'Error',
+                        // @ts-ignore
+                        value: report.instantReport.reportDetails.summary_services?.reportData[i.toString()] || 0
+                    });
+                }
             }
 
             this.cdr.markForCheck();

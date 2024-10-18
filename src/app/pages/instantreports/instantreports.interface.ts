@@ -1,6 +1,7 @@
 import { InstantreportEvaluationTypes, InstantreportFormats, InstantreportObjectTypes } from './instantreports.enums';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { DateTime } from 'luxon';
+import { ChartAbsolutValue, PieChartMetric } from '../../components/charts/charts.interface';
 
 /**********************
  *    Index action    *
@@ -166,9 +167,6 @@ export interface InstantreportGenerateResponse {
         hosts: {
             [key: string]: {
                 Host: InstantreportHost,
-                Services: {
-                    [key: string]: InstantreportService
-                }
             }
         },
         reportDetails: InstantreportReportDetails
@@ -179,7 +177,11 @@ export interface InstantreportGenerateResponse {
 export interface InstantreportHost {
     id: number,
     name: string,
-    reportData: InstantreportHostReportData
+    reportData: InstantreportHostReportData,
+    _pieChartMetrics?: PieChartMetric[] // this is only for the eCharts pie chart and not returned by the server
+    Services: {
+        [key: string]: InstantreportService
+    },
 }
 
 export interface InstantreportService {
@@ -187,6 +189,7 @@ export interface InstantreportService {
         name: string,
         id: number,
         reportData: InstantreportServiceReportData
+        _chartAbsolutValues?: ChartAbsolutValue[] // this is only for the eCharts pie chart and not returned by the server
     }
 }
 

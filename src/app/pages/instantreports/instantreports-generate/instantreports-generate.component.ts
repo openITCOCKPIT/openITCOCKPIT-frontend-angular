@@ -45,7 +45,7 @@ import { InstantreportsService } from '../instantreports.service';
 import { Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ChartAbsolutValue, PieChartMetric } from '../../../components/charts/charts.interface';
+import { PieChartMetric } from '../../../components/charts/charts.interface';
 import {
     ServiceRadialbarChartComponent
 } from '../../../components/charts/service-radialbar-chart/service-radialbar-chart.component';
@@ -225,53 +225,6 @@ export class InstantreportsGenerateComponent implements OnInit, OnDestroy {
                     }
                 }));
         }
-    }
-
-    public getSummaryDataAsPercentag(reportData: any, type: 'host' | 'service'): ChartAbsolutValue[] {
-        const data: ChartAbsolutValue[] = [];
-
-        // do not use report.instantReport.reportDetails.totalTime
-        // as all outages of all hosts got summed up
-
-        const max = type === 'host' ? 2 : 3;
-
-        if (reportData) {
-            // Get total value
-            let total = 0;
-            for (let i = 0; i <= max; i++) {
-                total += reportData[i] || 0
-            }
-
-            // get percentage for each status
-            for (let i = 0; i <= max; i++) {
-                data.push({
-                    Total: total,
-                    Value: reportData[i] || 0
-                });
-            }
-        }
-        return data;
-    }
-
-    public getSummaryDataForEcharts(reportData: any, type: 'host' | 'service'): PieChartMetric[] {
-        const data: PieChartMetric[] = [];
-
-        // do not use report.instantReport.reportDetails.totalTime
-        // as all outages of all hosts got summed up
-
-        const max = type === 'host' ? 2 : 3;
-
-        if (reportData) {
-
-            // get percentage for each status
-            for (let i = 0; i <= max; i++) {
-                data.push({
-                    name: reportData['percentage'][i] || 'undefined',
-                    value: reportData[i] || 0
-                });
-            }
-        }
-        return data;
     }
 
 
