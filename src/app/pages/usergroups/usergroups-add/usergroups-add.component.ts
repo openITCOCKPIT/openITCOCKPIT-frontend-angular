@@ -33,7 +33,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -112,8 +111,6 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsAddComponent implements OnInit, OnDestroy {
-    protected readonly keepOrder = keepOrder;
-
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly notyService: NotyService = inject(NotyService);
@@ -121,6 +118,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected errors: GenericValidationError | null = null;
     protected acos: AcoRoot = {acos: {}} as AcoRoot;
@@ -128,7 +126,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
     protected post: UsergroupsAddRoot = this.getDefaultPost() as UsergroupsAddRoot;
-    private cdr = inject(ChangeDetectorRef);
+    protected readonly keepOrder = keepOrder;
 
     public ngOnInit() {
         this.loadAcos();

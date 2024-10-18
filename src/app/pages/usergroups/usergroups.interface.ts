@@ -164,6 +164,3 @@ export interface child {
         _delete: string
     }
 }
-
-
-

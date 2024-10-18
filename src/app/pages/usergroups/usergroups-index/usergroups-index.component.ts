@@ -22,7 +22,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -67,7 +66,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownDividerDirective,
@@ -112,13 +110,12 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly router: Router = inject(Router);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected params: UsergroupsIndexParams = getdefaultUsergroupsIndexParams();
     protected usergroups: UsergroupsIndexRoot = {allUsergroups: [], _csrfToken: ''} as UsergroupsIndexRoot;
     protected selectedItems: DeleteAllItem[] = [];
     protected hideFilter: boolean = true;
-    private cdr = inject(ChangeDetectorRef);
-
 
     public ngOnInit() {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
@@ -143,7 +140,6 @@ export class UsergroupsIndexComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             }));
     }
-
 
     public toggleDeleteAllModal(usergroup?: UsergroupIndex) {
         let items: DeleteAllItem[] = [];
