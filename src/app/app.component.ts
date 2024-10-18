@@ -16,10 +16,10 @@ import { CoreuiFooterComponent } from './layouts/coreui/coreui-footer/coreui-foo
 import { CoreuiHeaderComponent } from './layouts/coreui/coreui-header/coreui-header.component';
 import { CoreuiNavbarComponent } from './layouts/coreui/coreui-navbar/coreui-navbar.component';
 import { GlobalLoaderComponent } from './layouts/coreui/global-loader/global-loader.component';
-import { DOCUMENT } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { LayoutService } from './layouts/coreui/layout.service';
+import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-root',
@@ -32,7 +32,10 @@ import { LayoutService } from './layouts/coreui/layout.service';
         CoreuiHeaderComponent,
         CoreuiNavbarComponent,
         GlobalLoaderComponent,
-        ShadowOnScrollDirective
+        ShadowOnScrollDirective,
+        NgIf,
+        AsyncPipe,
+        NgClass
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
@@ -43,8 +46,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
 
-    readonly LayoutService = inject(LayoutService);
+    public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
+
     private subscription: Subscription = new Subscription();
 
     constructor(library: FaIconLibrary,
@@ -83,6 +87,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             }
 
         }));
+        
     }
 
     public ngOnDestroy(): void {
@@ -110,4 +115,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             }, 100);
         }
     }
+
+    protected readonly LayoutOptions = LayoutOptions;
 }

@@ -157,10 +157,11 @@ export class PopoverGraphComponent implements OnDestroy {
                 setTimeout(() => {
                     this.renderGraphs();
                     this.isLoading = false;
-
+                    this.cdr.markForCheck();
                     // Check position after everything has rendered
                     setTimeout(() => {
                         this.graphOverlayPanel.align();
+                        this.cdr.markForCheck();
                     }, 150);
 
 

@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+export enum LayoutOptions {
+    Default = 'default',
+    Blank = 'blank'
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -11,6 +16,11 @@ export class LayoutService {
     // Subscribe to theme$ for layout changes
     public theme$: Observable<'light' | 'dark'> = this.theme$$.asObservable();
 
+    // The "default" layout uses CoreUI with navbar, header and content area.
+    // The blank layout also uses CoreUI, but hides the navbar and header
+    private layout$$: BehaviorSubject<LayoutOptions> = new BehaviorSubject<LayoutOptions>(LayoutOptions.Default);
+    public layout$: Observable<LayoutOptions> = this.layout$$.asObservable();
+
     constructor() {
     }
 
@@ -18,5 +28,8 @@ export class LayoutService {
         this.theme$$.next(theme);
     }
 
+    public setLayout(layout: LayoutOptions): void {
+        this.layout$$.next(layout);
+    }
 
 }
