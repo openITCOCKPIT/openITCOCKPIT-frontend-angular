@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ButtonCloseDirective, ColComponent,
@@ -85,6 +85,7 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly MessagesOfTheDayService = inject(MessagesOfTheDayService);
     private readonly BbCodeParserService = inject(BbCodeParserService);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected html: string = '';
     protected messageOfTheDay: CurrentMessageOfTheDay = {
@@ -98,6 +99,7 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
             show: false,
             id: 'messageOfTheDayModal'
         });
+        this.cdr.markForCheck();
     }
 
     public showModal() {
@@ -105,19 +107,18 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
             show: true,
             id: 'messageOfTheDayModal'
         });
+        this.cdr.markForCheck();
     }
 
     ngOnInit() {
         // Fetch current message of the day.
         this.subscriptions.add(this.MessagesOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
             this.messageOfTheDay = message;
-            this.html = this.BbCodeParserService.parse(message.messageOtd.content);
+            this.html = this.BbCodeParserService.parse(message.messageOtd.content || '');
 
             if (this.messageOfTheDay.showMessageAfterLogin) {
                 this.showModal();
             }
-        }));
-        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
         }));
     }
 
