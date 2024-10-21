@@ -102,8 +102,7 @@ export interface AgentconnectorPushSatelliteParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Hosts.name]': string,
-    'filter[host_assignment]': string,
-    'filter[no_host_assignment]': string
+    'filter[hasHostAssignment]': string,
 }
 
 export function getDefaultAgentconnectorPushSatelliteParams(): AgentconnectorPushSatelliteParams {
@@ -114,8 +113,7 @@ export function getDefaultAgentconnectorPushSatelliteParams(): AgentconnectorPus
         page: 1,
         direction: 'asc',
         'filter[Hosts.name]': '',
-        'filter[host_assignment]': '',
-        'filter[no_host_assignment]': ''
+        'filter[hasHostAssignment]': '',
     }
 }
 
