@@ -118,7 +118,7 @@
                     <c-row
                         *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
                         <fieldset class="hostWithServicesToDeploy">
-                            <h4>
+                            <h5>
                                 <legend>
                                     <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
                                         <input type="checkbox" cFormCheckInput
@@ -135,7 +135,7 @@
                                     </label>
 
                                 </legend>
-                            </h4>
+                            </h5>
 
                             <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                 <label

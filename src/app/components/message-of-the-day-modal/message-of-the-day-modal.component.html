@@ -1,5 +1,5 @@
 <c-modal id="messageOfTheDayModal"
-         size="lg">
+         size="lg" *ngIf="messageOfTheDay.messageOtd">
     <ng-container *transloco="let t">
         <c-modal-header [class]="'bg-' + messageOfTheDay.messageOtd.style">
             <h5>
