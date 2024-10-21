@@ -49,7 +49,6 @@ export class ServiceProgressbarComponent {
             });
         }
 
-        console.log(values);
         return values;
     }
 
