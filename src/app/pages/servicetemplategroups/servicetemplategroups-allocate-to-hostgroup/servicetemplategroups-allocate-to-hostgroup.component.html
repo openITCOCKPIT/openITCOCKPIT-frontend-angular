@@ -119,22 +119,19 @@
                         *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
                         <fieldset class="hostWithServicesToDeploy">
                             <h5>
-                                <legend>
-                                    <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
-                                        <input type="checkbox" cFormCheckInput
-                                               id="{{hostWithServicesToDeploy.host.id}}_ALL"
-                                               (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
-                                               [ngModelOptions]="{standalone: true}"
-                                               [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
-                                        >
-                                        {{ t('Service/s to deploy on host:') }}
-                                        <span class="text-info">
-                                            {{ hostWithServicesToDeploy.host.hostname }}
-                                            ({{ hostWithServicesToDeploy.host.address }})
-                                        </span>
-                                    </label>
-
-                                </legend>
+                                <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
+                                    <input type="checkbox" cFormCheckInput
+                                           id="{{hostWithServicesToDeploy.host.id}}_ALL"
+                                           (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
+                                    >
+                                    {{ t('Service/s to deploy on host:') }}
+                                    <span class="text-info">
+                                        {{ hostWithServicesToDeploy.host.hostname }}
+                                        ({{ hostWithServicesToDeploy.host.address }})
+                                    </span>
+                                </label>
                             </h5>
 
                             <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
