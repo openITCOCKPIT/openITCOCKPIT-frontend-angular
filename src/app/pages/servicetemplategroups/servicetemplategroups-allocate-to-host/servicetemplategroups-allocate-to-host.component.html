@@ -115,9 +115,7 @@
 
                 <ng-container *ngIf="hostId !== null">
                     <fieldset class="hostWithServicesToDeploy">
-                        <legend>
-                            <h4>{{ t('Service/s to deploy on target host:') }}</h4>
-                        </legend>
+                        <h5>{{ t('Service/s to deploy on target host:') }}</h5>
                         <div
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
