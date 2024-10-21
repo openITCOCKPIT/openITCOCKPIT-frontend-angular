@@ -5,6 +5,7 @@ import {
     ModalBodyComponent,
     ModalComponent,
     ModalHeaderComponent,
+    ModalService,
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
@@ -40,6 +41,7 @@ export class MessageOfTheDayModalComponent implements OnChanges {
 
     protected html: string = '';
     private readonly BbCodeParserService = inject(BbCodeParserService);
+    private readonly ModalService = inject(ModalService);
 
     public ngOnChanges(changes: SimpleChanges) {
         if (! this.messageOfTheDay.messageOtd) {
@@ -52,6 +54,9 @@ export class MessageOfTheDayModalComponent implements OnChanges {
     }
 
     protected hideModal(): void {
-
+        this.ModalService.toggle({
+            show: false,
+            id: 'messageOfTheDayModal'
+        });
     }
 }
