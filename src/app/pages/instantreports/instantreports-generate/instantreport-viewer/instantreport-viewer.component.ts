@@ -33,6 +33,9 @@ import { RouterLink } from '@angular/router';
 import {
     ServiceProgressbarComponent
 } from '../../../../components/services/service-progressbar/service-progressbar.component';
+import {
+    HostSimplePieChartComponent
+} from '../../../../components/charts/host-simple-pie-chart/host-simple-pie-chart.component';
 
 @Component({
     selector: 'oitc-instantreport-viewer',
@@ -56,6 +59,7 @@ import {
         PermissionDirective,
         RouterLink,
         ServiceProgressbarComponent,
+        HostSimplePieChartComponent,
     ],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
