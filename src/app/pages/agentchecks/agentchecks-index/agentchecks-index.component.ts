@@ -56,6 +56,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate-types.enum';
 
 @Component({
     selector: 'oitc-agentchecks-index',
@@ -221,4 +222,5 @@ export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
 
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
+    protected readonly ServicetemplateTypesEnum = ServicetemplateTypesEnum;
 }

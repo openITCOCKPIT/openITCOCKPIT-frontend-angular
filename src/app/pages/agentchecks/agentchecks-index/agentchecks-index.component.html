@@ -35,6 +35,15 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
+                    <a *oitcPermission="['servicetemplates', 'index']"
+                       [routerLink]="['/', 'servicetemplates', 'index']"
+                       [queryParams]="{servicetemplatetype_id: ServicetemplateTypesEnum.OITC_AGENT_SERVICE}"
+                       cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                        {{ t('Go to Service templates') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item class="px-1">
                     <button (click)="loadAgentchecks()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}

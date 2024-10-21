@@ -22,7 +22,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -136,6 +135,19 @@ export class ServicetemplatesIndexComponent implements OnInit, OnDestroy, IndexP
             if (id) {
                 this.params['filter[Servicetemplates.id][]'] = [].concat(id); // make sure we always get an array
             }
+
+            let servicetemplatetype_id = params['servicetemplatetype_id'];
+            if (servicetemplatetype_id) {
+                // The Number cast is required otherwise the select box will not select the correct value
+                if (Array.isArray(servicetemplatetype_id)) {
+                    servicetemplatetype_id = servicetemplatetype_id.map(Number);
+                } else {
+                    servicetemplatetype_id = [Number(servicetemplatetype_id)];
+                }
+
+                this.params['filter[Servicetemplates.servicetemplatetype_id][]'] = servicetemplatetype_id;
+            }
+
 
             this.loadServicetemplates();
         }));
