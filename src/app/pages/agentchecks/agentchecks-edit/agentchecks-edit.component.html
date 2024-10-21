@@ -1,1 +1,123 @@
-<p>agentchecks-edit works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('openITCOCKPIT Agent') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentchecks', 'index']" [routerLink]="['/', 'agentchecks', 'index']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Checks') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3" *ngIf="post">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit openITCOCKPIT Agent check') }}
+                    <small class="fw-300">
+                        {{ post.name }}
+                    </small>
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['agentchecks', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+                <div class="mb-3">
+                    <label cLabel for="Name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="Name" type="text"
+                           name="Name"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="post.name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('The name of the check is equal to the key from the agents JSON output.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="PluginName">
+                        {{ t('Plugin name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="PluginName" type="text"
+                           name="PluginName"
+                           oitcFormError [errors]="errors" errorField="plugin_name"
+                           [(ngModel)]="post.plugin_name">
+                    <oitc-form-feedback [errors]="errors" errorField="plugin_name"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('The name of the check plugin used by the poller.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="servicetemplate">
+                        <oitc-label-link
+                            [objectId]="post.servicetemplate_id"
+                            [route]="'/servicetemplates/edit'"
+                            [permissions]="'servicetemplates.edit'"
+                        >
+                            {{ t('Service template') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </oitc-label-link>
+                    </label>
+
+                    <oitc-select
+                        name="servicetemplate"
+                        id="servicetemplate"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.servicetemplate_id"
+                        [options]="servicetemplates"
+                        oitcFormError [errors]="errors" errorField="servicetemplate_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="servicetemplate_id"></oitc-form-feedback>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Update agent check') }}
+                </button>
+                <button [fallbackUrl]="['agentchecks', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>

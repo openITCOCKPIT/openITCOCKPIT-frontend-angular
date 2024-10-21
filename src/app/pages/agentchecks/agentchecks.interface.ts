@@ -41,3 +41,16 @@ export interface AllAgentcheck {
     servicetemplate: ServicetemplateEntity
     allow_edit: boolean
 }
+
+/**********************
+ *    Add action    *
+ **********************/
+export interface AgentcheckPost {
+    id?: number
+    name: string
+    plugin_name: string
+    servicetemplate_id: number
+    created?: string
+    modified?: string,
+    servicetempalte?: ServicetemplateEntity
+}
