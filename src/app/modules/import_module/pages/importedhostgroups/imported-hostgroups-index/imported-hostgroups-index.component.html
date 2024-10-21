@@ -149,11 +149,12 @@
                                         cFormCheckInput
                                         name="filter.ImportedHostgroups.imported"
                                         id="filter.ImportedHostgroups.imported"
+                                        class="checkbox-lg checkbox-primary"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="params['filter[ImportedHostgroups.imported]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.ImportedHostgroups.imported">
                                         <c-badge color="info">
                                             {{ t('In monitoring') }}
@@ -166,11 +167,12 @@
                                         cFormCheckInput
                                         name="filter.ImportedHostgroups.not_imported"
                                         id="filter.ImportedHostgroups.not_imported"
+                                        class="checkbox-lg checkbox-primary"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="params['filter[ImportedHostgroups.not_imported]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.ImportedHostgroups.not_imported">
                                         <c-badge color="success">
                                             {{ t('NEW') }}

@@ -23,7 +23,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -44,6 +43,7 @@ import { EventlogsIndex, EventlogsIndexParams, getDefaultEventlogsIndexParams } 
 import { EventlogsService } from '../eventlogs.service';
 import { HttpParams } from '@angular/common/http';
 import { IndexPage } from '../../../pages.interface';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-eventlogs-index',
@@ -86,7 +86,8 @@ import { IndexPage } from '../../../pages.interface';
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        CardFooterComponent
+        CardFooterComponent,
+        TrueFalseDirective
     ],
     templateUrl: './eventlogs-index.component.html',
     styleUrl: './eventlogs-index.component.css',

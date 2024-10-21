@@ -209,12 +209,12 @@
                                 <span cInputGroupText>
                                     <c-form-check>
                                         <label>
+                                            {{ t('Enable RegEx') }}
                                             <input cFormCheckInput id="checkregexService" type="checkbox"
                                                    oitcDebounce
                                                    (debouncedValue)="onFilterChange($event)"
                                                    [(ngModel)]="filter.Services.name_regex"
                                             />
-                                            {{ t('Enable regex') }}
                                         </label>
                                     </c-form-check>
                                     <oitc-regex-helper-tooltip/>

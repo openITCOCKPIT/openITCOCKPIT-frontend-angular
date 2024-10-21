@@ -116,42 +116,42 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-warning"
+                                        class="checkbox-lg checkbox-warning"
                                         name="stateFilter.warning"
                                         id="stateFilter.warning"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.warning"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.warning">{{ t('Warning') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="stateFilter.critical"
                                         id="stateFilter.critical"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.critical"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.critical">{{ t('Critical') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="stateFilter.unknown"
                                         id="stateFilter.unknown"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.unknown"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.unknown">{{ t('Unknown') }}</label>
                                 </c-form-check>
                             </fieldset>

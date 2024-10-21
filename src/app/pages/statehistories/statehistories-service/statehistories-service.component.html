@@ -100,7 +100,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-success"
+                                        class="checkbox-lg checkbox-success"
                                         name="stateFilter.ok"
                                         id="stateFilter.ok"
                                         type="checkbox"
@@ -108,49 +108,49 @@
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.ok"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.ok">{{ t('Ok') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-warning"
+                                        class="checkbox-lg checkbox-warning"
                                         name="stateFilter.warning"
                                         id="stateFilter.warning"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.warning"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.warning">{{ t('Warning') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="stateFilter.critical"
                                         id="stateFilter.critical"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.critical"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.critical">{{ t('Critical') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="stateFilter.unknown"
                                         id="stateFilter.unknown"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="stateFilter.unknown"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="stateFilter.unknown">{{ t('Unknown') }}</label>
                                 </c-form-check>
                             </fieldset>
@@ -164,7 +164,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="StatehistoryServices.soft"
                                         id="StatehistoryServices.soft"
                                         type="checkbox"
@@ -172,21 +172,21 @@
                                         oitcDebounce
                                         [(ngModel)]="state_typesFilter.soft"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="StatehistoryServices.soft">{{ t('Soft') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-primary"
+                                        class="checkbox-lg checkbox-primary"
                                         name="StatehistoryServices.hard"
                                         id="StatehistoryServices.hard"
                                         type="checkbox"
                                         trueFalseValue
                                         oitcDebounce
                                         [(ngModel)]="state_typesFilter.hard"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="StatehistoryServices.hard">{{ t('Hard') }}</label>
                                 </c-form-check>
                             </fieldset>

@@ -113,8 +113,8 @@
                 </c-col>
             </c-row>
 
+            <!-- isLoading animation has an issue on theme switch so for now I disabled it -->
             <div echarts [options]="chartOption"
-                 [loading]="isLoading"
                  [theme]="theme"
                  (chartInit)="onChartInit($event)"
                  (chartDataZoom)="onChartDataZoom($event)"

@@ -1,0 +1,45 @@
+
+.title-border {
+    border-bottom: 3px solid;
+    border-image-slice: 0 0 1 0;
+}
+
+.title-border-bottom-primary {
+    border-image-source: linear-gradient(45deg, #4285F4, transparent);
+}
+
+.title-border-bottom-info {
+    border-image-source: linear-gradient(45deg, #33b5e5, transparent);
+}
+
+.title-border-bottom-success {
+    border-image-source: linear-gradient(45deg, #00C851, transparent);
+}
+
+.title-border-bottom-warning {
+    border-image-source: linear-gradient(45deg, #ffbb33, transparent);
+}
+
+.title-border-bottom-danger {
+    border-image-source: linear-gradient(45deg, #CC0000, transparent);
+}
+
+.title-border-primary {
+    border-color: #4285F4;
+}
+
+.title-border-info {
+    border-color: #33b5e5;
+}
+
+.title-border-success {
+    border-color: #00C851;
+}
+
+.title-border-warning {
+    border-color: #ffbb33;
+}
+
+.title-border-danger {
+    border-color: #CC0000;
+}

@@ -12,6 +12,7 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -21,7 +22,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -96,7 +96,8 @@ import { IndexPage } from '../../../pages.interface';
         XsButtonDirective,
         RouterLink,
         TableLoaderComponent,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        FormCheckInputDirective
     ],
     templateUrl: './deleted-hosts-index.component.html',
     styleUrl: './deleted-hosts-index.component.css',

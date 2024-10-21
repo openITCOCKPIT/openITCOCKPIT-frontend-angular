@@ -1,0 +1,41 @@
+<button cButton [color]="messageOfTheDay.messageOtd.style" (click)="showModal()" *ngIf="messageOfTheDay.messageOtdAvailable">
+    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+</button>
+
+
+<c-modal id="messageOfTheDayModal"
+         size="lg">
+    <ng-container *transloco="let t">
+        <c-modal-header [class]="'bg-' + messageOfTheDay.messageOtd.style">
+            <h5>
+                {{ t('Message of the day!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col md="1">
+                    <fa-stack size="2x">
+                        <fa-icon [icon]="['fas', 'comment']" [class]="'text-' + messageOfTheDay.messageOtd.style"
+                                 stackItemSize="2x"></fa-icon>
+                        <fa-icon [icon]="['fas', 'exclamation']" class="text-white"
+                                 stackItemSize="1x"
+                                 transform="right-10"></fa-icon>
+                    </fa-stack>
+                </c-col>
+                <c-col md="11">
+                    <h4 [class]="'title-border title-border-bottom-' + messageOfTheDay.messageOtd.style">
+                        {{ messageOfTheDay.messageOtd.title }}
+                    </h4>
+                    <p>
+                        <i>
+                            {{ messageOfTheDay.messageOtd.description }}
+                        </i>
+                    </p>
+                    <p [innerHTML]="html | trustAsHtml">
+                    </p>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+    </ng-container>
+</c-modal>

@@ -27,7 +27,6 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ColorModeService,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -47,11 +46,11 @@ import { SelectComponent } from '../../../../layouts/primeng/select/select/selec
 import { SelectKeyValue, SelectKeyValueString } from '../../../../layouts/primeng/select.interface';
 
 import 'echarts/theme/dark.js';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { DateTime } from "luxon";
 import { LocalStorageService } from '../../../../services/local-storage.service';
 import { GenericUnixtimerange } from '../../../../generic.interfaces';
+import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
@@ -154,7 +153,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     public currentGraphUnit: string | null = null;
 
     private PopoverGraphService = inject(PopoverGraphService);
-    private readonly ColorModeService = inject(ColorModeService);
+    private readonly LayoutService = inject(LayoutService);
 
     private subscriptions: Subscription = new Subscription();
 
@@ -173,29 +172,12 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     public hasEnoughData: boolean = true;
 
     public constructor() {
-        const colorMode$ = toObservable(this.ColorModeService.colorMode);
-
-        this.subscriptions.add(colorMode$.subscribe((theme) => {
-            this.isLoading = false;
-            //console.log('Change in theme detected', theme);
-            const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            switch (theme) {
-                case 'light':
-                    this.theme = null;
-                    break;
-
-                case 'dark':
-                    this.theme = 'dark';
-                    break;
-
-                case 'auto':
-                    if (osSystemDarkModeEnabled) {
-                        this.theme = 'dark';
-                    } else {
-                        this.theme = null;
-                    }
-                    break;
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = null;
+            if (theme === 'dark') {
+                this.theme = 'dark';
             }
+
             this.cdr.markForCheck();
         }));
     }

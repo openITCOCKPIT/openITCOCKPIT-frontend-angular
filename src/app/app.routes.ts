@@ -309,6 +309,15 @@ const coreRoutes: Routes = [{
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
 }, {
+    path: 'messagesOtd/add',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-add/messagesotd-add.component').then(m => m.MessagesotdAddComponent)
+}, {
+    path: 'messagesOtd/edit/:id',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-edit/messagesotd-edit.component').then(m => m.MessagesotdEditComponent)
+}, {
+    path: 'messagesOtd/index',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-index/messagesotd-index.component').then(m => m.MessagesotdIndexComponent)
+}, {
     path: 'timeperiods/index',
     loadComponent: () => import('./pages/timeperiods/timeperiods-index/timeperiods-index.component').then(m => m.TimeperiodsIndexComponent)
 }, {

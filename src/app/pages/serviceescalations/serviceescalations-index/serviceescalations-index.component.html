@@ -208,7 +208,7 @@
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-success"
+                                        class="checkbox-lg checkbox-success"
                                         name="Serviceescalations.escalate_on_recovery"
                                         id="Serviceescalations.escalate_on_recovery"
                                         type="checkbox"
@@ -218,14 +218,14 @@
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Serviceescalations.escalate_on_recovery]']"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Serviceescalations.escalate_on_recovery">{{ t('Ok') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-warning"
+                                        class="checkbox-lg checkbox-warning"
                                         name="Serviceescalations.escalate_on_warning"
                                         id="Serviceescalations.escalate_on_warning"
                                         type="checkbox"
@@ -235,14 +235,14 @@
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Serviceescalations.escalate_on_warning]']"/>
 
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Serviceescalations.escalate_on_warning">{{ t('Warning') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-danger"
+                                        class="checkbox-lg checkbox-danger"
                                         name="Serviceescalations.escalate_on_critical"
                                         id="Serviceescalations.escalate_on_critical"
                                         type="checkbox"
@@ -251,14 +251,14 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Serviceescalations.escalate_on_critical]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Serviceescalations.escalate_on_critical">{{ t('Critical') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
                                         (debouncedValue)="onFilterChange($event)"
                                         cFormCheckInput
-                                        class="checkbox-secondary"
+                                        class="checkbox-lg checkbox-secondary"
                                         name="Serviceescalations.escalate_on_unknown"
                                         id="Serviceescalations.escalate_on_unknown"
                                         type="checkbox"
@@ -267,7 +267,7 @@
                                         [falseValue]="''"
                                         [trueValue]="'1'"
                                         [(ngModel)]="params['filter[Serviceescalations.escalate_on_unknown]']"/>
-                                    <label cFormCheckLabel
+                                    <label cFormCheckLabel class="ms-1 mt-1"
                                            for="Serviceescalations.escalate_on_unknown">{{ t('Unknown') }}</label>
                                 </c-form-check>
                             </fieldset>

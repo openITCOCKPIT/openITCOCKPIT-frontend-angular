@@ -12,6 +12,7 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
+    FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -23,7 +24,6 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
@@ -117,7 +117,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         XsButtonDirective,
         RouterLink,
         EnableModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        FormCheckInputDirective
     ],
     templateUrl: './services-disabled.component.html',
     styleUrl: './services-disabled.component.css',

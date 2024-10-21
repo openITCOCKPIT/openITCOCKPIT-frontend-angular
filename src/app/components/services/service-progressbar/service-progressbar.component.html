@@ -1,0 +1,21 @@
+<c-row>
+    <c-col xs="12" md="6">
+        <c-progress-stacked>
+            @for (value of values; track $index) {
+                <c-progress [value]="value.percentage" [color]="value.color"/>
+
+            }
+        </c-progress-stacked>
+    </c-col>
+    <c-col xs="12" md="6">
+        <c-row>
+            @for (value of values; track $index) {
+                <c-col xs="3">
+                    <fa-icon [icon]="['fas', 'square']" [ngClass]="'text-'+value.color"></fa-icon>
+                    {{ value.name }}
+                    <span *ngIf="showPercentage()">({{ value.percentage }})</span>
+                </c-col>
+            }
+        </c-row>
+    </c-col>
+</c-row>

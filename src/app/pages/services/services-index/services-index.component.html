@@ -103,11 +103,11 @@
                                     <span cInputGroupText>
                                         <c-form-check>
                                             <label>
+                                                {{ t('Enable RegEx') }}
                                                 <input cFormCheckInput id="checkRegexHost" type="checkbox"
                                                        oitcDebounce
                                                        (debouncedValue)="onFilterChange($event)"
                                                        [(ngModel)]="filter.Hosts.name_regex"/>
-                                                {{ t('Enable regex') }}
                                             </label>
                                         </c-form-check>
 
@@ -131,11 +131,11 @@
                                     <span cInputGroupText>
                                         <c-form-check>
                                             <label>
+                                                {{ t('Enable RegEx') }}
                                                 <input cFormCheckInput id="checkregexService" type="checkbox"
                                                        [(ngModel)]="filter.Services.name_regex"
                                                        oitcDebounce
                                                        (debouncedValue)="onFilterChange($event)"/>
-                                                {{ t('Enable regex') }}
                                             </label>
                                         </c-form-check>
                                         <oitc-regex-helper-tooltip/>
