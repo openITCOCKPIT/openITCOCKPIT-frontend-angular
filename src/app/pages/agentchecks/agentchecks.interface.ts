@@ -43,7 +43,7 @@ export interface AllAgentcheck {
 }
 
 /**********************
- *    Add action    *
+ *    Add action      *
  **********************/
 export interface AgentcheckPost {
     id?: number

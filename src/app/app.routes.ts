@@ -549,6 +549,15 @@ const coreRoutes: Routes = [{
     path: 'agentchecks/edit/:id',
     loadComponent: () => import('./pages/agentchecks/agentchecks-edit/agentchecks-edit.component').then(m => m.AgentchecksEditComponent)
 }, {
+    path: 'agentconnector/pull',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-pull/agentconnector-pull.component').then(m => m.AgentconnectorPullComponent)
+}, {
+    path: 'agentconnector/push',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push/agentconnector-push.component').then(m => m.AgentconnectorPushComponent)
+}, {
+    path: 'agentconnector/push_satellite',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push-satellite/agentconnector-push-satellite.component').then(m => m.AgentconnectorPushSatelliteComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

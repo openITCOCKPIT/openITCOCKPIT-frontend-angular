@@ -1,0 +1,147 @@
+import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { HostEntity } from '../hosts/hosts.interface';
+
+/**********************
+ *    Pull action     *
+ **********************/
+
+export interface AgentconnectorPullParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+}
+
+export function getDefaultAgentconnectorPullParams(): AgentconnectorPullParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': ''
+    }
+}
+
+export interface AgentconnectorPullRoot extends PaginateOrScroll {
+    agents: PullAgent[]
+    _csrfToken: string
+}
+
+export interface PullAgent {
+    id: number
+    host_id: number
+    port: number
+    use_https: boolean
+    insecure: boolean
+    use_autossl: boolean
+    autossl_successful: boolean
+    use_push_mode: boolean
+    basic_auth: boolean
+    host: HostEntity // All pull agents are assigend to a host
+    allow_edit: boolean
+}
+
+/**********************
+ *    Push action     *
+ **********************/
+
+export interface AgentconnectorPushParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[host_assignment]': string,
+    'filter[no_host_assignment]': string
+}
+
+export function getDefaultAgentconnectorPushParams(): AgentconnectorPushParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[host_assignment]': '',
+        'filter[no_host_assignment]': ''
+    }
+}
+
+export interface AgentconnectorPushRoot extends PaginateOrScroll {
+    agents: PushAgent[]
+    _csrfToken: string
+}
+
+export interface PushAgent {
+    id: number
+    uuid: string
+    hostname: string
+    ipaddress: string
+    remote_address: string
+    http_x_forwarded_for: any
+    last_update: string
+    Hosts?: HostEntity
+    Agentconfigs: {
+        host_id?: number
+    }
+    allow_edit: boolean
+}
+
+/*************************
+ * Push Satellite action *
+ *************************/
+
+export interface AgentconnectorPushSatelliteParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[host_assignment]': string,
+    'filter[no_host_assignment]': string
+}
+
+export function getDefaultAgentconnectorPushSatelliteParams(): AgentconnectorPushSatelliteParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[host_assignment]': '',
+        'filter[no_host_assignment]': ''
+    }
+}
+
+export interface AgentconnectorPushSatelliteRoot extends PaginateOrScroll {
+    agents: PushAgentSatellite[]
+    _csrfToken: string
+}
+
+export interface PushAgentSatellite {
+    id: number
+    uuid: string
+    hostname: string
+    ipaddress: string
+    remote_address: string
+    http_x_forwarded_for: any
+    last_update: string
+    container_ids?: string
+    Hosts?: HostEntity
+    Agentconfigs: {
+        host_id?: number
+    }
+    Satellites: {
+        id: number
+        name: string
+    }
+    allow_edit: boolean
+}
+
