@@ -192,15 +192,17 @@
 
                     <td class="width-50">
                         <oitc-actions-button [permission]="'agentconnector.config'"
-                                             [url]="'/agentconnector/config?hostId=' + agent.host.id"
+                                             [url]="'/agentconnector/config'"
+                                             [queryParams]="{'hostId':agent.host.id}"
                                              [allowEdit]="agent.allow_edit">
                             <oitc-actions-button-element [permission]="'agentconnector.config'"
-                                                         [url]="'/agentconnector/config?hostId=' + agent.host.id">
+                                                         [url]="'/agentconnector/config'"
+                                                         [queryParams]="{'hostId':agent.host.id}">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
-                                                         [url]="'/agentconnector/showOutput/' + agent.host.id+'?mode=pull'">
+                                                         [url]="'/agentconnector/showOutput/' + agent.host.id+'/pull'">
                                 <fa-icon [icon]="['fab', 'js']"></fa-icon>
                                 {{ t('Query Agent') }}
                             </oitc-actions-button-element>

@@ -1100,7 +1100,7 @@
     "By deleting, the corresponding openITCOCKPIT Agent is not able to send data to the openITCOCKPIT server anymore.": "Usuwając, odpowiadający Agent openITCOCKPIT nie będzie już w stanie przesyłać danych do serwera openITCOCKPIT.",
     "Host assignments": "Przypisania hosta",
     "Host assigned": "Przypisany host",
-    "Agents witout host assignment": "Agenci bez przypisanego hosta",
+    "Agents without host assignment": "Agenci bez przypisanego hosta",
     "Assigned host": "Przypisany host",
     "Agent UUID": "UUID Agenta",
     "Agent Hostname": "Nazwa hosta Agenta",

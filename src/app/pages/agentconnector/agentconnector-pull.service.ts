@@ -1,7 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { AgentconnectorPullParams, AgentconnectorPullRoot } from './agentconnector.interface';
+import {
+    AgentconnectorPullParams,
+    AgentconnectorPullRoot,
+    AgentconnectorShowOutputParams,
+    AgentconnectorShowOutputRoot
+} from './agentconnector.interface';
 import { map, Observable } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 
@@ -33,5 +38,16 @@ export class AgentconnectorPullService {
         const proxyPath = this.proxyPath;
 
         return this.http.post(`${proxyPath}/agentconnector/delete/${item.id}.json`, {});
+    }
+
+    public showOutput(params: AgentconnectorShowOutputParams): Observable<AgentconnectorShowOutputRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AgentconnectorShowOutputRoot>(`${proxyPath}/agentconnector/showOutput.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
     }
 }

@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { HostEntity } from '../hosts/hosts.interface';
+import { AgentConfig } from './agentconfig.interface';
 
 /**********************
  *    Pull action     *
@@ -55,8 +56,7 @@ export interface AgentconnectorPushParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Hosts.name]': string,
-    'filter[host_assignment]': string,
-    'filter[no_host_assignment]': string
+    'filter[hasHostAssignment]': string,
 }
 
 export function getDefaultAgentconnectorPushParams(): AgentconnectorPushParams {
@@ -67,8 +67,7 @@ export function getDefaultAgentconnectorPushParams(): AgentconnectorPushParams {
         page: 1,
         direction: 'asc',
         'filter[Hosts.name]': '',
-        'filter[host_assignment]': '',
-        'filter[no_host_assignment]': ''
+        'filter[hasHostAssignment]': '',
     }
 }
 
@@ -145,3 +144,25 @@ export interface PushAgentSatellite {
     allow_edit: boolean
 }
 
+/**********************
+ * showOutput action  *
+ **********************/
+export interface AgentconnectorShowOutputParams {
+    angular: true,
+    id: number, // hostId or push_agents.id in push mode
+    mode: AgentModes
+}
+
+export interface AgentconnectorShowOutputRoot {
+    host: HostEntity
+    config: AgentConfig
+    outputAsJson: string
+    pushAgentUuid?: string
+    _csrfToken: string
+}
+
+export enum AgentModes {
+    Pull = 'pull',
+    Push = 'push',
+    PushSatellite = 'push_satellite'
+}

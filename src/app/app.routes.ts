@@ -558,6 +558,9 @@ const coreRoutes: Routes = [{
     path: 'agentconnector/push_satellite',
     loadComponent: () => import('./pages/agentconnector/agentconnector-push-satellite/agentconnector-push-satellite.component').then(m => m.AgentconnectorPushSatelliteComponent)
 }, {
+    path: 'agentconnector/showOutput/:id/:mode',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-show-output/agentconnector-show-output.component').then(m => m.AgentconnectorShowOutputComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

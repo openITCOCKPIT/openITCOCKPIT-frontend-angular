@@ -1031,7 +1031,7 @@
     "By deleting, the corresponding openITCOCKPIT Agent is not able to send data to the openITCOCKPIT server anymore.": "После удаления соответствующий агент openITCOCKPIT больше не сможет отправлять данные на сервер openITCOCKPIT.",
     "Host assignments": "Назначения узлов",
     "Host assigned": "Узел назначен",
-    "Agents witout host assignment": "Агенты без назначения узла",
+    "Agents without host assignment": "Агенты без назначения узла",
     "Assigned host": "Назначенный узел",
     "Agent UUID": "Агент UUID",
     "Agent Hostname": "Имя узла агента",
