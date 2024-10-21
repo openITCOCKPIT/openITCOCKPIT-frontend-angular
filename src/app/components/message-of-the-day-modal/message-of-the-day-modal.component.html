@@ -1,10 +1,5 @@
-<button cButton [color]="messageOfTheDay.messageOtd.style" (click)="showModal()" *ngIf="messageOfTheDay.messageOtdAvailable">
-    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-</button>
-
-
 <c-modal id="messageOfTheDayModal"
-         size="lg">
+         size="lg" *ngIf="messageOfTheDay.messageOtd">
     <ng-container *transloco="let t">
         <c-modal-header [class]="'bg-' + messageOfTheDay.messageOtd.style">
             <h5>

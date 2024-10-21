@@ -130,6 +130,7 @@ export class ProfileService {
             }
         }).pipe(
             map(data => {
+                data.last_use = null;
                 return data;
             })
         )

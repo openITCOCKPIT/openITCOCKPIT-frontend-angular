@@ -118,29 +118,26 @@
                     <c-row
                         *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
                         <fieldset class="hostWithServicesToDeploy">
-                            <h4>
-                                <legend>
-                                    <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
-                                        <input type="checkbox"
-                                               id="{{hostWithServicesToDeploy.host.id}}_ALL"
-                                               (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
-                                               [ngModelOptions]="{standalone: true}"
-                                               [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
-                                        >
-                                        {{ t('Service/s to deploy on host:') }}
-                                        <span class="text-info">
-                                            {{ hostWithServicesToDeploy.host.hostname }}
-                                            ({{ hostWithServicesToDeploy.host.address }})
-                                        </span>
-                                    </label>
-
-                                </legend>
-                            </h4>
+                            <h5>
+                                <label for="{{hostWithServicesToDeploy.host.id}}_ALL">
+                                    <input type="checkbox" cFormCheckInput
+                                           id="{{hostWithServicesToDeploy.host.id}}_ALL"
+                                           (click)="handleHostSelect(i, hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue, hostWithServicesToDeploy.services)"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [(ngModel)]="hostWithServicesToDeploy.areAllCreateServiceOnTargetHostTrue"
+                                    >
+                                    {{ t('Service/s to deploy on host:') }}
+                                    <span class="text-info">
+                                        {{ hostWithServicesToDeploy.host.hostname }}
+                                        ({{ hostWithServicesToDeploy.host.address }})
+                                    </span>
+                                </label>
+                            </h5>
 
                             <div *ngFor="let serviceToDeploy of hostWithServicesToDeploy.services">
                                 <label
                                     for="{{hostWithServicesToDeploy.host.id}}_{{serviceToDeploy.servicetemplate.id}}">
-                                    <input type="checkbox"
+                                    <input type="checkbox" cFormCheckInput
                                            [ngModelOptions]="{standalone: true}"
                                            [(ngModel)]="serviceToDeploy.createServiceOnTargetHost"
                                            (ngModelChange)="handleServiceCheckboxClick(hostWithServicesToDeploy.host.id)"

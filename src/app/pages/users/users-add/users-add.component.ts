@@ -70,7 +70,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
     selector: 'oitc-users-add',
     standalone: true,
     imports: [
-
         FaIconComponent,
         PermissionDirective,
         TranslocoDirective,
@@ -162,11 +161,11 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 if (result.success) {
                     this.cdr.markForCheck();
 
-                    const response: GenericIdResponse = result.data as GenericIdResponse;
+                    const response: {user: GenericIdResponse} = result.data as {user: GenericIdResponse};
 
                     const title: string = this.TranslocoService.translate('User');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['users', 'edit', response.id];
+                    const url: (string | number)[] = ['users', 'edit', response.user.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
@@ -277,6 +276,7 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 this.cdr.markForCheck();
             }));
     }
+
     public loadContainers = (): void => {
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
@@ -296,7 +296,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 this.cdr.markForCheck();
             }));
     }
-
 
     public loadLocaleOptions = (): void => {
         this.subscriptions.add(this.UsersService.getLocaleOptions()
@@ -355,7 +354,6 @@ export class UsersAddComponent implements OnDestroy, OnInit {
     protected trackByIndex(index: number, item: any): number {
         return index;
     }
-
 }
 
 const keepOrder = (a: any, b: any) => a;

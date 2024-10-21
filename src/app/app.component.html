@@ -7,6 +7,7 @@
         <div class="top-right" *ngIf="(this.LayoutService.layout$ | async) == LayoutOptions.Default">
             <!--app-header-->
             <oitc-coreui-header [cShadowOnScroll]="'sm'"
+                                [messageOfTheDay]="messageOfTheDay"
                                 class="w-100 shadow-sm p-0"
                                 position="sticky"
                                 sidebarId="sidebar1"/>
@@ -23,4 +24,6 @@
             <!-- You can use the oitc-coreui-footer component here but we have removed it for now as we do not need a footer -->
         </div>
     </div>
+
+    <oitc-message-of-the-day-modal [messageOfTheDay]="messageOfTheDay" />
 </div>

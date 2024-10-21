@@ -198,6 +198,7 @@ export interface AddFromLdapRoot {
 export interface Apikey {
     apikey: string
     description: string
+    last_use: string | null
 }
 
 // LoadContainerRoles
