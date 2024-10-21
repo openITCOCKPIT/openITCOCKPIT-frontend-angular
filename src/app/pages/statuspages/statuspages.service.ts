@@ -30,10 +30,6 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { TranslocoService } from '@jsverse/transloco';
-import { PermissionsService } from '../../permissions/permissions.service';
-import { DisableItem } from '../../layouts/coreui/disable-modal/disable.interface';
-import { EnableItem } from '../../layouts/coreui/enable-modal/enable.interface';
 import {
     StatuspagesParams,
     StatuspagesIndexRoot}
@@ -47,14 +43,11 @@ export class StatuspagesService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    private TranslocoService = inject(TranslocoService);
-    private PermissionsService = inject(PermissionsService);
-
   constructor() { }
 
     public getStatuspagesIndex(params: StatuspagesParams): Observable<StatuspagesIndexRoot> {
         const proxyPath = this.proxyPath;
-        return this.http.get<StatuspagesIndexRoot>(`${proxyPath}/services/index.json`, {
+        return this.http.get<StatuspagesIndexRoot>(`${proxyPath}/statuspages/index.json`, {
             params: params as {}
         }).pipe(
             map(data => {

@@ -84,16 +84,23 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private StauspagesService: StatuspagesService = inject(StatuspagesService);
+    private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     public readonly PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-
+            this.load();
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public load(): void {
+        this.subscriptions.add(this.StatuspagesService.getStatuspagesIndex(this.params).subscribe(data => {
+            this.statuspages = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public toggleFilter(): void {
