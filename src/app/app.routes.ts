@@ -540,6 +540,15 @@ const coreRoutes: Routes = [{
     path: 'instantreports/generate/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
 }, {
+    path: 'agentchecks/index',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-index/agentchecks-index.component').then(m => m.AgentchecksIndexComponent)
+}, {
+    path: 'agentchecks/add',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-add/agentchecks-add.component').then(m => m.AgentchecksAddComponent)
+}, {
+    path: 'agentchecks/edit/:id',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-edit/agentchecks-edit.component').then(m => m.AgentchecksEditComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
