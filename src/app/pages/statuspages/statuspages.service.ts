@@ -55,4 +55,9 @@ export class StatuspagesService {
             })
         )
     }
+
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/statuspages/delete/${item.id}.json?angular=true`, {});
+    }
 }
