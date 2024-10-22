@@ -30,7 +30,6 @@ import {
     RowDirective,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -117,7 +116,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormDirective,
@@ -185,10 +183,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
-
-    public selectedItems: any[] = [];
-    public serviceParams: ServicegroupsExtendedParams = getDefaultServicegroupsExtendedParams();
-
     private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
@@ -196,14 +190,15 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
+    private readonly ExternalCommandsService: ExternalCommandsService = inject(ExternalCommandsService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
-    private cdr = inject(ChangeDetectorRef);
-
-    private userFullname: string = '';
-
-    protected readonly AcknowledgementTypes = AcknowledgementTypes;
+    protected userFullname: string = '';
+    protected selectedItems: any[] = [];
+    protected serviceParams: ServicegroupsExtendedParams = getDefaultServicegroupsExtendedParams();
+    protected timezone!: TimezoneObject;
+    protected AcknowledgementTypes = AcknowledgementTypes;
     protected servicegroupId: number = 0;
     protected servicegroups: SelectKeyValue[] = [];
     protected servicegroupExtended: ServiceGroupExtendedRoot = {
@@ -222,7 +217,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
             }
         }
     } as ServiceGroupExtendedRoot;
-    protected timezone!: TimezoneObject;
 
     protected filter: any = {
         Service: {
@@ -237,7 +231,6 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
             }
         }
     };
-
 
     public ngOnInit() {
         // Fetch the id from the URL

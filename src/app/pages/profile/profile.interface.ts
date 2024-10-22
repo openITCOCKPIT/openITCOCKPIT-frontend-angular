@@ -50,4 +50,5 @@ export interface ProfileCreateApiKey {
     apikey: string
     qrcode: string
     description: string
+    last_use: string | null
 }

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { Subscription } from 'rxjs';
@@ -122,20 +121,18 @@ import { IndexPage } from '../../../pages.interface';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
-    private readonly modalService = inject(ModalService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private subscriptions: Subscription = new Subscription();
-    private ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    private readonly modalService: ModalService = inject(ModalService);
+    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    private readonly router: Router = inject(Router);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
     protected params: ServicegroupsIndexParams = getDefaultServicegroupsIndexParams();
-
-    protected readonly route = inject(ActivatedRoute);
     protected selectedItems: DeleteAllItem[] = [];
     protected servicegroups: ServicegroupsIndexRoot = {all_servicegroups: undefined, _csrfToken: ''}
-    private readonly router = inject(Router);
     protected hideFilter: boolean = true;
-    private cdr = inject(ChangeDetectorRef);
-
 
     // Show or hide the filter
     public toggleFilter() {

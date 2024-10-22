@@ -39,7 +39,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormControlDirective,
         FormErrorDirective,
@@ -61,18 +60,17 @@ import { HttpErrorResponse } from '@angular/common/http';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsCopyComponent implements OnInit, OnDestroy {
-
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected usergroups: UsergroupsCopyPostRoot = {
         data: []
     } as UsergroupsCopyPostRoot;
-    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);

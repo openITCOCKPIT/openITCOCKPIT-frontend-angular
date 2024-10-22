@@ -115,14 +115,12 @@
 
                 <ng-container *ngIf="hostId !== null">
                     <fieldset class="hostWithServicesToDeploy">
-                        <legend>
-                            <h4>{{ t('Service/s to deploy on target host:') }}</h4>
-                        </legend>
+                        <h5>{{ t('Service/s to deploy on target host:') }}</h5>
                         <div
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
                             <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
-                                <input type="checkbox"
+                                <input type="checkbox" cFormCheckInput
                                        id="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}"
                                        [ngModelOptions]="{standalone: true}"
                                        [(ngModel)]="hostWithServicesToDeploy.createServiceOnTargetHost"

@@ -548,9 +548,15 @@
                                    [name]="post.User.apikeys[i].description"
                                    [ngModelOptions]="{standalone: true}"
                                    [(ngModel)]="post.User.apikeys[i].description"
-                                   oitcFormError [errors]="errors" errorField="apikeys.{{i}}.description">
+                                   oitcFormError [errors]="errors"
+                                   errorField="apikeys.{{i}}.description">
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="apikeys.{{i}}.description"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Last used:') }}
+                                <span class="text-info" *ngIf="post.User.apikeys[i].last_use === null">{{t('never')}}</span>
+                                <span class="text-info" *ngIf="post.User.apikeys[i].last_use !== null">{{post.User.apikeys[i].last_use}}</span>
+                            </div>
                         </div>
                     </c-col>
                     <c-col md="8">

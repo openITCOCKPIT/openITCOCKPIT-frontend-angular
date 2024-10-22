@@ -23,10 +23,11 @@
  *     confirmation.
  */
 
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
-    ButtonCloseDirective, ColComponent,
+    ButtonCloseDirective,
+    ColComponent,
     FormControlDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -39,11 +40,8 @@ import {
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { MessagesOfTheDayService } from '../../pages/messagesotd/messagesotd.service';
-import { CurrentMessageOfTheDay, MessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
-import { BbCodeParserService } from '../../services/bb-code-parser.service';
+import { CurrentMessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
 
 
@@ -54,7 +52,7 @@ type NewBookmark = {
 }
 
 @Component({
-    selector: 'oitc-message-of-the-day',
+    selector: 'oitc-message-of-the-day-button',
     standalone: true,
     imports: [
         TranslocoDirective,
@@ -76,31 +74,14 @@ type NewBookmark = {
         FaStackItemSizeDirective,
         TrustAsHtmlPipe
     ],
-    templateUrl: './message-of-the-day.component.html',
-    styleUrl: './message-of-the-day.component.css'
+    templateUrl: './message-of-the-day-button.component.html',
+    styleUrl: './message-of-the-day-button.component.css'
 })
-export class MessageOfTheDayComponent implements OnInit, OnDestroy {
-
+export class MessageOfTheDayButtonComponent {
     private readonly modalService = inject(ModalService);
-    private readonly subscriptions: Subscription = new Subscription();
-    private readonly MessagesOfTheDayService = inject(MessagesOfTheDayService);
-    private readonly BbCodeParserService = inject(BbCodeParserService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    protected html: string = '';
-    protected messageOfTheDay: CurrentMessageOfTheDay = {
-        messageOtdAvailable: false,
-        messageOtd: {} as MessageOfTheDay,
-        showMessageAfterLogin: false
-    } as CurrentMessageOfTheDay;
-
-    public hideModal() {
-        this.modalService.toggle({
-            show: false,
-            id: 'messageOfTheDayModal'
-        });
-        this.cdr.markForCheck();
-    }
+    @Input({required: true}) public messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
     public showModal() {
         this.modalService.toggle({
@@ -110,21 +91,4 @@ export class MessageOfTheDayComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    ngOnInit() {
-        // Fetch current message of the day.
-        this.subscriptions.add(this.MessagesOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
-            if (message.messageOtdAvailable) {
-                this.messageOfTheDay = message;
-                this.html = this.BbCodeParserService.parse(this.messageOfTheDay.messageOtd.content);
-            }
-
-            if (this.messageOfTheDay.showMessageAfterLogin) {
-                this.showModal();
-            }
-        }));
-    }
-
-    ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
 }
