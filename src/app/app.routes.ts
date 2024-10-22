@@ -81,6 +81,9 @@ const coreRoutes: Routes = [{
     path: 'contactgroups/usedBy/:id',
     loadComponent: () => import('./pages/contactgroups/contactgroups-used-by/contactgroups-used-by.component').then(m => m.ContactgroupsUsedByComponent)
 }, {
+    path: 'usercontainerroles/add',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-add/usercontainerroles-add.component').then(m => m.UsercontainerrolesAddComponent)
+}, {
     path: 'usercontainerroles/index',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-index/usercontainerroles-index.component').then(m => m.UsercontainerrolesIndexComponent)
 }, {

@@ -74,7 +74,9 @@ export interface CopyUserContainerRoleDatum {
 
 
 // COPY POST RESPONSE
+export interface saveUserContainerRolesCopy {
 
+}
 
 // ADD
 
@@ -84,7 +86,7 @@ export interface AddUserContainerRole {
 
 export interface UserContainerRole {
     ContainersUsercontainerrolesMemberships: {
-        [key: string]: string
+        [key: string]: number
     }
     ldapgroups: {
         _ids: number[]

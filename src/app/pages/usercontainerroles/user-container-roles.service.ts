@@ -15,6 +15,8 @@ import {
     UserContainerRolesIndex,
     UserContainerRolesIndexParams, UserContainerRolesIndexRoot
 } from './usercontainerroles.interface';
+import { LoadLdapgroups } from '../usergroups/usergroups.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +38,7 @@ export class UserContainerRolesService {
 
     public addUserContainerRole(userContainerRole: UserContainerRole): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<GenericResponseWrapper>(`${proxyPath}/usercontainerroles/add.json?angular=true`, {usercontainerrole: userContainerRole})
+        return this.http.post<GenericResponseWrapper>(`${proxyPath}/usercontainerroles/add.json?angular=true`, {Usercontainerrole: userContainerRole})
             .pipe(
                 map(data => {
                     return {
@@ -101,4 +103,8 @@ export class UserContainerRolesService {
 
     public getCopy():void{}
     public copy(): void{}
+
+    public loadLdapgroupsForAngular(search: string = ''): Observable<{ ldapgroups: SelectKeyValue[] }> {
+        return this.http.get<{ ldapgroups: SelectKeyValue[] }>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);
+    }
 }
