@@ -130,3 +130,23 @@ nav ol.breadcrumb li.breadcrumb-item a {
 .border-primary {
     border-color: var(--cui-primary) !important;
 }
+
+.title-border-bottom-primary {
+    border-image-source: linear-gradient(45deg, $primary, transparent);
+}
+
+.title-border-bottom-info {
+    border-image-source: linear-gradient(45deg, $info, transparent);
+}
+
+.title-border-bottom-success {
+    border-image-source: linear-gradient(45deg, $success, transparent);
+}
+
+.title-border-bottom-warning {
+    border-image-source: linear-gradient(45deg, $warning, transparent);
+}
+
+.title-border-bottom-danger {
+    border-image-source: linear-gradient(45deg, $danger, transparent);
+}

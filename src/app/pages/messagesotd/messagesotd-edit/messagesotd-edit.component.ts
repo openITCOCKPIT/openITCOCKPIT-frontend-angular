@@ -14,6 +14,7 @@ import {
     DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -28,7 +29,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -47,10 +48,11 @@ import { HistoryService } from '../../../history.service';
 import { UsergroupsService } from '../../usergroups/usergroups.service';
 import { UsergroupIndex, UsergroupsIndexParams, UsergroupsIndexRoot } from '../../usergroups/usergroups.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
-  selector: 'oitc-messagesotd-edit',
-  standalone: true,
+    selector: 'oitc-messagesotd-edit',
+    standalone: true,
     imports: [
         BackButtonDirective,
         BbCodeEditorComponent,
@@ -89,10 +91,13 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         TrustAsHtmlPipe,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        NgClass
     ],
-  templateUrl: './messagesotd-edit.component.html',
-  styleUrl: './messagesotd-edit.component.css'
+    templateUrl: './messagesotd-edit.component.html',
+    styleUrl: './messagesotd-edit.component.css'
 })
 export class MessagesotdEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -120,7 +125,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
             _ids: []
         },
         id: 0,
-        created : '',
+        created: '',
         modified: '',
         user_id: 0
     } as EditableMessageOfTheDay;
@@ -157,7 +162,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
     }
 
     protected updateMessageOfTheDay(): void {
-        if (! this.post.expire) {
+        if (!this.post.expire) {
             this.post.expiration_duration = 0;
         }
         this.subscriptions.add(this.MessagesOfTheDayService.updateMessageOfTheDay(this.post)
@@ -167,7 +172,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
 
                     const title: string = this.TranslocoService.translate('Message of the day');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['messageOtd', 'edit', response.id];
+                    const url: (string | number)[] = ['/', 'messagesOtd', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 

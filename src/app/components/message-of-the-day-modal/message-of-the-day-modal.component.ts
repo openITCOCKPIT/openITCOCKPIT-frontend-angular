@@ -13,7 +13,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
 import { CurrentMessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
 import { BbCodeParserService } from '../../services/bb-code-parser.service';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-message-of-the-day-modal',
@@ -30,7 +30,8 @@ import { NgIf } from '@angular/common';
         RowComponent,
         TranslocoDirective,
         TrustAsHtmlPipe,
-        NgIf
+        NgIf,
+        NgClass
     ],
     templateUrl: './message-of-the-day-modal.component.html',
     styleUrl: './message-of-the-day-modal.component.css',
@@ -44,7 +45,7 @@ export class MessageOfTheDayModalComponent implements OnChanges {
     private readonly ModalService = inject(ModalService);
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (! this.messageOfTheDay.messageOtd) {
+        if (!this.messageOfTheDay.messageOtd) {
             return;
         }
         this.html = this.BbCodeParserService.parse(this.messageOfTheDay.messageOtd.content);

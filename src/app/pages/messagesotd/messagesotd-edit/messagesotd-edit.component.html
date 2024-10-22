@@ -21,7 +21,7 @@
     </nav>
 
 
-    <oitc-form-loader *ngIf="post.id === 0" />
+    <oitc-form-loader *ngIf="post.id === 0"/>
     <form *ngIf="post.id !== 0" cForm (ngSubmit)="updateMessageOfTheDay()">
         <c-card class="mb-3">
             <c-card-header>
@@ -91,7 +91,7 @@
                 <div class="mb-3">
                     <label cLabel for="post.expiration_duration">
                         {{ t('Expiration') }}
-                        <oitc-required-icon *ngIf="post.expire" />
+                        <oitc-required-icon *ngIf="post.expire"/>
                     </label>
                     <c-input-group>
                         <span cInputGroupText>
@@ -124,9 +124,9 @@
                                name="post.expiration_duration"
                                oitcFormError [errors]="errors" errorField="expiration_duration"
                                [disabled]="! post.expire"
-                               [(ngModel)]="post.expiration_duration" />
+                               [(ngModel)]="post.expiration_duration"/>
                         <span cInputGroupText>
-                            {{t('in days')}}
+                            {{ t('in days') }}
                         </span>
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors" errorField="expiration_duration"></oitc-form-feedback>
@@ -140,13 +140,13 @@
                         {{ t('Filter for user groups (optional)') }}
                     </label>
                     <oitc-multi-select
-                            name="post.usergroups._ids"
-                            id="post.usergroups._ids"
-                            [(ngModel)]="post.usergroups._ids"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="usergroups"
-                            oitcFormError [errors]="errors" errorField="containerroles">
+                        name="post.usergroups._ids"
+                        id="post.usergroups._ids"
+                        [(ngModel)]="post.usergroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="usergroups"
+                        oitcFormError [errors]="errors" errorField="containerroles">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
                     <div class="help-block">
@@ -161,14 +161,20 @@
                                id="post.notify_users"
                                type="checkbox"
                                trueFalseValue
+                               [falseValue]="0"
+                               [trueValue]="1"
                                [(ngModel)]="post.notify_users"
                                oitcFormError [errors]="errors" errorField="notify_users"/>
-                        <oitc-form-feedback [errors]="errors" errorField="notify_users"></oitc-form-feedback>
                         <label cFormCheckLabel for="post.notify_users">
                             {{ t('Notify users') }}
-                            <fa-icon [icon]="['fas', 'question-circle']"/>
+                            <div class="icon-stack margin-bottom-5">
+                                <i class="fas fa-user opacity-100 "></i>
+                                <i class="fas fa-envelope opacity-100 fa-xs text-primary cornered cornered-lr"></i>
+                            </div>
                         </label>
                     </c-form-check>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="notify_users"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('If activated, the system sends notifications via email with the current content of the "Message of the day" to affected users') }}
                     </div>
@@ -180,13 +186,13 @@
                         {{ t('Style') }}
                     </label>
                     <oitc-select
-                            name="post.style"
-                            id="post.style"
-                            [(ngModel)]="post.style"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="styles"
-                            oitcFormError [errors]="errors" errorField="style">
+                        name="post.style"
+                        id="post.style"
+                        [(ngModel)]="post.style"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="styles"
+                        oitcFormError [errors]="errors" errorField="style">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="style"></oitc-form-feedback>
                 </div>
@@ -194,36 +200,43 @@
                 <c-row>
 
 
-                    <c-col md="6">
-                        <oitc-bb-code-editor [(bbcode)]="post.content" (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                    <c-col [md]="12" [lg]="12" [xl]="6" class="mb-3">
+                        <oitc-bb-code-editor [(bbcode)]="post.content"
+                                             (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
                         <oitc-form-feedback [errors]="errors" errorField="content"></oitc-form-feedback>
                     </c-col>
-                    <c-col md="6">
+
+                    <c-col [md]="12" [lg]="12" [xl]="6">
                         <c-card>
-                            <c-card-body [class]="'title-border-' + post.style">
-                                <c-row>
-                                    <c-col md="1">
-                                        <fa-stack size="2x">
-                                            <fa-icon [icon]="['fas', 'comment']" [class]="'text-' + post.style"
-                                                     stackItemSize="2x"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'exclamation']" class="text-white"
-                                                     stackItemSize="1x"
-                                                     transform="right-10"></fa-icon>
-                                        </fa-stack>
-                                    </c-col>
-                                    <c-col md="11">
-                                        <h4 [class]="'title-border title-border-bottom-' + post.style">
-                                            {{ post.title }}
-                                        </h4>
-                                        <p>
-                                            <i>
+                            <c-card-body [class]="'border-' + post.style">
+
+                                <div class="alert bg-transparent" [ngClass]="'border-'+post.style">
+                                    <div class="d-flex">
+                                        <div class="alert-icon">
+                                            <span class="icon-stack icon-stack-lg">
+                                                <i class="base base-comment icon-stack-3x opacity-100"
+                                                   [ngClass]="'text-'+post.style"></i>
+                                                <i class="fas fa-info icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'primary' || post.style == 'info'"></i>
+
+                                                <i class="fas fa-check icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'success'"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'warning' || post.style == 'danger'"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 ps-3">
+                                            <h4 [class]="'title-border title-border-bottom-' + post.style">
+                                                {{ post.title }}
+                                            </h4>
+                                            <div class="italic mb-3">
                                                 {{ post.description }}
-                                            </i>
-                                        </p>
-                                        <p [innerHTML]=" html | trustAsHtml">
-                                        </p>
-                                    </c-col>
-                                </c-row>
+                                            </div>
+
+                                            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </c-card-body>
                         </c-card>
 
