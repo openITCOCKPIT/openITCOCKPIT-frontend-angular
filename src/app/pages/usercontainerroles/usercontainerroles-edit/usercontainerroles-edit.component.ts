@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RouterLink } from '@angular/router';
+import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
     CardComponent,
@@ -12,72 +9,75 @@ import {
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective, FormControlDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
-import { UserContainerRolesService } from '../user-container-roles.service';
-import { HistoryService } from '../../../history.service';
-import { UserContainerRole } from '../usercontainerroles.interface';
-import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { EditableUserContainerRole, UserContainerRole } from '../usercontainerroles.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { NgForOf, NgIf } from '@angular/common';
+import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
+import { UserContainerRolesService } from '../user-container-roles.service';
 import { ContainersService } from '../../containers/containers.service';
+import { HistoryService } from '../../../history.service';
 
 @Component({
-    selector: 'oitc-usercontainerroles-add',
+    selector: 'oitc-usercontainerroles-edit',
     standalone: true,
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
+        BackButtonDirective,
+        CardBodyComponent,
         CardComponent,
+        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        BackButtonDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        MultiSelectComponent,
-        RequiredIconComponent,
         ColComponent,
+        FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
         NgForOf,
         NgIf,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
         RowComponent,
-        CardFooterComponent,
-        FormControlDirective
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink
     ],
-    templateUrl: './usercontainerroles-add.component.html',
-    styleUrl: './usercontainerroles-add.component.css',
+    templateUrl: './usercontainerroles-edit.component.html',
+    styleUrl: './usercontainerroles-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
+export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UserContainerRolesService: UserContainerRolesService = inject(UserContainerRolesService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
@@ -86,8 +86,9 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     private readonly notyService: NotyService = inject(NotyService);
     private readonly profileService: ProfileService = inject(ProfileService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-    protected post: UserContainerRole = this.getDefaultPost();
+    protected post: EditableUserContainerRole = {} as EditableUserContainerRole;
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected ldapGroups: SelectKeyValue[] = [];
     protected selectedContainerIds: number[] = [];
@@ -109,8 +110,17 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+
         this.loadContainers();
         this.loadLdapGroups('');
+
+        this.subscriptions.add(this.UserContainerRolesService.getEdit(id).subscribe((result: EditableUserContainerRole) => {
+            this.cdr.markForCheck();
+            this.post = result;
+        }));
+
     }
 
     public loadContainers = (): void => {
@@ -122,14 +132,16 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     }
 
 
-    public addUserContainerRole(): void {
-        this.subscriptions.add(this.UserContainerRolesService.addUserContainerRole(this.post)
+    public updateUserContainerRole(): void {
+        this.subscriptions.add(this.UserContainerRolesService.updateUserContainerRole(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.cdr.markForCheck();
 
-                    const response: { usercontainerrole: GenericIdResponse } = result.data as { usercontainerrole: GenericIdResponse };
+                    const response: { usercontainerrole: GenericIdResponse } = result.data as {
+                        usercontainerrole: GenericIdResponse
+                    };
 
                     const title: string = this.TranslocoService.translate('User container role');
                     const msg: string = this.TranslocoService.translate('added successfully');
@@ -137,17 +149,7 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title, url);
 
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/usercontainerroles/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost();
-                    this.errors = {} as GenericValidationError;
-                    this.selectedContainerIds = [];
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
-                    this.cdr.markForCheck();
-
+                    this.HistoryService.navigateWithFallback(['/usercontainerroles/index']);
                     return;
                 }
 
@@ -180,7 +182,9 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     }
 
     protected loadLdapGroups = (search: string = ''): void => {
-        this.subscriptions.add(this.UserContainerRolesService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: { ldapgroups: SelectKeyValue[] }) => {
+        this.subscriptions.add(this.UserContainerRolesService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: {
+            ldapgroups: SelectKeyValue[]
+        }) => {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));
