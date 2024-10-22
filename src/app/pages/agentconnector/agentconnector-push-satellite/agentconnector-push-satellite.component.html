@@ -269,63 +269,34 @@
                     </td>
 
                     <td class="width-50">
-                        @if (agent.Hosts && agent.Hosts.id) {
-                            <!-- Agent is assigend to a host -->
-                            <oitc-actions-button [permission]="'agentconnector.config'"
-                                                 [url]="'/agentconnector/config'"
-                                                 [queryParams]="{'hostId':agent.Hosts.id}"
-                                                 [allowEdit]="agent.allow_edit">
-                                <oitc-actions-button-element [permission]="'agentconnector.config'"
-                                                             [url]="'/agentconnector/config'"
-                                                             [queryParams]="{'hostId':agent.Hosts.id}">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
-                                                             [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
-                                    <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                                    {{ t('Query Agent') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider *ngIf="agent.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
-                                                             [permission]="'agentconnector.delete'"
-                                                             *ngIf="agent.allow_edit">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        } @else {
-                            <!-- Agent is not assigned to a host -->
-                            <oitc-actions-button [permission]="'agentconnector.config'"
-                                                 [url]="'/agentconnector/wizard'"
-                                                 [queryParams]="{'pushAgentId':agent.id}"
-                                                 [allowEdit]="agent.allow_edit"
-                                                 [icon]="['fas', 'link']">
-                                <oitc-actions-button-element [permission]="'agentconnector.config'"
-                                                             [url]="'/agentconnector/wizard'"
-                                                             [queryParams]="{'pushAgentId':agent.id}">
-                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
-                                    {{ t('Assign to host') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
-                                                             [url]="'/agentconnector/showOutput/' + agent.id+'/push'">
-                                    <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                                    {{ t('Show received data') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider *ngIf="agent.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
-                                                             [permission]="'agentconnector.delete'"
-                                                             *ngIf="agent.allow_edit">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        }
-
+                        <!-- Agent is assigend to a host -->
+                        <oitc-actions-button [permission]="'agentconnector.config'"
+                                             [url]="'/agentconnector/config'"
+                                             [queryParams]="{'hostId':agent.Hosts?.id}"
+                                             [allowEdit]="agent.allow_edit && agent.Hosts?.id">
+                            <oitc-actions-button-element
+                                *ngIf="agent.allow_edit && agent.Hosts?.id"
+                                [permission]="'agentconnector.config'"
+                                [url]="'/agentconnector/config'"
+                                [queryParams]="{'hostId':agent.Hosts?.id}">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
+                                                         [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
+                                <fa-icon [icon]="['fab', 'js']"></fa-icon>
+                                {{ t('Show received data') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider *ngIf="agent.allow_edit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
+                                                         [permission]="'agentconnector.delete'"
+                                                         *ngIf="agent.allow_edit">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
                     </td>
                 </tr>
                 </tbody>
