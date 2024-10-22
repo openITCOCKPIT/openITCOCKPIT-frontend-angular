@@ -1,0 +1,52 @@
+<ng-container *transloco="let t">
+    <!-- Wizard progressbar -->
+    <div class="row m-0 text-center">
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 0}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 0"></fa-icon>
+                {{ t('Select host') }}
+            </span>
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.ConfigureAgent, 'wizard-success': stepCount() > 1}">
+            <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 1"></fa-icon>
+            {{ t('Configure Agent') }}
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.InstallAgent}">
+            {{ t('Install Agent') }}
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.AutoTls}">
+            {{ t('Exchange TLS Certificate') }}
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2  wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.CreateServices}">
+            {{ t('Create services') }}
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+            <div class="btn-group btn-group-xs w-100 h-100">
+                <button type="button" class="btn btn-xs btn-primary ripple"
+                        [disabled]="disableBack()"
+                        [title]="'Back' | transloco"
+                        style="border-radius: 0;">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+
+                <button type="button" class="btn btn-xs btn-success btn-block ripple"
+                        style="border-radius: 0;"
+                        [title]="'Next' | transloco"
+                        [disabled]="disableNext()">
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End progressbar -->
+</ng-container>

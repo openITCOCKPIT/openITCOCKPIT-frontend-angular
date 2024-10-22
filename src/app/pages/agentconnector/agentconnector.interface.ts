@@ -164,3 +164,31 @@ export enum AgentModes {
     Push = 'push',
     PushSatellite = 'push_satellite'
 }
+
+/**********************
+ *   Wizard action    *
+ **********************/
+export interface AgentconnectorWizardLoadHostsByStringParams {
+    'angular': true,
+    'filter[Hosts.name]': string,
+    'selected[]'?: number[],
+    'pushAgentId'?: number
+}
+
+/*****************************
+ *   Wizard config action    *
+ *****************************/
+
+export interface AgentconnectorAgentConfigRoot {
+    config: AgentConfig
+    host: HostEntity
+    isNewConfig: boolean
+    satellite?: AgentconnectorAgentConfigSatellite
+    _csrfToken: string
+}
+
+export interface AgentconnectorAgentConfigSatellite {
+    id: number
+    name: string
+    address: string
+}
