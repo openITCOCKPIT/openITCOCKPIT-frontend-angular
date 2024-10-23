@@ -10,12 +10,14 @@ import {
 } from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
+    CopyUserContainerRoleDatum,
+    CopyUserContainerRolesPost, CopyUserContainerRolesRequest,
     EditableUserContainerRole,
     UserContainerRole,
     UserContainerRolesIndex,
     UserContainerRolesIndexParams, UserContainerRolesIndexRoot
 } from './usercontainerroles.interface';
-import { LoadLdapgroups } from '../usergroups/usergroups.interface';
+import { LoadLdapgroups, UsergroupsCopyGetRoot, UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
@@ -101,8 +103,18 @@ export class UserContainerRolesService {
             );
     }
 
-    public getCopy():void{}
-    public copy(): void{}
+    public getCopy(ids: number[]): Observable<CopyUserContainerRolesRequest> {
+        return this
+            .http.get<CopyUserContainerRolesRequest>(`${this.proxyPath}/usercontainerroles/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map((data: CopyUserContainerRolesRequest) => {
+                    return data;
+                })
+            )
+    }
+    public saveCopy(post: CopyUserContainerRoleDatum[]): Observable<UsergroupsCopyPostRoot> {
+        return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usercontainerroles/copy/.json?angular=true`, {data: post});
+    }
 
     public loadLdapgroupsForAngular(search: string = ''): Observable<{ ldapgroups: SelectKeyValue[] }> {
         return this.http.get<{ ldapgroups: SelectKeyValue[] }>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);

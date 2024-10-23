@@ -84,6 +84,9 @@ const coreRoutes: Routes = [{
     path: 'usercontainerroles/add',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-add/usercontainerroles-add.component').then(m => m.UsercontainerrolesAddComponent)
 }, {
+    path: 'usercontainerroles/copy/:ids',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-copy/usercontainerroles-copy.component').then(m => m.UserContainerRolesCopyComponent)
+}, {
     path: 'usercontainerroles/edit/:id',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-edit/usercontainerroles-edit.component').then(m => m.UsercontainerrolesEditComponent)
 }, {
