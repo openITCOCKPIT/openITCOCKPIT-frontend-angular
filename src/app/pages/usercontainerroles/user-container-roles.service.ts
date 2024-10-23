@@ -67,7 +67,7 @@ export class UserContainerRolesService {
     }
     public updateUserContainerRole(userContainerRole: EditableUserContainerRole): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/usercontainerroles/edit/${userContainerRole.id}.json?angular=true`, {usercontainerrole: userContainerRole})
+        return this.http.post<any>(`${proxyPath}/usercontainerroles/edit/${userContainerRole.id}.json?angular=true`, {Usercontainerrole: userContainerRole})
             .pipe(
                 map(data => {
                     return {

@@ -38,6 +38,7 @@ import { ContainersLoadContainersByStringParams } from '../../containers/contain
 import { UserContainerRolesService } from '../user-container-roles.service';
 import { ContainersService } from '../../containers/containers.service';
 import { HistoryService } from '../../../history.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-usercontainerroles-edit',
@@ -71,7 +72,8 @@ import { HistoryService } from '../../../history.service';
         RowComponent,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        FormLoaderComponent
     ],
     templateUrl: './usercontainerroles-edit.component.html',
     styleUrl: './usercontainerroles-edit.component.css',
@@ -88,7 +90,17 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-    protected post: EditableUserContainerRole = {} as EditableUserContainerRole;
+    protected post: EditableUserContainerRole = {
+        id: 0,
+        ldapgroups: {
+            _ids: [] as number[]
+        },
+        name: '',
+        ContainersUsercontainerrolesMemberships: {},
+        containers: {
+            _ids: [] as number[]
+        }
+    };
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected ldapGroups: SelectKeyValue[] = [];
     protected selectedContainerIds: number[] = [];
@@ -119,6 +131,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UserContainerRolesService.getEdit(id).subscribe((result: EditableUserContainerRole) => {
             this.cdr.markForCheck();
             this.post = result;
+            this.selectedContainerIds = this.post.containers._ids;
         }));
 
     }
@@ -170,12 +183,12 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
         // Traverse all containerids and set the value to 1.
         this.selectedContainerIds.map((id) => {
             if (id === 1) {
-                this.post.ContainersUsercontainerrolesMemberships[id] = 2;
+                this.post.ContainersUsercontainerrolesMemberships[id] = "2";
                 return;
             }
             // Only if not already set to 1 or 2.
-            if (this.post.ContainersUsercontainerrolesMemberships[id] !== 2) {
-                this.post.ContainersUsercontainerrolesMemberships[id] = 1;
+            if (this.post.ContainersUsercontainerrolesMemberships[id] !== "2") {
+                this.post.ContainersUsercontainerrolesMemberships[id] = "1";
             }
         });
         this.cdr.markForCheck();

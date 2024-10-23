@@ -86,7 +86,7 @@ export interface AddUserContainerRole {
 
 export interface UserContainerRole {
     ContainersUsercontainerrolesMemberships: {
-        [key: string]: number
+        [key: string]: string
     }
     ldapgroups: {
         _ids: number[]
