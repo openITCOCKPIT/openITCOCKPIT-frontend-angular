@@ -62,9 +62,9 @@
             </div>
 
             <!-- Host is not configured yet -->
-            <div class="row d-flex" *ngIf="!isConfigured">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 offset-lg-2 offset-xl-2 d-flex">
-                    <c-card class="agent-mode-box-pull">
+            <c-row *ngIf="!isConfigured" class="mb-3">
+                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="4" [offset]="{lg: 2, xl: 2}" class="d-flex mb-3">
+                    <c-card class="agent-mode-box-pull flex-1">
                         <c-card-body>
                             <h5 cCardTitle>
                                 {{ t('Register Agent in pull mode') }}
@@ -94,10 +94,10 @@
                             </div>
                         </c-card-footer>
                     </c-card>
-                </div>
+                </c-col>
 
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 d-flex">
-                    <c-card class="agent-mode-box-push">
+                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="4" class="d-flex mb-3">
+                    <c-card class="agent-mode-box-push flex-1">
                         <c-card-body>
                             <h5 cCardTitle>
                                 {{ t('Register Agent in push mode') }}
@@ -127,13 +127,13 @@
                             </div>
                         </c-card-footer>
                     </c-card>
-                </div>
-            </div>
+                </c-col>
+            </c-row>
 
             <!-- Agent config already exists -->
-            <div class="row d-flex" *ngIf="hostId && isConfigured">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 offset-lg-2 offset-xl-2 d-flex">
-                    <c-card class="agent-mode-box-create-services">
+            <c-row *ngIf="hostId && isConfigured" class="mb-3">
+                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="4" [offset]="{lg: 2, xl: 2}" class="d-flex mb-3">
+                    <c-card class="agent-mode-box-create-services flex-1">
                         <c-card-body>
                             <h5 cCardTitle>
                                 {{ t('Create new services') }}
@@ -158,10 +158,9 @@
                             </div>
                         </c-card-footer>
                     </c-card>
-                </div>
-
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 d-flex">
-                    <c-card class="agent-mode-box-config-edit">
+                </c-col>
+                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="4" class="d-flex mb-3">
+                    <c-card class="agent-mode-box-config-edit flex-1">
                         <c-card-body>
                             <h5 cCardTitle>
                                 {{ t('Edit agent configuration') }}
@@ -187,9 +186,9 @@
                             </div>
                         </c-card-footer>
                     </c-card>
-                </div>
 
-            </div>
+                </c-col>
+            </c-row>
 
         </c-card-body>
 

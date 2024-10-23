@@ -42,8 +42,8 @@
         <oitc-block-loader *ngIf="!config" class="p-2"></oitc-block-loader>
         <c-card-body *ngIf="config">
 
-            <div class="row">
-                <div class="col-12">
+            <c-row>
+                <c-col [xs]="12">
                     <c-card>
                         <c-card-body>
                             <fieldset>
@@ -84,14 +84,13 @@
                             </fieldset>
                         </c-card-body>
                     </c-card>
-                </div>
 
+                </c-col>
+            </c-row>
 
-            </div>
-
-            <div class="row pt-4 d-flex">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 d-flex">
-                    <c-card>
+            <c-row class="pt-4">
+                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                    <c-card class="flex-1">
                         <c-card-body class="flex-1">
                             <fieldset>
                                 <legend class="fs-md fieldset-legend-border-bottom mt-1">
@@ -183,9 +182,10 @@
                             </fieldset>
                         </c-card-body>
                     </c-card>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 d-flex" *ngIf="!config.bool.enable_push_mode">
-                    <c-card>
+                </c-col>
+
+                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex" *ngIf="!config.bool.enable_push_mode">
+                    <c-card class="flex-1">
                         <c-card-body class="flex-1">
                             <fieldset>
                                 <legend class="fs-md fieldset-legend-border-bottom mt-1">
@@ -221,9 +221,10 @@
                             </fieldset>
                         </c-card-body>
                     </c-card>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 d-flex" *ngIf="config.bool.enable_push_mode">
-                    <c-card>
+                </c-col>
+
+                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex" *ngIf="config.bool.enable_push_mode">
+                    <c-card class="flex-1">
                         <c-card-body class="flex-1">
                             <fieldset>
                                 <legend class="fs-md fieldset-legend-border-bottom mt-1">
@@ -349,9 +350,9 @@
                             </fieldset>
                         </c-card-body>
                     </c-card>
-                </div>
+                </c-col>
 
-            </div>
+            </c-row>
 
         </c-card-body>
     </c-card>

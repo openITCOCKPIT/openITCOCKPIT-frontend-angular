@@ -16,13 +16,15 @@ import {
     CardHeaderComponent,
     CardTextDirective,
     CardTitleDirective,
+    ColComponent,
     DropdownItemDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    FormSelectDirective
+    FormSelectDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -78,7 +80,9 @@ import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-moda
         TrueFalseDirective,
         DropdownItemDirective,
         ApikeyDocModalComponent,
-        JsonPipe
+        JsonPipe,
+        RowComponent,
+        ColComponent
     ],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',
