@@ -6,11 +6,17 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     AgentconnectorAgentConfigRoot,
     AgentconnectorAutoTlsSatelliteTaskResponse,
+    AgentconnectorSelectAgentRoot,
     AgentconnectorWizardAutoTlsRoot,
     AgentconnectorWizardInstallRoot,
     AgentconnectorWizardLoadHostsByStringParams
 } from './agentconnector.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericSuccessResponse,
+    GenericValidationError
+} from '../../generic-responses';
 import { AgentConfig } from './agentconfig.interface';
 
 @Injectable({
@@ -137,5 +143,47 @@ export class AgentconnectorService {
                 angular: true
             }
         });
+    }
+
+    public loadPushAgents(hostId: number): Observable<AgentconnectorSelectAgentRoot> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<AgentconnectorSelectAgentRoot>(`${proxyPath}/agentconnector/select_agent.json`, {
+            params: {
+                angular: true,
+                hostId: hostId
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public savePushAgentAssignment(selectedPushAgentId: number, hostId: number, agentUuid: string): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/agentconnector/select_agent.json?angular=true`, {
+            pushagent: {
+                id: selectedPushAgentId,
+                host_id: hostId,
+                agent_uuid: agentUuid
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 }

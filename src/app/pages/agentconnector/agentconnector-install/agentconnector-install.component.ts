@@ -111,6 +111,7 @@ export class AgentconnectorInstallComponent implements OnInit, OnDestroy {
         if (this.config.bool.enable_push_mode) {
             // In Push Mode, the user need to select the agent manually
             this.router.navigate(['/agentconnector/select_agent', this.hostId]);
+            return;
         }
 
         // Pull mode

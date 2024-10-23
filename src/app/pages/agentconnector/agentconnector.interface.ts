@@ -233,3 +233,20 @@ export interface AgentconnectorAutoTlsSatelliteTaskResponse {
     }
     _csrfToken: string
 }
+
+/**********************************
+ *   Wizard Select Agent action   *
+ **********************************/
+export interface AgentconnectorSelectAgentRoot {
+    config: AgentConfig,
+    host: HostEntity,
+    pushAgents: AgentconnectorSelectPushAgent[],
+    selectedPushAgentId: number
+    _csrfToken: string
+}
+
+export interface AgentconnectorSelectPushAgent {
+    id: number
+    agent_uuid: string
+    name: string
+}

@@ -218,7 +218,7 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
     }
 
     public onNextButtonClick() {
-        this.router.navigate(['/agentconnector/create_services', this.hostId]);
+        this.router.navigate(['/agentconnector/create_services', this.hostId], {queryParams: {testConnection: false}});
     }
 
     protected readonly AgentHttpClientErrors = AgentHttpClientErrors;

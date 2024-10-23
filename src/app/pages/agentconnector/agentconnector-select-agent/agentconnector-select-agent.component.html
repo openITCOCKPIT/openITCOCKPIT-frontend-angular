@@ -1,1 +1,136 @@
-<p>agentconnector-select-agent works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('openITCOCKPIT Agent') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+                {{ t('Wizard') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
+                <small class="fw-300" *ngIf="host">
+                    {{ host.name }} ({{ host.address }})
+                </small>
+            </h5>
+
+        </c-card-header>
+
+        <c-card-body class="p-0">
+            <oitc-agentconnector-wizard-progressbar
+                [stepCount]="4"
+                [step]="AgentconnectorWizardStepsEnum.SelectHost"
+                [mode]="AgentModes.Push"
+                [disableBack]="false"
+                (goBackEvent)="onBackButtonClick()"
+                [disableNext]="disableNextButton"
+                (goNextEvent)="onNextButtonClick()"
+            ></oitc-agentconnector-wizard-progressbar>
+        </c-card-body>
+
+        <c-card-body>
+            <c-row>
+                <c-col [xs]="12">
+                    <c-card>
+                        <c-card-body>
+                            <fieldset>
+                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                    <h4>
+                                        <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                        {{ t('Select Agent to create host assignment') }}
+                                    </h4>
+                                </legend>
+                                <div class="pt-3">
+
+                                    <!-- Loading box -->
+                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isLoading">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-cyan-500">
+                                                    {{ t('Waiting for Agent data.') }}
+                                                </span>
+
+                                                <div class="mt-2">
+                                                    <p-progressBar mode="indeterminate"
+                                                                   [style]="{ height: '6px' }"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Info box -->
+                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="!isLoading">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-cyan-500">
+                                                    {{ t('Agent not in list?') }}
+                                                </span>
+                                                <br>
+                                                {{ t('Most likely the Agent did not send any data to the openITCOCKPIT Server yet. Please check the log file of the Agent and refresh the list.') }}
+                                            </div>
+                                            <div class="ms-2">
+                                                <button class="btn btn-outline-info btn-sm ripple"
+                                                        (click)="loadAgents()">
+                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                    {{ t('Refresh list') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3">
+                                    <div class="mb-3">
+                                        <label cLabel for="available_agents">
+                                            {{ t('Available Agents') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+
+                                        <oitc-select
+                                            name="available_agents"
+                                            id="available_agents"
+                                            [optionValue]="'key'"
+                                            [optionLabel]="'value'"
+                                            [(ngModel)]="selectedPushAgentId"
+                                            [options]="pushAgentsSelect"
+                                            (onChange)="enableNextButton()">
+                                        </oitc-select>
+                                        <div class="help-block">
+                                            {{ t('Agents with an exact match of the IP-Address will be selected automatically. If none of the IP-Addresses matches openITCOCKPIT will pre-select the best matching hostname.') }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+        </c-card-body>
+    </c-card>
+</ng-container>
