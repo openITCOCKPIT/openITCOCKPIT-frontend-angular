@@ -80,7 +80,7 @@ export class MessagesOfTheDayService {
                 map(data => {
                     return {
                         success: true,
-                        data: data as unknown as GenericIdResponse
+                        data: data.messageOtd as unknown as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

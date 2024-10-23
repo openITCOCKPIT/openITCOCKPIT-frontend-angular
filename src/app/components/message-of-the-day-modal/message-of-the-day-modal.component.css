@@ -1,0 +1,4 @@
+.title-border {
+    border-bottom: 3px solid;
+    border-image-slice: 0 0 1 0;
+}

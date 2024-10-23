@@ -561,6 +561,36 @@ const coreRoutes: Routes = [{
     path: 'agentchecks/edit/:id',
     loadComponent: () => import('./pages/agentchecks/agentchecks-edit/agentchecks-edit.component').then(m => m.AgentchecksEditComponent)
 }, {
+    path: 'agentconnector/pull',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-pull/agentconnector-pull.component').then(m => m.AgentconnectorPullComponent)
+}, {
+    path: 'agentconnector/push',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push/agentconnector-push.component').then(m => m.AgentconnectorPushComponent)
+}, {
+    path: 'agentconnector/push_satellite',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push-satellite/agentconnector-push-satellite.component').then(m => m.AgentconnectorPushSatelliteComponent)
+}, {
+    path: 'agentconnector/showOutput/:id/:mode',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-show-output/agentconnector-show-output.component').then(m => m.AgentconnectorShowOutputComponent)
+}, {
+    path: 'agentconnector/wizard',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-wizard/agentconnector-wizard.component').then(m => m.AgentconnectorWizardComponent)
+}, {
+    path: 'agentconnector/config/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-config/agentconnector-config.component').then(m => m.AgentconnectorConfigComponent)
+}, {
+    path: 'agentconnector/install/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-install/agentconnector-install.component').then(m => m.AgentconnectorInstallComponent)
+}, {
+    path: 'agentconnector/autotls/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-auto-tls/agentconnector-auto-tls.component').then(m => m.AgentconnectorAutoTlsComponent)
+}, {
+    path: 'agentconnector/select_agent/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-select-agent/agentconnector-select-agent.component').then(m => m.AgentconnectorSelectAgentComponent)
+}, {
+    path: 'agentconnector/create_services/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-create-services/agentconnector-create-services.component').then(m => m.AgentconnectorCreateServicesComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {

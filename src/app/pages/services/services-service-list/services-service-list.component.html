@@ -96,9 +96,10 @@
                             </li>
 
                             <li *oitcPermission="['agentconnector', 'wizard']">
-                                <a
-                                    cDropdownItem
-                                    [routerLink]="['/agentconnector/wizard',  host?.id]">
+                                <a *ngIf="host"
+                                   cDropdownItem
+                                   [routerLink]="['/agentconnector/wizard']"
+                                   [queryParams]="{hostId: host.id}">
                                     <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
                                     {{ t('openITCOCKPIT Agent discovery') }}
                                 </a>

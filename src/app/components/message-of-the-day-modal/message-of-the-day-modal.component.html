@@ -8,29 +8,33 @@
             <button (click)="hideModal()" cButtonClose></button>
         </c-modal-header>
         <c-modal-body>
-            <c-row>
-                <c-col md="1">
-                    <fa-stack size="2x">
-                        <fa-icon [icon]="['fas', 'comment']" [class]="'text-' + messageOfTheDay.messageOtd.style"
-                                 stackItemSize="2x"></fa-icon>
-                        <fa-icon [icon]="['fas', 'exclamation']" class="text-white"
-                                 stackItemSize="1x"
-                                 transform="right-10"></fa-icon>
-                    </fa-stack>
-                </c-col>
-                <c-col md="11">
-                    <h4 [class]="'title-border title-border-bottom-' + messageOfTheDay.messageOtd.style">
+
+            <div class="d-flex">
+                <div class="alert-icon">
+                    <span class="icon-stack icon-stack-lg">
+                        <i class="base base-comment icon-stack-3x opacity-100"
+                           [ngClass]="'text-'+messageOfTheDay.messageOtd.style"></i>
+                        <i class="fas fa-info icon-stack-1x opacity-100 color-white mb-2"
+                           *ngIf="messageOfTheDay.messageOtd.style == 'primary' || messageOfTheDay.messageOtd.style == 'info'"></i>
+
+                        <i class="fas fa-check icon-stack-1x opacity-100 color-white mb-2"
+                           *ngIf="messageOfTheDay.messageOtd.style == 'success'"></i>
+                        <i class="fas fa-exclamation icon-stack-1x opacity-100 color-white mb-2"
+                           *ngIf="messageOfTheDay.messageOtd.style == 'warning' || messageOfTheDay.messageOtd.style == 'danger'"></i>
+                    </span>
+                </div>
+                <div class="flex-1 ps-3">
+                    <h4 class="title-border" [ngClass]="'title-border-bottom-'+messageOfTheDay.messageOtd.style">
                         {{ messageOfTheDay.messageOtd.title }}
                     </h4>
-                    <p>
-                        <i>
-                            {{ messageOfTheDay.messageOtd.description }}
-                        </i>
-                    </p>
-                    <p [innerHTML]="html | trustAsHtml">
-                    </p>
-                </c-col>
-            </c-row>
+                    <div class="italic mb-3">
+                        {{ messageOfTheDay.messageOtd.description }}
+                    </div>
+
+                    <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+                </div>
+            </div>
+
         </c-modal-body>
     </ng-container>
 </c-modal>
