@@ -594,11 +594,11 @@ export class HostsEditComponent implements OnInit, OnDestroy {
                     if (!this.createAnother && submitType) {
                         switch (submitType) {
                             case HostSubmitType.ServiceAdd:
-                                this.router.navigate(['/services/add/' + response.id]);
+                                this.router.navigate(['/services/add/'], {queryParams: {hostId: response.id}});
                                 break;
 
                             case HostSubmitType.AgentDiscovery:
-                                this.router.navigate(['/agentconnector/wizard/' + response.id]);
+                                this.router.navigate(['/agentconnector/wizard'], {queryParams: {hostId: response.id}});
                                 break;
 
                             case HostSubmitType.CheckmkDiscovery:

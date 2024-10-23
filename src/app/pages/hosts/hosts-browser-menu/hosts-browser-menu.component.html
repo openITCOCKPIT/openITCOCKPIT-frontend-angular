@@ -140,7 +140,8 @@
                         </li>
 
                         <li *oitcPermission="['agentconnector', 'wizard']">
-                            <a [routerLink]="['/', 'agentconnector', 'wizard', data.hostId]"
+                            <a [routerLink]="['/', 'agentconnector', 'wizard']"
+                               [queryParams]="{hostId: data.hostId}"
                                cDropdownItem>
                                 <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
                                 {{ t('openITCOCKPIT Agent discovery') }}
