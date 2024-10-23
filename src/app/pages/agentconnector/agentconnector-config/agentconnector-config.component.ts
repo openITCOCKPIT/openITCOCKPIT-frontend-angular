@@ -243,4 +243,6 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
 
     protected readonly AgentconnectorOperatingSystems = AgentconnectorOperatingSystems;
     protected readonly Number = Number;
+    protected readonly AgentconnectorConnectionTypes = AgentconnectorConnectionTypes;
+    protected readonly AgentconnectorWebserverTypes = AgentconnectorWebserverTypes;
 }

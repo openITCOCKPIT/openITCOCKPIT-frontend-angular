@@ -368,6 +368,217 @@
                                 </legend>
                                 <div>
 
+                                    <!-- Connection type in PULL mode -->
+                                    <div class="mt-3"
+                                         *ngIf="config.bool.enable_push_mode === false">
+                                        <label for="connectionType">
+                                            {{ t('Connection type') }}
+                                        </label>
+                                        <select
+                                            cSelect
+                                            name="connectionType"
+                                            id="connectionType"
+                                            [(ngModel)]="connectionType">
+                                            <option
+                                                [ngValue]="AgentconnectorConnectionTypes.AutoTls">{{ t('Auto-TLS') }}
+                                            </option>
+                                            <option [ngValue]="AgentconnectorConnectionTypes.Https">{{ t('HTTPS') }}
+                                            </option>
+                                            <option
+                                                [ngValue]="AgentconnectorConnectionTypes.Http">{{ t('HTTP (plaintext)') }}
+                                            </option>
+                                        </select>
+
+                                        <div class="help-block"
+                                             *ngIf="connectionType === AgentconnectorConnectionTypes.AutoTls">
+                                            {{ t('openITCOCKPIT automatically generate a TLS certificate for authentication and encryption purpose. Auto-TLS is only available in Pull mode.') }}
+                                        </div>
+                                        <div class="help-block"
+                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
+                                            {{ t('Start the Agents web server with own TLS certificates from Let\'s Encrypt for example.') }}
+                                        </div>
+                                        <div class="help-block text-danger"
+                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
+                                            {{ t('It\'s recommended to also enable HTTP Basic Authentication to restrict the access to the agent.') }}
+                                        </div>
+                                        <div class="help-block text-danger"
+                                             *ngIf="connectionType === AgentconnectorConnectionTypes.Http">
+                                            {{ t('Communication will be plaintext. No encryption and authentication. Not recommended!') }}
+                                        </div>
+                                    </div>
+                                    <!-- End connection type -->
+
+                                    <!-- Webserver settings in PUSH mode -->
+                                    <div class="mt-3"
+                                         *ngIf="config.bool.enable_push_mode">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="push_enable_webserver"
+                                                   id="push_enable_webserver"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.push_enable_webserver"/>
+                                            <label cFormCheckLabel for="push_enable_webserver">
+                                                {{ t('Enable Webserver') }}
+                                            </label>
+                                        </c-form-check>
+                                        <div class="help-block">
+                                            {{ t('By default the web server of the Agent is disabled when running in Push mode.') }}
+                                        </div>
+                                        <div class="help-block text-danger">
+                                            {{ t('It is highly recommended to enable at least HTTP Basic Authentication!') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3"
+                                         *ngIf="config.bool.enable_push_mode">
+                                        <label for="webserverType">
+                                            {{ t('Web server type') }}
+                                        </label>
+                                        <select
+                                            cSelect
+                                            name="webserverType"
+                                            id="webserverType"
+                                            [disabled]="!config.bool.push_enable_webserver"
+                                            [(ngModel)]="webserverType">
+                                            <option
+                                                [ngValue]="AgentconnectorWebserverTypes.Https">{{ t('HTTPS') }}
+                                            </option>
+                                            <option
+                                                [ngValue]="AgentconnectorWebserverTypes.Http">{{ t('HTTP (plaintext)') }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- End Webserver settings -->
+
+                                    <!-- TLS certificate settings -->
+                                    <div class="mt-3"
+                                         *ngIf="connectionType === AgentconnectorConnectionTypes.Https">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="use_https_verify"
+                                                   id="use_https_verify"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.use_https_verify"/>
+                                            <label cFormCheckLabel for="use_https_verify">
+                                                {{ t('Verify certificate') }}
+                                            </label>
+                                        </c-form-check>
+                                        <div class="help-block">
+                                            {{ t('Enabled TLS certificate validation. This requires valid certificates like from Let\'s Encrypt') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3"
+                                         *ngIf="(connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)">
+                                        <label cLabel for="ssl_certfile">
+                                            {{ t('TLS certificate file') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <input cFormControl
+                                               id="ssl_certfile" required type="text"
+                                               name="ssl_certfile"
+                                               [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
+                                               [placeholder]="'/etc/ssl/acme.sh/example.org/cert.pem'|transloco"
+                                               oitcFormError [errors]="errors" errorField="ssl_certfile"
+                                               [(ngModel)]="config.string.ssl_certfile">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="ssl_certfile"></oitc-form-feedback>
+                                        <div class="help-block">
+                                            {{ t('Full path to certificate file the Agent should use') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3"
+                                         *ngIf="(connectionType === AgentconnectorConnectionTypes.Https && !config.bool.enable_push_mode) || (webserverType === AgentconnectorWebserverTypes.Https && config.bool.enable_push_mode)">
+                                        <label cLabel for="ssl_keyfile">
+                                            {{ t('TLS key file') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <input cFormControl
+                                               id="ssl_keyfile" required type="text"
+                                               name="ssl_keyfile"
+                                               [disabled]="(config.bool.enable_push_mode === true && config.bool.push_enable_webserver === false )"
+                                               [placeholder]="'/etc/ssl/acme.sh/example.org/privkey.pem'|transloco"
+                                               oitcFormError [errors]="errors" errorField="ssl_keyfile"
+                                               [(ngModel)]="config.string.ssl_keyfile">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="ssl_keyfile"></oitc-form-feedback>
+                                        <div class="help-block">
+                                            {{ t('Full path to key file the Agent should use') }}
+                                        </div>
+                                    </div>
+                                    <!-- End TLS certificate settings -->
+
+                                    <!-- Basic Auth settings -->
+                                    <div class="mt-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="use_http_basic_auth"
+                                                   id="use_http_basic_auth"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.use_http_basic_auth"/>
+                                            <label cFormCheckLabel for="use_http_basic_auth">
+                                                {{ t('Enable HTTP Basic Authentication') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label cLabel for="username">
+                                            {{ t('Username') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <input cFormControl
+                                               id="username" required type="text"
+                                               name="username"
+                                               [disabled]="!config.bool.use_http_basic_auth"
+                                               [placeholder]="'Username'|transloco"
+                                               oitcFormError [errors]="errors" errorField="username"
+                                               [(ngModel)]="config.string.username">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="username"></oitc-form-feedback>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label cLabel for="password">
+                                            {{ t('Password') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <input cFormControl
+                                               id="password" required type="password"
+                                               name="password"
+                                               [disabled]="!config.bool.use_http_basic_auth"
+                                               [placeholder]="'Password'|transloco"
+                                               oitcFormError [errors]="errors" errorField="password"
+                                               [(ngModel)]="config.string.password">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="password"></oitc-form-feedback>
+                                    </div>
+                                    <!-- End Basic Auth settings -->
+
+                                    <!-- Config update mode -->
+                                    <div class="mt-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="enable_remote_config_update"
+                                                   id="enable_remote_config_update"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.enable_remote_config_update"/>
+                                            <label cFormCheckLabel for="enable_remote_config_update">
+                                                {{ t('Enable remote configuration update mode') }}
+                                            </label>
+                                        </c-form-check>
+                                        <div class="help-block">
+                                            {{ t('Enables the remote agent configuration update mode.') }}
+                                            <br>
+                                            {{ t('Should only be configured after an successful TLS configuration.') }}
+                                            <br>
+                                            <p class="text-danger">
+                                                {{ t('Warning: This could lead to remote code execution!') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- End config update mode -->
 
                                 </div>
 
