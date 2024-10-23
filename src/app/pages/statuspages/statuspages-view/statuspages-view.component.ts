@@ -44,11 +44,12 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatuspagesViewComponent implements OnInit, OnDestroy {
-    private id: number = 0;
+
     private subscriptions: Subscription = new Subscription();
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     private cdr = inject(ChangeDetectorRef);
     public statuspage!: StatuspageRoot;
+    public id: number = 0;
 
     constructor(private route: ActivatedRoute) {
     }
