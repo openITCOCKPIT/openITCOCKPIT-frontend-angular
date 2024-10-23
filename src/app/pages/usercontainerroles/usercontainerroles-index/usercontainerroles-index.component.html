@@ -148,6 +148,12 @@
 
 
                             <li cDropdownDivider></li>
+                            <oitc-actions-button-element [permission]="'usercontainerroles.copy'"
+                                                         [url]="'/usercontainerroles/copy/' + userContainerRole.id">
+                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                {{ t('Copy') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
                             <oitc-actions-button-element (click)="toggleDeleteAllModal(userContainerRole)"
                                                          [permission]="'usercontainerroles.delete'">
                                 <span class="text-danger">
@@ -173,6 +179,11 @@
                         </c-col>
                         <c-col md="3">
                             <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="navigateCopy()">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </button>
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
