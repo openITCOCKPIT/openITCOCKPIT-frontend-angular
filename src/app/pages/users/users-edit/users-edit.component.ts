@@ -131,7 +131,6 @@ export class UsersEditComponent implements OnDestroy, OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly cdr = inject(ChangeDetectorRef);
 
-    protected createAnother: boolean = false;
     protected post: UpdateUser = this.getDefaultPost();
     protected containerRoles: LoadContainerRolesRoot = {} as LoadContainerRolesRoot;
     protected selectedContainerIds: number[] = [];
@@ -184,30 +183,14 @@ export class UsersEditComponent implements OnDestroy, OnInit {
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    const response: {user: GenericIdResponse} = result.data as {user: GenericIdResponse};
                     const title: string = this.TranslocoService.translate('User');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['users', 'edit', response.user.id];
+                    const url: (string | number)[] = ['users', 'edit', result.data.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/users/index']);
-                        return;
-                    }
-                    this.errors = {} as GenericValidationError;
-
-                    this.ldapUserDetails = {
-                        usergroupLdap: {
-                            id: 0
-                        }
-                    } as LdapUserDetails;
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
-
+                    this.HistoryService.navigateWithFallback(['/users/index']);
                     return;
                 }
-
                 // Error
                 this.notyService.genericError();
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
