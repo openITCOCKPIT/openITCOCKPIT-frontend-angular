@@ -157,7 +157,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
                     };
 
                     const title: string = this.TranslocoService.translate('User container role');
-                    const msg: string = this.TranslocoService.translate('added successfully');
+                    const msg: string = this.TranslocoService.translate('saved successfully');
                     const url: (string | number)[] = ['usercontainerroles', 'edit', response.usercontainerrole.id];
 
                     this.notyService.genericSuccess(msg, title, url);
