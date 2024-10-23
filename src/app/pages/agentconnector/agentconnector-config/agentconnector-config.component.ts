@@ -118,17 +118,18 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
                 this.hostId = hostId;
             }
 
-            const pushAgentId = Number(this.route.snapshot.paramMap.get('pushAgentId'));
+            // Query String Parameters
+            const pushAgentId = Number(params['pushAgentId']) || 0;
             if (pushAgentId > 0) {
                 this.pushAgentId = pushAgentId;
             }
 
-            const mode = this.route.snapshot.paramMap.get('mode');
+            const mode = params['mode'] || undefined;
             if (mode == AgentModes.Push || mode == AgentModes.Pull) {
                 this.urlMode = mode;
             }
 
-            const selectedOs = this.route.snapshot.paramMap.get('selectedOs');
+            const selectedOs = params['selectedOs'] || undefined;
             if (selectedOs) {
                 this.preselectedOs = selectedOs as AgentconnectorOperatingSystems;
             }

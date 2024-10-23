@@ -129,12 +129,14 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             //console.log(params);
-            const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+
+            // Query String Parameters
+            const hostId = Number(params['hostId']) || 0;
             if (hostId > 0) {
                 this.hostId = hostId;
             }
 
-            const pushAgentId = Number(this.route.snapshot.paramMap.get('pushAgentId'));
+            const pushAgentId = Number(params['pushAgentId']) || 0;
             if (pushAgentId > 0) {
                 this.pushAgentId = pushAgentId;
             }
@@ -168,7 +170,7 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
 
     public onHostChange() {
         this.isConfigured = false;
-        
+
         if (this.hostId > 0) {
             this.subscriptions.add(this.AgentconnectorService.loadIsConfigured(this.hostId)
                 .subscribe((result) => {
