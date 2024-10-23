@@ -198,10 +198,9 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                console.warn(item);
                 return {
                     id: item.id,
-                    displayName: item.title
+                    displayName: item.name
                 };
             });
         }
