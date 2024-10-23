@@ -161,11 +161,9 @@ export class UsersAddComponent implements OnDestroy, OnInit {
                 if (result.success) {
                     this.cdr.markForCheck();
 
-                    const response: {user: GenericIdResponse} = result.data as {user: GenericIdResponse};
-
                     const title: string = this.TranslocoService.translate('User');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['users', 'edit', response.user.id];
+                    const url: (string | number)[] = ['users', 'edit', result.data.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
