@@ -144,6 +144,9 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
             }
 
             this.loadHosts('');
+            if (this.hostId > 0) {
+                this.onHostChange();
+            }
         }));
     }
 
@@ -160,9 +163,13 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
         let params: AgentconnectorWizardLoadHostsByStringParams = {
             angular: true,
             'selected[]': selected,
-            'filter[Hosts.name]': searchString,
-            pushAgentId: this.pushAgentId
+            'filter[Hosts.name]': searchString
         }
+
+        if (this.pushAgentId > 0) {
+            params['pushAgentId'] = this.pushAgentId;
+        }
+
         this.subscriptions.add(this.AgentconnectorService.loadHostsByString(params)
             .subscribe((result: SelectKeyValue[]) => {
                 this.hosts = result;
