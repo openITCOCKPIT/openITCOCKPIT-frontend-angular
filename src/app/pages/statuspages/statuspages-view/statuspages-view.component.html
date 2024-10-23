@@ -1,0 +1,95 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['statuspages', 'index']" [routerLink]="['/', 'statuspages', 'index']">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Statuspages') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('View') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Status pages') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="load()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button  cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        {{ t('Public view') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'long-arrow-alt-left']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <ng-container *ngIf="statuspage">
+                <div class="no-padding">
+
+                    <div class="col-12 pt-2 pb-4">
+                        <h4 class="d-block l-h-n m-0 fw-500">
+                            {{statuspage.Statuspage.statuspage.name}}
+
+                        </h4>
+                        <small class="m-0 l-h-n">
+                            {{statuspage.Statuspage.statuspage.description}}
+                        </small>
+                    </div>
+                    <div
+                            class="p-3 bg-{{statuspage.Statuspage.statuspage.cumulatedColor}} rounded overflow-hidden position-relative text-white">
+                        <div>
+                            <h2 class="d-block l-h-n m-0 fw-500">
+                                {{statuspage.Statuspage.statuspage.cumulatedHumanStatus}}
+                            </h2>
+                        </div>
+                        <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
+                    </div>
+                </div>
+                <div class="no-padding margin-bottom-10" *ngFor="let item of statuspage.Statuspage.items">
+                    <div class="card d-flex flex-row mt-2 min-h-110">
+                        <div class="p-2">
+                            <div class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="row p-2">
+                                <div class="col-12 text-truncate h5">
+                                    {{ item.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 hidden-md-down">
+                            <div class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+
+        </c-card-body>
+    </c-card>
+</ng-container>

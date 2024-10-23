@@ -28,7 +28,7 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button cButton class="ripple" color="default" size="xs">
+                    <button cButton class="ripple" color="default" size="xs" (click)="load()">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>
@@ -172,7 +172,7 @@
                                 [item]="statuspage"></oitc-item-select>
                     </td>
                     <td>
-                        <a [routerLink]="['/', 'statuspages', 'show', statuspage.id]">
+                        <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
                             {{ statuspage.name }}
                         </a>
                     </td>
@@ -224,6 +224,14 @@
                                                          [url]="'/statuspages/view/' + statuspage.id">
                                 <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 {{ t('View') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element *ngIf="statuspage.public"
+                                                         [permission]="'statuspages.view'"
+                                                         [url]="'/statuspages/view/' + statuspage.id">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('V' +
+                                'Public view') }}
                             </oitc-actions-button-element>
 
                             <li cDropdownDivider *ngIf="statuspage.allow_edit"></li>

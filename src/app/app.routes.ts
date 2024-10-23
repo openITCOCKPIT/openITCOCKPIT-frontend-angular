@@ -537,6 +537,9 @@ const coreRoutes: Routes = [{
     path: 'statuspages/index',
     loadComponent: () => import('./pages/statuspages/statuspages-index/statuspages-index.component').then(m => m.StatuspagesIndexComponent)
 }, {
+    path: 'statuspages/view/:id',
+    loadComponent: () => import('./pages/statuspages/statuspages-view/statuspages-view.component').then(m => m.StatuspagesViewComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {

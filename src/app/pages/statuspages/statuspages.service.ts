@@ -34,6 +34,9 @@ import {
     StatuspagesParams,
     StatuspagesIndexRoot}
     from './statuspages.interface';
+import {
+    StatuspageRoot}
+    from './statuspage.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +58,17 @@ export class StatuspagesService {
             })
         )
     }
+    public getStatuspageViewData(statuspageId: number): Observable<StatuspageRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<StatuspageRoot>(`${proxyPath}/statuspages/view/${statuspageId}.json`, {
+            params: {'angular': true}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;

@@ -64,10 +64,6 @@ import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbu
 import {PaginatorChangeEvent} from '../../../layouts/coreui/paginator/paginator.interface';
 import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
 import {Subscription} from 'rxjs';
-import {
-    getDefaultInstantreportsIndexParams, InstantreportIndex,
-    InstantreportsIndexParams
-} from '../../instantreports/instantreports.interface';
 import {TableLoaderComponent} from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import {ItemSelectComponent} from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import {BadgeOutlineComponent} from '../../../layouts/coreui/badge-outline/badge-outline.component';
