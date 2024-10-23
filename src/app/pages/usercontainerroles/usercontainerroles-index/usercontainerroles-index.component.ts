@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -111,6 +111,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
     private readonly router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected params: UserContainerRolesIndexParams = {} as UserContainerRolesIndexParams;
     protected userContainerRolesIndexRoot: UserContainerRolesIndexRoot = {
@@ -171,6 +172,7 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
         this.subscriptions.add(this.UserContainerRolesService.getIndex(this.params)
             .subscribe((result: UserContainerRolesIndexRoot) => {
                 this.userContainerRolesIndexRoot = result;
+                this.cdr.markForCheck();
             }));
     }
 
@@ -213,4 +215,11 @@ export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
             id: 'deleteAllModal',
         });
     }
+    public navigateCopy() {
+        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
+        if (ids) {
+            this.router.navigate(['/', 'usercontainerroles', 'copy', ids]);
+        }
+    }
+
 }
