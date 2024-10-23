@@ -1080,7 +1080,7 @@
     "Custom checks": "Eigene Prüfungen",
     "Download and install openITCOCKPIT Monitoring Agent ": "Herunterladen und Installation des openITCOCKPIT Monitoring Agenten",
     "Download and install the openITCOCKPIT Monitoring Agent.": "Den openITCOCKPIT Monitoring Agent herunterladen und installieren",
-    "If not already done, please {0} the openITCOCKPIT Agent now.": "Falls noch nicht geschehen, {{0}} jetzt bitte den openITCOCKPIT Agent.",
+    "If not already done, please download and install the openITCOCKPIT Agent now.": "Falls noch nicht geschehen, herunterladen und installieren jetzt bitte den openITCOCKPIT Agent.",
     "download and install": "herunterladen und installieren",
     "Configuration file\/s for the openITCOCKPIT Monitoring Agent": "Konfigurationsdateien des openITCOCKPIT Monitoring Agenten",
     "After the installation process is completed you should replace the default openITCOCKPIT Agent configuration with the recently generated configuration.": "Nach Abschluss des Installationsvorgangs sollten Sie die Standardkonfiguration des openITCOCKPIT Agent durch die zuvor generierte Konfiguration ersetzen.",

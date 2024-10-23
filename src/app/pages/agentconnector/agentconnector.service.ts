@@ -1,9 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
-import { AgentconnectorAgentConfigRoot, AgentconnectorWizardLoadHostsByStringParams } from './agentconnector.interface';
+import {
+    AgentconnectorAgentConfigRoot,
+    AgentconnectorWizardInstallRoot,
+    AgentconnectorWizardLoadHostsByStringParams
+} from './agentconnector.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { AgentConfig } from './agentconfig.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -61,4 +67,43 @@ export class AgentconnectorService {
         );
     }
 
+    public saveAgentConfig(config: AgentConfig, hostId: number, pushAgentId: number | null): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/agentconnector/config.json`, {
+            config: config,
+            hostId: hostId,
+            pushAgentId: pushAgentId
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public loadAgentConfigForInstall(hostId: number): Observable<AgentconnectorWizardInstallRoot> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<AgentconnectorWizardInstallRoot>(`${proxyPath}/agentconnector/install.json`, {
+            params: {
+                angular: true,
+                hostId: hostId
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
 }

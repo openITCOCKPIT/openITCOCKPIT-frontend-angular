@@ -41,10 +41,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-agentconnector-config',
@@ -90,6 +91,8 @@ import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-moda
 })
 export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
 
+    // Wizard step 2
+
     public hostId: number = 0;
     public pushAgentId: number = 0;
     public connectionType: AgentconnectorConnectionTypes = AgentconnectorConnectionTypes.AutoTls;
@@ -106,6 +109,7 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private readonly AgentconnectorService = inject(AgentconnectorService);
+    private readonly notyService = inject(NotyService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
@@ -233,12 +237,46 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
         }
     }
 
+    private submitAgentConfig() {
+        this.cleanupConnectionTypes();
+
+        let pushAgentId: number | null = null;
+        if (this.pushAgentId > 0) {
+            pushAgentId = this.pushAgentId;
+        }
+
+        this.subscriptions.add(this.AgentconnectorService.saveAgentConfig(this.config, this.hostId, pushAgentId)
+            .subscribe((result) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response = result.data as GenericIdResponse;
+                    this.notyService.genericSuccess();
+
+                    this.notyService.scrollContentDivToTop();
+                    this.errors = null;
+
+                    if (response.id) {
+                        this.router.navigate(['/agentconnector/install', this.hostId]);
+                    }
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                }
+            }));
+    }
+
     public onBackButtonClick() {
         this.router.navigate(['/agentconnector/wizard'], {queryParams: {hostId: this.hostId}});
     }
 
     public onNextButtonClick() {
-        console.log('Implement next');
+        this.submitAgentConfig();
     }
 
     protected readonly AgentconnectorOperatingSystems = AgentconnectorOperatingSystems;

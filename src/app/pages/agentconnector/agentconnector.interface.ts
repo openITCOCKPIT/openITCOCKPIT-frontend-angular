@@ -192,3 +192,12 @@ export interface AgentconnectorAgentConfigSatellite {
     name: string
     address: string
 }
+
+/*****************************
+ *   Wizard install action   *
+ *****************************/
+export interface AgentconnectorWizardInstallRoot {
+    config: AgentConfig,
+    host: HostEntity,
+    config_as_ini: string
+}

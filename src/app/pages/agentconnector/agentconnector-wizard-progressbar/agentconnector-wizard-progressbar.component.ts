@@ -36,4 +36,5 @@ export class AgentconnectorWizardProgressbarComponent {
     public goNextEvent = output<void>();
 
     protected readonly AgentconnectorWizardStepsEnum = AgentconnectorWizardStepsEnum;
+    protected readonly AgentModes = AgentModes;
 }

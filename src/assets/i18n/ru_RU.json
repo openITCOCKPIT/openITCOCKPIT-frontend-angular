@@ -1000,7 +1000,7 @@
     "Custom checks": "Пользовательские проверки",
     "Download and install openITCOCKPIT Monitoring Agent ": "Загрузите и установите агент мониторинга openITCOCKPIT",
     "Download and install the openITCOCKPIT Monitoring Agent.": "Скачайте и установите openITCOCKPIT Агент мониторинга",
-    "If not already done, please {0} the openITCOCKPIT Agent now.": "Если это еще не сделано, пожалуйста, {{0}} агент openITCOCKPIT сейчас.",
+    "If not already done, please download and install the openITCOCKPIT Agent now.": "Если это еще не сделано, пожалуйста, скачать и установить агент openITCOCKPIT сейчас.",
     "download and install": "скачать и установить",
     "Configuration file\/s for the openITCOCKPIT Monitoring Agent": "Файлы конфигурации для агента мониторинга openITCOCKPIT",
     "After the installation process is completed you should replace the default openITCOCKPIT Agent configuration with the recently generated configuration.": "После завершения процесса установки вы должны заменить стандартную конфигурацию агента openITCOCKPIT на недавно созданную конфигурацию.",

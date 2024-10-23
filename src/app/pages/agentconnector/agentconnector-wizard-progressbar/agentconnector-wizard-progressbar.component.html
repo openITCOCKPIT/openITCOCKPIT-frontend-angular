@@ -3,32 +3,54 @@
     <div class="row m-0 text-center">
         <div
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
-            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 0}">
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 1}">
             <span>
-                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 0"></fa-icon>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 1"></fa-icon>
                 {{ t('Select host') }}
             </span>
         </div>
         <div
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
-            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.ConfigureAgent, 'wizard-success': stepCount() > 1}">
-            <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 1"></fa-icon>
-            {{ t('Configure Agent') }}
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.ConfigureAgent, 'wizard-success': stepCount() > 2}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 2"></fa-icon>
+                {{ t('Configure Agent') }}
+            </span>
         </div>
         <div
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
-            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.InstallAgent}">
-            {{ t('Install Agent') }}
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.InstallAgent, 'wizard-success': stepCount() > 3}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 3"></fa-icon>
+                {{ t('Install Agent') }}
+            </span>
         </div>
-        <div
-            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
-            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.AutoTls}">
-            {{ t('Exchange TLS Certificate') }}
-        </div>
+        @if (mode() == AgentModes.Pull) {
+            <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+                [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.AutoTls, 'wizard-success': stepCount() > 4}">
+                <span>
+                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    {{ t('Exchange TLS Certificate') }}
+                </span>
+            </div>
+        } @else {
+            <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+                [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 4}">
+                <span>
+                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    {{ t('Select Agent') }}
+                </span>
+            </div>
+        }
         <div
             class="col-xs-12 col-md-4 col-lg-2  wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
-            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.CreateServices}">
-            {{ t('Create services') }}
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.CreateServices,  'wizard-success': stepCount() > 5}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 5"></fa-icon>
+                {{ t('Create services') }}
+            </span>
         </div>
         <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
             <div class="btn-group btn-group-xs w-100 h-100">
@@ -45,6 +67,7 @@
                         [title]="'Next' | transloco"
                         [disabled]="disableNext()"
                         (click)="goNextEvent.emit()">
+                    {{ t('Next') }}
                     <i class="fa fa-arrow-right"></i>
                 </button>
             </div>

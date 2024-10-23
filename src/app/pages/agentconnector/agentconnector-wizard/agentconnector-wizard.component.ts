@@ -111,6 +111,8 @@ import { Subscription } from 'rxjs';
 })
 export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
 
+    // Wizard step 1
+
     public hostId: number = 0;
     public pushAgentId: number = 0;
     public hosts: SelectKeyValue[] = [];
