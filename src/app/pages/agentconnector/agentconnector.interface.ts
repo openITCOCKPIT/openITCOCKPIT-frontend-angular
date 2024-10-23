@@ -201,3 +201,35 @@ export interface AgentconnectorWizardInstallRoot {
     host: HostEntity,
     config_as_ini: string
 }
+
+/*****************************
+ *   Wizard AutoTls action   *
+ *****************************/
+export interface AgentconnectorWizardAutoTlsRoot {
+    config: AgentConfig,
+    host: HostEntity,
+    connection_test: AgentconnectorAutoTlsConnectionTest,
+    satellite_task_id: null | number
+    _csrfToken: string
+}
+
+export interface AgentconnectorAutoTlsConnectionTest {
+    status: string,
+    error: string,
+    guzzle_error: string,
+    oitc_errno: number
+}
+
+export interface AgentconnectorAutoTlsSatelliteTaskResponse {
+    task: {
+        id: number
+        satellite_id: number
+        task: string
+        status: number
+        result: null | string
+        error: null | string
+        modified: string
+        created: string
+    }
+    _csrfToken: string
+}

@@ -5,6 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     AgentconnectorAgentConfigRoot,
+    AgentconnectorAutoTlsSatelliteTaskResponse,
+    AgentconnectorWizardAutoTlsRoot,
     AgentconnectorWizardInstallRoot,
     AgentconnectorWizardLoadHostsByStringParams
 } from './agentconnector.interface';
@@ -105,5 +107,35 @@ export class AgentconnectorService {
                 return data;
             })
         );
+    }
+
+    public loadAutoTls(hostId: number, reExchangeAutoTLS: boolean = false): Observable<AgentconnectorWizardAutoTlsRoot> {
+        const proxyPath: string = this.proxyPath;
+
+        let params: any = {
+            angular: true,
+            hostId: hostId
+        };
+        if (reExchangeAutoTLS) {
+            params['reExchangeAutoTLS'] = 'true'
+        }
+
+        return this.http.get<AgentconnectorWizardAutoTlsRoot>(`${proxyPath}/agentconnector/autotls.json`, {
+            params: params
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public loadSatelliteResponse(satellite_task_id: number): Observable<AgentconnectorAutoTlsSatelliteTaskResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AgentconnectorAutoTlsSatelliteTaskResponse>(`${proxyPath}/agentconnector/satellite_response.json`, {
+            params: {
+                task_id: satellite_task_id,
+                angular: true
+            }
+        });
     }
 }
