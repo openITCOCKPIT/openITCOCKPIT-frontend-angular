@@ -35,7 +35,9 @@
                 [step]="AgentconnectorWizardStepsEnum.ConfigureAgent"
                 [mode]="AgentModes.Pull"
                 [disableBack]="false"
+                (goBackEvent)="onBackButtonClick()"
                 [disableNext]="false"
+                (goNextEvent)="onNextButtonClick()"
             ></oitc-agentconnector-wizard-progressbar>
         </c-card-body>
 
@@ -344,6 +346,267 @@
                                         <div class="help-block">
                                             {{ t('HTTP timeout in seconds') }}
                                         </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+
+            <c-row class="pt-4">
+                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                    <c-card class="flex-1">
+                        <c-card-body class="flex-1">
+                            <fieldset>
+                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                    <h4>
+                                        <fa-icon [icon]="['fas', 'shield-alt']"></fa-icon>
+                                        {{ t('Security configuration') }}
+                                    </h4>
+                                </legend>
+                                <div>
+
+
+                                </div>
+
+
+                            </fieldset>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+                <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                    <c-card class="flex-1">
+                        <c-card-body class="flex-1">
+                            <fieldset>
+                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                    <h4>
+                                        <fa-icon [icon]="['far', 'check-square']"></fa-icon>
+                                        {{ t('Enable/disable checks') }}
+                                    </h4>
+                                </legend>
+                                <div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="cpustats"
+                                                   id="cpustats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.cpustats"/>
+                                            <label cFormCheckLabel for="cpustats">
+                                                {{ t('Enable CPU stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="memory"
+                                                   id="memory"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.memory"/>
+                                            <label cFormCheckLabel for="memory">
+                                                {{ t('Enable Memory stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="swap"
+                                                   id="swap"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.swap"/>
+                                            <label cFormCheckLabel for="swap">
+                                                {{ t('Enable Swap stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="processstats"
+                                                   id="processstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.processstats"/>
+                                            <label cFormCheckLabel for="processstats">
+                                                {{ t('Enable Process checks') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="netstats"
+                                                   id="netstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.netstats"/>
+                                            <label cFormCheckLabel for="processstats">
+                                                {{ t('Enable Network stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="netio"
+                                                   id="netio"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.netio"/>
+                                            <label cFormCheckLabel for="netio">
+                                                {{ t('Enable Network I/O stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="diskstats"
+                                                   id="diskstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.diskstats"/>
+                                            <label cFormCheckLabel for="diskstats">
+                                                {{ t('Enable Disk usage checks') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="diskio"
+                                                   id="diskio"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.diskio"/>
+                                            <label cFormCheckLabel for="diskio">
+                                                {{ t('Enable Disk I/O stats') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="systemdservices"
+                                                   id="systemdservices"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.systemdservices"/>
+                                            <label cFormCheckLabel for="systemdservices">
+                                                {{ t('Enable Systemd checks (only affects Linux)') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="launchdservices"
+                                                   id="launchdservices"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.launchdservices"/>
+                                            <label cFormCheckLabel for="launchdservices">
+                                                {{ t('Enable Launchd checks (only affects macOS)') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="winservices"
+                                                   id="winservices"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.winservices"/>
+                                            <label cFormCheckLabel for="winservices">
+                                                {{ t('Enable Windows Services checks (only affects Windows)') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="wineventlog"
+                                                   id="wineventlog"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.wineventlog"/>
+                                            <label cFormCheckLabel for="wineventlog">
+                                                {{ t('Enable Windows Event Log checks (only affects Windows)') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="sensorstats"
+                                                   id="sensorstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.sensorstats"/>
+                                            <label cFormCheckLabel for="sensorstats">
+                                                {{ t('Enable Sensor stats (only affects Linux and macOS)') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="dockerstats"
+                                                   id="dockerstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.dockerstats"/>
+                                            <label cFormCheckLabel for="dockerstats">
+                                                {{ t('Enable Docker checks') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="libvirt"
+                                                   id="libvirt"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.libvirt"/>
+                                            <label cFormCheckLabel for="libvirt">
+                                                {{ t('Enable KVM checks through libvirt') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="userstats"
+                                                   id="userstats"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.userstats"/>
+                                            <label cFormCheckLabel for="userstats">
+                                                {{ t('Collect information about logged in users') }}
+                                            </label>
+                                        </c-form-check>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <c-form-check>
+                                            <input cFormCheckInput
+                                                   name="ntp"
+                                                   id="ntp"
+                                                   type="checkbox"
+                                                   [(ngModel)]="config.bool.ntp"/>
+                                            <label cFormCheckLabel for="ntp">
+                                                {{ t('Monitor of system clock is synchronized (NTP)') }}
+                                            </label>
+                                        </c-form-check>
                                     </div>
 
                                 </div>

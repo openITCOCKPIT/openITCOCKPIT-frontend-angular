@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
 import { NgClass, NgIf } from '@angular/common';
@@ -31,6 +31,9 @@ export class AgentconnectorWizardProgressbarComponent {
     public mode = input<AgentModes>(AgentModes.Pull);
     public disableBack = input<boolean>(false);
     public disableNext = input<boolean>(false);
+
+    public goBackEvent = output<void>();
+    public goNextEvent = output<void>();
 
     protected readonly AgentconnectorWizardStepsEnum = AgentconnectorWizardStepsEnum;
 }

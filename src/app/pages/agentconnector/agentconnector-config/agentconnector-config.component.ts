@@ -233,6 +233,14 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onBackButtonClick() {
+        this.router.navigate(['/agentconnector/wizard'], {queryParams: {hostId: this.hostId}});
+    }
+
+    public onNextButtonClick() {
+        console.log('Implement next');
+    }
+
     protected readonly AgentconnectorOperatingSystems = AgentconnectorOperatingSystems;
     protected readonly Number = Number;
 }

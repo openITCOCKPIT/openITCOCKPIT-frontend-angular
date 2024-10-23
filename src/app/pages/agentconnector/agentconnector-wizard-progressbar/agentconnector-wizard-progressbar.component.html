@@ -35,6 +35,7 @@
                 <button type="button" class="btn btn-xs btn-primary ripple"
                         [disabled]="disableBack()"
                         [title]="'Back' | transloco"
+                        (click)="goBackEvent.emit()"
                         style="border-radius: 0;">
                     <i class="fa fa-arrow-left"></i>
                 </button>
@@ -42,7 +43,8 @@
                 <button type="button" class="btn btn-xs btn-success btn-block ripple"
                         style="border-radius: 0;"
                         [title]="'Next' | transloco"
-                        [disabled]="disableNext()">
+                        [disabled]="disableNext()"
+                        (click)="goNextEvent.emit()">
                     <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
