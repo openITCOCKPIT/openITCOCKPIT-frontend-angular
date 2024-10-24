@@ -9,6 +9,7 @@ import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes
 import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
 import { slaModuleRoutes } from './modules/sla_module/sla_module.routes';
 import { importModuleRoutes } from './modules/import_module/import_module.routes';
+import { customalertModuleRoutes } from './modules/customalert_module/customalert_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -35,6 +36,7 @@ class LegacyUrlComponent {
 /***    Routes for modules   ***/
 const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
+    ...customalertModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
     ...nagiosModuleRoutes,
