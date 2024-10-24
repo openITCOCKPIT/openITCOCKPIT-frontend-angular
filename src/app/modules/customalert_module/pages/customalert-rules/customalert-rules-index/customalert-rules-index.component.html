@@ -99,15 +99,101 @@
                             </c-input-group>
                         </c-col>
                     </c-row>
-                    <c-row>
-
-                        <!-- filter by host tags-->
-                        <!-- fiolter by excluded host tags -->
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="HostTags"
+                                        name="HostTags"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="hostTags"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by host tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="HostTagsExcluded"
+                                        name="HostTagsExcluded"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="hostTagsExcluded"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded host tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
                     </c-row>
-                    <c-row>
-
-                        <!-- filter by service tags-->
-                        <!-- fiolter by excluded service tags -->
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="ServiceTags"
+                                        name="ServiceTags"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="serviceTags"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by service tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="ServiceTagsExcluded"
+                                        name="ServiceTagsExcluded"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="serviceTagsExcluded"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded service tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
                     </c-row>
                     <c-row class="mt-2">
                         <c-col class="text-end">
@@ -195,7 +281,44 @@
                 </tbody>
             </table>
 
+            <oitc-no-records
+                    *ngIf="result && result.customalertRules.length === 0"></oitc-no-records>
+            <ng-container *ngIf="result && result.customalertRules.length !== 0">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="result.customalertRules.length"></oitc-select-all>
+                        </c-col>
+                        <c-col md="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                    [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
         </c-card-body>
 
     </c-card>
 </ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

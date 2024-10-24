@@ -9,7 +9,7 @@ import {
     ContainerComponent,
     DropdownDividerDirective,
     FormControlDirective,
-    FormDirective,
+    FormDirective, FormLabelDirective,
     InputGroupComponent, InputGroupTextDirective,
     ModalService,
     NavComponent,
@@ -45,6 +45,16 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { TemplateDiffComponent } from '../../../../../components/template-diff/template-diff.component';
+import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 
 @Component({
     selector: 'oitc-customalert-rules-index',
@@ -82,7 +92,16 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
         FormControlDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        TranslocoPipe
+        TranslocoPipe,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        NgSelectComponent,
+        TemplateDiffComponent,
+        DeleteAllModalComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent
     ],
     templateUrl: './customalert-rules-index.component.html',
     styleUrl: './customalert-rules-index.component.css',
@@ -102,6 +121,10 @@ export class CustomalertRulesIndexComponent implements OnInit, OnDestroy, IndexP
     protected result?: CustomAlertRulesIndex;
     protected hideFilter: boolean = true;
     protected selectedItems: DeleteAllItem[] = [];
+    protected hostTags: string[] = [];
+    protected hostTagsExcluded: string[] = [];
+    protected serviceTags: string[] = [];
+    protected serviceTagsExcluded: string[] = [];
 
     protected refresh(): void {
         this.SelectionServiceService.deselectAll();
