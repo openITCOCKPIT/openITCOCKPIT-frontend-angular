@@ -10,7 +10,9 @@ import {
     AgentconnectorSelectAgentRoot,
     AgentconnectorWizardAutoTlsRoot,
     AgentconnectorWizardInstallRoot,
-    AgentconnectorWizardLoadHostsByStringParams
+    AgentconnectorWizardLoadHostsByStringParams,
+    AgentServiceForCreate,
+    CreateAgentServicesPostResponse
 } from './agentconnector.interface';
 import {
     GenericIdResponse,
@@ -202,5 +204,18 @@ export class AgentconnectorService {
                 return data;
             })
         );
+    }
+
+    public saveCreateServices(hostId: number, services: AgentServiceForCreate[]): Observable<CreateAgentServicesPostResponse> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<CreateAgentServicesPostResponse>(`${proxyPath}/agentconnector/create_services.json`, {
+            services: services
+        }, {
+            params: {
+                angular: true,
+                hostId: hostId
+            }
+        });
     }
 }

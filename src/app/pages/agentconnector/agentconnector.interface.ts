@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.inter
 import { HostEntity } from '../hosts/hosts.interface';
 import { AgentConfig } from './agentconfig.interface';
 import { ServicetemplateCommandArgument } from '../servicetemplates/servicetemplates.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 /**********************
  *    Pull action     *
@@ -298,4 +299,29 @@ export interface AgentServiceForCreate {
     name: string
     servicecommandargumentvalues: ServicetemplateCommandArgument[]
     host_id: number
+}
+
+export interface CreateServiceCheckbox {
+    service_key: keyof AgentServicesForCreate,
+    checkboxValue: boolean,
+    service: AgentServiceForCreate
+}
+
+export type CreateServicesMultiSelect = {
+    [key in keyof AgentServicesForCreate]?: CreateServiceMultiSelect
+};
+
+export interface CreateServiceMultiSelect {
+    selectedIndicies: number[]
+    options: SelectKeyValue[]
+    services: AgentServiceForCreate[],
+    length: number
+}
+
+export interface CreateAgentServicesPostResponse {
+    services: {
+        _ids: number[]
+    },
+    success: boolean,
+    _csrfToken: string
 }

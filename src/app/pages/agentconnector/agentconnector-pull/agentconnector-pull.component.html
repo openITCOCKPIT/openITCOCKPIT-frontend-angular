@@ -192,12 +192,10 @@
 
                     <td class="width-50">
                         <oitc-actions-button [permission]="'agentconnector.config'"
-                                             [url]="'/agentconnector/config'"
-                                             [queryParams]="{'hostId':agent.host.id}"
+                                             [url]="'/agentconnector/config/'+agent.host.id"
                                              [allowEdit]="agent.allow_edit">
                             <oitc-actions-button-element [permission]="'agentconnector.config'"
-                                                         [url]="'/agentconnector/config'"
-                                                         [queryParams]="{'hostId':agent.host.id}">
+                                                         [url]="'/agentconnector/config/'+agent.host.id">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
