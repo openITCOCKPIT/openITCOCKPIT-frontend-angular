@@ -1,0 +1,77 @@
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col [xs]="12" class="bold">
+            {{ t('Agents') }}
+        </c-col>
+    </c-row>
+    <c-row>
+        @for (file of filetypeWithFilesVar?.agents; track $index) {
+            <c-col [xs]="12" [md]="6" [lg]="3">
+                <a [href]="'/checkmk_module/mkagents/download?file='+file.path">
+                    {{ file.filename }}
+                </a>
+            </c-col>
+        }
+    </c-row>
+
+    <c-row class="pt-2">
+        <c-col [xs]="12" class="bold">
+            {{ t('Special agents') }}
+        </c-col>
+    </c-row>
+    <c-row>
+        <c-col [xs]="12" [md]="6" [lg]="3">
+            @for (file of filetypeWithFilesVar?.special; track $index) {
+                <a [href]="'/checkmk_module/mkagents/download?file='+file.path">
+                    {{ file.filename }}
+                </a>
+            }
+        </c-col>
+    </c-row>
+
+    <c-row class="pt-2">
+        <c-col [xs]="12" class="bold">
+            {{ t('Example configurations') }}
+        </c-col>
+    </c-row>
+    <c-row>
+        @for (file of filetypeWithFilesVar?.cfg_examples; track $index) {
+            <c-col [xs]="12" [md]="6" [lg]="3">
+                <a [href]="'/checkmk_module/mkagents/download?file='+file.path">
+                    {{ file.filename }}
+                </a>
+            </c-col>
+        }
+    </c-row>
+
+    <c-row class="pt-2">
+        <c-col [xs]="12" class="bold">
+            {{ t('Plugins') }}
+        </c-col>
+    </c-row>
+    <c-row>
+        @for (file of filetypeWithFilesVar?.plugins; track $index) {
+            <c-col [xs]="12" [md]="6" [lg]="3">
+                <a [href]="'/checkmk_module/mkagents/download?file='+file.path">
+                    {{ file.filename }}
+                </a>
+            </c-col>
+        }
+    </c-row>
+
+    <c-row class="pt-2">
+        <c-col [xs]="12" class="bold">
+            {{ t('Other files') }}
+        </c-col>
+    </c-row>
+    <c-row>
+        @for (file of filetypeWithFilesVar?.files; track $index) {
+            <c-col [xs]="12" [md]="6" [lg]="3">
+                <a [href]="'/checkmk_module/mkagents/download?file='+file.path">
+                    {{ file.filename }}
+                </a>
+            </c-col>
+        }
+    </c-row>
+
+</ng-container>
