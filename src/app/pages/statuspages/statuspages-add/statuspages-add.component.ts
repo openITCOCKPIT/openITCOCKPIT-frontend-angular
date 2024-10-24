@@ -32,7 +32,12 @@ import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
-    CardTitleDirective, FormLabelDirective,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective, FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -44,6 +49,15 @@ import {SelectComponent} from '../../../layouts/primeng/select/select/select.com
 import { StatuspagesService } from '../statuspages.service';
 import {Subscription} from 'rxjs';
 import {SelectKeyValue} from '../../../layouts/primeng/select.interface';
+import {
+    StatuspagePost}
+    from '../statuspage.interface';
+import { GenericValidationError } from '../../../generic-responses';
+import { HostSubmitType } from '../../hosts/hosts.enum';
+import { FormsModule } from '@angular/forms';
+import { PaginatorModule } from 'primeng/paginator';
+import { NgIf } from '@angular/common';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 
 @Component({
   selector: 'oitc-statuspages-add',
@@ -64,7 +78,16 @@ import {SelectKeyValue} from '../../../layouts/primeng/select.interface';
         FormLabelDirective,
         RequiredIconComponent,
         FormErrorDirective,
-        SelectComponent
+        SelectComponent,
+        FormDirective,
+        FormsModule,
+        PaginatorModule,
+        NgIf,
+        FormFeedbackComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective
     ],
   templateUrl: './statuspages-add.component.html',
   styleUrl: './statuspages-add.component.css',
@@ -76,9 +99,12 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     private cdr = inject(ChangeDetectorRef);
     public containers: SelectKeyValue[] | undefined;
+    public post: StatuspagePost = {} as StatuspagePost;
+    public errors: GenericValidationError | null = null;
 
     public ngOnInit(): void {
             //Fire on page load
+            this.post = this.getDefaultPost();
             this.loadContainers();
         this.cdr.markForCheck();
     }
@@ -96,5 +122,40 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         );
     }
 
+    public onContainerChange(){
 
+    }
+
+    private getDefaultPost(): StatuspagePost {
+
+        return {
+            container_id: null,
+            name: '',
+            description: '',
+            public: 0,
+            show_downtimes: 0,
+            show_downtime_comments: 0,
+            show_acknowledgements: 0,
+            show_acknowledgement_comments: 0,
+            selected_hostgroups: {
+                _ids: []
+            },
+            selected_hosts: {
+                _ids: []
+            },
+            selected_servicegroups: {
+                _ids: []
+            },
+            selected_services: {
+                _ids: []
+            },
+            hostgroups: {},
+            hosts: {},
+            servicegroups: {},
+            services: {},
+        };
+    }
+
+
+    protected readonly HostSubmitType = HostSubmitType;
 }

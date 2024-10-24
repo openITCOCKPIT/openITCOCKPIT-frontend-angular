@@ -47,8 +47,32 @@ export interface PlannedDowntimeDaum {
     comment: string
 }
 
-export interface statuspagePost {
-
+export interface StatuspagePost {
+    container_id: null | number,
+    name: '',
+    description: '',
+    public: 0,
+    show_downtimes: 0,
+    show_downtime_comments: 0,
+    show_acknowledgements: 0,
+    show_acknowledgement_comments: 0,
+    selected_hostgroups: {
+        _ids: []
+    },
+    selected_hosts: {
+        _ids: []
+    },
+    selected_servicegroups: {
+        _ids: []
+    },
+    selected_services: {
+        _ids: []
+    },
+    hostgroups: {},
+    hosts: {},
+    servicegroups: {},
+    services: {},
 }
+
 
 
