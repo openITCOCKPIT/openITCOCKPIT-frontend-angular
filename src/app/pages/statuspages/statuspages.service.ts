@@ -69,6 +69,19 @@ export class StatuspagesService {
         )
     }
 
+    public loadContainers(): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ containers: SelectKeyValue[] }>(`${proxyPath}/statuspages/loadContainers.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.containers
+            })
+        )
+    }
+
 
     public delete(item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;

@@ -47,4 +47,8 @@ export interface PlannedDowntimeDaum {
     comment: string
 }
 
+export interface statuspagePost {
+
+}
+
 

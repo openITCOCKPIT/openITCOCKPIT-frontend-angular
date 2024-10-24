@@ -33,8 +33,9 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button  cButton class="ripple" color="success" size="xs">
+                <c-nav-item class="px-1" *oitcPermission="['statuspages', 'add']">
+                    <button cButton class="ripple" color="success" size="xs"
+                            [routerLink]="['/', 'statuspages', 'add']">
                         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
                         {{ t('New') }}
                     </button>
