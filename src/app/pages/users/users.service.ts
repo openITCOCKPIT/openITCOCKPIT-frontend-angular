@@ -157,7 +157,6 @@ export class UsersService {
         );
     }
 
-
     public addUser(user: UsersAddRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/users/add.json?angular=true`, user)

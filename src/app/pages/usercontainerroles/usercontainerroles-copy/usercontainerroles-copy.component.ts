@@ -26,7 +26,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
-import { UserContainerRolesService } from '../user-container-roles.service';
+import { UsercontainerrolesService } from '../usercontainerroles.service';
 import { CopyUserContainerRoleDatum, CopyUserContainerRolesRequest } from '../usercontainerroles.interface';
 
 @Component({
@@ -63,7 +63,7 @@ import { CopyUserContainerRoleDatum, CopyUserContainerRolesRequest } from '../us
 })
 export class UserContainerRolesCopyComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly UserContainerRolesService: UserContainerRolesService = inject(UserContainerRolesService);
+    private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);

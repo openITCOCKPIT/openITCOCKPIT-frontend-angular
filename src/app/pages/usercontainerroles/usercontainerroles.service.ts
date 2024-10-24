@@ -11,19 +11,19 @@ import {
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     CopyUserContainerRoleDatum,
-    CopyUserContainerRolesPost, CopyUserContainerRolesRequest,
+    CopyUserContainerRolesRequest,
     EditableUserContainerRole,
     UserContainerRole,
-    UserContainerRolesIndex,
-    UserContainerRolesIndexParams, UserContainerRolesIndexRoot
+    UserContainerRolesIndexParams,
+    UserContainerRolesIndexRoot
 } from './usercontainerroles.interface';
-import { LoadLdapgroups, UsergroupsCopyGetRoot, UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
+import { UsergroupsCopyPostRoot } from '../usergroups/usergroups.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserContainerRolesService {
+export class UsercontainerrolesService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
@@ -36,7 +36,6 @@ export class UserContainerRolesService {
             })
         )
     }
-
 
     public addUserContainerRole(userContainerRole: UserContainerRole): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
@@ -57,6 +56,7 @@ export class UserContainerRolesService {
                 })
             );
     }
+
     public getEdit(id: number): Observable<EditableUserContainerRole> {
         return this.http.get<{
             usercontainerrole: EditableUserContainerRole
@@ -67,6 +67,7 @@ export class UserContainerRolesService {
                 })
             )
     }
+
     public updateUserContainerRole(userContainerRole: EditableUserContainerRole): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/usercontainerroles/edit/${userContainerRole.id}.json?angular=true`, {Usercontainerrole: userContainerRole})

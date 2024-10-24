@@ -44,7 +44,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { UserContainerRolesService } from '../user-container-roles.service';
+import { UsercontainerrolesService } from '../usercontainerroles.service';
 import {
     getDefaultContainerRolesIndexParams,
     UserContainerRolesIndex,
@@ -99,14 +99,14 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     styleUrl: './usercontainerroles-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: UserContainerRolesService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: UsercontainerrolesService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ],
 })
 export class UsercontainerrolesIndexComponent implements OnInit, OnDestroy{
     private readonly modalService: ModalService = inject(ModalService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly UserContainerRolesService: UserContainerRolesService = inject(UserContainerRolesService);
+    private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);

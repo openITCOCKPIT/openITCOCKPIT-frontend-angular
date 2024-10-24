@@ -29,7 +29,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../../profile/profile.service';
-import { UserContainerRolesService } from '../user-container-roles.service';
+import { UsercontainerrolesService } from '../usercontainerroles.service';
 import { HistoryService } from '../../../history.service';
 import { UserContainerRole } from '../usercontainerroles.interface';
 import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
@@ -79,7 +79,7 @@ import { ContainersService } from '../../containers/containers.service';
 })
 export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly UserContainerRolesService: UserContainerRolesService = inject(UserContainerRolesService);
+    private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
