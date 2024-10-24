@@ -46,6 +46,17 @@ export interface Mkagent {
 }
 
 /**********************
+ *  Add action   *
+ **********************/
+export interface MkagentPost {
+    id?: number
+    container_id: number
+    name: string
+    description: string
+    command_line: string
+}
+
+/**********************
  *  Download action   *
  **********************/
 
