@@ -33,8 +33,9 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button  cButton class="ripple" color="primary" size="xs" *ngIf="statuspage.Statuspage.statuspage.public">
+                <c-nav-item class="px-1" *ngIf="statuspage">
+                    <button cButton class="ripple" color="primary" size="xs"
+                            *ngIf="statuspage.Statuspage.statuspage.public">
                         <a class="text-white" href="/statuspages/publicView/{{id}}" target="_blank">
                             <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                             {{ t('Public view') }}
@@ -42,7 +43,8 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple" color="default" size="xs">
+                    <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
+                            color="default" size="xs">
                         <fa-icon [icon]="['fas', 'long-arrow-alt-left']"></fa-icon>
                         {{ t('Back') }}
                     </button>
@@ -55,18 +57,18 @@
 
                     <div class="col-12 pt-2 pb-4">
                         <h4 class="d-block l-h-n m-0 fw-500">
-                            {{statuspage.Statuspage.statuspage.name}}
+                            {{ statuspage.Statuspage.statuspage.name }}
 
                         </h4>
                         <small class="m-0 l-h-n">
-                            {{statuspage.Statuspage.statuspage.description}}
+                            {{ statuspage.Statuspage.statuspage.description }}
                         </small>
                     </div>
                     <div
                             class="p-3 bg-{{statuspage.Statuspage.statuspage.cumulatedColor}} rounded overflow-hidden position-relative text-white">
                         <div>
                             <h2 class="d-block l-h-n m-0 fw-500">
-                                {{statuspage.Statuspage.statuspage.cumulatedHumanStatus}}
+                                {{ statuspage.Statuspage.statuspage.cumulatedHumanStatus }}
                             </h2>
                         </div>
                         <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
@@ -79,9 +81,135 @@
                         </div>
                         <div class="flex-1">
                             <div class="row p-2">
-                                <div class="col-12 text-truncate h5">
-                                    {{ item.name }}
+                                <div class="col-12 text-truncate h5"  *ngIf="item.type === 'host'">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', item.id]">
+                                            {{ item.name }}
+                                        </a>
+                                    } @else {
+                                        {{ item.name }}
+                                    }
                                 </div>
+                                <div class="col-12 text-truncate h5"  *ngIf="item.type === 'service'">
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'services', 'browser', item.id]">
+                                            {{ item.name }}
+                                        </a>
+                                    } @else {
+                                        {{ item.name }}
+                                    }
+                                </div>
+                                <div class="col-12 text-truncate h5"  *ngIf="item.type === 'hostgroup'">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
+                                        <a [routerLink]="['/', 'hostgroups', 'extended', item.id]">
+                                            {{ item.name }}
+                                        </a>
+                                    } @else {
+                                        {{ item.name }}
+                                    }
+                                </div>
+                                <div class="col-12 text-truncate h5"  *ngIf="item.type === 'servicegroup'">
+                                    @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
+                                        <a [routerLink]="['/', 'servicegroups', 'extended', item.id]">
+                                            {{ item.name }}
+                                        </a>
+                                    } @else {
+                                        {{ item.name }}
+                                    }
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h6>
+                                </div>
+                                <!-- Handle acknowledgement comments -->
+                                <div class="col-12 text-truncate">
+                                    <div class="row">
+                                        <div class="col-12 text-truncate">
+                                            <div *ngIf="item.acknowledgedProblemsText && item.cumulatedColorId > 0 && statuspage.Statuspage.statuspage.showAcknowledgements">
+                                                <fa-icon [icon]="['far', 'user']" class="fa-lg"></fa-icon>
+                                                <span *ngIf="item.acknowledgeComment && item.acknowledgeComment.length > 0"
+                                                      class="text-center ps-1"
+                                                      (click)="toggleAcknowledgeComments(toString(item.type + item.id))"
+                                                      title="expand comments">
+                                                    <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg"
+                                                             *ngIf="!showAcknowledgeComments[item.type + item.id]"/>
+                                                    <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"
+                                                             *ngIf="showAcknowledgeComments[item.type + item.id]"/>
+
+                                                </span>
+                                                {{ item.acknowledgedProblemsText }}
+                                            </div>
+                                            <div *ngIf="showAcknowledgeComments[item.type + item.id]">
+                                                <div *ngFor="let comment of item.acknowledgeComment">
+                                                    <div class="text-truncate">
+                                                        {{ t('Comment') }}:  {{comment}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end of acknowledgements -->
+                                <!-- handle current downtimes -->
+                                <div class="col-12 text-truncate" *ngIf="item.downtimeData.length > 0 && statuspage.Statuspage.statuspage.showDowntimes">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <fa-icon [icon]="['fas', 'power-off']" class="fa-lg"></fa-icon>
+                                            <span class="text-center ps-1" (click)="toggleCurrentDowntimes(item.type + item.id)">
+                                                <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg" *ngIf="!showCurrentDowntimes[item.type + item.id]" title="expand downtime data"/>
+                                                <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"  *ngIf="showCurrentDowntimes[item.type + item.id]"/>
+                                            </span>
+                                            {{ item.downtimeData.length }} {{ t('current maintenances') }}
+
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="showCurrentDowntimes[item.type + item.id]">
+                                        <div class="col-12 text-truncate">
+                                            <div class="row" *ngFor="let downtime of item.downtimeData">
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('Start') }}: {{downtime.scheduledStartTime}}
+                                                </div>
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('End') }}: {{downtime.scheduledEndTime}}
+                                                </div>
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('Comment') }}: {{downtime.comment}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end of current downtimes -->
+                                <!-- handle planed downtimes -->
+                                <div class="col-12 text-truncate" *ngIf="item.plannedDowntimeData.length > 0 && statuspage.Statuspage.statuspage.showDowntimes">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <fa-icon [icon]="['fas', 'power-off']" class="fa-lg"></fa-icon>
+                                            <span class="text-center ps-1" (click)="togglePlannedDowntimes(item.type + item.id)">
+                                                <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg" *ngIf="!showPlannedDowntimes[item.type + item.id]" title="expand downtime data"/>
+                                                <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"  *ngIf="showPlannedDowntimes[item.type + item.id]"/>
+                                            </span>
+                                            {{ item.plannedDowntimeData.length }} {{ t('scheduled maintenances for the next 10 days') }}
+
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="showPlannedDowntimes[item.type + item.id]">
+                                        <div class="col-12 text-truncate">
+                                            <div class="row" *ngFor="let downtime of item.plannedDowntimeData">
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('Start') }}: {{downtime.scheduledStartTime}}
+                                                </div>
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('End') }} {{downtime.scheduledEndTime}}
+                                                </div>
+                                                <div class="col-xs-12 col-md-3">
+                                                    {{ t('Comment') }}: {{downtime.comment}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end of planed downtimes -->
                             </div>
                         </div>
                         <div class="p-2 hidden-md-down">
@@ -90,8 +218,6 @@
                     </div>
                 </div>
             </ng-container>
-
-
         </c-card-body>
     </c-card>
 </ng-container>

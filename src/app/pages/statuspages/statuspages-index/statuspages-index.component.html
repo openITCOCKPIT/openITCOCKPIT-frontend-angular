@@ -172,9 +172,13 @@
                                 [item]="statuspage"></oitc-item-select>
                     </td>
                     <td>
-                        <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
+                        @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                            <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
+                                {{ statuspage.name }}
+                            </a>
+                        } @else {
                             {{ statuspage.name }}
-                        </a>
+                        }
                     </td>
                     <td>
                         {{ statuspage.description }}
