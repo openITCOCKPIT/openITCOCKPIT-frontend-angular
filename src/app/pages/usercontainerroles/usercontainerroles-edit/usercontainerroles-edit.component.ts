@@ -35,7 +35,7 @@ import { EditableUserContainerRole, UserContainerRole } from '../usercontainerro
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { UserContainerRolesService } from '../user-container-roles.service';
+import { UsercontainerrolesService } from '../usercontainerroles.service';
 import { ContainersService } from '../../containers/containers.service';
 import { HistoryService } from '../../../history.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
@@ -81,7 +81,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 })
 export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly UserContainerRolesService: UserContainerRolesService = inject(UserContainerRolesService);
+    private readonly UserContainerRolesService: UsercontainerrolesService = inject(UsercontainerrolesService);
     private readonly ContainersService: ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);

@@ -129,10 +129,15 @@
                     <td>
                         <ul *ngIf="userContainerRole.users.length !== 0">
                             <li *ngFor="let user of userContainerRole.users" >
-                                <a  *oitcPermission="['users', 'edit']"
-                                    [routerLink]="['/', 'users', 'edit', user.id]">
+                                <ng-container *ngIf="user.allow_edit">
+                                    <a *oitcPermission="['users', 'edit']"
+                                       [routerLink]="['/', 'users', 'edit', user.id]">
+                                        {{ user.full_name }}
+                                    </a>
+                                </ng-container>
+                                <ng-container *ngIf="!user.allow_edit">
                                     {{ user.full_name }}
-                                </a>
+                                </ng-container>
                             </li>
                         </ul>
                     </td>
