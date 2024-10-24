@@ -94,7 +94,7 @@ export class AgentconnectorInstallComponent implements OnInit, OnDestroy {
                 this.configAsIni = response.config_as_ini;
 
                 if (this.config.bool.enable_push_mode) {
-                    // Update the Wizard progress bar to show the "Select Agent" setp
+                    // Update the Wizard progress bar to show the "Select Agent" step
                     this.agentModeForProgress = AgentModes.Push;
                 }
 

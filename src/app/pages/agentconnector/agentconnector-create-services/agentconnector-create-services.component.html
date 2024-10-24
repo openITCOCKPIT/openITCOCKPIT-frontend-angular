@@ -1,1 +1,193 @@
-<p>agentconnector-create-services works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('openITCOCKPIT Agent') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+                {{ t('Wizard') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
+                <small class="fw-300" *ngIf="host">
+                    {{ host.name }} ({{ host.address }})
+                </small>
+            </h5>
+
+        </c-card-header>
+
+        <c-card-body class="p-0">
+            <oitc-agentconnector-wizard-progressbar
+                [stepCount]="5"
+                [step]="AgentconnectorWizardStepsEnum.CreateServices"
+                [mode]="agentModeForProgress"
+                [isLastStep]="true"
+                [disableBack]="false"
+                (goBackEvent)="onBackButtonClick()"
+                [disableNext]="disableNextButton"
+                (goNextEvent)="onNextButtonClick()"
+            ></oitc-agentconnector-wizard-progressbar>
+        </c-card-body>
+
+        <c-card-body>
+            <c-row>
+                <c-col [xs]="12">
+                    <c-card>
+                        <c-card-body>
+                            <fieldset>
+                                <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                    <h4>
+                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                        {{ t('Select Services to monitor') }}
+                                    </h4>
+                                </legend>
+                                <div class="pt-3">
+
+                                    <!-- Loading box -->
+                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isLoading">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-cyan-500">
+                                                    {{ t('Waiting for Agent data.') }}
+                                                </span>
+
+                                                <div class="mt-2">
+                                                    <p-progressBar mode="indeterminate"
+                                                                   [style]="{ height: '6px' }"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Connection error -->
+                                    <div class="alert border-faded bg-transparent text-secondary"
+                                         *ngIf="connection_test && connection_test.status !== 'success'">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-danger"></i>
+                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-danger">
+                                                    {{ t('Error') }}
+                                                </span>
+                                                <br>
+                                                {{ connection_test?.error }}
+                                                <div *ngIf="connection_test?.guzzle_error">
+                                                    {{ connection_test?.guzzle_error }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- No Services available -->
+                                    <div class="alert border-faded bg-transparent text-secondary"
+                                         *ngIf="!servicesAvailable && !isLoading">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-warning"></i>
+                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-warning">
+                                                    {{ t('There are no new services available') }}
+                                                </span>
+                                                <br>
+                                                {{ t('Please verify your Agent Configuration.') }}
+                                            </div>
+                                            <div class="ms-2">
+                                                <button class="btn btn-outline-warning btn-sm ripple"
+                                                        [routerLink]="['/', 'agentconnector', 'config', this.hostId]">
+                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                    {{ t('Go to "Configure Agent"') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Saving box -->
+                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isSaving">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-cyan-500">
+                                                    {{ t('Creating new services...') }}
+                                                </span>
+
+                                                <div class="mt-2">
+                                                    <p-progressBar mode="indeterminate"
+                                                                   [style]="{ height: '6px' }"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Successful -->
+                                    <div class="alert border-faded bg-transparent text-secondary"
+                                         *ngIf="showSuccessful">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-success"></i>
+                                                    <i class="fas fa-check icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-success">
+                                                    {{ t('Services created successfully!') }}
+                                                </span>
+                                                <br>
+                                                {{ t('To apply the changes, please refresh your monitoring configuration.') }}
+                                            </div>
+                                            <div class="ms-2" *oitcPermission="['exports', 'index']">
+                                                <button class="btn btn-outline-success btn-sm ripple"
+                                                        [routerLink]="['/', 'exports', 'index']">
+                                                    <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                                                    {{ t('Go to "Refresh monitoring configuration"') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <c-row>
+
+                                    </c-row>
+
+                                </div>
+                            </fieldset>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+        </c-card-body>
+    </c-card>
+</ng-container>
