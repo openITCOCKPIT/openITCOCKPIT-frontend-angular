@@ -21,7 +21,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add') }}
+                {{ t('Add custom alert rule') }}
             </li>
         </ol>
     </nav>
@@ -251,9 +251,6 @@
                                [(ngModel)]="post.servicename_regex">
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors" errorField="servicename_regex"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
-                    </div>
                 </div>
 
             </c-card-body>

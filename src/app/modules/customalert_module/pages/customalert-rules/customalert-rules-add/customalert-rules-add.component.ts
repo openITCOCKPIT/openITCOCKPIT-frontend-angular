@@ -152,12 +152,12 @@ export class CustomalertRulesAddComponent implements OnInit, OnDestroy {
 
                     const title: string = this.TranslocoService.translate('Custom alert rule');
                     const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['users', 'edit', result.data.id];
+                    const url: (string | number)[] = ['customalert_module', 'customalert_rules', 'edit', result.data.id];
 
                     this.NotyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/users/index']);
+                        this.HistoryService.navigateWithFallback(['/customalert_module/customalert_rules/index']);
                         return;
                     }
 
