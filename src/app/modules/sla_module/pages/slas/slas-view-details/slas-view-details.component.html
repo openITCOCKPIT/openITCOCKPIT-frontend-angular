@@ -1,0 +1,622 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Level Agreement Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['slamodule', 'slas', 'index']"
+                   [routerLink]="['/', 'sla_module', 'slas', 'index']">
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                    {{ t('Service Level Agreements') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                {{ t('View details') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service Level Agreements') }}
+                <small class="fw-300">
+                    <i>{{ details.sla.name }}</i>
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [routerLink]="['/', 'sla_module', 'slas', 'edit', details.sla.id]" cButton
+                            *oitcPermission="['slamodule', 'slas', 'edit']"
+                            class="ripple"
+                            color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Edit') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <c-row class="pb-2">
+                <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="border-right">
+                    <!--<sla-availability-overview sla="sla" availability="availability"
+                                               ng-if="sla"></sla-availability-overview>-->
+                </c-col>
+                <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="pt-2">
+                    <c-row>
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Evaluation interval') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            {{ details.sla.evaluation_interval }}
+                        </c-col>
+                    </c-row>
+                    <c-row class="pt-2">
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Thresholds') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            <oitc-badge-outline color="warning" [hidden]="!details.sla.warning_threshold"
+                                                class="me-1">
+                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                {{ details.sla.warning_threshold }} %
+                            </oitc-badge-outline>
+                            <oitc-badge-outline color="danger" [hidden]="!details.sla.minimal_availability">
+                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                {{ details.sla.minimal_availability }} %
+                            </oitc-badge-outline>
+                        </c-col>
+                    </c-row>
+                    <c-row class="pt-2">
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Container') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
+                                <span *ngFor="let container of details.sla.main_container">/
+                                    <a [routerLink]="['/', 'browsers', 'index']"
+                                       [queryParams]="{ containerId: container.id }"
+                                       *ngIf="container.id != null">
+                                        {{ container.name }}
+                                    </a>
+
+                                    <span *ngIf="container.id === null">
+                                        {{ container.name }}
+                                    </span>
+                                </span>
+                            } @else {
+                                <span *ngFor="let container of details.sla.main_container">/
+                                    {{ container.name }}
+                                </span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row class="pt-2">
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Consider downtimes') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            <oitc-badge-outline color="success" [hidden]="!details.sla.consider_downtimes">
+                                {{ t('Yes') }}
+                            </oitc-badge-outline>
+                            <oitc-badge-outline color="danger" [hidden]="details.sla.consider_downtimes">
+                                {{ t('No') }}
+                            </oitc-badge-outline>
+                        </c-col>
+                    </c-row>
+                    <c-row class="pt-2">
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Reflection state') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            <span [hidden]="details.sla.hard_state_only">
+                                {{ t('soft and hard state') }}
+                            </span>
+                            <span [hidden]="!details.sla.hard_state_only">
+                                {{ t('hard state only') }}
+                            </span>
+                        </c-col>
+                    </c-row>
+                    <c-row class="pt-2">
+                        <c-col lg="5" md="12" xs="12">
+                            {{ t('Time period') }}:
+                        </c-col>
+                        <c-col lg="7" md="12" xs="12">
+                            {{ details.sla.timeperiod.name }}
+                        </c-col>
+                    </c-row>
+                </c-col>
+
+                <c-col xs="12" md="12" sm="12" lg="8" xl="6">
+                    <c-row>
+                        <c-col lg="3" md="12" xs="12">
+                            <div class="p-2 bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                            <span class="badge-clickable"
+                                                  [hidden]="!(details.sla.hostsOverview!.failed.count>0)"
+                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.failed.ids]">
+                                                {{ details.sla.hostsOverview!.failed.count }}
+                                            </span>
+                                            <span [hidden]="details.sla.hostsOverview!.failed.count>0">
+                                                {{ details.sla.hostsOverview!.failed.count }}
+                                            </span>
+                                        } @else {
+                                            <span>
+                                                {{ details.sla.hostsOverview!.failed.count }}
+                                            </span>
+                                        }
+                                        <small class="d-block m-0 l-h-n">
+                                            {{ t('Failed') }}
+                                        </small>
+                                    </h6>
+                                </div>
+                                <fa-icon [icon]="['fas', 'bolt']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col lg="3" md="12" xs="12">
+                            <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                            <span class="badge-clickable"
+                                                  [hidden]="!(details.sla.hostsOverview!.warning.count>0)"
+                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.warning.ids]">
+                                                {{ details.sla.hostsOverview!.warning.count }}
+                                            </span>
+                                            <span [hidden]="details.sla.hostsOverview!.warning.count>0">
+                                                {{ details.sla.hostsOverview!.warning.count }}
+                                            </span>
+                                        } @else {
+                                            <span>
+                                                {{ details.sla.hostsOverview!.warning.count }}
+                                            </span>
+                                        }
+                                        <small class="d-block m-0 l-h-n">
+                                            {{ t('Warning') }}
+                                        </small>
+                                    </h6>
+                                </div>
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col lg="3" md="12" xs="12">
+                            <div
+                                class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                            <span class="badge-clickable"
+                                                  [hidden]="!(details.sla.hostsOverview!.passed.count>0)"
+                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.passed.ids]">
+                                                {{ details.sla.hostsOverview!.passed.count }}
+                                            </span>
+                                            <span [hidden]="details.sla.hostsOverview!.passed.count>0">
+                                                {{ details.sla.hostsOverview!.passed.count }}
+                                            </span>
+                                        } @else {
+                                            <span>
+                                                {{ details.sla.hostsOverview!.passed.count }}
+                                            </span>
+                                        }
+                                        <small class="d-block m-0 l-h-n">
+                                            {{ t('Passed') }}
+                                        </small>
+                                    </h6>
+                                </div>
+                                <fa-icon [icon]="['fas', 'check']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col lg="3" md="12" xs="12">
+                            <div
+                                class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                            <span class="badge-clickable"
+                                                  [hidden]="!(details.sla.hostsOverview!.not_calculated.count>0)"
+                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.not_calculated.ids]">
+                                                {{ details.sla.hostsOverview!.not_calculated.count }}
+                                            </span>
+                                            <span [hidden]="details.sla.hostsOverview!.not_calculated.count>0">
+                                                {{ details.sla.hostsOverview!.not_calculated.count }}
+                                            </span>
+                                        } @else {
+                                            <span>
+                                                {{ details.sla.hostsOverview!.not_calculated.count }}
+                                            </span>
+                                        }
+                                        <small class="d-block m-0 l-h-n">
+                                            {{ t('Not calculated') }}
+                                        </small>
+                                    </h6>
+                                </div>
+                                <fa-icon [icon]="['fas', 'question']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    <c-row>
+                        <c-col lg="12" md="12" xs="12">
+                            <div class="gridContainer-weekdays">
+                                <div *ngFor="let weekday of weekdayNames"
+                                     class="child grid bg-primary text-white small">
+                                    {{ weekday.name }}
+                                </div>
+                                <div class="child grid" *ngFor="let weekDay of weekDays | keyvalue">
+                                    <span [hidden]="weekDay.value.length !== 0">
+                                        <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                    </span>
+                                    <ul class="p-0 inside-list fw-300" [hidden]="!(weekDay.value.length > 0)">
+                                        <li *ngFor="let timeDetails of weekDay.value">
+                                            {{ timeDetails.start }} - {{ timeDetails.end }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-col>
+            </c-row>
+
+            <c-row class="pt-2 pb-2">
+                <c-col lg="7" md="12" xs="12">
+                    <!--<sla-hosts-overview ng-if="sla" sla="sla">
+
+                    </sla-hosts-overview>-->
+                </c-col>
+                <c-col lg="5" md="12" xs="12"
+                       [hidden]="!details.slaDetails">
+                    <c-row class="pt-2">
+                        <c-col lg="9" class="bold">
+                            {{ t('Host') }}
+                            <sub class="text-secondary">
+                                {{ t('limit 10') }}
+                            </sub>
+                        </c-col>
+                        <c-col lg="3" class="bold">
+                            {{ t('Achieved') }}(%)
+                            <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
+                        </c-col>
+                        <hr class="mt-1 mb-1 w-100"/>
+                        <ng-container *ngFor="let slaDetail of details.sla.hostsOverview?.top10">
+                            <c-col lg="9" class="ellipsis">
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', slaDetail.id]">
+                                        {{ slaDetail.name }}
+                                    </a>
+                                } @else {
+                                    {{ slaDetail.name }}
+                                }
+
+                            </c-col>
+                            <c-col lg="3" class="text-{{slaDetail.state}}">
+                                {{ slaDetail.determined_availability }}%
+                            </c-col>
+                        </ng-container>
+                    </c-row>
+                </c-col>
+            </c-row>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="3">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'greater-than-equal']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="determined_availability.from"
+                                       type="number" step="any"
+                                       placeholder="0" min="0" max="100"
+                                       name="determined_availability.from"
+                                       cFormControl
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="3">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'less-than-equal']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="determined_availability.to"
+                                       type="number" step="any"
+                                       placeholder="100" min="0" max="100"
+                                       name="determined_availability.to"
+                                       cFormControl
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group class="multi-select-input-group">
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="container"
+                                    id="container"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[Hosts.container_id][]']"
+                                    [options]="containers"
+                                    [placeholder]="'Filter by container' | transloco"
+                                    (onChange)="onFilterChange(null)"
+                                    [debounce]="true">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <c-row>
+                <c-col lg="12" class="p-2">
+                    <oitc-table-loader *ngIf="!details && isLoading"></oitc-table-loader>
+                    <table *ngIf="details && !isLoading" bordered cTable class="mt-2 mb-2" hover striped
+                           matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
+                        <tr>
+                            <th scope="col" mat-sort-header="Hosts.name">
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Total time') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Availability time') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Outage time') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Last update') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Goal') }}(%)
+                            </th>
+                            <th scope="col" class="col-1">
+                                {{ t('Achieved') }}(%)
+                                <span class="float-end">
+                                    <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
+                                </span>
+                            </th>
+                            <th scope="col">
+                                {{ t('Status') }}
+                            </th>
+                            <th class="text-center col-1 editItemWidth" scope="col">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor="let hostStatus of details.slaDetails; let i = index">
+                            <tr class="btn-{{hostStatus.host_state}}-opacity ps-1">
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    <fa-icon [icon]="['fas', 'desktop']" class="fa-lg"></fa-icon>
+                                    <span class="ps-1">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', hostStatus.host.id]">
+                                                {{ hostStatus.host.name }}
+                                            </a>
+                                        } @else {
+                                            {{ hostStatus.host.name }}
+                                        }
+                                    </span>
+                                    <sup class="cursor-help"
+                                         title="{{ t('SLA violation for a service is detected') }}"
+                                         *ngIf="hostStatus.host_state_number < hostStatus.state_number">
+                                        <fa-stack size="2x" class="ml-n2">
+                                            <fa-icon [icon]="['fas', 'play']" stackItemSize="1x" [rotate]="270"
+                                                     [ngClass]="{'text-black-50': hostStatus.state_number == 1, 'text-white': hostStatus.state_number == 2}"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']" stackItemSize="1x"
+                                                     class="text-{{ hostStatus.state }}"></fa-icon>
+                                        </fa-stack>
+                                    </sup>
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ hostStatus.evaluation_total_time_human_readable }}
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ hostStatus.determined_availability_time_human_readable }}
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ hostStatus.determined_outage_time_human_readable }}
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ hostStatus.evaluation_end }}
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ details.sla.minimal_availability }}%
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    {{ hostStatus.determined_availability_percent }}%
+                                </td>
+                                <td class="btn-{{hostStatus.host_state}}-opacity">
+                                    <c-badge [hidden]="hostStatus.host_state === 'danger'"
+                                             class="badge-border w-100">
+                                        {{ t('PASSED') }}
+                                        <span *ngIf="hostStatus.host_state_number < hostStatus.state_number"
+                                              class="cursor-help"
+                                              title="{{ t('SLA violation for a service is detected') }}">
+                                            <fa-icon [icon]="['fas', 'exclamation']"
+                                                     class="text-{{ hostStatus.state}}"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'exclamation']"
+                                                     class="text-{{ hostStatus.state}}"></fa-icon>
+                                        </span>
+                                    </c-badge>
+                                    <c-badge [hidden]="hostStatus.host_state !== 'danger'"
+                                             class="badge-border w-100">
+                                        {{ t('FAILED') }}
+                                    </c-badge>
+                                </td>
+                                <td class="text-center btn-{{hostStatus.host_state}}-opacity">
+                                    <oitc-actions-button [style]="hostStatus.state" [icon]="['fas', 'list-check']"
+                                                         [permission]="'slamodule.SlaAvailabilityStatusHostsLog.index'"
+                                                         [url]="'/sla_module/sla_availability_status_hosts_log/index/' + hostStatus.host.id">
+                                        <oitc-actions-button-element
+                                            [permission]="'slamodule.SlaAvailabilityStatusHostsLog.index'"
+                                            [url]="'/sla_module/sla_availability_status_hosts_log/index/' + hostStatus.host.id">
+                                            <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                                            {{ t('View status log') }}
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                            <ng-container *ngFor="let serviceStatus of hostStatus.sla_availability_status_services">
+                                <tr>
+                                    <td class="ps-3">
+                                        <span class="border-left border-{{serviceStatus.state}} ps-1 border-5">
+                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
+                                                <a [routerLink]="['/', 'services', 'browser', serviceStatus.service_id]">
+                                                    {{ serviceStatus.servicename }}
+                                                </a>
+                                            } @else {
+                                                {{ serviceStatus.servicename }}
+                                            }
+                                        </span>
+                                    </td>
+                                    <td>{{ serviceStatus.evaluation_total_time_human_readable }}</td>
+                                    <td>
+                                        {{ serviceStatus.determined_availability_time_human_readable }}
+                                    </td>
+                                    <td>
+                                        {{ serviceStatus.determined_outage_time_human_readable }}
+                                    </td>
+                                    <td>
+                                        {{ serviceStatus.evaluation_end }}
+                                    </td>
+                                    <td>
+                                        {{ details.sla.minimal_availability }}%
+                                    </td>
+
+                                    <td class="text-{{serviceStatus.state}}">
+                                        {{ serviceStatus.determined_availability_percent }}%
+                                    </td>
+
+                                    <td>
+                                        <c-badge [hidden]="serviceStatus.state === 'danger'"
+                                                 textColor="success"
+                                                 class="badge-border w-100">
+                                            {{ t('PASSED') }}
+                                        </c-badge>
+                                        <c-badge [hidden]="serviceStatus.state !== 'danger'"
+                                                 textColor="danger"
+                                                 class="badge-border w-100">
+                                            {{ t('FAILED') }}
+                                        </c-badge>
+                                    </td>
+                                    <td class="text-center">
+                                        <oitc-actions-button [icon]="['fas', 'list-check']"
+                                                             [permission]="'slamodule.SlaAvailabilityStatusServicesLog.index'"
+                                                             [url]="'/sla_module/sla_availability_status_services_log/index/' + serviceStatus.service_id">
+                                            <oitc-actions-button-element
+                                                [permission]="'slamodule.SlaAvailabilityStatusServicesLog.index'"
+                                                [url]="'/sla_module/sla_availability_status_services_log/index/' + serviceStatus.service_id">
+                                                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                                                {{ t('View status log') }}
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        </tbody>
+                    </table>
+
+                    <oitc-no-records *ngIf="details && Object.keys(details).length === 0"></oitc-no-records>
+                </c-col>
+            </c-row>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="details"
+                            [paginateOrScroll]="details"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>

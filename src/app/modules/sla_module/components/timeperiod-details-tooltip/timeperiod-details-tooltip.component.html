@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                     <tr *ngIf="weekDays">
-                        <td *ngFor="let day of weekDays | keyvalue" class="pl-1 pb-1 pt-1 pr-1 text-center">
+                        <td *ngFor="let day of weekDays | keyvalue" class="ps-1 pb-1 pt-1 pe-1 text-center">
                             @if (day.value.length > 0) {
                                 <c-badge class="width-90" color="success" textColor="white">
                                     {{ label.messageExists }}
@@ -40,7 +40,7 @@
                         </td>
                     </tr>
                     <tr *ngIf="weekDays">
-                        <td *ngFor="let day of weekDays | keyvalue" class="text-center pl-1 pb-1 pt-1 pr-1">
+                        <td *ngFor="let day of weekDays | keyvalue" class="text-center ps-1 pb-1 pt-1 pe-1">
                             @if (day.value.length > 0) {
                                 <ul class="inside-list">
                                     <li *ngFor="let timerange of day.value">

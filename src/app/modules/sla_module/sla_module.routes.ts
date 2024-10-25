@@ -14,6 +14,10 @@ export const slaModuleRoutes: Routes = [
         loadComponent: () => import('./pages/slas/slas-edit/slas-edit.component').then(m => m.SlasEditComponent)
     },
     {
+        path: 'sla_module/slas/viewDetails/:id',
+        loadComponent: () => import('./pages/slas/slas-view-details/slas-view-details.component').then(m => m.SlasViewDetailsComponent)
+    },
+    {
         path: 'sla_module/slas/hosts/:id',
         loadComponent: () => import('./pages/slas/slas-hosts/slas-hosts.component').then(m => m.SlasHostsComponent)
     },

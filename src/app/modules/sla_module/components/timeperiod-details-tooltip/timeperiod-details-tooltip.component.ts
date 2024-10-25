@@ -82,7 +82,7 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
 
                     this.timeperiod = result.timeperiod;
                     this.weekDays = [];
-                    for (var i = 0; i <= 6; i++) {
+                    for (let i = 0; i <= 6; i++) {
                         // Array required to keep order
                         this.weekDays[i] = [];
                     }

@@ -360,7 +360,7 @@
                                         {{ host.hostdescription }}
                                     </td>
                                     <td>
-                                        <c-badge color="primary" [hidden]="!host.hosttags" class="mr-1"
+                                        <c-badge color="primary" [hidden]="!host.hosttags" class="me-1"
                                                  *ngFor="let tag of host.hosttags.split(',')">
                                             {{ tag }}
                                         </c-badge>
@@ -416,7 +416,7 @@
                                             {{ service.description }}
                                         </td>
                                         <td>
-                                            <c-badge color="primary" [hidden]="!service.servicetags" class="mr-1"
+                                            <c-badge color="primary" [hidden]="!service.servicetags" class="me-1"
                                                      *ngFor="let tag of service.servicetags.split(',')">
                                                 {{ tag }}
                                             </c-badge>
