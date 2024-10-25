@@ -58,6 +58,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import {MultiSelectComponent} from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 @Component({
   selector: 'oitc-statuspages-add',
@@ -87,7 +88,8 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        FormControlDirective
+        FormControlDirective,
+        MultiSelectComponent
     ],
   templateUrl: './statuspages-add.component.html',
   styleUrl: './statuspages-add.component.css',
@@ -98,7 +100,9 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     private cdr = inject(ChangeDetectorRef);
-    public containers: SelectKeyValue[] | undefined;
+    public containers: SelectKeyValue[] = [];
+    public hostgroups: SelectKeyValue[] = [];
+    public hosts: SelectKeyValue[] = [];
     public post: StatuspagePost = {} as StatuspagePost;
     public errors: GenericValidationError | null = null;
 
@@ -122,8 +126,32 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public onContainerChange(){
+    loadHostgroups(searchstring: string) {
+        if(this.post.container_id === null){
+            return;
+        }
+        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, '',[] )
+            .subscribe((result) => {
+                this.hostgroups = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+    loadHosts(searchstring: string) {
+        if(this.post.container_id === null){
+            return;
+        }
+        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, '',[] )
+            .subscribe((result) => {
+                this.hosts = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
 
+    public onContainerChange(){
+        this.loadHostgroups('');
+        this.loadHosts('');
     }
 
     private getDefaultPost(): StatuspagePost {

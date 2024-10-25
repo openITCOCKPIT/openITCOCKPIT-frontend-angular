@@ -36,7 +36,7 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <form cForm>
+            <div>
                 <div class="mb-3">
                     <label cLabel for="container">
                         {{ t('Container') }}
@@ -77,12 +77,152 @@
                     <input cFormControl id="Description" required
                            name="description"
                            oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="post.description"
-                    >
+                           [(ngModel)]="post.description">
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-
                 </div>
-            </form>
+                <fieldset class="pb-1 pt-2">
+                    <legend class="fs-md fieldset-legend-border-bottom">
+                        <h5>
+                            {{ t('Access control') }}
+                        </h5>
+                    </legend>
+                </fieldset>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+
+                        <input type="checkbox"
+                               cFormCheckInput
+                               id="public"
+                               [(ngModel)]="post.public">
+                        <label class="custom-control-label ps-2" for="public">
+                            {{ t('Public') }}
+                        </label>
+                    </div>
+                    <div class="help-block mt-0">
+                        <span class="font-lg"
+                              [class]="{'warning-icon-gray' : post.public == 0}">⚠️</span>
+                        {{ t('Grant unrestricted access to this Statuspage without user authentication.') }}
+                    </div>
+                </div>
+
+                <fieldset class="pb-1 pt-2">
+                    <legend class="fs-md fieldset-legend-border-bottom">
+                        <h5>
+                            {{ t('Downtime and Acknowledgements') }}
+                        </h5>
+                    </legend>
+                </fieldset>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <!-- Downtimes -->
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox"
+                                       cFormCheckInput
+                                       id="showDowntimes"
+                                       [(ngModel)]="post.show_downtimes">
+                                <label class="custom-control-label ps-2" for="showDowntimes">
+                                    {{ t('Show downtimes') }}
+                                </label>
+                            </div>
+                            <div class="help-block mt-0">
+                                {{ t('Determines if running and planed downtimes are displayed on the status page') }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox"
+                                       cFormCheckInput
+                                       id="showDowntimeComments"
+                                       [disabled]="!post.show_downtimes"
+                                       [(ngModel)]="post.show_downtime_comments">
+                                <label class="custom-control-label ps-2" for="showDowntimeComments">
+                                    {{ t('Show downtime comment') }}
+                                </label>
+                            </div>
+                            <div class="help-block mt-0">
+                                {{ t('Determines if the comments of the downtime are displayed on the status page.') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6">
+                        <!-- Acknowledgements -->
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox"
+                                       cFormCheckInput
+                                       id="showAcknowledgements"
+                                       [(ngModel)]="post.show_acknowledgements">
+                                <label class="custom-control-label l ps-2" for="showAcknowledgements">
+                                    {{ t('Show acknowledgements') }}
+                                </label>
+                            </div>
+                            <div class="help-block mt-0">
+                                {{ t('Determines if acknowledgements are displayed on the status page') }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox"
+                                       cFormCheckInput
+                                       id="showAcknowledgementComments"
+                                       [disabled]="!post.show_acknowledgements"
+                                       [(ngModel)]="post.show_acknowledgement_comments">
+                                <label class="custom-control-labell ps-2" for="showAcknowledgementComments">
+                                    {{ t('Show acknowledgement comments') }}
+                                </label>
+                            </div>
+                            <div class="help-block mt-0">
+                                {{ t('Determines if the comments of the acknowledgements are displayed on the status page.') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <fieldset class="pb-1 pt-2">
+                    <legend class="fs-md fieldset-legend-border-bottom">
+                        <h5>
+                            {{ t('Status page items') }}
+                        </h5>
+                    </legend>
+                </fieldset>
+                <div class="mb-3">
+                    <label cLabel for="post.hostgroups._ids">
+                        {{ t('Host groups') }}
+                    </label>
+                    <oitc-multi-select
+                            name="post.hostgroups._ids"
+                            id="post.hostgroups._ids"
+                            [(ngModel)]="post.selected_hostgroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHostgroups"
+                            [options]="hostgroups"
+                            oitcFormError [errors]="errors" errorField="hostgroups">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.hosts._ids">
+                        {{ t('Hosts') }}
+                    </label>
+                    <oitc-multi-select
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.selected_hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="hosts">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                </div>
+
+            </div>
         </c-card-body>
     </c-card>
 </ng-container>
