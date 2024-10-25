@@ -1,1 +1,280 @@
-<p>customalert-rules-add works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Custom Alert Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                   [routerLink]="['/', 'customalert_module', 'customalert_rules', 'index']">
+                    <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
+                    {{ t('Custom Alert Rules') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <form cForm (ngSubmit)="addCustomAlertRule()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Create new custom alert rule') }}
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers"
+                            [debounce]="true"
+                            oitcFormError [errors]="errors" errorField="containers">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                        {{ t('Please select a container.') }}
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="post.recursive"
+                               id="post.recursive"
+                               type="checkbox"
+                               trueFalseValue
+                               [(ngModel)]="post.recursive"/>
+                        <label cFormCheckLabel for="post.recursive">
+                            {{ t('Recursive') }}
+                        </label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('When enabled, this alert rule will also apply to hosts in all sub-container.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.name">
+                        {{ t('Name') }}
+                        <oitc-required-icon />
+                    </label>
+                    <input cFormControl
+                           id="post.name"
+                           type="text"
+                           name="post.name"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="post.name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.name">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           id="post.description"
+                           type="text"
+                           name="post.description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <h5 class="fieldset-legend-border-bottom">
+                    <fa-icon [icon]="['fas', 'desktop']" />
+                    {{t('Host')}}
+                </h5>
+
+                <div class="mb-3">
+                    <label cLabel for="hostTags">
+                        {{ t('Included tags') }}
+                        <oitc-required-icon />
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <div class="icon-stack">
+                                <i class="fas fa-desktop opacity-100 "></i>
+                                <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                            </div>
+                        </span>
+                        <ng-select
+                                id="hostTags"
+                                name="hostTags"
+                                [items]="[]"
+                                [(ngModel)]="hostTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false">
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="host_keywords"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{t('Press return to separate tags')}}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="hostTagsExcluded">
+                        {{ t('Excluded tags') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <div class="icon-stack">
+                                <i class="fas fa-desktop opacity-100 "></i>
+                                <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                            </div>
+                        </span>
+                        <ng-select
+                                id="hostTagsExcluded"
+                                name="hostTagsExcluded"
+                                [items]="[]"
+                                [(ngModel)]="hostTagsExcluded"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false">
+                        </ng-select>
+                    </c-input-group>
+                    <div class="help-block">
+                        {{t('Press return to separate tags')}}
+                    </div>
+                </div>
+
+
+                <h5 class="fieldset-legend-border-bottom">
+                    <fa-icon [icon]="['fas', 'cog']" />
+                    {{t('Service')}}
+                </h5>
+
+                <div class="mb-3">
+                    <label cLabel for="serviceTags">
+                        {{ t('Included tags') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <div class="icon-stack">
+                                <i class="fas fa-cog opacity-100 "></i>
+                                <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                            </div>
+                        </span>
+                        <ng-select
+                                id="serviceTags"
+                                name="serviceTags"
+                                [items]="[]"
+                                [(ngModel)]="serviceTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false">
+                        </ng-select>
+                    </c-input-group>
+                    <div class="help-block">
+                        {{t('Press return to separate tags')}}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="serviceTagsExcluded">
+                        {{ t('Excluded tags') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <div class="icon-stack">
+                                <i class="fas fa-cog opacity-100 "></i>
+                                <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                            </div>
+                        </span>
+                        <ng-select
+                                id="serviceTagsExcluded"
+                                name="serviceTagsExcluded"
+                                [items]="[]"
+                                [(ngModel)]="serviceTagsExcluded"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false">
+                        </ng-select>
+                    </c-input-group>
+                    <div class="help-block">
+                        {{t('Press return to separate tags')}}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.servicename_regex">
+                        {{ t('Service RegEx') }}
+                    </label>
+
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <oitc-regex-helper-tooltip />
+                        </span>
+                        <input cFormControl
+                               id="post.servicename_regex"
+                               type="text"
+                               name="post.servicename_regex"
+                               oitcFormError [errors]="errors" errorField="servicename_regex"
+                               [(ngModel)]="post.servicename_regex">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="servicename_regex"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Container Roles are handy to grant the same permissions to multiple users.') }}
+                    </div>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <label class="me-2">
+                    <input cFormCheckInput type="checkbox" name="createAnother"
+                           [(ngModel)]="createAnother">
+                    {{ t('Create another') }}
+                </label>
+
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+                <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+
+
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
