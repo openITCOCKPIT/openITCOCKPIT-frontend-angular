@@ -13,5 +13,8 @@ export const checkmkModuleRoutes: Routes = [
     }, {
         path: 'checkmk_module/mkagents/download',
         loadComponent: () => import('./pages/mkagents/mkagents-download/mkagents-download.component').then(m => m.MkagentsDownloadComponent)
+    }, {
+        path: 'checkmk_module/scans/index/:id',
+        loadComponent: () => import('./pages/scans/scans-index/scans-index.component').then(m => m.ScansIndexComponent)
     },
 ];
