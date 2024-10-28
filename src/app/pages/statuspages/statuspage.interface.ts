@@ -57,21 +57,30 @@ export interface StatuspagePost {
     show_acknowledgements: 0,
     show_acknowledgement_comments: 0,
     selected_hostgroups: {
-        _ids: []
+        _ids: number[]
     },
     selected_hosts: {
-        _ids: []
+        _ids: number[]
     },
     selected_servicegroups: {
-        _ids: []
+        _ids: number[]
     },
     selected_services: {
-        _ids: []
+        _ids: number[]
     },
     hostgroups: {},
     hosts: {},
     servicegroups: {},
     services: {},
+}
+
+export interface SelectKeyValueExtended {
+    key: number,
+    value: string | {},
+    id?: number,
+    _joinData: {
+        display_alias?: ''
+    }
 }
 
 

@@ -36,7 +36,7 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <div>
+            <form cForm (ngSubmit)="addStatuspage()">
                 <div class="mb-3">
                     <label cLabel for="container">
                         {{ t('Container') }}
@@ -74,7 +74,7 @@
                         {{ t('Description') }}
 
                     </label>
-                    <input cFormControl id="Description" required
+                    <input cFormControl id="Description"
                            name="description"
                            oitcFormError [errors]="errors" errorField="name"
                            [(ngModel)]="post.description">
@@ -93,6 +93,7 @@
                         <input type="checkbox"
                                cFormCheckInput
                                id="public"
+                               name="public"
                                [(ngModel)]="post.public">
                         <label class="custom-control-label ps-2" for="public">
                             {{ t('Public') }}
@@ -120,6 +121,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showDowntimes"
+                                       name="showDowntimes"
                                        [(ngModel)]="post.show_downtimes">
                                 <label class="custom-control-label ps-2" for="showDowntimes">
                                     {{ t('Show downtimes') }}
@@ -135,6 +137,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showDowntimeComments"
+                                       name="showDowntimeComments"
                                        [disabled]="!post.show_downtimes"
                                        [(ngModel)]="post.show_downtime_comments">
                                 <label class="custom-control-label ps-2" for="showDowntimeComments">
@@ -154,6 +157,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgements"
+                                        name="showAcknowledgements"
                                        [(ngModel)]="post.show_acknowledgements">
                                 <label class="custom-control-label l ps-2" for="showAcknowledgements">
                                     {{ t('Show acknowledgements') }}
@@ -169,6 +173,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgementComments"
+                                        name="showAcknowledgementComments"
                                        [disabled]="!post.show_acknowledgements"
                                        [(ngModel)]="post.show_acknowledgement_comments">
                                 <label class="custom-control-labell ps-2" for="showAcknowledgementComments">
@@ -204,6 +209,36 @@
                             oitcFormError [errors]="errors" errorField="hostgroups">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
+                    <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
+                        <div class="row pb-2">
+                            <div class="col-4 bold">
+                                {{ t('Host name') }}
+                            </div>
+                            <div class="col-8 bold">
+                                {{ t('Display name') }}
+                            </div>
+                        </div>
+                        <ng-container *ngFor="let hostgroup of hostgroups; let i = index" class="row form-group">
+                            <div *ngIf="post.selected_hostgroups._ids.includes(hostgroup.key)" class="row">
+                                <div class="col-4 statuspage-item-box">
+                                    {{ hostgroup.value }}
+                                </div>
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                            </span>
+                                        </div>
+                                        <input class="form-control form-control-sm" type="text"
+                                               name="alias"
+                                               [(ngModel)]="hostgroups[i]._joinData.display_alias"
+                                               placeholder="Set alias for hosthostgroup">
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.hosts._ids">
@@ -221,8 +256,38 @@
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
                 </div>
+                <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
+                    <div class="row pb-2">
+                        <div class="col-4 bold">
+                            {{ t('Host name') }}
+                        </div>
+                        <div class="col-8 bold">
+                            {{ t('Display name') }}
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let host of hosts; let i = index" class="row form-group">
+                        <div *ngIf="post.selected_hosts._ids.includes(host.key)" class="row">
+                            <div class="col-4 statuspage-item-box">
+                                {{ host.value }}
+                            </div>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                        </span>
+                                    </div>
+                                    <input class="form-control form-control-sm" type="text"
+                                           name="alias"
+                                             [(ngModel)]="hosts[i]._joinData.display_alias"
+                                           placeholder="Set alias for host">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
 
-            </div>
+            </form>
         </c-card-body>
     </c-card>
 </ng-container>
