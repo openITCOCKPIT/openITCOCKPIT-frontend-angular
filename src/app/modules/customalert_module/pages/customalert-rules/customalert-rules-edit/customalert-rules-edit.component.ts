@@ -105,7 +105,6 @@ export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
     protected hideFilter: boolean = true;
     protected selectedItems: DeleteAllItem[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
-
     protected post?: EditableCustomAlertRule;
 
 
@@ -120,10 +119,11 @@ export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
                 this.post = result;
                 // Split the tags
 
-                this.hostTags = this.post.host_keywords.split(',');
-                this.hostTagsExcluded = this.post.host_not_keywords.split(',');
-                this.serviceTags = this.post.service_keywords.split(',');
-                this.serviceTagsExcluded = this.post.service_not_keywords.split(',');
+                // Split the tags, remove empty strings from array.
+                this.hostTags = this.post.host_keywords.trim().split(',').filter((tag: string) => tag.length > 0);
+                this.hostTagsExcluded = this.post.host_not_keywords.trim().split(',').filter((tag: string) => tag.length > 0);
+                this.serviceTags = this.post.service_keywords.trim().split(',').filter((tag: string) => tag.length > 0);
+                this.serviceTagsExcluded = this.post.service_not_keywords.trim().split(',').filter((tag: string) => tag.length > 0);
 
                 this.cdr.markForCheck();
             }));
@@ -143,7 +143,6 @@ export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
 
 
     protected updateCustomAlertRule(): void {
-
         if (!this.post) {
             return;
         }
@@ -174,8 +173,6 @@ export class CustomalertRulesEditComponent implements OnInit, OnDestroy {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
-                    console.warn(this.errors);
                 }
             })
         );

@@ -4,8 +4,10 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     CustomAlertRule,
+    CustomAlertRuleServices,
     CustomAlertRulesIndex,
     CustomAlertRulesIndexParams,
+    CustomAlertRulesServicesParams,
     EditableCustomAlertRule
 } from './customalert-rules.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -83,5 +85,17 @@ export class CustomalertRulesService {
                     });
                 })
             );
+    }
+
+    public getServices(customAlertRuleId: number, params: CustomAlertRulesServicesParams): Observable<CustomAlertRuleServices> {
+        return this.http.get<CustomAlertRuleServices>(`${this.proxyPath}/customalert_module/customalert_rules/services/${customAlertRuleId}.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: any): any => {
+                return data;
+            })
+        );
     }
 }

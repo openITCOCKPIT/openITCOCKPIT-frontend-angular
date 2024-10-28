@@ -64,3 +64,44 @@ export interface EditCustomAlertRule {
 // EDIT POST
 export interface EditCustomAlertRulePost extends EditableCustomAlertRule {
 }
+
+// SERVICES PARAMS
+export interface CustomAlertRulesServicesParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc,
+
+    'filter[Hosts.name]': string,
+    'filter[servicename]': string
+}
+
+export function getDefaultCustomAlertRulesServicesParams(): CustomAlertRulesServicesParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[servicename]': ''
+    } as CustomAlertRulesServicesParams
+}
+
+// SERVICES
+export interface CustomAlertRuleServices extends PaginateOrScroll {
+    customalertRule: CustomAlertRule
+    services: {
+        id: number
+        servicename: string
+        description: any
+        Hosts: {
+            name: string
+            id: number
+        }
+    }[]
+    success: boolean
+}
+

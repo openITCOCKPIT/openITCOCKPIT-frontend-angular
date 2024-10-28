@@ -263,7 +263,8 @@
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'customalertmodule.customalertRules.services'">
+                            <oitc-actions-button-element [permission]="'customalertmodule.customalertRules.services'"
+                                                         [url]="'/customalert_module/customalert_rules/services/' + customAlertRule.id">
                                 <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                 {{ t('Affected services') }}
                             </oitc-actions-button-element>
