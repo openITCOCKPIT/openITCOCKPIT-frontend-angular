@@ -3314,7 +3314,7 @@
     "Scan device:": "Пристрій сканування:",
     "Cancel waiting for satellite result": "Скасувати очікування результату супутника",
     "Download and install the Checkmk Agent.": "Завантажте та встановіть агент Checkmk.",
-    "If not already done, please {0} the Checkmk Agent now.": "Якщо ви ще цього не зробили, будь ласка, {{0}} агент Checkmk зараз.",
+    "If not already done, please download and install the Checkmk Agent now.": "Якщо ви ще цього не зробили, будь ласка, завантажити та встановити агент Checkmk зараз.",
     "Enable Checkmk agent": "Увімкнути агент Checkmk",
     "If enabled, openITCOCKPIT will query the Checkmk agent on the remote host.": "Якщо ввімкнено, openITCOCKPIT запитуватиме агента Checkmk на віддаленому хості.",
     "Datasource": "Джерело даних",

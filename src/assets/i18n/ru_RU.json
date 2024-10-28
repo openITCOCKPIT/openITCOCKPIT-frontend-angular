@@ -3322,7 +3322,7 @@
     "Scan device:": "Сканирование устройства:",
     "Cancel waiting for satellite result": "Отмена ожидания спутникового результата",
     "Download and install the Checkmk Agent.": "Скачайте и установите checkmk Agent.",
-    "If not already done, please {0} the Checkmk Agent now.": "Если это еще не сделано, пожалуйста, {{0}} агент Checkmk сейчас.",
+    "If not already done, please download and install the Checkmk Agent now.": "Если это еще не сделано, пожалуйста, скачать и установить агент Checkmk сейчас.",
     "Enable Checkmk agent": "Включить агент checkmk",
     "If enabled, openITCOCKPIT will query the Checkmk agent on the remote host.": "Если включено, openITCOCKPIT будет запрашивать агент checkmk на удаленном узле.",
     "Datasource": "Источник данных",

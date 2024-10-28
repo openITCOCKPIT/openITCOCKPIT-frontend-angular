@@ -3605,7 +3605,7 @@
     "Scan device:": "Scan Gerät:",
     "Cancel waiting for satellite result": "Warten auf Ergebnis vom Satelliten abbrechen",
     "Download and install the Checkmk Agent.": "Laden Sie den Checkmk-Agenten herunter und installieren Sie ihn.",
-    "If not already done, please {0} the Checkmk Agent now.": "Falls noch nicht geschehen, {{0}} bitte jetzt den Checkmk-Agenten.",
+    "If not already done, please download and install the Checkmk Agent now.": "Falls noch nicht geschehen, herunterladen und installieren bitte jetzt den Checkmk-Agenten.",
     "Enable Checkmk agent": "Checkmk-Agent aktivieren",
     "If enabled, openITCOCKPIT will query the Checkmk agent on the remote host.": "Wenn aktiviert, fragt openITCOCKPIT den Checkmk-Agenten auf dem entfernten Host ab.",
     "Datasource": "Datenquelle",
