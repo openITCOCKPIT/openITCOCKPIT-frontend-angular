@@ -1,0 +1,27 @@
+.hr-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+/* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+.hr-separator::before {
+    content: '';
+    border-bottom: 1px solid var(--cui-primary);
+    flex-basis: 0.75rem;
+}
+
+.hr-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--cui-primary);
+}
+
+.hr-separator span {
+    margin-left: .25em;
+    margin-right: .25em;
+    background: var(--cui-primary);
+    border-radius: 4px;
+    color: #FFFFFF;
+    padding: 2px 5px;
+}

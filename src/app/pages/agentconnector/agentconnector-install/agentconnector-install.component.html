@@ -106,7 +106,7 @@
                                     <br>
                                     {{ t('Copy and paste the shown configuration file to') }}
                                     <code
-                                        *ngIf="config.string.operating_system === AgentconnectorOperatingSystems.Windows">{{ t('C:\Program Files\it-novum\openitcockpit-agent\config.ini') }}</code>
+                                        *ngIf="config.string.operating_system === AgentconnectorOperatingSystems.Windows">{{ t('C:\\Program Files\\it-novum\\openitcockpit-agent\\config.ini') }}</code>
                                     <code
                                         *ngIf="config.string.operating_system === AgentconnectorOperatingSystems.Linux">{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
                                     <code

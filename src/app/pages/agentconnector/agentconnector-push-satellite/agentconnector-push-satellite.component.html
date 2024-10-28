@@ -271,14 +271,12 @@
                     <td class="width-50">
                         <!-- Agent is assigend to a host -->
                         <oitc-actions-button [permission]="'agentconnector.config'"
-                                             [url]="'/agentconnector/config'"
-                                             [queryParams]="{'hostId':agent.Hosts?.id}"
+                                             [url]="'/agentconnector/config/'+agent.Hosts?.id"
                                              [allowEdit]="agent.allow_edit && agent.Hosts?.id">
                             <oitc-actions-button-element
                                 *ngIf="agent.allow_edit && agent.Hosts?.id"
                                 [permission]="'agentconnector.config'"
-                                [url]="'/agentconnector/config'"
-                                [queryParams]="{'hostId':agent.Hosts?.id}">
+                                [url]="'/agentconnector/config/'+agent.Hosts?.id">
                                 <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>

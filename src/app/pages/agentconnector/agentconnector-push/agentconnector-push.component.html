@@ -238,19 +238,17 @@
                         @if (agent.Hosts && agent.Hosts.id) {
                             <!-- Agent is assigend to a host -->
                             <oitc-actions-button [permission]="'agentconnector.config'"
-                                                 [url]="'/agentconnector/config'"
-                                                 [queryParams]="{'hostId':agent.Hosts.id}"
+                                                 [url]="'/agentconnector/config/'+agent.Hosts.id"
                                                  [allowEdit]="agent.allow_edit">
                                 <oitc-actions-button-element [permission]="'agentconnector.config'"
-                                                             [url]="'/agentconnector/config'"
-                                                             [queryParams]="{'hostId':agent.Hosts.id}">
+                                                             [url]="'/agentconnector/config/'+agent.Hosts.id">
                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                     {{ t('Edit') }}
                                 </oitc-actions-button-element>
                                 <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
                                                              [url]="'/agentconnector/showOutput/' + agent.id+'/push'">
                                     <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                                    {{ t('Query Agent') }}
+                                    {{ t('Show received data') }}
                                 </oitc-actions-button-element>
                                 <li cDropdownDivider *ngIf="agent.allow_edit"></li>
                                 <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"

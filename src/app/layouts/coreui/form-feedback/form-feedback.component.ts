@@ -26,8 +26,17 @@ export class FormFeedbackComponent {
 
     constructor() {
         effect(() => {
+            this.cdr.markForCheck();
+
             const errors = this.errors();
             const errorField = this.errorField();
+
+            if (this.hasError && !errors) {
+                // Probably create another was clicked
+                // We had errors in the bast, but now thare a no errors anymore.
+                this.hasError = false;
+                this.errorMessages = [];
+            }
 
             if (errors && errorField) {
                 const fieldErrorMessages = _.result(errors, errorField);
@@ -38,7 +47,6 @@ export class FormFeedbackComponent {
                     this.hasError = true;
                     this.errorMessages = Object.values(fieldErrorMessages);
                 }
-                this.cdr.markForCheck();
             }
 
         });

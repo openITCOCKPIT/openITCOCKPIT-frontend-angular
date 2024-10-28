@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     <!-- Wizard progressbar -->
-    <div class="row m-0 text-center">
+    <div class="row m-0 text-center" style="min-height: 22px;">
         <div
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 1}">
@@ -54,7 +54,7 @@
         </div>
         <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
             <div class="btn-group btn-group-xs w-100 h-100">
-                <button type="button" class="btn btn-xs btn-primary ripple"
+                <button type="button" class="btn btn-primary"
                         [disabled]="disableBack()"
                         [title]="'Back' | transloco"
                         (click)="goBackEvent.emit()"
@@ -62,12 +62,12 @@
                     <i class="fa fa-arrow-left"></i>
                 </button>
 
-                <button type="button" class="btn btn-xs btn-success btn-block ripple"
+                <button type="button" class="btn btn-success"
                         style="border-radius: 0;"
                         [title]="'Next' | transloco"
                         [disabled]="disableNext()"
                         (click)="goNextEvent.emit()">
-                    {{ t('Next') }}
+                    {{ nextButtonText }}
                     <i class="fa fa-arrow-right"></i>
                 </button>
             </div>

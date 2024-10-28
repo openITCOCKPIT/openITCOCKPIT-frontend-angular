@@ -1,6 +1,8 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { HostEntity } from '../hosts/hosts.interface';
 import { AgentConfig } from './agentconfig.interface';
+import { ServicetemplateCommandArgument } from '../servicetemplates/servicetemplates.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 /**********************
  *    Pull action     *
@@ -249,4 +251,77 @@ export interface AgentconnectorSelectPushAgent {
     id: number
     agent_uuid: string
     name: string
+}
+
+/**********************************
+ *  Wizard create services action *
+ **********************************/
+
+export interface AgentconnectorCreateServiceRoot {
+    config: AgentConfig,
+    host: HostEntity,
+    services: AgentServicesForCreate,
+    connection_test: null | AgentconnectorAutoTlsConnectionTest,
+    _csrfToken: string
+}
+
+
+export interface AgentServicesForCreate {
+    // Keep the same order as in https://github.com/it-novum/openITCOCKPIT/blob/development/src/itnovum/openITCOCKPIT/Agent/AgentResponseToServices.php#L101
+    // Single services (AgentServiceForCreate) will become checkboxes and arrays (AgentServiceForCreate[]) will become a multi select
+    system_uptime: AgentServiceForCreate
+    memory: AgentServiceForCreate
+    swap: AgentServiceForCreate
+    cpu_percentage: AgentServiceForCreate
+    system_load: AgentServiceForCreate
+    sensors: AgentServiceForCreate[]
+    disk_io: AgentServiceForCreate[]
+    disks: AgentServiceForCreate[]
+    disks_free: AgentServiceForCreate[]
+    net_io: AgentServiceForCreate[]
+    net_stats: AgentServiceForCreate[]
+    processes: AgentServiceForCreate[]
+    systemd_services: AgentServiceForCreate[]
+    launchd_services: AgentServiceForCreate[]
+    windows_services: AgentServiceForCreate[]
+    windows_eventlog: AgentServiceForCreate[]
+    customchecks: AgentServiceForCreate[]
+    docker_running: AgentServiceForCreate[]
+    docker_cpu: AgentServiceForCreate[]
+    docker_memory: AgentServiceForCreate[]
+    libvirt: AgentServiceForCreate[]
+    ntp: AgentServiceForCreate
+}
+
+
+export interface AgentServiceForCreate {
+    servicetemplate_id: number
+    name: string
+    servicecommandargumentvalues: ServicetemplateCommandArgument[]
+    host_id: number
+}
+
+export interface CreateServiceCheckbox {
+    service_key: keyof AgentServicesForCreate,
+    checkboxValue: boolean,
+    service: AgentServiceForCreate
+}
+
+export type CreateServicesMultiSelect = {
+    [key in keyof AgentServicesForCreate]?: CreateServiceMultiSelect
+};
+
+export interface CreateServiceMultiSelect {
+    selectedIndicies: number[]
+    options: SelectKeyValue[]
+    services: AgentServiceForCreate[],
+    length: number
+}
+
+export interface CreateAgentServicesPostResponse {
+    services: {
+        _ids: number[]
+    },
+    success: boolean,
+    _csrfToken: string
 }

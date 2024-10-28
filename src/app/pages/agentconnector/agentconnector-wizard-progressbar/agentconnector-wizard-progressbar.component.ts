@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
 import { NgClass, NgIf } from '@angular/common';
 import { AgentModes } from '../agentconnector.interface';
@@ -31,10 +31,24 @@ export class AgentconnectorWizardProgressbarComponent {
     public mode = input<AgentModes>(AgentModes.Pull);
     public disableBack = input<boolean>(false);
     public disableNext = input<boolean>(false);
+    public isLastStep = input<boolean>(false);
 
     public goBackEvent = output<void>();
     public goNextEvent = output<void>();
 
+    public nextButtonText: string = '';
+
     protected readonly AgentconnectorWizardStepsEnum = AgentconnectorWizardStepsEnum;
     protected readonly AgentModes = AgentModes;
+    private readonly TranslocoService = inject(TranslocoService);
+
+    constructor() {
+        this.nextButtonText = this.TranslocoService.translate('Next');
+        effect(() => {
+            this.nextButtonText = this.TranslocoService.translate('Next');
+            if (this.isLastStep()) {
+                this.nextButtonText = this.TranslocoService.translate('Finish');
+            }
+        });
+    }
 }

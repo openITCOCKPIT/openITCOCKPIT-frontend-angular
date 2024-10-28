@@ -6,10 +6,13 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     AgentconnectorAgentConfigRoot,
     AgentconnectorAutoTlsSatelliteTaskResponse,
+    AgentconnectorCreateServiceRoot,
     AgentconnectorSelectAgentRoot,
     AgentconnectorWizardAutoTlsRoot,
     AgentconnectorWizardInstallRoot,
-    AgentconnectorWizardLoadHostsByStringParams
+    AgentconnectorWizardLoadHostsByStringParams,
+    AgentServiceForCreate,
+    CreateAgentServicesPostResponse
 } from './agentconnector.interface';
 import {
     GenericIdResponse,
@@ -185,5 +188,34 @@ export class AgentconnectorService {
                     });
                 })
             );
+    }
+
+    public loadCreateServices(hostId: number, testConnection: boolean = false): Observable<AgentconnectorCreateServiceRoot> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.get<AgentconnectorCreateServiceRoot>(`${proxyPath}/agentconnector/create_services.json`, {
+            params: {
+                angular: true,
+                hostId: hostId,
+                testConnection: testConnection
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public saveCreateServices(hostId: number, services: AgentServiceForCreate[]): Observable<CreateAgentServicesPostResponse> {
+        const proxyPath: string = this.proxyPath;
+
+        return this.http.post<CreateAgentServicesPostResponse>(`${proxyPath}/agentconnector/create_services.json`, {
+            services: services
+        }, {
+            params: {
+                angular: true,
+                hostId: hostId
+            }
+        });
     }
 }
