@@ -104,6 +104,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public hostgroups: SelectKeyValueExtended[] = [];
     public hosts: SelectKeyValueExtended[] = [];
     public services: SelectKeyValueExtended[] = [];
+    public servicegroups: SelectKeyValueExtended[] = [];
     public post: StatuspagePost = {} as StatuspagePost;
     public errors: GenericValidationError | null = null;
     public hostsFilldata : any = {};
@@ -187,6 +188,28 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                     servicesObjects.push(objectEntry);
                 });
                 this.services = servicesObjects;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadServicegroups(searchstring: string) {
+        if(this.post.container_id === null){
+            return;
+        }
+        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, '',[] )
+            .subscribe((result) => {
+                let servicegroupsObjects:SelectKeyValueExtended[]  = [];
+
+                result.map((item: SelectKeyValue) => {
+                    let objectEntry: SelectKeyValueExtended = {key: 0, value: {}, id: 0, _joinData: {display_alias: ''}};
+                    objectEntry.key = item.key;
+                    objectEntry.id = item.key;
+                    objectEntry.value = item.value;
+                    objectEntry._joinData.display_alias = "";
+                    servicegroupsObjects.push(objectEntry);
+                });
+                this.servicegroups = servicegroupsObjects;
                 this.cdr.markForCheck();
             })
         );

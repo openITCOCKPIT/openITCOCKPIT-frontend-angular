@@ -287,6 +287,53 @@
                     </ng-container>
                 </ng-container>
 
+                <div class="mb-3">
+                    <label cLabel for="post.services._ids">
+                        {{ t('Services') }}
+                    </label>
+                    <oitc-multi-select
+                        name="post.services._ids"
+                        id="post.services._ids"
+                        [(ngModel)]="post.selected_services._ids"
+                        optionValue="key"
+                        optionLabel="value.servicename"
+                        [searchCallback]="loadServices"
+                        [options]="services"
+                        oitcFormError [errors]="errors" errorField="hosts">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                </div>
+                <ng-container class="form-group" *ngIf="post.selected_services._ids.length > 0">
+                    <div class="row pb-2">
+                        <div class="col-4 bold">
+                            {{ t('Service name') }}
+                        </div>
+                        <div class="col-8 bold">
+                            {{ t('Display name') }}
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let service of services; let i = index" class="row form-group">
+                        <div *ngIf="post.selected_services._ids.includes(service.key)" class="row">
+                            <div class="col-4 statuspage-item-box">
+                                'Test'
+                            </div>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                        </span>
+                                    </div>
+                                    <input class="form-control form-control-sm" type="text"
+                                           name="alias"
+                                           [(ngModel)]="services[i]._joinData.display_alias"
+                                           placeholder="Set alias for service">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+
             </form>
         </c-card-body>
     </c-card>

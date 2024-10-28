@@ -106,6 +106,26 @@ export class StatuspagesService {
         )
     }
 
+    public loadServicegroups (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            servicegroups: SelectKeyValue[]
+        }>(`${proxyPath}/servicegroups/loadServicegroupsByContainerId.json`, {
+            params: {
+                'angular': true,
+                'containerId': containerId,
+                'filter[Containers.name]': search,
+                'selected[]': selected,
+                'resolveContainerIds': true
+
+            }
+        }).pipe(
+            map(data => {
+                return data.servicegroups
+            })
+        )
+    }
+
     public loadHosts (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
