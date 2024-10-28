@@ -70,8 +70,8 @@
 
             <c-row class="pb-2">
                 <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="border-right">
-                    <!--<sla-availability-overview sla="sla" availability="availability"
-                                               ng-if="sla"></sla-availability-overview>-->
+                    <oitc-sla-availability-overview-pie-echart [sla]="details.sla" [availability]="details.availability"
+                                                               *ngIf="details.sla"></oitc-sla-availability-overview-pie-echart>
                 </c-col>
                 <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="pt-2">
                     <c-row>
@@ -314,7 +314,7 @@
                             {{ t('Achieved') }}(%)
                             <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
                         </c-col>
-                        <hr class="mt-1 mb-1 w-100"/>
+                        <hr class="mt-1 mb-1 w-100 border-dashed"/>
                         <ng-container *ngFor="let slaDetail of details.sla.hostsOverview?.top10">
                             <c-col lg="9" class="ellipsis">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {

@@ -54,6 +54,9 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import {
+    SlaAvailabilityOverviewPieEchartComponent
+} from '../../../components/charts/sla-availability-overview-pie-echart/sla-availability-overview-pie-echart.component';
 
 @Component({
     selector: 'oitc-slas-view-details',
@@ -105,7 +108,8 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         BackButtonDirective,
         AsyncPipe,
         BadgeOutlineComponent,
-        KeyValuePipe
+        KeyValuePipe,
+        SlaAvailabilityOverviewPieEchartComponent
     ],
     templateUrl: './slas-view-details.component.html',
     styleUrl: './slas-view-details.component.css',
