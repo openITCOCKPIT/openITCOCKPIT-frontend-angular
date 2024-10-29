@@ -36,7 +36,9 @@ import {
 }
     from './statuspages.interface';
 import {
-    StatuspageRoot
+    StatuspageRoot,
+    SelectValueExtended,
+    PostParams, StatuspagePost
 }
     from './statuspage.interface';
 
@@ -146,10 +148,10 @@ export class StatuspagesService {
         )
     }
 
-    public loadServices (containerId: number, search: string, selected: number[]): Observable<SelectKeyValue[]> {
+    public loadServices (containerId: number, search: string, selected: number[]): Observable<SelectValueExtended[]> {
         const proxyPath = this.proxyPath;
         return this.http.post<{
-            services: SelectKeyValue[]
+            services: SelectValueExtended[]
         }>(`${proxyPath}/services/loadServicesByContainerIdCake4.json?angular=true`, {
             params: {
                 'containerId': containerId,
@@ -163,6 +165,27 @@ export class StatuspagesService {
                 return data.services
             })
         )
+    }
+
+    public addStatuspage (params: StatuspagePost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<GenericIdResponse>(`${proxyPath}/statuspages/add.json?angular=true`, {Statuspage: params})
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 

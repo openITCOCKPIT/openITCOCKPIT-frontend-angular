@@ -20,6 +20,7 @@
             </li>
         </ol>
     </nav>
+    <form cForm (ngSubmit)="submit()">
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>
@@ -35,8 +36,9 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
+
         <c-card-body>
-            <form cForm (ngSubmit)="addStatuspage()">
+
                 <div class="mb-3">
                     <label cLabel for="container">
                         {{ t('Container') }}
@@ -74,11 +76,11 @@
                         {{ t('Description') }}
 
                     </label>
-                    <input cFormControl id="Description"
+                    <input cFormControl id="description"
                            name="description"
-                           oitcFormError [errors]="errors" errorField="name"
+                           oitcFormError [errors]="errors" errorField="description"
                            [(ngModel)]="post.description">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <fieldset class="pb-1 pt-2">
                     <legend class="fs-md fieldset-legend-border-bottom">
@@ -87,21 +89,20 @@
                         </h5>
                     </legend>
                 </fieldset>
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-
+                <div>
+                    <div>
                         <input type="checkbox"
                                cFormCheckInput
                                id="public"
                                name="public"
                                [(ngModel)]="post.public">
-                        <label class="custom-control-label ps-2" for="public">
+                        <label class="ps-2" for="public">
                             {{ t('Public') }}
                         </label>
                     </div>
                     <div class="help-block mt-0">
                         <span class="font-lg"
-                              [class]="{'warning-icon-gray' : post.public == 0}">⚠️</span>
+                              [class]="{'warning-icon-gray' : post.public == false}">⚠️</span>
                         {{ t('Grant unrestricted access to this Statuspage without user authentication.') }}
                     </div>
                 </div>
@@ -113,17 +114,17 @@
                         </h5>
                     </legend>
                 </fieldset>
-                <div class="row">
+                <c-row>
                     <div class="col-xs-12 col-md-6">
                         <!-- Downtimes -->
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
+                        <div>
+                            <div>
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showDowntimes"
                                        name="showDowntimes"
                                        [(ngModel)]="post.show_downtimes">
-                                <label class="custom-control-label ps-2" for="showDowntimes">
+                                <label class="ps-2" for="showDowntimes">
                                     {{ t('Show downtimes') }}
                                 </label>
                             </div>
@@ -133,14 +134,14 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="custom-control custom-checkbox">
+                            <div>
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showDowntimeComments"
                                        name="showDowntimeComments"
                                        [disabled]="!post.show_downtimes"
                                        [(ngModel)]="post.show_downtime_comments">
-                                <label class="custom-control-label ps-2" for="showDowntimeComments">
+                                <label class="ps-2" for="showDowntimeComments">
                                     {{ t('Show downtime comment') }}
                                 </label>
                             </div>
@@ -152,14 +153,14 @@
 
                     <div class="col-xs-12 col-md-6">
                         <!-- Acknowledgements -->
-                        <div class="form-group">
+                        <div>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgements"
                                         name="showAcknowledgements"
                                        [(ngModel)]="post.show_acknowledgements">
-                                <label class="custom-control-label l ps-2" for="showAcknowledgements">
+                                <label class="ps-2" for="showAcknowledgements">
                                     {{ t('Show acknowledgements') }}
                                 </label>
                             </div>
@@ -168,15 +169,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
+                        <div>
+                            <div>
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgementComments"
                                         name="showAcknowledgementComments"
                                        [disabled]="!post.show_acknowledgements"
                                        [(ngModel)]="post.show_acknowledgement_comments">
-                                <label class="custom-control-labell ps-2" for="showAcknowledgementComments">
+                                <label class="ps-2" for="showAcknowledgementComments">
                                     {{ t('Show acknowledgement comments') }}
                                 </label>
                             </div>
@@ -185,7 +186,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </c-row>
 
                 <fieldset class="pb-1 pt-2">
                     <legend class="fs-md fieldset-legend-border-bottom">
@@ -206,13 +207,13 @@
                             optionLabel="value"
                             [searchCallback]="loadHostgroups"
                             [options]="hostgroups"
-                            oitcFormError [errors]="errors" errorField="hostgroups">
+                            oitcFormError [errors]="errors" errorField="selected_hostgroups">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
-                    <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
+                    <oitc-form-feedback [errors]="errors" errorField="selected_hostgroups"></oitc-form-feedback>
+                    <ng-container class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
                         <div class="row pb-2">
                             <div class="col-4 bold">
-                                {{ t('Host name') }}
+                                {{ t('Hostgroup name') }}
                             </div>
                             <div class="col-8 bold">
                                 {{ t('Display name') }}
@@ -221,7 +222,14 @@
                         <ng-container *ngFor="let hostgroup of hostgroups; let i = index" class="row form-group">
                             <div *ngIf="post.selected_hostgroups._ids.includes(hostgroup.key)" class="row">
                                 <div class="col-4 statuspage-item-box">
-                                    {{ hostgroup.value }}
+                                    @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
+                                        <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                                            {{ hostgroup.value }}
+                                        </a>
+                                    } @else {
+                                        {{ hostgroup.value }}
+                                    }
+
                                 </div>
                                 <div class="col-8">
                                     <div class="input-group">
@@ -231,9 +239,62 @@
                                             </span>
                                         </div>
                                         <input class="form-control form-control-sm" type="text"
-                                               name="alias"
+                                               name="alias_hostgroup"
                                                [(ngModel)]="hostgroups[i]._joinData.display_alias"
                                                placeholder="Set alias for hosthostgroup">
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.servicegroups._ids">
+                        {{ t('Service groups') }}
+                    </label>
+                    <oitc-multi-select
+                            name="post.servicegroups._ids"
+                            id="post.servicegroups._ids"
+                            [(ngModel)]="post.selected_servicegroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServicegroups"
+                            [options]="servicegroups"
+                            oitcFormError [errors]="errors" errorField="selected_servicegroups">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_servicegroups"></oitc-form-feedback>
+                    <ng-container class="form-group" *ngIf="post.selected_servicegroups._ids.length > 0">
+                        <div class="row pb-2">
+                            <div class="col-4 bold">
+                                {{ t('Servicegroup name') }}
+                            </div>
+                            <div class="col-8 bold">
+                                {{ t('Display name') }}
+                            </div>
+                        </div>
+                        <ng-container *ngFor="let servicegroup of servicegroups; let i = index" class="row form-group">
+                            <div *ngIf="post.selected_servicegroups._ids.includes(servicegroup.key)" class="row">
+                                <div class="col-4 statuspage-item-box">
+                                    @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
+                                        <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.key]">
+                                            {{ servicegroup.value }}
+                                        </a>
+                                    } @else {
+                                        {{ servicegroup.value }}
+                                    }
+
+                                </div>
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                            </span>
+                                        </div>
+                                        <input class="form-control form-control-sm" type="text"
+                                               name="alias_servicegroup"
+                                               [(ngModel)]="servicegroups[i]._joinData.display_alias"
+                                               placeholder="Set alias for servicegroup">
                                     </div>
                                 </div>
                             </div>
@@ -252,9 +313,9 @@
                             optionLabel="value"
                             [searchCallback]="loadHosts"
                             [options]="hosts"
-                            oitcFormError [errors]="errors" errorField="hosts">
+                            oitcFormError [errors]="errors" errorField="selected_hosts">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_hosts"></oitc-form-feedback>
                 </div>
                 <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
                     <div class="row pb-2">
@@ -268,7 +329,13 @@
                     <ng-container *ngFor="let host of hosts; let i = index" class="row form-group">
                         <div *ngIf="post.selected_hosts._ids.includes(host.key)" class="row">
                             <div class="col-4 statuspage-item-box">
-                                {{ host.value }}
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', host.key]">
+                                        {{ host.value }}
+                                    </a>
+                                } @else {
+                                    {{ host.value }}
+                                }
                             </div>
                             <div class="col-8">
                                 <div class="input-group">
@@ -278,7 +345,7 @@
                                         </span>
                                     </div>
                                     <input class="form-control form-control-sm" type="text"
-                                           name="alias"
+                                           name="alias_host"
                                              [(ngModel)]="hosts[i]._joinData.display_alias"
                                            placeholder="Set alias for host">
                                 </div>
@@ -296,12 +363,12 @@
                         id="post.services._ids"
                         [(ngModel)]="post.selected_services._ids"
                         optionValue="key"
-                        optionLabel="value.servicename"
+                        optionLabel="value"
                         [searchCallback]="loadServices"
                         [options]="services"
-                        oitcFormError [errors]="errors" errorField="hosts">
+                        oitcFormError [errors]="errors" errorField="selected_services">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_services"></oitc-form-feedback>
                 </div>
                 <ng-container class="form-group" *ngIf="post.selected_services._ids.length > 0">
                     <div class="row pb-2">
@@ -315,7 +382,13 @@
                     <ng-container *ngFor="let service of services; let i = index" class="row form-group">
                         <div *ngIf="post.selected_services._ids.includes(service.key)" class="row">
                             <div class="col-4 statuspage-item-box">
-                                'Test'
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'services', 'browser', service.key]">
+                                        {{ service.value }}
+                                    </a>
+                                } @else {
+                                    {{ service.value }}
+                                }
                             </div>
                             <div class="col-8">
                                 <div class="input-group">
@@ -325,7 +398,7 @@
                                         </span>
                                     </div>
                                     <input class="form-control form-control-sm" type="text"
-                                           name="alias"
+                                           name="alias_service"
                                            [(ngModel)]="services[i]._joinData.display_alias"
                                            placeholder="Set alias for service">
                                 </div>
@@ -334,7 +407,20 @@
                     </ng-container>
                 </ng-container>
 
-            </form>
+
         </c-card-body>
+
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="submit">
+                {{ t('Save') }}
+            </button>
+            <button [fallbackUrl]="['statuspages', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton
+                    type="button">
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
+
     </c-card>
+    </form>
 </ng-container>

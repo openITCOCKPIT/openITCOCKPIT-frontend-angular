@@ -51,11 +51,11 @@ export interface StatuspagePost {
     container_id: null | number,
     name: '',
     description: '',
-    public: 0,
-    show_downtimes: 0,
-    show_downtime_comments: 0,
-    show_acknowledgements: 0,
-    show_acknowledgement_comments: 0,
+    public: boolean,
+    show_downtimes: boolean,
+    show_downtime_comments: boolean,
+    show_acknowledgements: boolean,
+    show_acknowledgement_comments: boolean,
     selected_hostgroups: {
         _ids: number[]
     },
@@ -74,13 +74,34 @@ export interface StatuspagePost {
     services: {},
 }
 
+export interface PostParams {
+    Statuspage: StatuspagePost
+}
+
 export interface SelectKeyValueExtended {
     key: number,
-    value: string | {},
-    id?: number,
+    value: string,
+    id: number,
     _joinData: {
-        display_alias?: ''
+        display_alias: ''
     }
+}
+
+export interface ValueExtended {
+    servicename: string,
+    id: number,
+    disabled: boolean,
+    _matchingData: {
+        Hosts: {
+            id: number,
+            name: string
+        }
+    }
+}
+
+export interface SelectValueExtended {
+    key: number,
+    value: ValueExtended
 }
 
 
