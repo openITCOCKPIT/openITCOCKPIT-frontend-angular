@@ -17,7 +17,6 @@ import {
     NavItemComponent,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -58,7 +57,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -90,23 +88,22 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicegroupsAddComponent implements OnInit, OnDestroy {
-
-    private subscriptions: Subscription = new Subscription();
-    private ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
-    protected services: ServicesListService[] = [];
-    private router: Router = inject(Router);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    private readonly router: Router = inject(Router);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
-    public errors: GenericValidationError | null = null;
-    public createAnother: boolean = false;
+    private readonly route = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
-    public post: Servicegroup = {} as Servicegroup;
-    private preselectedServiceIds: number[] = [];
+    protected errors: GenericValidationError | null = null;
+    protected createAnother: boolean = false;
+    protected post: Servicegroup = {} as Servicegroup;
+    protected services: ServicesListService[] = [];
+    protected preselectedServiceIds: number[] = [];
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute);
-    private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.post = this.getDefaultPost();

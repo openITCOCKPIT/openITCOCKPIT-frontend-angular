@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
@@ -26,10 +26,12 @@ export class LabelLinkComponent {
     public hasPermission$: Observable<boolean> = new Observable<boolean>();
 
     public PermissionService: PermissionsService = inject(PermissionsService);
+    private cdr = inject(ChangeDetectorRef);
 
     public constructor() {
         effect(() => {
             this.hasPermission$ = this.PermissionService.hasPermissionObservable(this.permissions());
+            this.cdr.markForCheck();
         });
     }
 

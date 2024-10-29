@@ -320,3 +320,11 @@ body.dark-theme .p-overlaypanel::after {
     border-bottom-color: var(--cui-border-color);
 }
 
+/* progress bar color */
+body.dark-theme .p-progressbar {
+    background: #3f3f46;
+}
+
+.p-progressbar .p-progressbar-value {
+    background: $primary;
+}

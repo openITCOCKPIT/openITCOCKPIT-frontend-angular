@@ -77,7 +77,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-
         DebounceDirective,
         DeleteAllModalComponent,
         DropdownComponent,
@@ -203,7 +202,6 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     // Open the Delete All Modal
-
     public toggleDeleteAllModal(user?: User) {
         let items: DeleteAllItem[] = [];
         if (user) {
@@ -249,5 +247,4 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.loadUsers();
         }
     }
-
 }

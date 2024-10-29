@@ -1,0 +1,29 @@
+.simplepie-container {
+    position: relative;
+    width: 100%;
+}
+
+.simplepie-container .legend {
+    text-align: right;
+    display: flex;
+}
+
+.simplepie-container .legend .legend-items {
+    display: inline-block;
+    align-self: flex-end;
+}
+
+.simplepie-container .legend span:after {
+    display: inline-block;
+    content: "";
+    width: 0.8em;
+    height: 0.8em;
+    margin-left: 0.4em;
+    border-radius: 0.2em;
+    background: currentColor;
+}
+
+
+.legend-placeholder {
+    flex: 1;
+}

@@ -1,0 +1,89 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['usercontainerroles', 'index']" [routerLink]="['/', 'usercontainerroles', 'index']">
+                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                    {{ t('User container roles') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                {{ t('Copy') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('User container role') }}
+                <small class="fw-300">
+                    {{ t('Copy User container role/s') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <button [fallbackUrl]="['usercontainerroles', 'index']" cButton class="ripple" color="default"
+                        oitcBackButton
+                        size="xs">
+                    <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    {{ t('Back') }}
+                </button>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-form-loader *ngIf="userContainerRoles.length === 0"></oitc-form-loader>
+
+            <c-card class="mb-3" *ngFor="let userContainerRole of userContainerRoles; let i = index">
+                <c-card-header>
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    <span class="ms-1">
+                        {{ t('Source user container role:') }}
+                        {{ userContainerRole.Source.name }}
+                    </span>
+                </c-card-header>
+                <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="name{{i}}">
+                            {{ t('Service template group name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               required
+                               type="text"
+                               name="name{{i}}"
+                               id="name{{i}}"
+                               [(ngModel)]="userContainerRole.Usercontainerrole.name"
+                               oitcFormError [errors]="userContainerRole.Error" errorField="name">
+                        <oitc-form-feedback [errors]="userContainerRole.Error"
+                                            errorField="name"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Name of the new user container role') }}
+                        </div>
+                    </div>
+
+                </c-card-body>
+            </c-card>
+
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button" (click)="copyUserContainerRoles()">
+                {{ t('Copy') }}
+            </button>
+            <button [fallbackUrl]="['usercontainerroles', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton
+                    type="submit">
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
+
+    </c-card>
+
+</ng-container>
+

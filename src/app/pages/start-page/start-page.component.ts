@@ -64,6 +64,7 @@ import {
     ActionsButtonElementComponent
 } from '../../components/actions-button-element/actions-button-element.component';
 import { CodeMirrorContainerComponent } from '../../components/code-mirror-container/code-mirror-container.component';
+import { MessageOfTheDayButtonComponent } from '../../components/message-of-the-day-button/message-of-the-day-button.component';
 
 
 @Component({
@@ -104,7 +105,8 @@ import { CodeMirrorContainerComponent } from '../../components/code-mirror-conta
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,
-        CodeMirrorContainerComponent
+        CodeMirrorContainerComponent,
+        MessageOfTheDayButtonComponent
     ],
     templateUrl: './start-page.component.html',
     styleUrl: './start-page.component.css',

@@ -52,6 +52,35 @@
     font-size: 1.875rem;
 }
 
+/* stacked icons in input prepend */
+
+.icon-stack .cornered {
+    position: absolute;
+    bottom: -5px;
+    line-height: 1em;
+    text-shadow: 1px 1px 1px #BDBDBD;
+    font-size: 9px;
+}
+
+.icon-stack .cornered-lr {
+    right: -5px;
+    text-align: right;
+}
+
+.icon-stack .cornered-ll {
+    text-align: left;
+}
+
+.icon-stack .cornered-tr {
+    top: 0 !important;
+    text-align: right;
+}
+
+.icon-stack .cornered-tl {
+    top: 0 !important;
+    text-align: left;
+}
+
 /* FontAwesome icon bases to stack other icons on top, like a Square, Circle, Shield, Message, Comment */
 .base-square-full::after, .base-1::after {
     font: var(--fa-font-solid);

@@ -1,0 +1,17 @@
+.wizard-bg-inactive {
+    background: darken($light-bg-subtle, 5%)
+}
+
+body.dark-theme .wizard-bg-inactive {
+    background: var(--cui-light-bg-subtle)
+}
+
+.wizard-active {
+    background: $primary !important;
+    color: $white;
+}
+
+.wizard-success {
+    background: $success !important;
+    color: $white;
+}

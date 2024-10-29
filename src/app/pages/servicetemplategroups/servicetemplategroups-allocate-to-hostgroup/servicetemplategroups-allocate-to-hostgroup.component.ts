@@ -19,7 +19,6 @@ import {
     ProgressBarComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -100,30 +99,25 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit, OnDestroy {
-
     private readonly subscriptions: Subscription = new Subscription();
     private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
-
-    protected errors: GenericValidationError = {} as GenericValidationError;
-    protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
-
-    protected readonly route: ActivatedRoute = inject(ActivatedRoute);
-    protected selectedItems: DeleteAllItem[] = [];
-    protected readonly router: Router = inject(Router);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private readonly cdr = inject(ChangeDetectorRef);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    protected hideFilter: boolean = true;
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
 
+    protected selectedItems: DeleteAllItem[] = [];
+    protected hideFilter: boolean = true;
     protected servicetemplategroups: SelectKeyValue[] = [];
     protected hostgroups: LoadHostGroupsByStringHostgroup[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGroupGetHostsWithServicetemplatesForDeploy[] = [];
-    public isProcessing: boolean = false;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private cdr = inject(ChangeDetectorRef);
-
+    protected isProcessing: boolean = false;
+    protected errors: GenericValidationError = {} as GenericValidationError;
+    protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
     protected servicetemplategroupId: number = 0;
     protected hostgroupId: number | null = null;
-
     protected percentage: number = 42;
 
     public ngOnInit() {

@@ -9,6 +9,7 @@ import { nagiosModuleRoutes } from './modules/nagios_module/nagios_module.routes
 import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_module.routes';
 import { slaModuleRoutes } from './modules/sla_module/sla_module.routes';
 import { importModuleRoutes } from './modules/import_module/import_module.routes';
+import { checkmkModuleRoutes } from './modules/checkmk_module/checkmk_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -40,7 +41,8 @@ const moduleRoutes: Routes = [
     ...nagiosModuleRoutes,
     ...pagerdutyModuleRoutes,
     ...slaModuleRoutes,
-    ...importModuleRoutes
+    ...importModuleRoutes,
+    ...checkmkModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -80,6 +82,18 @@ const coreRoutes: Routes = [{
 }, {
     path: 'contactgroups/usedBy/:id',
     loadComponent: () => import('./pages/contactgroups/contactgroups-used-by/contactgroups-used-by.component').then(m => m.ContactgroupsUsedByComponent)
+}, {
+    path: 'usercontainerroles/add',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-add/usercontainerroles-add.component').then(m => m.UsercontainerrolesAddComponent)
+}, {
+    path: 'usercontainerroles/copy/:ids',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-copy/usercontainerroles-copy.component').then(m => m.UserContainerRolesCopyComponent)
+}, {
+    path: 'usercontainerroles/edit/:id',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-edit/usercontainerroles-edit.component').then(m => m.UsercontainerrolesEditComponent)
+}, {
+    path: 'usercontainerroles/index',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-index/usercontainerroles-index.component').then(m => m.UsercontainerrolesIndexComponent)
 }, {
     path: 'contacts/index',
     loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
@@ -309,6 +323,15 @@ const coreRoutes: Routes = [{
     path: 'documentations/edit/:uuid/:type',
     loadComponent: () => import('./pages/documentations/documentations-edit/documentations-edit.component').then(m => m.DocumentationsEditComponent)
 }, {
+    path: 'messagesOtd/add',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-add/messagesotd-add.component').then(m => m.MessagesotdAddComponent)
+}, {
+    path: 'messagesOtd/edit/:id',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-edit/messagesotd-edit.component').then(m => m.MessagesotdEditComponent)
+}, {
+    path: 'messagesOtd/index',
+    loadComponent: () => import('./pages/messagesotd/messagesotd-index/messagesotd-index.component').then(m => m.MessagesotdIndexComponent)
+}, {
     path: 'timeperiods/index',
     loadComponent: () => import('./pages/timeperiods/timeperiods-index/timeperiods-index.component').then(m => m.TimeperiodsIndexComponent)
 }, {
@@ -531,8 +554,53 @@ const coreRoutes: Routes = [{
     path: 'instantreports/generate/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
 }, {
+    path: 'agentchecks/index',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-index/agentchecks-index.component').then(m => m.AgentchecksIndexComponent)
+}, {
+    path: 'agentchecks/add',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-add/agentchecks-add.component').then(m => m.AgentchecksAddComponent)
+}, {
+    path: 'agentchecks/edit/:id',
+    loadComponent: () => import('./pages/agentchecks/agentchecks-edit/agentchecks-edit.component').then(m => m.AgentchecksEditComponent)
+}, {
+    path: 'agentconnector/pull',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-pull/agentconnector-pull.component').then(m => m.AgentconnectorPullComponent)
+}, {
+    path: 'agentconnector/push',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push/agentconnector-push.component').then(m => m.AgentconnectorPushComponent)
+}, {
+    path: 'agentconnector/push_satellite',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-push-satellite/agentconnector-push-satellite.component').then(m => m.AgentconnectorPushSatelliteComponent)
+}, {
+    path: 'agentconnector/showOutput/:id/:mode',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-show-output/agentconnector-show-output.component').then(m => m.AgentconnectorShowOutputComponent)
+}, {
+    path: 'agentconnector/wizard',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-wizard/agentconnector-wizard.component').then(m => m.AgentconnectorWizardComponent)
+}, {
+    path: 'agentconnector/config/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-config/agentconnector-config.component').then(m => m.AgentconnectorConfigComponent)
+}, {
+    path: 'agentconnector/install/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-install/agentconnector-install.component').then(m => m.AgentconnectorInstallComponent)
+}, {
+    path: 'agentconnector/autotls/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-auto-tls/agentconnector-auto-tls.component').then(m => m.AgentconnectorAutoTlsComponent)
+}, {
+    path: 'agentconnector/select_agent/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-select-agent/agentconnector-select-agent.component').then(m => m.AgentconnectorSelectAgentComponent)
+}, {
+    path: 'agentconnector/create_services/:hostId',
+    loadComponent: () => import('./pages/agentconnector/agentconnector-create-services/agentconnector-create-services.component').then(m => m.AgentconnectorCreateServicesComponent)
+}, {
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
+}, {
+    path: 'ConfigurationFiles/index',
+    loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
+}, {
+    path: 'ConfigurationFiles/edit/:configFile',
+    loadComponent: () => import('./pages/configurationfiles/configuration-files-edit/configuration-files-edit.component').then(m => m.ConfigurationFilesEditComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

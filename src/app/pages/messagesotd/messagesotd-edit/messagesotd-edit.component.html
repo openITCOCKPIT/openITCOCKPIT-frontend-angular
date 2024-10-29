@@ -1,0 +1,269 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['messagesOtd', 'index']"
+                   [routerLink]="['/', 'messagesOtd', 'index']">
+                    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+                    {{ t('Messages of the day') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <oitc-form-loader *ngIf="post.id === 0"/>
+    <form *ngIf="post.id !== 0" cForm (ngSubmit)="updateMessageOfTheDay()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Edit new message of the day ') }}
+                </h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['messagesOtd', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+
+                <div class="mb-3">
+                    <label cLabel for="post.title">
+                        {{ t('Title') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.title"
+                           type="text"
+                           name="post.title"
+                           oitcFormError [errors]="errors" errorField="title"
+                           [(ngModel)]="post.title">
+                    <oitc-form-feedback [errors]="errors" errorField="title"></oitc-form-feedback>
+                </div>
+
+
+                <div class="mb-3">
+                    <label cLabel for="post.description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           id="post.description"
+                           type="text"
+                           name="post.description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.date">
+                        {{ t('Date') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.date"
+                           type="date"
+                           name="post.date"
+                           oitcFormError [errors]="errors" errorField="date"
+                           [(ngModel)]="post.date">
+                    <oitc-form-feedback [errors]="errors" errorField="date"></oitc-form-feedback>
+                </div>
+
+                <!-- expiration custom shit -->
+                <div class="mb-3">
+                    <label cLabel for="post.expiration_duration">
+                        {{ t('Expiration') }}
+                        <oitc-required-icon *ngIf="post.expire"/>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <c-dropdown>
+                                <button *ngIf="post.expire"
+                                        cButton cDropdownToggle color="primary">
+                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                    {{ t('expiration duration') }}
+                                </button>
+                                <button *ngIf="! post.expire"
+                                        cButton cDropdownToggle color="primary">
+                                    <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                    {{ t('no expiration') }}
+                                </button>
+                                <ul cDropdownMenu>
+                                    <li cDropdownItem (click)="setExpiration(true)">
+                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                        {{ t('expiration duration') }}
+                                    </li>
+                                    <li cDropdownItem (click)="setExpiration(false)">
+                                        <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                        {{ t('no expiration') }}
+                                    </li>
+                                </ul>
+                            </c-dropdown>
+                        </span>
+                        <input cFormControl
+                               id="post.expiration_duration"
+                               type="number"
+                               name="post.expiration_duration"
+                               oitcFormError [errors]="errors" errorField="expiration_duration"
+                               [disabled]="! post.expire"
+                               [(ngModel)]="post.expiration_duration"/>
+                        <span cInputGroupText>
+                            {{ t('in days') }}
+                        </span>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="expiration_duration"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Leave this field blank to receive a permanent message of the day. The message will be displayed from the defined date. For temporary messages, set the expiration time in days.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.usergroups._ids">
+                        {{ t('Filter for user groups (optional)') }}
+                    </label>
+                    <oitc-multi-select
+                        name="post.usergroups._ids"
+                        id="post.usergroups._ids"
+                        [(ngModel)]="post.usergroups._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="usergroups"
+                        oitcFormError [errors]="errors" errorField="containerroles">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="containerroles"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Select user groups for restricted visibility. Leave this field blank to avoid excluding users.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="post.notify_users"
+                               id="post.notify_users"
+                               type="checkbox"
+                               trueFalseValue
+                               [falseValue]="0"
+                               [trueValue]="1"
+                               [(ngModel)]="post.notify_users"
+                               oitcFormError [errors]="errors" errorField="notify_users"/>
+                        <label cFormCheckLabel for="post.notify_users">
+                            {{ t('Notify users') }}
+                            <div class="icon-stack margin-bottom-5">
+                                <i class="fas fa-user opacity-100 "></i>
+                                <i class="fas fa-envelope opacity-100 fa-xs text-primary cornered cornered-lr"></i>
+                            </div>
+                        </label>
+                    </c-form-check>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="notify_users"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('If activated, the system sends notifications via email with the current content of the "Message of the day" to affected users') }}
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label cLabel for="post.style">
+                        {{ t('Style') }}
+                    </label>
+                    <oitc-select
+                        name="post.style"
+                        id="post.style"
+                        [(ngModel)]="post.style"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="styles"
+                        oitcFormError [errors]="errors" errorField="style">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="style"></oitc-form-feedback>
+                </div>
+
+                <c-row>
+
+
+                    <c-col [md]="12" [lg]="12" [xl]="6" class="mb-3">
+                        <oitc-bb-code-editor [(bbcode)]="post.content"
+                                             (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                        <oitc-form-feedback [errors]="errors" errorField="content"></oitc-form-feedback>
+                    </c-col>
+
+                    <c-col [md]="12" [lg]="12" [xl]="6">
+                        <c-card>
+                            <c-card-body [class]="'border-' + post.style">
+
+                                <div class="alert bg-transparent" [ngClass]="'border-'+post.style">
+                                    <div class="d-flex">
+                                        <div class="alert-icon">
+                                            <span class="icon-stack icon-stack-lg">
+                                                <i class="base base-comment icon-stack-3x opacity-100"
+                                                   [ngClass]="'text-'+post.style"></i>
+                                                <i class="fas fa-info icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'primary' || post.style == 'info'"></i>
+
+                                                <i class="fas fa-check icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'success'"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x opacity-100 color-white mb-2"
+                                                   *ngIf="post.style == 'warning' || post.style == 'danger'"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 ps-3">
+                                            <h4 [class]="'title-border title-border-bottom-' + post.style">
+                                                {{ post.title }}
+                                            </h4>
+                                            <div class="italic mb-3">
+                                                {{ post.description }}
+                                            </div>
+
+                                            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+
+                    </c-col>
+                </c-row>
+
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+
+                <button cButton class="ripple" color="primary" type="submit">
+                    <span *ngIf="post.notify_users">
+                        {{ t('Update message of the day and notify users') }}
+                    </span>
+                    <span *ngIf="! post.notify_users">
+                        {{ t('Update message of the day') }}
+                    </span>
+                </button>
+                <button [fallbackUrl]="['messagesOtd', 'index']" cButton class="ms-1 ripple"
+                        color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+
+
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>

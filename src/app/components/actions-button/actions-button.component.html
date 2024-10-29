@@ -25,7 +25,9 @@
 
 <c-button-group role="group">
     @if (allowEdit) {
-        <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding" [routerLink]="url"
+        <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding"
+           [routerLink]="url"
+           [queryParams]="queryParams"
            *oitcPermission="permission">
             <fa-icon [icon]="icon"></fa-icon>
         </a>

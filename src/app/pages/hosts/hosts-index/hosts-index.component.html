@@ -1144,7 +1144,8 @@
                             </oitc-actions-button-element>
 
                             <oitc-actions-button-element [permission]="'agentconnector.wizard'"
-                                                         [url]="'/agentconnector/wizard/' + host.Host.id">
+                                                         [url]="'/agentconnector/wizard'"
+                                                         [queryParams]="{hostId: host.Host.id}">
                                 <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
                                 {{ t('openITCOCKPIT Agent discovery') }}
                             </oitc-actions-button-element>

@@ -20,6 +20,12 @@ import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
+import { MessageOfTheDayButtonComponent } from './components/message-of-the-day-button/message-of-the-day-button.component';
+import {
+    MessageOfTheDayModalComponent
+} from './components/message-of-the-day-modal/message-of-the-day-modal.component';
+import { CurrentMessageOfTheDay, MessageOfTheDay } from './pages/messagesotd/messagesotd.interface';
+import { MessagesOfTheDayService } from './pages/messagesotd/messagesotd.service';
 
 @Component({
     selector: 'oitc-root',
@@ -35,7 +41,9 @@ import { LayoutOptions, LayoutService } from './layouts/coreui/layout.service';
         ShadowOnScrollDirective,
         NgIf,
         AsyncPipe,
-        NgClass
+        NgClass,
+        MessageOfTheDayButtonComponent,
+        MessageOfTheDayModalComponent
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
@@ -45,6 +53,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
+
+    // store the current message of the day
+    protected messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
     public readonly LayoutService = inject(LayoutService);
     private readonly document = inject(DOCUMENT);
@@ -56,7 +67,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
                 private selectConfig: NgSelectConfig,
                 private TranslocoService: TranslocoService,
                 private colorService: ColorModeService,
-                private cdr: ChangeDetectorRef
+                private cdr: ChangeDetectorRef,
+                private MessageOfTheDayService: MessagesOfTheDayService
     ) {
         // Add an icon to the library for convenient access in other components
         library.addIconPacks(fas);
@@ -81,13 +93,26 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             if (theme === 'dark') {
                 this.document.body.classList.add('dark-theme');
                 this.LayoutService.setTheme('dark');
+            } else if (theme === 'auto') {
+                const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (osSystemDarkModeEnabled) {
+                    this.LayoutService.setTheme('dark');
+                } else {
+                    this.LayoutService.setTheme('light');
+                }
             } else {
                 this.document.body.classList.remove('dark-theme');
                 this.LayoutService.setTheme('light');
             }
-
         }));
-        
+
+        // Solely fetch the current message of the day.
+        this.subscription.add(this.MessageOfTheDayService.getCurrentMessageOfTheDay().subscribe((message: CurrentMessageOfTheDay) => {
+            if (message.messageOtdAvailable) {
+                this.messageOfTheDay = message;
+            }
+        }));
+
     }
 
     public ngOnDestroy(): void {

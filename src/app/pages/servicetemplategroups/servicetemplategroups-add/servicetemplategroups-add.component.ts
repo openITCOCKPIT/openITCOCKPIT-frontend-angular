@@ -17,7 +17,6 @@ import {
     NavItemComponent,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -88,22 +87,20 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
-
-    private subscriptions: Subscription = new Subscription();
-    private ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
-    private router: Router = inject(Router);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+    private readonly router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
-    public errors: GenericValidationError = {} as GenericValidationError;
-    public createAnother: boolean = false;
-
-    protected servicetemplates: SelectKeyValue[] = [];
-
-    public post: ServiceTemplateGroupsAddPostServicetemplategroup = {} as ServiceTemplateGroupsAddPostServicetemplategroup;
-    protected containers: SelectKeyValue[] = [];
-    private route = inject(ActivatedRoute);
+    private readonly route = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
+    private readonly cdr = inject(ChangeDetectorRef);
+
+    protected errors: GenericValidationError = {} as GenericValidationError;
+    protected createAnother: boolean = false;
+    protected servicetemplates: SelectKeyValue[] = [];
+    protected post: ServiceTemplateGroupsAddPostServicetemplategroup = {} as ServiceTemplateGroupsAddPostServicetemplategroup;
+    protected containers: SelectKeyValue[] = [];
 
     constructor() {
         this.post = this.getDefaultPost();
@@ -119,7 +116,6 @@ export class ServicetemplategroupsAddComponent implements OnInit, OnDestroy {
     }
 
     public addServicetemplategroup(): void {
-
         this.subscriptions.add(this.ServicetemplategroupsService.addServicetemplateGroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();

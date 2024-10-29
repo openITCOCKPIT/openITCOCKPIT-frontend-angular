@@ -1,3 +1,7 @@
 fieldset.hostWithServicesToDeploy > div {
     padding-left: 10px;
 }
+
+.alert-icon {
+    margin-right: 10px;
+}

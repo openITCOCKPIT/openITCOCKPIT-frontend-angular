@@ -1,0 +1,47 @@
+.agent-mode-box-pull:before {
+    content: "\f019";
+    font: var(--fa-font-solid);
+    color: var(--indigo-200);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    padding: 0;
+    text-shadow: 1px 1px var(--indigo-400);
+}
+
+.agent-mode-box-push:before {
+    content: "\f093";
+    font: var(--fa-font-solid);
+    color: var(--indigo-200);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    padding: 0;
+    text-shadow: 1px 1px var(--indigo-400);
+}
+
+.agent-mode-box-create-services:before {
+    content: "\f085";
+    font: var(--fa-font-solid);
+    color: var(--green-200);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    padding: 0;
+    text-shadow: 1px 1px var(--green-400);;
+}
+
+.agent-mode-box-config-edit:before {
+    content: "\f21b";
+    font: var(--fa-font-solid);
+    color: #72a4f7;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    padding: 0;
+    text-shadow: 1px 1px var(--indigo-400);
+}

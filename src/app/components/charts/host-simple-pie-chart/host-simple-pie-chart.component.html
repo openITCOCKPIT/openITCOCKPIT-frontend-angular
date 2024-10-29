@@ -1,0 +1,27 @@
+<div class="simplepie-container">
+
+    <h5>
+        {{ headline }}
+    </h5>
+
+
+    <div class="d-flex">
+
+        <!-- This will become the chart -->
+        <div #simplePieContainer [style.width.px]="width()"></div>
+
+        <div class="legend">
+            <div class="legend-items">
+                @for (metric of values; track $index) {
+                    {{ metric.name }} <span [style.color]="metric.color"></span><br>
+                }
+            </div>
+        </div>
+
+        <div class="legend-placeholder">
+            <!-- Just a space so the legend looks good -->
+        </div>
+    </div>
+
+</div>
+

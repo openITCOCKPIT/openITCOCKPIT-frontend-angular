@@ -93,21 +93,19 @@
 
                 <ng-container *ngIf="hostId !== null">
                     <c-alert color="light">
-                        <div class="row">
-                            <div class="col alertLeftIcon">
-                                <fa-stack>
-                                    <fa-icon [icon]="['fas', 'circle']" class="text-info"
-                                             stackItemSize="2x"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'info']" class="text-light"
-                                             stackItemSize="1x"></fa-icon>
-                                </fa-stack>
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-7 icon-stack-3x text-info"></i>
+                                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                                </span>
                             </div>
-                            <div class="col-11">
-                                <h5 class="text-primary">
+                            <div class="flex-1 pl-5">
+                                <span class="h5 text-info">
                                     {{ t('Please notice') }}
-                                </h5>
+                                </span>
+                                <br>
                                 {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
-
                             </div>
                         </div>
                     </c-alert>
@@ -115,14 +113,12 @@
 
                 <ng-container *ngIf="hostId !== null">
                     <fieldset class="hostWithServicesToDeploy">
-                        <legend>
-                            <h4>{{ t('Service/s to deploy on target host:') }}</h4>
-                        </legend>
+                        <h5>{{ t('Service/s to deploy on target host:') }}</h5>
                         <div
                             *ngFor="let hostWithServicesToDeploy of hostsWithServicetemplatesForDeploy; let i = index;">
 
                             <label for="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}">
-                                <input type="checkbox"
+                                <input type="checkbox" cFormCheckInput
                                        id="checkbox_{{hostWithServicesToDeploy.servicetemplate.id}}"
                                        [ngModelOptions]="{standalone: true}"
                                        [(ngModel)]="hostWithServicesToDeploy.createServiceOnTargetHost"
