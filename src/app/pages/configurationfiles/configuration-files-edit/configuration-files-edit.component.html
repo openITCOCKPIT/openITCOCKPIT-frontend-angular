@@ -77,8 +77,18 @@
                     <oitc-dynamic-configuration-file
                         [dbKey]="dbKey"
                         [submit$]="submit$"></oitc-dynamic-configuration-file>
+
                 } @else if (this.dbKey === ConfigurationFilesDbKeys.DbBackend) {
-                    Handle db backend config
+                    <!-- Use a specialized config file component for the database backend -->
+                    <oitc-configuration-file-db-backend
+                        [dbKey]="dbKey"
+                        [submit$]="submit$"></oitc-configuration-file-db-backend>
+
+                } @else if (this.dbKey === ConfigurationFilesDbKeys.PerfdataBackend) {
+                    <oitc-configuration-file-perfdata-backend
+                        [dbKey]="dbKey"
+                        [submit$]="submit$"
+                    ></oitc-configuration-file-perfdata-backend>
                 } @else {
                     <c-alert color="danger" class="d-flex align-items-center">
                         <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>

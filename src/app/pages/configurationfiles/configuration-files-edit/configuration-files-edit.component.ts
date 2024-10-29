@@ -38,6 +38,12 @@ import {
     DynamicConfigurationFileComponent
 } from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import {
+    ConfigurationFileDbBackendComponent
+} from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';
+import {
+    ConfigurationFilePerfdataBackendComponent
+} from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -71,7 +77,9 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         FormCheckInputDirective,
         PaginatorModule,
         AlertComponent,
-        DynamicConfigurationFileComponent
+        DynamicConfigurationFileComponent,
+        ConfigurationFileDbBackendComponent,
+        ConfigurationFilePerfdataBackendComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',
