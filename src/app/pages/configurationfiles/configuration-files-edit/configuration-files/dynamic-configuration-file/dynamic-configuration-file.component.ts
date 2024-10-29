@@ -30,6 +30,13 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
+/**
+ * This component will just loop through all configuration fields and will create an input according to the field type.
+ * A "string" will be an <input type="text"> and "bool" will become a checkbox for example.
+ *
+ * If you need to build a complex form with select elements or enable / disable different parts of the form depending on
+ * the value of another field, you should create a new component for that configuration file.
+ */
 @Component({
     selector: 'oitc-dynamic-configuration-file',
     standalone: true,

@@ -56,21 +56,35 @@
                 We use the dbKey to load the correct component
 
                 The component itself will load the configuration file and display it
-                -->
-                @switch (ConfigFile.dbKey) {
-                    @case (ConfigurationFilesDbKeys.AfterExport) {
-                        <oitc-dynamic-configuration-file
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"></oitc-dynamic-configuration-file>
-                    }
-                    @default {
-                        <c-alert color="danger" class="d-flex align-items-center">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>
-                            {{ t('Error invalid configuration file') }}
-                        </c-alert>
-                    }
-                }
 
+                Under normal circumstances this should be a switch/case statement.
+                However, Angular can not handle multiple cases, so we need to go with an if statement for "now" (7 years and counting)
+                https://github.com/angular/angular/issues/14659
+
+                Otherwise we would have to copy paste all of the code for each case
+                 -->
+                @if (this.dbKey === ConfigurationFilesDbKeys.AfterExport ||
+                this.dbKey === ConfigurationFilesDbKeys.Gearman ||
+                this.dbKey === ConfigurationFilesDbKeys.GraphiteWeb ||
+                this.dbKey === ConfigurationFilesDbKeys.PhpFpmOitc ||
+                this.dbKey === ConfigurationFilesDbKeys.Statusengine3Cfg ||
+                this.dbKey === ConfigurationFilesDbKeys.StatusengineCfg ||
+                this.dbKey === ConfigurationFilesDbKeys.SnmpTrapCfgs_snmptrapd ||
+                this.dbKey === ConfigurationFilesDbKeys.SnmpTrapCfgs_snmpttIni ||
+                this.dbKey === ConfigurationFilesDbKeys.SnmpTrapCfgs_snmptrapdConf ||
+                this.dbKey === ConfigurationFilesDbKeys.PrometheusCfgs_prometheus) {
+                    <!-- Generate the form on the fly using the dynamic-configuration-file component -->
+                    <oitc-dynamic-configuration-file
+                        [dbKey]="dbKey"
+                        [submit$]="submit$"></oitc-dynamic-configuration-file>
+                } @else if (this.dbKey === ConfigurationFilesDbKeys.DbBackend) {
+                    Handle db backend config
+                } @else {
+                    <c-alert color="danger" class="d-flex align-items-center">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>
+                        {{ t('Error invalid configuration file') }}
+                    </c-alert>
+                }
 
             </c-card-body>
 

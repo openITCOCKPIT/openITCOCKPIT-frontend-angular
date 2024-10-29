@@ -26,5 +26,6 @@ export enum ConfigurationFilesFieldTypes {
     float = 'float',
     int = 'int',
     bool = 'bool',
-    string = 'string'
+    string = 'string',
+    text = 'text'
 }

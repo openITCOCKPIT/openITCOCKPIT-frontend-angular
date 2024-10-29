@@ -63,6 +63,22 @@
                 </div>
             </div>
         }
+        @case (ConfigurationFilesFieldTypes.text) {
+            <div class="mb-3">
+                <label cLabel [for]="field.field">
+                    {{ field.field }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <textarea cFormControl
+                          [attr.id]="field.field"
+                          [name]="field.field"
+                          class="code-font"
+                          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
+                          [(ngModel)]="field.value"
+                          rows="6"></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+            </div>
+        }
         @default {
             <div class="mb-3">
                 <label cLabel [for]="field.field">
