@@ -44,6 +44,9 @@ import {
 import {
     ConfigurationFilePerfdataBackendComponent
 } from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
+import {
+    ConfigurationFileNagiosCfgComponent
+} from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -79,7 +82,8 @@ import {
         AlertComponent,
         DynamicConfigurationFileComponent,
         ConfigurationFileDbBackendComponent,
-        ConfigurationFilePerfdataBackendComponent
+        ConfigurationFilePerfdataBackendComponent,
+        ConfigurationFileNagiosCfgComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',

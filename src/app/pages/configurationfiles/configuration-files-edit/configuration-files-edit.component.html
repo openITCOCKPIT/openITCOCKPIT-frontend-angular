@@ -89,6 +89,13 @@
                         [dbKey]="dbKey"
                         [submit$]="submit$"
                     ></oitc-configuration-file-perfdata-backend>
+
+                } @else if (this.dbKey === ConfigurationFilesDbKeys.NagiosCfg) {
+                    <oitc-configuration-file-nagios-cfg
+                        [dbKey]="dbKey"
+                        [submit$]="submit$"
+                    ></oitc-configuration-file-nagios-cfg>
+                    
                 } @else {
                     <c-alert color="danger" class="d-flex align-items-center">
                         <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>
