@@ -137,7 +137,7 @@
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
                     <th scope="col" mat-sort-header="Mkchecks.name">
-                        {{ t('Agent name') }}
+                        {{ t('Check name') }}
                     </th>
                     <th scope="col" mat-sort-header="Servicetemplates.name">
                         {{ t('Service template name') }}
@@ -151,7 +151,7 @@
                 <tr *ngFor="let mkcheck of mkchecks.mkchecks">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['CheckmkModule', 'mkagents', 'delete']"
+                            *oitcPermission="['CheckmkModule', 'mkchecks', 'delete']"
                             [disabled]="false"
                             [item]="mkcheck"></oitc-item-select>
 

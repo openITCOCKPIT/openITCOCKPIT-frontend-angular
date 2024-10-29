@@ -134,8 +134,8 @@ export class MkchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     public loadMkchecks(): void {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(
-            this.MkchecksService.getIndex(this.params).subscribe((agentchecks) => {
-                this.mkchecks = agentchecks;
+            this.MkchecksService.getIndex(this.params).subscribe((mkchecks) => {
+                this.mkchecks = mkchecks;
                 this.cdr.markForCheck();
             })
         );

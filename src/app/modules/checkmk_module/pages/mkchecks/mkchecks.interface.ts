@@ -39,3 +39,14 @@ export interface Mkcheck {
     modified: string
     servicetemplate: ServicetemplateEntity
 }
+
+/**********************
+ *    Add action      *
+ **********************/
+export interface MkcheckPost {
+    id?: number
+    name: string
+    servicetemplate_id: number
+    created?: string
+    modified?: string
+}
