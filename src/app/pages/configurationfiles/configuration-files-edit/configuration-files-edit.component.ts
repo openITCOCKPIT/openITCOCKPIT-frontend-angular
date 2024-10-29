@@ -47,6 +47,9 @@ import {
 import {
     ConfigurationFileNagiosCfgComponent
 } from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
+import {
+    ConfigurationFileModGearmanModuleComponent
+} from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -83,7 +86,8 @@ import {
         DynamicConfigurationFileComponent,
         ConfigurationFileDbBackendComponent,
         ConfigurationFilePerfdataBackendComponent,
-        ConfigurationFileNagiosCfgComponent
+        ConfigurationFileNagiosCfgComponent,
+        ConfigurationFileModGearmanModuleComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',
