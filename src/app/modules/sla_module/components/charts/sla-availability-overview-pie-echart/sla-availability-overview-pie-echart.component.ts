@@ -2,8 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     inject,
-    Input,
+    input,
     OnChanges,
     OnDestroy,
     OnInit,
@@ -12,12 +13,11 @@ import {
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
-import { ColorModeService } from '@coreui/angular';
 import { TranslocoService } from '@jsverse/transloco';
-import { Availability, Sla } from '../../../pages/slas/Slas.interface';
+import { Availability } from '../../../pages/slas/Slas.interface';
 import { PieChartMetric } from '../../../../../components/charts/charts.interface';
+import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-sla-availability-overview-pie-echart',
@@ -34,15 +34,14 @@ import { PieChartMetric } from '../../../../../components/charts/charts.interfac
 })
 export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChanges, OnDestroy {
 
-    @Input() public sla: Sla = {} as Sla;
-    @Input() public availability: Availability = {} as Availability;
+    public availability = input<Availability>({} as Availability);
 
     public theme: null | 'dark' = null;
     public chartOption: EChartsOption = {};
     public echartsInstance: any;
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ColorModeService = inject(ColorModeService);
+    private readonly LayoutService = inject(LayoutService);
     private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -51,30 +50,19 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
     private OutageLabel: string = this.TranslocoService.translate('Outage');
 
     public constructor() {
-        const colorMode$ = toObservable(this.ColorModeService.colorMode);
-
-        this.subscriptions.add(colorMode$.subscribe((theme) => {
-            //console.log('Change in theme detected', theme);
-            const osSystemDarkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            switch (theme) {
-                case 'light':
-                    this.theme = null;
-                    break;
-
-                case 'dark':
-                    this.theme = 'dark';
-                    break;
-
-                case 'auto':
-                    if (osSystemDarkModeEnabled) {
-                        this.theme = 'dark';
-                    } else {
-                        this.theme = null;
-                    }
-                    break;
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = null;
+            if (theme === 'dark') {
+                this.theme = 'dark';
             }
 
+            this.cdr.markForCheck();
         }));
+
+        effect(() => {
+            this.renderChart();
+            this.cdr.markForCheck();
+        });
     }
 
     public ngOnInit(): void {
@@ -102,7 +90,7 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
 
     private renderChart() {
 
-        const passed = this.availability.status_percent;
+        const passed = this.availability().status_percent;
         const failed = 100 - passed;
         let data: PieChartMetric[] = [
             {value: Number(failed.toFixed(3)), name: this.OutageLabel},
