@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ConfigurationFilesService } from '../configuration-files.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -27,13 +27,17 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ConfigurationFileInformation } from '../configuration-files.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { PaginatorModule } from 'primeng/paginator';
+import {
+    DynamicConfigurationFileComponent
+} from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -66,7 +70,8 @@ import { PaginatorModule } from 'primeng/paginator';
         CardFooterComponent,
         FormCheckInputDirective,
         PaginatorModule,
-        AlertComponent
+        AlertComponent,
+        DynamicConfigurationFileComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',
@@ -79,11 +84,19 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
 
     public isRestoring: boolean = false;
 
+    // The submit button is in this component, but each configuration file has its own child component.
+    // The submit action is implemented in the child component.
+    // The child will subscribe to this observable to know when to submit.
+    private readonly submit$$: Subject<void> = new Subject<void>();
+    public readonly submit$ = this.submit$$.asObservable();
+
     private subscriptions: Subscription = new Subscription();
     private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly route = inject(ActivatedRoute);
     private readonly modalService = inject(ModalService);
+    private readonly notyService = inject(NotyService);
     private readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
 
@@ -121,8 +134,9 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
     }
 
     public submit(): void {
-        // todo
-        console.log('implement submit');
+        // We do not submit the form by our self. The child component will do this.
+        // We just tell the child component that submit was clicked.
+        this.submit$$.next();
     }
 
     // Modal functions
@@ -136,9 +150,23 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
 
     public restore() {
         this.isRestoring = true;
+        if (this.dbKey) {
+            this.ConfigurationFilesService.restoreDefault(this.dbKey).subscribe((response) => {
+                this.cdr.markForCheck();
+                this.isRestoring = false;
 
-        // todo
-        console.log('implement restore default via Signal or so??');
+                if (response.success) {
+                    this.notyService.genericSuccess(this.TranslocoService.translate('Config successfully restored to default'));
+                    this.hideModal();
+                    this.router.navigate(['/', 'ConfigurationFiles', 'index']);
+                    return;
+                }
+
+                this.notyService.genericError();
+                return;
+
+            });
+        }
     }
 
     protected readonly ConfigurationFilesDbKeys = ConfigurationFilesDbKeys;

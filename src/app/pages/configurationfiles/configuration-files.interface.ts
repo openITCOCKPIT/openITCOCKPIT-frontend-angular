@@ -1,4 +1,4 @@
-import { ConfigurationFilesDbKeys } from './configuration-files.enum';
+import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from './configuration-files.enum';
 
 /**********************
  *    Index action    *
@@ -33,4 +33,24 @@ export interface ConfigurationFileInformation {
     // the data twice.
     // So angularDirective is deprecated and should be removed in the future.
     angularDirective: string
+}
+
+export interface ConfigurationEditorRootResponse {
+    config: ConfigurationEditorConfig
+    fields: ConfigurationEditorField[]
+    _csrfToken: string
+}
+
+export type ConfigurationEditorConfig = {
+    [key in ConfigurationFilesFieldTypes]?: {
+        [key: string]: string | number
+    }
+}
+
+export interface ConfigurationEditorField {
+    type: ConfigurationFilesFieldTypes
+    field: string // e.g. "username"
+    value: string | number // e.g. "naemon"
+    placeholder: string | number // e.g. "naemon"
+    help: string // e.g. "The username of the Monitoring Engine"
 }

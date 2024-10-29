@@ -22,7 +22,7 @@
 
     <oitc-form-loader *ngIf="!ConfigFile"></oitc-form-loader>
 
-    <form *ngIf="ConfigFile" (ngSubmit)="submit()">
+    <form *ngIf="ConfigFile && dbKey" (ngSubmit)="submit()">
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>{{ t('Edit configuration file ') }}
@@ -59,7 +59,9 @@
                 -->
                 @switch (ConfigFile.dbKey) {
                     @case (ConfigurationFilesDbKeys.AfterExport) {
-                        <div> hier after export</div>
+                        <oitc-dynamic-configuration-file
+                            [dbKey]="dbKey"
+                            [submit$]="submit$"></oitc-dynamic-configuration-file>
                     }
                     @default {
                         <c-alert color="danger" class="d-flex align-items-center">
