@@ -61,6 +61,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
 
     public dbKey = input.required<ConfigurationFilesDbKeys>();
+    public moduleUrl = input.required<null | string>();
     public submit$ = input.required<Observable<void>>();
 
     public errors: GenericValidationError | null = null;
@@ -105,7 +106,7 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
     public loadConfigFile(): void {
         const dbKey = this.dbKey()
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey).subscribe((result) => {
+            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, this.moduleUrl()).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.config = result.config;
                 this.fields = result.fields;
@@ -129,7 +130,7 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), this.config)
+            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), this.moduleUrl(), this.config)
                 .subscribe((result) => {
                     this.cdr.markForCheck();
 

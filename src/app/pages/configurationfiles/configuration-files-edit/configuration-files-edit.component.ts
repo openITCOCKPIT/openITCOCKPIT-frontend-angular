@@ -166,8 +166,8 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
 
     public restore() {
         this.isRestoring = true;
-        if (this.dbKey) {
-            this.ConfigurationFilesService.restoreDefault(this.dbKey).subscribe((response) => {
+        if (this.dbKey && this.ConfigFile) {
+            this.ConfigurationFilesService.restoreDefault(this.dbKey, this.ConfigFile.moduleUrl).subscribe((response) => {
                 this.cdr.markForCheck();
                 this.isRestoring = false;
 

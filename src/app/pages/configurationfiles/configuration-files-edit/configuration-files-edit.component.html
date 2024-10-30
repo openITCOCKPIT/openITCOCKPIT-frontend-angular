@@ -76,6 +76,7 @@
                     <!-- Generate the form on the fly using the dynamic-configuration-file component -->
                     <oitc-dynamic-configuration-file
                         [dbKey]="dbKey"
+                        [moduleUrl]="ConfigFile.moduleUrl"
                         [submit$]="submit$"></oitc-dynamic-configuration-file>
 
                 } @else if (this.dbKey === ConfigurationFilesDbKeys.DbBackend) {

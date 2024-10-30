@@ -28,6 +28,11 @@ export interface ConfigurationFileInformation {
     realOutfile: string,
     dbKey: ConfigurationFilesDbKeys,
 
+    // By default, we load configuration files from the core API endpoint.
+    // Some config files are provided by a module, of moduleUrl is set, this is the URL prefix we need to use
+    // for example "prometheus_module"
+    moduleUrl: null | string,
+
     // in the AngularJS days we used this to dynamically load the directive. This is no longer possible in Angular.
     // instead we use a switch case now, but we use the dbKey instead of the directive name so we don't have to define
     // the data twice.

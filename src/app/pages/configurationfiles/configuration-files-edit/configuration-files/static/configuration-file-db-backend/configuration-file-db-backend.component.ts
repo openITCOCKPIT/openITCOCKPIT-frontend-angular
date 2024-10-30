@@ -88,7 +88,7 @@ export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
     public loadConfigFile(): void {
         const dbKey = this.dbKey()
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey).subscribe((result) => {
+            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.config = result.config;
                 this.fields = result.fields;
@@ -112,7 +112,7 @@ export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), this.config)
+            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config)
                 .subscribe((result) => {
                     this.cdr.markForCheck();
 
