@@ -68,7 +68,7 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
     public fields: ConfigurationEditorField[] = [];
 
     /**
-     * The serve returns the current configuration.
+     * The server returns the current configuration.
      * Instead of dealing with the configuration object directly, we use the "fields" array which provides the
      * configuration in an Angular friendly way.
      *

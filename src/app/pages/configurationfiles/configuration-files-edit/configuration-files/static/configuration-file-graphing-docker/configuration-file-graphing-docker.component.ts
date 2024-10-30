@@ -30,9 +30,43 @@ import { RequiredIconComponent } from '../../../../../../components/required-ico
 import { NgIf } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
+import { UserTimezonesSelect } from '../../../../../users/users.interface';
+import { UsersService } from '../../../../../users/users.service';
+import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
+import { TimezoneConfiguration, TimezoneService } from '../../../../../../services/timezone.service';
+
+// This view defines each input manually to keep an order that makes sense for the user.
+// To not have to work against TypeScript, we define all possible fields in the interface.
+export interface GraphingDockerConfig extends ConfigurationEditorConfig {
+    [ConfigurationFilesFieldTypes.string]: {
+        carbon_path: string
+        carbon_storage_schema: string
+        timezone: string
+        USE_AUTO_NETWORKING: string
+        docker_compose_subnet: string
+        victoria_metrics_storage_path: string
+    }
+    [ConfigurationFilesFieldTypes.int]: {
+        number_of_carbon_cache_instances: number
+        number_of_carbon_c_relay_workers: number
+        local_graphite_http_port: number
+        local_graphite_plaintext_port: number
+        victoria_metrics_retention_period: number
+        local_victoria_metrics_http_port: number
+    }
+    [ConfigurationFilesFieldTypes.float]: {
+        default_average_x_files_factor: number
+
+    }
+    [ConfigurationFilesFieldTypes.bool]: {
+        WHISPER_FALLOCATE_CREATE: number
+        enable_docker_userland_proxy: number
+    }
+}
 
 @Component({
-    selector: 'oitc-configuration-file-mod-gearman-module',
+    selector: 'oitc-configuration-file-graphing-docker',
     standalone: true,
     imports: [
         FormControlDirective,
@@ -47,33 +81,42 @@ import { TrueFalseDirective } from '../../../../../../directives/true-false.dire
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
-        TrueFalseDirective
+        TrueFalseDirective,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective
     ],
-    templateUrl: './configuration-file-mod-gearman-module.component.html',
-    styleUrl: './configuration-file-mod-gearman-module.component.css',
+    templateUrl: './configuration-file-graphing-docker.component.html',
+    styleUrl: './configuration-file-graphing-docker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDestroy {
+export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestroy {
 
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 
+    public timezones: UserTimezonesSelect[] = [];
+    public serverTimezone: TimezoneConfiguration | null = null;
+
     public errors: GenericValidationError | null = null;
-    public fields: ConfigurationEditorField[] = [];
+    public fields: ConfigurationEditorField[] = []; // Not used!
+
+    public fieldInfo: { [key: string]: { field: string, help: string, placeholder: string | number } } = {};
 
     /**
      * The server returns the current configuration.
-     * Instead of dealing with the configuration object directly, we use the "fields" array which provides the
-     * configuration in an Angular friendly way.
+     * Due to the view defines every field manually, we don't need to use the "fields" array in this case.
      *
-     * However, when we submit the new configuration, we have to copy the values from "fields" back into "config".
+     * THIS VIEW PATCHES DIRECTLY THE CONFIGURATION OBJECT !
      *
      * @public
      */
-    public config?: ConfigurationEditorConfig;
+    public config?: GraphingDockerConfig;
 
     private subscriptions: Subscription = new Subscription();
     private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
+    private readonly UsersService = inject(UsersService);
+    private readonly TimezoneService = inject(TimezoneService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private readonly notyService = inject(NotyService);
@@ -88,6 +131,8 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
     public ngOnInit(): void {
         const submit$ = this.submit$();
 
+        this.loadTimezones();
+
         this.subscriptions.add(submit$.subscribe(() => {
             this.submit();
         }));
@@ -97,33 +142,39 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
         this.subscriptions.unsubscribe();
     }
 
+    public loadTimezones(): void {
+        this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
+            this.timezones = data.timezones;
+            this.cdr.markForCheck();
+        }));
+
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.serverTimezone = data;
+            this.cdr.markForCheck();
+        }));
+    }
+
     public loadConfigFile(): void {
         const dbKey = this.dbKey()
         if (dbKey) {
             this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
                 this.cdr.markForCheck();
-                this.config = result.config;
-                this.fields = result.fields;
+                this.config = result.config as GraphingDockerConfig;
+
+                result.fields.forEach((field) => {
+                    this.fieldInfo[field.field] = {
+                        field: field.field,
+                        help: field.help,
+                        placeholder: field.placeholder
+                    }
+                });
             }));
 
         }
     }
 
     private submit() {
-        if (this.config && this.fields) {
-
-            // Copy the values from the fields array back into the config object.
-            for (const field of this.fields) {
-                const fieldName = field.field;
-
-                if (this.config[field.type]) {
-                    if (this.config[field.type]?.hasOwnProperty(fieldName)) {
-                        //@ts-ignore
-                        this.config[field.type][fieldName] = field.value;
-                    }
-                }
-            }
-
+        if (this.config) {
             this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config)
                 .subscribe((result) => {
                     this.cdr.markForCheck();
@@ -147,4 +198,5 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
     }
 
     protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
+
 }

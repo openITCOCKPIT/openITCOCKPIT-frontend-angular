@@ -53,6 +53,9 @@ import {
 import {
     ConfigurationFileNstaMasterComponent
 } from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
+import {
+    ConfigurationFileGraphingDockerComponent
+} from './configuration-files/static/configuration-file-graphing-docker/configuration-file-graphing-docker.component';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -91,7 +94,8 @@ import {
         ConfigurationFilePerfdataBackendComponent,
         ConfigurationFileNagiosCfgComponent,
         ConfigurationFileModGearmanModuleComponent,
-        ConfigurationFileNstaMasterComponent
+        ConfigurationFileNstaMasterComponent,
+        ConfigurationFileGraphingDockerComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',

@@ -64,7 +64,7 @@ export class ConfigurationFileNstaMasterComponent implements OnInit, OnDestroy {
     public disableInputs: boolean = false;
 
     /**
-     * The serve returns the current configuration.
+     * The server returns the current configuration.
      * Instead of dealing with the configuration object directly, we use the "fields" array which provides the
      * configuration in an Angular friendly way.
      *
@@ -105,7 +105,7 @@ export class ConfigurationFileNstaMasterComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.config = result.config;
-                this.fields = result.fields;
+                this.fields = result.fields.reverse(); // The reverse is a hacky way to make the checkbox appear at the top of the form.
                 this.checkDisableInputs();
             }));
 
