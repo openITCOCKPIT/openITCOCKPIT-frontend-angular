@@ -21,23 +21,23 @@
         </ol>
     </nav>
     <form cForm (ngSubmit)="submit()">
-    <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>
-                {{ t('Create new Status page') }}
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
-                            color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'long-arrow-alt-left']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Create new Status page') }}
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
+                                color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'long-arrow-alt-left']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
 
-        <c-card-body>
+            <c-card-body>
 
                 <div class="mb-3">
                     <label cLabel for="container">
@@ -68,7 +68,7 @@
                            name="Name"
                            oitcFormError [errors]="errors" errorField="name"
                            [(ngModel)]="post.name"
-                           >
+                    >
                     <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
                 </div>
                 <div class="mb-2">
@@ -83,7 +83,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom">
                         <h5>
                             {{ t('Access control') }}
                         </h5>
@@ -108,7 +108,7 @@
                 </div>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom"  [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom">
                         <h5>
                             {{ t('Downtime and Acknowledgements') }}
                         </h5>
@@ -158,7 +158,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgements"
-                                        name="showAcknowledgements"
+                                       name="showAcknowledgements"
                                        [(ngModel)]="post.show_acknowledgements">
                                 <label class="ps-2" for="showAcknowledgements">
                                     {{ t('Show acknowledgements') }}
@@ -174,7 +174,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgementComments"
-                                        name="showAcknowledgementComments"
+                                       name="showAcknowledgementComments"
                                        [disabled]="!post.show_acknowledgements"
                                        [(ngModel)]="post.show_acknowledgement_comments">
                                 <label class="ps-2" for="showAcknowledgementComments">
@@ -189,13 +189,9 @@
                 </c-row>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom"   [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom">
                         <h5>
                             {{ t('Status page items') }}
-                            <span class="text-danger font-xs pl-1 fw-300"
-                                  *ngIf="noItemsSelected">
-                                {{ t('You must select at least one configuration item for status page.') }}
-                            </span>
                         </h5>
                     </legend>
                 </fieldset>
@@ -210,9 +206,10 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHostgroups"
-                            [options]="hostgroups">
+                            [options]="hostgroups"
+                            oitcFormError [errors]="errors" errorField="selected_hostgroups">
                     </oitc-multi-select>
-
+                    <oitc-form-feedback [errors]="errors" errorField="selected_hostgroups"></oitc-form-feedback>
                     <ng-container class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
                         <div class="row pb-2">
                             <div class="col-4 bold">
@@ -262,8 +259,10 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadServicegroups"
-                            [options]="servicegroups">
+                            [options]="servicegroups"
+                            oitcFormError [errors]="errors" errorField="selected_servicegroups">
                     </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_servicegroups"></oitc-form-feedback>
                     <ng-container class="form-group" *ngIf="post.selected_servicegroups._ids.length > 0">
                         <div class="row pb-2">
                             <div class="col-4 bold">
@@ -313,8 +312,10 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHosts"
-                            [options]="hosts">
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="selected_hosts">
                     </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_hosts"></oitc-form-feedback>
                 </div>
                 <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
                     <div class="row pb-2">
@@ -345,7 +346,7 @@
                                     </div>
                                     <input class="form-control form-control-sm" type="text"
                                            name="alias_host"
-                                             [(ngModel)]="hosts[i]._joinData.display_alias"
+                                           [(ngModel)]="hosts[i]._joinData.display_alias"
                                            placeholder="Set alias for host">
                                 </div>
                             </div>
@@ -358,14 +359,16 @@
                         {{ t('Services') }}
                     </label>
                     <oitc-multi-select
-                        name="post.services._ids"
-                        id="post.services._ids"
-                        [(ngModel)]="post.selected_services._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadServices"
-                        [options]="services">
+                            name="post.services._ids"
+                            id="post.services._ids"
+                            [(ngModel)]="post.selected_services._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServices"
+                            [options]="services"
+                            oitcFormError [errors]="errors" errorField="selected_services">
                     </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="selected_services"></oitc-form-feedback>
                 </div>
                 <ng-container class="form-group" *ngIf="post.selected_services._ids.length > 0">
                     <div class="row pb-2">
@@ -405,19 +408,19 @@
                 </ng-container>
 
 
-        </c-card-body>
+            </c-card-body>
 
-        <c-card-footer class="text-end">
-            <button cButton class="ripple" color="primary" type="submit">
-                {{ t('Save') }}
-            </button>
-            <button [fallbackUrl]="['statuspages', 'index']" cButton class="ms-1 ripple" color="default"
-                    oitcBackButton
-                    type="button">
-                {{ t('Cancel') }}
-            </button>
-        </c-card-footer>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+                <button [fallbackUrl]="['statuspages', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+            </c-card-footer>
 
-    </c-card>
+        </c-card>
     </form>
 </ng-container>

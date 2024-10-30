@@ -188,6 +188,18 @@ export class StatuspagesService {
             );
     }
 
+    public editStatuspage(id: number): Observable<StatuspagePost>  {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/statuspages/edit/${id}.json`, {params: {angular: true}})
+            .pipe(
+                map(data => {
+                    return data.statuspage.Statuspage;
+                }),
+            );
+
+
+    }
+
 
     public delete (item: DeleteAllItem): Observable<Object> {
         const proxyPath = this.proxyPath;

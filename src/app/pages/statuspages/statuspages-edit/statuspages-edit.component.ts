@@ -23,12 +23,12 @@
  *     confirmation.
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { Router, RouterLink } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {
     CardBodyComponent,
     CardComponent, CardFooterComponent,
@@ -56,13 +56,12 @@ import {
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
-
 @Component({
-  selector: 'oitc-statuspages-add',
+  selector: 'oitc-statuspages-edit',
   standalone: true,
     imports: [
         TranslocoDirective,
@@ -95,19 +94,18 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         CardFooterComponent,
         RowComponent,
         InputGroupComponent,
-        AsyncPipe,
-        NgClass
+        AsyncPipe
     ],
-  templateUrl: './statuspages-add.component.html',
-  styleUrl: './statuspages-add.component.css',
+  templateUrl: './statuspages-edit.component.html',
+  styleUrl: './statuspages-edit.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatuspagesAddComponent implements OnInit, OnDestroy {
-
+export class StatuspagesEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     public readonly PermissionsService = inject(PermissionsService);
     private cdr = inject(ChangeDetectorRef);
+    public id: number = 0;
     public containers: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValueExtended[] = [];
     public hosts: SelectKeyValueExtended[] = [];
@@ -115,14 +113,15 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public servicegroups: SelectKeyValueExtended[] = [];
     public post: StatuspagePost = {} as StatuspagePost;
     public errors: GenericValidationError | null = null;
-    public noItemsSelected: boolean = false;
 
-    constructor(private _router: Router) { }
+    constructor(private route: ActivatedRoute) { }
 
     public ngOnInit(): void {
-            //Fire on page load
-            this.post = this.getDefaultPost();
-            this.loadContainers();
+        this.id = Number(this.route.snapshot.paramMap.get('id'));
+        //Fire on page load
+        //this.post = this.getDefaultPost();
+        this.load();
+        this.loadContainers();
         this.cdr.markForCheck();
     }
 
@@ -135,6 +134,8 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
+                //this.load();
+
             })
         );
     }
@@ -191,7 +192,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
                 result.map((item: SelectValueExtended) => {
                     let objectEntry: SelectKeyValueExtended = {key: 0,
-                         value: '',
+                        value: '',
                         id: 0,
                         _joinData: {display_alias: ''}};
                     objectEntry.key = item.key;
@@ -223,6 +224,15 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                     servicegroupsObjects.push(objectEntry);
                 });
                 this.servicegroups = servicegroupsObjects;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public load() {
+        this.subscriptions.add(this.StatuspagesService.editStatuspage(this.id)
+            .subscribe((result) => {
+                this.post = result;
                 this.cdr.markForCheck();
             })
         );
@@ -276,7 +286,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     // Create another
                     this.errors = null;
-                    this._router.navigate(['statuspages', 'index'])
+                 //   this._router.navigate(['statuspages', 'index'])
 
                     return;
                 }
@@ -284,15 +294,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                 // Error
                 const errorResponse = result.data as GenericValidationError;
                 if (result) {
-                    this.noItemsSelected = false;
                     this.errors = errorResponse;
-                    if(this.errors.hasOwnProperty('selected_hostgroups') ||
-                        this.errors.hasOwnProperty('selected_servicegroups') ||
-                        this.errors.hasOwnProperty('selected_hosts') ||
-                        this.errors.hasOwnProperty('selected_services')
-                    ) {
-                        this.noItemsSelected = true;
-                    }
                 }
 
             })
@@ -329,6 +331,4 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    protected readonly String = String;
-    protected readonly Number = Number;
 }
