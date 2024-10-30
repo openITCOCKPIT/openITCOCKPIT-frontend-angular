@@ -57,6 +57,10 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
 import {
     SlaAvailabilityOverviewPieEchartComponent
 } from '../../../components/charts/sla-availability-overview-pie-echart/sla-availability-overview-pie-echart.component';
+import {
+    SlaHostsOverviewBarEchartComponent
+} from '../../../components/charts/sla-hosts-overview-bar-echart/sla-hosts-overview-bar-echart.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'oitc-slas-view-details',
@@ -109,7 +113,9 @@ import {
         AsyncPipe,
         BadgeOutlineComponent,
         KeyValuePipe,
-        SlaAvailabilityOverviewPieEchartComponent
+        SlaAvailabilityOverviewPieEchartComponent,
+        SlaHostsOverviewBarEchartComponent,
+        SkeletonModule
     ],
     templateUrl: './slas-view-details.component.html',
     styleUrl: './slas-view-details.component.css',

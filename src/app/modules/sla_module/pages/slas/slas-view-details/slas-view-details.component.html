@@ -69,269 +69,354 @@
         <c-card-body>
 
             <c-row class="pb-2">
-                <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="border-right">
-                    <oitc-sla-availability-overview-pie-echart [availability]="details.availability"
-                                                               *ngIf="details.sla"></oitc-sla-availability-overview-pie-echart>
-                </c-col>
-                <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="pt-2">
-                    <c-row>
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Evaluation interval') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            {{ details.sla.evaluation_interval }}
-                        </c-col>
-                    </c-row>
-                    <c-row class="pt-2">
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Thresholds') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            <oitc-badge-outline color="warning" [hidden]="!details.sla.warning_threshold"
-                                                class="me-1">
-                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                {{ details.sla.warning_threshold }} %
-                            </oitc-badge-outline>
-                            <oitc-badge-outline color="danger" [hidden]="!details.sla.minimal_availability">
-                                <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                {{ details.sla.minimal_availability }} %
-                            </oitc-badge-outline>
-                        </c-col>
-                    </c-row>
-                    <c-row class="pt-2">
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Container') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
-                                <span *ngFor="let container of details.sla.main_container">/
-                                    <a [routerLink]="['/', 'browsers', 'index']"
-                                       [queryParams]="{ containerId: container.id }"
-                                       *ngIf="container.id != null">
-                                        {{ container.name }}
-                                    </a>
+                @if (isLoading) {
+                    <c-col xs="12" md="12" sm="12" lg="3" xl="3"
+                           class="border-right d-flex justify-content-center align-items-center">
+                        <p-skeleton class="mt-2 p-2" shape="circle" width="100px" height="100px"></p-skeleton>
+                    </c-col>
+                    <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="pt-2">
+                        <c-row>
+                            <c-col lg="5" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="180px" height="19px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                } @else {
+                    <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="border-right">
+                        <oitc-sla-availability-overview-pie-echart [availability]="details.availability"
+                                                                   *ngIf="details.sla"></oitc-sla-availability-overview-pie-echart>
+                    </c-col>
+                    <c-col xs="12" md="12" sm="12" lg="3" xl="3" class="pt-2">
+                        <c-row>
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Evaluation interval') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                {{ details.sla.evaluation_interval }}
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Thresholds') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <oitc-badge-outline color="warning" [hidden]="!details.sla.warning_threshold"
+                                                    class="me-1">
+                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                    {{ details.sla.warning_threshold }} %
+                                </oitc-badge-outline>
+                                <oitc-badge-outline color="danger" [hidden]="!details.sla.minimal_availability">
+                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                    {{ details.sla.minimal_availability }} %
+                                </oitc-badge-outline>
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Container') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
+                                    <span *ngFor="let container of details.sla.main_container">/
+                                        <a [routerLink]="['/', 'browsers', 'index']"
+                                           [queryParams]="{ containerId: container.id }"
+                                           *ngIf="container.id != null">
+                                            {{ container.name }}
+                                        </a>
 
-                                    <span *ngIf="container.id === null">
+                                        <span *ngIf="container.id === null">
+                                            {{ container.name }}
+                                        </span>
+                                    </span>
+                                } @else {
+                                    <span *ngFor="let container of details.sla.main_container">/
                                         {{ container.name }}
                                     </span>
+                                }
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Consider downtimes') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <oitc-badge-outline color="success" [hidden]="!details.sla.consider_downtimes">
+                                    {{ t('Yes') }}
+                                </oitc-badge-outline>
+                                <oitc-badge-outline color="danger" [hidden]="details.sla.consider_downtimes">
+                                    {{ t('No') }}
+                                </oitc-badge-outline>
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Reflection state') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                <span [hidden]="details.sla.hard_state_only">
+                                    {{ t('soft and hard state') }}
                                 </span>
-                            } @else {
-                                <span *ngFor="let container of details.sla.main_container">/
-                                    {{ container.name }}
+                                <span [hidden]="!details.sla.hard_state_only">
+                                    {{ t('hard state only') }}
                                 </span>
-                            }
-                        </c-col>
-                    </c-row>
-                    <c-row class="pt-2">
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Consider downtimes') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            <oitc-badge-outline color="success" [hidden]="!details.sla.consider_downtimes">
-                                {{ t('Yes') }}
-                            </oitc-badge-outline>
-                            <oitc-badge-outline color="danger" [hidden]="details.sla.consider_downtimes">
-                                {{ t('No') }}
-                            </oitc-badge-outline>
-                        </c-col>
-                    </c-row>
-                    <c-row class="pt-2">
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Reflection state') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            <span [hidden]="details.sla.hard_state_only">
-                                {{ t('soft and hard state') }}
-                            </span>
-                            <span [hidden]="!details.sla.hard_state_only">
-                                {{ t('hard state only') }}
-                            </span>
-                        </c-col>
-                    </c-row>
-                    <c-row class="pt-2">
-                        <c-col lg="5" md="12" xs="12">
-                            {{ t('Time period') }}:
-                        </c-col>
-                        <c-col lg="7" md="12" xs="12">
-                            {{ details.sla.timeperiod.name }}
-                        </c-col>
-                    </c-row>
-                </c-col>
+                            </c-col>
+                        </c-row>
+                        <c-row class="pt-2">
+                            <c-col lg="5" md="12" xs="12">
+                                {{ t('Time period') }}:
+                            </c-col>
+                            <c-col lg="7" md="12" xs="12">
+                                {{ details.sla.timeperiod.name }}
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                }
 
-                <c-col xs="12" md="12" sm="12" lg="8" xl="6">
-                    <c-row>
-                        <c-col lg="3" md="12" xs="12">
-                            <div class="p-2 bg-danger rounded overflow-hidden position-relative text-white mb-4">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
-                                            <span class="badge-clickable"
-                                                  [hidden]="!(details.sla.hostsOverview!.failed.count>0)"
-                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.failed.ids]">
-                                                {{ details.sla.hostsOverview!.failed.count }}
-                                            </span>
-                                            <span [hidden]="details.sla.hostsOverview!.failed.count>0">
-                                                {{ details.sla.hostsOverview!.failed.count }}
-                                            </span>
-                                        } @else {
-                                            <span>
-                                                {{ details.sla.hostsOverview!.failed.count }}
-                                            </span>
-                                        }
-                                        <small class="d-block m-0 l-h-n">
-                                            {{ t('Failed') }}
-                                        </small>
-                                    </h6>
+                @if (isLoading) {
+                    <c-col xs="12" md="12" sm="12" lg="8" xl="6">
+                        <c-row>
+                            <c-col md="12" lg="3" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="190px" height="80px"></p-skeleton>
+                            </c-col>
+                            <c-col md="12" lg="3" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="190px" height="80px"></p-skeleton>
+                            </c-col>
+                            <c-col md="12" lg="3" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="190px" height="80px"></p-skeleton>
+                            </c-col>
+                            <c-col md="12" lg="3" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="190px" height="80px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col lg="12" md="12" xs="12">
+                                <p-skeleton class="mt-2 p-2" width="835px" height="60px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                } @else {
+                    <c-col xs="12" md="12" sm="12" lg="8" xl="6">
+                        <c-row>
+                            <c-col lg="3" md="12" xs="12">
+                                <div class="p-2 bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                                <span class="badge-clickable"
+                                                      [hidden]="!(details.sla.hostsOverview!.failed.count>0)"
+                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.failed.ids]">
+                                                    {{ details.sla.hostsOverview!.failed.count }}
+                                                </span>
+                                                <span [hidden]="details.sla.hostsOverview!.failed.count>0">
+                                                    {{ details.sla.hostsOverview!.failed.count }}
+                                                </span>
+                                            } @else {
+                                                <span>
+                                                    {{ details.sla.hostsOverview!.failed.count }}
+                                                </span>
+                                            }
+                                            <small class="d-block m-0 l-h-n">
+                                                {{ t('Failed') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'bolt']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'bolt']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                        <c-col lg="3" md="12" xs="12">
-                            <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
-                                            <span class="badge-clickable"
-                                                  [hidden]="!(details.sla.hostsOverview!.warning.count>0)"
-                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.warning.ids]">
-                                                {{ details.sla.hostsOverview!.warning.count }}
-                                            </span>
-                                            <span [hidden]="details.sla.hostsOverview!.warning.count>0">
-                                                {{ details.sla.hostsOverview!.warning.count }}
-                                            </span>
-                                        } @else {
-                                            <span>
-                                                {{ details.sla.hostsOverview!.warning.count }}
-                                            </span>
-                                        }
-                                        <small class="d-block m-0 l-h-n">
-                                            {{ t('Warning') }}
-                                        </small>
-                                    </h6>
+                            </c-col>
+                            <c-col lg="3" md="12" xs="12">
+                                <div class="p-2 bg-warning rounded overflow-hidden position-relative text-white mb-g">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                                <span class="badge-clickable"
+                                                      [hidden]="!(details.sla.hostsOverview!.warning.count>0)"
+                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.warning.ids]">
+                                                    {{ details.sla.hostsOverview!.warning.count }}
+                                                </span>
+                                                <span [hidden]="details.sla.hostsOverview!.warning.count>0">
+                                                    {{ details.sla.hostsOverview!.warning.count }}
+                                                </span>
+                                            } @else {
+                                                <span>
+                                                    {{ details.sla.hostsOverview!.warning.count }}
+                                                </span>
+                                            }
+                                            <small class="d-block m-0 l-h-n">
+                                                {{ t('Warning') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                        <c-col lg="3" md="12" xs="12">
-                            <div
-                                class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
-                                            <span class="badge-clickable"
-                                                  [hidden]="!(details.sla.hostsOverview!.passed.count>0)"
-                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.passed.ids]">
-                                                {{ details.sla.hostsOverview!.passed.count }}
-                                            </span>
-                                            <span [hidden]="details.sla.hostsOverview!.passed.count>0">
-                                                {{ details.sla.hostsOverview!.passed.count }}
-                                            </span>
-                                        } @else {
-                                            <span>
-                                                {{ details.sla.hostsOverview!.passed.count }}
-                                            </span>
-                                        }
-                                        <small class="d-block m-0 l-h-n">
-                                            {{ t('Passed') }}
-                                        </small>
-                                    </h6>
+                            </c-col>
+                            <c-col lg="3" md="12" xs="12">
+                                <div
+                                    class="p-2 bg-success rounded overflow-hidden position-relative text-white mb-g">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                                <span class="badge-clickable"
+                                                      [hidden]="!(details.sla.hostsOverview!.passed.count>0)"
+                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.passed.ids]">
+                                                    {{ details.sla.hostsOverview!.passed.count }}
+                                                </span>
+                                                <span [hidden]="details.sla.hostsOverview!.passed.count>0">
+                                                    {{ details.sla.hostsOverview!.passed.count }}
+                                                </span>
+                                            } @else {
+                                                <span>
+                                                    {{ details.sla.hostsOverview!.passed.count }}
+                                                </span>
+                                            }
+                                            <small class="d-block m-0 l-h-n">
+                                                {{ t('Passed') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'check']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'check']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                        <c-col lg="3" md="12" xs="12">
-                            <div
-                                class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500">
-                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
-                                            <span class="badge-clickable"
-                                                  [hidden]="!(details.sla.hostsOverview!.not_calculated.count>0)"
-                                                  [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.not_calculated.ids]">
-                                                {{ details.sla.hostsOverview!.not_calculated.count }}
-                                            </span>
-                                            <span [hidden]="details.sla.hostsOverview!.not_calculated.count>0">
-                                                {{ details.sla.hostsOverview!.not_calculated.count }}
-                                            </span>
-                                        } @else {
-                                            <span>
-                                                {{ details.sla.hostsOverview!.not_calculated.count }}
-                                            </span>
-                                        }
-                                        <small class="d-block m-0 l-h-n">
-                                            {{ t('Not calculated') }}
-                                        </small>
-                                    </h6>
+                            </c-col>
+                            <c-col lg="3" md="12" xs="12">
+                                <div
+                                    class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'index']) | async) {
+                                                <span class="badge-clickable"
+                                                      [hidden]="!(details.sla.hostsOverview!.not_calculated.count>0)"
+                                                      [routerLink]="['/', 'hosts', 'index', details.sla.hostsOverview!.not_calculated.ids]">
+                                                    {{ details.sla.hostsOverview!.not_calculated.count }}
+                                                </span>
+                                                <span [hidden]="details.sla.hostsOverview!.not_calculated.count>0">
+                                                    {{ details.sla.hostsOverview!.not_calculated.count }}
+                                                </span>
+                                            } @else {
+                                                <span>
+                                                    {{ details.sla.hostsOverview!.not_calculated.count }}
+                                                </span>
+                                            }
+                                            <small class="d-block m-0 l-h-n">
+                                                {{ t('Not calculated') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'question']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'question']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                    </c-row>
+                            </c-col>
+                        </c-row>
 
-                    <c-row>
-                        <c-col lg="12" md="12" xs="12">
-                            <div class="gridContainer-weekdays">
-                                <div *ngFor="let weekday of weekdayNames"
-                                     class="child grid bg-primary text-white small">
-                                    {{ weekday.name }}
+                        <c-row>
+                            <c-col lg="12" md="12" xs="12">
+                                <div class="gridContainer-weekdays">
+                                    <div *ngFor="let weekday of weekdayNames"
+                                         class="child grid bg-primary text-white small">
+                                        {{ weekday.name }}
+                                    </div>
+                                    <div class="child grid" *ngFor="let weekDay of weekDays | keyvalue">
+                                        <span [hidden]="weekDay.value.length !== 0">
+                                            <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                        </span>
+                                        <ul class="p-0 inside-list fw-300" [hidden]="!(weekDay.value.length > 0)">
+                                            <li *ngFor="let timeDetails of weekDay.value">
+                                                {{ timeDetails.start }} - {{ timeDetails.end }}
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="child grid" *ngFor="let weekDay of weekDays | keyvalue">
-                                    <span [hidden]="weekDay.value.length !== 0">
-                                        <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
-                                    </span>
-                                    <ul class="p-0 inside-list fw-300" [hidden]="!(weekDay.value.length > 0)">
-                                        <li *ngFor="let timeDetails of weekDay.value">
-                                            {{ timeDetails.start }} - {{ timeDetails.end }}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-col>
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                }
             </c-row>
 
             <c-row class="pt-2 pb-2">
-                <c-col lg="7" md="12" xs="12">
-                    <!--<sla-hosts-overview ng-if="sla" sla="sla">
+                @if (isLoading) {
+                    <c-col lg="7" md="12" xs="12">
+                        <p-skeleton class="mt-2 p-2" width="400x" height="300px"></p-skeleton>
+                    </c-col>
+                    <c-col lg="5" md="12" xs="12">
+                        <c-row class="pt-2">
+                            <c-col lg="9">
+                                <p-skeleton class="mt-2 p-2" width="500x" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="3">
+                                <p-skeleton class="mt-2 p-2" width="50px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="9">
+                                <p-skeleton class="mt-2 p-2" width="500px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="3">
+                                <p-skeleton class="mt-2 p-2" width="50px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="9">
+                                <p-skeleton class="mt-2 p-2" width="500px" height="19px"></p-skeleton>
+                            </c-col>
+                            <c-col lg="3">
+                                <p-skeleton class="mt-2 p-2" width="50px" height="19px"></p-skeleton>
+                            </c-col>
+                        </c-row>
+                    </c-col>
+                } @else {
+                    <c-col lg="7" md="12" xs="12">
+                        <oitc-sla-hosts-overview-bar-echart *ngIf="details.sla" [sla]="details.sla">
 
-                    </sla-hosts-overview>-->
-                </c-col>
-                <c-col lg="5" md="12" xs="12"
-                       [hidden]="!details.slaDetails">
-                    <c-row class="pt-2">
-                        <c-col lg="9" class="bold">
-                            {{ t('Host') }}
-                            <sub class="text-secondary">
-                                {{ t('limit 10') }}
-                            </sub>
-                        </c-col>
-                        <c-col lg="3" class="bold">
-                            {{ t('Achieved') }}(%)
-                            <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
-                        </c-col>
-                        <hr class="mt-1 mb-1 w-100 border-dashed"/>
-                        <ng-container *ngFor="let slaDetail of details.sla.hostsOverview?.top10">
-                            <c-col lg="9" class="ellipsis">
-                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', slaDetail.id]">
+                        </oitc-sla-hosts-overview-bar-echart>
+                    </c-col>
+                    <c-col lg="5" md="12" xs="12"
+                           [hidden]="!details.slaDetails">
+                        <c-row class="pt-2">
+                            <c-col lg="9" class="bold">
+                                {{ t('Host') }}
+                                <sub class="text-secondary">
+                                    {{ t('limit 10') }}
+                                </sub>
+                            </c-col>
+                            <c-col lg="3" class="bold">
+                                {{ t('Achieved') }}(%)
+                                <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
+                            </c-col>
+                            <hr class="mt-1 mb-1 w-100 border-dashed"/>
+                            <ng-container *ngFor="let slaDetail of details.sla.hostsOverview?.top10">
+                                <c-col lg="9" class="ellipsis">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', slaDetail.id]">
+                                            {{ slaDetail.name }}
+                                        </a>
+                                    } @else {
                                         {{ slaDetail.name }}
-                                    </a>
-                                } @else {
-                                    {{ slaDetail.name }}
-                                }
+                                    }
 
-                            </c-col>
-                            <c-col lg="3" class="text-{{slaDetail.state}}">
-                                {{ slaDetail.determined_availability }}%
-                            </c-col>
-                        </ng-container>
-                    </c-row>
-                </c-col>
+                                </c-col>
+                                <c-col lg="3" class="text-{{slaDetail.state}}">
+                                    {{ slaDetail.determined_availability }}%
+                                </c-col>
+                            </ng-container>
+                        </c-row>
+                    </c-col>
+                }
             </c-row>
 
             <!-- Filter -->
@@ -425,8 +510,8 @@
 
             <c-row>
                 <c-col lg="12" class="p-2">
-                    <oitc-table-loader *ngIf="!details && isLoading"></oitc-table-loader>
-                    <table *ngIf="details && !isLoading" bordered cTable class="mt-2 mb-2" hover striped
+                    <oitc-table-loader *ngIf="!details"></oitc-table-loader>
+                    <table *ngIf="details" bordered cTable class="mt-2 mb-2" hover striped
                            matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">

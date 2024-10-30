@@ -1,15 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    inject,
-    input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import 'echarts/theme/dark.js';
 import { EChartsOption } from 'echarts';
@@ -32,7 +21,7 @@ import { LayoutService } from '../../../../../layouts/coreui/layout.service';
     styleUrl: './sla-availability-overview-pie-echart.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChanges, OnDestroy {
+export class SlaAvailabilityOverviewPieEchartComponent implements OnDestroy {
 
     public availability = input<Availability>({} as Availability);
 
@@ -45,9 +34,9 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
     private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
-    private AvailabilityLabel: string = this.TranslocoService.translate('Availability');
-    private UptimeLabel: string = this.TranslocoService.translate('Uptime');
-    private OutageLabel: string = this.TranslocoService.translate('Outage');
+    private availabilityLabel: string = this.TranslocoService.translate('Availability');
+    private uptimeLabel: string = this.TranslocoService.translate('Uptime');
+    private outageLabel: string = this.TranslocoService.translate('Outage');
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -65,20 +54,6 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
         });
     }
 
-    public ngOnInit(): void {
-
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-        if (changes['sla'] || changes['availability']) {
-
-            console.log("renderChart");
-            this.renderChart();
-        }
-
-    }
-
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
@@ -93,13 +68,13 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
         const passed = this.availability().status_percent;
         const failed = 100 - passed;
         let data: PieChartMetric[] = [
-            {value: Number(failed.toFixed(3)), name: this.OutageLabel},
-            {value: Number(passed.toFixed(3)), name: this.UptimeLabel}
+            {value: Number(failed.toFixed(3)), name: this.outageLabel},
+            {value: Number(passed.toFixed(3)), name: this.uptimeLabel}
         ];
 
         this.chartOption = {
             title: {
-                text: this.AvailabilityLabel + ' ' + passed + ' %',
+                text: this.availabilityLabel + ' ' + passed + ' %',
                 left: 'center',
                 textStyle: {
                     fontSize: 18,
@@ -116,7 +91,7 @@ export class SlaAvailabilityOverviewPieEchartComponent implements OnInit, OnChan
             },
             series: [
                 {
-                    name: 'Availability',
+                    name: this.availabilityLabel,
                     type: 'pie',
                     radius: '50%',
                     data: data,

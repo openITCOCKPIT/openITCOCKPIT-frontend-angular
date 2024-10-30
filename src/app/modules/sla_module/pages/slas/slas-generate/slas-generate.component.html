@@ -108,7 +108,7 @@
                             id="ReportId"
                             optionValue="id"
                             optionLabel="name"
-                            placeholder="{{ t('Please choose') }}"
+                            [placeholder]="'Please choose' | transloco"
                             required
                             [(ngModel)]="post.Sla.id"
                             [options]="slas">
@@ -128,7 +128,7 @@
                             id="SlaFormat"
                             optionValue="key"
                             optionLabel="value"
-                            placeholder="{{ t('Please choose') }}"
+                            [placeholder]="'Please choose' | transloco"
                             required
                             [(ngModel)]="post.Sla.format"
                             [options]="reportFormats">
@@ -188,7 +188,7 @@
                         </label>
 
                         <input cFormControl id="from" type="date"
-                               name="from" placeholder="{{ t('DD.MM.YYYY') }}"
+                               name="from" [placeholder]="'DD.MM.YYYY' | transloco"
                                oitcFormError [errors]="errors" errorField="from_date"
                                [(ngModel)]="from">
                         <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
@@ -200,7 +200,7 @@
                         </label>
 
                         <input cFormControl id="to" type="date"
-                               name="to" placeholder="{{ t('DD.MM.YYYY') }}"
+                               name="to" [placeholder]="'DD.MM.YYYY' | transloco"
                                oitcFormError [errors]="errors" errorField="to_date"
                                [(ngModel)]="to">
                         <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
