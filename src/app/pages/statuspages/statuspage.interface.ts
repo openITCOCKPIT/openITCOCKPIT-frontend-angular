@@ -68,10 +68,10 @@ export interface StatuspagePost {
     selected_services: {
         _ids: number[]
     },
-    hostgroups: {},
-    hosts: {},
-    servicegroups: {},
-    services: {},
+    hostgroups: [],
+    hosts: [],
+    servicegroups: [],
+    services: [],
 }
 
 export interface PostParams {

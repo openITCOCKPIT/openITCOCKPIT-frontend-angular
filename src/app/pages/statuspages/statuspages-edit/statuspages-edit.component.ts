@@ -113,16 +113,16 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     public servicegroups: SelectKeyValueExtended[] = [];
     public post: StatuspagePost = {} as StatuspagePost;
     public errors: GenericValidationError | null = null;
+    public noItemsSelected: boolean = false;
 
-    constructor(private route: ActivatedRoute) { }
+    constructor(private route: ActivatedRoute, private _router: Router) { }
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
         //Fire on page load
-        //this.post = this.getDefaultPost();
-        this.load();
+        this.post = this.getDefaultPost();
+       // this.load();
         this.loadContainers();
-        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {
@@ -133,8 +133,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatuspagesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
-                this.cdr.markForCheck();
-                //this.load();
+                //this.cdr.markForCheck();
+                this.load();
 
             })
         );
@@ -152,7 +152,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
-                    objectEntry._joinData.display_alias = "";
+                    // @ts-ignore
+                    objectEntry._joinData.display_alias = this.post.hostgroups.find((hostgroup) => {hostgroup.id === item.key})._joinData.display_alias;
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups= hostgroupObjects;
@@ -240,6 +241,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
 
 
     public onContainerChange(){
+        console.log('containerModelChange');
         this.loadHostgroups('');
         this.loadServicegroups('');
         this.loadHosts('');
@@ -269,24 +271,23 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             selected_services: {
                 _ids: []
             },
-            hostgroups: {},
-            hosts: {},
-            servicegroups: {},
-            services: {},
+            hostgroups: [],
+            hosts: [],
+            servicegroups: [],
+            services: [],
         };
     }
 
     public submit(){
         this.filterForSubmit();
 
-        this.subscriptions.add(this.StatuspagesService.addStatuspage(this.post)
+        this.subscriptions.add(this.StatuspagesService.updateStatuspage(this.id, this.post)
             .subscribe((result) => {
 
-                this.cdr.markForCheck();
                 if (result.success) {
                     // Create another
                     this.errors = null;
-                 //   this._router.navigate(['statuspages', 'index'])
+                    this._router.navigate(['statuspages', 'index'])
 
                     return;
                 }
@@ -294,7 +295,15 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 // Error
                 const errorResponse = result.data as GenericValidationError;
                 if (result) {
+                    this.noItemsSelected = false;
                     this.errors = errorResponse;
+                    if(this.errors.hasOwnProperty('selected_hostgroups') ||
+                        this.errors.hasOwnProperty('selected_servicegroups') ||
+                        this.errors.hasOwnProperty('selected_hosts') ||
+                        this.errors.hasOwnProperty('selected_services')
+                    ) {
+                        this.noItemsSelected = true;
+                    }
                 }
 
             })
@@ -312,7 +321,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             }
         });
         // @ts-ignore
-        this.post.servicegroups = this.hostgroups.filter((servicegroup) => {
+        this.post.servicegroups = this.servicegroups.filter((servicegroup) => {
             if(this.post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
                 return servicegroup;
             }

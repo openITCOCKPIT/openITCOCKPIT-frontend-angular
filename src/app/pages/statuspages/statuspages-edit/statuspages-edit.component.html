@@ -15,8 +15,8 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add') }}
+                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                {{ t('Edit') }}
             </li>
         </ol>
     </nav>
@@ -51,7 +51,8 @@
                             optionLabel="value"
                             [(ngModel)]="post.container_id"
                             [options]="containers"
-                            (onChange)="onContainerChange()"
+       
+                            (ngModelChange)="onContainerChange()"
                             oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
@@ -412,7 +413,7 @@
 
             <c-card-footer class="text-end">
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save') }}
+                    {{ t('Update') }}
                 </button>
                 <button [fallbackUrl]="['statuspages', 'index']" cButton class="ms-1 ripple" color="default"
                         oitcBackButton
