@@ -50,6 +50,9 @@ import {
 import {
     ConfigurationFileModGearmanModuleComponent
 } from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
+import {
+    ConfigurationFileNstaMasterComponent
+} from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
 
 @Component({
     selector: 'oitc-configuration-files-edit',
@@ -87,7 +90,8 @@ import {
         ConfigurationFileDbBackendComponent,
         ConfigurationFilePerfdataBackendComponent,
         ConfigurationFileNagiosCfgComponent,
-        ConfigurationFileModGearmanModuleComponent
+        ConfigurationFileModGearmanModuleComponent,
+        ConfigurationFileNstaMasterComponent
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',
