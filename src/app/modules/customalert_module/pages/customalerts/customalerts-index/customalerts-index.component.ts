@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
@@ -12,7 +12,12 @@ import {
     ColComponent,
     ContainerComponent,
     DropdownDividerDirective,
-    ModalService,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService, NavComponent, NavItemComponent,
     RowComponent,
     TableDirective,
     TextColorDirective
@@ -42,6 +47,14 @@ import {
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { FilterBookmarkComponent } from '../../../../../components/filter-bookmark/filter-bookmark.component';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import { FormsModule } from '@angular/forms';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { PaginatorModule } from 'primeng/paginator';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { LoadContainersRoot } from '../../../../../pages/contactgroups/contactgroups.interface';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -73,7 +86,21 @@ import { FilterBookmarkComponent } from '../../../../../components/filter-bookma
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
-        FilterBookmarkComponent
+        FilterBookmarkComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgSelectComponent,
+        PaginatorModule,
+        TranslocoPipe,
+        XsButtonDirective,
+        MultiSelectComponent,
+        FormCheckInputDirective,
+        NavComponent,
+        NavItemComponent
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
@@ -86,6 +113,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     private readonly modalService: ModalService = inject(ModalService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
+    protected containers: SelectKeyValue[] = [];
     protected params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
     protected result?: CustomAlertsIndex;
     protected hideFilter: boolean = true;
@@ -112,7 +140,16 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     }
 
     public ngOnInit(): void {
+        this.loadContainers();
         this.refresh();
+    }
+
+    private loadContainers(): void {
+        this.subscriptions.add(this.CustomAlertsService.loadContainers()
+            .subscribe((result: LoadContainersRoot) => {
+                this.containers = result.containers;
+                this.cdr.markForCheck();
+            }))
     }
 
     public ngOnDestroy(): void {

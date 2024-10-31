@@ -27,6 +27,14 @@
                     {{ t('Overview') }}
                 </small>
             </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
         </c-card-header>
         <c-card-body>
             <c-card>
@@ -57,6 +65,102 @@
                     </c-row>
                 </c-card-body>
             </c-card>
+
+
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Customalerts.message]']"
+                                       [placeholder]="'Filter by custom alerts message' | transloco"
+                                       cFormControl
+                                       name="params['filter[Customalerts.message]']"
+                                       id="params['filter[Customalerts.message]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{t('From')}}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[from]']"
+                                       cFormControl
+                                       name="params['filter[from]']"
+                                       id="params['filter[from]']"
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{t('To')}}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[to]']"
+                                       cFormControl
+                                       name="params['filter[to]']"
+                                       id="params['filter[to]']"
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="2">
+                            <h5>{{t('Alert status')}}</h5>
+                        </c-col>
+                        <c-col md="10">
+
+                            <h5>{{t('Container')}}</h5>
+                            <oitc-multi-select
+                                    name="post.User.usercontainerroles._ids"
+                                    id="post.User.usercontainerroles._ids"
+                                    [(ngModel)]="params['filter[Hosts.container_id][]']"
+                                    optionValue="key"
+                                    optionLabel="value.servicename"
+                                    [options]="containers">
+                            </oitc-multi-select>
+                            <br />
+
+                            <input cFormCheckInput
+                                   name="params.recursive"
+                                   id="params.recursive"
+                                   type="checkbox"
+                                   [(ngModel)]="params.recursive"/>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+
 
 
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>

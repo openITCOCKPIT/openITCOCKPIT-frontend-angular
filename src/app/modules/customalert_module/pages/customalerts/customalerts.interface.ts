@@ -1,5 +1,6 @@
 // Get custom alerts
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface CustomAlertsIndex extends PaginateOrScroll {
     customalerts: Customalert[]
@@ -83,9 +84,15 @@ export interface CustomAlertsIndexParams {
     'recursive': boolean,
     'filter[Customalerts.message]' : string,
     'filter[Customalerts.state][]' : number[],
+    'filter[Hosts.container_id][]' : number[],
     'filter[from]' : string,
     'filter[to]' : string,
 
+}
+
+export interface LoadContainersRoot {
+    containers: SelectKeyValue[]
+    _csrfToken: string
 }
 
 export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
@@ -99,6 +106,7 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
         'recursive': false,
         'filter[Customalerts.message]' : '',
         'filter[Customalerts.state][]' : [],
+        'filter[Hosts.container_id][]' : [],
         'filter[from]' : '',
         'filter[to]' : '',
     }
