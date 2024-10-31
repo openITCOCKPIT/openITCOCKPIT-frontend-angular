@@ -34,7 +34,7 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective,
+    CardTitleDirective, ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -98,7 +98,8 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         RowComponent,
         InputGroupComponent,
         AsyncPipe,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        ColComponent
     ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
@@ -170,9 +171,6 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups = hostgroupObjects;
-
-                console.log(this.hostgroups);
-
                 this.cdr.markForCheck();
             })
         );
