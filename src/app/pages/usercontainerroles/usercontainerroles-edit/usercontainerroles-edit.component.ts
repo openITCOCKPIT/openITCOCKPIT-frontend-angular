@@ -195,7 +195,7 @@ export class UsercontainerrolesEditComponent implements OnInit, OnDestroy {
     }
 
     protected loadLdapGroups = (search: string = ''): void => {
-        this.subscriptions.add(this.UserContainerRolesService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: {
+        this.subscriptions.add(this.UserContainerRolesService.loadLdapgroupsForAngular(search, this.post.ldapgroups._ids).subscribe((ldapgroups: {
             ldapgroups: SelectKeyValue[]
         }) => {
             this.ldapGroups = ldapgroups.ldapgroups;
