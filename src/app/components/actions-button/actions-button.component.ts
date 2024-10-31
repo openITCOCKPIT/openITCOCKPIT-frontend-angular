@@ -61,6 +61,7 @@ export class ActionsButtonComponent {
     @Input({required: false}) icon: IconProp = ['fas', 'gear'];
     @Input({required: true}) url: string = '';
     @Input({required: true}) permission: string = '';
+    @Input({required: false}) style: string = 'default';
     @Input() queryParams: Params | undefined | null;
 
     constructor(private router: Router) {

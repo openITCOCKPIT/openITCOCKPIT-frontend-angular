@@ -65,6 +65,8 @@ export interface Sla {
     fulfill: boolean
     users: Users
     host_mapping_rule: null | HostMappingRulesPost
+    main_container?: MainContainer[]
+    hostsOverview?: HostsOverview
 }
 
 export interface Timeperiod {
@@ -161,6 +163,7 @@ export interface Host {
     hosttemplate: Hosttemplate
     hosts_to_containers_sharing: HostsToContainersSharing[]
     allowEdit: boolean
+    description?: string
 }
 
 export interface Service {
@@ -404,5 +407,141 @@ export interface ReportErrorObject {
     services: string[]
 }
 
+/***************************
+ *    view Details action      *
+ ***************************/
+
+export interface SlasViewDetailsParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string,
+    'filter[Hosts.container_id][]': number[],
+    'filter[determined_availability][]': number[],
+}
+
+export function getDefaultSlasViewDetailsParams(): SlasViewDetailsParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'determined_availability',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': "",
+        'filter[Hosts.container_id][]': [],
+        'filter[determined_availability][]': [],
+    }
+}
+
+export interface SlasViewDetailsRoot extends PaginateOrScroll {
+    sla: Sla
+    slaDetails: SlaDetail[]
+    availability: Availability
+    _csrfToken: string
+}
+
+export interface MainContainer {
+    id: number
+    name: string
+}
+
+export interface HostsOverview {
+    totalHosts: number
+    failed: Failed
+    warning: Warning
+    passed: Passed
+    not_calculated: NotCalculated
+    top10: Top10[]
+}
+
+export interface Failed {
+    count: number
+    ids: number[]
+}
+
+export interface Warning {
+    count: number
+    ids: any[]
+}
+
+export interface Passed {
+    count: number
+    ids: number[]
+}
+
+export interface NotCalculated {
+    count: number
+    ids: number[]
+}
+
+export interface Top10 {
+    id: number
+    name: string
+    determined_availability: number
+    state: string
+}
+
+export interface SlaDetail {
+    host_id: number
+    evaluation_total_time: number
+    determined_outage_time: number
+    evaluation_end: string
+    determined_availability_percent: number
+    determined_availability_time: number
+    determined_availability: number
+    sla_availability_status_services: SlaAvailabilityStatusService[]
+    host: Host
+    _matchingData: MatchingData
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    state: string
+    state_number: number
+    host_state: string
+    host_state_number: number
+}
+
+export interface SlaAvailabilityStatusService {
+    servicename: string
+    host_id: number
+    service_id: number
+    evaluation_total_time: number
+    determined_availability_time: number
+    determined_outage_time: number
+    evaluation_end: string
+    determined_availability_percent: number
+    Services: Services
+    Servicetemplates: Servicetemplates
+    evaluation_total_time_human_readable: string
+    determined_availability_time_human_readable: string
+    determined_outage_time_human_readable: string
+    state: string
+}
+
+export interface Services {
+    id: number
+}
+
+export interface Servicetemplates {
+    id: number
+}
+
+export interface MatchingData {
+    Hosts: Hosts
+}
+
+export interface Hosts {
+    id: number
+    name: string
+    description: any
+}
+
+export interface Availability {
+    status_percent: number
+    fulfill: boolean
+}
 
 
