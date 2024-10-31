@@ -1,0 +1,330 @@
+<ng-container *transloco="let t">
+    @if (config) {
+        @if (config.string && config.int && config.float && config.bool) {
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['victoria_metrics_storage_path'].field">
+                    {{ t('VictoriaMetrics storage path') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['victoria_metrics_storage_path'].field"
+                       [name]="fieldInfo['victoria_metrics_storage_path'].field"
+                       type="text"
+                       [placeholder]="fieldInfo['victoria_metrics_storage_path'].placeholder"
+                       [(ngModel)]="config.string.victoria_metrics_storage_path"
+                       oitcFormError [errors]="errors" errorField="Configfile.victoria_metrics_storage_path">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.victoria_metrics_storage_path"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['victoria_metrics_storage_path'].help">
+                    {{ fieldInfo['victoria_metrics_storage_path'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['victoria_metrics_retention_period'].field">
+                    {{ t('VictoriaMetrics retention period') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['victoria_metrics_retention_period'].field"
+                       [name]="fieldInfo['victoria_metrics_retention_period'].field"
+                       type="number"
+                       min="0"
+                       [placeholder]="fieldInfo['victoria_metrics_retention_period'].placeholder"
+                       [(ngModel)]="config.int.victoria_metrics_retention_period"
+                       oitcFormError [errors]="errors" errorField="Configfile.victoria_metrics_retention_period">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.victoria_metrics_retention_period"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['victoria_metrics_retention_period'].help">
+                    {{ fieldInfo['victoria_metrics_retention_period'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['local_victoria_metrics_http_port'].field">
+                    {{ t('VictoriaMetrics local HTTP port') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['local_victoria_metrics_http_port'].field"
+                       [name]="fieldInfo['local_victoria_metrics_http_port'].field"
+                       type="number"
+                       min="1"
+                       max="65535"
+                       [placeholder]="fieldInfo['local_victoria_metrics_http_port'].placeholder"
+                       [(ngModel)]="config.int.local_victoria_metrics_http_port"
+                       oitcFormError [errors]="errors" errorField="Configfile.local_victoria_metrics_http_port">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.local_victoria_metrics_http_port"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['local_victoria_metrics_http_port'].help">
+                    {{ fieldInfo['local_victoria_metrics_http_port'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['carbon_path'].field">
+                    {{ t('Carbon storage path') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['carbon_path'].field"
+                       [name]="fieldInfo['carbon_path'].field"
+                       type="text"
+                       [placeholder]="fieldInfo['carbon_path'].placeholder"
+                       [(ngModel)]="config.string.carbon_path"
+                       oitcFormError [errors]="errors" errorField="Configfile.carbon_path">
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.carbon_path"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['carbon_path'].help">
+                    {{ fieldInfo['carbon_path'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <c-form-check>
+                    <input cFormCheckInput
+                           [attr.id]="fieldInfo['WHISPER_FALLOCATE_CREATE'].field"
+                           [name]="fieldInfo['WHISPER_FALLOCATE_CREATE'].field"
+                           type="checkbox"
+                           trueFalseValue
+                           [trueValue]="1"
+                           [falseValue]="0"
+                           [(ngModel)]="config.bool.WHISPER_FALLOCATE_CREATE"
+                           oitcFormError [errors]="errors" errorField="Configfile.WHISPER_FALLOCATE_CREATE"
+                    />
+                    <label cFormCheckLabel [for]="fieldInfo['WHISPER_FALLOCATE_CREATE'].field">
+                        {{ fieldInfo['WHISPER_FALLOCATE_CREATE'].field }}
+                    </label>
+                </c-form-check>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.WHISPER_FALLOCATE_CREATE"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['WHISPER_FALLOCATE_CREATE'].help">
+                    {{ fieldInfo['WHISPER_FALLOCATE_CREATE'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['default_average_x_files_factor'].field">
+                    {{ t('Default average xFilesFactor') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['default_average_x_files_factor'].field"
+                       [name]="fieldInfo['default_average_x_files_factor'].field"
+                       type="number"
+                       min="0"
+                       max="1"
+                       step="0.01"
+                       [placeholder]="fieldInfo['default_average_x_files_factor'].placeholder"
+                       [(ngModel)]="config.float.default_average_x_files_factor"
+                       oitcFormError [errors]="errors" errorField="Configfile.default_average_x_files_factor">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.default_average_x_files_factor"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['default_average_x_files_factor'].help">
+                    {{ fieldInfo['default_average_x_files_factor'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['carbon_storage_schema'].field">
+                    {{ t('Carbon storage schema') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['carbon_storage_schema'].field"
+                       [name]="fieldInfo['carbon_storage_schema'].field"
+                       type="text"
+                       [placeholder]="fieldInfo['carbon_storage_schema'].placeholder"
+                       [(ngModel)]="config.string.carbon_storage_schema"
+                       oitcFormError [errors]="errors" errorField="Configfile.carbon_storage_schema">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.carbon_storage_schema"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['carbon_storage_schema'].help">
+                    {{ fieldInfo['carbon_storage_schema'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['number_of_carbon_cache_instances'].field">
+                    {{ t('Carbon Cache instances') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['number_of_carbon_cache_instances'].field"
+                       [name]="fieldInfo['number_of_carbon_cache_instances'].field"
+                       type="number"
+                       min="0"
+                       [placeholder]="fieldInfo['number_of_carbon_cache_instances'].placeholder"
+                       [(ngModel)]="config.int.number_of_carbon_cache_instances"
+                       oitcFormError [errors]="errors" errorField="Configfile.number_of_carbon_cache_instances">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.number_of_carbon_cache_instances"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['number_of_carbon_cache_instances'].help">
+                    {{ fieldInfo['number_of_carbon_cache_instances'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['number_of_carbon_c_relay_workers'].field">
+                    {{ t('Carbon C Relay workers') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['number_of_carbon_c_relay_workers'].field"
+                       [name]="fieldInfo['number_of_carbon_c_relay_workers'].field"
+                       type="number"
+                       min="0"
+                       [placeholder]="fieldInfo['number_of_carbon_c_relay_workers'].placeholder"
+                       [(ngModel)]="config.int.number_of_carbon_c_relay_workers"
+                       oitcFormError [errors]="errors" errorField="Configfile.number_of_carbon_c_relay_workers">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.number_of_carbon_c_relay_workers"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['number_of_carbon_c_relay_workers'].help">
+                    {{ fieldInfo['number_of_carbon_c_relay_workers'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['local_graphite_plaintext_port'].field">
+                    {{ t('Local Carbon C Relay port') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['local_graphite_plaintext_port'].field"
+                       [name]="fieldInfo['local_graphite_plaintext_port'].field"
+                       type="number"
+                       min="1"
+                       max="65535"
+                       [placeholder]="fieldInfo['local_graphite_plaintext_port'].placeholder"
+                       [(ngModel)]="config.int.local_graphite_plaintext_port"
+                       oitcFormError [errors]="errors" errorField="Configfile.local_graphite_plaintext_port">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.local_graphite_plaintext_port"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['local_graphite_plaintext_port'].help">
+                    {{ fieldInfo['local_graphite_plaintext_port'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['local_graphite_http_port'].field">
+                    {{ t('Local Graphite-Web port') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['local_graphite_http_port'].field"
+                       [name]="fieldInfo['local_graphite_http_port'].field"
+                       type="number"
+                       min="1"
+                       max="65535"
+                       [placeholder]="fieldInfo['local_graphite_http_port'].placeholder"
+                       [(ngModel)]="config.int.local_graphite_http_port"
+                       oitcFormError [errors]="errors" errorField="Configfile.local_graphite_http_port">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.local_graphite_http_port"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['local_graphite_http_port'].help">
+                    {{ fieldInfo['local_graphite_http_port'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel for="UserTimezone">
+                    {{ t('Graphite-Web timezone') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <ng-select id="UserTimezone"
+                           name="UserTimezone"
+                           [items]="timezones"
+                           groupBy="group"
+                           bindLabel="name"
+                           bindValue="value"
+                           [clearable]="false"
+                           [(ngModel)]="config.string.timezone"
+                           oitcFormError [errors]="errors" errorField="Configfile.timezone">
+                    <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                        <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                    </ng-template>
+                </ng-select>
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.timezone"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['timezone'].help">
+                    {{ fieldInfo['timezone'].help }}
+                </div>
+                <div class="help-block" *ngIf="serverTimezone">
+                    {{ t('Server timezone is:') }}
+                    <strong>
+                        {{ serverTimezone.server_timezone }}.
+                    </strong>
+                    {{ t('Current server time:') }}
+                    <strong>
+                        {{ serverTimezone.server_time }}
+                    </strong>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <c-form-check>
+                    <input cFormCheckInput
+                           [attr.id]="fieldInfo['enable_docker_userland_proxy'].field"
+                           [name]="fieldInfo['enable_docker_userland_proxy'].field"
+                           type="checkbox"
+                           trueFalseValue
+                           [trueValue]="1"
+                           [falseValue]="0"
+                           [(ngModel)]="config.bool.enable_docker_userland_proxy"
+                           oitcFormError [errors]="errors" errorField="Configfile.enable_docker_userland_proxy"
+                    />
+                    <label cFormCheckLabel [for]="fieldInfo['enable_docker_userland_proxy'].field">
+                        {{ t('Enable Docker userland proxy') }}
+                    </label>
+                </c-form-check>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.enable_docker_userland_proxy"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['enable_docker_userland_proxy'].help">
+                    {{ fieldInfo['enable_docker_userland_proxy'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['USE_AUTO_NETWORKING'].field">
+                    {{ t('Docker network configuration') }}
+                    <oitc-required-icon/>
+                </label>
+                <select
+                    cSelect
+                    [attr.id]="fieldInfo['USE_AUTO_NETWORKING'].field"
+                    [name]="fieldInfo['USE_AUTO_NETWORKING'].field"
+                    oitcFormError [errors]="errors" errorField="Configfile.USE_AUTO_NETWORKING"
+                    [(ngModel)]="config.string.USE_AUTO_NETWORKING"
+                >
+                    <option [ngValue]="'1'">{{ t('Automatically') }}</option>
+                    <option [ngValue]="'0'">{{ t('Manually') }}</option>
+                </select>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.USE_AUTO_NETWORKING"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['USE_AUTO_NETWORKING'].help">
+                    {{ fieldInfo['USE_AUTO_NETWORKING'].help }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel [for]="fieldInfo['docker_compose_subnet'].field">
+                    {{ t('Docker Compose subnet') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="fieldInfo['docker_compose_subnet'].field"
+                       [name]="fieldInfo['docker_compose_subnet'].field"
+                       [disabled]="config.string.USE_AUTO_NETWORKING == '1'"
+                       type="text"
+                       [placeholder]="fieldInfo['docker_compose_subnet'].placeholder"
+                       [(ngModel)]="config.string.docker_compose_subnet"
+                       oitcFormError [errors]="errors" errorField="Configfile.docker_compose_subnet">
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="Configfile.docker_compose_subnet"></oitc-form-feedback>
+                <div class="help-block" *ngIf="fieldInfo['docker_compose_subnet'].help">
+                    {{ fieldInfo['docker_compose_subnet'].help }}
+                </div>
+            </div>
+
+        }
+    }
+
+</ng-container>

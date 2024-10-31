@@ -601,7 +601,7 @@ const coreRoutes: Routes = [{
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
 }, {
-    path: 'ConfigurationFiles/edit/:configFile',
+    path: 'ConfigurationFiles/edit/:dbKey',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-edit/configuration-files-edit.component').then(m => m.ConfigurationFilesEditComponent)
 }, {
     path: 'error/403',
