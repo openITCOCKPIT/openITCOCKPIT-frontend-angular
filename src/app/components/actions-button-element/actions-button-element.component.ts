@@ -24,7 +24,7 @@
  */
 
 import { booleanAttribute, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Params, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DropdownItemDirective } from '@coreui/angular';
@@ -49,5 +49,6 @@ export class ActionsButtonElementComponent {
     @Input({transform: booleanAttribute}) allow: boolean = true;
     @Input() url: string = '';
     @Input({required: true}) permission: string = '';
+    @Input() queryParams: Params | undefined | null;
 
 }

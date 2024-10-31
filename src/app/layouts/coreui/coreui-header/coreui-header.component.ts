@@ -3,9 +3,9 @@ import {
     ChangeDetectorRef,
     Component,
     DestroyRef,
-    inject,
+    inject, Input,
     input,
-    OnDestroy
+    OnDestroy, SimpleChanges
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -37,6 +37,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+import { MessageOfTheDayButtonComponent } from '../../../components/message-of-the-day-button/message-of-the-day-button.component';
+import { CurrentMessageOfTheDay } from '../../../pages/messagesotd/messagesotd.interface';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -64,7 +66,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        MessageOfTheDayButtonComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
@@ -72,6 +75,8 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 })
 export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy {
     sidebarId = input('sidebar1');
+
+    @Input({required: true}) public messageOfTheDay: CurrentMessageOfTheDay = {} as CurrentMessageOfTheDay;
 
     readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     readonly #colorModeService = inject(ColorModeService);

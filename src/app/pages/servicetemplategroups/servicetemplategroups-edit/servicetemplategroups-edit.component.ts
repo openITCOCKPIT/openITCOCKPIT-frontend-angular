@@ -17,7 +17,6 @@ import {
     NavItemComponent,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -89,17 +88,19 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
-
-    private subscriptions: Subscription = new Subscription();
-    private ServicetemplateGroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
-    protected servicetemplates: SelectKeyValue[] = [];
-    private router: Router = inject(Router);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly ServicetemplateGroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+    private readonly router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
-    public errors: GenericValidationError = {} as GenericValidationError;
-    private cdr = inject(ChangeDetectorRef);
+    private readonly cdr = inject(ChangeDetectorRef);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
-    public post: ServiceTemplateGroupssGetEditPostServicetemplategroup = {
+    protected servicetemplates: SelectKeyValue[] = [];
+    protected containers: SelectKeyValue[] = [];
+    protected errors: GenericValidationError = {} as GenericValidationError;
+    protected post: ServiceTemplateGroupssGetEditPostServicetemplategroup = {
         container: {
             containertype_id: 0,
             id: 0,
@@ -118,9 +119,6 @@ export class ServicetemplategroupsEditComponent implements OnInit, OnDestroy {
         },
         uuid: ''
     }
-    protected containers: SelectKeyValue[] = [];
-    private route: ActivatedRoute = inject(ActivatedRoute);
-    private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));

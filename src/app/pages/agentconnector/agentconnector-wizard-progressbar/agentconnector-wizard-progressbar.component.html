@@ -1,0 +1,77 @@
+<ng-container *transloco="let t">
+    <!-- Wizard progressbar -->
+    <div class="row m-0 text-center" style="min-height: 22px;">
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 1}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 1"></fa-icon>
+                {{ t('Select host') }}
+            </span>
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.ConfigureAgent, 'wizard-success': stepCount() > 2}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 2"></fa-icon>
+                {{ t('Configure Agent') }}
+            </span>
+        </div>
+        <div
+            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.InstallAgent, 'wizard-success': stepCount() > 3}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 3"></fa-icon>
+                {{ t('Install Agent') }}
+            </span>
+        </div>
+        @if (mode() == AgentModes.Pull) {
+            <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+                [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.AutoTls, 'wizard-success': stepCount() > 4}">
+                <span>
+                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    {{ t('Exchange TLS Certificate') }}
+                </span>
+            </div>
+        } @else {
+            <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+                [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 4}">
+                <span>
+                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    {{ t('Select Agent') }}
+                </span>
+            </div>
+        }
+        <div
+            class="col-xs-12 col-md-4 col-lg-2  wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
+            [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.CreateServices,  'wizard-success': stepCount() > 5}">
+            <span>
+                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 5"></fa-icon>
+                {{ t('Create services') }}
+            </span>
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+            <div class="btn-group btn-group-xs w-100 h-100">
+                <button type="button" class="btn btn-primary"
+                        [disabled]="disableBack()"
+                        [title]="'Back' | transloco"
+                        (click)="goBackEvent.emit()"
+                        style="border-radius: 0;">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+
+                <button type="button" class="btn btn-success"
+                        style="border-radius: 0;"
+                        [title]="'Next' | transloco"
+                        [disabled]="disableNext()"
+                        (click)="goNextEvent.emit()">
+                    {{ nextButtonText }}
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End progressbar -->
+</ng-container>

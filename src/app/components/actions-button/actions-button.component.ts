@@ -31,7 +31,7 @@ import {
     DropdownToggleDirective
 } from '@coreui/angular';
 import { PermissionDirective } from '../../permissions/permission.directive';
-import { Router, RouterLink } from '@angular/router';
+import { Params, Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -61,6 +61,7 @@ export class ActionsButtonComponent {
     @Input({required: false}) icon: IconProp = ['fas', 'gear'];
     @Input({required: true}) url: string = '';
     @Input({required: true}) permission: string = '';
+    @Input() queryParams: Params | undefined | null;
 
     constructor(private router: Router) {
     }

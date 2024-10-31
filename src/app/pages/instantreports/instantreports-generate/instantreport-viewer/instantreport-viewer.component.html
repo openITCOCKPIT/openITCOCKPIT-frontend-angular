@@ -55,14 +55,21 @@
                                 </h5>
                             </c-card-header>
                             <c-card-body>
-                                <c-col>
-                                    <c-row [xs]="12" *ngIf="host.Host._pieChartMetrics">
-                                        <oitc-host-pie-echart
-                                            [chartData]="host.Host._pieChartMetrics"></oitc-host-pie-echart>
-                                    </c-row>
+                                <c-row>
+                                    <c-col [xs]="12" *ngIf="host.Host._pieChartMetrics">
+                                        <oitc-host-simple-pie-chart
+                                            class="mb-2"
+                                            [pieData]="host.Host._pieChartMetrics"
+                                            [width]="200"
+                                        ></oitc-host-simple-pie-chart>
+                                    </c-col>
+
+                                    <c-col [xs]="12" *ngIf="host.Services.length > 0">
+                                        <h5>{{ t('Service availability') }}</h5>
+                                    </c-col>
 
                                     @for (service of host.Services; track $index) {
-                                        <c-row [xs]="12" *ngIf="service.Service._chartAbsolutValues">
+                                        <c-col [xs]="12" *ngIf="service.Service._chartAbsolutValues">
                                             <span>
                                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                                 <a *oitcPermission="['services', 'browser']"
@@ -78,9 +85,9 @@
                                                 [progressbarData]="service.Service._chartAbsolutValues"
                                                 [showPercentage]="false"
                                                 class="mb-2"></oitc-service-progressbar>
-                                        </c-row>
+                                        </c-col>
                                     }
-                                </c-col>
+                                </c-row>
 
                             </c-card-body>
                         </c-card>

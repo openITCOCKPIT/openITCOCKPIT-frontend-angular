@@ -69,7 +69,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -117,7 +116,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsergroupsEditComponent implements OnInit, OnDestroy {
-    protected readonly keepOrder = keepOrder;
 
     private readonly subscriptions: Subscription = new Subscription();
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
@@ -126,6 +124,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected systemname: string = 'openITCOCKPIT';
     protected errors: GenericValidationError | null = null;
@@ -133,6 +132,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
+    protected readonly keepOrder = keepOrder;
     protected post: UsergroupsEditPostRoot = {
         Acos: {},
         Usergroup: {
@@ -148,7 +148,6 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
             aro: {}
         }
     } as unknown as UsergroupsEditPostRoot;
-    private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -202,7 +201,6 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     }
 
     protected editUserrole() {
-
         this.subscriptions.add(this.UsergroupsService.updateUsergroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -235,7 +233,6 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
         );
     }
 
-
     protected forceTicks(actionToTick: string, tick: boolean) {
         for (let aco in this.acos.acos) {
             for (let controller in this.acos.acos[aco].children) {
@@ -264,7 +261,6 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
         }
         this.cdr.markForCheck();
     };
-
 }
 
 const keepOrder = (a: any, b: any) => a;

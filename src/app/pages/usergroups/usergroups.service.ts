@@ -24,8 +24,7 @@ export class UsergroupsService {
     private readonly proxyPath: string = inject(PROXY_PATH);
 
     public getIndex(params: UsergroupsIndexParams): Observable<UsergroupsIndexRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<UsergroupsIndexRoot>(`${proxyPath}/usergroups/index.json?angular=true`, {
+        return this.http.get<UsergroupsIndexRoot>(`${this.proxyPath}/usergroups/index.json?angular=true`, {
             params: params as {}
         }).pipe(
             map((data: UsergroupsIndexRoot) => {
@@ -34,11 +33,9 @@ export class UsergroupsService {
         )
     }
 
-
     public getUsergroupsCopy(ids: number[]): Observable<UsergroupsCopyGetRoot> {
-        const proxyPath: string = this.proxyPath;
         return this
-            .http.get<UsergroupsCopyGetRoot>(`${proxyPath}/usergroups/copy/${ids.join('/')}.json?angular=true`)
+            .http.get<UsergroupsCopyGetRoot>(`${this.proxyPath}/usergroups/copy/${ids.join('/')}.json?angular=true`)
             .pipe(
                 map((data: UsergroupsCopyGetRoot) => {
                     return data;
@@ -47,31 +44,23 @@ export class UsergroupsService {
     }
 
     public saveUsergroupsCopy(post: UsergroupsCopyPostRoot): Observable<UsergroupsCopyPostRoot> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<UsergroupsCopyPostRoot>(`${proxyPath}/usergroups/copy/.json?angular=true`, post);
+        return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usergroups/copy/.json?angular=true`, post);
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
-        const proxyPath: string = this.proxyPath;
-
-        return this.http.post(`${proxyPath}/usergroups/delete/${item.id}.json?angular=true`, {});
+        return this.http.post(`${this.proxyPath}/usergroups/delete/${item.id}.json?angular=true`, {});
     }
 
     public loadLdapgroupsForAngular(search: string = ''): Observable<LoadLdapgroups> {
-        const proxyPath: string = this.proxyPath;
-
-        return this.http.get<LoadLdapgroups>(`${proxyPath}/usergroups/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usergroups/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);
     }
 
     public loadAcos(): Observable<AcoRoot> {
-        const proxyPath: string = this.proxyPath;
-
-        return this.http.get<AcoRoot>(`${proxyPath}/usergroups/add.json?angular=true`);
+        return this.http.get<AcoRoot>(`${this.proxyPath}/usergroups/add.json?angular=true`);
     }
 
     public addUsergroup(usergroup: UsergroupsAddRoot): Observable<GenericResponseWrapper> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/usergroups/add.json?angular=true`, usergroup)
+        return this.http.post<any>(`${this.proxyPath}/usergroups/add.json?angular=true`, usergroup)
             .pipe(
                 map(data => {
                     return {
@@ -90,14 +79,11 @@ export class UsergroupsService {
     }
 
     public getEdit(id: number): Observable<UsergroupsEditGetRoot> {
-        const proxyPath: string = this.proxyPath;
-
-        return this.http.get<UsergroupsEditGetRoot>(`${proxyPath}/usergroups/edit/${id}.json?angular=true`);
+        return this.http.get<UsergroupsEditGetRoot>(`${this.proxyPath}/usergroups/edit/${id}.json?angular=true`);
     }
 
     public updateUsergroup(post: UsergroupsEditPostRoot): Observable<any> {
-        const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/usergroups/edit/${post.Usergroup.id}.json?angular=true`, post)
+        return this.http.post<any>(`${this.proxyPath}/usergroups/edit/${post.Usergroup.id}.json?angular=true`, post)
             .pipe(
                 map(data => {
                     return {
@@ -113,7 +99,5 @@ export class UsergroupsService {
                     });
                 })
             );
-
     }
-
 }

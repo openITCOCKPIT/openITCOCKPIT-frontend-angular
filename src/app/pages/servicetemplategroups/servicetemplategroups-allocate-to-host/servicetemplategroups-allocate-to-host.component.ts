@@ -20,7 +20,6 @@ import {
     RowComponent,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -61,7 +60,6 @@ import { HistoryService } from '../../../history.service';
         CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-
         FaIconComponent,
         FormCheckComponent,
         FormCheckInputDirective,
@@ -100,32 +98,26 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnDestroy {
-
     private readonly subscriptions: Subscription = new Subscription();
     private readonly ServicetemplategroupsService: ServicetemplategroupsService = inject(ServicetemplategroupsService);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
-
-    protected readonly route: ActivatedRoute = inject(ActivatedRoute);
     protected selectedItems: DeleteAllItem[] = [];
-    protected readonly router: Router = inject(Router);
-    private readonly HistoryService: HistoryService = inject(HistoryService);
     protected hideFilter: boolean = true;
-
     protected servicetemplategroups: SelectKeyValue[] = [];
     protected hosts: SelectKeyValue[] = [];
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGetServicetemplatesForDeploy[] = [];
-
     protected servicetemplategroupId: number = 0;
     protected hostId: number = 0;
-
     protected percentage: number = 42;
-
-    private cdr = inject(ChangeDetectorRef);
-    private isProcessing: boolean = false;
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
+    protected isProcessing: boolean = false;
 
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));

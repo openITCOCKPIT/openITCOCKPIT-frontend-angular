@@ -34,7 +34,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -143,7 +142,8 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
-            let servicetemplateTypeId = params['servicetemplateTypeId'];
+            let servicetemplatetype_id = params['servicetemplatetype_id'];
+            let servicetemplateTypeId = params['servicetemplateTypeId'] || servicetemplatetype_id;
             if (servicetemplateTypeId === undefined) {
                 servicetemplateTypeId = ServicetemplateTypesEnum.GENERIC_SERVICE
             }
