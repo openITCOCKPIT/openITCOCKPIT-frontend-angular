@@ -51,8 +51,7 @@
                             optionLabel="value"
                             [(ngModel)]="post.container_id"
                             [options]="containers"
-       
-                            (ngModelChange)="onContainerChange()"
+                            (onChange)="onContainerChange()"
                             oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
@@ -207,6 +206,7 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHostgroups"
+                            (onChange)="loadHostgroups"
                             [options]="hostgroups"
                             oitcFormError [errors]="errors" errorField="selected_hostgroups">
                     </oitc-multi-select>
@@ -220,17 +220,17 @@
                                 {{ t('Display name') }}
                             </div>
                         </div>
-                        <ng-container *ngFor="let hostgroup of hostgroups; let i = index" class="row form-group">
-                            <div *ngIf="post.selected_hostgroups._ids.includes(hostgroup.key)" class="row">
+                        <div *ngFor="let hostgroup of hostgroups; let i = index">
+                            <div *ngIf="post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1">
+                                <c-row>
                                 <div class="col-4 statuspage-item-box">
                                     @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
                                         <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
-                                            {{ hostgroup.value }}
+                                            {{ hostgroup.value }} {{ hostgroups[i]._joinData.display_alias }} {{ i }}
                                         </a>
                                     } @else {
                                         {{ hostgroup.value }}
                                     }
-
                                 </div>
                                 <div class="col-8">
                                     <div class="input-group">
@@ -239,14 +239,15 @@
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                         </div>
-                                        <input class="form-control form-control-sm" type="text"
+                                        <input class="form-control form-control-sm"
                                                name="alias_hostgroup"
                                                [(ngModel)]="hostgroups[i]._joinData.display_alias"
                                                placeholder="Set alias for hosthostgroup">
                                     </div>
                                 </div>
+                                </c-row>
                             </div>
-                        </ng-container>
+                        </div>
                     </ng-container>
                 </div>
                 <div class="mb-3">
@@ -260,6 +261,7 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadServicegroups"
+                            (onChange)="loadServicegroups"
                             [options]="servicegroups"
                             oitcFormError [errors]="errors" errorField="selected_servicegroups">
                     </oitc-multi-select>
@@ -313,6 +315,7 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHosts"
+                            (onChange)="loadHosts"
                             [options]="hosts"
                             oitcFormError [errors]="errors" errorField="selected_hosts">
                     </oitc-multi-select>
@@ -366,6 +369,7 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadServices"
+                            (onChange)="loadServices"
                             [options]="services"
                             oitcFormError [errors]="errors" errorField="selected_services">
                     </oitc-multi-select>

@@ -38,7 +38,9 @@ import {
 import {
     StatuspageRoot,
     SelectValueExtended,
-    PostParams, StatuspagePost
+    PostParams,
+    StatuspagePost,
+    StatuspagePostEdit
 }
     from './statuspage.interface';
 
@@ -188,7 +190,7 @@ export class StatuspagesService {
             );
     }
 
-    public editStatuspage(id: number): Observable<StatuspagePost>  {
+    public editStatuspage(id: number): Observable<StatuspagePostEdit>  {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/statuspages/edit/${id}.json`, {params: {angular: true}})
             .pipe(

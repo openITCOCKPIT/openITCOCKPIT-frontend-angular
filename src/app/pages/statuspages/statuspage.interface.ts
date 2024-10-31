@@ -68,10 +68,37 @@ export interface StatuspagePost {
     selected_services: {
         _ids: number[]
     },
-    hostgroups: [],
-    hosts: [],
-    servicegroups: [],
-    services: [],
+    hostgroups: {},
+    hosts: {},
+    servicegroups: {},
+    services: {},
+}
+
+export interface StatuspagePostEdit {
+    container_id: null | number,
+    name: '',
+    description: '',
+    public: boolean,
+    show_downtimes: boolean,
+    show_downtime_comments: boolean,
+    show_acknowledgements: boolean,
+    show_acknowledgement_comments: boolean,
+    selected_hostgroups: {
+        _ids: number[]
+    },
+    selected_hosts: {
+        _ids: number[]
+    },
+    selected_servicegroups: {
+        _ids: number[]
+    },
+    selected_services: {
+        _ids: number[]
+    },
+    hostgroups: SelectKeyValueExtended[],
+    hosts: SelectKeyValueExtended[],
+    servicegroups: SelectKeyValueExtended[],
+    services: SelectKeyValueExtended[],
 }
 
 export interface PostParams {

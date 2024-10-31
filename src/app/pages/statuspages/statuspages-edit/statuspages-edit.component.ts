@@ -51,7 +51,7 @@ import { StatuspagesService } from '../statuspages.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
-    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, PostParams}
+    StatuspagePostEdit, SelectKeyValueExtended, SelectValueExtended, PostParams}
     from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
@@ -111,7 +111,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     public hosts: SelectKeyValueExtended[] = [];
     public services: SelectKeyValueExtended[] = [];
     public servicegroups: SelectKeyValueExtended[] = [];
-    public post: StatuspagePost = {} as StatuspagePost;
+    public post: StatuspagePostEdit = {} as StatuspagePostEdit;
     public errors: GenericValidationError | null = null;
     public noItemsSelected: boolean = false;
 
@@ -140,20 +140,23 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    loadHostgroups(searchstring: string) {
+    loadHostgroups(searchstring: string = '') {
         if(this.post.container_id === null){
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, searchstring, this.post.selected_hostgroups._ids)
             .subscribe((result) => {
                 let hostgroupObjects:SelectKeyValueExtended[]  = [];
+                const selectedHostgroups = this.post.hostgroups;
                 result.map((item: SelectKeyValue) => {
+                    const selectedHostgroup = selectedHostgroups.find(hostgroup => hostgroup.id === item.key);
                     let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
-                    // @ts-ignore
-                    objectEntry._joinData.display_alias = this.post.hostgroups.find((hostgroup) => {hostgroup.id === item.key})._joinData.display_alias;
+                    if(selectedHostgroup){
+                        objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias
+                    }
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups= hostgroupObjects;
@@ -165,19 +168,23 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         if(this.post.container_id === null){
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, searchstring, this.post.selected_hosts._ids )
             .subscribe((result) => {
-                let hostsObjects:SelectKeyValueExtended[]  = [];
-
+                let hostObjects:SelectKeyValueExtended[]  = [];
+                const selectedHosts = this.post.hosts;
                 result.map((item: SelectKeyValue) => {
+                    const selectedHost = selectedHosts.find(host => host.id === item.key);
+                    console.log(selectedHost);
                     let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
-                    objectEntry._joinData.display_alias = "";
-                    hostsObjects.push(objectEntry);
+                    if(selectedHost){
+                        objectEntry._joinData.display_alias =selectedHost._joinData.display_alias
+                    }
+                    hostObjects.push(objectEntry);
                 });
-                this.hosts = hostsObjects;
+                this.hosts = hostObjects;
                 this.cdr.markForCheck();
             })
         );
@@ -187,11 +194,13 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         if(this.post.container_id === null){
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchstring, this.post.selected_services._ids )
             .subscribe((result) => {
-                let servicesObjects:SelectKeyValueExtended[]  = [];
+                let serviceObjects:SelectKeyValueExtended[]  = [];
+                const selectedServices = this.post.services;
 
                 result.map((item: SelectValueExtended) => {
+                    const selectedService = selectedServices.find(service => service.id === item.key);
                     let objectEntry: SelectKeyValueExtended = {key: 0,
                         value: '',
                         id: 0,
@@ -199,10 +208,12 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value.servicename;
-                    objectEntry._joinData.display_alias = "";
-                    servicesObjects.push(objectEntry);
+                    if(selectedService){
+                        objectEntry._joinData.display_alias =selectedService._joinData.display_alias
+                    }
+                    serviceObjects.push(objectEntry);
                 });
-                this.services = servicesObjects;
+                this.services = serviceObjects;
                 this.cdr.markForCheck();
             })
         );
@@ -212,16 +223,20 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         if(this.post.container_id === null){
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, '',[] )
+        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, searchstring, this.post.selected_servicegroups._ids )
             .subscribe((result) => {
                 let servicegroupsObjects:SelectKeyValueExtended[]  = [];
+                const selectedServicegroups = this.post.servicegroups;
 
                 result.map((item: SelectKeyValue) => {
+                    const selectedServicegroup = selectedServicegroups.find(servicegroup => servicegroup.id === item.key);
                     let objectEntry: SelectKeyValueExtended = {key: 0, value: '', id: 0, _joinData: {display_alias: ''}};
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
-                    objectEntry._joinData.display_alias = "";
+                    if(selectedServicegroup){
+                        objectEntry._joinData.display_alias =selectedServicegroup._joinData.display_alias
+                    }
                     servicegroupsObjects.push(objectEntry);
                 });
                 this.servicegroups = servicegroupsObjects;
@@ -234,7 +249,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatuspagesService.editStatuspage(this.id)
             .subscribe((result) => {
                 this.post = result;
-                this.cdr.markForCheck();
+                this.onContainerChange();
+
             })
         );
     }
@@ -246,9 +262,10 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.loadServicegroups('');
         this.loadHosts('');
         this.loadServices('');
+        this.cdr.markForCheck();
     }
 
-    private getDefaultPost(): StatuspagePost {
+    private getDefaultPost(): StatuspagePostEdit {
 
         return {
             container_id: null,

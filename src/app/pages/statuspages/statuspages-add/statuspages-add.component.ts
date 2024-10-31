@@ -259,10 +259,10 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             selected_services: {
                 _ids: []
             },
-            hostgroups: [],
-            hosts: [],
-            servicegroups: [],
-            services: [],
+            hostgroups: {},
+            hosts: {},
+            servicegroups: {},
+            services: {},
         };
     }
 
