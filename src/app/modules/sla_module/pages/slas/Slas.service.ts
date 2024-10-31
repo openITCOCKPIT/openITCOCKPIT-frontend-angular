@@ -16,7 +16,9 @@ import {
     SlasHostsParams,
     SlasHostsRoot,
     SlasIndexParams,
-    SlasIndexRoot
+    SlasIndexRoot,
+    SlasViewDetailsParams,
+    SlasViewDetailsRoot
 } from './Slas.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -185,6 +187,17 @@ export class SlasService {
             }
         }).pipe(
             map((data: SlasGenerateRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public getViewDetails(id: number, params: SlasViewDetailsParams): Observable<SlasViewDetailsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasViewDetailsRoot>(`${proxyPath}/sla_module/slas/viewDetails/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
                 return data;
             })
         )

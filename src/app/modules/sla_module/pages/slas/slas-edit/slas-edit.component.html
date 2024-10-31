@@ -125,7 +125,7 @@
                     </label>
 
                     <input cFormControl id="start_date" type="date"
-                           name="start_date" placeholder="{{ t('Start date') }}"
+                           name="start_date" [placeholder]="'Start date' | transloco"
                            oitcFormError [errors]="errors" errorField="start_date"
                            [(ngModel)]="post.start_date">
                     <oitc-form-feedback [errors]="errors" errorField="start_date"></oitc-form-feedback>
@@ -198,7 +198,7 @@
                             name="SlaTimeperiod"
                             id="SlaTimeperiod"
                             required
-                            placeholder="{{t('Please choose')}}"
+                            [placeholder]="'Please choose' | transloco"
                             optionValue="key"
                             optionLabel="value"
                             [(ngModel)]="post.timeperiod_id"
@@ -294,7 +294,7 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 required
-                                placeholder="{{ t('Please select...') }}"
+                                [placeholder]="'Please select...' | transloco"
                                 [(ngModel)]="post.users._ids"
                                 [options]="users"
                                 [debounce]="true"
@@ -316,7 +316,7 @@
                                 optionValue="key"
                                 optionLabel="value"
                                 required
-                                placeholder="{{ t('Please choose') }}"
+                                [placeholder]="'Please choose' | transloco"
                                 [(ngModel)]="files"
                                 [options]="reportFormats"
                                 (onChange)="onSendZipOrFileChange()"
