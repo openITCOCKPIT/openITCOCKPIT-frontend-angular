@@ -42,6 +42,7 @@ import {
     FormDirective,
     FormLabelDirective,
     InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent
@@ -96,7 +97,8 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         CardFooterComponent,
         RowComponent,
         InputGroupComponent,
-        AsyncPipe
+        AsyncPipe,
+        InputGroupTextDirective
     ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
@@ -168,6 +170,9 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups = hostgroupObjects;
+
+                console.log(this.hostgroups);
+
                 this.cdr.markForCheck();
             })
         );
@@ -183,7 +188,6 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 const selectedHosts = this.post.hosts;
                 result.map((item: SelectKeyValue) => {
                     const selectedHost = selectedHosts.find(host => host.id === item.key);
-                    console.log(selectedHost);
                     let objectEntry: SelectKeyValueExtended = {
                         key: 0,
                         value: '',

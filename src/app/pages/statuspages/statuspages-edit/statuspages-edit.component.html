@@ -217,35 +217,41 @@
                                 {{ t('Display name') }}
                             </div>
                         </div>
-                        <div *ngFor="let hostgroup of hostgroups; let i = index">
-                            <div class="row" *ngIf="post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1">
-                                <span class="col col-4 statuspage-item-box">
-                                    <ng-container
-                                        *ngIf="PermissionsService.hasPermissionObservable(['hostgroups', 'extended']) | async; else noPermission">
-                                        <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
-                                            {{ hostgroup.value }} {{ hostgroups[i]._joinData.display_alias }} {{ i }}
-                                        </a>
-                                    </ng-container>
-                                    <ng-template #noPermission>
-                                        {{ hostgroup.value }}
-                                    </ng-template>
-                                </span>
-                                <span class="col col-6">
-                                    <!-- <c-input-group>
-                                             <span class="input-group-text">
-                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
-                                             </span>-->
-                                    <input type="text"
-                                           class="form-control"
-                                           name="alias_hostgroup"
-                                           [(ngModel)]="hostgroup._joinData.display_alias"
-                                           placeholder="Set alias for hosthostgroup">
-                                    <!--</c-input-group>-->
+                        @for (hostgroup of hostgroups; track $index) {
+                            <div>
+                                <div class="row" *ngIf="post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1">
+                                    <span class="col col-4 statuspage-item-box">
+                                        <ng-container
+                                            *ngIf="PermissionsService.hasPermissionObservable(['hostgroups', 'extended']) | async; else noPermission">
+                                            <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                                                {{ hostgroup.value }}
+                                            </a>
+                                        </ng-container>
+                                        <ng-template #noPermission>
+                                            {{ hostgroup.value }}
+                                        </ng-template>
+                                    </span>
+                                    <span class="col col-6">
 
-                                </span>
-                                <span class="col">{{ hostgroups[i]._joinData.display_alias }}</span>
+                                        <c-input-group class="mb-3">
+                                            <span cInputGroupText id="basic-addon1">
+                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                            </span>
+                                            <input
+                                                cFormControl
+                                                type="text"
+                                                [attr.id]="'hostgroup_alias'+$index"
+                                                [name]="'hostgroup_alias'+$index"
+                                                class="form-control"
+                                                name="alias_hostgroup"
+                                                [(ngModel)]="hostgroup._joinData.display_alias"
+                                                placeholder="Set alias for hosthostgroup"
+                                            />
+                                        </c-input-group>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div class="mb-3">
