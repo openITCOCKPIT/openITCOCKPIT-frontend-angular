@@ -8,11 +8,12 @@
     content: " *";
     display: inline;
 }
+
 .hintmark_before:before {
-     color: #4759FF;
-     content: "* ";
-     display: inline;
- }
+    color: #4759FF;
+    content: "* ";
+    display: inline;
+}
 
 .arrowd-vertical-on-left {
     position: relative;
@@ -45,4 +46,14 @@
     right: 0;
     font-size: 20px;
     color: #4285F4;
+}
+
+
+.dropzoneStyle {
+    min-height: 175px;
+    padding: 15px;
+    border: 2px dashed var(--cui-border-color);
+    border-radius: 5px;
+    background: var(--cui-card-cap-bg);
+    color: var(--cui-body-color);
 }

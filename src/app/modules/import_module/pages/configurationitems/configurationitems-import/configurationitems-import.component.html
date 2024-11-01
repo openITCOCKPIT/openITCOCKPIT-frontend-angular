@@ -49,14 +49,28 @@
 
             </c-card-header>
             <c-card-body>
-
+                <!-- Dropzone -->
                 <c-row>
                     <c-col [xs]="12">
-                        <!-- Dropzone -->
-                        <!-- Dropzone end -->
+                        {{ t('Select image') }}
+                    </c-col>
+                    <c-col [xs]="12" class="text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Max allowed file size: ') }}
+                        {{ maxUploadLimit?.string }}
+                    </c-col>
+                    <c-col [xs]="12">
+                        <div id="jsonImportDropzone" class="dropzone dropzoneStyle">
+                            <div class="dz-message">
+                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                         class="mb-3 text-muted"></fa-icon>
+                                <br>
+                                <span class="text-uppercase"> {{ t('Drop JSON file here or click to upload.') }} </span>
+                            </div>
+                        </div>
                     </c-col>
                 </c-row>
-
+                <!-- Dropzone end -->
 
                 <fieldset>
                     <legend class="fs-md fieldset-legend-border-bottom mt-1"

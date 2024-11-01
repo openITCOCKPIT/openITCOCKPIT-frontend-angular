@@ -7,6 +7,7 @@ import {
     ConfigurationitemsElementsExportPost,
     ConfigurationitemsElementsJsonFile
 } from './configurationitems.interface';
+import { ProfileMaxUploadLimit } from '../../../../pages/profile/profile.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -41,5 +42,18 @@ export class ConfigurationitemsService {
                     return data;
                 })
             );
+    }
+
+    public loadMaxUploadLimit(): Observable<ProfileMaxUploadLimit> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            maxUploadLimit: ProfileMaxUploadLimit
+        }>(`${proxyPath}/import_module/configurationitems/import.json`, {
+            params: {}
+        }).pipe(
+            map(data => {
+                return data.maxUploadLimit;
+            })
+        )
     }
 }
