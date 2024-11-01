@@ -157,6 +157,7 @@ export class ImportedFilesViewComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             }
         });
+        this.subscriptions.add(sub);
     }
 
     protected readonly AgentHttpClientErrors = AgentHttpClientErrors;

@@ -25,4 +25,146 @@
         </ol>
     </nav>
 
+    <oitc-form-loader *ngIf="commands.length === 0"></oitc-form-loader>
+    <form cForm (ngSubmit)="submit()" *ngIf="commands.length > 0">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Export configuration items for /root Container') }}</h5>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'export']"
+                           *oitcPermission="['ImportModule', 'configurationitems', 'export']" class="nav-link active">
+                            <fa-icon [icon]="['fas', 'file-export']"></fa-icon>
+                            {{ t('Export') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'import']"
+                           *oitcPermission="['ImportModule', 'configurationitems', 'import']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                            {{ t('Import') }}
+                        </a>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+
+                <fieldset>
+                    <legend class="fs-md fieldset-legend-border-bottom mt-1"
+                            [ngClass]="{'fieldset-legend-border-bottom-danger': errors}">
+                        <h4>
+                            <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
+                            {{ t('Configuration items') }}
+                            <small class="text-danger ps-1 fw-300" *ngIf="errors">
+                                {{ t('You must select at least one configuration item for export.') }}
+                            </small>
+                        </h4>
+                    </legend>
+                    <div>
+
+                        <oitc-ui-blocker [blocked]="isGenerating">
+                            <div class="mb-3">
+                                <label cLabel for="commands">
+                                    {{ t('Commands') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="commands"
+                                    id="commands"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.commands._ids"
+                                    [options]="commands">
+                                </oitc-multi-select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="timeperiods">
+                                    {{ t('Time periods') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="timeperiods"
+                                    id="timeperiods"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.timeperiods._ids"
+                                    [options]="timeperiods">
+                                </oitc-multi-select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="contacts">
+                                    {{ t('Contacts') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="contacts"
+                                    id="contacts"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.contacts._ids"
+                                    [options]="contacts">
+                                </oitc-multi-select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="commands">
+                                    {{ t('Contact groups') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="contactgroups"
+                                    id="contactgroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.contactgroups._ids"
+                                    [options]="contactgroups">
+                                </oitc-multi-select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="servicetemplates">
+                                    {{ t('Service templates') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="servicetemplates"
+                                    id="servicetemplates"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.servicetemplates._ids"
+                                    [options]="servicetemplates">
+                                </oitc-multi-select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="servicetemplategroups">
+                                    {{ t('Service template groups') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="servicetemplategroups"
+                                    id="servicetemplategroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Configurationitems.servicetemplategroups._ids"
+                                    [options]="servicetemplategroups">
+                                </oitc-multi-select>
+                            </div>
+                        </oitc-ui-blocker>
+
+                    </div>
+                </fieldset>
+
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit" [disabled]="isGenerating">
+                    <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="isGenerating"></fa-icon>
+                    {{ t('Export configuration items') }}
+                </button>
+
+            </c-card-footer>
+        </c-card>
+    </form>
+
+
 </ng-container>
