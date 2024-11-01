@@ -37,32 +37,70 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <c-card>
+            <c-card *ngIf="result">
                 <!--<c-card-header>-->
                 <oitc-filter-bookmark [plugin]="'CustomalertModule'" [controller]="'Customalerts'" [action]="'index'"
                                       [filter]="params"
                                       (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
 
-                HIER DU SCHTRICHER!
                 <!--</c-card-header>-->
                 <c-card-body>
-                    <c-row>
-                        <c-col md="4">
-                            ORANJE 93/93
-                        </c-col>
-                        <c-col md="4">
-                            GREY 93/93
-                        </c-col>
-                        <c-col md="4">
-                            Legende
-                        </c-col>
-                    </c-row>
-                    <c-row>
-                        LINIE
-                    </c-row>
-                    <c-row>
-                        Group by host
-                    </c-row>
+                        <c-row>
+                            <c-col lg="4" md="12" xs="12">
+                                <div class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                            {{ result.customalertGlobalOverview['0'] }}
+                                            <span class="small opacity-40 ng-binding">
+                                                / {{ result.customalertGlobalOverview.total }}
+                                            </span>
+                                            <br />
+                                            <small class="m-0 l-h-n">
+                                                New alerts                                                </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'fire-flame-curved']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                                </div>
+                            </c-col>
+                            <c-col lg="4" md="12" xs="12">
+                                <div class="p-2 bg-secondary rounded overflow-hidden position-relative text-white mb-4">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                            {{ result.customalertGlobalOverview['1'] }}
+                                            <span class="small opacity-40 ng-binding">
+                                                / {{ result.customalertGlobalOverview.total }}
+                                            </span>
+                                            <br />
+                                            <small class="m-0 l-h-n">
+                                                {{ t('In progress') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'person-digging']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                                </div>
+                            </c-col>
+                            <c-col lg="4" md="12" xs="12">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+
+                                        <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                        <em class="padding-right-10">
+                                            New                                            </em>
+                                        <i class="fa-solid fa-person-digging text-secondary"></i>
+                                        <em class="padding-right-10">
+                                            In progress                                            </em>
+                                        <i class="fa-solid fa-clipboard-check text-success"></i>
+                                        <em class="padding-right-10">
+                                            Done                                            </em>
+                                        <i class="fa-solid fa-folder-closed color-primary"></i>
+                                        <em class="padding-right-10">
+                                            Manually closed                                            </em>
+                                    </div>
+                                </div>
+                            </c-col>
+                        </c-row>
                 </c-card-body>
             </c-card>
 
@@ -130,6 +168,50 @@
                     <c-row class="mt-2">
                         <c-col md="2">
                             <h5>{{t('Alert status')}}</h5>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       [(ngModel)]="params['filter[Customalerts.state][]']"
+                                       name="params['filter[Customalerts.state][]']"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                    {{ t('New') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       [(ngModel)]="params['filter[Customalerts.state][]']"
+                                       name="params['filter[Customalerts.state][]']"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                    {{ t('In progress') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       [(ngModel)]="params['filter[Customalerts.state][]']"
+                                       name="params['filter[Customalerts.state][]']"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                    {{ t('Done') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       [(ngModel)]="params['filter[Customalerts.state][]']"
+                                       name="params['filter[Customalerts.state][]']"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                    {{ t('Manually closed') }}
+                                </label>
+                            </c-form-check>
                         </c-col>
                         <c-col md="10">
 
@@ -139,16 +221,22 @@
                                     id="post.User.usercontainerroles._ids"
                                     [(ngModel)]="params['filter[Hosts.container_id][]']"
                                     optionValue="key"
-                                    optionLabel="value.servicename"
+                                    optionLabel="value"
                                     [options]="containers">
                             </oitc-multi-select>
                             <br />
 
-                            <input cFormCheckInput
-                                   name="params.recursive"
-                                   id="params.recursive"
-                                   type="checkbox"
-                                   [(ngModel)]="params.recursive"/>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="params.recursive" type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       [(ngModel)]="params.recursive"
+                                       name="params.recursive"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1" for="params.recursive">
+                                    {{ t('Recursive') }}
+                                </label>
+                            </c-form-check>
                         </c-col>
                     </c-row>
                     <c-row class="mt-2">

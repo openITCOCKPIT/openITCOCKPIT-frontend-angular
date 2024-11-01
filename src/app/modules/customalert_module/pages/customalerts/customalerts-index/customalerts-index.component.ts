@@ -11,8 +11,8 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownDividerDirective,
-    FormCheckInputDirective,
+    DropdownDividerDirective, FormCheckComponent,
+    FormCheckInputDirective, FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -100,7 +100,9 @@ import { LoadContainersRoot } from '../../../../../pages/contactgroups/contactgr
         MultiSelectComponent,
         FormCheckInputDirective,
         NavComponent,
-        NavItemComponent
+        NavItemComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
