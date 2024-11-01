@@ -1,1 +1,87 @@
-<p>configurationitems-import works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['importmodule','configurationitems', 'import']"
+                   [routerLink]="['/', 'import_module', 'configurationitems', 'import']">
+                    <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
+                    {{ t('Export / Import') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'file-export']"></fa-icon>
+                {{ t('Export') }}
+            </li>
+        </ol>
+    </nav>
+
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Import configuration items from JSON File') }}</h5>
+
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'export']"
+                           *oitcPermission="['ImportModule', 'configurationitems', 'export']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'file-export']"></fa-icon>
+                            {{ t('Export') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'import']"
+                           *oitcPermission="['ImportModule', 'configurationitems', 'import']" class="nav-link active">
+                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                            {{ t('Import') }}
+                        </a>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+                <c-row>
+                    <c-col [xs]="12">
+                        <!-- Dropzone -->
+                        <!-- Dropzone end -->
+                    </c-col>
+                </c-row>
+
+
+                <fieldset>
+                    <legend class="fs-md fieldset-legend-border-bottom mt-1"
+                            [ngClass]="{'File information': errors}">
+                        <h4>
+                            <fa-icon [icon]="['fas', 'truck-ramp-box']"></fa-icon>
+                            {{ t('Configuration items') }}
+                            <small class="text-danger ps-1 fw-300" *ngIf="errors">
+                                {{ t('Import configuration items from JSON File') }}
+                            </small>
+                        </h4>
+                    </legend>
+                    <div>
+
+
+                    </div>
+                </fieldset>
+
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                &nbsp;
+            </c-card-footer>
+        </c-card>
+    </form>
+
+
+</ng-container>

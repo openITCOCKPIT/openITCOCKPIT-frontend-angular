@@ -177,7 +177,7 @@
                             <oitc-select-all
                                 [itemsCount]="systemfailures.all_systemfailures.length"></oitc-select-all>
                         </c-col>
-                        <c-col md="3">
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div *oitcPermission="['systemfailures', 'delete']"
                                  class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
