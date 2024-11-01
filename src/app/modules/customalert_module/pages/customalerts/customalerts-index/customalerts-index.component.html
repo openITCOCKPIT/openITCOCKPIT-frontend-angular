@@ -381,3 +381,7 @@
         </c-card-body>
     </c-card>
 </ng-container>
+
+
+<oitc-customalerts-annotate-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-customalerts-annotate-modal>
+<oitc-customalerts-close-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-customalerts-close-modal>
