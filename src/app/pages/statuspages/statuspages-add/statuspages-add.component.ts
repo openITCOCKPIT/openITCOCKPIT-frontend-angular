@@ -60,6 +60,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {intersection} from 'lodash';
 
 
 @Component({
@@ -272,6 +273,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
     public submit = ()=> {
+        this.cleanUpForSubmit();
         this.filterForSubmit();
 
         this.subscriptions.add(this.StatuspagesService.addStatuspage(this.post)
@@ -338,6 +340,25 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                 return service;
             }
         });
+    }
+
+    private cleanUpForSubmit = () => {
+        this.post.selected_hostgroups._ids  = intersection(
+            this.hostgroups.map(hostgroup => hostgroup.key),
+            this.post.selected_hostgroups._ids
+        );
+        this.post.selected_servicegroups._ids = intersection(
+            this.servicegroups.map(servicegroup  => servicegroup.key),
+            this.post.selected_servicegroups._ids
+        );
+        this.post.selected_hosts._ids = intersection(
+            this.hosts.map(host  => host.key),
+            this.post.selected_hosts._ids
+        );
+        this.post.selected_services._ids = intersection(
+            this.services.map(service  => service.key),
+            this.post.selected_services._ids
+        );
     }
 
     protected readonly String = String;

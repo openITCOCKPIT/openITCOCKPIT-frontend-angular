@@ -53,7 +53,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { StatuspagesService } from '../statuspages.service';
-import { Subscription } from 'rxjs';
+import {map, Subscription} from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
@@ -63,6 +63,7 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import {NotyService} from '../../../layouts/coreui/noty.service';
+import {intersection} from 'lodash';
 
 @Component({
     selector: 'oitc-statuspages-edit',
@@ -321,13 +322,13 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     }
 
     public submit = ()=>  {
+        this.cleanUpForSubmit();
         this.filterForSubmit();
 
         this.subscriptions.add(this.StatuspagesService.updateStatuspage(this.id, this.post)
             .subscribe((result) => {
-
+                this.errors = null;
                 if (result.success) {
-                    this.errors = null;
                     const title: string = this.TranslocoService.translate('Statuspage');
                     const msg: string = this.TranslocoService.translate('added successfully');
                     this.notyService.genericSuccess(msg, title);
@@ -386,6 +387,25 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 return service;
             }
         });
+    }
+
+    private cleanUpForSubmit = () => {
+        this.post.selected_hostgroups._ids  = intersection(
+            this.hostgroups.map(hostgroup => hostgroup.key),
+            this.post.selected_hostgroups._ids
+        );
+        this.post.selected_servicegroups._ids = intersection(
+            this.servicegroups.map(servicegroup  => servicegroup.key),
+            this.post.selected_servicegroups._ids
+        );
+        this.post.selected_hosts._ids = intersection(
+            this.hosts.map(host  => host.key),
+            this.post.selected_hosts._ids
+        );
+        this.post.selected_services._ids = intersection(
+            this.services.map(service  => service.key),
+            this.post.selected_services._ids
+        );
     }
 
 }
