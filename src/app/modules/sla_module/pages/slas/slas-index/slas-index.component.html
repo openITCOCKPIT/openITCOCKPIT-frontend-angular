@@ -164,7 +164,7 @@
                     </td>
                     <td>
                         <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
-                           [routerLink]="['/', 'sla_module', 'slas', 'viewdetails', sla.id]">
+                           [routerLink]="['/', 'sla_module', 'slas', 'viewDetails', sla.id]">
                             {{ sla.name }}
                         </a>
                         <span *oitcPermission="['slamodule', 'slas', 'viewdetails']; negate: true">
@@ -212,7 +212,7 @@
                         <span [hidden]="sla.status_percent === null"
                               [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
                             <a *oitcPermission="['slamodule', 'slas', 'viewdetails']"
-                               [routerLink]="['/', 'sla_module', 'slas', 'viewdetails', sla.id]"
+                               [routerLink]="['/', 'sla_module', 'slas', 'viewDetails', sla.id]"
                                class="pointer"
                                [ngClass]="{'text-success': sla.fulfill, 'text-danger': !sla.fulfill}">
                                 {{ sla.status_percent }}%
@@ -309,7 +309,7 @@
                             <oitc-select-all
                                 [itemsCount]="slas.slas.length"></oitc-select-all>
                         </c-col>
-                        <c-col md="3">
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"

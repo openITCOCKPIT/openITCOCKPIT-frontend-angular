@@ -6,24 +6,6 @@
     cursor: help;
 }
 
-.select-input-group oitc-select {
-    flex-grow: 1;
-}
-
-.select-input-group oitc-select p-dropdown div {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-
-.pl-3 {
-    padding-left: 1rem !important;
-}
-
-.pl-5 {
-    padding-left: 2rem !important;
-}
-
 .margin-top-20 {
     margin-top: 20px;
 }
