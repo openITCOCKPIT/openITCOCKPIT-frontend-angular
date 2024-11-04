@@ -26,6 +26,8 @@
                 </c-row>
                 <textarea cFormControl
                           [(ngModel)]="comment"></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
+
                 {{ t('The maximum length for this field is 1024. Characters available:') }}
                 <code>{{ 1024 - comment.length }}</code>
             </ng-container>
@@ -39,11 +41,11 @@
             <c-form-check>
                 <input cFormCheckInput
                        class="checkbox-lg custom-check-default"
-                       name="acknolage"
-                       id="acknolage"
+                       name="acknowlage"
+                       id="acknowlage"
                        type="checkbox"
-                       [(ngModel)]="acknolage"/>
-                <label cFormCheckLabel for="acknolage">
+                       [(ngModel)]="acknowlage"/>
+                <label cFormCheckLabel for="acknowlage">
                     {{ t('Set annotation comment as service acknowledgement') }}
                 </label>
             </c-form-check>
@@ -66,6 +68,15 @@
                     </div>
                 </div>
             </c-alert>
+
+            <c-row [hidden]="!isProcessing" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Deleting...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
         </c-modal-body>
         <c-modal-footer>
             <button (click)="annotate()" [disabled]="isProcessing" cButton class="ripple" color="primary">

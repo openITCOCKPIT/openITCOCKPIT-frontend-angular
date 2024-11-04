@@ -111,3 +111,9 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
         'filter[to]' : '',
     }
 }
+
+// ANNOTATE
+export interface AnnotateParams {
+    setAnnotationAsHostAcknowledgement: boolean
+    setAnnotationAsServiceAcknowledgement : boolean
+}
