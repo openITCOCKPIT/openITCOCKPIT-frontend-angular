@@ -50,7 +50,7 @@
             </c-card-header>
             <c-card-body>
                 <!-- Dropzone -->
-                <c-row>
+                <c-row class="mb-3">
                     <c-col [xs]="12">
                         {{ t('Select image') }}
                     </c-col>
@@ -74,17 +74,44 @@
 
                 <fieldset>
                     <legend class="fs-md fieldset-legend-border-bottom mt-1"
-                            [ngClass]="{'File information': errors}">
+                            [ngClass]="{'fieldset-legend-border-bottom-danger': hasError}">
                         <h4>
                             <fa-icon [icon]="['fas', 'truck-ramp-box']"></fa-icon>
-                            {{ t('Configuration items') }}
-                            <small class="text-danger ps-1 fw-300" *ngIf="errors">
-                                {{ t('Import configuration items from JSON File') }}
+                            {{ t('File information') }}
+                            <small class="text-danger ps-1 fw-300" *ngIf="hasError">
+                                {{ t('Uploaded file contains errors!') }}
                             </small>
                         </h4>
                     </legend>
                     <div>
 
+                        <!-- Upload error -->
+                        <div class="alert border-faded bg-transparent text-secondary"
+                             *ngIf="hasError">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-shield icon-stack-3x text-danger"></i>
+                                        <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="h5 text-danger">
+                                        {{ t('Error') }}
+                                    </span>
+                                    <br>
+                                    {{ errorMessage }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Upload error end -->
+
+                        <c-row>
+                            <c-col [xs]="12" *ngIf="fileInformation && !importSuccessful">
+                                <!-- Display file information after upload but hide after successful import of objects  -->
+
+                            </c-col>
+                        </c-row>
 
                     </div>
                 </fieldset>
