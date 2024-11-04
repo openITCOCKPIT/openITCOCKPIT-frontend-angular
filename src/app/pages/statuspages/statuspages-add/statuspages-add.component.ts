@@ -33,12 +33,12 @@ import {
     CardBodyComponent,
     CardComponent, CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective,
+    CardTitleDirective, ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective, FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent,
+    FormLabelDirective, InputGroupComponent, InputGroupTextDirective,
     NavComponent,
     NavItemComponent, RowComponent
 } from '@coreui/angular';
@@ -51,7 +51,7 @@ import { StatuspagesService } from '../statuspages.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
-    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, PostParams}
+    StatuspagePost, SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit}
     from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
@@ -96,7 +96,9 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
         RowComponent,
         InputGroupComponent,
         AsyncPipe,
-        NgClass
+        NgClass,
+        ColComponent,
+        InputGroupTextDirective
     ],
   templateUrl: './statuspages-add.component.html',
   styleUrl: './statuspages-add.component.css',
@@ -113,7 +115,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public hosts: SelectKeyValueExtended[] = [];
     public services: SelectKeyValueExtended[] = [];
     public servicegroups: SelectKeyValueExtended[] = [];
-    public post: StatuspagePost = {} as StatuspagePost;
+    public post: StatuspagePostEdit = {} as StatuspagePostEdit;
     public errors: GenericValidationError | null = null;
     public noItemsSelected: boolean = false;
 
@@ -139,7 +141,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    loadHostgroups(searchstring: string) {
+    loadHostgroups = (searchString: string) => {
         if(this.post.container_id === null){
             return;
         }
@@ -159,7 +161,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             })
         );
     }
-    loadHosts(searchstring: string) {
+    public loadHosts = (searchString: string) => {
         if(this.post.container_id === null){
             return;
         }
@@ -181,7 +183,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadServices(searchstring: string) {
+    public loadServices = (searchString: string) => {
         if(this.post.container_id === null){
             return;
         }
@@ -206,7 +208,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         );
     }
 
-    public loadServicegroups(searchstring: string) {
+    public loadServicegroups = (searchString: string) => {
         if(this.post.container_id === null){
             return;
         }
@@ -236,7 +238,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         this.loadServices('');
     }
 
-    private getDefaultPost(): StatuspagePost {
+    private getDefaultPost(): StatuspagePostEdit {
 
         return {
             container_id: null,
@@ -259,14 +261,14 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             selected_services: {
                 _ids: []
             },
-            hostgroups: {},
-            hosts: {},
-            servicegroups: {},
-            services: {},
+            hostgroups: [],
+            hosts: [],
+            servicegroups: [],
+            services: [],
         };
     }
 
-    public submit(){
+    public submit = ()=> {
         this.filterForSubmit();
 
         this.subscriptions.add(this.StatuspagesService.addStatuspage(this.post)
@@ -293,6 +295,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                     ) {
                         this.noItemsSelected = true;
                     }
+                    this.cdr.markForCheck();
                 }
 
             })
@@ -301,7 +304,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
     }
 
-    private filterForSubmit() {
+    private filterForSubmit = () => {
 
         // @ts-ignore
         this.post.hostgroups = this.hostgroups.filter((hostgroup) => {

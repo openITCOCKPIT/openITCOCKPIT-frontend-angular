@@ -139,7 +139,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatuspagesService.loadContainers()
             .subscribe((result) => {
                 this.containers = result;
-                //this.cdr.markForCheck();
+                this.cdr.markForCheck();
                 this.load();
 
             })
@@ -279,8 +279,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     }
 
 
-    public onContainerChange() {
-        console.log('containerModelChange');
+    public onContainerChange = ()=> {
         this.loadHostgroups('');
         this.loadServicegroups('');
         this.loadHosts('');
@@ -318,7 +317,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         };
     }
 
-    public submit() {
+    public submit = ()=>  {
         this.filterForSubmit();
 
         this.subscriptions.add(this.StatuspagesService.updateStatuspage(this.id, this.post)
@@ -344,6 +343,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     ) {
                         this.noItemsSelected = true;
                     }
+                    this.cdr.markForCheck();
                 }
 
             })
@@ -352,7 +352,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
 
     }
 
-    private filterForSubmit() {
+    private filterForSubmit = () => {
 
         // @ts-ignore
         this.post.hostgroups = this.hostgroups.filter((hostgroup) => {

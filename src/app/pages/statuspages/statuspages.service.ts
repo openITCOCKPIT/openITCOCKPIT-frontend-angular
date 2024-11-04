@@ -169,7 +169,7 @@ export class StatuspagesService {
         )
     }
 
-    public addStatuspage (params: StatuspagePost): Observable<GenericResponseWrapper> {
+    public addStatuspage (params: StatuspagePostEdit): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<GenericIdResponse>(`${proxyPath}/statuspages/add.json?angular=true`, {Statuspage: params})
             .pipe(

@@ -108,14 +108,14 @@
                 </div>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom"  [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
+                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Downtime and Acknowledgements') }}
                         </h5>
                     </legend>
                 </fieldset>
                 <c-row>
-                    <div class="col-xs-12 col-md-6">
+                    <c-col xs="12" md="6">
                         <!-- Downtimes -->
                         <div>
                             <div>
@@ -132,7 +132,6 @@
                                 {{ t('Determines if running and planed downtimes are displayed on the status page') }}
                             </div>
                         </div>
-
                         <div class="form-group">
                             <div>
                                 <input type="checkbox"
@@ -149,16 +148,16 @@
                                 {{ t('Determines if the comments of the downtime are displayed on the status page.') }}
                             </div>
                         </div>
-                    </div>
+                    </c-col>
 
-                    <div class="col-xs-12 col-md-6">
+                    <c-col xs="12" md="6">
                         <!-- Acknowledgements -->
                         <div>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgements"
-                                        name="showAcknowledgements"
+                                       name="showAcknowledgements"
                                        [(ngModel)]="post.show_acknowledgements">
                                 <label class="ps-2" for="showAcknowledgements">
                                     {{ t('Show acknowledgements') }}
@@ -174,7 +173,7 @@
                                 <input type="checkbox"
                                        cFormCheckInput
                                        id="showAcknowledgementComments"
-                                        name="showAcknowledgementComments"
+                                       name="showAcknowledgementComments"
                                        [disabled]="!post.show_acknowledgements"
                                        [(ngModel)]="post.show_acknowledgement_comments">
                                 <label class="ps-2" for="showAcknowledgementComments">
@@ -185,7 +184,7 @@
                                 {{ t('Determines if the comments of the acknowledgements are displayed on the status page.') }}
                             </div>
                         </div>
-                    </div>
+                    </c-col>
                 </c-row>
 
                 <fieldset class="pb-1 pt-2">
@@ -201,6 +200,7 @@
                 </fieldset>
                 <div class="mb-3">
                     <label cLabel for="post.hostgroups._ids">
+                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
                         {{ t('Host groups') }}
                     </label>
                     <oitc-multi-select
@@ -213,46 +213,49 @@
                             [options]="hostgroups">
                     </oitc-multi-select>
 
-                    <ng-container class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
-                        <div class="row pb-2">
-                            <div class="col-4 bold">
+                    <div class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
+                        <c-row class="pt-2 pb-2">
+                            <c-col lg="4" md="4" xs="4" class="bold">
                                 {{ t('Hostgroup name') }}
-                            </div>
-                            <div class="col-8 bold">
+                            </c-col>
+                            <c-col lg="8" md="8" xs="8" class="bold">
                                 {{ t('Display name') }}
-                            </div>
-                        </div>
-                        <ng-container *ngFor="let hostgroup of hostgroups; let i = index" class="row form-group">
-                            <div *ngIf="post.selected_hostgroups._ids.includes(hostgroup.key)" class="row">
-                                <div class="col-4 statuspage-item-box">
-                                    @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
-                                        <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                            </c-col>
+                        </c-row>
+                        @for (hostgroup of hostgroups; track $index) {
+                            @if (post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
+                                <c-row class="mb-2">
+                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
+                                            <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                                                {{ hostgroup.value }}
+                                            </a>
+                                        } @else {
                                             {{ hostgroup.value }}
-                                        </a>
-                                    } @else {
-                                        {{ hostgroup.value }}
-                                    }
-
-                                </div>
-                                <div class="col-8">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
+                                        }
+                                    </c-col>
+                                    <c-col lg="8" md="8" xs="8">
+                                        <c-input-group>
+                                            <span cInputGroupText id="basic-addon1">
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
-                                        </div>
-                                        <input class="form-control form-control-sm" type="text"
-                                               name="alias_hostgroup"
-                                               [(ngModel)]="hostgroups[i]._joinData.display_alias"
-                                               placeholder="Set alias for hosthostgroup">
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </ng-container>
+                                            <input
+                                                    cFormControl
+                                                    [attr.id]="'hostgroup_alias'+$index"
+                                                    [name]="'hostgroup_alias'+$index"
+                                                    [(ngModel)]="hostgroups[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for hosthostgroup"
+                                            />
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                            }
+                        }
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.servicegroups._ids">
+                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                         {{ t('Service groups') }}
                     </label>
                     <oitc-multi-select
@@ -264,46 +267,48 @@
                             [searchCallback]="loadServicegroups"
                             [options]="servicegroups">
                     </oitc-multi-select>
-                    <ng-container class="form-group" *ngIf="post.selected_servicegroups._ids.length > 0">
-                        <div class="row pb-2">
-                            <div class="col-4 bold">
+                    @if (post.selected_servicegroups._ids.length > 0) {
+                        <c-row class="pt-2 pb-2">
+                            <c-col lg="4" md="4" xs="4" class="bold">
                                 {{ t('Servicegroup name') }}
-                            </div>
-                            <div class="col-8 bold">
+                            </c-col>
+                            <c-col lg="8" md="8" xs="8" class="bold">
                                 {{ t('Display name') }}
-                            </div>
-                        </div>
-                        <ng-container *ngFor="let servicegroup of servicegroups; let i = index" class="row form-group">
-                            <div *ngIf="post.selected_servicegroups._ids.includes(servicegroup.key)" class="row">
-                                <div class="col-4 statuspage-item-box">
-                                    @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
-                                        <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.key]">
+                            </c-col>
+                        </c-row>
+                        @for (servicegroup of servicegroups; ; track $index) {
+                            @if (post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
+                                <c-row class="mb-2">
+                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                        @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
+                                            <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.key]">
+                                                {{ servicegroup.value }}
+                                            </a>
+                                        } @else {
                                             {{ servicegroup.value }}
-                                        </a>
-                                    } @else {
-                                        {{ servicegroup.value }}
-                                    }
-
-                                </div>
-                                <div class="col-8">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
+                                        }
+                                    </c-col>
+                                    <c-col lg="8" md="8" xs="8" class="col-8">
+                                        <c-input-group>
+                                            <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
-                                        </div>
-                                        <input class="form-control form-control-sm" type="text"
-                                               name="alias_servicegroup"
-                                               [(ngModel)]="servicegroups[i]._joinData.display_alias"
-                                               placeholder="Set alias for servicegroup">
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </ng-container>
+                                            <input
+                                                    cFormControl
+                                                    [attr.id]="'servicegroup_alias'+$index"
+                                                    [name]="'servicegroup_alias'+$index"
+                                                    [(ngModel)]="servicegroups[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for servicegroup">
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                            }
+                        }
+                    }
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.hosts._ids">
+                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                         {{ t('Hosts') }}
                     </label>
                     <oitc-multi-select
@@ -316,18 +321,19 @@
                             [options]="hosts">
                     </oitc-multi-select>
                 </div>
-                <ng-container class="form-group" *ngIf="post.selected_hosts._ids.length > 0">
-                    <div class="row pb-2">
-                        <div class="col-4 bold">
-                            {{ t('Host name') }}
-                        </div>
-                        <div class="col-8 bold">
-                            {{ t('Display name') }}
-                        </div>
-                    </div>
-                    <ng-container *ngFor="let host of hosts; let i = index" class="row form-group">
-                        <div *ngIf="post.selected_hosts._ids.includes(host.key)" class="row">
-                            <div class="col-4 statuspage-item-box">
+            @if (post.selected_hosts._ids.length > 0) {
+                <c-row class="pt-2 pb-2">
+                    <c-col lg="4" md="4" xs="4" class="bold">
+                        {{ t('Host name') }}
+                    </c-col>
+                    <c-col lg="8" md="8" xs="8" class="bold">
+                        {{ t('Display name') }}
+                    </c-col>
+                </c-row>
+                @for (host of hosts; ; track $index) {
+                    @if (post.selected_hosts._ids.indexOf(host.id) !== -1) {
+                        <c-row class="mb-2">
+                            <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                     <a [routerLink]="['/', 'hosts', 'browser', host.key]">
                                         {{ host.value }}
@@ -335,26 +341,28 @@
                                 } @else {
                                     {{ host.value }}
                                 }
-                            </div>
-                            <div class="col-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
-                                        </span>
-                                    </div>
-                                    <input class="form-control form-control-sm" type="text"
-                                           name="alias_host"
-                                             [(ngModel)]="hosts[i]._joinData.display_alias"
-                                           placeholder="Set alias for host">
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                </ng-container>
+                            </c-col>
+                            <c-col lg="8" md="8" xs="8">
+                                <c-input-group>
+                                    <span  cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                    </span>
+                                    <input
+                                            cFormControl
+                                            [attr.id]="'host_alias'+$index"
+                                            [name]="'host_alias'+$index"
+                                            [(ngModel)]="hosts[$index]._joinData.display_alias"
+                                            placeholder="Set alias for host">
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                    }
+                }
+            }
 
                 <div class="mb-3">
                     <label cLabel for="post.services._ids">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         {{ t('Services') }}
                     </label>
                     <oitc-multi-select
@@ -366,44 +374,46 @@
                         [searchCallback]="loadServices"
                         [options]="services">
                     </oitc-multi-select>
-                </div>
-                <ng-container class="form-group" *ngIf="post.selected_services._ids.length > 0">
-                    <div class="row pb-2">
-                        <div class="col-4 bold">
-                            {{ t('Service name') }}
-                        </div>
-                        <div class="col-8 bold">
-                            {{ t('Display name') }}
-                        </div>
-                    </div>
-                    <ng-container *ngFor="let service of services; let i = index" class="row form-group">
-                        <div *ngIf="post.selected_services._ids.includes(service.key)" class="row">
-                            <div class="col-4 statuspage-item-box">
-                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'services', 'browser', service.key]">
-                                        {{ service.value }}
-                                    </a>
-                                } @else {
-                                    {{ service.value }}
-                                }
-                            </div>
-                            <div class="col-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
-                                        </span>
-                                    </div>
-                                    <input class="form-control form-control-sm" type="text"
-                                           name="alias_service"
-                                           [(ngModel)]="services[i]._joinData.display_alias"
-                                           placeholder="Set alias for service">
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                </ng-container>
 
+                    @if (post.selected_services._ids.length > 0) {
+                        <c-row class="pt-2 pb-2">
+                            <c-col lg="4" md="4" xs="4" class="bold">
+                                {{ t('Service name') }}
+                            </c-col>
+                            <c-col lg="8" md="8" xs="8" class="bold">
+                                {{ t('Display name') }}
+                            </c-col>
+                        </c-row>
+                        @for (service of services; track $index) {
+                            @if (post.selected_services._ids.indexOf(service.id) !== -1) {
+                                <c-row class="mb-2">
+                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'services', 'browser', service.key]">
+                                                {{ service.value }}
+                                            </a>
+                                        } @else {
+                                            {{ service.value }}
+                                        }
+                                    </c-col>
+                                    <c-col lg="8" md="8" xs="8">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                            </span>
+                                            <input
+                                                    cFormControl
+                                                    [attr.id]="'service_alias'+$index"
+                                                    [name]="'service_alias'+$index"
+                                                    [(ngModel)]="services[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for service">
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                            }
+                        }
+                    }
+                </div>
 
         </c-card-body>
 

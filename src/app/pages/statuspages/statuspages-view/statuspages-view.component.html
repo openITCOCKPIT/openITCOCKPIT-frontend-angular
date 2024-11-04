@@ -80,7 +80,7 @@
                             <div class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>
                         </div>
                         <div class="flex-1">
-                            <div class="row p-2">
+                            <c-row class="p-2">
                                 <div class="col-12 text-truncate h5"  *ngIf="item.type === 'host'">
                                     @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'browser', item.id]">
@@ -163,7 +163,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="row" *ngIf="showCurrentDowntimes[item.type + item.id]">
+                                    <c-row *ngIf="showCurrentDowntimes[item.type + item.id]">
                                         <div class="col-12 text-truncate">
                                             <div class="row" *ngFor="let downtime of item.downtimeData">
                                                 <div class="col-xs-12 col-md-3">
@@ -177,7 +177,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </c-row>
                                 </div>
                                 <!-- end of current downtimes -->
                                 <!-- handle planed downtimes -->
@@ -193,7 +193,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="row" *ngIf="showPlannedDowntimes[item.type + item.id]">
+                                    <c-row *ngIf="showPlannedDowntimes[item.type + item.id]">
                                         <div class="col-12 text-truncate">
                                             <div class="row" *ngFor="let downtime of item.plannedDowntimeData">
                                                 <div class="col-xs-12 col-md-3">
@@ -207,10 +207,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </c-row>
                                 </div>
                                 <!-- end of planed downtimes -->
-                            </div>
+                            </c-row>
                         </div>
                         <div class="p-2 hidden-md-down">
                             <div class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>

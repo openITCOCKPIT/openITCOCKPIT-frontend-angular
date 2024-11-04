@@ -12,7 +12,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent, RowComponent
 } from '@coreui/angular';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -42,6 +42,7 @@ import {toString} from 'lodash';
         NgIf,
         NgForOf,
         AsyncPipe,
+        RowComponent,
     ],
   templateUrl: './statuspages-view.component.html',
   styleUrl: './statuspages-view.component.css',

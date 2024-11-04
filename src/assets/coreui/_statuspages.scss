@@ -17,11 +17,27 @@
 .fw-500 {
   font-weight: 500 !important; }
 
+.fw-300 {
+  font-weight: 300 !important; }
+
 .bg-not-monitored {
   background-color:  rgb(88, 86, 214);
+}
+
+.statuspage-icon {
+  font-size: 3.5rem;
+  text-shadow: -1px -1px 0px rgba(255, 255, 255, 0.3), 1px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.font-xs {
+  font-size: 85% !important;
 }
 
 .statuspage-item-box {
   background: #4285F408;
   background-clip: content-box;
+}
+
+.position-absolute {
+  position: absolute !important;
 }

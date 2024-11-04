@@ -81,7 +81,7 @@
                     <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
                 </div>
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom">
+                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Access control') }}
                         </h5>
@@ -106,7 +106,7 @@
                 </div>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom">
+                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Downtime and Acknowledgements') }}
                         </h5>
@@ -187,10 +187,15 @@
                 </c-row>
 
                 <fieldset class="pb-1 pt-2">
-                    <legend class="fs-md fieldset-legend-border-bottom">
+                    <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Status page items') }}
+                            <span class="text-danger font-xs pl-1 fw-300"
+                                  *ngIf="noItemsSelected">
+                                {{ t('You must select at least one configuration item for status page.') }}
+                            </span>
                         </h5>
+
                     </legend>
                 </fieldset>
                 <div class="mb-3">
@@ -205,10 +210,8 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHostgroups"
-                            [options]="hostgroups"
-                            oitcFormError [errors]="errors" errorField="selected_hostgroups">
+                            [options]="hostgroups">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="selected_hostgroups"></oitc-form-feedback>
                     <div class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
                         <c-row class="pt-2 pb-2">
                             <c-col lg="4" md="4" xs="4" class="bold">
@@ -261,10 +264,8 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadServicegroups"
-                            [options]="servicegroups"
-                            oitcFormError [errors]="errors" errorField="selected_servicegroups">
+                            [options]="servicegroups">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="selected_servicegroups"></oitc-form-feedback>
                     @if (post.selected_servicegroups._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
                             <c-col lg="4" md="4" xs="4" class="bold">
@@ -316,10 +317,8 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadHosts"
-                            [options]="hosts"
-                            oitcFormError [errors]="errors" errorField="selected_hosts">
+                            [options]="hosts">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="selected_hosts"></oitc-form-feedback>
                     @if (post.selected_hosts._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
                             <c-col lg="4" md="4" xs="4" class="bold">
@@ -371,10 +370,8 @@
                             optionValue="key"
                             optionLabel="value"
                             [searchCallback]="loadServices"
-                            [options]="services"
-                            oitcFormError [errors]="errors" errorField="selected_services">
+                            [options]="services">
                     </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="selected_services"></oitc-form-feedback>
                     @if (post.selected_services._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
                             <c-col lg="4" md="4" xs="4" class="bold">
