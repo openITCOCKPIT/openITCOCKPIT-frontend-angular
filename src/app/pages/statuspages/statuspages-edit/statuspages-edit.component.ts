@@ -24,7 +24,7 @@
  */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -62,6 +62,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {NotyService} from '../../../layouts/coreui/noty.service';
 
 @Component({
     selector: 'oitc-statuspages-edit',
@@ -109,6 +110,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
     public id: number = 0;
     public containers: SelectKeyValue[] = [];
@@ -324,14 +327,19 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
 
                 if (result.success) {
-                    // Create another
                     this.errors = null;
+                    const title: string = this.TranslocoService.translate('Statuspage');
+                    const msg: string = this.TranslocoService.translate('added successfully');
+                    this.notyService.genericSuccess(msg, title);
+                    this._router.navigate(['statuspages', 'index']);
+                    this.notyService.scrollContentDivToTop();
                     this._router.navigate(['statuspages', 'index'])
 
                     return;
                 }
 
                 // Error
+                this.notyService.genericError();
                 const errorResponse = result.data as GenericValidationError;
                 if (result) {
                     this.noItemsSelected = false;

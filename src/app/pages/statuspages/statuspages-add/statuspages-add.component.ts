@@ -24,7 +24,7 @@
  */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -48,6 +48,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { StatuspagesService } from '../statuspages.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import {
@@ -109,6 +110,8 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
     public containers: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValueExtended[] = [];
@@ -276,14 +279,19 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
                 this.cdr.markForCheck();
                 if (result.success) {
-                    // Create another
-                    this.errors = null;
-                    this._router.navigate(['statuspages', 'index'])
 
+                    this.errors = null;
+                    const title: string = this.TranslocoService.translate('Statuspage');
+                    const msg: string = this.TranslocoService.translate('added successfully');
+                    this.notyService.genericSuccess(msg, title);
+                    this._router.navigate(['statuspages', 'index']);
+                    this.notyService.scrollContentDivToTop();
                     return;
+
                 }
 
                 // Error
+                this.notyService.genericError();
                 const errorResponse = result.data as GenericValidationError;
                 if (result) {
                     this.noItemsSelected = false;
