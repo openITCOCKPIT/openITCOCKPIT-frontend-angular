@@ -81,12 +81,26 @@ export interface ConfigurationitemsImportChange {
     name: string,
     changes: {
         [key: string]: {
-            current: {
+            current: any[] | {
                 [key: string]: any
             },
-            new: {
+            new: any[] | {
                 [key: string]: any
             }
         }
     }
 }
+
+export interface ConfigurationitemsRelevantChangeForTemplate {
+    objectType: ConfigurationItemsExportImport,
+    id: number,
+    name: string,
+    changes: RelevantChangeForTemplate[]
+}
+
+export interface RelevantChangeForTemplate {
+    changedModelName: string // "Command" or "Custom Variables" - the field that has changed
+    current: { field: string, value: any }[][] // [ [{field: "foo", value 123}, {field: "bar", value: "buzz"}] ]
+    new: { field: string, value: any }[][]     // This is an array in an array so we know when a new obect starts (like if multiple custom variables got changes)
+}
+

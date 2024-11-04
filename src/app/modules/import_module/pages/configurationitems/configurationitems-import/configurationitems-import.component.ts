@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import {
+    CalloutComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -10,13 +11,14 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { UiBlockerComponent } from '../../../../../components/ui-blocker/ui-blocker.component';
@@ -33,9 +35,12 @@ import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agent
 import {
     ConfigurationitemsImportFileInformation,
     ConfigurationitemsImportRelevantChanges,
-    ConfigurationitemsImportRoot
+    ConfigurationitemsImportRoot,
+    ConfigurationitemsRelevantChangeForTemplate,
+    RelevantChangeForTemplate
 } from '../configurationitems.interface';
-import { HttpErrorResponse } from '@angular/common/http';
+import { SystemnameService } from '../../../../../services/systemname.service';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'oitc-configurationitems-import',
@@ -62,7 +67,11 @@ import { HttpErrorResponse } from '@angular/common/http';
         NgClass,
         RouterLink,
         RowComponent,
-        ColComponent
+        ColComponent,
+        AsyncPipe,
+        TableDirective,
+        ProgressBarModule,
+        CalloutComponent
     ],
     templateUrl: './configurationitems-import.component.html',
     styleUrl: './configurationitems-import.component.css',
@@ -76,6 +85,9 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
     public hasError: boolean = false;
     public errorMessage: string = '';
 
+    public importRunning: boolean = false;
+    public hasImportError: boolean = false;
+
     public fileInformation?: ConfigurationitemsImportFileInformation;
     public uploadSuccessful: boolean = false;
     public filenameOnServer?: string
@@ -83,8 +95,9 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     // Holds a list of changes that might break the current monitoring
     public hasRelevantChanges: boolean = false;
-    public relevantChanges?: ConfigurationitemsImportRelevantChanges;
+    public relevantChanges: ConfigurationitemsRelevantChangeForTemplate[] = [];
 
+    public readonly SystemnameService = inject(SystemnameService);
 
     private subscriptions: Subscription = new Subscription();
     private dropzoneCreated: boolean = false;
@@ -138,7 +151,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
                     this.hasRelevantChanges = false;
-                    this.relevantChanges = undefined;
+                    this.relevantChanges = [];
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
@@ -148,14 +161,18 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
                     this.importSuccessful = false;
                     this.uploadSuccessful = false;
-                    this.hasRelevantChanges = false;
-                    this.relevantChanges = undefined;
                     let errorMessage: undefined | string = undefined;
                     if (response) {
                         const serverResponse = JSON.parse(response.response) as ConfigurationitemsImportRoot;
                         if (serverResponse.success) {
                             // Update the preview element to show check mark icon
                             this.updatePreviewElement(file, 'success');
+
+                            this.hasRelevantChanges = Object.keys(serverResponse.relevantChanges).length > 0;
+
+                            this.relevantChanges = this.formatRelevantChangesForTemplate(serverResponse.relevantChanges);
+
+                            console.log(this.relevantChanges);
 
                             this.hasError = false;
                             this.fileInformation = serverResponse.fileInformation;
@@ -221,26 +238,32 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         // Remove uploaded file from dropzone preview
         file.previewElement.parentNode?.removeChild(file.previewElement);
 
+        return;
+
+        // This code is disabled, as we do not know for sure which file to delete if a user drops
+        // more than one file into the dropzone.
+        // So for now we just remove the file from the preview and do not delete it from the server.
+
         // Remove file from server
-        if (this.filenameOnServer) {
-            const sub = this.ConfigurationitemsService.deleteUploadedFile(this.filenameOnServer).subscribe({
-                next: (response) => {
-                    if (response.success) {
-                        this.notyService.genericSuccess(response.message);
-                    } else {
-                        this.notyService.genericError(response.message);
-                    }
-                    this.filenameOnServer = undefined;
-                    this.cdr.markForCheck();
-                },
-                error: (error: HttpErrorResponse) => {
-                    this.notyService.genericError();
-                    this.filenameOnServer = undefined;
-                    this.cdr.markForCheck();
-                }
-            });
-            this.subscriptions.add(sub);
-        }
+        //if (this.filenameOnServer) {
+        //    const sub = this.ConfigurationitemsService.deleteUploadedFile(this.filenameOnServer).subscribe({
+        //        next: (response) => {
+        //            if (response.success) {
+        //                this.notyService.genericSuccess(response.message);
+        //            } else {
+        //                this.notyService.genericError(response.message);
+        //            }
+        //            this.filenameOnServer = undefined;
+        //            this.cdr.markForCheck();
+        //        },
+        //        error: (error: HttpErrorResponse) => {
+        //            this.notyService.genericError();
+        //            this.filenameOnServer = undefined;
+        //            this.cdr.markForCheck();
+        //        }
+        //    });
+        //    this.subscriptions.add(sub);
+        //}
 
     }
 
@@ -254,6 +277,88 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         if (errorMessageElement && tooltipMessage) {
             errorMessageElement.children[0].innerHTML = tooltipMessage; // .dz-error-message span
         }
+    }
+
+    /**
+     * The API Result is an object with keys that represent the type of change.
+     * The value of changes."Field Name".new can be an object or an array of objects.
+     * We have to make everything an array so the template can iterate over it.
+     *
+     * See attached configurationitems_import_diff.png
+     *
+     * @param relevantChanges
+     * @private
+     */
+    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): ConfigurationitemsRelevantChangeForTemplate[] {
+        const changesForTemplate: ConfigurationitemsRelevantChangeForTemplate[] = [];
+
+        for (let key in relevantChanges) {
+            let tsKey = key as keyof ConfigurationitemsImportRelevantChanges;
+            let changes = relevantChanges[tsKey];
+
+            changes?.forEach(change => {
+                const changeForTemplate: ConfigurationitemsRelevantChangeForTemplate = {
+                    id: change.id,
+                    name: change.name,
+                    objectType: tsKey,
+                    changes: []
+                };
+
+                // The ts-ignore is required due to we get current and new from the array.
+                for (let CurrentOrNew of ['current', 'new']) {
+                    for (let changedModelName in change.changes) {
+                        let modelChange: RelevantChangeForTemplate = {
+                            changedModelName: changedModelName,
+                            current: [],
+                            new: []
+                        };
+
+                        // @ts-ignore
+                        for (let subKey in change.changes[changedModelName][CurrentOrNew]) {
+                            // subValue can be an array, an object or a string
+                            // @ts-ignore
+                            let subValue = change.changes[changedModelName][CurrentOrNew][subKey];
+
+                            if (typeof subValue === "object") {
+                                // Array or object (bc an array is typeof object in JavaScript)
+                                const subValues: { field: string, value: any }[] = [];
+                                for (let fieldKey in subValue) {
+                                    // @ts-ignore
+                                    subValues.push({
+                                        field: fieldKey,           // e.g. objecttype_id
+                                        value: subValue[fieldKey]  // e.g. 4096
+                                    });
+                                }
+                                // Push array in array so we know where a new object starts (multiple custom variables for example)
+                                // @ts-ignore
+                                modelChange[CurrentOrNew].push(subValues);
+                            } else {
+                                // String or number
+                                // Also array in array to keep the same API
+                                // @ts-ignore
+                                modelChange[CurrentOrNew].push([{
+                                    field: subKey,   // e.g. command_line
+                                    value: subValue  // e.g. /bin/true
+                                }]);
+                            }
+                        }
+
+                        changeForTemplate.changes.push(modelChange);
+                    }
+                }
+
+                // All changes for all objects
+                changesForTemplate.push(changeForTemplate);
+            });
+
+        }
+
+
+        return changesForTemplate;
+    }
+
+    public launchImport() {
+        this.importRunning = true;
     }
 
     protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
