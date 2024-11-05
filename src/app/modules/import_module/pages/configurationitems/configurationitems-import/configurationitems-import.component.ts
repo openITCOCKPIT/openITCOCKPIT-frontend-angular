@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import {
+    AlertComponent,
     CalloutComponent,
     CardBodyComponent,
     CardComponent,
@@ -44,6 +45,8 @@ import {
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfigurationItemsExportImport } from '../configurationitems.enum';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
     selector: 'oitc-configurationitems-import',
@@ -74,7 +77,10 @@ import { ConfigurationItemsExportImport } from '../configurationitems.enum';
         AsyncPipe,
         TableDirective,
         ProgressBarModule,
-        CalloutComponent
+        CalloutComponent,
+        LabelLinkComponent,
+        RequiredIconComponent,
+        AlertComponent
     ],
     templateUrl: './configurationitems-import.component.html',
     styleUrl: './configurationitems-import.component.css',
@@ -394,4 +400,5 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
 
+    protected readonly ConfigurationItemsExportImport = ConfigurationItemsExportImport;
 }
