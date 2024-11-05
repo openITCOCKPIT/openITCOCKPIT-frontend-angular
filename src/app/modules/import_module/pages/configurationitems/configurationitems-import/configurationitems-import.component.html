@@ -353,31 +353,54 @@
 
                         </c-callout>
 
-                        @for (changes of relevantChanges; track $index) {
+                        @for (objectTypeChanges of relevantChanges; track $index) {
                             <fieldset class="col-12 p-0">
                                 <legend class="mt-3 bg-cyan-100 text-info">
-                                    {{ changes.objectType }}
+                                    {{ objectTypeChanges.objectType }}
                                 </legend>
 
-                                @for (change of changes.changes; track $index) {
+                                @for (changes of objectTypeChanges.relevantChanges; track $index) {
                                     <c-row>
-                                        <c-col>
+                                        <c-col [xs]="12">
+                                            <h5>
+                                                {{ changes.name }}
+                                            </h5>
+                                        </c-col>
+                                        <c-col [xs]="12">
+                                            @for (change of changes.changes; track $index) {
+                                                <blockquote class="changelog-blockquote-primary blockquote ps-3">
+                                                    <span class="font-sm">{{ change.changedModelName }}</span>
+                                                    <c-row>
+                                                        <c-col [xs]="12" [md]="6" class="bg-red-100 down">
+                                                            @for (currentArray of change.current; track $index) {
+                                                                @for (current of currentArray; track $index) {
+                                                                    <div class="mb-2">
+                                                                        {{ current.field }}
+                                                                        {{ current.value }}
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </c-col>
 
+                                                        <c-col [xs]="12" [md]="6" class="bg-green-100 text-teal-600">
+                                                            @for (newArray of change.new; track $index) {
+                                                                @for (newData of newArray; track $index) {
+                                                                    <div class="mb-2">
+                                                                        {{ newData.field }}
+                                                                        {{ newData.value }}
+                                                                    </div>
+                                                                }
+                                                            }
+
+                                                        </c-col>
+                                                    </c-row>
+                                                </blockquote>
+                                            }
                                         </c-col>
                                     </c-row>
                                 }
 
-                                <blockquote class="changelog-blockquote-primary blockquote ps-3">
-                                    <div class="row small">
-                                        <div class="col-xs-12 col-md-6 bg-red-100 down">
-                                            {{ t('Current configuration') }}
-                                        </div>
 
-                                        <div class="col-xs-12 col-md-6 bg-green-100 text-teal-600">
-                                            {{ t('New configuration after import') }}
-                                        </div>
-                                    </div>
-                                </blockquote>
                             </fieldset>
                         }
 

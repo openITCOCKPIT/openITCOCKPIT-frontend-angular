@@ -37,7 +37,9 @@ import {
     ConfigurationitemsImportRelevantChanges,
     ConfigurationitemsImportRoot,
     ConfigurationitemsRelevantChangeForTemplate,
-    RelevantChangeForTemplate
+    RelevantChangeForTemplate,
+    RelevantChangesByObjectTypeForGroupByType,
+    RelevantChangesByObjectTypesForTemplate
 } from '../configurationitems.interface';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -95,7 +97,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     // Holds a list of changes that might break the current monitoring
     public hasRelevantChanges: boolean = false;
-    public relevantChanges: ConfigurationitemsRelevantChangeForTemplate[] = [];
+    public relevantChanges: RelevantChangesByObjectTypesForTemplate[] = [];
 
     public readonly SystemnameService = inject(SystemnameService);
 
@@ -289,12 +291,18 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
      * @param relevantChanges
      * @private
      */
-    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): ConfigurationitemsRelevantChangeForTemplate[] {
-        const changesForTemplate: ConfigurationitemsRelevantChangeForTemplate[] = [];
+    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): RelevantChangesByObjectTypesForTemplate[] {
+        const changesForTemplate: RelevantChangesByObjectTypeForGroupByType = {};
 
         for (let key in relevantChanges) {
             let tsKey = key as keyof ConfigurationitemsImportRelevantChanges;
+            if (!changesForTemplate.hasOwnProperty(tsKey)) {
+                changesForTemplate[tsKey] = [];
+            }
+
             let changes = relevantChanges[tsKey];
+
+            const objectTypeChangesForTemplate: ConfigurationitemsRelevantChangeForTemplate[] = [];
 
             changes?.forEach(change => {
                 const changeForTemplate: ConfigurationitemsRelevantChangeForTemplate = {
@@ -304,7 +312,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     changes: []
                 };
 
-                // The ts-ignore is required due to we get current and new from the array.
+                // requires all the ts-ignore, don't know how to do this the typescript way
                 for (let CurrentOrNew of ['current', 'new']) {
                     for (let changedModelName in change.changes) {
                         let modelChange: RelevantChangeForTemplate = {
@@ -347,14 +355,25 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     }
                 }
 
-                // All changes for all objects
-                changesForTemplate.push(changeForTemplate);
+                // All changes for current object type
+                objectTypeChangesForTemplate.push(changeForTemplate);
             });
 
+            changesForTemplate[tsKey] = objectTypeChangesForTemplate;
         }
 
+        // Currently al objects are group by type in a hash map.
+        // Stupid ngFor can not handle hash maps, so we have to convert it to an array
+        const changesForTemplateArray: RelevantChangesByObjectTypesForTemplate[] = [];
+        for (let key in changesForTemplate) {
+            let tsKey = key as keyof ConfigurationitemsImportRelevantChanges;
+            changesForTemplateArray.push({
+                objectType: tsKey,
+                relevantChanges: changesForTemplate[tsKey] || []
+            });
+        }
 
-        return changesForTemplate;
+        return changesForTemplateArray;
     }
 
     public launchImport() {

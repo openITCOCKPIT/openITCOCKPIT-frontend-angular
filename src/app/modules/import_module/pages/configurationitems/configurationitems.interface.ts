@@ -91,6 +91,18 @@ export interface ConfigurationitemsImportChange {
     }
 }
 
+// These interfaces are only for the template as we have to rewrite the server response
+// to make ngFor happy
+
+export type RelevantChangesByObjectTypeForGroupByType = {
+    [key in ConfigurationItemsExportImport]?: ConfigurationitemsRelevantChangeForTemplate[]
+}
+
+export interface RelevantChangesByObjectTypesForTemplate {
+    objectType: ConfigurationItemsExportImport,
+    relevantChanges: ConfigurationitemsRelevantChangeForTemplate[]
+}
+
 export interface ConfigurationitemsRelevantChangeForTemplate {
     objectType: ConfigurationItemsExportImport,
     id: number,
