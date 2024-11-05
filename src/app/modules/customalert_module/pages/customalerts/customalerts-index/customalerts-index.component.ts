@@ -161,7 +161,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected hideFilter: boolean = true;
     protected selectedItems: DeleteAllItem[] = [];
     protected groupViewByHost: boolean = false;
-    protected groupedList: Customalert[] = [];
+    protected groupedList: { [key: number]: Customalert[] } = {};
 
     private getSelectedItems(customAlert?: Customalert): DeleteAllItem[] {
         if (customAlert) {
@@ -284,6 +284,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         }
     }
 
+    protected hostIdsInOrder: number[] = [];
     protected refresh(): void {
         this.params['filter[Customalerts.state][]'] = Object.keys(_.pickBy(this.stateFilter, (value, key) => value === true)) as unknown as number[];
 
@@ -292,34 +293,23 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
             .subscribe((result: CustomAlertsIndex) => {
                 this.result = result;
 
-                this.groupedList = [];
+                this.groupedList = {};
                 // Iterate all custom alerts from this.result and group it by the element.service.host.id key
 
 
-                var customAlertsFormated: { [key: number]: Customalert[] } = {};
-                var keepOrder = [];
+                this.groupedList = {};
+                this.hostIdsInOrder = [];
                 for (var i in this.result.customalerts) {
-                    var customAlert = this.result.customalerts[i];
+                    let customAlert = this.result.customalerts[i];
 
-                    if (!customAlertsFormated.hasOwnProperty(customAlert.service.host_id)) {
+                    if (!this.groupedList.hasOwnProperty(customAlert.service.host_id)) {
                         // Push the host_ids into an array to restore the order from the server
-                        keepOrder.push(customAlert.service.host_id);
+                        this.hostIdsInOrder.push(customAlert.service.host_id);
 
-                        customAlertsFormated[customAlert.service.host_id] = []
+                        this.groupedList[customAlert.service.host_id] = []
                     }
-                    customAlertsFormated[customAlert.service.host_id].push(customAlert);
+                    this.groupedList[customAlert.service.host_id].push(customAlert);
                 }
-
-                let me = this;
-                keepOrder.forEach(function (hostId) {
-                    // me.groupedList[hostId] = customAlertsFormated[hostId] as Customalert[];
-                    customAlertsFormated[hostId].forEach(function (customAlert) {
-                        me.groupedList.push(customAlert);
-                    });
-
-                    console.warn(me.groupedList);
-                });
-
 
                 this.cdr.markForCheck();
             }));
