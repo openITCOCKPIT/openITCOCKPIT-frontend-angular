@@ -20,7 +20,8 @@ import {
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalService,
-    ModalTitleDirective, ProgressComponent,
+    ModalTitleDirective,
+    ProgressComponent,
     RowComponent,
     TextColorDirective
 } from '@coreui/angular';
@@ -93,20 +94,14 @@ export class CustomalertsAnnotateModalComponent {
             let issueCount = 0;
 
 
-            this.CustomAlertsService.annotate(item.id, this.comment, false, false).subscribe({
+            this.CustomAlertsService.annotate(item.id, this.comment, true, this.acknowlage).subscribe({
                 next: (value: any) => {
-                    console.warn('value', value);
                     responseCount++
                     this.percentage = Math.round((responseCount / count) * 100);
 
                     if (responseCount === count && issueCount === 0) {
                         // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
                         setTimeout(() => {
-                            // All records have been deleted successfully. Reset the modal
-                            this.isProcessing = false;
-                            this.percentage = 0;
-                            this.hasErrors = false;
-                            this.errors = null;
 
                             this.hideModal();
                         }, 250);
@@ -117,7 +112,6 @@ export class CustomalertsAnnotateModalComponent {
                 error: (error: HttpErrorResponse) => {
                     this.cdr.markForCheck();
                     this.errors = error.error.error as GenericValidationError
-                    console.warn('responseError', this.errors);
                     issueCount++
                     this.hasErrors = true;
 
@@ -142,5 +136,17 @@ export class CustomalertsAnnotateModalComponent {
             show: false,
             id: 'customalertsAnnotateModal'
         });
+        this.reset();
+    }
+
+    private reset(): void {
+        // All records have been deleted successfully. Reset the modal
+        this.acknowlage = true;
+        this.isProcessing = false;
+        this.percentage = 0;
+        this.hasErrors = false;
+        this.comment = '';
+        this.errors = null;
+        this.items = [];
     }
 }

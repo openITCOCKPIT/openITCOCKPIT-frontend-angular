@@ -25,16 +25,15 @@ export class CustomAlertsService {
     }
 
     public annotate(customAlertId: number, comment: string, setAnnotationAsHostAcknowledgement: boolean, setServiceAcknowledgement: boolean): Observable<void> {
-        let a: string = '&setAnnotationAsHostAcknowledgement=true&setAnnotationAsServiceAcknowledgement=' + setServiceAcknowledgement ? 'true' : 'false';
+        let a: string = '&setAnnotationAsHostAcknowledgement=true&setAnnotationAsServiceAcknowledgement=' + (setServiceAcknowledgement ? 'true' : 'false');
         return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/annotate/${customAlertId}.json?angular=true${a}`, {
-            comment,
+            comment
         });
     }
 
-    public close(customAlertId: number, comment: string): void {
-        // https://master/customalert_module/customalerts/close/162.json?angular=true
-        this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/close/${customAlertId}.json`, {
-            comment,
+    public closeManually(customAlertId: number, comment: string): Observable<void> {
+        return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/close/${customAlertId}.json`, {
+            comment
         });
     }
 

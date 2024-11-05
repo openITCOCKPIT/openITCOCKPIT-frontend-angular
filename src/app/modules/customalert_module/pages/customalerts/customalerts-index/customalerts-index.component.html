@@ -94,7 +94,7 @@
                                         <i class="fa-solid fa-clipboard-check text-success"></i>
                                         <em class="padding-right-10">
                                             Done                                            </em>
-                                        <i class="fa-solid fa-folder-closed color-primary"></i>
+                                        <i class="fa-solid fa-folder-closed text-primary"></i>
                                         <em class="padding-right-10">
                                             Manually closed                                            </em>
                                     </div>
@@ -305,21 +305,38 @@
                         </div>
                     </td>
                     <td>
-                        {{ customAlertRule.state }}
+                        <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
+                        <i *ngIf="customAlertRule.state  === 1" class="fa-solid fa-person-digging text-secondary"></i>
+                        <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
                     </td>
                     <td>
                         {{ customAlertRule.container }}
                     </td>
                     <td>
-                        {{ customAlertRule.service.host.name }}
+                        <span *oitcPermission="['hosts', 'browser']">
+                            <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
+                                {{ customAlertRule.service.host.name }}
+                            </a>
+                        </span>
+                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                            {{ customAlertRule.service.host.name }}
+                        </span>
                     </td>
                     <td>
-                        {{ customAlertRule.servicename }}
+                        <span *oitcPermission="['services', 'browser']">
+                            <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
+                                {{ customAlertRule.service.host.name }}
+                            </a>
+                        </span>
+                        <span *oitcPermission="['services', 'browser']; negate: true">
+                            {{ customAlertRule.servicename }}
+                        </span>
                     </td>
                     <td>
                         {{ customAlertRule.message }}
                     </td>
                     <td>
+                        <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
                         {{ customAlertRule.CustomalertComments.comment }}
                     </td>
                     <td>

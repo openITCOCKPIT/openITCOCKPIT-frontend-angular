@@ -44,7 +44,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -68,6 +68,7 @@ import {
     CustomalertsCloseModalComponent
 } from '../../../components/customalerts-close-modal/customalerts-close-modal.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -118,7 +119,9 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         FormCheckLabelDirective,
         DeleteAllModalComponent,
         CustomalertsAnnotateModalComponent,
-        CustomalertsCloseModalComponent
+        CustomalertsCloseModalComponent,
+        DatePipe,
+        LabelLinkComponent
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
