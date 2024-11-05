@@ -222,6 +222,8 @@
                                     [(ngModel)]="params['filter[Hosts.container_id][]']"
                                     optionValue="key"
                                     optionLabel="value"
+                                    (debouncedValue)="onFilterChange($event)"
+                                    oitcDebounce
                                     [options]="containers">
                             </oitc-multi-select>
                             <br/>
@@ -348,7 +350,7 @@
                             <td>
                                 <span *oitcPermission="['services', 'browser']">
                                     <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
-                                        {{ customAlertRule.service.host.name }}
+                                        {{ customAlertRule.servicename }}
                                     </a>
                                 </span>
                                 <span *oitcPermission="['services', 'browser']; negate: true">
@@ -438,6 +440,9 @@
                             <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
                         </td>
                         <td>
+                            {{ customAlertRule.service.container }}
+                        </td>
+                        <td>
                             <span *oitcPermission="['hosts', 'browser']">
                                 <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
                                     {{ customAlertRule.service.host.name }}
@@ -450,7 +455,7 @@
                         <td>
                             <span *oitcPermission="['services', 'browser']">
                                 <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
-                                    {{ customAlertRule.service.host.name }}
+                                    {{ customAlertRule.servicename }}
                                 </a>
                             </span>
                             <span *oitcPermission="['services', 'browser']; negate: true">
@@ -464,7 +469,7 @@
                             <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
                             {{ customAlertRule.CustomalertComments.comment }}
                         </td>
-                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
+                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}" class="text-center">
                             {{ customAlertRule.last24hoursAlerts }}
                         </td>
                         <td>
