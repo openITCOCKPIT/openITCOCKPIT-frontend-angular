@@ -44,8 +44,11 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 import { CustomAlertsService } from '../customalerts.service';
 import {
     Customalert,
-    CustomAlertsIndex, CustomAlertsIndexCustomAlertsStateFilter,
-    CustomAlertsIndexParams, CustomAlertsState, getDefaultCustomAlertsIndexCustomAlertsStateFilter,
+    CustomAlertsIndex,
+    CustomAlertsIndexCustomAlertsStateFilter,
+    CustomAlertsIndexParams,
+    CustomAlertsState,
+    getDefaultCustomAlertsIndexCustomAlertsStateFilter,
     getDefaultCustomAlertsIndexParams
 } from '../customalerts.interface';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
@@ -79,10 +82,6 @@ import {
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import {
-    getDefaultInstantreportsIndexObjectTypesFilter,
-    InstantreportsIndexObjectTypesFilter
-} from '../../../../../pages/instantreports/instantreports.interface';
 import _ from 'lodash';
 
 @Component({
@@ -162,7 +161,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected hideFilter: boolean = true;
     protected selectedItems: DeleteAllItem[] = [];
     protected groupViewByHost: boolean = false;
-    protected groupedList: { [key: number]: Customalert[] } = {} as { [key: number]: Customalert[] };
+    protected groupedList: Customalert[] = [];
 
     private getSelectedItems(customAlert?: Customalert): DeleteAllItem[] {
         if (customAlert) {
@@ -297,20 +296,30 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
                 // Iterate all custom alerts from this.result and group it by the element.service.host.id key
 
 
-                for (let i in this.result.customalerts) {
-                    const item = this.result.customalerts[i] as Customalert;
+                var customAlertsFormated: { [key: number]: Customalert[] } = {};
+                var keepOrder = [];
+                for (var i in this.result.customalerts) {
+                    var customAlert = this.result.customalerts[i];
 
-                    // Find the group
-                    let hostId = item.service.host.id;
+                    if (!customAlertsFormated.hasOwnProperty(customAlert.service.host_id)) {
+                        // Push the host_ids into an array to restore the order from the server
+                        keepOrder.push(customAlert.service.host_id);
 
-                    // Check if array position hostId in this.groupedList exists.
-                    if (!(hostId in this.groupedList)) {
-                        // If the key does not exist, create it and initialize with an empty array
-                        this.groupedList[hostId] = [];
+                        customAlertsFormated[customAlert.service.host_id] = []
                     }
-
-                    this.groupedList[hostId].push(item);
+                    customAlertsFormated[customAlert.service.host_id].push(customAlert);
                 }
+
+                let me = this;
+                keepOrder.forEach(function (hostId) {
+                    // me.groupedList[hostId] = customAlertsFormated[hostId] as Customalert[];
+                    customAlertsFormated[hostId].forEach(function (customAlert) {
+                        me.groupedList.push(customAlert);
+                    });
+
+                    console.warn(me.groupedList);
+                });
+
 
                 this.cdr.markForCheck();
             }));

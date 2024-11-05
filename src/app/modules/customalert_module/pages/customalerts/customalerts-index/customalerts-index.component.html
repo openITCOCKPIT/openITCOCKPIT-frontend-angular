@@ -310,28 +310,27 @@
                     </thead>
                     <tbody *ngIf="result">
 
-                    <ng-container *ngFor="let customAlertRuleGroup of this.groupedList | keyvalue:keepOrder">
+                    <ng-container *ngFor="let customAlertRuleGroup of [groupedList[0]]">
                         <tr>
                             <td colspan="10">
                                 <span *oitcPermission="['hosts', 'browser']">
-                                    <a [routerLink]="['/', 'hosts', 'browser',customAlertRuleGroup.value[0].service.host.id]">
+                                    <a [routerLink]="['/', 'hosts', 'browser',customAlertRuleGroup.service.host.id]">
                                         <fa-icon [icon]="['fas', 'desktop']"/>
-                                        {{ customAlertRuleGroup.value[0].service.host.name }}
+                                        {{ customAlertRuleGroup.service.host.name }}
                                     </a>
                                 </span>
                                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'desktop']"/>
-                                    {{ customAlertRuleGroup.value[0].service.host.name }}
+                                    {{ customAlertRuleGroup.service.host.name }}
                                 </span>
                                 <oitc-badge-outline color="primary">
 
-                                    /{{ customAlertRuleGroup.value[0].service.host.primary_container }}
+                                    /{{ customAlertRuleGroup.service.host.primary_container }}
                                 </oitc-badge-outline>
                             </td>
                         </tr>
 
-                        <tr *ngFor="let customAlertRule of customAlertRuleGroup.value">
-
+                        <tr  *ngFor="let customAlertRule of this.groupedList">
                             <td class="text-center">
                                 <div>
                                     <oitc-item-select
