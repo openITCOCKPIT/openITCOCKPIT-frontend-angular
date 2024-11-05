@@ -25,455 +25,461 @@
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Import configuration items from JSON File') }}</h5>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Import configuration items from JSON File') }}</h5>
 
-                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'export']"
-                           *oitcPermission="['ImportModule', 'configurationitems', 'export']" class="nav-link">
-                            <fa-icon [icon]="['fas', 'file-export']"></fa-icon>
-                            {{ t('Export') }}
-                        </a>
-                    </c-nav-item>
-                    <c-nav-item>
-                        <a [routerLink]="['/', 'import_module', 'configurationitems', 'import']"
-                           *oitcPermission="['ImportModule', 'configurationitems', 'import']" class="nav-link active">
-                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                            {{ t('Import') }}
-                        </a>
-                    </c-nav-item>
-                </c-nav>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'import_module', 'configurationitems', 'export']"
+                       *oitcPermission="['ImportModule', 'configurationitems', 'export']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'file-export']"></fa-icon>
+                        {{ t('Export') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'import_module', 'configurationitems', 'import']"
+                       *oitcPermission="['ImportModule', 'configurationitems', 'import']" class="nav-link active">
+                        <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                        {{ t('Import') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
 
-            </c-card-header>
-            <c-card-body>
-                <!-- Dropzone -->
-                <c-row class="mb-3">
-                    <c-col [xs]="12">
-                        {{ t('Select image') }}
-                    </c-col>
-                    <c-col [xs]="12" class="text-info">
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Max allowed file size: ') }}
-                        {{ maxUploadLimit?.string }}
-                    </c-col>
-                    <c-col [xs]="12">
-                        <div id="jsonImportDropzone" class="dropzone dropzoneStyle">
-                            <div class="dz-message">
-                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
-                                         class="mb-3 text-muted"></fa-icon>
-                                <br>
-                                <span class="text-uppercase"> {{ t('Drop JSON file here or click to upload.') }} </span>
-                            </div>
+        </c-card-header>
+        <c-card-body>
+            <!-- Dropzone -->
+            <c-row class="mb-3">
+                <c-col [xs]="12">
+                    {{ t('Select image') }}
+                </c-col>
+                <c-col [xs]="12" class="text-info">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Max allowed file size: ') }}
+                    {{ maxUploadLimit?.string }}
+                </c-col>
+                <c-col [xs]="12">
+                    <div id="jsonImportDropzone" class="dropzone dropzoneStyle">
+                        <div class="dz-message">
+                            <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                                     class="mb-3 text-muted"></fa-icon>
+                            <br>
+                            <span class="text-uppercase"> {{ t('Drop JSON file here or click to upload.') }} </span>
                         </div>
-                    </c-col>
-                </c-row>
-                <!-- Dropzone end -->
-
-                <fieldset *ngIf="fileInformation || hasError">
-                    <legend class="fs-md fieldset-legend-border-bottom mt-1"
-                            [ngClass]="{'fieldset-legend-border-bottom-danger': hasError}">
-                        <h4>
-                            <fa-icon [icon]="['fas', 'truck-ramp-box']"></fa-icon>
-                            {{ t('File information') }}
-                            <small class="text-danger ps-1 fw-300" *ngIf="hasError">
-                                {{ t('Uploaded file contains errors!') }}
-                            </small>
-                        </h4>
-                    </legend>
-                    <div>
-
-                        <!-- Upload error -->
-                        <div class="alert border-faded bg-transparent text-secondary"
-                             *ngIf="hasError">
-                            <div class="d-flex align-items-center">
-                                <div class="alert-icon me-2">
-                                    <span class="icon-stack icon-stack-md">
-                                        <i class="base-shield icon-stack-3x text-danger"></i>
-                                        <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-1">
-                                    <span class="h5 text-danger">
-                                        {{ t('Error') }}
-                                    </span>
-                                    <br>
-                                    {{ errorMessage }}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Upload error end -->
-
-                        <c-row>
-                            <c-col [xs]="12" *ngIf="fileInformation && !importSuccessful" class="mb-3">
-                                <!-- Display file information after upload but hide after successful import of objects  -->
-                                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                                    <tbody>
-                                    <tr>
-                                        <th>{{ t('Information') }}</th>
-                                        <th>{{ t('Value') }}</th>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            {{
-                                                t('Created with {0} version', {
-                                                    '0': SystemnameService.systemName$ | async
-                                                })
-                                            }}
-                                        </td>
-                                        <td class="code-font">
-                                            {{ fileInformation.openITCOCKPIT_version }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Checksum') }}</td>
-                                        <td class="code-font text-success">
-                                            {{ fileInformation.checksum }}
-                                            <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>{{ t('Object type') }}</th>
-                                        <th>{{ t('Count') }}</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Commands') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.commands_count }}</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Time periods') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.timeperiods_count }}</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Contacts') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.contacts_count }}</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Contact groups') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.contactgroups_count }}</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Service templates') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.servicetemplates_count }}</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ t('Service template groups') }}</td>
-                                        <td>
-                                            <code>{{ fileInformation.servicetemplategroups_count }}</code>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c-col>
-
-                            <c-col [xs]="12" *ngIf="uploadSuccessful && !importSuccessful" class="mb-3">
-                                <!-- Display after successful upload but hide after successful import of objects  -->
-                                <div class="alert border-faded bg-transparent">
-                                    <div class="d-flex align-items-center">
-                                        <div class="alert-icon me-2">
-                                            <span class="icon-stack icon-stack-md">
-                                                <i class="base-circle icon-stack-3x text-primary"></i>
-                                                <i class="fas fa-database icon-stack-1x text-white"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <span class="h5 text-primary">
-                                                {{ t('It is recommended that you create a backup before starting the import!') }}
-                                            </span>
-                                            <br>
-                                            {{ t('No changes were applied yet. If not already done make sure that you have a backup of your current configuration.') }}
-                                        </div>
-                                        <div class="ms-2" *oitcPermission="['backups', 'index']">
-                                            <a class="btn btn-outline-primary btn-sm ripple"
-                                               [routerLink]="['/', 'backups', 'index']"
-                                            >
-                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                                {{ t('Go to "Backup / Restore"') }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c-col>
-                        </c-row>
-
                     </div>
-                </fieldset>
+                </c-col>
+            </c-row>
+            <!-- Dropzone end -->
 
-                <!-- Import errors -->
-                <fieldset *ngIf="uploadSuccessful && filenameOnServer">
-                    <legend class="fs-md fieldset-legend-border-bottom mt-1"
-                            [ngClass]="{'fieldset-legend-border-bottom-danger': hasImportError}">
-                        <h4>
-                            <fa-icon [icon]="['fas', 'box-open']"></fa-icon>
-                            {{ t('Import') }}
-                            <small class="text-danger ps-1 fw-300" *ngIf="hasImportError">
-                                {{ t('Error while importing data!') }}
-                            </small>
-                        </h4>
-                    </legend>
-                    <c-row *ngIf="hasImportError">
-                        <c-col [xs]="12">
+            <fieldset *ngIf="fileInformation || hasError">
+                <legend class="fs-md fieldset-legend-border-bottom mt-1"
+                        [ngClass]="{'fieldset-legend-border-bottom-danger': hasError}">
+                    <h4>
+                        <fa-icon [icon]="['fas', 'truck-ramp-box']"></fa-icon>
+                        {{ t('File information') }}
+                        <small class="text-danger ps-1 fw-300" *ngIf="hasError">
+                            {{ t('Uploaded file contains errors!') }}
+                        </small>
+                    </h4>
+                </legend>
+                <div>
+
+                    <!-- Upload error -->
+                    <div class="alert border-faded bg-transparent text-secondary"
+                         *ngIf="hasError">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-shield icon-stack-3x text-danger"></i>
+                                    <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-danger">
+                                    {{ t('Error') }}
+                                </span>
+                                <br>
+                                {{ errorMessage }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Upload error end -->
+
+                    <c-row>
+                        <c-col [xs]="12" *ngIf="fileInformation && !importSuccessful" class="mb-3">
+                            <!-- Display file information after upload but hide after successful import of objects  -->
+                            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                <tbody>
+                                <tr>
+                                    <th>{{ t('Information') }}</th>
+                                    <th>{{ t('Value') }}</th>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        {{
+                                            t('Created with {0} version', {
+                                                '0': SystemnameService.systemName$ | async
+                                            })
+                                        }}
+                                    </td>
+                                    <td class="code-font">
+                                        {{ fileInformation.openITCOCKPIT_version }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Checksum') }}</td>
+                                    <td class="code-font text-success">
+                                        {{ fileInformation.checksum }}
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>{{ t('Object type') }}</th>
+                                    <th>{{ t('Count') }}</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Commands') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.commands_count }}</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Time periods') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.timeperiods_count }}</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Contacts') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.contacts_count }}</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Contact groups') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.contactgroups_count }}</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Service templates') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.servicetemplates_count }}</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ t('Service template groups') }}</td>
+                                    <td>
+                                        <code>{{ fileInformation.servicetemplategroups_count }}</code>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </c-col>
+
+                        <c-col [xs]="12" *ngIf="uploadSuccessful && !importSuccessful" class="mb-3">
+                            <!-- Display after successful upload but hide after successful import of objects  -->
                             <div class="alert border-faded bg-transparent">
                                 <div class="d-flex align-items-center">
                                     <div class="alert-icon me-2">
                                         <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-danger"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                            <i class="base-circle icon-stack-3x text-primary"></i>
+                                            <i class="fas fa-database icon-stack-1x text-white"></i>
                                         </span>
                                     </div>
                                     <div class="flex-1">
-                                        <span class="h5 text-danger">
-                                            <!-- todo -->
-                                            todo IMPLEMENT IMPORT ERRORS
+                                        <span class="h5 text-primary">
+                                            {{ t('It is recommended that you create a backup before starting the import!') }}
                                         </span>
                                         <br>
-                                        {{ t('Please see the log file for more information.') }}
+                                        {{ t('No changes were applied yet. If not already done make sure that you have a backup of your current configuration.') }}
+                                    </div>
+                                    <div class="ms-2" *oitcPermission="['backups', 'index']">
+                                        <a class="btn btn-outline-primary btn-sm ripple"
+                                           [routerLink]="['/', 'backups', 'index']">
+                                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            {{ t('Go to "Backup / Restore"') }}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </c-col>
                     </c-row>
-                </fieldset>
 
-                <c-row *ngIf="uploadSuccessful && filenameOnServer && !importSuccessful">
+                </div>
+            </fieldset>
 
-                    <!-- No conflicts or possible dangerous changes -->
-                    <c-col [xs]="12" *ngIf="!hasRelevantChanges">
+            <!-- Import errors -->
+            <fieldset *ngIf="uploadSuccessful && filenameOnServer">
+                <legend class="fs-md fieldset-legend-border-bottom mt-1"
+                        [ngClass]="{'fieldset-legend-border-bottom-danger': hasImportError}">
+                    <h4>
+                        <fa-icon [icon]="['fas', 'box-open']"></fa-icon>
+                        {{ t('Import') }}
+                        <small class="text-danger ps-1 fw-300" *ngIf="hasImportError">
+                            {{ t('Error while importing data!') }}
+                        </small>
+                    </h4>
+                </legend>
+                <c-row *ngIf="hasImportError">
+                    <c-col [xs]="12">
                         <div class="alert border-faded bg-transparent">
                             <div class="d-flex align-items-center">
                                 <div class="alert-icon me-2">
                                     <span class="icon-stack icon-stack-md">
-                                        <i class="base-circle icon-stack-3x text-success"></i>
-                                        <i class="fas fa-database icon-stack-1x text-white"></i>
+                                        <i class="base-circle icon-stack-3x text-danger"></i>
+                                        <i class="fas fa-exclamation icon-stack-1x text-white"></i>
                                     </span>
                                 </div>
-                                <div class="flex-1">
-                                    <span class="h5 text-success">
-                                        {{ t('Ready to import') }}
+                                <div class="flex-1" *ngIf="importResponse">
+                                    <span class="h5 text-danger" *ngIf="importResponse.error">
+                                        {{ t('Error while importing ') }}
+                                        {{ importResponse.error.Model }}
+                                        {{ t('Source UUID:') }}
+                                        {{ importResponse.error.sourceUuid }}
+
+                                        <div
+                                            *ngFor="let vError of importResponse.error.validationErrors | keyvalue">
+                                            <div *ngFor="let error of vError.value | keyvalue" class="mt-1">
+                                                - {{ vError.key }}: {{ error.value }}
+                                            </div>
+                                        </div>
                                     </span>
                                     <br>
-                                    {{ t('No conflicts were found.') }}
-                                    <div class="mt-2" *ngIf="importRunning">
-                                        <p-progressBar mode="indeterminate"
-                                                       [style]="{ height: '6px' }"/>
-                                    </div>
-                                </div>
-                                <div class="ms-2"
-                                     *oitcPermission="['ImportModule', 'configurationitems', 'launch_import']">
-                                    <button class="btn btn-outline-success btn-sm ripple"
-                                            [disabled]="importRunning"
-                                            (click)="launchImport()"
-                                    >
-                                        <fa-icon [icon]="['fas', 'database']" *ngIf="!importRunning"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"
-                                                 *ngIf="importRunning"></fa-icon>
-                                        {{ t('Start import') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </c-col>
-
-                    <!-- Possible dangerous changes show a diff -->
-                    <c-col [xs]="12" *ngIf="hasRelevantChanges">
-                        <div class="alert border-faded bg-transparent">
-                            <div class="d-flex align-items-center">
-                                <div class="alert-icon me-2">
-                                    <span class="icon-stack icon-stack-md">
-                                        <i class="base-circle icon-stack-3x text-warning"></i>
-                                        <i class="fas fa-database icon-stack-1x text-white"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-1">
-                                    <span class="h5 text-warning">
-                                        {{ t('Possible dangerous changes detected') }}
-                                    </span>
-                                    <br>
-                                    {{ t('Importing this configuration could break your currently running monitoring configuration.') }}
-                                    {{ t('Before importing, please check the shown comparison.') }}
-                                    <div class="mt-2" *ngIf="importRunning">
-                                        <p-progressBar mode="indeterminate"
-                                                       [style]="{ height: '6px' }"/>
-                                    </div>
-                                </div>
-                                <div class="ms-2"
-                                     *oitcPermission="['ImportModule', 'configurationitems', 'launch_import']">
-                                    <button class="btn btn-outline-warning btn-sm ripple"
-                                            [disabled]="importRunning"
-                                            (click)="launchImport()"
-                                    >
-                                        <fa-icon [icon]="['fas', 'database']" *ngIf="!importRunning"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"
-                                                 *ngIf="importRunning"></fa-icon>
-                                        {{ t('Start import anyway') }}
-                                    </button>
+                                    {{ t('Please see the log file for more information.') }}
                                 </div>
                             </div>
                         </div>
                     </c-col>
-                    <c-col [xs]="12" *ngIf="hasRelevantChanges">
-                        <c-callout color="info" class="text-info mb-3">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('This overview will only show potential dangerous changes. For example if command arguments get removed from an existing check command.') }}
-                            <br>
-                            {{
-                                t('It will not mean that the change will break something. {0} can not detected if a change was made intentionally or by accident.', {
-                                    '0': SystemnameService.systemName$ | async
-                                })
-                            }}
-
-                            <fieldset class="col-12 p-0">
-                                <blockquote class="changelog-blockquote-primary blockquote ps-3">
-                                    <div class="row small">
-                                        <div
-                                            class="col-xs-12 col-md-6 changelog-diff-red py-2 rounded-start border border-end-0 changelog-diff-border-color">
-                                            {{ t('Current configuration') }}
-                                        </div>
-
-                                        <div
-                                            class="col-xs-12 col-md-6 changelog-diff-green py-2 rounded-end border border-start-0 changelog-diff-border-color">
-                                            {{ t('New configuration after import') }}
-                                        </div>
-                                    </div>
-                                </blockquote>
-                            </fieldset>
-
-                        </c-callout>
-
-                        @for (objectTypeChanges of relevantChanges; track $index) {
-                            <fieldset class="col-12 p-0">
-                                <legend>
-                                    <c-alert color="info" class="mt-3">
-                                        <h4 class="m-0">
-                                            @switch (objectTypeChanges.objectType) {
-                                                @case (ConfigurationItemsExportImport.commands) {
-                                                    <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                                                    {{ t('Commands') }}
-
-                                                }
-                                                @case (ConfigurationItemsExportImport.timeperiods) {
-                                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                                    {{ t('Time periods') }}
-
-                                                }
-                                                @case (ConfigurationItemsExportImport.contacts) {
-                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                    {{ t('Contacts') }}
-
-                                                }
-                                                @case (ConfigurationItemsExportImport.contactgroups) {
-                                                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                                                    {{ t('Contact groups') }}
-
-                                                }
-                                                @case (ConfigurationItemsExportImport.servicetemplates) {
-                                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                                    {{ t('Service templates') }}
-
-                                                }
-                                                @case (ConfigurationItemsExportImport.servicetemplategroups) {
-                                                    <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
-                                                    {{ t('Service templates groups') }}
-                                                }
-                                            }
-                                        </h4>
-                                    </c-alert>
-                                </legend>
-
-                                @for (object of objectTypeChanges.relevantObjects; track $index) {
-                                    <c-row>
-                                        <c-col [xs]="12" class="mb-1 mt-2">
-                                            <oitc-label-link [objectId]="object.id"
-                                                             [route]="'/'+objectTypeChanges.objectType+'/edit'"
-                                                             [permissions]="objectTypeChanges.objectType+'.edit'">
-                                                <h5>{{ object.name }}</h5>
-                                            </oitc-label-link>
-                                        </c-col>
-
-                                        @for (change of object.modelChanges; track $index) {
-                                            <c-col [xs]="12">
-
-                                                <blockquote class="changelog-blockquote-primary blockquote ps-3">
-                                                    <span class="font-sm">{{ change.modelName }}</span>
-
-                                                    <c-row>
-                                                        <c-col [xs]="12" [md]="6"
-                                                               class="changelog-diff-red pb-2 rounded-start border border-end-0 changelog-diff-border-color">
-                                                            @for (currentValues of change.current; track $index) {
-                                                                <div class="mt-2">
-                                                                    @for (currentValue of currentValues; track $index) {
-                                                                        <div class="ps-1 changelog-diff">
-                                                                            <span class="text-secondary">
-                                                                                {{ currentValue.key }}
-                                                                                <fa-icon
-                                                                                    [icon]="['fas', 'caret-right']"></fa-icon>
-                                                                            </span>
-                                                                            <span
-                                                                                class="changelog-delete-after-import">
-                                                                                {{ currentValue.value }}
-                                                                            </span>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            }
-                                                        </c-col>
-                                                        <c-col [xs]="12" [md]="6"
-                                                               class="changelog-diff-green pb-2 rounded-end border border-start-0 changelog-diff-border-color">
-                                                            @for (newValues of change.new; track $index) {
-                                                                <div class="mt-2">
-                                                                    @for (newValue of newValues; track $index) {
-                                                                        <div class="ps-1 changelog-diff">
-                                                                            <span class="text-secondary">
-                                                                                {{ newValue.key }}
-                                                                                <fa-icon
-                                                                                    [icon]="['fas', 'caret-right']"></fa-icon>
-                                                                            </span>
-                                                                            <span>
-                                                                                {{ newValue.value }}
-                                                                            </span>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            }
-                                                        </c-col>
-                                                    </c-row>
-
-                                                </blockquote>
-                                            </c-col>
-                                        }
-
-
-                                    </c-row>
-                                }
-                            </fieldset>
-                        }
-
-
-                    </c-col>
-
                 </c-row>
+            </fieldset>
 
-            </c-card-body>
-            <c-card-footer class="text-end">
-                &nbsp;
-            </c-card-footer>
-        </c-card>
-    </form>
+            <c-row *ngIf="uploadSuccessful && filenameOnServer && !importSuccessful">
+
+                <!-- No conflicts or possible dangerous changes -->
+                <c-col [xs]="12" *ngIf="!hasRelevantChanges">
+                    <div class="alert border-faded bg-transparent">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-success"></i>
+                                    <i class="fas fa-database icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-success">
+                                    {{ t('Ready to import') }}
+                                </span>
+                                <br>
+                                {{ t('No conflicts were found.') }}
+                                <div class="mt-2" *ngIf="importRunning">
+                                    <p-progressBar mode="indeterminate"
+                                                   [style]="{ height: '6px' }"/>
+                                </div>
+                            </div>
+                            <div class="ms-2"
+                                 *oitcPermission="['ImportModule', 'configurationitems', 'launch_import']">
+                                <button class="btn btn-outline-success btn-sm ripple"
+                                        [disabled]="importRunning"
+                                        (click)="launchImport()"
+                                >
+                                    <fa-icon [icon]="['fas', 'database']" *ngIf="!importRunning"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"
+                                             *ngIf="importRunning"></fa-icon>
+                                    {{ t('Start import') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </c-col>
+
+                <!-- Possible dangerous changes show a diff -->
+                <c-col [xs]="12" *ngIf="hasRelevantChanges">
+                    <div class="alert border-faded bg-transparent">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-warning"></i>
+                                    <i class="fas fa-database icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-warning">
+                                    {{ t('Possible dangerous changes detected') }}
+                                </span>
+                                <br>
+                                {{ t('Importing this configuration could break your currently running monitoring configuration.') }}
+                                {{ t('Before importing, please check the shown comparison.') }}
+                                <div class="mt-2" *ngIf="importRunning">
+                                    <p-progressBar mode="indeterminate"
+                                                   [style]="{ height: '6px' }"/>
+                                </div>
+                            </div>
+                            <div class="ms-2"
+                                 *oitcPermission="['ImportModule', 'configurationitems', 'launch_import']">
+                                <button class="btn btn-outline-warning btn-sm ripple"
+                                        [disabled]="importRunning"
+                                        (click)="launchImport()"
+                                >
+                                    <fa-icon [icon]="['fas', 'database']" *ngIf="!importRunning"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"
+                                             *ngIf="importRunning"></fa-icon>
+                                    {{ t('Start import anyway') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </c-col>
+                <c-col [xs]="12" *ngIf="hasRelevantChanges">
+                    <c-callout color="info" class="text-info mb-3">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('This overview will only show potential dangerous changes. For example if command arguments get removed from an existing check command.') }}
+                        <br>
+                        {{
+                            t('It will not mean that the change will break something. {0} can not detected if a change was made intentionally or by accident.', {
+                                '0': SystemnameService.systemName$ | async
+                            })
+                        }}
+
+                        <fieldset class="col-12 p-0">
+                            <blockquote class="changelog-blockquote-primary blockquote ps-3">
+                                <div class="row small">
+                                    <div
+                                        class="col-xs-12 col-md-6 changelog-diff-red py-2 rounded-start border border-end-0 changelog-diff-border-color">
+                                        {{ t('Current configuration') }}
+                                    </div>
+
+                                    <div
+                                        class="col-xs-12 col-md-6 changelog-diff-green py-2 rounded-end border border-start-0 changelog-diff-border-color">
+                                        {{ t('New configuration after import') }}
+                                    </div>
+                                </div>
+                            </blockquote>
+                        </fieldset>
+
+                    </c-callout>
+
+                    @for (objectTypeChanges of relevantChanges; track $index) {
+                        <fieldset class="col-12 p-0">
+                            <legend>
+                                <c-alert color="info" class="mt-3">
+                                    <h4 class="m-0">
+                                        @switch (objectTypeChanges.objectType) {
+                                            @case (ConfigurationItemsExportImport.commands) {
+                                                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                                {{ t('Commands') }}
+
+                                            }
+                                            @case (ConfigurationItemsExportImport.timeperiods) {
+                                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                                {{ t('Time periods') }}
+
+                                            }
+                                            @case (ConfigurationItemsExportImport.contacts) {
+                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                {{ t('Contacts') }}
+
+                                            }
+                                            @case (ConfigurationItemsExportImport.contactgroups) {
+                                                <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                {{ t('Contact groups') }}
+
+                                            }
+                                            @case (ConfigurationItemsExportImport.servicetemplates) {
+                                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                {{ t('Service templates') }}
+
+                                            }
+                                            @case (ConfigurationItemsExportImport.servicetemplategroups) {
+                                                <fa-icon [icon]="['fas', 'object-group']"></fa-icon>
+                                                {{ t('Service templates groups') }}
+                                            }
+                                        }
+                                    </h4>
+                                </c-alert>
+                            </legend>
+
+                            @for (object of objectTypeChanges.relevantObjects; track $index) {
+                                <c-row>
+                                    <c-col [xs]="12" class="mb-1 mt-2">
+                                        <oitc-label-link [objectId]="object.id"
+                                                         [route]="'/'+objectTypeChanges.objectType+'/edit'"
+                                                         [permissions]="objectTypeChanges.objectType+'.edit'">
+                                            <h5>{{ object.name }}</h5>
+                                        </oitc-label-link>
+                                    </c-col>
+
+                                    @for (change of object.modelChanges; track $index) {
+                                        <c-col [xs]="12">
+
+                                            <blockquote class="changelog-blockquote-primary blockquote ps-3">
+                                                <span class="font-sm">{{ change.modelName }}</span>
+
+                                                <c-row>
+                                                    <c-col [xs]="12" [md]="6"
+                                                           class="changelog-diff-red pb-2 rounded-start border border-end-0 changelog-diff-border-color">
+                                                        @for (currentValues of change.current; track $index) {
+                                                            <div class="mt-2">
+                                                                @for (currentValue of currentValues; track $index) {
+                                                                    <div class="ps-1 changelog-diff">
+                                                                        <span class="text-secondary">
+                                                                            {{ currentValue.key }}
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'caret-right']"></fa-icon>
+                                                                        </span>
+                                                                        <span
+                                                                            class="changelog-delete-after-import">
+                                                                            {{ currentValue.value }}
+                                                                        </span>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                    <c-col [xs]="12" [md]="6"
+                                                           class="changelog-diff-green pb-2 rounded-end border border-start-0 changelog-diff-border-color">
+                                                        @for (newValues of change.new; track $index) {
+                                                            <div class="mt-2">
+                                                                @for (newValue of newValues; track $index) {
+                                                                    <div class="ps-1 changelog-diff">
+                                                                        <span class="text-secondary">
+                                                                            {{ newValue.key }}
+                                                                            <fa-icon
+                                                                                [icon]="['fas', 'caret-right']"></fa-icon>
+                                                                        </span>
+                                                                        <span>
+                                                                            {{ newValue.value }}
+                                                                        </span>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                </c-row>
+
+                                            </blockquote>
+                                        </c-col>
+                                    }
+
+
+                                </c-row>
+                            }
+                        </fieldset>
+                    }
+
+
+                </c-col>
+
+            </c-row>
+
+        </c-card-body>
+        <c-card-footer class="text-end">
+            &nbsp;
+        </c-card-footer>
+    </c-card>
 
 
 </ng-container>

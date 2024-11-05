@@ -1,6 +1,7 @@
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { ProfileMaxUploadLimit } from '../../../../pages/profile/profile.interface';
 import { ConfigurationItemsExportImport } from './configurationitems.enum';
+import { GenericValidationError } from '../../../../generic-responses';
 
 /**********************
  *    Export action   *
@@ -113,4 +114,13 @@ export interface ModelChange {
     modelName: string,
     current: { key: string, value: any }[][]
     new: { key: string, value: any }[][]
+}
+
+export interface ConfigurationItemsImportResponse {
+    error?: {
+        validationErrors: GenericValidationError,
+        Model: string
+        sourceUuid: string
+    }
+    "_csrfToken": null | string
 }
