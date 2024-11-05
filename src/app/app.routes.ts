@@ -598,6 +598,18 @@ const coreRoutes: Routes = [{
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
+    path: 'statuspages/index',
+    loadComponent: () => import('./pages/statuspages/statuspages-index/statuspages-index.component').then(m => m.StatuspagesIndexComponent)
+}, {
+    path: 'statuspages/view/:id',
+    loadComponent: () => import('./pages/statuspages/statuspages-view/statuspages-view.component').then(m => m.StatuspagesViewComponent)
+}, {
+    path: 'statuspages/add',
+    loadComponent: () => import('./pages/statuspages/statuspages-add/statuspages-add.component').then(m => m.StatuspagesAddComponent)
+}, {
+    path: 'statuspages/edit/:id',
+    loadComponent: () => import('./pages/statuspages/statuspages-edit/statuspages-edit.component').then(m => m.StatuspagesEditComponent)
+}, {
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
 }, {

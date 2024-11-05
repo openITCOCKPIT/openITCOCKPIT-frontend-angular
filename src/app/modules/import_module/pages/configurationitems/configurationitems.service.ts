@@ -8,6 +8,7 @@ import {
     ConfigurationitemsElementsJsonFile
 } from './configurationitems.interface';
 import { ProfileMaxUploadLimit } from '../../../../pages/profile/profile.interface';
+import { GenericSuccessAndMessageResponse } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -53,6 +54,19 @@ export class ConfigurationitemsService {
         }).pipe(
             map(data => {
                 return data.maxUploadLimit;
+            })
+        )
+    }
+
+    public deleteUploadedFile(filename: string): Observable<GenericSuccessAndMessageResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{
+            response: GenericSuccessAndMessageResponse
+        }>(`${proxyPath}/import_module/configurationitems/deleteUploadedFile.json?angular=true`, {
+            filename: filename
+        }).pipe(
+            map(data => {
+                return data.response;
             })
         )
     }
