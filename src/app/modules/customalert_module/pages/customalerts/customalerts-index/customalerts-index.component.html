@@ -45,62 +45,62 @@
 
                 <!--</c-card-header>-->
                 <c-card-body>
-                        <c-row>
-                            <c-col lg="4" md="12" xs="12">
-                                <div class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
-                                    <div>
-                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
-                                            {{ result.customalertGlobalOverview['0'] }}
-                                            <span class="small opacity-40 ng-binding">
-                                                / {{ result.customalertGlobalOverview.total }}
-                                            </span>
-                                            <br />
-                                            <small class="m-0 l-h-n">
-                                                New alerts                                                </small>
-                                        </h6>
-                                    </div>
-                                    <fa-icon [icon]="['fas', 'fire-flame-curved']"
-                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                    <c-row>
+                        <c-col lg="4" md="12" xs="12">
+                            <div class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                        {{ result.customalertGlobalOverview['0'] }}
+                                        <span class="small opacity-40 ng-binding">
+                                            / {{ result.customalertGlobalOverview.total }}
+                                        </span>
+                                        <br/>
+                                        <small class="m-0 l-h-n">
+                                            New alerts </small>
+                                    </h6>
                                 </div>
-                            </c-col>
-                            <c-col lg="4" md="12" xs="12">
-                                <div class="p-2 bg-secondary rounded overflow-hidden position-relative text-white mb-4">
-                                    <div>
-                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
-                                            {{ result.customalertGlobalOverview['1'] }}
-                                            <span class="small opacity-40 ng-binding">
-                                                / {{ result.customalertGlobalOverview.total }}
-                                            </span>
-                                            <br />
-                                            <small class="m-0 l-h-n">
-                                                {{ t('In progress') }}
-                                            </small>
-                                        </h6>
-                                    </div>
-                                    <fa-icon [icon]="['fas', 'person-digging']"
-                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                                <fa-icon [icon]="['fas', 'fire-flame-curved']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col lg="4" md="12" xs="12">
+                            <div class="p-2 bg-secondary rounded overflow-hidden position-relative text-white mb-4">
+                                <div>
+                                    <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                        {{ result.customalertGlobalOverview['1'] }}
+                                        <span class="small opacity-40 ng-binding">
+                                            / {{ result.customalertGlobalOverview.total }}
+                                        </span>
+                                        <br/>
+                                        <small class="m-0 l-h-n">
+                                            {{ t('In progress') }}
+                                        </small>
+                                    </h6>
                                 </div>
-                            </c-col>
-                            <c-col lg="4" md="12" xs="12">
-                                <div class="row">
-                                    <div class="col-12 text-end">
+                                <fa-icon [icon]="['fas', 'person-digging']"
+                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                            </div>
+                        </c-col>
+                        <c-col lg="4" md="12" xs="12">
+                            <div class="row">
+                                <div class="col-12 text-end">
 
-                                        <i class="fa-solid fa-fire-flame-curved flame"></i>
-                                        <em class="padding-right-10">
-                                            New                                            </em>
-                                        <i class="fa-solid fa-person-digging text-secondary"></i>
-                                        <em class="padding-right-10">
-                                            In progress                                            </em>
-                                        <i class="fa-solid fa-clipboard-check text-success"></i>
-                                        <em class="padding-right-10">
-                                            Done                                            </em>
-                                        <i class="fa-solid fa-folder-closed text-primary"></i>
-                                        <em class="padding-right-10">
-                                            Manually closed                                            </em>
-                                    </div>
+                                    <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                    <em class="padding-right-10">
+                                        New </em>
+                                    <i class="fa-solid fa-person-digging text-secondary"></i>
+                                    <em class="padding-right-10">
+                                        In progress </em>
+                                    <i class="fa-solid fa-clipboard-check text-success"></i>
+                                    <em class="padding-right-10">
+                                        Done </em>
+                                    <i class="fa-solid fa-folder-closed text-primary"></i>
+                                    <em class="padding-right-10">
+                                        Manually closed </em>
                                 </div>
-                            </c-col>
-                        </c-row>
+                            </div>
+                        </c-col>
+                    </c-row>
                 </c-card-body>
             </c-card>
 
@@ -137,7 +137,7 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    {{t('From')}}
+                                    {{ t('From') }}
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[from]']"
@@ -152,7 +152,7 @@
                         <c-col md="6">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    {{t('To')}}
+                                    {{ t('To') }}
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[to]']"
@@ -167,55 +167,55 @@
                     </c-row>
                     <c-row class="mt-2">
                         <c-col md="2">
-                            <h5>{{t('Alert status')}}</h5>
+                            <h5>{{ t('Alert status') }}</h5>
                             <c-form-check class="mb-2">
-                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                <input cFormCheckInput id="stateFilter[CustomAlertsState.New]" type="checkbox"
                                        class="checkbox-lg custom-check-default"
-                                       [(ngModel)]="params['filter[Customalerts.state][]']"
-                                       name="params['filter[Customalerts.state][]']"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.New]"
+                                       name="stateFilter[CustomAlertsState.New]"
                                        (debouncedValue)="onFilterChange($event)"
                                        oitcDebounce/>
-                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.New]">
                                     {{ t('New') }}
                                 </label>
                             </c-form-check>
                             <c-form-check class="mb-2">
-                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                <input cFormCheckInput id="stateFilter[CustomAlertsState.InProgress]" type="checkbox"
                                        class="checkbox-lg custom-check-default"
-                                       [(ngModel)]="params['filter[Customalerts.state][]']"
-                                       name="params['filter[Customalerts.state][]']"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.InProgress]"
+                                       name="stateFilter[CustomAlertsState.InProgress]"
                                        (debouncedValue)="onFilterChange($event)"
                                        oitcDebounce/>
-                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.InProgress]">
                                     {{ t('In progress') }}
                                 </label>
                             </c-form-check>
                             <c-form-check class="mb-2">
-                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                <input cFormCheckInput id="stateFilter[CustomAlertsState.Done]" type="checkbox"
                                        class="checkbox-lg custom-check-default"
-                                       [(ngModel)]="params['filter[Customalerts.state][]']"
-                                       name="params['filter[Customalerts.state][]']"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.Done]"
+                                       name="stateFilter[CustomAlertsState.Done]"
                                        (debouncedValue)="onFilterChange($event)"
                                        oitcDebounce/>
-                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.Done]">
                                     {{ t('Done') }}
                                 </label>
                             </c-form-check>
                             <c-form-check class="mb-2">
-                                <input cFormCheckInput id="params['filter[Customalerts.state][]']" type="checkbox"
+                                <input cFormCheckInput id="stateFilter[CustomAlertsState.ManuallyClosed]" type="checkbox"
                                        class="checkbox-lg custom-check-default"
-                                       [(ngModel)]="params['filter[Customalerts.state][]']"
-                                       name="params['filter[Customalerts.state][]']"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.ManuallyClosed]"
+                                       name="stateFilter[CustomAlertsState.ManuallyClosed]"
                                        (debouncedValue)="onFilterChange($event)"
                                        oitcDebounce/>
-                                <label cFormCheckLabel class="ms-1 mt-1" for="params['filter[Customalerts.state][]']">
+                                <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.ManuallyClosed]">
                                     {{ t('Manually closed') }}
                                 </label>
                             </c-form-check>
                         </c-col>
                         <c-col md="10">
 
-                            <h5>{{t('Container')}}</h5>
+                            <h5>{{ t('Container') }}</h5>
                             <oitc-multi-select
                                     name="post.User.usercontainerroles._ids"
                                     id="post.User.usercontainerroles._ids"
@@ -224,7 +224,7 @@
                                     optionLabel="value"
                                     [options]="containers">
                             </oitc-multi-select>
-                            <br />
+                            <br/>
 
                             <c-form-check class="mb-2">
                                 <input cFormCheckInput id="params.recursive" type="checkbox"
@@ -249,110 +249,240 @@
                 </form>
             </c-container>
 
+            <c-container>
+                <c-row>
+                    <c-col md="12" class="text-end">
+                        <input cFormCheckInput id="groupViewByHost" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="groupViewByHost"
+                               name="groupViewByHost"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="groupViewByHost">
+                            <a cButton
+                               class="ripple"
+                               color="success"
+                               size="xs">
+                                <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                                {{ t('Group view by host') }}
+                            </a>
+                        </label>
+                        <a></a>
+                    </c-col>
+                </c-row>
+            </c-container>
 
 
             <oitc-table-loader *ngIf="!result"></oitc-table-loader>
 
-            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Customalerts.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Container') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Host') }}
-                    </th>
-                    <th scope="col" mat-sort-header="servicename">
-                        {{ t('Service') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Customalerts.message">
-                        {{ t('Message') }}
-                    </th>
-                    <th scope="col" mat-sort-header="CustomalertComments.comment">
-                        {{ t('Annotation') }}
-                    </th>
-                    <th scope="col">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
-                        {{ t('last 24h') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Customalerts.created">
-                        {{ t('Created') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Customalerts.modified">
-                        {{ t('Modified') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="result">
-                <tr *ngFor="let customAlertRule of result.customalerts">
+            <ng-container *ngIf="groupViewByHost">
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.message">
+                            {{ t('Message') }}
+                        </th>
+                        <th scope="col" mat-sort-header="CustomalertComments.comment">
+                            {{ t('Annotation') }}
+                        </th>
+                        <th scope="col">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
+                            {{ t('last 24h') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.created">
+                            {{ t('Created') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.modified">
+                            {{ t('Modified') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="result">
 
-                    <td class="text-center">
-                        <div>
-                            <oitc-item-select
-                                    *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
-                                    [disabled]="false"
-                                    [item]="customAlertRule"></oitc-item-select>
-                        </div>
-                    </td>
-                    <td>
-                        <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
-                        <i *ngIf="customAlertRule.state  === 1" class="fa-solid fa-person-digging text-secondary"></i>
-                        <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
-                    </td>
-                    <td>
-                        {{ customAlertRule.container }}
-                    </td>
-                    <td>
-                        <span *oitcPermission="['hosts', 'browser']">
-                            <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
+                    <ng-container *ngFor="let customAlertRuleGroup of this.groupedList | keyvalue:keepOrder">
+                        <tr>
+                            <td colspan="10">
+                                <span *oitcPermission="['hosts', 'browser']">
+                                    <a [routerLink]="['/', 'hosts', 'browser',customAlertRuleGroup.value[0].service.host.id]">
+                                        <fa-icon [icon]="['fas', 'desktop']"/>
+                                        {{ customAlertRuleGroup.value[0].service.host.name }}
+                                    </a>
+                                </span>
+                                <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                    <fa-icon [icon]="['fas', 'desktop']"/>
+                                    {{ customAlertRuleGroup.value[0].service.host.name }}
+                                </span>
+                                <oitc-badge-outline color="primary">
+
+                                    /{{ customAlertRuleGroup.value[0].service.host.primary_container }}
+                                </oitc-badge-outline>
+                            </td>
+                        </tr>
+
+                        <tr *ngFor="let customAlertRule of customAlertRuleGroup.value">
+
+                            <td class="text-center">
+                                <div>
+                                    <oitc-item-select
+                                            *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                            [disabled]="false"
+                                            [item]="customAlertRule"></oitc-item-select>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
+                                <i *ngIf="customAlertRule.state  === 1" class="fa-solid fa-person-digging text-secondary"></i>
+                                <i *ngIf="customAlertRule.state  === 2" class="fa-solid fa-clipboard-check text-success"></i>
+                                <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
+                            </td>
+                            <td>
+                                <span *oitcPermission="['services', 'browser']">
+                                    <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
+                                        {{ customAlertRule.service.host.name }}
+                                    </a>
+                                </span>
+                                <span *oitcPermission="['services', 'browser']; negate: true">
+                                    {{ customAlertRule.servicename }}
+                                </span>
+                            </td>
+                            <td>
+                                {{ customAlertRule.message }}
+                            </td>
+                            <td>
+                                <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                                {{ customAlertRule.CustomalertComments.comment }}
+                            </td>
+                            <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
+                                {{ customAlertRule.last24hoursAlerts }}
+                            </td>
+                            <td>
+                                {{ customAlertRule.createdInHumanShort }}
+                            </td>
+                            <td>
+                                {{ customAlertRule.modifiedInHumanShort }}
+                            </td>
+                            <td class="width-50">
+                            </td>
+                        </tr>
+
+                    </ng-container>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-container *ngIf="! groupViewByHost">
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Container') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.message">
+                            {{ t('Message') }}
+                        </th>
+                        <th scope="col" mat-sort-header="CustomalertComments.comment">
+                            {{ t('Annotation') }}
+                        </th>
+                        <th scope="col">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
+                            {{ t('last 24h') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.created">
+                            {{ t('Created') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Customalerts.modified">
+                            {{ t('Modified') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="result">
+                    <tr *ngFor="let customAlertRule of result.customalerts">
+
+                        <td class="text-center">
+                            <div>
+                                <oitc-item-select
+                                        *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                        [disabled]="false"
+                                        [item]="customAlertRule"></oitc-item-select>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
+                            <i *ngIf="customAlertRule.state  === 1" class="fa-solid fa-person-digging text-secondary"></i>
+                            <i *ngIf="customAlertRule.state  === 2" class="fa-solid fa-clipboard-check text-success"></i>
+                            <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
+                        </td>
+                        <td>
+                            <span *oitcPermission="['hosts', 'browser']">
+                                <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
+                                    {{ customAlertRule.service.host.name }}
+                                </a>
+                            </span>
+                            <span *oitcPermission="['hosts', 'browser']; negate: true">
                                 {{ customAlertRule.service.host.name }}
-                            </a>
-                        </span>
-                        <span *oitcPermission="['hosts', 'browser']; negate: true">
-                            {{ customAlertRule.service.host.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <span *oitcPermission="['services', 'browser']">
-                            <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
-                                {{ customAlertRule.service.host.name }}
-                            </a>
-                        </span>
-                        <span *oitcPermission="['services', 'browser']; negate: true">
-                            {{ customAlertRule.servicename }}
-                        </span>
-                    </td>
-                    <td>
-                        {{ customAlertRule.message }}
-                    </td>
-                    <td>
-                        <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
-                        {{ customAlertRule.CustomalertComments.comment }}
-                    </td>
-                    <td>
-                        {{ customAlertRule.last24hoursAlerts }}
-                    </td>
-                    <td>
-                        {{ customAlertRule.createdInHumanShort }}
-                    </td>
-                    <td>
-                        {{ customAlertRule.modifiedInHumanShort }}
-                    </td>
-                    <td class="width-50">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            </span>
+                        </td>
+                        <td>
+                            <span *oitcPermission="['services', 'browser']">
+                                <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
+                                    {{ customAlertRule.service.host.name }}
+                                </a>
+                            </span>
+                            <span *oitcPermission="['services', 'browser']; negate: true">
+                                {{ customAlertRule.servicename }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ customAlertRule.message }}
+                        </td>
+                        <td>
+                            <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                            {{ customAlertRule.CustomalertComments.comment }}
+                        </td>
+                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
+                            {{ customAlertRule.last24hoursAlerts }}
+                        </td>
+                        <td>
+                            {{ customAlertRule.createdInHumanShort }}
+                        </td>
+                        <td>
+                            {{ customAlertRule.modifiedInHumanShort }}
+                        </td>
+                        <td class="width-50">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </ng-container>
+
+
             <oitc-no-records
                     *ngIf="result && result.customalerts.length === 0"></oitc-no-records>
             <ng-container *ngIf="result && result.customalerts.length !== 0">
@@ -400,5 +530,7 @@
 </ng-container>
 
 
-<oitc-customalerts-annotate-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-customalerts-annotate-modal>
-<oitc-customalerts-close-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-customalerts-close-modal>
+<oitc-customalerts-annotate-modal (completed)="onMassActionComplete($event)"
+                                  [items]="selectedItems"></oitc-customalerts-annotate-modal>
+<oitc-customalerts-close-modal (completed)="onMassActionComplete($event)"
+                               [items]="selectedItems"></oitc-customalerts-close-modal>

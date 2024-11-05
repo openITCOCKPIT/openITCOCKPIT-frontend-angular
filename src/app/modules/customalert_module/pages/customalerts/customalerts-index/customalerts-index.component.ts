@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    Pipe,
+    PipeTransform
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -35,8 +44,8 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 import { CustomAlertsService } from '../customalerts.service';
 import {
     Customalert,
-    CustomAlertsIndex,
-    CustomAlertsIndexParams,
+    CustomAlertsIndex, CustomAlertsIndexCustomAlertsStateFilter,
+    CustomAlertsIndexParams, CustomAlertsState, getDefaultCustomAlertsIndexCustomAlertsStateFilter,
     getDefaultCustomAlertsIndexParams
 } from '../customalerts.interface';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
@@ -44,7 +53,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -69,6 +78,12 @@ import {
 } from '../../../components/customalerts-close-modal/customalerts-close-modal.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import {
+    getDefaultInstantreportsIndexObjectTypesFilter,
+    InstantreportsIndexObjectTypesFilter
+} from '../../../../../pages/instantreports/instantreports.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -121,7 +136,10 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
         CustomalertsAnnotateModalComponent,
         CustomalertsCloseModalComponent,
         DatePipe,
-        LabelLinkComponent
+        LabelLinkComponent,
+        KeyValuePipe,
+        BadgeOutlineComponent,
+        NgClass
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
@@ -136,17 +154,18 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
 
-
+    protected readonly keepOrder = keepOrder;
     protected containers: SelectKeyValue[] = [];
     protected params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
+    protected stateFilter: CustomAlertsIndexCustomAlertsStateFilter = getDefaultCustomAlertsIndexCustomAlertsStateFilter()
     protected result?: CustomAlertsIndex;
     protected hideFilter: boolean = true;
     protected selectedItems: DeleteAllItem[] = [];
-
+    protected groupViewByHost: boolean = false;
+    protected groupedList: { [key: number]: Customalert[] } = {} as { [key: number]: Customalert[] };
 
     private getSelectedItems(customAlert?: Customalert): DeleteAllItem[] {
         if (customAlert) {
-
             return [{
                 id: Number(customAlert.id),
                 displayName: String(customAlert.servicename)
@@ -267,12 +286,49 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     }
 
     protected refresh(): void {
+        this.params['filter[Customalerts.state][]'] = Object.keys(_.pickBy(this.stateFilter, (value, key) => value === true)) as unknown as number[];
+
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(this.CustomAlertsService.getIndex(this.params)
             .subscribe((result: CustomAlertsIndex) => {
                 this.result = result;
+
+                this.groupedList = [];
+                // Iterate all custom alerts from this.result and group it by the element.service.host.id key
+
+
+                for (let i in this.result.customalerts) {
+                    const item = this.result.customalerts[i] as Customalert;
+
+                    // Find the group
+                    let hostId = item.service.host.id;
+
+                    // Check if array position hostId in this.groupedList exists.
+                    if (!(hostId in this.groupedList)) {
+                        // If the key does not exist, create it and initialize with an empty array
+                        this.groupedList[hostId] = [];
+                    }
+
+                    this.groupedList[hostId].push(item);
+                }
+
                 this.cdr.markForCheck();
             }));
+    }
+
+    protected readonly CustomAlertsState = CustomAlertsState;
+}
+const keepOrder = (a: any, b: any) => a;
+
+// This pipe uses the angular keyvalue pipe. but doesn't change order.
+@Pipe({
+    standalone: true,
+    name: 'sortKeyValue'
+})
+export class SortKeyValuePipe extends KeyValuePipe implements PipeTransform {
+
+    override transform(value: any, ...args: any[]): any {
+        return super.transform(value, keepOrder);
     }
 
 }

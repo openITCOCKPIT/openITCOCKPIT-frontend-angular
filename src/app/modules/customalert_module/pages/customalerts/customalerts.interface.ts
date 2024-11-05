@@ -100,9 +100,9 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
     return {
         angular: true,
         scroll: true,
-        sort: 'Containers.name',
+        sort: 'Customalerts.created',
         page: 1,
-        direction: 'asc',
+        direction: 'desc',
         'recursive': false,
         'filter[Customalerts.message]' : '',
         'filter[Customalerts.state][]' : [],
@@ -116,4 +116,24 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
 export interface AnnotateParams {
     setAnnotationAsHostAcknowledgement: boolean
     setAnnotationAsServiceAcknowledgement : boolean
+}
+
+export enum CustomAlertsState {
+    New = 0,
+    InProgress = 1,
+    Done = 2,
+    ManuallyClosed = 3,
+}
+
+export function getDefaultCustomAlertsIndexCustomAlertsStateFilter(): CustomAlertsIndexCustomAlertsStateFilter {
+    return {
+        [CustomAlertsState.New]: false,
+        [CustomAlertsState.InProgress]: false,
+        [CustomAlertsState.Done]: false,
+        [CustomAlertsState.ManuallyClosed]: false,
+    }
+}
+
+export type CustomAlertsIndexCustomAlertsStateFilter = {
+    [key in CustomAlertsState]: boolean
 }
