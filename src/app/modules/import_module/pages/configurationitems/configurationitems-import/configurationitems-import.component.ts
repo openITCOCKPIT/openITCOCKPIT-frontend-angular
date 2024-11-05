@@ -36,13 +36,14 @@ import {
     ConfigurationitemsImportFileInformation,
     ConfigurationitemsImportRelevantChanges,
     ConfigurationitemsImportRoot,
-    ConfigurationitemsRelevantChangeForTemplate,
-    RelevantChangeForTemplate,
-    RelevantChangesByObjectTypeForGroupByType,
-    RelevantChangesByObjectTypesForTemplate
+    ModelChange,
+    RelevantChangesAsArray,
+    RelevantChangesAsObject,
+    RelevantObjectChanges,
 } from '../configurationitems.interface';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ConfigurationItemsExportImport } from '../configurationitems.enum';
 
 @Component({
     selector: 'oitc-configurationitems-import',
@@ -97,7 +98,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     // Holds a list of changes that might break the current monitoring
     public hasRelevantChanges: boolean = false;
-    public relevantChanges: RelevantChangesByObjectTypesForTemplate[] = [];
+    public relevantChanges: RelevantChangesAsArray[] = [];
 
     public readonly SystemnameService = inject(SystemnameService);
 
@@ -291,89 +292,100 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
      * @param relevantChanges
      * @private
      */
-    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): RelevantChangesByObjectTypesForTemplate[] {
-        const changesForTemplate: RelevantChangesByObjectTypeForGroupByType = {};
+    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): RelevantChangesAsArray[] {
+        let relevantChangesForTemplateHash: RelevantChangesAsObject = {}; // For grouping by object type
+        const relevantChangesForTemplateArray: RelevantChangesAsArray[] = []; // For ngFor in the template
 
-        for (let key in relevantChanges) {
-            let tsKey = key as keyof ConfigurationitemsImportRelevantChanges;
-            if (!changesForTemplate.hasOwnProperty(tsKey)) {
-                changesForTemplate[tsKey] = [];
+        for (let objectTypeKey in relevantChanges) {
+            // Terrible language design
+            const objectTypeKeyTs = objectTypeKey as keyof ConfigurationitemsImportRelevantChanges;
+            const objects = relevantChanges[objectTypeKeyTs]; // all changed commands or service templates etc
+
+            if (!relevantChangesForTemplateHash.hasOwnProperty(objectTypeKeyTs)) {
+                relevantChangesForTemplateHash[objectTypeKeyTs] = [];
             }
 
-            let changes = relevantChanges[tsKey];
+            if (objects) {
+                objects.forEach((object) => {
 
-            const objectTypeChangesForTemplate: ConfigurationitemsRelevantChangeForTemplate[] = [];
+                    const objectChanges: RelevantObjectChanges = {
+                        id: object.id,
+                        name: object.name,
+                        modelChanges: []
+                    }
 
-            changes?.forEach(change => {
-                const changeForTemplate: ConfigurationitemsRelevantChangeForTemplate = {
-                    id: change.id,
-                    name: change.name,
-                    objectType: tsKey,
-                    changes: []
-                };
+                    for (let modelName in object.changes) {
+                        // modelName = "Command" or "Command arguments"
+                        let serverModelChange = object.changes[modelName];
 
-                // requires all the ts-ignore, don't know how to do this the typescript way
-                for (let CurrentOrNew of ['current', 'new']) {
-                    for (let changedModelName in change.changes) {
-                        let modelChange: RelevantChangeForTemplate = {
-                            changedModelName: changedModelName,
+                        let modelChange: ModelChange = {
+                            modelName: modelName,
                             current: [],
                             new: []
-                        };
+                        }
 
-                        // @ts-ignore
-                        for (let subKey in change.changes[changedModelName][CurrentOrNew]) {
-                            // subValue can be an array, an object or a string
+                        for (let key in serverModelChange.current) {
                             // @ts-ignore
-                            let subValue = change.changes[changedModelName][CurrentOrNew][subKey];
+                            const value = serverModelChange.current[key];
 
-                            if (typeof subValue === "object") {
-                                // Array or object (bc an array is typeof object in JavaScript)
-                                const subValues: { field: string, value: any }[] = [];
-                                for (let fieldKey in subValue) {
-                                    // @ts-ignore
-                                    subValues.push({
-                                        field: fieldKey,           // e.g. objecttype_id
-                                        value: subValue[fieldKey]  // e.g. 4096
-                                    });
+                            if (typeof value === 'object') {
+                                // "value" is an object{} or an array[] (arrays are typeof object in JS)
+                                // see attached configurationitems_import_diff.png
+                                // key = 0
+                                // value = { name: ARG1, value: 100 }
+                                const changes: { key: string, value: any }[] = [];
+                                for (let subKey in value) {
+                                    changes.push({key: subKey, value: value[subKey]});
                                 }
-                                // Push array in array so we know where a new object starts (multiple custom variables for example)
-                                // @ts-ignore
-                                modelChange[CurrentOrNew].push(subValues);
+                                modelChange.current.push(changes);
                             } else {
-                                // String or number
-                                // Also array in array to keep the same API
-                                // @ts-ignore
-                                modelChange[CurrentOrNew].push([{
-                                    field: subKey,   // e.g. command_line
-                                    value: subValue  // e.g. /bin/true
-                                }]);
+                                // key = "command_line"
+                                // value = "/bin/true"
+                                modelChange.current.push([{key: key, value: value}]);
                             }
                         }
 
-                        changeForTemplate.changes.push(modelChange);
+                        for (let key in serverModelChange.new) {
+                            // @ts-ignore
+                            const value = serverModelChange.new[key];
+
+                            if (typeof value === 'object') {
+                                // "value" is an object{} or an array[] (arrays are typeof object in JS)
+                                // see attached configurationitems_import_diff.png
+                                // key = 0
+                                // value = { name: ARG1, value: 200 }
+                                const changes: { key: string, value: any }[] = [];
+                                for (let subKey in value) {
+                                    changes.push({key: subKey, value: value[subKey]});
+                                }
+                                modelChange.new.push(changes);
+                            } else {
+                                // key = "command_line"
+                                // value = "/bin/false"
+                                modelChange.new.push([{key: key, value: value}]);
+                            }
+                        }
+
+                        objectChanges.modelChanges.push(modelChange);
                     }
-                }
 
-                // All changes for current object type
-                objectTypeChangesForTemplate.push(changeForTemplate);
-            });
+                    if (relevantChangesForTemplateHash[objectTypeKeyTs]) {
+                        relevantChangesForTemplateHash[objectTypeKeyTs].push(objectChanges);
+                    }
+                });
+            }
 
-            changesForTemplate[tsKey] = objectTypeChangesForTemplate;
         }
 
-        // Currently al objects are group by type in a hash map.
-        // Stupid ngFor can not handle hash maps, so we have to convert it to an array
-        const changesForTemplateArray: RelevantChangesByObjectTypesForTemplate[] = [];
-        for (let key in changesForTemplate) {
-            let tsKey = key as keyof ConfigurationitemsImportRelevantChanges;
-            changesForTemplateArray.push({
-                objectType: tsKey,
-                relevantChanges: changesForTemplate[tsKey] || []
+        for (const objectType in relevantChangesForTemplateHash) {
+            relevantChangesForTemplateArray.push({
+                objectType: objectType as ConfigurationItemsExportImport,
+                // @ts-ignore
+                relevantObjects: relevantChangesForTemplateHash[objectType]
             });
         }
 
-        return changesForTemplateArray;
+        return relevantChangesForTemplateArray;
     }
 
     public launchImport() {

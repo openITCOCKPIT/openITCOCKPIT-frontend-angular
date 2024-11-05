@@ -359,48 +359,66 @@
                                     {{ objectTypeChanges.objectType }}
                                 </legend>
 
-                                @for (changes of objectTypeChanges.relevantChanges; track $index) {
+                                @for (object of objectTypeChanges.relevantObjects; track $index) {
                                     <c-row>
                                         <c-col [xs]="12">
-                                            <h5>
-                                                {{ changes.name }}
-                                            </h5>
+                                            {{ object.name }} - {{ object.id }}
                                         </c-col>
-                                        <c-col [xs]="12">
-                                            @for (change of changes.changes; track $index) {
+
+                                        @for (change of object.modelChanges; track $index) {
+                                            <c-col [xs]="12">
+
                                                 <blockquote class="changelog-blockquote-primary blockquote ps-3">
-                                                    <span class="font-sm">{{ change.changedModelName }}</span>
+                                                    <span class="font-sm">{{ change.modelName }}</span>
+
                                                     <c-row>
-                                                        <c-col [xs]="12" [md]="6" class="bg-red-100 down">
-                                                            @for (currentArray of change.current; track $index) {
-                                                                @for (current of currentArray; track $index) {
-                                                                    <div class="mb-2">
-                                                                        {{ current.field }}
-                                                                        {{ current.value }}
-                                                                    </div>
-                                                                }
+                                                        <c-col [xs]="12" [md]="6" class="changelog-diff-red pb-2">
+                                                            @for (currentValues of change.current; track $index) {
+                                                                <div class="mt-2">
+                                                                    @for (currentValue of currentValues; track $index) {
+                                                                        <div class="ps-1 changelog-diff">
+                                                                            <span class="text-secondary">
+                                                                                {{ currentValue.key }}
+                                                                                <fa-icon
+                                                                                    [icon]="['fas', 'caret-right']"></fa-icon>
+                                                                            </span>
+                                                                            <span
+                                                                                class="changelog-delete-after-import">
+                                                                                {{ currentValue.value }}
+                                                                            </span>
+                                                                        </div>
+                                                                    }
+                                                                </div>
                                                             }
                                                         </c-col>
-
-                                                        <c-col [xs]="12" [md]="6" class="bg-green-100 text-teal-600">
-                                                            @for (newArray of change.new; track $index) {
-                                                                @for (newData of newArray; track $index) {
-                                                                    <div class="mb-2">
-                                                                        {{ newData.field }}
-                                                                        {{ newData.value }}
-                                                                    </div>
-                                                                }
+                                                        <c-col [xs]="12" [md]="6"
+                                                               class="changelog-diff-green pb-2">
+                                                            @for (newValues of change.new; track $index) {
+                                                                <div class="mt-2">
+                                                                    @for (newValue of newValues; track $index) {
+                                                                        <div class="ps-1 changelog-diff">
+                                                                            <span class="text-secondary">
+                                                                                {{ newValue.key }}
+                                                                                <fa-icon
+                                                                                    [icon]="['fas', 'caret-right']"></fa-icon>
+                                                                            </span>
+                                                                            <span>
+                                                                                {{ newValue.value }}
+                                                                            </span>
+                                                                        </div>
+                                                                    }
+                                                                </div>
                                                             }
-
                                                         </c-col>
                                                     </c-row>
+
                                                 </blockquote>
-                                            }
-                                        </c-col>
+                                            </c-col>
+                                        }
+
+
                                     </c-row>
                                 }
-
-
                             </fieldset>
                         }
 

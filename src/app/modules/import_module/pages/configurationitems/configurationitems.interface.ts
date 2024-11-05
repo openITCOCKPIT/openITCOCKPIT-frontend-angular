@@ -91,28 +91,26 @@ export interface ConfigurationitemsImportChange {
     }
 }
 
-// These interfaces are only for the template as we have to rewrite the server response
-// to make ngFor happy
-
-export type RelevantChangesByObjectTypeForGroupByType = {
-    [key in ConfigurationItemsExportImport]?: ConfigurationitemsRelevantChangeForTemplate[]
+// Angular can NOT handle hashmaps in the template, so we need to rewirte all the ImportChanges into arrays
+// For grouping by object type in TypeScript
+export type RelevantChangesAsObject = {
+    [key in ConfigurationItemsExportImport]?: RelevantObjectChanges[]
 }
 
-export interface RelevantChangesByObjectTypesForTemplate {
-    objectType: ConfigurationItemsExportImport,
-    relevantChanges: ConfigurationitemsRelevantChangeForTemplate[]
+// For ngFor in the template
+export type RelevantChangesAsArray = {
+    objectType: ConfigurationItemsExportImport
+    relevantObjects: RelevantObjectChanges[]
 }
 
-export interface ConfigurationitemsRelevantChangeForTemplate {
-    objectType: ConfigurationItemsExportImport,
-    id: number,
-    name: string,
-    changes: RelevantChangeForTemplate[]
+export interface RelevantObjectChanges {
+    id: number
+    name: string
+    modelChanges: ModelChange[]
 }
 
-export interface RelevantChangeForTemplate {
-    changedModelName: string // "Command" or "Custom Variables" - the field that has changed
-    current: { field: string, value: any }[][] // [ [{field: "foo", value 123}, {field: "bar", value: "buzz"}] ]
-    new: { field: string, value: any }[][]     // This is an array in an array so we know when a new obect starts (like if multiple custom variables got changes)
+export interface ModelChange {
+    modelName: string,
+    current: { key: string, value: any }[][]
+    new: { key: string, value: any }[][]
 }
-
