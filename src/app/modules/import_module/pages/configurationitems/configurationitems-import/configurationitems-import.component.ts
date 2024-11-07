@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import {
+    AlertComponent,
     CalloutComponent,
     CardBodyComponent,
     CardComponent,
@@ -18,23 +19,22 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, DOCUMENT, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { UiBlockerComponent } from '../../../../../components/ui-blocker/ui-blocker.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { GenericValidationError } from '../../../../../generic-responses';
 import { ProfileMaxUploadLimit } from '../../../../../pages/profile/profile.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfigurationitemsService } from '../configurationitems.service';
 import Dropzone from 'dropzone';
 import { AuthService } from '../../../../../auth/auth.service';
-import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 import {
     ConfigurationitemsImportFileInformation,
     ConfigurationitemsImportRelevantChanges,
+    ConfigurationItemsImportResponse,
     ConfigurationitemsImportRoot,
     ModelChange,
     RelevantChangesAsArray,
@@ -44,6 +44,9 @@ import {
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfigurationItemsExportImport } from '../configurationitems.enum';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-configurationitems-import',
@@ -74,7 +77,12 @@ import { ConfigurationItemsExportImport } from '../configurationitems.enum';
         AsyncPipe,
         TableDirective,
         ProgressBarModule,
-        CalloutComponent
+        CalloutComponent,
+        LabelLinkComponent,
+        RequiredIconComponent,
+        AlertComponent,
+        NgForOf,
+        KeyValuePipe
     ],
     templateUrl: './configurationitems-import.component.html',
     styleUrl: './configurationitems-import.component.css',
@@ -82,7 +90,6 @@ import { ConfigurationItemsExportImport } from '../configurationitems.enum';
 })
 export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewInit {
 
-    public errors: GenericValidationError | null = null;
     public maxUploadLimit?: ProfileMaxUploadLimit;
 
     public hasError: boolean = false;
@@ -90,6 +97,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     public importRunning: boolean = false;
     public hasImportError: boolean = false;
+    public importResponse?: ConfigurationItemsImportResponse;
 
     public fileInformation?: ConfigurationitemsImportFileInformation;
     public uploadSuccessful: boolean = false;
@@ -126,9 +134,6 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
             this.createDropzone();
 
         }));
-    }
-
-    public submit() {
     }
 
     private createDropzone() {
@@ -172,10 +177,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                             this.updatePreviewElement(file, 'success');
 
                             this.hasRelevantChanges = Object.keys(serverResponse.relevantChanges).length > 0;
-
                             this.relevantChanges = this.formatRelevantChangesForTemplate(serverResponse.relevantChanges);
-
-                            console.log(this.relevantChanges);
 
                             this.hasError = false;
                             this.fileInformation = serverResponse.fileInformation;
@@ -390,8 +392,31 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     public launchImport() {
         this.importRunning = true;
+        this.hasImportError = false;
+        this.importSuccessful = false;
+        this.cdr.markForCheck();
+
+        if (this.filenameOnServer) {
+            const sub = this.ConfigurationitemsService.launchImport(this.filenameOnServer).subscribe({
+                next: (response) => {
+                    // Success
+                    this.importRunning = false;
+                    this.importSuccessful = true;
+                    this.cdr.markForCheck();
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.importRunning = false;
+                    this.hasImportError = true;
+                    this.importResponse = error.error as ConfigurationItemsImportResponse;
+
+                    console.log(this.importResponse);
+
+                    this.cdr.markForCheck();
+                }
+            });
+            this.subscriptions.add(sub);
+        }
     }
 
-    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
-
+    protected readonly ConfigurationItemsExportImport = ConfigurationItemsExportImport;
 }

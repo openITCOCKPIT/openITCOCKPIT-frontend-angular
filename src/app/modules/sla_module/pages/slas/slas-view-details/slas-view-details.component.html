@@ -159,12 +159,12 @@
                                 {{ t('Consider downtimes') }}:
                             </c-col>
                             <c-col lg="7" md="12" xs="12">
-                                <oitc-badge-outline color="success" [hidden]="!details.sla.consider_downtimes">
+                                <c-badge color="success" [hidden]="!details.sla.consider_downtimes">
                                     {{ t('Yes') }}
-                                </oitc-badge-outline>
-                                <oitc-badge-outline color="danger" [hidden]="details.sla.consider_downtimes">
+                                </c-badge>
+                                <c-badge color="danger" [hidden]="details.sla.consider_downtimes">
                                     {{ t('No') }}
-                                </oitc-badge-outline>
+                                </c-badge>
                             </c-col>
                         </c-row>
                         <c-row class="pt-2">

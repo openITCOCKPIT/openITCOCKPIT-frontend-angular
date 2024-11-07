@@ -5,7 +5,8 @@ import { map, Observable } from 'rxjs';
 import {
     ConfigurationitemsElementsExport,
     ConfigurationitemsElementsExportPost,
-    ConfigurationitemsElementsJsonFile
+    ConfigurationitemsElementsJsonFile,
+    ConfigurationItemsImportResponse
 } from './configurationitems.interface';
 import { ProfileMaxUploadLimit } from '../../../../pages/profile/profile.interface';
 import { GenericSuccessAndMessageResponse } from '../../../../generic-responses';
@@ -67,6 +68,17 @@ export class ConfigurationitemsService {
         }).pipe(
             map(data => {
                 return data.response;
+            })
+        )
+    }
+
+    public launchImport(filename: string): Observable<ConfigurationItemsImportResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ConfigurationItemsImportResponse>(`${proxyPath}/import_module/configurationitems/launch_import.json?angular=true`, {
+            filename: filename
+        }).pipe(
+            map(data => {
+                return data;
             })
         )
     }
