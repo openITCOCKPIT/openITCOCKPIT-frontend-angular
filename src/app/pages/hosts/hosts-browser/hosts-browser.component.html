@@ -1100,7 +1100,15 @@
 
             <!-- SLA Module start -->
             <div *ngIf="selectedTab == HostBrowserTabs.SLA">
-                SLA
+                @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
+                && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
+                    <oitc-sla-host-information-element
+                        [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
+                } @else {
+                    <label class="text-danger">
+                        {{ t('No permissions') }}
+                    </label>
+                }
             </div>
             <!-- SLA Module end -->
 
