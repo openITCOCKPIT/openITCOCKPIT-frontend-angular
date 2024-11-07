@@ -20,5 +20,9 @@ export const customalertModuleRoutes: Routes = [
     {
         path: 'customalert_module/customalerts/index',
         loadComponent: () => import('./pages/customalerts/customalerts-index/customalerts-index.component').then(m => m.CustomalertsIndexComponent)
+    },
+    {
+        path: 'customalert_module/customalerts/history/:id',
+        loadComponent: () => import('./pages/customalerts/customalerts-history/customalerts-history.component').then(m => m.CustomalertsHistoryComponent)
     }
 ];

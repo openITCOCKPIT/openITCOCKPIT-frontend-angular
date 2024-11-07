@@ -137,3 +137,32 @@ export function getDefaultCustomAlertsIndexCustomAlertsStateFilter(): CustomAler
 export type CustomAlertsIndexCustomAlertsStateFilter = {
     [key in CustomAlertsState]: boolean
 }
+
+// CHANGES
+export interface CustomAlertHistory {
+    customalert: Customalert
+    history: History[]
+    success: boolean
+    _csrfToken: any
+}
+
+
+export interface History {
+    state_time: string
+    timeAgoInWords: string
+    user: boolean
+    customalert_comment: {
+        id: any
+        customalert_id: any
+        user_id: any
+        comment: any
+        entry_time: any
+        user: {
+            id: any
+            firstname: any
+            lastname: any
+        }
+    }
+
+    state: number
+}

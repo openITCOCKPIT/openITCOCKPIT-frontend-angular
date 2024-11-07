@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { CustomAlertsIndex, CustomAlertsIndexParams, LoadContainersRoot } from './customalerts.interface';
+import {
+    CustomAlertHistory,
+    CustomAlertsIndex,
+    CustomAlertsIndexParams,
+    LoadContainersRoot
+} from './customalerts.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -39,5 +44,9 @@ export class CustomAlertsService {
 
     public loadContainers(): Observable<LoadContainersRoot> {
         return this.http.get<LoadContainersRoot>(`${this.proxyPath}/customalert_module/customalerts/loadContainers.json?angular=true`);
+    }
+
+    public getHistory(customAlertId: number) : Observable<CustomAlertHistory> {
+        return this.http.get<CustomAlertHistory>(`${this.proxyPath}/customalert_module/customalerts/history/${customAlertId}.json?angular=true`);
     }
 }
