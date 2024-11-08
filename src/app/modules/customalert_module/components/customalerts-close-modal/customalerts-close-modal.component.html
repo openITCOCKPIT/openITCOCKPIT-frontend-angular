@@ -7,7 +7,7 @@
     >
         <c-modal-header class="bg-primary">
             <h5 cModalTitle class="text-white">
-                <fa-icon [icon]="['fas', 'folder']"></fa-icon>
+                <fa-icon [icon]="['fas', 'folder-closed']"></fa-icon>
                 {{ t('Close manually') }}
             </h5>
             <button (click)="hideModal()" cButtonClose></button>
@@ -27,7 +27,10 @@
                                 {{ t('Information') }}
                             </span>
                             <br>
-                            {{ t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.') }}
+                            {{ t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.', {
+                            '{0}' : t('New'),
+                            '{1}' : t('In progress')
+                        }) }}
                         </div>
                     </div>
                 </c-alert>

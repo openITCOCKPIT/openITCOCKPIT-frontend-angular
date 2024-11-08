@@ -7,7 +7,6 @@ import {
     Input,
     Output
 } from '@angular/core';
-import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     AlertComponent,
     BadgeComponent,
@@ -22,7 +21,7 @@ import {
     ModalTitleDirective,
     RowComponent
 } from '@coreui/angular';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -63,6 +62,7 @@ import { Customalert } from '../../pages/customalerts/customalerts.interface';
 export class CustomalertsCloseModalComponent {
     private readonly modalService = inject(ModalService);
     private readonly CustomAlertsService = inject(CustomAlertsService);
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected comment: string = '';
@@ -78,6 +78,16 @@ export class CustomalertsCloseModalComponent {
     protected closeManually(): void {
         // Iterate all elements of this.items and call this.CustomAlertsService.annotate
         // with the appropriate arguments for each element.
+        this.errors = null;
+        if (this.comment.length === 0) {
+            this.errors = {
+                comment: {
+                    _empty: this.TranslocoService.translate('This field cannot be left empty')
+                }
+            }
+            ;
+            return;
+        }
         this.isProcessing = true;
 
         for (let i in this.items) {

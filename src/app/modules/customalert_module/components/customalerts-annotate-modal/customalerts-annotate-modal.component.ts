@@ -13,7 +13,8 @@ import {
     ButtonCloseDirective,
     ColComponent,
     FormCheckComponent,
-    FormCheckInputDirective, FormCheckLabelDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -25,7 +26,7 @@ import {
     RowComponent,
     TextColorDirective
 } from '@coreui/angular';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService} from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -38,7 +39,8 @@ import { GenericValidationError } from '../../../../generic-responses';
 import {
     CheckHoststatusForAcknowledgementsRequest,
     CheckHoststatusForAcknowledgementsResponse,
-    Customalert, CustomAlertsState
+    Customalert,
+    CustomAlertsState
 } from '../../pages/customalerts/customalerts.interface';
 import { Subscription } from 'rxjs';
 
@@ -79,6 +81,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
     private readonly modalService = inject(ModalService);
     private readonly CustomAlertsService = inject(CustomAlertsService);
     private readonly subscriptions: Subscription = new Subscription();
+    private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected result?: CheckHoststatusForAcknowledgementsResponse;
@@ -126,8 +129,18 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
     protected annotate(): void {
         // Iterate all elements of this.items and call this.CustomAlertsService.annotate
         // with the appropriate arguments for each element.
-        this.isProcessing = true;
+        this.errors = null;
 
+        if (this.comment.length === 0) {
+            this.errors = {
+                comment: {
+                    _empty: this.TranslocoService.translate('This field cannot be left empty')
+                }
+            }
+            ;
+            return;
+        }
+        this.isProcessing = true;
         for (let i in this.items) {
             const item = this.items[i];
             let responseCount = 0;
