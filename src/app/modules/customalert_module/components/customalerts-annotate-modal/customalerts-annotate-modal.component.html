@@ -16,10 +16,10 @@
             <ng-container>
                 {{ t('Do you want annotate the selected objects?') }}
                 <c-row class="pt-2">
-                    <c-col *ngFor="let item of items" sm="12">
-                        <ul class="mb-0">
-                            <li>
-                                {{ item.displayName }}
+                    <c-col sm="12">
+                        <ul class="mb-3">
+                            <li *ngFor="let item of items">
+                                {{ item.service.host.name }} / {{ item.servicename }}
                             </li>
                         </ul>
                     </c-col>
@@ -28,17 +28,24 @@
                           [(ngModel)]="comment"></textarea>
                 <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
-                {{ t('The maximum length for this field is 1024. Characters available:') }}
-                <code>{{ 1024 - comment.length }}</code>
+                <div class="help-block">
+                    {{ t('The maximum length for this field is 1024. Characters available:') }}
+                    <code>{{ 1024 - comment.length }}</code>
+                </div>
             </ng-container>
 
-            <div [cTextColor]="'success'">
+            <div class="mb-3" class="col-lg-12 margin-top-10" *ngIf="loadingHoststate">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                {{ t('Determining host state...') }}
+            </div>
+
+            <div class="mb-3" [cTextColor]="'success'" *ngIf="result && result.all_hosts.length === 0">
                 <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
                 {{ t('All hosts are Up.') }}
             </div>
 
 
-            <c-form-check>
+            <c-form-check class="mb-3">
                 <input cFormCheckInput
                        class="checkbox-lg custom-check-default"
                        name="acknowlage"

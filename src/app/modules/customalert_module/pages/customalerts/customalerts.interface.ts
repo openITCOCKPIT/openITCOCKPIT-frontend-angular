@@ -166,3 +166,14 @@ export interface History {
 
     state: number
 }
+
+// CheckHoststatusForAcknowledgements
+export interface CheckHoststatusForAcknowledgementsRequest {
+    hostIds: string[]
+}
+
+export interface CheckHoststatusForAcknowledgementsResponse {
+    all_hosts: any[]
+    canSubmitExternalCommands: boolean
+    _csrfToken: any
+}

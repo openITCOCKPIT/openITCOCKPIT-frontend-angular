@@ -31,6 +31,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { GenericValidationError } from '../../../../generic-responses';
 import { CustomAlertsService } from '../../pages/customalerts/customalerts.service';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { Customalert } from '../../pages/customalerts/customalerts.interface';
 
 @Component({
     selector: 'oitc-customalerts-close-modal',
@@ -71,7 +72,7 @@ export class CustomalertsCloseModalComponent {
     protected hasErrors: boolean = false;
     protected errors: GenericValidationError | null = null;
 
-    @Input({required: true}) public items: DeleteAllItem[] = [];
+    @Input({required: true}) public items: Customalert[] = [];
     @Output() completed = new EventEmitter<boolean>();
 
     protected closeManually(): void {

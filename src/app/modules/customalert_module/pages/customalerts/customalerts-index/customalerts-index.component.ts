@@ -159,27 +159,21 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected stateFilter: CustomAlertsIndexCustomAlertsStateFilter = getDefaultCustomAlertsIndexCustomAlertsStateFilter()
     protected result?: CustomAlertsIndex;
     protected hideFilter: boolean = true;
-    protected selectedItems: DeleteAllItem[] = [];
+    protected selectedItems: Customalert[] = [];
     protected groupViewByHost: boolean = false;
     protected groupedList: { [key: number]: Customalert[] } = {};
 
-    private getSelectedItems(customAlert?: Customalert): DeleteAllItem[] {
+    private getSelectedItems(customAlert?: Customalert): Customalert[] {
         if (customAlert) {
-            return [{
-                id: Number(customAlert.id),
-                displayName: String(customAlert.servicename)
-            }] as DeleteAllItem[];
+            return [customAlert];
         }
-        return this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-            return {
-                id: item.id,
-                displayName: '{"name":"'+item.service.host.name+'/'+item.servicename+'", "host_id":"'+item.service.host.id+'", "service_id":"'+item.service.id+'"}',
-            };
+        return this.SelectionServiceService.getSelectedItems().map((item): Customalert => {
+            return item;
         });
     }
 
     public toggleCloseModal(customAlert?: Customalert) {
-        let items: DeleteAllItem[] = this.getSelectedItems(customAlert);
+        let items: Customalert[] = this.getSelectedItems(customAlert);
 
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');
@@ -197,8 +191,8 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         this.cdr.markForCheck();
     }
 
-    protected toggleAnnotateModal(customAlert?: Customalert) {
-        let items: DeleteAllItem[] = this.getSelectedItems(customAlert);
+    protected toggleAnnotateModal = (customAlert?: Customalert) => {
+        let items: Customalert[] = this.getSelectedItems(customAlert);
 
         if (items.length === 0) {
             const message = this.TranslocoService.translate('No items selected!');

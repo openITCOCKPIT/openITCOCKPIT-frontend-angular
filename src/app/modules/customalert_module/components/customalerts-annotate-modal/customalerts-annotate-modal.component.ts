@@ -5,9 +5,9 @@ import {
     EventEmitter,
     inject,
     Input,
+    OnInit,
     Output
 } from '@angular/core';
-import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     AlertComponent,
     ButtonCloseDirective,
@@ -27,7 +27,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -35,6 +35,12 @@ import { CustomAlertsService } from '../../pages/customalerts/customalerts.servi
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericValidationError } from '../../../../generic-responses';
+import {
+    CheckHoststatusForAcknowledgementsRequest,
+    CheckHoststatusForAcknowledgementsResponse,
+    Customalert
+} from '../../pages/customalerts/customalerts.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-customalerts-annotate-modal',
@@ -61,17 +67,21 @@ import { GenericValidationError } from '../../../../generic-responses';
         TextColorDirective,
         DebounceDirective,
         ProgressComponent,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        NgIf
     ],
     templateUrl: './customalerts-annotate-modal.component.html',
     styleUrl: './customalerts-annotate-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomalertsAnnotateModalComponent {
+export class CustomalertsAnnotateModalComponent implements OnInit {
     private readonly modalService = inject(ModalService);
     private readonly CustomAlertsService = inject(CustomAlertsService);
+    private readonly subscriptions: Subscription = new Subscription();
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
+    protected result?: CheckHoststatusForAcknowledgementsResponse;
+    protected loadingHoststate: boolean = false;
     protected comment: string = '';
     protected acknowlage: boolean = true;
     protected isProcessing: boolean = false;
@@ -79,8 +89,38 @@ export class CustomalertsAnnotateModalComponent {
     protected hasErrors: boolean = false;
     protected errors: GenericValidationError | null = null;
 
-    @Input({required: true}) public items: DeleteAllItem[] = [];
+    @Input({required: true}) public items: Customalert[] = [];
     @Output() completed = new EventEmitter<boolean>();
+
+    constructor() {
+    }
+
+    public ngOnInit(): void {
+        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
+            if (state.id === 'customalertsAnnotateModal' && state.show === true) {
+                this.cdr.markForCheck();
+                this.checkHoststatusForAcknowledgements();
+            }
+        }));
+    }
+
+//
+    protected checkHoststatusForAcknowledgements = () => {
+        this.loadingHoststate = true;
+        this.cdr.markForCheck();
+        console.warn(this.items);
+        let params: CheckHoststatusForAcknowledgementsRequest = {
+            hostIds: this.items.map(item => item.service.host.id as unknown as string)
+        };
+
+        this.subscriptions.add(this.CustomAlertsService.checkHoststatusForAcknowledgements(params)
+            .subscribe((result: CheckHoststatusForAcknowledgementsResponse) => {
+                this.result = result;
+                this.loadingHoststate = false;
+                this.cdr.markForCheck();
+            })
+        );
+    }
 
     protected annotate(): void {
         // Iterate all elements of this.items and call this.CustomAlertsService.annotate

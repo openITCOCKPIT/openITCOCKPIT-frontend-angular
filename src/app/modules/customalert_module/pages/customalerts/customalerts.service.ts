@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
+    CheckHoststatusForAcknowledgementsRequest,
+    CheckHoststatusForAcknowledgementsResponse,
     CustomAlertHistory,
     CustomAlertsIndex,
     CustomAlertsIndexParams,
@@ -37,7 +39,7 @@ export class CustomAlertsService {
     }
 
     public closeManually(customAlertId: number, comment: string): Observable<void> {
-        return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/close/${customAlertId}.json`, {
+        return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/close/${customAlertId}.json?angular=true`, {
             comment
         });
     }
@@ -48,5 +50,9 @@ export class CustomAlertsService {
 
     public getHistory(customAlertId: number) : Observable<CustomAlertHistory> {
         return this.http.get<CustomAlertHistory>(`${this.proxyPath}/customalert_module/customalerts/history/${customAlertId}.json?angular=true`);
+    }
+
+    public checkHoststatusForAcknowledgements(params: CheckHoststatusForAcknowledgementsRequest): Observable<CheckHoststatusForAcknowledgementsResponse> {
+        return this.http.post<CheckHoststatusForAcknowledgementsResponse>(`${this.proxyPath}/customalert_module/Customalerts/checkHoststatusForAcknowledgements.json?angular=true`, params);
     }
 }
