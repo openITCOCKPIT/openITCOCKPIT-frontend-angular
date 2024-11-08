@@ -372,6 +372,26 @@
                                 {{ customAlertRule.modifiedInHumanShort }}
                             </td>
                             <td class="width-50">
+                                <oitc-actions-button [url]="''" [click]="toggleAnnotateModal"
+                                                     [element]="customAlertRule"
+                                                     [icon]="['fas', 'comment']"
+                                                     [permission]="'CustomalertModule.Customalerts.annotate'">
+                                    <oitc-actions-button-element  (click)="toggleAnnotateModal(customAlertRule)"
+                                                                  [permission]="'CustomalertModule.Customalerts.annotate'">
+                                        <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                        {{ t('Annotate') }}
+                                    </oitc-actions-button-element>
+                                    <oitc-actions-button-element  (click)="toggleCloseModal(customAlertRule)"
+                                                                  [permission]="'CustomalertModule.Customalerts.close'">
+                                        <fa-icon [icon]="['fas', 'folder']"></fa-icon>
+                                        {{ t('Close manually') }}
+                                    </oitc-actions-button-element>
+                                    <oitc-actions-button-element [permission]="'CustomalertModule.Customalerts.history'"
+                                                                 [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
+                                        <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                                        {{ t('History') }}
+                                    </oitc-actions-button-element>
+                                </oitc-actions-button>
                             </td>
                         </tr>
 

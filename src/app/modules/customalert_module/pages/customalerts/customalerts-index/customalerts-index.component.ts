@@ -253,6 +253,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
 
     // Callback when a filter has changed
     public onFilterChange(event: any) {
+        alert('A');
         this.params.page = 1;
         this.refresh();
     }

@@ -127,8 +127,8 @@ export enum CustomAlertsState {
 
 export function getDefaultCustomAlertsIndexCustomAlertsStateFilter(): CustomAlertsIndexCustomAlertsStateFilter {
     return {
-        [CustomAlertsState.New]: false,
-        [CustomAlertsState.InProgress]: false,
+        [CustomAlertsState.New]: true,
+        [CustomAlertsState.InProgress]: true,
         [CustomAlertsState.Done]: false,
         [CustomAlertsState.ManuallyClosed]: false,
     }
