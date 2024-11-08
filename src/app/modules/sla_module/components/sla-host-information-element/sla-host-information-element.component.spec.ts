@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SlaHostInformationElementComponent } from './sla-host-information-element.component';
 
-describe('SlaHostgroupHostsStatusOverviewComponent', () => {
+describe('SlaHostInformationElementComponent', () => {
     let component: SlaHostInformationElementComponent;
     let fixture: ComponentFixture<SlaHostInformationElementComponent>;
 
