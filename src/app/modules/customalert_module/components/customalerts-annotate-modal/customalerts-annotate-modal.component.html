@@ -28,13 +28,13 @@
                           [(ngModel)]="comment"></textarea>
                 <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
-                <div class="help-block">
+                <div class="help-block mb-3">
                     {{ t('The maximum length for this field is 1024. Characters available:') }}
                     <code>{{ 1024 - comment.length }}</code>
                 </div>
             </ng-container>
 
-            <div class="mb-3" class="col-lg-12 margin-top-10" *ngIf="loadingHoststate">
+            <div class="col-lg-12 mt-3" *ngIf="loadingHoststate">
                 <i class="fa-solid fa-spinner fa-spin"></i>
                 {{ t('Determining host state...') }}
             </div>
@@ -44,19 +44,17 @@
                 {{ t('All hosts are Up.') }}
             </div>
 
-
             <c-form-check class="mb-3">
-                <input cFormCheckInput
+                <input cFormCheckInput id="stateFilter[CustomAlertsState.New]" type="checkbox"
                        class="checkbox-lg custom-check-default"
+                       [(ngModel)]="acknowlage"
                        name="acknowlage"
                        id="acknowlage"
-                       type="checkbox"
-                       [(ngModel)]="acknowlage"/>
-                <label cFormCheckLabel for="acknowlage">
+                       oitcDebounce/>
+                <label cFormCheckLabel class="ms-1 mt-1" for="acknowlage">
                     {{ t('Set annotation comment as service acknowledgement') }}
                 </label>
             </c-form-check>
-
 
             <c-alert color="light">
                 <div class="d-flex align-items-center">
@@ -78,7 +76,7 @@
 
             <c-row [hidden]="!isProcessing" class="pt-4 pb-2">
                 <c-col sm="12">
-                    <h4>{{ t('Deleting...') }}</h4>
+                    <h4>{{ t('Annotating...') }}</h4>
                 </c-col>
                 <c-col sm="12">
                     <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>

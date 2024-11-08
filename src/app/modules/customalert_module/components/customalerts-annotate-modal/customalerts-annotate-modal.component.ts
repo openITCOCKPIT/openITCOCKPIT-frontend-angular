@@ -13,7 +13,7 @@ import {
     ButtonCloseDirective,
     ColComponent,
     FormCheckComponent,
-    FormCheckInputDirective,
+    FormCheckInputDirective, FormCheckLabelDirective,
     FormControlDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -38,7 +38,7 @@ import { GenericValidationError } from '../../../../generic-responses';
 import {
     CheckHoststatusForAcknowledgementsRequest,
     CheckHoststatusForAcknowledgementsResponse,
-    Customalert
+    Customalert, CustomAlertsState
 } from '../../pages/customalerts/customalerts.interface';
 import { Subscription } from 'rxjs';
 
@@ -68,7 +68,8 @@ import { Subscription } from 'rxjs';
         DebounceDirective,
         ProgressComponent,
         FormFeedbackComponent,
-        NgIf
+        NgIf,
+        FormCheckLabelDirective
     ],
     templateUrl: './customalerts-annotate-modal.component.html',
     styleUrl: './customalerts-annotate-modal.component.css',
@@ -189,4 +190,6 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
         this.errors = null;
         this.items = [];
     }
+
+    protected readonly CustomAlertsState = CustomAlertsState;
 }
