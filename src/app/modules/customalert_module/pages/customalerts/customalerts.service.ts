@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import {
     CheckHoststatusForAcknowledgementsRequest,
     CheckHoststatusForAcknowledgementsResponse,
-    CustomAlertHistory,
+    CustomAlertHistory, CustomalertServiceHistory,
     CustomAlertsIndex,
     CustomAlertsIndexParams,
     LoadContainersRoot
@@ -54,5 +54,22 @@ export class CustomAlertsService {
 
     public checkHoststatusForAcknowledgements(params: CheckHoststatusForAcknowledgementsRequest): Observable<CheckHoststatusForAcknowledgementsResponse> {
         return this.http.post<CheckHoststatusForAcknowledgementsResponse>(`${this.proxyPath}/customalert_module/Customalerts/checkHoststatusForAcknowledgements.json?angular=true`, params);
+    }
+
+    public getServiceHistory(serviceId: number): Observable<CustomalertServiceHistory> {
+        let params: object = {
+            angular: true,
+            sort: 'CustomalertStatehistory.state_time',
+            page: 1,
+            scroll: true,
+            direction: 'desc',
+            'filter[from]': '12.10.2024 09:23',
+            'filter[to]': '12.11.2024 08:23'
+        }
+        return this.http.get<CustomalertServiceHistory>(`${this.proxyPath}/customalert_module/customalerts/service_history/${serviceId}.json`, {
+            params: {
+                ...params
+            }
+        });
     }
 }

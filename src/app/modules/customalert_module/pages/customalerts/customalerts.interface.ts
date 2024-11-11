@@ -177,3 +177,37 @@ export interface CheckHoststatusForAcknowledgementsResponse {
     canSubmitExternalCommands: boolean
     _csrfToken: any
 }
+
+//
+export interface CustomalertServiceHistory extends PaginateOrScroll {
+    history: {
+        message: string
+        state: number
+        modified: string
+        timeAgoInWords: string
+        customalert_statehistory: CustomalertStatehistory[]
+    }[]
+    success: boolean
+    _csrfToken: any
+}
+
+export interface CustomalertStatehistory {
+    state_time: string
+    timeAgoInWords: string
+    user: boolean
+    customalert_comment: {
+        id: number
+        customalert_id: number
+        user_id: number
+        comment: string
+        entry_time: string
+        user: {
+            id: number
+            firstname: string
+            lastname: string
+        }
+    }
+    state: number
+}
+
+

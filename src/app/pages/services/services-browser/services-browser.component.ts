@@ -128,6 +128,9 @@ import {
 import {
     CancelServicedowntimeModalComponent
 } from '../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
+import {
+    CustomalertsServiceHistoryComponent
+} from '../../../modules/customalert_module/components/customalerts-service-history/customalerts-service-history.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -198,7 +201,8 @@ import {
         ServicenowServiceBrowserTabComponent,
         CancelHostdowntimeModalComponent,
         CancelServicedowntimeModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        CustomalertsServiceHistoryComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
