@@ -29,7 +29,7 @@
         <c-card-header>
             <h5 cCardTitle>{{ t('Event Correlation:') }}
                 <small class="fw-300">
-                    EVK NAME HIER todo
+                    {{ rootElement.host.name }}
                 </small>
             </h5>
 
@@ -65,7 +65,12 @@
         </c-card-header>
         <c-card-body>
 
-            Hier ist massig Platz für content
+            <div class="d-flex" style="height: 100vh;">
+                <oitc-evc-tree
+                    class="w-100 h-100"
+                    [evcId]="id"
+                    [evcTree]="evcTree"></oitc-evc-tree>
+            </div>
 
         </c-card-body>
         <c-card-footer>

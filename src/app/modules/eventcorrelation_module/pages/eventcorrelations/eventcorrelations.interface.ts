@@ -20,9 +20,9 @@ export interface EvcTree {
         parent_id: number
         host_id: number
         service_id: number
-        operator: any,
+        operator: EventcorrelationOperators | null,
         service: EvcService
-    }
+    }[]
 }
 
 export interface EventcorrelationRootElement {

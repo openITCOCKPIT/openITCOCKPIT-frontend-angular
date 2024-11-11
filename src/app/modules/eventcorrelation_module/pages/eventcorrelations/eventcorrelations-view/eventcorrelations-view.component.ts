@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../eventcorrelations.service';
 import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
@@ -65,7 +66,8 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
         XsButtonDirective,
         RouterLink,
         BackButtonDirective,
-        BlockLoaderComponent
+        BlockLoaderComponent,
+        EvcTreeComponent
     ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
@@ -100,7 +102,6 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.EventcorrelationsService.getEventcorrelationView(this.id).subscribe((result) => {
             this.cdr.markForCheck();
 
-            console.log(result);
             this.evcTree = result.evcTree;
             this.rootElement = result.rootElement;
             this.hasWritePermission = result.hasWritePermission;
