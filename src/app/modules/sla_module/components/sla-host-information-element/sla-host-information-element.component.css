@@ -1,16 +1,3 @@
-.multi-select-input-group oitc-multi-select {
-    flex-grow: 1;
-}
-
-.card-icon-big {
-    font-size: 50px;
-}
-
-.pos-bottom-negative-10 {
-    bottom: -10px;
-}
-
-
 .gridContainer-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
