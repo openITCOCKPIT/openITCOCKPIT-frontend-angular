@@ -1,0 +1,29 @@
+.evc-service-container {
+    border: 2px solid var(--cui-primary);
+    border-radius: var(--cui-border-radius);
+    box-shadow: rgba($primary, 0.3) 5px 0px 10px 0px;
+}
+
+.evc-service-ok {
+    border-color: var(--cui-success);
+    box-shadow: rgba($success, 0.3) 5px 0px 10px 0px;
+}
+
+.evc-service-warning {
+    border-color: var(--cui-warning);
+    box-shadow: rgba($warning, 0.3) 5px 0px 10px 0px;
+}
+
+.evc-service-critical {
+    border-color: var(--cui-danger);
+    box-shadow: rgba($danger, 0.3) 5px 0px 10px 0px;
+}
+
+.evc-service-unknown {
+    border-color: var(--cui-secondary);
+    box-shadow: rgba($secondary, 0.3) 5px 0px 10px 0px;
+}
+
+.evc-tree-hostname {
+    font-size: 10px;
+}
