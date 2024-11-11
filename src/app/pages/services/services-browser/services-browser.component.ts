@@ -23,7 +23,6 @@ import {
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { HostsBrowserMenuComponent } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
 import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import {
@@ -128,6 +127,9 @@ import {
 import {
     CancelServicedowntimeModalComponent
 } from '../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
+import {
+    SlaServiceInformationElementComponent
+} from '../../../modules/sla_module/components/sla-service-information-element/sla-service-information-element.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -198,7 +200,8 @@ import {
         ServicenowServiceBrowserTabComponent,
         CancelHostdowntimeModalComponent,
         CancelServicedowntimeModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        SlaServiceInformationElementComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',

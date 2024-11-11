@@ -513,6 +513,8 @@ export interface SlaAvailabilityStatusService {
     determined_outage_time: number
     evaluation_end: string
     determined_availability_percent: number
+    minimal_availability_percent?: number
+    determined_number_outages?: number
     Services: Services
     Servicetemplates: Servicetemplates
     evaluation_total_time_human_readable: string

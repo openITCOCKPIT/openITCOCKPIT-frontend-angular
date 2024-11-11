@@ -1,0 +1,108 @@
+.gridContainer-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.child {
+    text-align: center;
+}
+
+.child.grid {
+    width: auto;
+    max-width: 100%;
+}
+
+.sla-service-list:before {
+    content: "\f884";
+    position: relative;
+    font: var(--fa-font-solid);
+    font-size: 15px;
+    top: 17%;
+    right: -103%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #727b84 0%, #727b84 50%, transparent 50%),
+    linear-gradient(180deg, rgba(204, 0, 0, 0.2) 0%, rgba(204, 0, 0, 0.8) 35%, rgba(255, 187, 0.8) 35%, rgba(0, 200, 81, 0.8) 100%);
+    opacity: 0.8;
+}
+
+.sla-service-list-icon {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #727b84 0%, #727b84 50%, transparent 50%),
+    linear-gradient(180deg, rgba(204, 0, 0, 1) 0%, rgba(204, 0, 0, 1) 35%, rgba(255, 187, 1) 35%, rgba(0, 200, 81, 1) 100%);
+}
+
+.border-left {
+    border-left: 1px solid #dee2e6;
+}
+
+.inside-list {
+    list-style-position: inside;
+}
+
+.sla-info-box {
+    display: block;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    color: #ffffff;
+}
+
+.sla-info-box-icon {
+    border-radius: 2px 0 0 2px;
+    display: block;
+    float: left;
+    height: 62px;
+    width: 60px;
+    text-align: center;
+    font-size: 45px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.sla-info-box-content {
+    padding: 0px 10px;
+    margin-left: 60px;
+}
+
+.sla-info-box-text {
+    text-transform: uppercase;
+}
+
+.sla-info-box-number {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.sla-info-box .progress, .sla-info-box .progress .progress-bar {
+    border-radius: 0;
+}
+
+.sla-info-box .progress {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 5px -10px 5px -10px;
+    height: 2px;
+}
+
+.sla-info-box .progress .progress-bar {
+    background: #fff;
+}
+
+.progress-description {
+    margin: 0;
+}
+
+.progress-description, .sla-info-box-text {
+    display: block;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.width-6 {
+    width: 3.25rem;
+}

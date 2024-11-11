@@ -113,6 +113,9 @@ import {
 import {
     AdditionalHostInformationComponent
 } from '../../../modules/import_module/components/additional-host-information/additional-host-information.component';
+import {
+    SlaHostInformationElementComponent
+} from '../../../modules/sla_module/components/sla-host-information-element/sla-host-information-element.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -176,7 +179,8 @@ import {
         GrafanaTimepickerComponent,
         ServicenowHostBrowserTabComponent,
         AdditionalHostInformationComponent,
-        AsyncPipe
+        AsyncPipe,
+        SlaHostInformationElementComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',

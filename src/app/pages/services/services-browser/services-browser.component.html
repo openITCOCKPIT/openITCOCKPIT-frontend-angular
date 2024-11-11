@@ -1281,7 +1281,16 @@
 
             <!-- SLA Module start -->
             <div *ngIf="selectedTab == ServiceBrowserTabs.SLA">
-                SLA
+                @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
+                && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaServiceInformation']) | async )) {
+                    <oitc-sla-service-information-element *ngIf="result && result.mergedService"
+                                                          [serviceId]="Number(result.mergedService.id)">
+                    </oitc-sla-service-information-element>
+                } @else {
+                    <label class="text-danger">
+                        {{ t('No permissions') }}
+                    </label>
+                }
             </div>
             <!-- SLA Module end -->
 
