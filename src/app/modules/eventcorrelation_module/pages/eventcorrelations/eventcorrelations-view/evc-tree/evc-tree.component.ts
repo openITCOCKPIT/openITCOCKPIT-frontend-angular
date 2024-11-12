@@ -28,22 +28,26 @@ import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/a
 import { TranslocoDirective } from '@jsverse/transloco';
 import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
 import { ConnectionOperator } from './evc-tree.interface'
+import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 
+// Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
-    service: EvcService
+    evcNode: EvcGraphNode
 }
 
 interface EvcGraphNode {
     id: string
     parentId: string | null
-    service: EvcService
+    service?: EvcService
+    operator?: EventcorrelationOperators | null,
+    type: 'service' | 'operator'
 }
 
 interface INodeViewModel {
     id: string
     connectorId: string
     position: IPoint,
-    service?: EvcService
+    evcNode: EvcGraphNode
 }
 
 
@@ -65,6 +69,9 @@ const CONFIGURATION = {
         inputSide: EFConnectableSide.BOTTOM
     }
 };
+
+const SERVICE_WIDTH = 150;
+const OPERATOR_WIDTH = 100;
 
 @Component({
     selector: 'oitc-evc-tree',
@@ -154,15 +161,20 @@ export class EvcTreeComponent implements AfterViewInit {
         // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
         graph.setGraph({
             rankdir: direction,
-            nodesep: 10,
-            ranksep: 50,
+            nodesep: 10, // vertical distance between nodes
+            ranksep: 50, //200
             edgesep: 10
         });
 
 
         nodes.forEach(node => {
             // Add service meta data into dagre.Node (EvcNode)
-            graph.setNode(node.id, {width: 150, height: 38, service: node.service});
+            graph.setNode(node.id, {
+                width: (node.type === 'service') ? SERVICE_WIDTH : OPERATOR_WIDTH,
+                height: 38,
+                evcNode: node,
+            });
+
             if (node.parentId != null) {
                 graph.setEdge(node.parentId, node.id, {});
             }
@@ -179,14 +191,19 @@ export class EvcTreeComponent implements AfterViewInit {
             // Cast the dagre.Node to EvcNode
             const evcNode = node as EvcNode;
 
+            let xpos = evcNode.x;
+            if (evcNode.evcNode.type === 'operator') {
+                xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 2;
+            }
+
             return {
                 id: generateGuid(),
                 connectorId: x,
                 position: {
-                    x: evcNode.x,
+                    x: xpos,//evcNode.x,
                     y: evcNode.y
                 },
-                service: evcNode.service
+                evcNode: evcNode.evcNode
             }
         });
     }
@@ -195,16 +212,32 @@ export class EvcTreeComponent implements AfterViewInit {
     private getEvcTreeNodes(evcTree: EvcTree[]): EvcGraphNode[] {
         const nodes: EvcGraphNode[] = [];
 
+        // This method create an array for the EVC Tree (Flow Chart)
+        // We reverse the array from the server, so we can connect the services to the operators more easily
+        evcTree = evcTree.reverse();
+
         evcTree.forEach((layer: EvcTree, layerIndex: number) => {
+            // EVC Layer in reverse order
             for (const vServiceKey in layer) {
-                // "Real" services if layerIndex == 0, otherwise virtual services
                 const vServices = layer[vServiceKey];
                 vServices.forEach((vService, vServiceIndex: number) => {
                     nodes.push({
                         id: vService.id.toString(),
-                        parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
-                        service: vService.service
+                        //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
+                        parentId: vService.parent_id === null ? null : `${vService.parent_id}_operator`,
+                        service: vService.service,
+                        type: 'service'
                     });
+
+                    if (vService.operator !== null) {
+                        nodes.push({
+                            id: `${vService.id}_operator`,
+                            parentId: vService.id.toString(),
+                            operator: vService.operator,
+                            type: 'operator'
+                        });
+                    }
+
                 });
             }
         });

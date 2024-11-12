@@ -2,6 +2,12 @@
     border: 2px solid var(--cui-primary);
     border-radius: var(--cui-border-radius);
     box-shadow: rgba($primary, 0.3) 5px 0px 10px 0px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--cui-body-color);
+}
+
+.service-node {
+    width: 150px;
 }
 
 .evc-service-ok {
@@ -26,4 +32,23 @@
 
 .evc-tree-hostname {
     font-size: 10px;
+}
+
+.evc-operator-container {
+    border-color: var(--cui-border-color);
+    box-shadow: var(--cui-border-color-translucent) 5px 0px 10px 0px;
+    background: $gray-900;
+    color: $white;
+}
+
+.operator-node {
+    padding: 2px;
+    text-transform: uppercase;
+    width: 100px;
+    height: 34px;
+}
+
+.evc-operator-icon {
+    font-size: 1.4rem;
+    color: var(--cui-secondary);
 }

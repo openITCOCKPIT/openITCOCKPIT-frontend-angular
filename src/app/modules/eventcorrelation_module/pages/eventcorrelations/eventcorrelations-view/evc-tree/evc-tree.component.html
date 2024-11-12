@@ -10,65 +10,87 @@
                 </f-connection>
             }
             @for (node of nodes; track node.id) {
+                <!-- vService Node -->
                 <div fNode class="evc-service-container"
-                     [ngClass]="{'evc-service-ok': node.service?.servicestatus?.currentState === 0,'evc-service-warning': node.service?.servicestatus?.currentState === 1,'evc-service-critical': node.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.service?.servicestatus?.currentState === 3}"
+                     [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator'}"
                      [fNodePosition]="node.position"
                      fNodeOutput [fOutputId]="node.connectorId"
                      [fOutputConnectableSide]="configuration.outputSide"
                      fNodeInput [fInputId]="node.connectorId"
                      [fInputConnectableSide]="configuration.inputSide">
 
-                    <!-- Downtime and Acknowledgement Badge -->
-                    @if (node.service?.servicestatus?.problemHasBeenAcknowledged || Number(node.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                            @if (Number(node.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
-                                <oitc-downtime-icon
-                                    *oitcPermission="['services', 'browser']"
-                                    type="services"
-                                    [objectId]="node.service?.id">
-                                </oitc-downtime-icon>
-                                <fa-icon [icon]="['fas', 'power-off']" size="lg"
-                                         *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
+                    <!-- We can not have an if or ngIf here or on fNode  -->
+
+                    @if (node.evcNode.type === 'service') {
+                        <div class="service-node">
+                            <!-- vService container -->
+                            <!-- Downtime and Acknowledgement Badge -->
+                            @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged || Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
+                                        <oitc-downtime-icon
+                                            *oitcPermission="['services', 'browser']"
+                                            type="services"
+                                            [objectId]="node.evcNode.service?.id">
+                                        </oitc-downtime-icon>
+                                        <fa-icon [icon]="['fas', 'power-off']" size="lg"
+                                                 *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
+                                    }
+
+                                    @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged) {
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
+                                            <oitc-acknowledgement-icon
+                                                *ngIf="node.evcNode.service?.servicestatus"
+                                                type="services"
+                                                [objectId]="node.evcNode.service?.id"
+                                                [acknowledgement_type]="node.evcNode.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
+                                        } @else {
+                                            <fa-icon [icon]="['far', 'user']"
+                                                     *ngIf="node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Normal"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'user']"
+                                                     *ngIf="node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Sticky"
+                                                     title="{{t('Sticky Acknowledgement')}}"></fa-icon>
+                                        }
+                                    }
+                                </span>
                             }
 
-                            @if (node.service?.servicestatus?.problemHasBeenAcknowledged) {
-                                @if (PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
-                                    <oitc-acknowledgement-icon
-                                        *ngIf="node.service?.servicestatus"
-                                        type="services"
-                                        [objectId]="node.service?.id"
-                                        [acknowledgement_type]="node.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
-                                } @else {
-                                    <fa-icon [icon]="['far', 'user']"
-                                             *ngIf="node.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Normal"></fa-icon>
-                                    <fa-icon [icon]="['fas', 'user']"
-                                             *ngIf="node.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Sticky"
-                                             title="{{t('Sticky Acknowledgement')}}"></fa-icon>
-                                }
-                            }
-
-                        </span>
+                            <c-row *ngIf="node.evcNode.service" class="m-0">
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
+                                       [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ node.evcNode.service.host.name }}
+                                </c-col>
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1"
+                                       [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'cog']"
+                                             *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                             *ngIf="node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE"
+                                             class="text-primary"></fa-icon>
+                                    {{ node.evcNode.service.servicename }}
+                                </c-col>
+                            </c-row>
+                        </div>
                     }
 
+                    @if (node.evcNode.type === 'operator') {
+                        <!-- Operator container -->
+                        <div class="operator-node">
+                            <div class="d-flex align-items-center h-100">
+                                <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
 
-                    <c-row *ngIf="node.service" class="m-0">
-                        <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
-                               [cTooltip]="node.service.host.name" cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            {{ node.service.host.name }}
-                        </c-col>
-                        <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                               [cTooltip]="node.service.servicename " cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'cog']"
-                                     *ngIf="node.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
-                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                     *ngIf="node.service.service_type === ServiceTypesEnum.EVK_SERVICE"
-                                     class="text-primary"></fa-icon>
-                            {{ node.service.servicename }}
-                        </c-col>
-                    </c-row>
+                                <div class="flex-1 text-center">
+                                    {{ node.evcNode.operator }}
+                                </div>
+                            </div>
+                        </div>
+                    }
 
                 </div>
+
+
             }
         </f-canvas>
     </f-flow>
