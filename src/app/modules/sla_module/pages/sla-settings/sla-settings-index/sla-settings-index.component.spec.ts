@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SlaSettingsIndexComponent } from './sla-settings-index.component';
 
-describe('SlasAddComponent', () => {
+describe('SlaSettingsIndexComponent', () => {
     let component: SlaSettingsIndexComponent;
     let fixture: ComponentFixture<SlaSettingsIndexComponent>;
 
