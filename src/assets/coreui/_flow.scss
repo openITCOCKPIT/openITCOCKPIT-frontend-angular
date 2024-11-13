@@ -128,7 +128,7 @@
     background: var(--node-background-color);
     border-radius: var(--node-border-radius);
     border: 0.2px solid var(--node-border-color);
-    cursor: move;
+    /*cursor: move;*/
 
     &:active {
         box-shadow: var(--node-shadow);

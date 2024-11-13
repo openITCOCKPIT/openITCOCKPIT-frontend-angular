@@ -25,7 +25,7 @@ import {
     AcknowledgementIconComponent
 } from '../../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
 import { ConnectionOperator } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
@@ -90,7 +90,8 @@ const OPERATOR_WIDTH = 100;
         AsyncPipe,
         AcknowledgementIconComponent,
         TranslocoDirective,
-        EvcOperatorComponent
+        EvcOperatorComponent,
+        TranslocoPipe
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',

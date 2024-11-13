@@ -11,6 +11,10 @@
     width: 150px;
 }
 
+.evc-service-disabled {
+    color: var(--cui-secondary-color);
+}
+
 .evc-service-ok {
     border-color: var(--cui-success);
     box-shadow: rgba($success, 0.3) 5px 0px 10px 0px;
