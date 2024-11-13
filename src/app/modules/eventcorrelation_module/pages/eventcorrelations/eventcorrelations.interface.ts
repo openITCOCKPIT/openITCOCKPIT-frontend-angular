@@ -1,5 +1,6 @@
-import { ServicestatusObject } from '../../../../pages/services/services.interface';
+import { ServiceObject, ServicestatusObject } from '../../../../pages/services/services.interface';
 import { EventcorrelationOperators } from './eventcorrelations.enum';
+import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
 
 export interface EventcorrelationsViewRoot {
     evcTree: EvcTree[]
@@ -61,4 +62,12 @@ export interface EvcService {
     }
     servicename: string
     servicestatus: ServicestatusObject
+}
+
+export interface EvcServicestatusToast {
+    host: HostObject,
+    service: ServiceObject,
+    servicestatus: ServicestatusObject,
+    hoststatus: HoststatusObject,
+    _csrfToken: string | null
 }
