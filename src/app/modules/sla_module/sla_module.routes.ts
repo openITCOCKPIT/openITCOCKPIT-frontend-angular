@@ -30,6 +30,10 @@ export const slaModuleRoutes: Routes = [
         loadComponent: () => import('./pages/host-mapping-rules/host-mapping-rules-assign-to-hosts/host-mapping-rules-assign-to-hosts.component').then(m => m.HostMappingRulesAssignToHostsComponent)
     },
     {
+        path: 'sla_module/sla_settings/index',
+        loadComponent: () => import('./pages/sla-settings/sla-settings-index/sla-settings-index.component').then(m => m.SlaSettingsIndexComponent)
+    },
+    {
         path: 'sla_module/sla_availability_status_hosts_log/index/:id',
         loadComponent: () => import('./pages/sla-availability-status-hosts-log/sla-availability-status-hosts-log-index/sla-availability-status-hosts-log-index.component').then(m => m.SlaAvailabilityStatusHostsLogIndexComponent)
     },

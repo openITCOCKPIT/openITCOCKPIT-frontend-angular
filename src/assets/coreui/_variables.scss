@@ -60,6 +60,28 @@ $primaries: (
     "primary-900": $cui-primary-900,
 ) !default;
 
+$cui-warning-100: tint-color($warning, 80%);
+$cui-warning-200: tint-color($warning, 60%);
+$cui-warning-300: tint-color($warning, 40%);
+$cui-warning-400: tint-color($warning, 20%);
+$cui-warning-500: $warning;
+$cui-warning-600: shade-color($warning, 20%);
+$cui-warning-700: shade-color($warning, 40%);
+$cui-warning-800: shade-color($warning, 60%);
+$cui-warning-900: shade-color($warning, 80%);
+
+$warnings: (
+    "warning-100": $cui-warning-100,
+    "warning-200": $cui-warning-200,
+    "warning-300": $cui-warning-300,
+    "warning-400": $cui-warning-400,
+    "warning-500": $cui-warning-500,
+    "warning-600": $cui-warning-600,
+    "warning-700": $cui-warning-700,
+    "warning-800": $cui-warning-800,
+    "warning-900": $cui-warning-900,
+) !default;
+
 // scss-docs-start theme-text-variables
 /*
 $primary-text-emphasis: rgb(216, 124, 249) !default;

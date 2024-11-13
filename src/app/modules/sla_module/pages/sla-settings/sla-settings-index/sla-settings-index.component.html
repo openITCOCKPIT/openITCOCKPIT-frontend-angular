@@ -1,0 +1,102 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('SLA Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['slamodule', 'slasettings', 'index']"
+                   [routerLink]="['/', 'sla_module', 'sla_settings', 'index']">
+                    <fa-icon [icon]="['fas', 'gears']"></fa-icon>
+                    {{ t('Configuration') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <form cForm (ngSubmit)="submit()">
+
+        <c-alert color="warning" class="bg-warning-500 alert-dismissible" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="alert-icon me-2">
+                    <div class='icon-stack  icon-stack-sm'>
+                        <i class="base base-9 icon-stack-3x opacity-100 text-primary"></i>
+                        <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <span class="h5"> {{ t('Attention!') }}</span>
+                    {{ t('This changes affects all reports') }}
+                </div>
+            </div>
+        </c-alert>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('SLA Settings') }}</h5>
+            </c-card-header>
+            <c-card-body>
+
+                <table bordered cTable class="m-0 table-sm" hover striped>
+                    <thead>
+                    <tr>
+                        <th>
+                            {{ t('Key') }}
+                        </th>
+                        <th class="text-left col-6">
+                            {{ t('Value') }}
+                        </th>
+                        <th class="text-center col-1">
+                            {{ t('Info') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            {{ t('Max storage age') }}
+                        </td>
+                        <td class="text-left">
+                            <div class="form-group">
+                                <input cFormControl class="systemsetting-input"
+                                       id="max_age"
+                                       type="text"
+                                       name="max_age"
+                                       oitcFormError [errors]="errors" errorField="max_age"
+                                       [(ngModel)]="post.max_age">
+                                <oitc-form-feedback [errors]="errors" errorField="max_age"></oitc-form-feedback>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <fa-icon [icon]="['fas', 'info-circle']" class="pt-1 fa-2x text-info"
+                                     [cTooltip]="tooltipContent">
+                                <ng-template #tooltipContent>
+                                    {{ t('Time in weeks how long SLA related data will be stored') }}
+                                </ng-template>
+                            </fa-icon>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
