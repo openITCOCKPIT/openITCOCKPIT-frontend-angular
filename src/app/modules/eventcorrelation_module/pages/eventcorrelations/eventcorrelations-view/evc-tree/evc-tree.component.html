@@ -12,7 +12,7 @@
             @for (node of nodes; track node.id) {
                 <!-- vService Node -->
                 <div fNode class="evc-service-container"
-                     [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-service-disabled':node.evcNode.service?.disabled }"
+                     [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator' }"
                      [fNodePosition]="node.position"
                      fNodeOutput [fOutputId]="node.connectorId"
                      [fOutputConnectableSide]="configuration.outputSide"
@@ -24,16 +24,20 @@
                     @if (node.evcNode.type === 'service') {
                         <div class="service-node">
                             <!-- vService container -->
+                            <!-- Disable Badge -->
+                            @if (node.evcNode.service?.disabled) {
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                    <fa-icon [icon]="['fas', 'plug']" size="lg"
+                                             [cTooltip]="'Service is disabled' | transloco"
+                                             cTooltipPlacement="top"></fa-icon>
+                                </span>
+                            }
+
                             <!-- Downtime and Acknowledgement Badge -->
-                            @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged || Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 || node.evcNode.service?.disabled) {
+                            @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged || Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
                                 <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                    @if (node.evcNode.service?.disabled) {
-                                        <fa-icon [icon]="['fas', 'plug']" size="lg"
-                                                 [cTooltip]="'Service is disabled' | transloco"
-                                                 cTooltipPlacement="top"></fa-icon>
-                                    }
-
                                     @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0) {
                                         <oitc-downtime-icon
                                             *oitcPermission="['services', 'browser']"
@@ -64,18 +68,37 @@
 
                             <c-row *ngIf="node.evcNode.service" class="m-0">
                                 <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
+                                       [ngClass]="{'text-muted':node.evcNode.service?.disabled}"
                                        [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                    {{ node.evcNode.service.host.name }}
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', node.evcNode.service.host.id]"
+                                           class="link-default"
+                                           [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
+                                            {{ node.evcNode.service.host.name }}
+                                        </a>
+                                    } @else {
+                                        {{ node.evcNode.service.host.name }}
+                                    }
                                 </c-col>
                                 <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                                       [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top">
+                                       [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
+                                       [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
                                     <fa-icon [icon]="['fas', 'cog']"
                                              *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
                                     <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
                                              *ngIf="node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE"
                                              class="text-primary"></fa-icon>
-                                    {{ node.evcNode.service.servicename }}
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'services', 'browser', node.evcNode.service.id]"
+                                           class="link-default"
+                                           [ngClass]="{'text-muted':node.evcNode.service?.disabled}">
+                                            {{ node.evcNode.service.servicename }}
+                                        </a>
+                                    } @else {
+                                        {{ node.evcNode.service.servicename }}
+                                    }
+
                                 </c-col>
                             </c-row>
                         </div>

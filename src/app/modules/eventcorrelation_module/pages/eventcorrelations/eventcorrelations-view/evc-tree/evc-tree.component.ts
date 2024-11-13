@@ -29,6 +29,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
 import { ConnectionOperator } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
+import { RouterLink } from '@angular/router';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -91,7 +92,8 @@ const OPERATOR_WIDTH = 100;
         AcknowledgementIconComponent,
         TranslocoDirective,
         EvcOperatorComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        RouterLink
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
