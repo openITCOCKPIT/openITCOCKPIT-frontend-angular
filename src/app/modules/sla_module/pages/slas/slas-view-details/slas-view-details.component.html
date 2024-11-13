@@ -29,7 +29,7 @@
         <c-card-header>
             <h5 cCardTitle>{{ t('Service Level Agreements') }}
                 <small class="fw-300">
-                    <i>{{ details.sla.name }}</i>
+                    <i *ngIf="details.sla">{{ details.sla.name }}</i>
                 </small>
             </h5>
             <c-nav class="card-toolbar card-header-pills">
@@ -43,14 +43,16 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button [routerLink]="['/', 'sla_module', 'slas', 'edit', details.sla.id]" cButton
-                            *oitcPermission="['slamodule', 'slas', 'edit']"
-                            class="ripple"
-                            color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Edit') }}
-                    </button>
+                    @if (details.sla) {
+                        <button [routerLink]="['/', 'sla_module', 'slas', 'edit', details.sla.id]" cButton
+                                *oitcPermission="['slamodule', 'slas', 'edit']"
+                                class="ripple"
+                                color="default"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Edit') }}
+                        </button>
+                    }
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button (click)="load()" cButton class="ripple" color="default" size="xs">
