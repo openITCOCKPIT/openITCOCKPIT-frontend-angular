@@ -146,7 +146,7 @@ export class SlaSettingsIndexComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title);
 
-                    //this.HistoryService.navigateWithFallback(['/sla_module/sla_settings/index']);
+                    this.HistoryService.navigateWithFallback(['/sla_module/sla_settings/index']);
                     return;
                 }
 
