@@ -1,0 +1,128 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['importmodule','HostDefaults', 'index']"
+                   [routerLink]="['/', 'import_module', 'HostDefaults', 'index']">
+                    <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                    {{ t('Host defaults') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add host defaults') }}
+            </li>
+        </ol>
+    </nav>
+    <form cForm (ngSubmit)="submit()" autocomplete="off">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Create new host defaults') }}</h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['import_module', 'HostDefaults', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <div class="row">
+                    <div class="col-12">
+                        <c-alert color="info">
+                            <h4 cAlertHeading>
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('What are host defaults?') }}
+                            </h4>
+                            <p>
+                                {{ t('Define defaults like which Container and services should assigned to imported hosts, depending on the used data source (Importer).') }}
+                            </p>
+                        </c-alert>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="container">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="containers"
+                        [(ngModel)]="post.container_id">
+                    </oitc-select>
+                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                        {{ t('Please select a container.') }}
+                    </div>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="HostdefaultName">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="HostdefaultName" required type="text"
+                           name="name"
+                           [(ngModel)]="post.name"
+                           oitcFormError errorField="name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="HostdefaultDescription">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl id="HostdefaultDescription" required type="text"
+                           name="description"
+                           [(ngModel)]="post.description"
+                           oitcFormError errorField="description">
+                </div>
+
+                <c-container
+                    [fluid]="true" class="shadow-sm px-2 pb-4 mb-4 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                {{ t('Host details ') }}
+                            </h4>
+                            <div class="help-block">
+                                {{ t('Predefined host settings that are automatically assigned when hosts are imported.') }}
+                            </div>
+                        </legend>
+                        <c-row>
+                            <c-col>
+
+
+                            </c-col>
+                        </c-row>
+                    </fieldset>
+                </c-container>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+                <button [fallbackUrl]="['import_module','Hostdefaults', 'index']" cButton class="ms-1 ripple"
+                        color="default" oitcBackButton type="button">
+                    {{ t('Cancel') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>

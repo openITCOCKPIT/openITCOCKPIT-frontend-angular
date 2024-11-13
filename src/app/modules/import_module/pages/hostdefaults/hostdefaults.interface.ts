@@ -39,3 +39,24 @@ export function getDefaultHostDefaultsIndexParams(): HostDefaultsIndexParams {
         'filter[Hostdefaults.description]': ''
     }
 }
+
+export interface HostDefaultsPost {
+    id?: number
+    container_id: number | null
+    name: string
+    description: string
+    hosttemplate_id: number
+    satellite_id: number
+    host_container_id: null
+    hostdefaults_to_containers_sharing: {
+        _ids: number[]
+    }
+    hostdefaults_to_servicetemplates: []
+    hostdefaults_to_servicetemplategroups: []
+    hostdefaults_to_agentchecks: []
+    hostdefaults_to_servicetemplates_external_monitoring: []
+}
+
+export interface HostDefaultsGet {
+    hostdefault: HostDefaultsPost
+}

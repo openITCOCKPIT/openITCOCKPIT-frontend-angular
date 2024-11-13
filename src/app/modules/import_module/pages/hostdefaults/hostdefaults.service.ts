@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { HostDefaultsIndexParams, HostDefaultsIndexRoot } from './hostdefaults.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { HostDefaultsIndexParams, HostDefaultsIndexRoot, HostDefaultsPost } from './hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,30 @@ export class HostdefaultsService {
                 return data;
             })
         )
+    }
+
+    /**********************
+     *    Add action    *
+     **********************/
+    public createHostdefault(hostdefault: HostDefaultsPost) {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/host_defaults/add.json?angular=true`, hostdefault)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.hostdefault as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     /**********************

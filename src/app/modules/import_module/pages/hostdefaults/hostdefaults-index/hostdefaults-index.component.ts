@@ -147,9 +147,9 @@ export class HostdefaultsIndexComponent implements OnInit, OnDestroy, IndexPage 
         this.hideFilter = !this.hideFilter;
     }
 
-    public onPaginatorChange(externalSystem: PaginatorChangeEvent): void {
-        this.params.page = externalSystem.page;
-        this.params.scroll = externalSystem.scroll;
+    public onPaginatorChange(hostdefault: PaginatorChangeEvent): void {
+        this.params.page = hostdefault.page;
+        this.params.scroll = hostdefault.scroll;
         this.load();
     }
 
