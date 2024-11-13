@@ -42,3 +42,4 @@ $oitcgrays: (
 ) !default;
 @include generate-color-classes($oitcgrays);
 @include generate-color-classes($primaries);
+@include generate-color-classes($warnings);
