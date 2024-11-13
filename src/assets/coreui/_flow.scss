@@ -21,7 +21,7 @@
     --minimap-node-selected-color: #3451b2;
     --minimap-view-color: rgba(100, 108, 255, 0.14);
 
-    &.dark {
+    body.dark-theme {
         --background-element-color: rgba(255, 255, 255, 0.1);
         --selection-area-color: rgba(100, 108, 255, 0.16);
         --disabled-color: #2c2c2e;

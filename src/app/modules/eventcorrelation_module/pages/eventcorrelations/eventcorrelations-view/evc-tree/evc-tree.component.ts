@@ -161,9 +161,29 @@ export class EvcTreeComponent implements AfterViewInit {
         // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
         graph.setGraph({
             rankdir: direction,
+
+            // nodesep is the vertical distance between the nodes
+            // +--------------+
+            // |    Node 1    |
+            // +--------------+
+            // ↑
+            // | <- nodesep
+            // ↓
+            // +--------------+
+            // |    Node 2    |
+            // +--------------+
             nodesep: 10, // vertical distance between nodes
-            ranksep: 50, //200
-            edgesep: 10
+
+            // ranksep is the distance between the different layers of the graph
+            // --------------------------
+            // ↑                        |
+            // +--------------+         ↓  <- ranksep
+            // |    Layer 1   |         +--------------+
+            // +--------------+         |    Layer 2   |
+            //                          +--------------+
+            //
+            ranksep: 50,
+            edgesep: 10 // not  entirely sure
         });
 
 
