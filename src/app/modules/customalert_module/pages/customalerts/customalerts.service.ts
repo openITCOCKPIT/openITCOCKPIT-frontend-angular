@@ -10,6 +10,7 @@ import {
     CustomAlertsIndexParams,
     LoadContainersRoot
 } from './customalerts.interface';
+import { formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -57,14 +58,19 @@ export class CustomAlertsService {
     }
 
     public getServiceHistory(serviceId: number): Observable<CustomalertServiceHistory> {
+        let now = new Date();
+        // From: 30 days ago
+        let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
+        // To: Tomorrow
+        let toStr: string = formatDate(new Date(now.getTime()   + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
         let params: object = {
             angular: true,
             sort: 'CustomalertStatehistory.state_time',
             page: 1,
             scroll: true,
             direction: 'desc',
-            'filter[from]': '12.10.2024 09:23',
-            'filter[to]': '12.11.2024 08:23'
+            'filter[from]': fromStr,
+            'filter[to]': toStr
         }
         return this.http.get<CustomalertServiceHistory>(`${this.proxyPath}/customalert_module/customalerts/service_history/${serviceId}.json`, {
             params: {

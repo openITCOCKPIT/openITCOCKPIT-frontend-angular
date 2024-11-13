@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
     CardBodyComponent,
-    CardComponent,
+    CardComponent, CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -83,6 +83,11 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 import _ from 'lodash';
+import {
+    getDefaultServiceIndexParams,
+    getServiceCurrentStateForApi,
+    ServiceIndexFilter
+} from '../../../../../pages/services/services.interface';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -138,7 +143,8 @@ import _ from 'lodash';
         LabelLinkComponent,
         KeyValuePipe,
         BadgeOutlineComponent,
-        NgClass
+        NgClass,
+        CardFooterComponent
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
@@ -217,9 +223,22 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         }
 
         if (filterstring && filterstring.length > 0) {
-            //resetFilter
-
+            //cnditions to apply old bookmarks
+            const bookmarkfilter = JSON.parse(filterstring);
+            let params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
+            console.warn('bookmarkfilter', bookmarkfilter);
+            params['filter[Customalerts.message]'] = bookmarkfilter.Customalerts.message || '';
+            params['filter[Hosts.container_id][]'] = bookmarkfilter.Hosts.container_id || [];
+            params['recursive'] = bookmarkfilter.recursive || false;
+            this.setFilterAndLoad(params);
         }
+        this.cdr.markForCheck();
+    }
+
+    private setFilterAndLoad(params: CustomAlertsIndexParams) {
+        this.params = params;
+        this.cdr.markForCheck();
+        this.onFilterChange(true);
     }
 
     public ngOnInit(): void {
@@ -253,7 +272,6 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
 
     // Callback when a filter has changed
     public onFilterChange(event: any) {
-        alert('A');
         this.params.page = 1;
         this.refresh();
     }

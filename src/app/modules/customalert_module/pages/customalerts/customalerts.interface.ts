@@ -1,6 +1,7 @@
 // Get custom alerts
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { formatDate } from '@angular/common';
 
 export interface CustomAlertsIndex extends PaginateOrScroll {
     customalerts: Customalert[]
@@ -97,6 +98,11 @@ export interface LoadContainersRoot {
 
 export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
 {
+    let now = new Date();
+    // From: 30 days ago
+    let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
+    // To: Tomorrow
+    let toStr: string = formatDate(new Date(now.getTime()   + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
     return {
         angular: true,
         scroll: true,
@@ -107,8 +113,8 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
         'filter[Customalerts.message]' : '',
         'filter[Customalerts.state][]' : [],
         'filter[Hosts.container_id][]' : [],
-        'filter[from]' : '',
-        'filter[to]' : '',
+        'filter[from]' : fromStr,
+        'filter[to]' : toStr,
     }
 }
 
