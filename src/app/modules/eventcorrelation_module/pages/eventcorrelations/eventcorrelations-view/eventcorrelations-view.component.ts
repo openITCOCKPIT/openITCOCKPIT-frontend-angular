@@ -22,7 +22,7 @@ import {
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -33,6 +33,8 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
+import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
@@ -67,7 +69,9 @@ import { EvcTreeComponent } from './evc-tree/evc-tree.component';
         RouterLink,
         BackButtonDirective,
         BlockLoaderComponent,
-        EvcTreeComponent
+        EvcTreeComponent,
+        NoRecordsComponent,
+        NgClass
     ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
@@ -80,6 +84,13 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     public evcTree: EvcTree[] = [];
     public rootElement?: EventcorrelationRootElement;
     public hasWritePermission: boolean = false;
+
+    public showInfoForDisabledService: number = 0;
+    public disabledServices: number = 0; //number of disabled services in the EVC
+    public stateForDisabledService: number = 3; // Unknown
+
+    public downtimedServices: number = 0; //number of services in a downtime in the EVC
+    public stateForDowntimedService: number = 3; // Unknown
 
     private subscriptions: Subscription = new Subscription();
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
@@ -105,7 +116,15 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.evcTree = result.evcTree;
             this.rootElement = result.rootElement;
             this.hasWritePermission = result.hasWritePermission;
+            this.showInfoForDisabledService = result.showInfoForDisabledService;
+            this.stateForDisabledService = result.stateForDisabledService;
+            this.disabledServices = result.disabledServices;
+
+            this.downtimedServices = result.downtimedServices;
+            this.stateForDowntimedService = result.stateForDowntimedService;
+
         }));
     }
 
+    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
 }

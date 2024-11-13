@@ -1,4 +1,27 @@
 <ng-container *transloco="let t">
+    <c-row>
+        <c-col [xs]="12" class="text-end">
+            <c-button-group aria-label="Rotation" role="group">
+                <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.RIGHT_TO_LEFT === direction"
+                        (click)="horizontalRL()">
+                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
+                </button>
+                <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.BOTTOM_TO_TOP === direction"
+                        (click)="verticalBT()">
+                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="180"></fa-icon>
+                </button>
+                <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.LEFT_TO_RIGHT === direction"
+                        (click)="horizontalLR()">
+                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                </button>
+                <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.TOP_TO_BOTTOM === direction"
+                        (click)="verticalTB()">
+                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                </button>
+            </c-button-group>
+        </c-col>
+    </c-row>
+
     <f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
         <f-canvas>
             @for (connection of connections; track connection.id) {
@@ -24,12 +47,25 @@
                     @if (node.evcNode.type === 'service') {
                         <div class="service-node">
                             <!-- vService container -->
+
+                            <!-- Downtime overwrites current state badge -->
+                            <span
+                                *ngIf="Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState"
+                                class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                                [cTooltip]="downtimeStateTitle"
+                                cTooltipPlacement="top">
+                                &nbsp; <!-- important be not empty -->
+                            </span>
+
+
                             <!-- Disable Badge -->
                             @if (node.evcNode.service?.disabled) {
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                                    [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
                                     <fa-icon [icon]="['fas', 'plug']" size="lg"
-                                             [cTooltip]="'Service is disabled' | transloco"
+                                             [cTooltip]="disabledStateTitle"
                                              cTooltipPlacement="top"></fa-icon>
                                 </span>
                             }
@@ -122,6 +158,7 @@
 
             }
         </f-canvas>
+        <f-minimap [fMinSize]="2000"></f-minimap>
     </f-flow>
 
 </ng-container>

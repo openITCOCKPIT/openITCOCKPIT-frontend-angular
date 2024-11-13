@@ -15,7 +15,7 @@ import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
-import { ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -25,11 +25,13 @@ import {
     AcknowledgementIconComponent
 } from '../../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
 import { ConnectionOperator } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { RouterLink } from '@angular/router';
+import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -93,7 +95,9 @@ const OPERATOR_WIDTH = 100;
         TranslocoDirective,
         EvcOperatorComponent,
         TranslocoPipe,
-        RouterLink
+        RouterLink,
+        XsButtonDirective,
+        ButtonGroupComponent
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
@@ -102,8 +106,15 @@ const OPERATOR_WIDTH = 100;
 export class EvcTreeComponent implements AfterViewInit {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
+    public downtimedServices = input<number>(0);
+    public stateForDowntimedService = input<number>(3);
+    public stateForDisabledService = input<number>(3);
+
+    public downtimeStateTitle: string = '';
+    public disabledStateTitle: string = '';
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    private readonly TranslocoService = inject(TranslocoService);
 
     public nodes: INodeViewModel[] = [];
     public connections: ConnectionOperator[] = [];
@@ -123,10 +134,50 @@ export class EvcTreeComponent implements AfterViewInit {
     private isInitialized = false;
 
     constructor() {
+        this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+        this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
+
         effect(() => {
             if (this.isInitialized) {
                 this.updateGraph(new dagre.graphlib.Graph(), this.direction);
             }
+
+            switch (this.stateForDowntimedService()) {
+                case 0:
+                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered ok');
+                    break;
+
+                case 1:
+                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered warning');
+                    break;
+
+                case 2:
+                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered critical');
+                    break;
+
+                case 3:
+                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+                    break;
+            }
+
+            switch (this.stateForDisabledService()) {
+                case 0:
+                    this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered ok');
+                    break;
+
+                case 1:
+                    this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered warning');
+                    break;
+
+                case 2:
+                    this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered critical');
+                    break;
+
+                case 3:
+                    this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
+                    break;
+            }
+
         });
     }
 
@@ -186,7 +237,7 @@ export class EvcTreeComponent implements AfterViewInit {
             //                          +--------------+
             //
             ranksep: 50,
-            edgesep: 10 // not  entirely sure
+            edgesep: 10 // not entirely sure
         });
 
 
@@ -216,6 +267,7 @@ export class EvcTreeComponent implements AfterViewInit {
 
             let xpos = evcNode.x;
             if (evcNode.evcNode.type === 'operator') {
+                // This centers the operator node between the service nodes
                 xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 2;
             }
 
@@ -308,4 +360,5 @@ export class EvcTreeComponent implements AfterViewInit {
     protected readonly ServiceTypesEnum = ServiceTypesEnum;
     protected readonly Number = Number;
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
+    protected readonly EvcTreeDirection = EvcTreeDirection;
 }

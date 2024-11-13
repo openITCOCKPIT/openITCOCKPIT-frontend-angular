@@ -16,7 +16,6 @@
     --connection-gradient-2: #30a46c;
     --outlet-color: #3451b2;
     --input-output-color: rgba(60, 60, 67, 0.78);
-    --minimap-background-color: #ffffff;
     --minimap-node-color: rgba(60, 60, 67);
     --minimap-node-selected-color: #3451b2;
     --minimap-view-color: rgba(100, 108, 255, 0.14);
@@ -37,7 +36,6 @@
         --connection-gradient-2: #298459;
         --outlet-color: #a8b1ff;
         --input-output-color: rgba(235, 235, 245, 0.6);
-        --minimap-background-color: #1b1b1f;
         --minimap-node-color: rgba(255, 255, 245, 0.86);
         --minimap-node-selected-color: #a8b1ff;
         --minimap-view-color: rgba(100, 108, 255, 0.16);
@@ -101,8 +99,8 @@
 
 
 .f-minimap {
-    background-color: var(--minimap-background-color);
-    bottom: 16px;
+    background-color: var(--cui-card-cap-bg);
+    top: 16px;
     right: 16px;
     width: 120px;
     height: 120px;

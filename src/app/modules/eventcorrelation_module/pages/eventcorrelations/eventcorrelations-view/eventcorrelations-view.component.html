@@ -65,11 +65,73 @@
         </c-card-header>
         <c-card-body>
 
+            <c-row>
+                <c-col [xs]="12" [md]="6">
+                    <fa-icon [icon]="['fas', 'square']" class="p-0 ok"></fa-icon>
+                    <em class="pe-1">
+                        {{ t('Ok') }}
+                    </em>
+
+                    <fa-icon [icon]="['fas', 'square']" class="p-0 warning"></fa-icon>
+                    <em class="pe-1">
+                        {{ t('Warning') }}
+                    </em>
+
+                    <fa-icon [icon]="['fas', 'square']" class="p-0 critical"></fa-icon>
+                    <em class="pe-1">
+                        {{ t('Critical') }}
+                    </em>
+
+                    <fa-icon [icon]="['fas', 'square']" class="p-0 unknown"></fa-icon>
+                    <em class="pe-1">
+                        {{ t('Unknown') }}
+                    </em>
+
+                    <fa-icon [icon]="['fas', 'square']" class="p-0 text-primary"></fa-icon>
+                    <em class="pe-1">
+                        {{ t('Not monitored') }}
+                    </em>
+                </c-col>
+                <c-col [xs]="12" [md]="6" *ngIf="showInfoForDisabledService && disabledServices > 0">
+                    <div class="alert border-faded bg-transparent text-secondary">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-info"></i>
+                                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-info">
+                                    {{ t('Event correlation includes disabled services!') }}
+                                </span>
+                                <br>
+                                {{ t('Status for disabled service') }}:
+                                <fa-icon [icon]="['fas', 'square']" class="p-0"
+                                         [ngClass]="{'ok': stateForDisabledService == 0, 'warning': stateForDisabledService == 1, 'critical': stateForDisabledService == 2, 'unknown': stateForDisabledService == 3}">
+                                </fa-icon>
+                            </div>
+                            <div class="ms-2"
+                                 *oitcPermission="['EventcorrelationModule', 'EventcorrelationSettings', 'index']">
+                                <a class="btn btn-outline-info btn-sm ripple"
+                                   [routerLink]="['/','eventcorrelation_module','eventcorrelation_settings','index']">
+                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                    {{ t('Go to "Event Correlation Globals"') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-col>
+            </c-row>
+
             <div class="d-flex" style="height: 100vh;">
                 <oitc-evc-tree
                     class="w-100 h-100"
                     [evcId]="id"
-                    [evcTree]="evcTree"></oitc-evc-tree>
+                    [evcTree]="evcTree"
+                    [downtimedServices]="downtimedServices"
+                    [stateForDowntimedService]="stateForDowntimedService"
+                    [stateForDisabledService]="stateForDisabledService"></oitc-evc-tree>
             </div>
 
         </c-card-body>
