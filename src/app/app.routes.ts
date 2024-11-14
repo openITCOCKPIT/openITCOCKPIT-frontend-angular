@@ -10,6 +10,7 @@ import { pagerdutyModuleRoutes } from './modules/pagerduty_module/pagerduty_modu
 import { slaModuleRoutes } from './modules/sla_module/sla_module.routes';
 import { importModuleRoutes } from './modules/import_module/import_module.routes';
 import { checkmkModuleRoutes } from './modules/checkmk_module/checkmk_module.routes';
+import { mapModuleRoutes } from './modules/map_module/map_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -42,7 +43,8 @@ const moduleRoutes: Routes = [
     ...pagerdutyModuleRoutes,
     ...slaModuleRoutes,
     ...importModuleRoutes,
-    ...checkmkModuleRoutes
+    ...checkmkModuleRoutes,
+    ...mapModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
