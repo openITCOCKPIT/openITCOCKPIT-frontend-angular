@@ -1,0 +1,24 @@
+<c-toaster [placement]="'top-end'" class="p-3" position="fixed">
+    <c-toast #toast="cToast"
+             (timer)="onToastTimerChange($event)"
+             (visibleChange)="onToastVisibleChange($event)"
+             [visible]="toastVisible"
+             [delay]="5000"
+             class="align-items-center w-100">
+        <div class="d-flex">
+            <c-toast-header>
+                <c-progress thin>
+                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                </c-progress>
+            </c-toast-header>
+            <c-toast-body class="w-100">
+                Hier kommt der content
+
+                <c-progress thin>
+                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                </c-progress>
+
+            </c-toast-body>
+        </div>
+    </c-toast>
+</c-toaster>

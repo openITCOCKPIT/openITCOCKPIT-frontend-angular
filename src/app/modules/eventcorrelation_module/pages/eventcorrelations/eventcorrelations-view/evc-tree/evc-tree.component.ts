@@ -15,7 +15,18 @@ import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
-import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import {
+    ButtonGroupComponent,
+    ColComponent,
+    ProgressBarComponent,
+    ProgressComponent,
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent,
+    ToastHeaderComponent,
+    TooltipDirective
+} from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -31,6 +42,11 @@ import { ConnectionOperator } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {
+    HostSummaryStatusmapComponent
+} from '../../../../../../pages/statusmaps/statusmaps-index/host-summary-statusmap/host-summary-statusmap.component';
+import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
+import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
@@ -97,7 +113,15 @@ const OPERATOR_WIDTH = 100;
         TranslocoPipe,
         RouterLink,
         XsButtonDirective,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        HostSummaryStatusmapComponent,
+        ProgressBarComponent,
+        ProgressComponent,
+        ToastBodyComponent,
+        ToastComponent,
+        ToastHeaderComponent,
+        ToasterComponent,
+        EvcServicestatusToasterComponent
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.css',
@@ -115,6 +139,7 @@ export class EvcTreeComponent implements AfterViewInit {
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
 
     public nodes: INodeViewModel[] = [];
     public connections: ConnectionOperator[] = [];
@@ -132,6 +157,8 @@ export class EvcTreeComponent implements AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     private isInitialized = false;
+
+    private toasterTimeout: any = null;
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
@@ -355,6 +382,23 @@ export class EvcTreeComponent implements AfterViewInit {
         if (this.fCanvasComponent) {
             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }
+    }
+
+    public toggleToaster(serviceId: number | undefined): void {
+        this.cancelToaster();
+        if (serviceId) {
+            this.toasterTimeout = setTimeout(() => {
+                this.EvcServicestatusToasterService.setServiceIdToaster(serviceId);
+            }, 500);
+        }
+    }
+
+    public cancelToaster() {
+        if (this.toasterTimeout) {
+            clearTimeout(this.toasterTimeout);
+        }
+
+        this.toasterTimeout = null;
     }
 
     protected readonly ServiceTypesEnum = ServiceTypesEnum;

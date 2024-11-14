@@ -45,7 +45,9 @@
                     <!-- We can not have an if or ngIf here or on fNode  -->
 
                     @if (node.evcNode.type === 'service') {
-                        <div class="service-node">
+                        <div class="service-node"
+                             (mouseenter)="toggleToaster(node.evcNode.service?.id)"
+                             (mouseleave)="cancelToaster()">
                             <!-- vService container -->
 
                             <!-- Downtime overwrites current state badge -->
@@ -160,5 +162,7 @@
         </f-canvas>
         <f-minimap [fMinSize]="2000"></f-minimap>
     </f-flow>
-
 </ng-container>
+
+<oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
+
