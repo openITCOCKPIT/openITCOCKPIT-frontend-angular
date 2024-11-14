@@ -82,7 +82,7 @@ export class EvcServicestatusToasterComponent implements OnDestroy {
         this.subscriptions.add(this.EvcServicestatusToasterService.serviceId$.subscribe((serviceId: number) => {
             this.result = undefined;
             this.cdr.markForCheck();
-            
+
             if (serviceId > 0) {
                 // Load the service status details from the service and show the toast.
                 this.subscriptions.add(this.EvcServicestatusToasterService.getServicestatus(serviceId).subscribe((data: EvcServicestatusToast) => {
