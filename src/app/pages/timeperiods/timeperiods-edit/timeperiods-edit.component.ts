@@ -23,7 +23,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -198,7 +197,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
     public addTimerange() {
         this.timeperiod.ranges.push({
-            id: 0,
+            id: null,
             day: '1',
             start: '',
             end: '',
