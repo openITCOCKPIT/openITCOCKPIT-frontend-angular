@@ -33,7 +33,38 @@
                 </small>
             </h5>
 
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', rootElement.host.id]"
+                       *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
+                       class="nav-link active">
+                        <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
+                        {{ t('EVC Tree') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'summary_view', rootElement.host.id]"
+                       *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'summary_view']"
+                       class="nav-link">
+                        <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+                        {{ t('EVC Summary') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+
             <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['documentations', 'view']"
+                            [routerLink]="['/', 'documentations', 'view', rootElement.host.uuid, 'host']"
+                            cButton
+                            class="ripple"
+                            color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                        {{ t('Documentation') }}
+                    </button>
+                </c-nav-item>
+
                 <c-nav-item class="px-1">
                     <button (click)="loadEventcorrelation()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
