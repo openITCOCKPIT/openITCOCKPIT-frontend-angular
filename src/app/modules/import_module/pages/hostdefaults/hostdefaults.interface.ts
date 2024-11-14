@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface HostDefaultsIndexRoot extends PaginateOrScroll {
     hostdefaults: Hostdefault[]
@@ -59,4 +60,13 @@ export interface HostDefaultsPost {
 
 export interface HostDefaultsGet {
     hostdefault: HostDefaultsPost
+}
+
+export interface HostDefaultsElements {
+    sharingContainers: SelectKeyValue[]
+    hosttemplates: SelectKeyValue[]
+    servicetemplates: SelectKeyValue[]
+    servicetemplategroups: SelectKeyValue[]
+    satellites: SelectKeyValue[]
+    agentchecks: SelectKeyValue[]
 }

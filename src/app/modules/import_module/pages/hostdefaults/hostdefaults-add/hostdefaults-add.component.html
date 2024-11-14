@@ -65,7 +65,9 @@
                         optionValue="key"
                         optionLabel="value"
                         [options]="containers"
-                        [(ngModel)]="post.container_id">
+                        [(ngModel)]="post.container_id"
+                        [debounce]="true"
+                        (onChange)="loadElements()">
                     </oitc-select>
                     <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
@@ -107,16 +109,199 @@
                         </legend>
                         <c-row>
                             <c-col>
+                                <div class="mb-3">
+                                    <label cLabel for="host_container">
+                                        {{ t('Host container') }}
+                                        <oitc-required-icon></oitc-required-icon>
+                                    </label>
+                                    <oitc-select
+                                        name="host_container"
+                                        id="host_container"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [disabled]="true"
+                                        [options]="containers"
+                                        placeholder="{{ t('Will be automatically selected') }}"
+                                        [(ngModel)]="post.container_id">
+                                    </oitc-select>
+                                </div>
+                                <div class="mb-3">
+                                    <label cLabel for="HostTemplate">
+                                        <oitc-label-link
+                                            [objectId]="post.hosttemplate_id"
+                                            [route]="'/hosttemplates/edit'"
+                                            [permissions]="'hosttemplates.edit'">
+                                            {{ t('Host template') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </oitc-label-link>
+                                    </label>
+                                    <oitc-select
+                                        name="hosttemplate"
+                                        id="HostTemplate"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        placeholder="{{ t('Please choose') }}"
+                                        [options]="hosttemplates"
+                                        [(ngModel)]="post.hosttemplate_id"
+                                        oitcFormError [errors]="errors" errorField="hosttemplates">
+                                    </oitc-select>
+                                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
+                                        {{ t('Please select a host template.') }}
+                                    </div>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hosttemplate_id"></oitc-form-feedback>
+                                </div>
 
+                                <div class="mb-3">
+                                    <label cLabel for="HostSharingContainer">
+                                        {{ t('Shared containers') }}
+                                    </label>
 
+                                    <oitc-multi-select
+                                        name="HostSharingContainer"
+                                        id="HostSharingContainer"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.hostdefaults_to_containers_sharing._ids"
+                                        [options]="sharingContainers"
+                                        oitcFormError [errors]="errors" errorField="hosts_to_containers_sharing">
+                                    </oitc-multi-select>
+
+                                    <oitc-form-feedback [errors]="errors" errorField="hosts_to_containers_sharing">
+                                    </oitc-form-feedback>
+                                </div>
+                                @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
+                                    <div class="mb-3">
+                                        <label cLabel for="SatellitesSelect">
+                                            <oitc-label-link
+                                                [objectId]="post.satellite_id"
+                                                [route]="'/distribute_module/satellites/edit'"
+                                                [permissions]="'DistributeModule.satellites.edit'">
+                                                {{ t('Satellite') }}
+                                            </oitc-label-link>
+                                        </label>
+
+                                        <oitc-select
+                                            name="SatellitesSelect"
+                                            id="SatellitesSelect"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [(ngModel)]="post.satellite_id"
+                                            [options]="satellites"
+                                            oitcFormError [errors]="errors" errorField="satellite_id">
+                                        </oitc-select>
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="satellite_id"></oitc-form-feedback>
+                                    </div>
+                                }
+                            </c-col>
+                        </c-row>
+                    </fieldset>
+                </c-container>
+                <!-- Service templates -->
+                <c-container
+                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('Service templates matches') }}
+                                <span class="italic text-info">{{ t(' (optional):') }}</span>
+                            </h4>
+                            <div class="help-block">
+                                {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                            </div>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                            </c-col>
+                            <c-col>
+
+                            </c-col>
+                        </c-row>
+                    </fieldset>
+                </c-container>
+                <!-- Service template groups -->
+                <c-container
+                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-object-group"></i>
+                                    <i class="fas fa-font fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('Service template groups matches') }}
+                                <span class="italic text-info">{{ t(' (optional):') }}</span>
+                            </h4>
+                            <div class="help-block">
+                                {{ t('If the match is successful, these service template groups are assigned to the imported hosts.') }}
+                            </div>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                            </c-col>
+                        </c-row>
+                    </fieldset>
+                </c-container>
+                <!-- Agent Checks -->
+                <c-container
+                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-user-secret"></i>
+                                    <i class="fas fa-cogs fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('Agent checks matches') }}
+                                <span class="italic text-info">{{ t(' (optional):') }}</span>
+                            </h4>
+                            <div class="help-block">
+                                {{ t('If the match is successful, these agent checks are assigned to the imported hosts.') }}
+                            </div>
+                        </legend>
+                        <c-row>
+                            <c-col>
+                            </c-col>
+                        </c-row>
+                    </fieldset>
+                </c-container>
+                <!-- External Monitoring Checks -->
+                <c-container
+                    [fluid]="true" class="shadow-sm mt-2 pb-2 bg-body rounded">
+                    <fieldset>
+                        <legend class="small fieldset-legend-border-bottom">
+                            <h4>
+                                <div class="icon-stack">
+                                    <i class="fa-solid fa-tower-observation"></i>
+                                    <i class="fas fa-cog fa-xs text-primary cornered cornered-lr"></i>
+                                </div>
+                                {{ t('External Monitoring Checks') }}
+                                <span class="italic text-info">{{ t(' (optional):') }}</span>
+                            </h4>
+                            <div class="help-block">
+                                {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
+                            </div>
+                        </legend>
+                        <c-row>
+                            <c-col>
                             </c-col>
                         </c-row>
                     </fieldset>
                 </c-container>
             </c-card-body>
             <c-card-footer class="text-end">
+                <label class="me-2">
+                    <input cFormCheckInput type="checkbox" name="createAnother"
+                           [(ngModel)]="createAnother">
+                    {{ t('Create another') }}
+                </label>
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save') }}
+                    {{ t('Create host defaults') }}
                 </button>
                 <button [fallbackUrl]="['import_module','Hostdefaults', 'index']" cButton class="ms-1 ripple"
                         color="default" oitcBackButton type="button">

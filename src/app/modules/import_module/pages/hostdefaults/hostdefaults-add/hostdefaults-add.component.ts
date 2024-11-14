@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
@@ -55,6 +55,10 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { HostTypesEnum } from '../../../../../pages/hosts/hosts.enum';
+import { FakeSelectComponent } from '../../../../../layouts/coreui/fake-select/fake-select.component';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
 
 @Component({
@@ -102,7 +106,10 @@ import { RouterLink } from '@angular/router';
         TranslocoDirective,
         TrueFalseDirective,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
+        MultiSelectComponent,
+        FakeSelectComponent,
+        LabelLinkComponent
     ],
     templateUrl: './hostdefaults-add.component.html',
     styleUrl: './hostdefaults-add.component.css',
@@ -118,11 +125,17 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
 
     public post = this.getClearForm();
     public createAnother: boolean = false;
-    public objectTypesForOptionGroup: SelectItemOptionGroup[] = [];
 
     public errors: GenericValidationError | null = null;
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public containers: SelectKeyValue[] = [];
+    public sharingContainers: SelectKeyValue[] = [];
+    public hosttemplates: SelectKeyValue[] = [];
+    public servicetemplates: SelectKeyValue[] = [];
+    public servicetemplategroups: SelectKeyValue[] = [];
+    public satellites: SelectKeyValue[] = [];
+    public agentchecks: SelectKeyValue[] = [];
+
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
@@ -195,6 +208,26 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
+            })
+        );
+    }
+
+    protected loadElements() {
+        const containerId = this.post.container_id;
+
+        if (!containerId) {
+            return;
+        }
+
+        this.subscriptions.add(this.HostdefaultsService.loadElements(containerId)
+            .subscribe((result) => {
+                this.sharingContainers = result.sharingContainers;
+                this.hosttemplates = result.hosttemplates;
+                this.servicetemplates = result.servicetemplates;
+                this.servicetemplategroups = result.servicetemplategroups;
+                this.satellites = result.satellites;
+                this.agentchecks = result.agentchecks;
+                this.cdr.markForCheck();
             })
         );
     }
