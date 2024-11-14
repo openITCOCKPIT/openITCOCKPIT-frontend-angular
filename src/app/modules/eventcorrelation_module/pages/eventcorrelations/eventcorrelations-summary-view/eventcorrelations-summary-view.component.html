@@ -18,34 +18,34 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                {{ t('View') }}
+                <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+                {{ t('Summary View') }}
             </li>
         </ol>
     </nav>
 
-    <oitc-block-loader [height]="'25rem'" *ngIf="!evcTree || !rootElement"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="evcTree && rootElement">
+    <oitc-block-loader [height]="'25rem'" *ngIf="!evcSummaryTree"></oitc-block-loader>
+    <c-card class="mb-3" *ngIf="evcSummaryTree">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Event Correlation:') }}
+            <h5 cCardTitle>{{ t('Event Correlation as summary:') }}
                 <small class="fw-300">
-                    {{ rootElement.host.name }}
+                    {{ rootElement?.host?.name }}
                 </small>
             </h5>
 
             <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                 <c-nav-item>
-                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', rootElement.host.id]"
+                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', id]"
                        *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
-                       class="nav-link active">
+                       class="nav-link">
                         <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
                         {{ t('EVC Tree') }}
                     </a>
                 </c-nav-item>
                 <c-nav-item>
-                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'summary_view', rootElement.host.id]"
+                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'summary_view', id]"
                        *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'summary_view']"
-                       class="nav-link">
+                       class="nav-link active">
                         <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
                         {{ t('EVC Summary') }}
                     </a>
@@ -54,19 +54,18 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <a *oitcPermission="['documentations', 'view']"
-                       [routerLink]="['/', 'documentations', 'view', rootElement.host.uuid, 'host']"
+                    <a [href]="'/eventcorrelation_module/eventcorrelations/summary_view_table/'+id+'.pdf'"
                        cButton
                        class="ripple"
-                       color="default"
+                       color="primary"
                        size="xs">
-                        <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                        {{ t('Documentation') }}
+                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                        {{ t('Download as PDF') }}
                     </a>
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
-                    <button (click)="loadEventcorrelation()" cButton class="ripple" color="default" size="xs">
+                    <button (click)="loadEventcorrelationSummary()" cButton class="ripple" color="default" size="xs">
                         <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                         {{ t('Refresh') }}
                     </button>
@@ -81,7 +80,7 @@
                     </button>
                 </c-nav-item>
 
-                <c-nav-item class="px-1" *ngIf="hasWritePermission">
+                <c-nav-item class="px-1" *ngIf="hasWritePermission && rootElement">
                     <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
                        [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
                        cButton
@@ -155,15 +154,14 @@
                 </c-col>
             </c-row>
 
-            <div class="d-flex" style="height: 100vh;">
-                <oitc-evc-tree
-                    class="w-100 h-100"
-                    [evcId]="id"
-                    [evcTree]="evcTree"
-                    [downtimedServices]="downtimedServices"
+
+            <div class="mt-3">
+                <oitc-evc-table
+                    [evcSummaryTree]="evcSummaryTree"
                     [stateForDowntimedService]="stateForDowntimedService"
-                    [stateForDisabledService]="stateForDisabledService"></oitc-evc-tree>
+                    [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
             </div>
+
 
         </c-card-body>
         <c-card-footer>

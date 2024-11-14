@@ -3,8 +3,9 @@ import { EventcorrelationOperators } from './eventcorrelations.enum';
 import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
 
 export interface EventcorrelationsViewRoot {
-    evcTree: EvcTree[]
-    rootElement: EventcorrelationRootElement
+    evcTree: EvcTree[] // Used to render the tree chart
+    rootElement: EventcorrelationRootElement,
+    evcSummaryTree: EvcSummaryService[][],  // used to render the table based summary
     stateForDisabledService: number
     stateForDowntimedService: number
     showInfoForDisabledService: number
@@ -70,4 +71,18 @@ export interface EvcServicestatusToast {
     servicestatus: ServicestatusObject,
     hoststatus: HoststatusObject,
     _csrfToken: string | null
+}
+
+export interface EvcSummaryService {
+    serviceId: number
+    hostName: string
+    serviceName: string
+    uuid: string
+    operator: EventcorrelationOperators | null
+    scheduledDowntimeDepth: number | null
+    problemHasBeenAcknowledged: boolean
+    current_state: number | null
+    disabled: number
+    serviceCounter: number,
+    modified_state?: number
 }
