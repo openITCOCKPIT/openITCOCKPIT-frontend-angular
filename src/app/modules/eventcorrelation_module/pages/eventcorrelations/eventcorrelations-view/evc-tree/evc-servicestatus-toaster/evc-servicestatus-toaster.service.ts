@@ -30,7 +30,8 @@ export class EvcServicestatusToasterService {
         const proxyPath = this.proxyPath;
         return this.http.get<EvcServicestatusToast>(`${proxyPath}/eventcorrelation_module/eventcorrelations/getServicestatus/${id}.json`, {
             params: {
-                angular: true
+                angular: true,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {
