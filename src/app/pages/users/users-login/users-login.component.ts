@@ -170,7 +170,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.customLoginBackgroundHtml = data.customLoginBackgroundHtml;
             this.isCustomLoginBackground = data.isCustomLoginBackground;
             this.loginAnimation = !data.disableAnimation;
-            this.disableLogin = data.disableAnimation; // Server wants us to not have this feature at all
+            this.disableAnimation = data.disableAnimation; // Server wants us to not have this feature at all
 
             switch (data.images.particles) {
                 case 'none':

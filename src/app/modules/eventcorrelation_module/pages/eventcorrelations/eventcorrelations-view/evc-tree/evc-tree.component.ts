@@ -392,6 +392,12 @@ export class EvcTreeComponent implements AfterViewInit {
         }
     }
 
+    public resetScaleAndCenter() {
+        if (this.fCanvasComponent) {
+            this.fCanvasComponent.resetScaleAndCenter(false);
+        }
+    }
+
     public toggleToaster(serviceId: number | undefined): void {
         this.cancelToaster();
         if (serviceId) {
