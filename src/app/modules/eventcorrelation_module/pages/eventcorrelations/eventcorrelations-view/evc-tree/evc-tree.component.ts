@@ -361,18 +361,22 @@ export class EvcTreeComponent implements AfterViewInit {
 
     public horizontalLR(): void {
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.LEFT_TO_RIGHT);
+        this.fitToScreen();
     }
 
     public horizontalRL(): void {
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.RIGHT_TO_LEFT);
+        this.fitToScreen();
     }
 
     public verticalTB(): void {
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.TOP_TO_BOTTOM);
+        this.fitToScreen();
     }
 
     public verticalBT(): void {
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
+        this.fitToScreen();
     }
 
     public fitToScreen(): void {
