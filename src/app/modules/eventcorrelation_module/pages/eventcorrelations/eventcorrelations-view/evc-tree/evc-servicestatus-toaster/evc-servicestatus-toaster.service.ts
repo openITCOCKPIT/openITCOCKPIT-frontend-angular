@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { EvcServicestatusToast } from '../../../eventcorrelations.interface';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
@@ -18,7 +18,7 @@ export class EvcServicestatusToasterService {
 
     // The EVCTree component will put a serviceId into the serviceId$$ BehaviorSubject when a service is hovered over.
     // The EvcServicestatusToasterComponent will subscribe to this serviceId$ Observable to get the serviceId.
-    private serviceId$$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    private serviceId$$: Subject<number> = new Subject<number>();
     public serviceId$: Observable<number> = this.serviceId$$.asObservable();
 
     // Setter method for the EVC Tree component to set the serviceId.
