@@ -1,0 +1,30 @@
+<div class="alert border-faded bg-transparent text-secondary">
+    <div class="d-flex align-items-center">
+        <div class="alert-icon me-2">
+            <span class="icon-stack icon-stack-md">
+                <i class="icon-stack-3x" [ngClass]="['base-'+baseIcon(), 'text-'+color()]"></i>
+                <i [ngClass]="templateIcon" class="icon-stack-1x text-white"></i>
+            </span>
+        </div>
+        <div class="flex-1">
+            <ng-container
+                *ngTemplateOutlet="useContentTemplate; context: {$implicit: {color: color()}}"></ng-container>
+        </div>
+        <ng-container *ngTemplateOutlet="useButtonTemplate; context: {$implicit: {color: color()}}"></ng-container>
+    </div>
+</div>
+
+<!-- This will become the default template if no template is passed -->
+<ng-template #defaultContentTemplate let-data>
+    <span class="h5" [ngClass]="['text-'+color()]">
+        {{ errorHeadline() }}
+    </span>
+    @if (errorText()) {
+        <br>
+        {{ errorText() }}
+    }
+</ng-template>
+
+<ng-template #defaultButtonTemplate let-data>
+    <!-- Button for example -->
+</ng-template>
