@@ -52,7 +52,7 @@ export interface HostDefaultsPost {
     hostdefaults_to_containers_sharing: {
         _ids: number[]
     }
-    hostdefaults_to_servicetemplates: []
+    hostdefaults_to_servicetemplates: HostdefaultsToServicetemplate[]
     hostdefaults_to_servicetemplategroups: []
     hostdefaults_to_agentchecks: []
     hostdefaults_to_servicetemplates_external_monitoring: []
@@ -60,6 +60,14 @@ export interface HostDefaultsPost {
 
 export interface HostDefaultsGet {
     hostdefault: HostDefaultsPost
+}
+
+export interface HostdefaultsToServicetemplate {
+    id?: number
+    servicetemplate_id: number | null
+    field: string
+    regex: string
+    index?: number
 }
 
 export interface HostDefaultsElements {

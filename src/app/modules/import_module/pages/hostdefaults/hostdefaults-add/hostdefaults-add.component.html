@@ -54,6 +54,13 @@
                         </c-alert>
                     </div>
                 </div>
+                <c-alert color="warning" *ngIf="showRootAlert">
+                    <h4 cAlertHeading>
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                        {{ t('/root container selected!') }}
+                    </h4>
+                    <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
+                </c-alert>
                 <div class="mb-3">
                     <label cLabel for="container">
                         {{ t('Container') }}
@@ -67,10 +74,15 @@
                         [options]="containers"
                         [(ngModel)]="post.container_id"
                         [debounce]="true"
-                        (onChange)="loadElements()">
+                        (onChange)="onContainerChange()">
                     </oitc-select>
                     <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
                         {{ t('Please select a container.') }}
+                    </div>
+                    <div *ngIf="post.container_id === ROOT_CONTAINER"
+                         class="help-block text-warning text-warning-glow">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                        {{ t('Hosts in /root can\'t be moved to other containers later') }}
                     </div>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
@@ -215,11 +227,88 @@
                                 {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
                             </div>
                         </legend>
+                        @for (match of post.hostdefaults_to_servicetemplates; track $index) {
+                            <c-row>
+                                <c-col [xs]="12" [md]="12" [lg]="2">
+                                    <c-input-group>
+                                        <span cInputGroupText class="bg-primary text-white">
+                                            <fa-icon [icon]="['fas', 'equals']"></fa-icon>
+                                        </span>
+                                        <oitc-select
+                                            class="flex-1"
+                                            name="hd_field_st_{{$index}}"
+                                            id="hd_field_st_{{$index}}"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="matchFields"
+                                            [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].field"
+                                            [showClear]="false">
+                                        </oitc-select>
+                                    </c-input-group>
+                                    <div class="help-block">
+                                        {{ t('Field to match') }}
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [md]="12" [lg]="4">
+                                    <c-input-group>
+                                        <span cInputGroupText class="bg-info text-white">
+                                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        </span>
+                                        <input type="text" cFormControl
+                                               name="hd_regex_st{{$index}}"
+                                               id="hd_regex_st{{$index}}"
+                                               oitcDebounce
+                                               placeholder="{{ t('RegEx') }}"
+                                               [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].regex"
+                                        />
+                                        <span cInputGroupText>
+                                            <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                                        </span>
+                                    </c-input-group>
+                                    <div class="help-block">
+                                        {{ t('RegEx that needs to match') }}
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [md]="12" [lg]="4">
+                                    <c-input-group>
+                                        <span cInputGroupText class="bg-default">
+                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                        </span>
+                                        <oitc-select
+                                            class="flex-1"
+                                            name="hd_field_st_{{$index}}"
+                                            id="hd_field_st_{{$index}}"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="servicetemplates"
+                                            [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].servicetemplate_id"
+                                            [showClear]="false">
+                                        </oitc-select>
+                                    </c-input-group>
+                                    <div class="help-block">
+                                        {{ t('Service template to assign on match') }}
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [md]="12" [lg]="1">
+                                    <button class="btn btn-danger ripple waves-effect waves-themed"
+                                            type="button"
+                                            (click)="removeMatchServicetemplate(match.index)">
+                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                                    </button>
+                                </c-col>
+                            </c-row>
+                        }
                         <c-row>
                             <c-col>
                             </c-col>
-                            <c-col>
-
+                            <c-col class="text-end">
+                                <button cButton class="ripple" color="success"
+                                        *ngIf="servicetemplates.length > 0" type="button"
+                                        [disabled]="!servicetemplates.length"
+                                        (click)="addMatchServicetemplate()">
+                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                    {{ t('Add') }}
+                                </button>
                             </c-col>
                         </c-row>
                     </fieldset>

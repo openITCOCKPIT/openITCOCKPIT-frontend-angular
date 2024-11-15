@@ -20,13 +20,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FormCheckComponent,
     FormCheckInputDirective,
-    FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
@@ -38,28 +32,22 @@ import {
 } from '@coreui/angular';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import {
-    RegexHelperTooltipComponent
-} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { HostTypesEnum } from '../../../../../pages/hosts/hosts.enum';
-import { FakeSelectComponent } from '../../../../../layouts/coreui/fake-select/fake-select.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
-
+import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
+import _ from 'lodash';
+import { DebounceDirective } from '../../../../../directives/debounce.directive';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 
 @Component({
     selector: 'oitc-hostdefaults-add',
@@ -76,40 +64,30 @@ import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/lab
         CardTitleDirective,
         ColComponent,
         ContainerComponent,
-        DebounceDirective,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
         FaIconComponent,
-        FormCheckComponent,
         FormCheckInputDirective,
-        FormCheckLabelDirective,
         FormControlDirective,
         FormDirective,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
         FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        MultiSelectOptgroupComponent,
         NavComponent,
         NavItemComponent,
         NgIf,
-        PermissionDirective,
         ReactiveFormsModule,
-        RegexHelperTooltipComponent,
         RequiredIconComponent,
         RowComponent,
         SelectComponent,
         TranslocoDirective,
-        TrueFalseDirective,
         XsButtonDirective,
         RouterLink,
         MultiSelectComponent,
-        FakeSelectComponent,
-        LabelLinkComponent
+        LabelLinkComponent,
+        DebounceDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RegexHelperTooltipComponent
     ],
     templateUrl: './hostdefaults-add.component.html',
     styleUrl: './hostdefaults-add.component.css',
@@ -124,6 +102,7 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public post = this.getClearForm();
+    public showRootAlert: boolean = false;
     public createAnother: boolean = false;
 
     public errors: GenericValidationError | null = null;
@@ -135,8 +114,29 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
     public servicetemplategroups: SelectKeyValue[] = [];
     public satellites: SelectKeyValue[] = [];
     public agentchecks: SelectKeyValue[] = [];
+    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 
     private cdr = inject(ChangeDetectorRef);
+
+
+    protected readonly matchFields = [
+        {
+            key: 'hostname',
+            value: this.TranslocoService.translate('Host name')
+        },
+        {
+            key: 'description',
+            value: this.TranslocoService.translate('Description')
+        },
+        {
+            key: 'address',
+            value: this.TranslocoService.translate('Address')
+        },
+        {
+            key: 'software',
+            value: this.TranslocoService.translate('Software')
+        }
+    ];
 
     constructor() {
     }
@@ -151,6 +151,12 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
                 this.containers = result;
                 this.cdr.markForCheck();
             }));
+    }
+
+    public onContainerChange() {
+        this.loadElements();
+        this.showRootAlert = this.post.container_id === ROOT_CONTAINER;
+        this.cdr.markForCheck();
     }
 
     public getClearForm(): HostDefaultsPost {
@@ -230,5 +236,53 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             })
         );
+    }
+
+    public addMatchServicetemplate() {
+        let count = this.post.hostdefaults_to_servicetemplates.length + 1;
+
+        this.post.hostdefaults_to_servicetemplates.push({
+            id: count,
+            field: 'hostname',
+            regex: '',
+            servicetemplate_id: null,
+            index: Object.keys(this.post.hostdefaults_to_servicetemplates).length
+        });
+
+        if (this.errors !== null) {
+            if (!(typeof this.errors['validate_matches_servicetemplates'] !== 'undefined' ||
+                typeof this.errors['hostdefaults_to_servicetemplates'] !== 'undefined')) {
+                this.post.hostdefaults_to_servicetemplates = _(this.post.hostdefaults_to_servicetemplates)
+                    .chain()
+                    .flatten()
+                    .sortBy(
+                        function (match) {
+                            return [match.regex, match.field];
+                        })
+                    .value();
+            }
+        }
+    }
+
+    public removeMatchServicetemplate(index: number | undefined) {
+        var hostdefault_matches_servicetemplates = [];
+        for (var i in this.post.hostdefaults_to_servicetemplates) {
+            if (this.post.hostdefaults_to_servicetemplates[i]['index'] !== index) {
+                hostdefault_matches_servicetemplates.push(this.post.hostdefaults_to_servicetemplates[i])
+            }
+        }
+        if (this.errors?.hasOwnProperty('validate_matches_servicetemplate') && typeof this.errors['validate_matches_servicetemplate'] !== 'undefined' ||
+            this.errors?.hasOwnProperty('validate_matches_servicetemplate') && typeof this.errors['hostdefault_matches_servicetemplate'] !== 'undefined') {
+            this.post.hostdefaults_to_servicetemplates = hostdefault_matches_servicetemplates;
+        } else {
+            this.post.hostdefaults_to_servicetemplates = _(hostdefault_matches_servicetemplates)
+                .chain()
+                .flatten()
+                .sortBy(
+                    function (match) {
+                        return [match.field, match.regex];
+                    })
+                .value();
+        }
     }
 }
