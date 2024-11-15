@@ -48,7 +48,6 @@ import {
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 
-
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
     evcNode: EvcGraphNode
@@ -264,7 +263,9 @@ export class EvcTreeComponent implements AfterViewInit {
             //                          +--------------+
             //
             ranksep: 50,
-            edgesep: 10 // not entirely sure
+            edgesep: 10, // not entirely sure
+            marginx: 0,
+            marginy: 0,
         });
 
 
@@ -376,11 +377,14 @@ export class EvcTreeComponent implements AfterViewInit {
 
     public fitToScreen(): void {
         // Disabled for now, as it adds a scale factor to the canvas and "zooms in" on init.
-        return;
+        //return;
 
         // https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
-            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
+            this.fCanvasComponent.resetScaleAndCenter(false);
+            this.fCanvasComponent.position = PointExtensions.initialize(0, 0);
+
+            //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }
     }
 
