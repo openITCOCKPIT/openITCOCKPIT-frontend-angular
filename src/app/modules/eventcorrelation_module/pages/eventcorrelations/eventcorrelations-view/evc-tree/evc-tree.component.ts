@@ -360,21 +360,25 @@ export class EvcTreeComponent implements AfterViewInit {
     }
 
     public horizontalLR(): void {
+        this.direction = EvcTreeDirection.LEFT_TO_RIGHT;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.LEFT_TO_RIGHT);
         this.fitToScreen();
     }
 
     public horizontalRL(): void {
+        this.direction = EvcTreeDirection.RIGHT_TO_LEFT;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.RIGHT_TO_LEFT);
         this.fitToScreen();
     }
 
     public verticalTB(): void {
+        this.direction = EvcTreeDirection.TOP_TO_BOTTOM;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.TOP_TO_BOTTOM);
         this.fitToScreen();
     }
 
     public verticalBT(): void {
+        this.direction = EvcTreeDirection.BOTTOM_TO_TOP;
         this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
         this.fitToScreen();
     }
@@ -389,12 +393,6 @@ export class EvcTreeComponent implements AfterViewInit {
             this.fCanvasComponent.position = PointExtensions.initialize(0, 0);
 
             //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
-        }
-    }
-
-    public resetScaleAndCenter() {
-        if (this.fCanvasComponent) {
-            this.fCanvasComponent.resetScaleAndCenter(false);
         }
     }
 
