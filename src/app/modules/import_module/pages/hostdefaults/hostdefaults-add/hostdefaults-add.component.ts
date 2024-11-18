@@ -11,8 +11,6 @@ import { HostDefaultsPost } from '../hostdefaults.interface';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    AlertComponent,
-    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -48,13 +46,15 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
+import { ServicetemplateTypesEnum } from '../../../../../pages/servicetemplates/servicetemplate-types.enum';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-hostdefaults-add',
     standalone: true,
     imports: [
-        AlertComponent,
-        AlertHeadingDirective,
         AsyncPipe,
         BackButtonDirective,
         CardBodyComponent,
@@ -87,7 +87,9 @@ import {
         DebounceDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        OitcAlertComponent,
+        PermissionDirective
     ],
     templateUrl: './hostdefaults-add.component.html',
     styleUrl: './hostdefaults-add.component.css',
@@ -106,7 +108,8 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
 
     public errors: GenericValidationError | null = null;
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    public errors_exists_matches_servicetemplates = false;
+    public PermissionsService: PermissionsService = inject(PermissionsService);
     public containers: SelectKeyValue[] = [];
     public sharingContainers: SelectKeyValue[] = [];
     public hosttemplates: SelectKeyValue[] = [];
@@ -156,6 +159,7 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
     public onContainerChange() {
         this.loadElements();
         this.showRootAlert = this.post.container_id === ROOT_CONTAINER;
+        this.post.host_container_id = this.post.container_id;
         this.cdr.markForCheck();
     }
 
@@ -252,6 +256,7 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
         if (this.errors !== null) {
             if (!(typeof this.errors['validate_matches_servicetemplates'] !== 'undefined' ||
                 typeof this.errors['hostdefaults_to_servicetemplates'] !== 'undefined')) {
+                this.errors_exists_matches_servicetemplates = true;
                 this.post.hostdefaults_to_servicetemplates = _(this.post.hostdefaults_to_servicetemplates)
                     .chain()
                     .flatten()
@@ -265,14 +270,14 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
     }
 
     public removeMatchServicetemplate(index: number | undefined) {
-        var hostdefault_matches_servicetemplates = [];
+        let hostdefault_matches_servicetemplates = [];
         for (var i in this.post.hostdefaults_to_servicetemplates) {
             if (this.post.hostdefaults_to_servicetemplates[i]['index'] !== index) {
                 hostdefault_matches_servicetemplates.push(this.post.hostdefaults_to_servicetemplates[i])
             }
         }
-        if (this.errors?.hasOwnProperty('validate_matches_servicetemplate') && typeof this.errors['validate_matches_servicetemplate'] !== 'undefined' ||
-            this.errors?.hasOwnProperty('validate_matches_servicetemplate') && typeof this.errors['hostdefault_matches_servicetemplate'] !== 'undefined') {
+        if (this.errors?.hasOwnProperty('validate_matches_servicetemplates') && typeof this.errors['validate_matches_servicetemplates'] !== 'undefined' ||
+            this.errors?.hasOwnProperty('validate_matches_servicetemplates') && typeof this.errors['hostdefault_matches_servicetemplates'] !== 'undefined') {
             this.post.hostdefaults_to_servicetemplates = hostdefault_matches_servicetemplates;
         } else {
             this.post.hostdefaults_to_servicetemplates = _(hostdefault_matches_servicetemplates)
@@ -285,4 +290,141 @@ export class HostdefaultsAddComponent implements OnInit, OnDestroy {
                 .value();
         }
     }
+
+    public removeMatchServicetemplategroup(index: number | undefined) {
+        let hostdefault_matches_servicetemplategroups = [];
+        for (var i in this.post.hostdefaults_to_servicetemplategroups) {
+            if (this.post.hostdefaults_to_servicetemplategroups[i]['index'] !== index) {
+                hostdefault_matches_servicetemplategroups.push(this.post.hostdefaults_to_servicetemplategroups[i])
+            }
+        }
+        if (this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_servicetemplategroup'] !== 'undefined' ||
+            this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_servicetemplategroup'] !== 'undefined') {
+            this.post.hostdefaults_to_servicetemplategroups = hostdefault_matches_servicetemplategroups;
+        } else {
+            this.post.hostdefaults_to_servicetemplategroups = _(hostdefault_matches_servicetemplategroups)
+                .chain()
+                .flatten()
+                .sortBy(
+                    function (match) {
+                        return [match.field, match.regex];
+                    })
+                .value();
+        }
+    }
+
+    public addMatchServicetemplategroup() {
+        let count = this.post.hostdefaults_to_servicetemplategroups.length + 1;
+
+        this.post.hostdefaults_to_servicetemplategroups.push({
+            id: count,
+            field: 'hostname',
+            regex: '',
+            servicetemplategroup_id: null,
+            index: Object.keys(this.post.hostdefaults_to_servicetemplategroups).length
+        });
+
+        if (this.errors !== null) {
+            if (!(typeof this.errors['validate_matches_servicetemplategroups'] !== 'undefined' ||
+                typeof this.errors['hostdefaults_to_servicetemplategroups'] !== 'undefined')) {
+                this.post.hostdefaults_to_servicetemplategroups = _(this.post.hostdefaults_to_servicetemplategroups)
+                    .chain()
+                    .flatten()
+                    .sortBy(
+                        function (match) {
+                            return [match.regex, match.field];
+                        })
+                    .value();
+            }
+        }
+    };
+
+    public removeMatchAgentcheck(index: any) {
+        let hostdefault_matches_agentchecks = [];
+        for (let i in this.post.hostdefaults_to_agentchecks) {
+            if (this.post.hostdefaults_to_agentchecks[i]['index'] !== index) {
+                hostdefault_matches_agentchecks.push(this.post.hostdefaults_to_agentchecks[i])
+            }
+        }
+        if (typeof this.post.hostdefaults_to_agentchecks !== 'undefined' ||
+            (this.errors?.hasOwnProperty('validate_matches_servicetemplategroup') && typeof this.errors['validate_matches_agentchecks'] !== 'undefined')) {
+            this.post.hostdefaults_to_agentchecks = hostdefault_matches_agentchecks;
+        } else {
+            this.post.hostdefaults_to_agentchecks = _(hostdefault_matches_agentchecks)
+                .chain()
+                .flatten()
+                .value();
+        }
+    }
+
+    public addMatchAgentcheck() {
+        let count = this.post.hostdefaults_to_agentchecks.length + 1;
+
+        this.post.hostdefaults_to_agentchecks.push({
+            id: count,
+            agentcheck_id: null,
+            regex: '',
+            index: Object.keys(this.post.hostdefaults_to_agentchecks).length
+        });
+
+        if (this.errors !== null) {
+            if (!(typeof this.errors['validate_matches_agentchecks'] !== 'undefined' ||
+                typeof this.errors['hostdefaults_to_agentchecks'] !== 'undefined')) {
+                this.post.hostdefaults_to_agentchecks = _(this.post.hostdefaults_to_agentchecks)
+                    .chain()
+                    .flatten()
+                    .sortBy(
+                        function (match) {
+                            return [match.regex];
+                        })
+                    .value();
+            }
+        }
+    }
+
+    public removeMatchServicetemplatesExternalMonitoring(index: number | undefined) {
+        let hostdefault_matches_servicetemplates_external_monitoring = [];
+        for (var i in this.post.hostdefaults_to_servicetemplates_external_monitoring) {
+            if (this.post.hostdefaults_to_servicetemplates_external_monitoring[i]['index'] !== index) {
+                hostdefault_matches_servicetemplates_external_monitoring.push(this.post.hostdefaults_to_servicetemplates_external_monitoring[i])
+            }
+        }
+        if (typeof this.post.hostdefaults_to_agentchecks !== 'undefined' ||
+            (this.errors?.hasOwnProperty('validate_matches_servicetemplates_external_monitoring') && typeof this.errors['validate_matches_servicetemplates_external_monitoring'] !== 'undefined')) {
+            this.post.hostdefaults_to_servicetemplates_external_monitoring = hostdefault_matches_servicetemplates_external_monitoring;
+        } else {
+            this.post.hostdefaults_to_servicetemplates_external_monitoring = _(hostdefault_matches_servicetemplates_external_monitoring)
+                .chain()
+                .flatten()
+                .value();
+        }
+    }
+
+    public addMatchServicetemplatesExternalMonitoring() {
+        let count = this.post.hostdefaults_to_servicetemplates_external_monitoring.length + 1;
+
+        this.post.hostdefaults_to_servicetemplates_external_monitoring.push({
+            id: count,
+            servicetemplate_id: null,
+            regex: '',
+            index: Object.keys(this.post.hostdefaults_to_servicetemplates_external_monitoring).length
+        });
+
+        if (this.errors !== null) {
+            if (!(typeof this.errors['validate_matches_servicetemplates_external_monitoring'] !== 'undefined' ||
+                typeof this.errors['hostdefaults_to_servicetemplates_external_monitoring'] !== 'undefined')) {
+                this.post.hostdefaults_to_servicetemplates_external_monitoring = _(this.post.hostdefaults_to_servicetemplates_external_monitoring)
+                    .chain()
+                    .flatten()
+                    .sortBy(
+                        function (match) {
+                            return [match.regex];
+                        })
+                    .value();
+            }
+        }
+    }
+
+    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
+    protected readonly ServicetemplateTypesEnum = ServicetemplateTypesEnum;
 }

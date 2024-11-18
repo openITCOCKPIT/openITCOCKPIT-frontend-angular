@@ -48,27 +48,50 @@ export interface HostDefaultsPost {
     description: string
     hosttemplate_id: number
     satellite_id: number
-    host_container_id: null
+    host_container_id: number | null
     hostdefaults_to_containers_sharing: {
         _ids: number[]
     }
-    hostdefaults_to_servicetemplates: HostdefaultsToServicetemplate[]
-    hostdefaults_to_servicetemplategroups: []
-    hostdefaults_to_agentchecks: []
-    hostdefaults_to_servicetemplates_external_monitoring: []
+    hostdefaults_to_servicetemplates: HostdefaultsToServicetemplates[]
+    hostdefaults_to_servicetemplategroups: HostdefaultsToServicetemplategroups[]
+    hostdefaults_to_agentchecks: HostdefaultsToAgentchecks[]
+    hostdefaults_to_servicetemplates_external_monitoring: HostdefaultsToExternalmonitorings[]
 }
 
 export interface HostDefaultsGet {
     hostdefault: HostDefaultsPost
 }
 
-export interface HostdefaultsToServicetemplate {
+export interface HostdefaultsToServicetemplates {
     id?: number
     servicetemplate_id: number | null
     field: string
     regex: string
     index?: number
 }
+
+export interface HostdefaultsToServicetemplategroups {
+    id?: number
+    servicetemplategroup_id: number | null
+    field: string
+    regex: string
+    index?: number
+}
+
+export interface HostdefaultsToAgentchecks {
+    id?: number
+    agentcheck_id: number | null
+    regex: string
+    index?: number
+}
+
+export interface HostdefaultsToExternalmonitorings {
+    id?: number
+    regex: string
+    servicetemplate_id: number | null
+    index?: number
+}
+
 
 export interface HostDefaultsElements {
     sharingContainers: SelectKeyValue[]

@@ -37,7 +37,9 @@ export class HostdefaultsService {
      **********************/
     public createHostdefault(hostdefault: HostDefaultsPost) {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/import_module/host_defaults/add.json?angular=true`, hostdefault)
+        return this.http.post<any>(`${proxyPath}/import_module/host_defaults/add.json?angular=true`, {
+            Hostdefault: hostdefault
+        })
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
