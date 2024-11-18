@@ -1,0 +1,325 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Custom Alert Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                   [routerLink]="['/', 'customalert_module', 'customalert_rules', 'index']">
+                    <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
+                    {{ t('Custom Alert Rules') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Custom Alert') }}
+                <small class="fw-300">
+                    {{ t('Rules') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="refresh()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *oitcPermission="['customalertmodule', 'customalertRules', 'index']">
+                    <button cButton class="ripple" color="success" size="xs"
+                            [routerLink]="['/', 'customalert_module', 'customalert_rules', 'add']">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="primary" size="xs" (click)="toggleFilter()">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[CustomalertRules.name]']"
+                                       [placeholder]="'Filter by rule name' | transloco"
+                                       cFormControl
+                                       name="params['filter[CustomalertRules.name]']"
+                                       id="params['filter[CustomalertRules.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[CustomalertRules.description]']"
+                                       [placeholder]="'Filter by rule description' | transloco"
+                                       cFormControl
+                                       name="params['filter[CustomalertRules.description]']"
+                                       id="params['filter[CustomalertRules.description]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="HostTags"
+                                        name="HostTags"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="hostTags"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by host tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-desktop opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="HostTagsExcluded"
+                                        name="HostTagsExcluded"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="hostTagsExcluded"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded host tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-cog opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-success cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="ServiceTags"
+                                        name="ServiceTags"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="serviceTags"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by service tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <i class="fas fa-cog opacity-100 "></i>
+                                        <i class="fa-solid fa-tags opacity-100 fa-xs text-danger cornered cornered-lr"></i>
+                                    </div>
+                                </span>
+                                <ng-select
+                                        id="ServiceTagsExcluded"
+                                        name="ServiceTagsExcluded"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [items]="[]"
+                                        [(ngModel)]="serviceTagsExcluded"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded service tags' | transloco"
+                                        [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+
+            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+
+            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="CustomalertRules.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="CustomalertRules.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Container') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Recursive container') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="result">
+                <tr *ngFor="let customAlertRule of result.customalertRules">
+
+                    <td class="text-center">
+                        <div>
+                            <oitc-item-select
+                                    *oitcPermission="['customalertmodule', 'customalertRules', 'delete']"
+                                    [disabled]="false"
+                                    [item]="customAlertRule"></oitc-item-select>
+                        </div>
+                    </td>
+                    <td>
+                        {{ customAlertRule.name }}
+                    </td>
+                    <td>
+                        {{ customAlertRule.description }}
+                    </td>
+                    <td>
+                        {{ customAlertRule.container }}
+                    </td>
+                    <td>
+                        <c-badge *ngIf="customAlertRule.recursive" color="success">{{ t('Enabled') }}</c-badge>
+                        <c-badge *ngIf="! customAlertRule.recursive" color="danger">{{ t('Disabled') }}</c-badge>
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'customalertmodule.customalertRules.edit'"
+                                             [url]="'/customalert_module/customalert_rules/edit/' + customAlertRule.id">
+                            <oitc-actions-button-element [permission]="'customalertmodule.customalertRules.edit'"
+                                                         [url]="'/customalert_module/customalert_rules/edit/' + customAlertRule.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'customalertmodule.customalertRules.services'"
+                                                         [url]="'/customalert_module/customalert_rules/services/' + customAlertRule.id">
+                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                {{ t('Affected services') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(customAlertRule)"
+                                                         [permission]="'customalertmodule.customalertRules.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                    *ngIf="result && result.customalertRules.length === 0"></oitc-no-records>
+            <ng-container *ngIf="result && result.customalertRules.length !== 0">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="result.customalertRules.length"></oitc-select-all>
+                        </c-col>
+                        <c-col md="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                    [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
