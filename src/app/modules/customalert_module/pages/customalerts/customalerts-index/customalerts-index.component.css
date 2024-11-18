@@ -1,6 +1,10 @@
 .multi-select-input-group oitc-multi-select {
     flex-grow: 1;
 }
+.padding-right-10 {
+    padding-right: 10px;
+}
+
 
 .border-5 {
     border-width: 5px !important;

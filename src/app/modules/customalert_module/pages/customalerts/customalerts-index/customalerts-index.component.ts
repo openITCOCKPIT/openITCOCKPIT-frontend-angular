@@ -14,8 +14,10 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { RouterLink } from '@angular/router';
 import {
     BadgeComponent,
+    ButtonGroupComponent,
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -39,16 +41,17 @@ import { IndexPage } from '../../../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
-import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { CustomAlertsService } from '../customalerts.service';
 import {
     Customalert,
     CustomAlertsIndex,
     CustomAlertsIndexCustomAlertsStateFilter,
+    CustomAlertsIndexFilter,
     CustomAlertsIndexParams,
     CustomAlertsState,
     getDefaultCustomAlertsIndexCustomAlertsStateFilter,
+    getDefaultCustomAlertsIndexFilter,
     getDefaultCustomAlertsIndexParams
 } from '../customalerts.interface';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
@@ -82,12 +85,10 @@ import {
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import _ from 'lodash';
 import {
-    getDefaultServiceIndexParams,
-    getServiceCurrentStateForApi,
-    ServiceIndexFilter
-} from '../../../../../pages/services/services.interface';
+    GrafanaTimepickerComponent
+} from '../../../../grafana_module/components/grafana-timepicker/grafana-timepicker.component';
+import { IntervalPickerComponent } from '../../../../../components/interval-picker/interval-picker.component';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -144,7 +145,10 @@ import {
         KeyValuePipe,
         BadgeOutlineComponent,
         NgClass,
-        CardFooterComponent
+        CardFooterComponent,
+        ButtonGroupComponent,
+        GrafanaTimepickerComponent,
+        IntervalPickerComponent
     ],
     templateUrl: './customalerts-index.component.html',
     styleUrl: './customalerts-index.component.css',
@@ -158,8 +162,10 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
+    private refreshTimer: number = 0;
 
     protected readonly keepOrder = keepOrder;
+    protected filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
     protected containers: SelectKeyValue[] = [];
     protected params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
     protected stateFilter: CustomAlertsIndexCustomAlertsStateFilter = getDefaultCustomAlertsIndexCustomAlertsStateFilter()
@@ -168,6 +174,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected selectedItems: Customalert[] = [];
     protected groupViewByHost: boolean = false;
     protected groupedList: { [key: number]: Customalert[] } = {};
+    protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
 
     private getSelectedItems(customAlert?: Customalert): Customalert[] {
         if (customAlert) {
@@ -216,6 +223,20 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         this.cdr.markForCheck();
     }
 
+    public onRefreshChange = (value?: SelectKeyValue): void => {
+        if (value) {
+            this.selectedAutoRefresh = value;
+        }
+        if (this.selectedAutoRefresh.key === 0) {
+            window.clearTimeout(this.refreshTimer);
+            return;
+        }
+        if (this.refreshTimer > 0) {
+            window.clearTimeout(this.refreshTimer);
+        }
+        this.refresh();
+        this.refreshTimer = window.setTimeout(this.onRefreshChange, this.selectedAutoRefresh.key * 1000);
+    }
 
     public onSelectedBookmark(filterstring: string) {
         if (filterstring === '') {
@@ -225,18 +246,21 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            let params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
+            let filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
             console.warn('bookmarkfilter', bookmarkfilter);
-            params['filter[Customalerts.message]'] = bookmarkfilter.Customalerts.message || '';
-            params['filter[Hosts.container_id][]'] = bookmarkfilter.Hosts.container_id || [];
-            params['recursive'] = bookmarkfilter.recursive || false;
-            this.setFilterAndLoad(params);
+            filter.Customalerts.message = bookmarkfilter.Customalerts.message || '';
+            filter.Customalerts.state = bookmarkfilter.Customalerts.state || [true, true, false, false];
+            filter.Hosts.container_id = bookmarkfilter.Hosts.container_id || [];
+            filter.recursive = bookmarkfilter.recursive || false;
+            this.setFilterAndLoad(filter);
         }
         this.cdr.markForCheck();
     }
 
-    private setFilterAndLoad(params: CustomAlertsIndexParams) {
-        this.params = params;
+    private setFilterAndLoad(filter: CustomAlertsIndexFilter) {
+        this.filter = filter;
+
+
         this.cdr.markForCheck();
         this.onFilterChange(true);
     }
@@ -284,7 +308,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     }
 
     public resetFilter() {
-        this.params = getDefaultCustomAlertsIndexParams();
+        this.filter = getDefaultCustomAlertsIndexFilter();
         this.refresh();
     }
 
@@ -299,10 +323,8 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
 
     protected hostIdsInOrder: number[] = [];
     protected refresh(): void {
-        this.params['filter[Customalerts.state][]'] = Object.keys(_.pickBy(this.stateFilter, (value, key) => value === true)) as unknown as number[];
-
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.CustomAlertsService.getIndex(this.params)
+        this.subscriptions.add(this.CustomAlertsService.getIndex(this.params, this.filter)
             .subscribe((result: CustomAlertsIndex) => {
                 this.result = result;
 

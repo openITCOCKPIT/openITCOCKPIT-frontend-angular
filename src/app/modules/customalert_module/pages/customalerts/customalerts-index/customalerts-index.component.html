@@ -29,6 +29,11 @@
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
+                    <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
+                    <button (click)="refresh()" cButton class="ripple" color="light" size="xs">
+                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                         {{ t('Filter') }}
@@ -37,10 +42,10 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <c-card *ngIf="result">
+            <c-card *ngIf="result" class=" mb-2">
                 <!--<c-card-header>-->
                 <oitc-filter-bookmark [plugin]="'CustomalertModule'" [controller]="'Customalerts'" [action]="'index'"
-                                      [filter]="params"
+                                      [filter]="filter"
                                       (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
 
                 <!--</c-card-header>-->
@@ -121,11 +126,11 @@
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[Customalerts.message]']"
+                                           [(ngModel)]="filter.Customalerts.message"
                                            [placeholder]="'Filter by custom alerts message' | transloco"
                                            cFormControl
-                                           name="params['filter[Customalerts.message]']"
-                                           id="params['filter[Customalerts.message]']"
+                                           name="filter.Customalerts.message"
+                                           id="filter.Customalerts.message"
                                            oitcDebounce
                                            type="text"
                                     />
@@ -139,10 +144,10 @@
                                         {{ t('From') }}
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[from]']"
+                                           [(ngModel)]="filter.from"
                                            cFormControl
-                                           name="params['filter[from]']"
-                                           id="params['filter[from]']"
+                                           name="filter.from"
+                                           id="filter.from"
                                            oitcDebounce
                                            type="datetime-local"
                                     />
@@ -154,10 +159,10 @@
                                         {{ t('To') }}
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[to]']"
+                                           [(ngModel)]="filter.to"
                                            cFormControl
-                                           name="params['filter[to]']"
-                                           id="params['filter[to]']"
+                                           name="filter.to"
+                                           id="filter.to"
                                            oitcDebounce
                                            type="datetime-local"
                                     />
@@ -168,46 +173,46 @@
                             <c-col md="2">
                                 <h5>{{ t('Alert status') }}</h5>
                                 <c-form-check class="mb-2">
-                                    <input cFormCheckInput id="stateFilter[CustomAlertsState.New]" type="checkbox"
+                                    <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.New]" type="checkbox"
                                            class="checkbox-lg custom-check-default"
-                                           [(ngModel)]="stateFilter[CustomAlertsState.New]"
-                                           name="stateFilter[CustomAlertsState.New]"
+                                           [(ngModel)]="filter.Customalerts.state[CustomAlertsState.New]"
+                                           name="filter.Customalerts.state[CustomAlertsState.New]"
                                            (debouncedValue)="onFilterChange($event)"
                                            oitcDebounce/>
-                                    <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.New]">
+                                    <label cFormCheckLabel class="ms-1 mt-1" for="filter.Customalerts.state[CustomAlertsState.New]">
                                         {{ t('New') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check class="mb-2">
-                                    <input cFormCheckInput id="stateFilter[CustomAlertsState.InProgress]" type="checkbox"
+                                    <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.InProgress]" type="checkbox"
                                            class="checkbox-lg custom-check-default"
-                                           [(ngModel)]="stateFilter[CustomAlertsState.InProgress]"
-                                           name="stateFilter[CustomAlertsState.InProgress]"
+                                           [(ngModel)]="filter.Customalerts.state[CustomAlertsState.InProgress]"
+                                           name="filter.Customalerts.state[CustomAlertsState.InProgress]"
                                            (debouncedValue)="onFilterChange($event)"
                                            oitcDebounce/>
-                                    <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.InProgress]">
+                                    <label cFormCheckLabel class="ms-1 mt-1" for="filter.Customalerts.state[CustomAlertsState.InProgress]">
                                         {{ t('In progress') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check class="mb-2">
-                                    <input cFormCheckInput id="stateFilter[CustomAlertsState.Done]" type="checkbox"
+                                    <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.Done]" type="checkbox"
                                            class="checkbox-lg custom-check-default"
-                                           [(ngModel)]="stateFilter[CustomAlertsState.Done]"
-                                           name="stateFilter[CustomAlertsState.Done]"
+                                           [(ngModel)]="filter.Customalerts.state[CustomAlertsState.Done]"
+                                           name="filter.Customalerts.state[CustomAlertsState.Done]"
                                            (debouncedValue)="onFilterChange($event)"
                                            oitcDebounce/>
-                                    <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.Done]">
+                                    <label cFormCheckLabel class="ms-1 mt-1" for="filter.Customalerts.state[CustomAlertsState.Done]">
                                         {{ t('Done') }}
                                     </label>
                                 </c-form-check>
                                 <c-form-check class="mb-2">
-                                    <input cFormCheckInput id="stateFilter[CustomAlertsState.ManuallyClosed]" type="checkbox"
+                                    <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]" type="checkbox"
                                            class="checkbox-lg custom-check-default"
-                                           [(ngModel)]="stateFilter[CustomAlertsState.ManuallyClosed]"
-                                           name="stateFilter[CustomAlertsState.ManuallyClosed]"
+                                           [(ngModel)]="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]"
+                                           name="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]"
                                            (debouncedValue)="onFilterChange($event)"
                                            oitcDebounce/>
-                                    <label cFormCheckLabel class="ms-1 mt-1" for="stateFilter[CustomAlertsState.ManuallyClosed]">
+                                    <label cFormCheckLabel class="ms-1 mt-1" for="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]">
                                         {{ t('Manually closed') }}
                                     </label>
                                 </c-form-check>
@@ -216,9 +221,9 @@
 
                                 <h5>{{ t('Container') }}</h5>
                                 <oitc-multi-select
-                                        name="post.User.usercontainerroles._ids"
-                                        id="post.User.usercontainerroles._ids"
-                                        [(ngModel)]="params['filter[Hosts.container_id][]']"
+                                        name="filter.Hosts.container_id"
+                                        id="filter.Hosts.container_id"
+                                        [(ngModel)]="filter.Hosts.container_id"
                                         optionValue="key"
                                         optionLabel="value"
                                         (debouncedValue)="onFilterChange($event)"
@@ -228,13 +233,13 @@
                                 <br/>
 
                                 <c-form-check class="mb-2">
-                                    <input cFormCheckInput id="params.recursive" type="checkbox"
+                                    <input cFormCheckInput id="filter.recursive" type="checkbox"
                                            class="checkbox-lg custom-check-default"
-                                           [(ngModel)]="params.recursive"
-                                           name="params.recursive"
+                                           [(ngModel)]="filter.recursive"
+                                           name="filter.recursive"
                                            (debouncedValue)="onFilterChange($event)"
                                            oitcDebounce/>
-                                    <label cFormCheckLabel class="ms-1 mt-1" for="params.recursive">
+                                    <label cFormCheckLabel class="ms-1 mt-1" for="filter.recursive">
                                         {{ t('Recursive') }}
                                     </label>
                                 </c-form-check>
@@ -263,8 +268,17 @@
                            name="groupViewByHost"/>
                     <label cFormCheckLabel class="ms-1 mt-1" for="groupViewByHost">
                         <a cButton
+                           [hidden]="!groupViewByHost"
                            class="ripple"
                            color="success"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                            {{ t('Group view by host') }}
+                        </a>
+                        <a cButton
+                           class="ripple"
+                           [hidden]="groupViewByHost"
+                           color="light"
                            size="xs">
                             <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
                             {{ t('Group view by host') }}

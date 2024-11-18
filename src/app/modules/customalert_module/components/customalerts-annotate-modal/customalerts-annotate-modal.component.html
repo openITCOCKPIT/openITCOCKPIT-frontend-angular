@@ -25,10 +25,13 @@
                     </c-col>
                 </c-row>
                 <textarea cFormControl
-                          [(ngModel)]="comment"></textarea>
-                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
+                          [(ngModel)]="comment"
+                          [ngClass]="{'is-invalid': comment.length > 1024}"
+                ></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
 
-                <div class="help-block mb-3">
+                <div class="help-block mb-3"
+                     [ngClass]="{'text-danger': comment.length > 1024}">
                     {{ t('The maximum length for this field is 1024. Characters available:') }}
                     <code>{{ 1024 - comment.length }}</code>
                 </div>
@@ -45,13 +48,12 @@
             </div>
 
             <c-form-check class="mb-3">
-                <input cFormCheckInput id="stateFilter[CustomAlertsState.New]" type="checkbox"
+                <input cFormCheckInput id="acknowledgement" type="checkbox"
                        class="checkbox-lg custom-check-default"
                        [(ngModel)]="acknowlage"
                        name="acknowlage"
-                       id="acknowlage"
                        oitcDebounce/>
-                <label cFormCheckLabel class="ms-1 mt-1" for="acknowlage">
+                <label cFormCheckLabel class="ms-1 mt-1" for="acknowledgement">
                     {{ t('Set annotation comment as service acknowledgement') }}
                 </label>
             </c-form-check>
@@ -79,12 +81,12 @@
                     <h4>{{ t('Annotating...') }}</h4>
                 </c-col>
                 <c-col sm="12">
-                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                    <c-progress [animated]="true" [value]="percentage" [max]="100" color="danger" variant="striped"/>
                 </c-col>
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="annotate()" [disabled]="isProcessing" cButton class="ripple" color="primary">
+            <button (click)="annotate()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
                 <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Annotate') }}
             </button>

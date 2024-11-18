@@ -81,14 +81,24 @@ export interface CustomAlertsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
+}
 
-    'recursive': boolean,
-    'filter[Customalerts.message]' : string,
-    'filter[Customalerts.state][]' : number[],
-    'filter[Hosts.container_id][]' : number[],
-    'filter[from]' : string,
-    'filter[to]' : string,
-
+export interface CustomAlertsIndexFilter {
+    Customalerts: {
+        message: string,
+        state: [
+            boolean,
+            boolean,
+            boolean,
+            boolean
+        ],
+    },
+    Hosts: {
+        container_id: number[]
+    },
+    from: string,
+    to: string,
+    recursive: boolean,
 }
 
 export interface LoadContainersRoot {
@@ -98,23 +108,38 @@ export interface LoadContainersRoot {
 
 export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
 {
-    let now = new Date();
-    // From: 30 days ago
-    let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
-    // To: Tomorrow
-    let toStr: string = formatDate(new Date(now.getTime()   + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
     return {
         angular: true,
         scroll: true,
         sort: 'Customalerts.created',
         page: 1,
         direction: 'desc',
-        'recursive': false,
-        'filter[Customalerts.message]' : '',
-        'filter[Customalerts.state][]' : [],
-        'filter[Hosts.container_id][]' : [],
-        'filter[from]' : fromStr,
-        'filter[to]' : toStr,
+    }
+}
+
+export function getDefaultCustomAlertsIndexFilter(): CustomAlertsIndexFilter {
+    let now = new Date();
+    // From: 30 days ago
+    let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
+    // To: Tomorrow
+    let toStr: string = formatDate(new Date(now.getTime() + 86400000), 'yyyy-MM-ddTHH:mm', 'en-US');
+
+    return {
+        Customalerts: {
+            message: '',
+            state: [
+                true,
+                true,
+                false,
+                false
+            ],
+        },
+        Hosts: {
+            container_id: []
+        },
+        from: fromStr,
+        to: toStr,
+        recursive: false,
     }
 }
 

@@ -23,7 +23,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -53,7 +53,8 @@ import { Customalert } from '../../pages/customalerts/customalerts.interface';
         FormsModule,
         ModalFooterComponent,
         XsButtonDirective,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        NgClass
     ],
     templateUrl: './customalerts-close-modal.component.html',
     styleUrl: './customalerts-close-modal.component.css',

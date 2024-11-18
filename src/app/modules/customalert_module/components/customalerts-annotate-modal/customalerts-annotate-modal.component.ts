@@ -28,7 +28,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService} from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -71,7 +71,8 @@ import { Subscription } from 'rxjs';
         ProgressComponent,
         FormFeedbackComponent,
         NgIf,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        NgClass
     ],
     templateUrl: './customalerts-annotate-modal.component.html',
     styleUrl: './customalerts-annotate-modal.component.css',
@@ -154,14 +155,10 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
                     this.percentage = Math.round((responseCount / count) * 100);
 
                     if (responseCount === count && issueCount === 0) {
-                        // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
-                        setTimeout(() => {
-
-                            this.hideModal();
-                        }, 250);
+                        this.hideModal();
                         this.completed.emit(true);
                     }
-
+                    this.cdr.markForCheck();
                 },
                 error: (error: HttpErrorResponse) => {
                     this.cdr.markForCheck();
@@ -170,7 +167,6 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
                     this.hasErrors = true;
 
                     responseCount++;
-                    this.percentage = Math.round((responseCount / count) * 100);
 
                     if (responseCount === count && issueCount > 0) {
                         // The timeout is not necessary. It is just to show the progress bar at 100% for a short time.
@@ -180,6 +176,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
                         }, 250);
                         this.completed.emit(false);
                     }
+                    this.cdr.markForCheck();
                 }
             });
         }

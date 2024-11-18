@@ -6,7 +6,7 @@ import {
     CheckHoststatusForAcknowledgementsRequest,
     CheckHoststatusForAcknowledgementsResponse,
     CustomAlertHistory, CustomalertServiceHistory,
-    CustomAlertsIndex,
+    CustomAlertsIndex, CustomAlertsIndexFilter,
     CustomAlertsIndexParams,
     LoadContainersRoot
 } from './customalerts.interface';
@@ -20,7 +20,7 @@ export class CustomAlertsService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public getIndex(params: CustomAlertsIndexParams): Observable<CustomAlertsIndex> {
+    public getIndex(params: CustomAlertsIndexParams, filter: CustomAlertsIndexFilter): Observable<CustomAlertsIndex> {
         return this.http.get<CustomAlertsIndex>(`${this.proxyPath}/customalert_module/customalerts/index.json`, {
             params: {
                 ...params

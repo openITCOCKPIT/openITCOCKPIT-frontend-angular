@@ -45,16 +45,20 @@
                     </c-col>
                 </c-row>
                 <textarea cFormControl
-                          [(ngModel)]="comment"></textarea>
-                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
-                <div class="help-block">
+                          [(ngModel)]="comment"
+                          [ngClass]="{'is-invalid': comment.length > 1024}"
+                ></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
+
+                <div class="help-block mb-3"
+                     [ngClass]="{'text-danger': comment.length > 1024}">
                     {{ t('The maximum length for this field is 1024. Characters available:') }}
                     <code>{{ 1024 - comment.length }}</code>
                 </div>
             </ng-container>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="closeManually()" [disabled]="isProcessing" cButton class="ripple" color="primary">
+            <button (click)="closeManually()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
                 <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Close manually') }}
             </button>
