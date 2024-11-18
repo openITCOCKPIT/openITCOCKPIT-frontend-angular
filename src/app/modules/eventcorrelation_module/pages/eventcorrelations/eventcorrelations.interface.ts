@@ -1,7 +1,74 @@
 import { ServiceObject, ServicestatusObject } from '../../../../pages/services/services.interface';
 import { EventcorrelationOperators } from './eventcorrelations.enum';
 import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
+
+/**********************
+ *    Index action    *
+ **********************/
+export interface EventcorrelationsIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[Hosts.description]': string
+}
+
+export function getDefaultEventcorrelationsIndexParams(): EventcorrelationsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[Hosts.description]': ''
+    }
+}
+
+export interface EventcorrelationsIndexRoot extends PaginateOrScroll {
+    all_evc_hosts: EvcIndexHost[]
+    _csrfToken: string | null
+}
+
+export interface EvcIndexHost {
+    Host: {
+        id: number
+        uuid: string
+        name: string
+        description: any
+        active_checks_enabled: any
+        address: string
+        satellite_id: number
+        container_id: number
+        tags: any
+        disabled: number,
+        hosts_to_containers_sharing: HostsToContainersSharing[]
+    }
+    hasViewPermission: boolean
+    hasWritePermission: boolean
+}
+
+export interface HostsToContainersSharing {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        host_id: number
+        container_id: number
+    }
+}
+
+/**********************
+ *    View action     *
+ **********************/
 export interface EventcorrelationsViewRoot {
     evcTree: EvcTree[] // Used to render the tree chart
     rootElement: EventcorrelationRootElement,
@@ -86,3 +153,4 @@ export interface EvcSummaryService {
     serviceCounter: number,
     modified_state?: number
 }
+
