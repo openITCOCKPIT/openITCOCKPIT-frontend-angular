@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { MapsIndexParams, MapsIndexRoot } from './Maps.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { LoadContainersRoot, LoadSatellitesRoot, MapPost, MapsIndexParams, MapsIndexRoot } from './Maps.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,50 @@ export class MapsService {
                 return data;
             })
         )
+    }
+
+    public loadContainers(): Observable<LoadContainersRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/map_module/maps/loadContainers.json?angular=true`).pipe(
+            map((data: LoadContainersRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public loadSatellites(containerIds: number[]): Observable<LoadSatellitesRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadSatellitesRoot>(`${proxyPath}/containers/loadSatellitesByContainerIds.json`, {
+            params: {
+                'angular': true,
+                'containerIds[]': containerIds
+            }
+        }).pipe(
+            map((data: LoadSatellitesRoot) => {
+                return data;
+            })
+        )
+    }
+
+    public add(post: MapPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/maps/add.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
 }

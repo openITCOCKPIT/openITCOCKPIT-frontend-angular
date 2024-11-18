@@ -139,7 +139,7 @@
                 <tr *ngFor="let map of maps.all_maps">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['maps', 'delete']"
+                            *oitcPermission="['mapmodule','maps', 'delete']"
                             [disabled]="!map.allowEdit"
                             [item]="map"></oitc-item-select>
 
@@ -175,7 +175,7 @@
                             }
                             <li cDropdownDivider></li>
                             <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
-                                                         [url]="'/map_module/mapeditors/view/' + map.id">
+                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + false">
                                 <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                                 {{ t('View') }}
                             </oitc-actions-button-element>

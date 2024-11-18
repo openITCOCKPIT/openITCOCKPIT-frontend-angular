@@ -1,9 +1,14 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface MapsIndexRoot extends PaginateOrScroll {
     all_maps: Map[]
     _csrfToken: string
 }
+
+/*******************************
+ *    Definition of Map        *
+ ******************************/
 
 export interface Map {
     id: number
@@ -57,5 +62,35 @@ export function getDefaultMapsIndexParams(): MapsIndexParams {
         'filter[Maps.name]': "",
         'filter[Maps.title]': "",
     }
+}
+
+/***************************
+ *    Add / Edit action    *
+ ***************************/
+
+export interface MapPost {
+    Map: MapEdit
+}
+
+export interface MapEdit {
+    name: string
+    title: string
+    refresh_interval: number
+    containers: {
+        _ids: number[]
+    },
+    satellites: {
+        _ids: number[]
+    }
+}
+
+export interface LoadContainersRoot {
+    containers: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface LoadSatellitesRoot {
+    satellites: SelectKeyValue[]
+    _csrfToken: string
 }
 
