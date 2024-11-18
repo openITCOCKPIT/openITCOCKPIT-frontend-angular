@@ -29,6 +29,8 @@ import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 import { InstantreportObjectTypes } from '../../instantreports/instantreports.enums';
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { LoginResponse } from '../../../auth/auth.interface';
 
 @Component({
     selector: 'oitc-users-login',
@@ -65,6 +67,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly NotyService: NotyService = inject(NotyService);
     private readonly AuthService: AuthService = inject(AuthService);
+    private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private _csrfToken: string = '';
@@ -170,7 +173,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             this.customLoginBackgroundHtml = data.customLoginBackgroundHtml;
             this.isCustomLoginBackground = data.isCustomLoginBackground;
             this.loginAnimation = !data.disableAnimation;
-            this.disableLogin = data.disableAnimation; // Server wants us to not have this feature at all
+            this.disableAnimation = data.disableAnimation; // Server wants us to not have this feature at all
 
             switch (data.images.particles) {
                 case 'none':
@@ -237,11 +240,15 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         //CakePHPs FormAuthenticator is able to parse the POST data
         //AngularJS $httpParamSerializerJQLike is going to encode the data for us...
 
-        this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe((data: any) => {
+        this.subscriptions.add(this.AuthService.login(this.post.email, this.post.password, this.post.remember_me).subscribe((data: LoginResponse) => {
             this.cdr.markForCheck();
             if (data.success) {
                 this.disableLogin = false;
                 this.NotyService.genericSuccess('Login successful', 'success');
+
+                // Load user permissions
+                this.PermissionsService.loadPermissions();
+
                 //window.location = this.getLocalStorageItemWithDefaultAndRemoveItem('lastPage', '/');
 
                 this.router.navigate(['/', 'hosts', 'index']); //todo replace with last page
@@ -249,8 +256,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 return;
             }
 
-
-            //noch nötich?  this.loadCsrf();
+            // still required?  this.loadCsrf();
             this.disableLogin = false;
 
             if (data.hasOwnProperty('errors')) {

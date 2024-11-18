@@ -1,0 +1,156 @@
+import { ServiceObject, ServicestatusObject } from '../../../../pages/services/services.interface';
+import { EventcorrelationOperators } from './eventcorrelations.enum';
+import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+
+
+/**********************
+ *    Index action    *
+ **********************/
+export interface EventcorrelationsIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[Hosts.description]': string
+}
+
+export function getDefaultEventcorrelationsIndexParams(): EventcorrelationsIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[Hosts.description]': ''
+    }
+}
+
+export interface EventcorrelationsIndexRoot extends PaginateOrScroll {
+    all_evc_hosts: EvcIndexHost[]
+    _csrfToken: string | null
+}
+
+export interface EvcIndexHost {
+    Host: {
+        id: number
+        uuid: string
+        name: string
+        description: any
+        active_checks_enabled: any
+        address: string
+        satellite_id: number
+        container_id: number
+        tags: any
+        disabled: number,
+        hosts_to_containers_sharing: HostsToContainersSharing[]
+    }
+    hasViewPermission: boolean
+    hasWritePermission: boolean
+}
+
+export interface HostsToContainersSharing {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        host_id: number
+        container_id: number
+    }
+}
+
+/**********************
+ *    View action     *
+ **********************/
+export interface EventcorrelationsViewRoot {
+    evcTree: EvcTree[] // Used to render the tree chart
+    rootElement: EventcorrelationRootElement,
+    evcSummaryTree: EvcSummaryService[][],  // used to render the table based summary
+    stateForDisabledService: number
+    stateForDowntimedService: number
+    showInfoForDisabledService: number
+    disabledServices: number
+    downtimedServices: number
+    hasWritePermission: boolean
+    _csrfToken: string | null
+}
+
+
+export interface EvcTree {
+    [key: string]: {
+        id: number
+        parent_id: number
+        host_id: number
+        service_id: number
+        operator: EventcorrelationOperators | null,
+        service: EvcService
+    }[]
+}
+
+export interface EventcorrelationRootElement {
+    id: number
+    parent_id: number | null
+    lft: number
+    rght: number
+    host_id: number
+    service_id: number
+    operator: EventcorrelationOperators | null
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface EvcService {
+    id: number
+    servicetemplate_id: number
+    host_id: number
+    name?: string
+    description: any
+    service_type: number
+    uuid: string
+    disabled: number
+    host: {
+        id: number
+        name: string
+    }
+    servicetemplate: {
+        id: number
+        name: string
+        description: string
+    }
+    servicename: string
+    servicestatus: ServicestatusObject
+}
+
+export interface EvcServicestatusToast {
+    host: HostObject,
+    service: ServiceObject,
+    servicestatus: ServicestatusObject,
+    hoststatus: HoststatusObject,
+    _csrfToken: string | null
+}
+
+export interface EvcSummaryService {
+    serviceId: number
+    hostName: string
+    serviceName: string
+    uuid: string
+    operator: EventcorrelationOperators | null
+    scheduledDowntimeDepth: number | null
+    problemHasBeenAcknowledged: boolean
+    current_state: number | null
+    disabled: number
+    serviceCounter: number,
+    modified_state?: number
+}
+

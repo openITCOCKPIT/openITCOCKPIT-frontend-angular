@@ -1,0 +1,99 @@
+.evc-summary-table {
+    border-spacing: 5px;
+    border-collapse: separate;
+}
+
+.evc-summary-table td {
+    position: relative;
+}
+
+.evc-summary-td-container {
+    /*box-shadow: 3px 3px 1px -2px rgba(0, 0, 0, 0.75);*/
+    padding: 2px;
+    color: white;
+    background-color: var(--cui-card-cap-bg);
+    border: var(--cui-card-border-width) solid var(--cui-card-border-color);
+}
+
+.evc-border-right-ok {
+    border-right: 5px solid var(--cui-success);
+}
+
+.evc-border-right-warning {
+    border-right: 5px solid var(--cui-warning);
+}
+
+.evc-border-right-critical {
+    border-right: 5px solid var(--cui-danger);
+}
+
+.evc-border-right-unknown {
+    border-right: 5px solid var(--cui-secondary);
+}
+
+.evc-border-right-not-monitored {
+    border-right: 5px solid var(--cui-primary);
+}
+
+
+.evc-summary-ok {
+    background: linear-gradient(to right, #4c4f53 15px, #0fa80f 2%, var(--cui-success));
+}
+
+.evc-summary-warning {
+    background: linear-gradient(to right, #4c4f53 15px, #db9225 2%, var(--cui-warning));
+}
+
+.evc-summary-critical {
+    background: linear-gradient(to right, #4c4f53 15px, #aa0202 2%, var(--cui-danger));
+
+}
+
+.evc-summary-unknown {
+    background: linear-gradient(to right, #4c4f53 15px, #6a6a6a 2%, var(--cui-secondary));
+}
+
+.evc-summary-not-monitored {
+    background: linear-gradient(to right, #4c4f53 15px, #2d2d7e 2%, var(--cui-primary));
+}
+
+.evc-summary-disabled-service {
+    background: repeating-linear-gradient(-45deg, #ffffff, #ffffff 10px, var(--cui-card-cap-bg) 10px, var(--cui-card-cap-bg) 20px);
+}
+
+body.dark-theme :host .evc-summary-disabled-service {
+    background: repeating-linear-gradient(-45deg, transparent, transparent 10px, var(--cui-card-cap-bg) 10px, var(--cui-card-cap-bg) 20px);
+}
+
+.evc-summary-operator {
+    display: block;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    transform-origin: center center;
+    width: 15px;
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    font-size: 14px;
+    /*text-shadow: 1px 1px #7d7d7d;*/
+    font-family: "Courier New", monospace;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.evc-summary-vservice {
+    padding: 5px 10px 5px 20px;
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Courier New', Arial;
+    color: #FFFFFF;
+}
+
+.evc-summary-first-layser-service {
+    color: var(--cui-body-color);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 400px;
+    padding: 5px;
+}

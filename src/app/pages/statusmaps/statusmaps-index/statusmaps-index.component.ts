@@ -435,10 +435,12 @@ export class StatusmapsIndexComponent implements OnInit, OnDestroy {
             network.on('stabilizationProgress', (params) => {
                 let currentPercentage = Math.round(params.iterations / params.total * 100);
                 this.progress = currentPercentage;
+                this.cdr.markForCheck();
             });
             network.once('stabilizationIterationsDone', () => {
                 this.showProgressbar = false;
                 network.setOptions({physics: false});
+                this.cdr.markForCheck();
             });
         }
 

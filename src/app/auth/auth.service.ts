@@ -41,16 +41,38 @@ export class AuthService {
                 'content-type': 'application/x-www-form-urlencoded'
             }
         }).pipe(
-            tap((response) => {
-                // Optionally handle successful login state here
+            map(data => {
+                // Return true on 200 Ok
+                // For some reason angular is always calling the catchError callback ??
+                // Not sure if this code gets ever executed but keep it the same as the catchError block
+
+                // Tell the AuthService that we are authenticated
                 this.authenticated$$.next(true);
+
+                return {
+                    success: true,
+                    errors: {},
+                };
             }),
-            catchError(error => {
+            catchError((error: any) => {
+                if (error.status === 200) {
+                    // For whatever reason this can happen if a user is already logged in
+                    // Not sure why angular is going to the error block here
+
+                    // Tell the AuthService that we are authenticated
+                    this.authenticated$$.next(true);
+
+                    return of({
+                        success: true,
+                        errors: {},
+                    });
+                }
+
                 const err = error.error.errors as GenericValidationError;
                 return of({
-                    success: error.status === 200,
+                    success: false,
                     errors: err
-                } as unknown as LoginResponse);
+                });
             })
         );
     }
@@ -64,7 +86,11 @@ export class AuthService {
         this.authenticated$$.next(false);
     }
 
-    public checkAuthentication(): Observable<boolean> {
+    /**
+     * 18.11.2024 changed to private as it was not used
+     * @private
+     */
+    private checkAuthentication(): Observable<boolean> {
         const proxyPath = this.proxyPath;
 
         return this.http.get<Record<string, string | boolean>>(`${proxyPath}/users/login.json`).pipe(

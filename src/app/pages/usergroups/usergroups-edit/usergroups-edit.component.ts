@@ -34,7 +34,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -58,6 +57,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-usergroups-edit',
@@ -124,6 +124,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly PermissionsService = inject(PermissionsService);
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected systemname: string = 'openITCOCKPIT';
@@ -210,6 +211,9 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
                     const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('updated successfully');
                     const url: (string | number)[] = ['usergroups', 'edit', response.id];
+
+                    // Reload user permissions just in the current logged in is part of the user group
+                    this.PermissionsService.loadPermissions();
 
                     this.notyService.genericSuccess(msg, title, url);
 

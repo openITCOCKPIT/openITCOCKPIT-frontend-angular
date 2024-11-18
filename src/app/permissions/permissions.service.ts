@@ -70,7 +70,7 @@ export class PermissionsService {
         return result === _chunks[_chunks.length - 1];
     }
 
-    private loadPermissions(): void {
+    public loadPermissions(): void {
         const proxyPath = this.proxyPath;
 
         this.authService.authenticated$.pipe(
