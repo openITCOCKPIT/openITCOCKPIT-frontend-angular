@@ -1,0 +1,191 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Custom Alert Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                   [routerLink]="['/', 'customalert_module', 'customalert_rules', 'index']">
+                    <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
+                    {{ t('Custom Alert Rules') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Custom Alert Rule Affected Services') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Custom Alert Rule') }}
+                <small class="fw-300">
+                    {{ t('Affected Services') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="refresh()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="primary" size="xs" (click)="toggleFilter()">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <div  *ngIf="result" class="alert border-faded bg-transparent text-secondary">
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon me-2">
+                        <span class="icon-stack icon-stack-md">
+                            <i class="base-2 icon-stack-3x text-info"></i>
+                            <i class="fas fa-gear icon-stack-1x text-white"></i>
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <span class="h5 text-cyan-500">
+                            {{ t('Custom alert rule:') }}
+                            <a>
+                                "{{ result.customalertRule.name }}"
+                            </a>
+                        </span>
+                        <br>
+                        {{t('Overview of all affected services. Please refresh your configuration after configuration changes!')}}
+                    </div>
+
+                    <a class="btn btn-outline-info btn-sm ripple" *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                       [routerLink]="['/', 'customalert_module', 'customalert_rules', 'edit', CustomAlertRuleId]">
+                        <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                        {{ t('Go to "Custom rule configuration"') }}
+                    </a>
+                </div>
+            </div>
+
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       cFormControl
+                                       name="params['filter[Hosts.name]']"
+                                       id="params['filter[Hosts.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[servicename]']"
+                                       [placeholder]="'Filter by service name' | transloco"
+                                       cFormControl
+                                       name="params['filter[servicename]']"
+                                       id="params['filter[servicename]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+
+            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+
+            <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col" mat-sort-header="Hosts.name">
+                        {{ t('Host') }}
+                    </th>
+                    <th scope="col" mat-sort-header="servicename">
+                        {{ t('Service') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Services.description">
+                        {{ t('Description') }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="result">
+                <tr *ngFor="let service of result.services">
+                    <td>
+                        <a *oitcPermission="['hosts', 'browser']"
+                           [routerLink]="['/', 'hosts', 'browser', service.Hosts.id]">
+                            {{ service.Hosts.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a *oitcPermission="['services', 'browser']"
+                           [routerLink]="['/', 'services', 'browser', service.id]">
+                            {{ service.servicename }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ service.description }}
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
+            <oitc-no-records
+                    *ngIf="result && result.services.length === 0"></oitc-no-records>
+
+            <c-container
+                    [fluid]="true">
+                <c-row class="mt-3">
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="result"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+
+        </c-card-body>
+    </c-card>
+</ng-container>
