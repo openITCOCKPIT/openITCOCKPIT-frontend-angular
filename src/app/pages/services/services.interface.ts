@@ -227,6 +227,7 @@ export interface ServiceObject {
     tags?: string
     host_id: number
     allow_edit: boolean
+    usageFlag?: number
     disabled: boolean
     serviceType: number
     priority: number

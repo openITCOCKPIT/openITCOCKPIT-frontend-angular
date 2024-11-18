@@ -25,10 +25,9 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from "@angular/common";
+import { AsyncPipe, DOCUMENT, JsonPipe, NgClass, NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
 import { PermissionDirective } from "../../permissions/permission.directive";
-import { CoreuiComponent } from '../../layouts/coreui/coreui.component';
 import { faAsterisk, faCircleInfo, faCoffee, faCog, faMouse } from "@fortawesome/free-solid-svg-icons";
 import {
     ButtonToolbarComponent,
@@ -64,7 +63,11 @@ import {
     ActionsButtonElementComponent
 } from '../../components/actions-button-element/actions-button-element.component';
 import { CodeMirrorContainerComponent } from '../../components/code-mirror-container/code-mirror-container.component';
-import { MessageOfTheDayButtonComponent } from '../../components/message-of-the-day-button/message-of-the-day-button.component';
+import {
+    MessageOfTheDayButtonComponent
+} from '../../components/message-of-the-day-button/message-of-the-day-button.component';
+import { OitcAlertComponent } from '../../components/alert/alert.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @Component({
@@ -106,7 +109,10 @@ import { MessageOfTheDayButtonComponent } from '../../components/message-of-the-
         ActionsButtonElementComponent,
         DropdownDividerDirective,
         CodeMirrorContainerComponent,
-        MessageOfTheDayButtonComponent
+        MessageOfTheDayButtonComponent,
+        OitcAlertComponent,
+        NgClass,
+        ProgressBarModule
     ],
     templateUrl: './start-page.component.html',
     styleUrl: './start-page.component.css',

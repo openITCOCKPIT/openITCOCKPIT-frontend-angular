@@ -87,6 +87,71 @@
             <button cButton class="ripple" color="primary">Save me</button>
         </c-card-footer>
     </c-card>
+
+    <c-card>
+        <c-card-header class="fw-bold">
+            oitc-alert showcase
+        </c-card-header>
+        <c-card-body>
+
+            <div>
+                <b>Default Alert</b>
+                <oitc-alert
+                    color="primary"
+                    baseIcon="square"
+                    [icon]="['fas', 'exclamation-triangle']"></oitc-alert>
+            </div>
+
+            <div>
+                <b>Default Alert - with custom messages</b>
+                <oitc-alert
+                    color="danger"
+                    baseIcon="circle"
+                    [icon]="['fas', 'bomb']"
+                    [errorHeadline]="'Panic'"
+                    [errorText]="'Everything is broken 🤯'"></oitc-alert>
+            </div>
+
+
+            <div>
+                <b>Alert with custom templates and controls</b>
+
+                <ng-template #contentTemplate let-data>
+                    <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
+                        Take the headline from a custom template
+                    </span>
+                    <br>
+                    Lot of space for custom elements or text
+
+                    <div class="mt-2">
+                        <p-progressBar mode="indeterminate"
+                                       [style]="{ height: '6px' }"/>
+                    </div>
+
+                </ng-template>
+
+                <ng-template #buttonTemplate let-data>
+                    <div class="ms-2" *ngIf="data">
+                        <button class="btn btn-sm ripple" [ngClass]="'btn-outline-'+data.color">
+                            Go Search
+                        </button>
+                    </div>
+
+                </ng-template>
+
+                <oitc-alert
+                    baseIcon="shield"
+                    color="success"
+                    [icon]="['fas', 'hat-wizard']"
+                    [contentTemplate]="contentTemplate"
+                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+            </div>
+
+        </c-card-body>
+    </c-card>
+
+
     <form cForm>
         <c-card class="mt-2">
             <c-card-header class="fw-bold">
