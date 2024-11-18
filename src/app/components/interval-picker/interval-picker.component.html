@@ -1,0 +1,31 @@
+<ng-container *transloco="let t">
+
+    <c-dropdown variant="btn-group">
+        <button [color]="'default'" cButton cDropdownToggle size="xs">
+            <fa-icon [icon]="['fas', 'clock']" class="margin-right-10"></fa-icon>
+            <span class="text-primary">{{ selectedAutoRefresh.value }}</span>
+
+        </button>
+        <div cDropdownMenu>
+            <div class="w-100 p-2">
+                <c-row>
+                    <c-col [xs]="12" [md]="12">
+                        <fieldset>
+                            <h5>{{ t('Auto refresh') }}</h5>
+                            <hr class="border-dashed">
+                            <div *ngFor="let refreshRate of refreshRates"
+                                 class="no-padding cursor-pointer"
+                                 style="line-height: 25px;"
+                                 [ngClass]="{'text-primary': refreshRate.key === selectedAutoRefresh.key}"
+                                 (click)="changeRefresh(refreshRate)">
+                                {{ refreshRate.value }}
+                            </div>
+                        </fieldset>
+                    </c-col>
+                </c-row>
+            </div>
+
+        </div>
+    </c-dropdown>
+
+</ng-container>
