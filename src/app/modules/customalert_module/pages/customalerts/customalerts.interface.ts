@@ -81,6 +81,14 @@ export interface CustomAlertsIndexParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
+
+    // These fields are only for the API request, not for bookmarks and front-end!
+    'recursive': boolean,
+    'filter[Customalerts.message]': string,
+    'filter[Customalerts.state][]': number[],
+    'filter[Hosts.container_id][]': number[],
+    'filter[from]': string,
+    'filter[to]': string,
 }
 
 export interface CustomAlertsIndexFilter {
@@ -114,6 +122,14 @@ export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams
         sort: 'Customalerts.created',
         page: 1,
         direction: 'desc',
+
+        // Just ignore these fields, they will be filled in CustomalertsService
+        'recursive': false,
+        'filter[Customalerts.message]': '',
+        'filter[Customalerts.state][]': [],
+        'filter[Hosts.container_id][]': [],
+        'filter[from]': '',
+        'filter[to]': '',
     }
 }
 

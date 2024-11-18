@@ -5,9 +5,12 @@ import { map, Observable } from 'rxjs';
 import {
     CheckHoststatusForAcknowledgementsRequest,
     CheckHoststatusForAcknowledgementsResponse,
-    CustomAlertHistory, CustomalertServiceHistory,
-    CustomAlertsIndex, CustomAlertsIndexFilter,
+    CustomAlertHistory,
+    CustomalertServiceHistory,
+    CustomAlertsIndex,
+    CustomAlertsIndexFilter,
     CustomAlertsIndexParams,
+    CustomAlertsState,
     LoadContainersRoot
 } from './customalerts.interface';
 import { formatDate } from '@angular/common';
@@ -21,6 +24,29 @@ export class CustomAlertsService {
     private readonly proxyPath: string = inject(PROXY_PATH);
 
     public getIndex(params: CustomAlertsIndexParams, filter: CustomAlertsIndexFilter): Observable<CustomAlertsIndex> {
+        // Inject data from bookmarkable filter object:
+        params['filter[Hosts.container_id][]'] = filter.Hosts.container_id;
+        params['filter[Customalerts.message]'] = filter.Customalerts.message;
+        params['filter[from]'] = filter.from;
+        params['filter[to]'] = filter.to;
+        // params['filter[Customalerts.state][]'] = filter.Customalerts.state;
+
+//        let arr : boolean[] = this.params['filter[Customalerts.state][]'] as unknown as boolean[];
+        params['filter[Customalerts.state][]'] = [];
+
+        if (filter.Customalerts.state[CustomAlertsState.New]) {
+            params['filter[Customalerts.state][]'].push(CustomAlertsState.New);
+        }
+        if (filter.Customalerts.state[CustomAlertsState.InProgress]) {
+            params['filter[Customalerts.state][]'].push(CustomAlertsState.InProgress);
+        }
+        if (filter.Customalerts.state[CustomAlertsState.Done]) {
+            params['filter[Customalerts.state][]'].push(CustomAlertsState.Done);
+        }
+        if (filter.Customalerts.state[CustomAlertsState.ManuallyClosed]) {
+            params['filter[Customalerts.state][]'].push(CustomAlertsState.ManuallyClosed);
+        }
+
         return this.http.get<CustomAlertsIndex>(`${this.proxyPath}/customalert_module/customalerts/index.json`, {
             params: {
                 ...params
