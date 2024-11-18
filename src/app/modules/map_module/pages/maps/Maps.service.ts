@@ -4,6 +4,7 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { LoadContainersRoot, LoadSatellitesRoot, MapPost, MapsIndexParams, MapsIndexRoot } from './Maps.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -65,6 +66,11 @@ export class MapsService {
                     });
                 })
             );
+    }
+
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/map_module/maps/delete/${item.id}.json?angular=true`, {});
     }
 
 }

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapsAddComponent } from './maps-add.component';
 
-describe('SlasAddComponent', () => {
+describe('MapsAddComponent', () => {
     let component: MapsAddComponent;
     let fixture: ComponentFixture<MapsAddComponent>;
 
