@@ -26,6 +26,8 @@
         "@coreui/angular": "^5.2.19",
         "@coreui/icons": "^3.0.1",
         "@coreui/icons-angular": "^5.2.19",
+        "@dagrejs/dagre": "^1.1.4",
+        "@foblex/flow": "^16.0.5",
         "@fontsource/roboto": "^5.1.0",
         "@fortawesome/angular-fontawesome": "^0.15.0",
         "@fortawesome/fontawesome-free": "^6.6.0",

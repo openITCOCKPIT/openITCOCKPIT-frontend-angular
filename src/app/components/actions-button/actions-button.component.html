@@ -25,23 +25,23 @@
 
 <c-button-group role="group">
     @if (allowEdit) {
-        <a class="ripple btn btn-default btn-xs btn-lower-padding"
+        <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding"
            [routerLink]="url"
            [queryParams]="queryParams"
            *oitcPermission="permission">
             <fa-icon [icon]="icon"></fa-icon>
         </a>
-        <button cButton class="ripple btn-lower-padding" color="default" size="xs"
+        <button cButton class="ripple btn-lower-padding" color="{{style}}" size="xs"
                 *oitcPermission="permission; negate: true" disabled>
             <fa-icon [icon]="icon"></fa-icon>
         </button>
     } @else {
-        <button cButton class="ripple btn-lower-padding" color="default" size="xs" disabled>
+        <button cButton class="ripple btn-lower-padding" color="{{style}}" size="xs" disabled>
             <fa-icon [icon]="icon"></fa-icon>
         </button>
     }
     <c-dropdown variant="btn-group">
-        <button cButton cDropdownToggle class="ripple btn-lower-padding dropdown-btn" color="default" [caret]="false"
+        <button cButton cDropdownToggle class="ripple btn-lower-padding dropdown-btn" color="{{style}}" [caret]="false"
                 size="xs">
             <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
         </button>

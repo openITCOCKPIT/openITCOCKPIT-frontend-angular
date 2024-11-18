@@ -33,5 +33,17 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/ExternalMonitorings/edit/:id',
     loadComponent: () => import('./pages/externalmonitorings/external-monitorings-edit/external-monitorings-edit.component').then(m => m.ExternalMonitoringsEditComponent)
+}, {
+    path: 'import_module/ImportedFiles/index',
+    loadComponent: () => import('./pages/importedfiles/imported-files-index/imported-files-index.component').then(m => m.ImportedFilesIndexComponent)
+}, {
+    path: 'import_module/ImportedFiles/view/:id',
+    loadComponent: () => import('./pages/importedfiles/imported-files-view/imported-files-view.component').then(m => m.ImportedFilesViewComponent)
+}, {
+    path: 'import_module/configurationitems/export',
+    loadComponent: () => import('./pages/configurationitems/configurationitems-export/configurationitems-export.component').then(m => m.ConfigurationitemsExportComponent)
+}, {
+    path: 'import_module/configurationitems/import',
+    loadComponent: () => import('./pages/configurationitems/configurationitems-import/configurationitems-import.component').then(m => m.ConfigurationitemsImportComponent)
 }
 ];

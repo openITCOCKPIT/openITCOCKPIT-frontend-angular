@@ -1,0 +1,31 @@
+.changelog-blockquote-primary {
+    border-left: 3px solid var(--cui-primary);
+}
+
+.changelog-delete-after-import {
+    text-decoration: line-through;
+    text-decoration-color: rgba(204, 0, 0, 0.5);
+}
+
+.changelog-diff::before {
+    color: var(--cui-secondary);
+    content: "\2014\00A0"; /* hyphen */
+}
+
+.changelog-diff {
+    font-size: 80%;
+}
+
+.changelog-diff-red {
+    color: var(--cui-danger-text-emphasis);
+    background: var(--cui-danger-bg-subtle);
+}
+
+.changelog-diff-green {
+    color: var(--cui-success-text-emphasis);
+    background: var(--cui-success-bg-subtle);
+}
+
+.changelog-diff-border-color {
+    border-color: var(--cui-secondary-border-subtle);
+}

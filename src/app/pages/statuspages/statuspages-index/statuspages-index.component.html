@@ -1,0 +1,295 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['statuspages', 'index']" [routerLink]="['/', 'statuspages', 'index']">
+                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                    {{ t('Statuspages') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Status pages') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="load()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1" *oitcPermission="['statuspages', 'add']">
+                    <button cButton class="ripple" color="success" size="xs"
+                            [routerLink]="['/', 'statuspages', 'add']">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button  cButton class="ripple" color="primary" size="xs"  (click)="toggleFilter()">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Statuspages.name]']"
+                                       [placeholder]="'Filter by statuspage name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="name"
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Statuspages.description]']"
+                                       [placeholder]="'Filter by statuspage description' | transloco"
+                                       aria-label="description"
+                                       cFormControl
+                                       name="description"
+                                       oitcDebounce
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col [xs]="12" lg="2">
+                        <fieldset>
+                            <h5>
+                                {{ t('Public') }}
+                            </h5>
+                            <c-form-check>
+                                <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="Hosts.acknowledged"
+                                        id="Hosts.acknowledged"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="is_public"/>
+
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="Hosts.acknowledged">{{ t('Is public') }}</label>
+                            </c-form-check>
+                            <c-form-check>
+                                <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="Hosts.not_acknowledged"
+                                        id="Hosts.not_acknowledged"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        oitcDebounce
+                                        [(ngModel)]="not_public"/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="Hosts.not_acknowledged">{{ t('Not public') }}</label>
+                            </c-form-check>
+                        </fieldset>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!--End  Filter -->
+            <oitc-table-loader *ngIf="!statuspages"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   *ngIf="statuspages"
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.name">
+                            {{ t('Status page name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.show_downtimes">
+                            {{ t('Show downtimes') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.show_acknowledgements">
+                            {{ t('Show acknowledgements') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.public">
+                            {{ t('Public') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let statuspage of statuspages.all_statuspages">
+                    <td class="text-center">
+                        <oitc-item-select
+                                *oitcPermission="['statuspages', 'delete']"
+                                [disabled]="!statuspage.allow_edit"
+                                [item]="statuspage"></oitc-item-select>
+                    </td>
+                    <td>
+                        @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                            <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
+                                {{ statuspage.name }}
+                            </a>
+                        } @else {
+                            {{ statuspage.name }}
+                        }
+                    </td>
+                    <td>
+                        {{ statuspage.description }}
+                    </td>
+                    <td class="text-center">
+                        <oitc-badge-outline color="success" *ngIf="statuspage.show_downtimes && !statuspage.show_downtime_comments">
+                            {{ t('Yes') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="success" *ngIf="statuspage.show_downtimes && statuspage.show_downtime_comments">
+                            {{ t('Yes with comments') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="danger" *ngIf="!statuspage.show_downtimes">
+                            {{ t('No') }}
+                        </oitc-badge-outline>
+                    </td>
+                    <td class="text-center">
+                        <oitc-badge-outline color="success" *ngIf="statuspage.show_acknowledgements && !statuspage.show_acknowledgement_comments">
+                            {{ t('Yes') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="success" *ngIf="statuspage.show_acknowledgements && statuspage.show_acknowledgement_comments">
+                            {{ t('Yes with comments') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="danger" *ngIf="!statuspage.show_acknowledgements">
+                            {{ t('No') }}
+                        </oitc-badge-outline>
+                    </td>
+                    <td class="text-center">
+                        <oitc-badge-outline color="primary" *ngIf="statuspage.public">
+                            {{ t('Yes') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="secondary" *ngIf="!statuspage.public">
+                            {{ t('No') }}
+                        </oitc-badge-outline>
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'statuspages.edit'"
+                                             [url]="'/statuspages/edit/' + statuspage.id"
+                                             [allowEdit]="statuspage.allow_edit">
+                            <oitc-actions-button-element [permission]="'statuspages.edit'"
+                                                         *ngIf="statuspage.allow_edit"
+                                                         [url]="'/statuspages/edit/' + statuspage.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element [permission]="'statuspages.view'"
+                                                         [url]="'/statuspages/view/' + statuspage.id">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element *ngIf="statuspage.public"
+                                                         [permission]="'statuspages.view'"
+                                                         >
+                                <a href="/statuspages/publicView/{{statuspage.id}}" target="_blank">
+                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                    {{ t('Public view') }}
+                                </a>
+
+                            </oitc-actions-button-element>
+
+                            <li cDropdownDivider *ngIf="statuspage.allow_edit"></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(statuspage)"
+                                                         [permission]="'statuspages.delete'"
+                                                         *ngIf="statuspage.allow_edit">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <oitc-no-records *ngIf="statuspages && statuspages.all_statuspages.length === 0"></oitc-no-records>
+            <ng-container *ngIf="statuspages && statuspages.all_statuspages">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                    [itemsCount]="statuspages.all_statuspages.length"></oitc-select-all>
+                        </c-col>
+                        <c-col>
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+            <c-container
+                    [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="statuspages"
+                                [paginateOrScroll]="statuspages"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

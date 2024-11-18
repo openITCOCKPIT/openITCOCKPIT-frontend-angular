@@ -108,7 +108,7 @@
                             id="ReportId"
                             optionValue="id"
                             optionLabel="name"
-                            placeholder="{{ t('Please choose') }}"
+                            [placeholder]="'Please choose' | transloco"
                             required
                             [(ngModel)]="post.Sla.id"
                             [options]="slas">
@@ -128,7 +128,7 @@
                             id="SlaFormat"
                             optionValue="key"
                             optionLabel="value"
-                            placeholder="{{ t('Please choose') }}"
+                            [placeholder]="'Please choose' | transloco"
                             required
                             [(ngModel)]="post.Sla.format"
                             [options]="reportFormats">
@@ -188,7 +188,7 @@
                         </label>
 
                         <input cFormControl id="from" type="date"
-                               name="from" placeholder="{{ t('DD.MM.YYYY') }}"
+                               name="from" [placeholder]="'DD.MM.YYYY' | transloco"
                                oitcFormError [errors]="errors" errorField="from_date"
                                [(ngModel)]="from">
                         <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
@@ -200,7 +200,7 @@
                         </label>
 
                         <input cFormControl id="to" type="date"
-                               name="to" placeholder="{{ t('DD.MM.YYYY') }}"
+                               name="to" [placeholder]="'DD.MM.YYYY' | transloco"
                                oitcFormError [errors]="errors" errorField="to_date"
                                [(ngModel)]="to">
                         <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
@@ -263,7 +263,7 @@
                             <h5>
                                 <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
                                 {{ date_range.title }}
-                                <small class="fw-300 font-xs italic pl-5">
+                                <small class="fw-300 font-xs italic ps-5">
                                     {{ date_range.start_human }}
                                     <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
                                     {{ date_range.end_human }}
@@ -360,7 +360,7 @@
                                     </tr>
                                     <ng-container *ngFor="let service of host.services">
                                         <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
-                                            <td class="pl-3">
+                                            <td class="ps-3">
                                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                                 {{ service.service.servicename }}
                                             </td>
@@ -461,7 +461,7 @@
                                     </tr>
                                     <ng-container *ngFor="let service of host.services">
                                         <tr *ngIf="service.sla_log.last_log_entry.evaluation_total_time_human_readable">
-                                            <td class="pl-3">
+                                            <td class="ps-3">
                                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                                 {{ service.service.servicename }}
                                             </td>

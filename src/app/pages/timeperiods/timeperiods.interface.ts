@@ -73,11 +73,11 @@ export interface TimeperiodRange {
     start: string,
     end: string,
     timeperiod_id?: number,
-    id?: number
+    id?: number | null
 }
 
 export interface InternalRange {
-    id: number,
+    id: number | null,
     day: string,
     start: string,
     end: string,

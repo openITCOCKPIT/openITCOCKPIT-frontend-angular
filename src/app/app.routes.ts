@@ -11,6 +11,7 @@ import { slaModuleRoutes } from './modules/sla_module/sla_module.routes';
 import { importModuleRoutes } from './modules/import_module/import_module.routes';
 import { customalertModuleRoutes } from './modules/customalert_module/customalert_module.routes';
 import { checkmkModuleRoutes } from './modules/checkmk_module/checkmk_module.routes';
+import { eventcorrelationModuleRoutes } from './modules/eventcorrelation_module/eventcorrelation_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -44,7 +45,8 @@ const moduleRoutes: Routes = [
     ...pagerdutyModuleRoutes,
     ...slaModuleRoutes,
     ...importModuleRoutes,
-    ...checkmkModuleRoutes
+    ...checkmkModuleRoutes,
+    ...eventcorrelationModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
@@ -598,10 +600,22 @@ const coreRoutes: Routes = [{
     path: 'exports/index',
     loadComponent: () => import('./pages/exports/exports-index/exports-index.component').then(m => m.ExportsIndexComponent)
 }, {
+    path: 'statuspages/index',
+    loadComponent: () => import('./pages/statuspages/statuspages-index/statuspages-index.component').then(m => m.StatuspagesIndexComponent)
+}, {
+    path: 'statuspages/view/:id',
+    loadComponent: () => import('./pages/statuspages/statuspages-view/statuspages-view.component').then(m => m.StatuspagesViewComponent)
+}, {
+    path: 'statuspages/add',
+    loadComponent: () => import('./pages/statuspages/statuspages-add/statuspages-add.component').then(m => m.StatuspagesAddComponent)
+}, {
+    path: 'statuspages/edit/:id',
+    loadComponent: () => import('./pages/statuspages/statuspages-edit/statuspages-edit.component').then(m => m.StatuspagesEditComponent)
+}, {
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
 }, {
-    path: 'ConfigurationFiles/edit/:configFile',
+    path: 'ConfigurationFiles/edit/:dbKey',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-edit/configuration-files-edit.component').then(m => m.ConfigurationFilesEditComponent)
 }, {
     path: 'error/403',

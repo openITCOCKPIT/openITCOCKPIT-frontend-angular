@@ -278,6 +278,14 @@
                             {{ t('No') }}
                         </oitc-badge-outline>
                     </td>
+                    <td class="text-center">
+                        <oitc-badge-outline color="success" *ngIf="instantreport.Instantreport.downtimes === 1">
+                            {{ t('Yes') }}
+                        </oitc-badge-outline>
+                        <oitc-badge-outline color="danger" *ngIf="instantreport.Instantreport.downtimes === 0">
+                            {{ t('No') }}
+                        </oitc-badge-outline>
+                    </td>
 
 
                     <td>

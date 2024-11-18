@@ -14,6 +14,10 @@ export const slaModuleRoutes: Routes = [
         loadComponent: () => import('./pages/slas/slas-edit/slas-edit.component').then(m => m.SlasEditComponent)
     },
     {
+        path: 'sla_module/slas/viewDetails/:id',
+        loadComponent: () => import('./pages/slas/slas-view-details/slas-view-details.component').then(m => m.SlasViewDetailsComponent)
+    },
+    {
         path: 'sla_module/slas/hosts/:id',
         loadComponent: () => import('./pages/slas/slas-hosts/slas-hosts.component').then(m => m.SlasHostsComponent)
     },
@@ -24,6 +28,10 @@ export const slaModuleRoutes: Routes = [
     {
         path: 'sla_module/host_mapping_rules/assignToHosts/:id',
         loadComponent: () => import('./pages/host-mapping-rules/host-mapping-rules-assign-to-hosts/host-mapping-rules-assign-to-hosts.component').then(m => m.HostMappingRulesAssignToHostsComponent)
+    },
+    {
+        path: 'sla_module/sla_settings/index',
+        loadComponent: () => import('./pages/sla-settings/sla-settings-index/sla-settings-index.component').then(m => m.SlaSettingsIndexComponent)
     },
     {
         path: 'sla_module/sla_availability_status_hosts_log/index/:id',
