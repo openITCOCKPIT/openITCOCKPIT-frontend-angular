@@ -82,6 +82,11 @@ export interface MapEdit {
     satellites: {
         _ids: number[]
     }
+    id?: number
+    background?: any
+    json_data?: any
+    created?: string
+    modified?: string
 }
 
 export interface LoadContainersRoot {
@@ -92,5 +97,14 @@ export interface LoadContainersRoot {
 export interface LoadSatellitesRoot {
     satellites: SelectKeyValue[]
     _csrfToken: string
+}
+
+export interface MapsEditRoot {
+    map: MapEditMap
+    _csrfToken: any
+}
+
+export interface MapEditMap {
+    Map: MapEdit
 }
 

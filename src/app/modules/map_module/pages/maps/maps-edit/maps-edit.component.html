@@ -18,16 +18,24 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add') }}
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
             </li>
         </ol>
     </nav>
 
-    <form cForm (ngSubmit)="submit()">
+    <oitc-form-loader *ngIf="!post"></oitc-form-loader>
+
+    <form cForm (ngSubmit)="updateMap()" *ngIf="post">
         <c-card class="mb-3">
             <c-card-header>
-                <h5 cCardTitle>{{ t('Create new map') }}</h5>
+                <h5 cCardTitle>
+                    {{ t('Edit map:') }}
+
+                    <small class="fw-300">
+                        {{ post.Map.name }}
+                    </small>
+                </h5>
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
@@ -137,20 +145,16 @@
             </c-card-body>
             <c-card-footer class="text-end">
 
-                <label class="me-2">
-                    <input cFormCheckInput type="checkbox" name="createAnother"
-                           [(ngModel)]="createAnother">
-                    {{ t('Create another') }}
-                </label>
-
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create map') }}
+                    {{ t('Update map') }}
                 </button>
+
                 <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ms-1 ripple" color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}
                 </button>
+
 
             </c-card-footer>
         </c-card>

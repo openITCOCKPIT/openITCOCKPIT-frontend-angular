@@ -9,8 +9,8 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/maps/add',
         loadComponent: () => import('./pages/maps/maps-add/maps-add.component').then(m => m.MapsAddComponent)
     },
-    /*{
-        path: 'sla_module/slas/edit/:id',
-        loadComponent: () => import('./pages/slas/slas-edit/slas-edit.component').then(m => m.SlasEditComponent)
-    },*/
+    {
+        path: 'map_module/maps/edit/:id',
+        loadComponent: () => import('./pages/maps/maps-edit/maps-edit.component').then(m => m.MapsEditComponent)
+    },
 ];

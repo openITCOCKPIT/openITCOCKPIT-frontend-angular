@@ -2,7 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { LoadContainersRoot, LoadSatellitesRoot, MapPost, MapsIndexParams, MapsIndexRoot } from './Maps.interface';
+import {
+    LoadContainersRoot,
+    LoadSatellitesRoot,
+    MapPost,
+    MapsEditRoot,
+    MapsIndexParams,
+    MapsIndexRoot
+} from './Maps.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
@@ -18,6 +25,15 @@ export class MapsService {
         return this.http.get<MapsIndexRoot>(`${proxyPath}/map_module/maps/index.json`, {
             params: params as {} // cast ContactsIndexParams into object
         }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getEdit(id: number): Observable<MapsEditRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/maps/edit/${id}.json?angular=true`, {}).pipe(
             map(data => {
                 return data;
             })
@@ -50,6 +66,27 @@ export class MapsService {
     public add(post: MapPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/map_module/maps/add.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public updateMap(post: MapPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/maps/edit/${post.Map.id}.json?angular=true`, post)
             .pipe(
                 map(data => {
                     // Return true on 200 Ok
