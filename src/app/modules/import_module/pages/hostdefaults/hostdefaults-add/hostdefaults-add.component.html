@@ -289,11 +289,15 @@
                                                oitcDebounce
                                                placeholder="{{ t('RegEx') }}"
                                                [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].regex"
+                                               oitcFormError [errors]="errors"
+                                               errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"
                                         />
                                         <span cInputGroupText>
                                             <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
                                         </span>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplates.{{$index}}.regex"></oitc-form-feedback>
                                     <div class="help-block">
                                         {{ t('RegEx that needs to match') }}
                                     </div>
@@ -311,9 +315,13 @@
                                             optionLabel="value"
                                             [options]="servicetemplates"
                                             [(ngModel)]="post.hostdefaults_to_servicetemplates[$index].servicetemplate_id"
-                                            [showClear]="false">
+                                            [showClear]="false"
+                                            oitcFormError [errors]="errors"
+                                            errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id">
                                         </oitc-select>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplates.{{$index}}.servicetemplate_id"></oitc-form-feedback>
                                     <div class="help-block">
                                         {{ t('Service template to assign on match') }}
                                     </div>
@@ -421,11 +429,16 @@
                                                oitcDebounce
                                                placeholder="{{ t('RegEx') }}"
                                                [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].regex"
+                                               oitcFormError [errors]="errors"
+                                               errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"
                                         />
                                         <span cInputGroupText>
                                             <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
                                         </span>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.regex"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('RegEx that needs to match') }}
                                     </div>
@@ -443,9 +456,14 @@
                                             optionLabel="value"
                                             [options]="servicetemplates"
                                             [(ngModel)]="post.hostdefaults_to_servicetemplategroups[$index].servicetemplategroup_id"
-                                            [showClear]="false">
+                                            [showClear]="false"
+                                            oitcFormError [errors]="errors"
+                                            errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id">
                                         </oitc-select>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplategroups.{{$index}}.servicetemplategroup_id"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('Service template group to assign on match') }}
                                     </div>
@@ -533,9 +551,14 @@
                                             optionLabel="value"
                                             [options]="agentchecks"
                                             [(ngModel)]="post.hostdefaults_to_agentchecks[$index].agentcheck_id"
-                                            [showClear]="false">
+                                            [showClear]="false"
+                                            oitcFormError [errors]="errors"
+                                            errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id">
                                         </oitc-select>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_agentchecks.{{$index}}.agentcheck_id"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('Agent check to assign on match') }}
                                     </div>
@@ -551,11 +574,16 @@
                                                oitcDebounce
                                                placeholder="{{ t('RegEx') }}"
                                                [(ngModel)]="post.hostdefaults_to_agentchecks[$index].regex"
+                                               oitcFormError [errors]="errors"
+                                               errorField="hostdefaults_to_agentchecks.{{$index}}.regex"
                                         />
                                         <span cInputGroupText>
                                             <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
                                         </span>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_agentchecks.{{$index}}.regex"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('RegEx that needs to match') }}
                                     </div>
@@ -644,11 +672,16 @@
                                                oitcDebounce
                                                placeholder="{{ t('RegEx') }}"
                                                [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].regex"
+                                               oitcFormError [errors]="errors"
+                                               errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"
                                         />
                                         <span cInputGroupText>
                                             <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
                                         </span>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.regex"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('RegEx that needs to match') }}
                                     </div>
@@ -666,9 +699,14 @@
                                             optionLabel="value"
                                             [options]="servicetemplates"
                                             [(ngModel)]="post.hostdefaults_to_servicetemplates_external_monitoring[$index].servicetemplate_id"
-                                            [showClear]="false">
+                                            [showClear]="false"
+                                            oitcFormError [errors]="errors"
+                                            errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id">
                                         </oitc-select>
                                     </c-input-group>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="hostdefaults_to_servicetemplates_external_monitoring.{{$index}}.servicetemplate_id"></oitc-form-feedback>
+
                                     <div class="help-block">
                                         {{ t('Service template to assign on match') }}
                                     </div>
