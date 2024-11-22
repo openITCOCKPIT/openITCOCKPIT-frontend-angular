@@ -62,6 +62,8 @@ export class ActionsButtonComponent {
     @Input({required: true}) url: string = '';
     @Input({required: true}) permission: string = '';
     @Input({required: false}) style: string = 'default';
+    @Input({required: false}) click: (element: any) => void = () => {};
+    @Input({required: false}) element: any = null;
     @Input() queryParams: Params | undefined | null;
 
     constructor(private router: Router) {

@@ -79,9 +79,9 @@
                 @if (( PermissionsService.hasModuleObservable('CustomalertModule') |async ) && CustomalertsExists) {
                     <c-nav-item>
                         <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.CustomAlerts}"
-                            (click)="changeTab(ServiceBrowserTabs.CustomAlerts)">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == ServiceBrowserTabs.CustomAlerts}"
+                                (click)="changeTab(ServiceBrowserTabs.CustomAlerts)">
                             <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
                             {{ t('Custom alerts') }}
                         </button>
@@ -1275,7 +1275,7 @@
 
             <!-- CustomAlerts Module start -->
             <div *ngIf="selectedTab == ServiceBrowserTabs.CustomAlerts">
-                CustomAlerts
+                <oitc-customalerts-service-history [serviceId]="id" />
             </div>
             <!-- CustomAlerts Module end -->
 
