@@ -1,0 +1,98 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="customalertsAnnotateModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-primary">
+            <h5 cModalTitle class="text-white">
+                <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+                {{ t('Annotation') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <ng-container>
+                {{ t('Do you want annotate the selected objects?') }}
+                <c-row class="pt-2">
+                    <c-col sm="12">
+                        <ul class="mb-3">
+                            <li *ngFor="let item of items">
+                                {{ item.service.host.name }} / {{ item.servicename }}
+                            </li>
+                        </ul>
+                    </c-col>
+                </c-row>
+                <textarea cFormControl
+                          [(ngModel)]="comment"
+                          [ngClass]="{'is-invalid': comment.length > 1024}"
+                ></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
+
+                <div class="help-block mb-3"
+                     [ngClass]="{'text-danger': comment.length > 1024}">
+                    {{ t('The maximum length for this field is 1024. Characters available:') }}
+                    <code>{{ 1024 - comment.length }}</code>
+                </div>
+            </ng-container>
+
+            <div class="col-lg-12 mt-3" *ngIf="loadingHoststate">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                {{ t('Determining host state...') }}
+            </div>
+
+            <div class="mb-3" [cTextColor]="'success'" *ngIf="result && result.all_hosts.length === 0">
+                <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                {{ t('All hosts are Up.') }}
+            </div>
+
+            <c-form-check class="mb-3">
+                <input cFormCheckInput id="acknowledgement" type="checkbox"
+                       class="checkbox-lg custom-check-default"
+                       [(ngModel)]="acknowlage"
+                       name="acknowlage"
+                       oitcDebounce/>
+                <label cFormCheckLabel class="ms-1 mt-1" for="acknowledgement">
+                    {{ t('Set annotation comment as service acknowledgement') }}
+                </label>
+            </c-form-check>
+
+            <c-alert color="light">
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon">
+                        <span class="icon-stack icon-stack-md">
+                            <i class="base-7 icon-stack-3x text-info"></i>
+                            <i class="fas fa-info icon-stack-1x text-white"></i>
+                        </span>
+                    </div>
+                    <div class="flex-1 pl-5">
+                        <span class="h5 text-info">
+                            {{ t('Information') }}
+                        </span>
+                        <br>
+                        {{ t('If you comment on the service, all future custom alerts from this service are provided with this comment when they are created and are set to the status "In Progress".') }}
+                    </div>
+                </div>
+            </c-alert>
+
+            <c-row [hidden]="!isProcessing" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Annotating...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" [max]="100" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="annotate()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Annotate') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

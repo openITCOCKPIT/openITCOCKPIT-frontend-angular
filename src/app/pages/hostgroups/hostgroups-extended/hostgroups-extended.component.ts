@@ -563,6 +563,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.HostgroupsService.loadServicesByHostId(element.Host.id, element.serviceParams as HostgroupsExtendedServiceListParams).subscribe((root: LoadServicesForHosts) => {
             element.services = root.all_services;
             element.servicesRoot = root;
+            this.cdr.markForCheck();
         });
         element.services = [];
         return;

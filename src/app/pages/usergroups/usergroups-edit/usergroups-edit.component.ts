@@ -210,7 +210,7 @@ export class UsergroupsEditComponent implements OnInit, OnDestroy {
 
                     const title: string = this.TranslocoService.translate('User role');
                     const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['usergroups', 'edit', response.id];
+                    const url: (string | number)[] = ['usergroups', 'edit', result.data.usergroup.id];
 
                     // Reload user permissions just in the current logged in is part of the user group
                     this.PermissionsService.loadPermissions();

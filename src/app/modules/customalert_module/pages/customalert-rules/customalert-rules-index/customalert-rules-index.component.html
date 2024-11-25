@@ -243,7 +243,14 @@
                         </div>
                     </td>
                     <td>
-                        {{ customAlertRule.name }}
+                        <span *oitcPermission="['customalertmodule', 'customalertRules', 'edit']">
+                            <a [routerLink]="['/', 'customalert_module', 'customalert_rules', 'edit', customAlertRule.id]">
+                                {{ customAlertRule.name }}
+                            </a>
+                        </span>
+                        <span *oitcPermission="['customalertmodule', 'customalertRules', 'edit']; negate: true">
+                            {{ customAlertRule.name }}
+                        </span>
                     </td>
                     <td>
                         {{ customAlertRule.description }}

@@ -130,6 +130,9 @@ import {
 import {
     SlaServiceInformationElementComponent
 } from '../../../modules/sla_module/components/sla-service-information-element/sla-service-information-element.component';
+import {
+    CustomalertsServiceHistoryComponent
+} from '../../../modules/customalert_module/components/customalerts-service-history/customalerts-service-history.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -201,7 +204,8 @@ import {
         CancelHostdowntimeModalComponent,
         CancelServicedowntimeModalComponent,
         AsyncPipe,
-        SlaServiceInformationElementComponent
+        SlaServiceInformationElementComponent,
+        CustomalertsServiceHistoryComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',
