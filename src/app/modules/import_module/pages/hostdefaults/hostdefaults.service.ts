@@ -4,12 +4,13 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
     HostDefaultsElements,
+    HostDefaultsGet,
     HostDefaultsIndexParams,
     HostDefaultsIndexRoot,
     HostDefaultsPost
 } from './hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -46,6 +47,47 @@ export class HostdefaultsService {
                     return {
                         success: true,
                         data: data.hostdefault as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
+    public getEdit(id: number): Observable<HostDefaultsGet> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            hostdefaults: HostDefaultsPost
+        }>(`${proxyPath}/import_module/host_defaults/edit/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    /**********************
+     *    Edit action    *
+     **********************/
+    public edit(hostDefault: HostDefaultsPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/import_module/host_defaults/edit/${hostDefault.id}.json?angular=true`, {
+            Hostdefault: hostDefault
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data.hostdefaults as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {

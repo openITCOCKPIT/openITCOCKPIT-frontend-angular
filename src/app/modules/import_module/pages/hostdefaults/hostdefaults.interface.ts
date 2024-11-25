@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { ExternalMonitoringPost } from '../externalmonitorings/external-monitorings.interface';
 
 export interface HostDefaultsIndexRoot extends PaginateOrScroll {
     hostdefaults: Hostdefault[]
@@ -41,6 +42,12 @@ export function getDefaultHostDefaultsIndexParams(): HostDefaultsIndexParams {
     }
 }
 
+export interface HostDefaultsGet {
+    hostdefaults: HostDefaultsPost
+}
+
+
+
 export interface HostDefaultsPost {
     id?: number
     container_id: number | null
@@ -56,10 +63,6 @@ export interface HostDefaultsPost {
     hostdefaults_to_servicetemplategroups: HostdefaultsToServicetemplategroups[]
     hostdefaults_to_agentchecks: HostdefaultsToAgentchecks[]
     hostdefaults_to_servicetemplates_external_monitoring: HostdefaultsToExternalmonitorings[]
-}
-
-export interface HostDefaultsGet {
-    hostdefault: HostDefaultsPost
 }
 
 export interface HostdefaultsToServicetemplates {

@@ -141,7 +141,7 @@
                     <td>
                         <span *oitcPermission="['importmodule','hostdefaults', 'edit']">
                             @if (hostdefault.allowEdit) {
-                                <a [routerLink]="['/', 'import_module', 'HostDefault', 'edit',hostdefault.id]">
+                                <a [routerLink]="['/', 'import_module', 'HostDefaults', 'edit',hostdefault.id]">
                                     {{ hostdefault.name }}
                                 </a>
                             } @else {
