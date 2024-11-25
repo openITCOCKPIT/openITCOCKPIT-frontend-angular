@@ -1,0 +1,12 @@
+.new-flame-bg {
+    background-color: #ff0000;
+    background: linear-gradient(0deg, #f00 0%, #ffa700 100%) !important;
+}
+
+.flame {
+    background-color: #ff0000;
+    background-image: linear-gradient(0deg, #f00 0%, #ffa700 100%) !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 100% 200%;
+}

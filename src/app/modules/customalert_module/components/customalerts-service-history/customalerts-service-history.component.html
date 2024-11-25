@@ -1,0 +1,118 @@
+<ng-container *transloco="let t">
+    <c-card>
+        <c-card-header>
+
+            <h5 cCardTitle>{{ t('Custom Alerts') }}:
+                <small class="fw-300">
+                    {{ t('history') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="reload()" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-table-loader *ngIf="!serviceHistory"/>
+
+            <ng-container *ngIf="serviceHistory">
+                <table bordered cTable class="mt-2 mb-0" hover striped>
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width: 5px;">
+                        </th>
+                        <th scope="col" colspan="2">
+                            {{ t('Message') }}
+                        </th>
+                        <th scope="col">
+                        </th>
+                        <th scope="col">
+                            {{ t('State since') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('State time') }}
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <ng-container *ngFor="let alertIncident of serviceHistory.history">
+                        <tbody>
+
+                            <tr>
+                                <td class="text-center">
+                                    <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                </td>
+                                <td colspan="3">
+                                    <code>{{ alertIncident.message }}</code>
+                                </td>
+                                <td>
+                                    {{ alertIncident.timeAgoInWords }}
+                                </td>
+                                <td>
+                                    {{ alertIncident.modified }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th style="width: 5px;"></th>
+                                <th style="width: 5px;">
+                                    {{ t('State') }}
+                                </th>
+                                <th>
+                                    {{ t('Annotation') }}
+                                </th>
+                                <th>
+                                    {{ t('User') }}
+                                </th>
+                                <th>
+                                    {{ t('State time') }}
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let stateHistory of alertIncident.customalert_statehistory">
+                            <tr>
+                                <td></td>
+                                <td class="text-center">
+                                    <i *ngIf="stateHistory.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
+                                    <i *ngIf="stateHistory.state  === 1" class="fa-solid fa-person-digging text-secondary"></i>
+                                    <i *ngIf="stateHistory.state  === 2" class="fa-solid fa-clipboard-check text-success"></i>
+                                    <i *ngIf="stateHistory.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
+                                </td>
+                                <td>
+                                    {{ stateHistory.customalert_comment.comment }}
+                                </td>
+                                <td>
+
+                                    <span *oitcPermission="['users', 'edit']">
+                                        <a [routerLink]="['/', 'users', 'edit', stateHistory.customalert_comment.user.id]">
+                                            {{ stateHistory.customalert_comment.user.firstname }}
+                                            {{ stateHistory.customalert_comment.user.lastname }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['users', 'edit']; negate: true">
+                                        {{ stateHistory.customalert_comment.user.firstname }}
+                                        {{ stateHistory.customalert_comment.user.lastname }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ stateHistory.timeAgoInWords }}
+                                </td>
+                                <td>
+                                    {{ stateHistory.state_time }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                </table>
+            </ng-container>
+        </c-card-body>
+    </c-card>
+</ng-container>

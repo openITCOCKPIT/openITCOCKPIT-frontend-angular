@@ -80,6 +80,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import {
+    CustomAlertsIndexFilter,
+    CustomAlertsIndexParams
+} from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
 
 
 @Component({
@@ -128,7 +132,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     @Input({required: true}) public plugin: string = '';
     @Input({required: true}) public controller: string = '';
     @Input({required: true}) public action: string = '';
-    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter;
+    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter | CustomAlertsIndexFilter;
     @Output() selected = new EventEmitter<string>();
     public bookmarks: BookmarksObject[] = [];
     public selectedBookmarkId: Number | null = null;

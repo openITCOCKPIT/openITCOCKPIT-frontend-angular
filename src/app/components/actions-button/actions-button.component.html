@@ -25,12 +25,20 @@
 
 <c-button-group role="group">
     @if (allowEdit) {
-        <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding"
-           [routerLink]="url"
-           [queryParams]="queryParams"
-           *oitcPermission="permission">
-            <fa-icon [icon]="icon"></fa-icon>
-        </a>
+        @if (url.length > 0) {
+            <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding"
+               [routerLink]="url"
+               [queryParams]="queryParams"
+               *oitcPermission="permission">
+                <fa-icon [icon]="icon"></fa-icon>
+            </a>
+        } @else {
+            <a class="ripple btn btn-{{style}} btn-xs btn-lower-padding"
+               (click)="click(element)"
+               *oitcPermission="permission">
+                <fa-icon [icon]="icon"></fa-icon>
+            </a>
+        }
         <button cButton class="ripple btn-lower-padding" color="{{style}}" size="xs"
                 *oitcPermission="permission; negate: true" disabled>
             <fa-icon [icon]="icon"></fa-icon>
