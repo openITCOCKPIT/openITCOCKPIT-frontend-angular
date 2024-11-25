@@ -612,6 +612,9 @@ const coreRoutes: Routes = [{
     path: 'statuspages/edit/:id',
     loadComponent: () => import('./pages/statuspages/statuspages-edit/statuspages-edit.component').then(m => m.StatuspagesEditComponent)
 }, {
+    path: 'wizards/index',
+    loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
+}, {
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)
 }, {

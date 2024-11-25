@@ -1,0 +1,26 @@
+<p>wizards-index works!</p>
+
+
+<c-row *ngIf="result">
+    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+        *ngFor="let wizard of result.wizards | keyvalue" [hidden]="filterByCategory(wizard.value.category)">
+        <c-card>
+            <c-card-body>
+                <div class="wizard-logo-image">
+                    <img width="100" height="100" [ngSrc]="wizard.value.image" />
+                </div>
+                <div class="ml-3 ng-binding">
+                    <strong class="font-md ng-binding">
+                        {{ wizard.value.title }}
+                    </strong>
+                    <br>
+                    {{ wizard.value.description }}
+                </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <i class="fas fa-tags wizard-info-tags"></i>
+                {{ wizard.value.category.join(', ')}}
+            </c-card-footer>
+        </c-card>
+    </c-col>
+</c-row>
