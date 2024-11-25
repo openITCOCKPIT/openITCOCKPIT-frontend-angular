@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { GenericValidationError } from '../../../../generic-responses';
 
 export interface MapsIndexRoot extends PaginateOrScroll {
     all_maps: Map[]
@@ -100,11 +101,37 @@ export interface LoadSatellitesRoot {
 }
 
 export interface MapsEditRoot {
-    map: MapEditMap
+    map: MapPost
     _csrfToken: any
 }
 
-export interface MapEditMap {
-    Map: MapEdit
+export interface MapCopyGet {
+    id: number
+    name: string
+    title: string
+    refresh_interval: number
+    containers: Container[]
 }
+
+export interface MapCopyPost {
+    Source: Source
+    Map: MapCopyPostMap
+    Error: GenericValidationError | null
+}
+
+export interface Source {
+    id: number
+    name: string
+    title: string
+    refresh_interval: number
+}
+
+export interface MapCopyPostMap {
+    name: string
+    title: string
+    refresh_interval: number
+}
+
+
+
 

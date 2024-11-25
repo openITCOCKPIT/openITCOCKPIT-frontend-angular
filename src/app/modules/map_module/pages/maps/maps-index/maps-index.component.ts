@@ -227,7 +227,7 @@ export class MapsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public navigateCopy() {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.id).join(',');
         if (ids) {
-            this.router.navigate(['/', 'maps', 'copy', ids]);
+            this.router.navigate(['/', 'map_module', 'maps', 'copy', ids]);
         }
     }
 }

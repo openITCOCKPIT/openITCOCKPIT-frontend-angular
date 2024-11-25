@@ -5,6 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     LoadContainersRoot,
     LoadSatellitesRoot,
+    MapCopyGet,
+    MapCopyPost,
     MapPost,
     MapsEditRoot,
     MapsIndexParams,
@@ -103,6 +105,25 @@ export class MapsService {
                     });
                 })
             );
+    }
+
+    public getMapsCopy(ids: number[]): Observable<MapCopyGet[]> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ maps: MapCopyGet[] }>(`${proxyPath}/map_module/maps/copy/${ids.join('/')}.json?angular=true`)
+            .pipe(
+                map(data => {
+                    return data.maps;
+                })
+            )
+    }
+
+
+    public saveMapsCopy(mapsCopyPost: MapCopyPost[]): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/maps/copy/.json?angular=true`, {
+            data: mapsCopyPost
+        });
     }
 
     public delete(item: DeleteAllItem): Observable<Object> {
