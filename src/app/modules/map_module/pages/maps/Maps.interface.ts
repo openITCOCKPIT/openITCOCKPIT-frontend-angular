@@ -1,0 +1,137 @@
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { GenericValidationError } from '../../../../generic-responses';
+
+export interface MapsIndexRoot extends PaginateOrScroll {
+    all_maps: Map[]
+    _csrfToken: string
+}
+
+/*******************************
+ *    Definition of Map        *
+ ******************************/
+
+export interface Map {
+    id: number
+    name: string
+    title: string
+    background: any
+    refresh_interval: number
+    json_data: any
+    created: string
+    modified: string
+    containers: Container[]
+    allowEdit: boolean
+    allowCopy: boolean
+}
+
+export interface Container {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: any
+    lft: number
+    rght: number
+    _joinData: JoinData
+}
+
+export interface JoinData {
+    id: number
+    container_id: number
+    map_id: number
+}
+
+
+export interface MapsIndexParams {
+    // Same again? Maybe create an intermediate class? OOP FTW :-P
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Maps.name]': string,
+    'filter[Maps.title]': string,
+}
+
+export function getDefaultMapsIndexParams(): MapsIndexParams {
+    return {
+        angular: true,
+        scroll: false,
+        sort: 'Maps.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Maps.name]': "",
+        'filter[Maps.title]': "",
+    }
+}
+
+/***************************
+ *    Add / Edit action    *
+ ***************************/
+
+export interface MapPost {
+    Map: MapEdit
+}
+
+export interface MapEdit {
+    name: string
+    title: string
+    refresh_interval: number
+    containers: {
+        _ids: number[]
+    },
+    satellites: {
+        _ids: number[]
+    }
+    id?: number
+    background?: any
+    json_data?: any
+    created?: string
+    modified?: string
+}
+
+export interface LoadContainersRoot {
+    containers: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface LoadSatellitesRoot {
+    satellites: SelectKeyValue[]
+    _csrfToken: string
+}
+
+export interface MapsEditRoot {
+    map: MapPost
+    _csrfToken: any
+}
+
+export interface MapCopyGet {
+    id: number
+    name: string
+    title: string
+    refresh_interval: number
+    containers: Container[]
+}
+
+export interface MapCopyPost {
+    Source: Source
+    Map: MapCopyPostMap
+    Error: GenericValidationError | null
+}
+
+export interface Source {
+    id: number
+    name: string
+    title: string
+    refresh_interval: number
+}
+
+export interface MapCopyPostMap {
+    name: string
+    title: string
+    refresh_interval: number
+}
+
+
+
+

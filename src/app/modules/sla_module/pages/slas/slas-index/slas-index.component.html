@@ -8,11 +8,8 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['slamodule', 'slas', 'index']"
-                   [routerLink]="['/', 'sla_module', 'slas', 'index']">
-                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                    {{ t('Service Level Agreement Module') }}
-                </a>
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Level Agreement Module') }}
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'award']"></fa-icon>
