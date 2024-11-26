@@ -11,14 +11,14 @@
                 {{ t('Import Module') }}
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
-                {{ t('External Monitoring Systems Overview') }}
+                <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                {{ t('Importers Overview') }}
             </li>
         </ol>
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('External Monitorings') }}
+            <h5 cCardTitle>{{ t('Importers') }}
                 <small class="fw-300">
                     {{ t('Overview') }}
                 </small>
@@ -31,8 +31,8 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <button *oitcPermission="['ImportModule', 'ExternalMonitorings', 'add']"
-                            [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'add']"
+                    <button *oitcPermission="['ImportModule', 'importers', 'add']"
+                            [routerLink]="['/', 'import_module', 'importers', 'add']"
                             cButton
                             class="ripple"
                             color="success"
@@ -68,11 +68,11 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[ExternalMonitorings.name]']"
-                                       [placeholder]="'Filter by monitoring system name' | transloco"
-                                       aria-label="ExternalMonitoringsName"
+                                       [(ngModel)]="params['filter[Importers.name]']"
+                                       [placeholder]="'Filter by importer name' | transloco"
+                                       aria-label="importersName"
                                        cFormControl
-                                       name="ExternalMonitoringsName"
+                                       name="importersName"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -84,11 +84,11 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[ExternalMonitorings.description]']"
-                                       [placeholder]="'Filter by monitoring system description' | transloco"
-                                       aria-label="ExternalMonitoringsDescription"
+                                       [(ngModel)]="params['filter[Importers.description]']"
+                                       [placeholder]="'Filter by importer description' | transloco"
+                                       aria-label="importersDescription"
                                        cFormControl
-                                       name="ExternalMonitoringsDescription"
+                                       name="importersDescription"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -106,7 +106,7 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!externalMonitorings"></oitc-table-loader>
+            <oitc-table-loader *ngIf="!importers"></oitc-table-loader>
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -115,14 +115,11 @@
                     <th class="width-50 text-center" scope="col">
                         <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                     </th>
-                    <th scope="col" mat-sort-header="ExternalMonitorings.name">
+                    <th scope="col" mat-sort-header="Importers.name">
                         {{ t('Name') }}
                     </th>
-                    <th scope="col" mat-sort-header="ExternalMonitorings.description">
+                    <th scope="col" mat-sort-header="Importers.description">
                         {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('System type') }}
                     </th>
                     <th scope="col">
                         {{ t('Container') }}
@@ -133,55 +130,50 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="externalMonitorings">
-                <tr *ngFor="let externalMonitoring of externalMonitorings.externalMonitorings">
+                <tbody *ngIf="importers">
+                <tr *ngFor="let importer of importers.importers">
                     <td class="text-center">
                         <oitc-item-select
-                            *oitcPermission="['importmodule','externalmonitorings', 'delete']"
-                            [disabled]="!externalMonitoring.allowEdit"
-                            [item]="externalMonitoring"></oitc-item-select>
+                            *oitcPermission="['importmodule','importers', 'delete']"
+                            [disabled]="!importer.allowEdit"
+                            [item]="importer"></oitc-item-select>
 
                     </td>
                     <td>
-                        <span *oitcPermission="['importmodule','externalmonitorings', 'edit']">
-                            @if (externalMonitoring.allowEdit) {
-                                <a [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'edit',externalMonitoring.id]">
-                                    {{ externalMonitoring.name }}
+                        <span *oitcPermission="['importmodule','importers', 'edit']">
+                            @if (importer.allowEdit) {
+                                <a [routerLink]="['/', 'import_module', 'importers', 'edit',importer.id]">
+                                    {{ importer.name }}
                                 </a>
                             } @else {
-                                {{ externalMonitoring.name }}
+                                {{ importer.name }}
                             }
                         </span>
-                        <span *oitcPermission="['importmodule','externalmonitorings', 'edit']; negate: true">
-                            {{ externalMonitoring.name }}
+                        <span *oitcPermission="['importmodule','importers', 'edit']; negate: true">
+                            {{ importer.name }}
                         </span>
                     </td>
-                    <td>{{ externalMonitoring.description }}</td>
-                    <td>
-                        <span class="badge border border-info text-info fw-light"
-                              *ngIf="externalMonitoring.system_type">
-                            {{ externalMonitoring.system_type }}
-                        </span>
-                    </td>
-                    <td> {{ externalMonitoring.container }}</td>
+                    <td>{{ importer.description }}</td>
+
+                    <td> {{ importer.container }}</td>
                     <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.ExternalMonitorings.edit'"
+                        <oitc-actions-button [permission]="'ImportModule.importers.edit'"
                                              [icon]="['fas', 'cog']"
-                                             [url]="'/import_module/ExternalMonitorings/edit/' + externalMonitoring.id">
-                            <oitc-actions-button-element [permission]="'ImportModule.ExternalMonitorings.edit'"
-                                                         *ngIf="externalMonitoring.allowEdit"
-                                                         [url]="'/import_module/ExternalMonitorings/edit/' + externalMonitoring.id">
+                                             [url]="'/import_module/importers/edit/' + importer.id">
+                            <oitc-actions-button-element [permission]="'ImportModule.importers.edit'"
+                                                         *ngIf="importer.allowEdit"
+                                                         [url]="'/import_module/importers/edit/' + importer.id">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                                 {{ t('Edit') }}
                             </oitc-actions-button-element>
                             <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
-                                                         [url]="'/import_module/import_changelogs/entity/ExternalMonitoring/' + externalMonitoring.id">
+                                                         [url]="'/import_module/import_changelogs/entity/Importer/' + importer.id">
                                 <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                                 {{ t('Changelog') }}
                             </oitc-actions-button-element>
                             <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(externalMonitoring)"
-                                                         *ngIf="externalMonitoring.allowEdit"
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importer)"
+                                                         *ngIf="importer.allowEdit"
                                                          [permission]="'ImportModule.importedhostgroups.delete'">
                                 <span class="text-danger">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -195,14 +187,14 @@
             </table>
 
             <oitc-no-records
-                *ngIf="externalMonitorings && externalMonitorings.externalMonitorings.length === 0"></oitc-no-records>
-            <ng-container *ngIf="externalMonitorings">
+                *ngIf="importers && importers.importers.length === 0"></oitc-no-records>
+            <ng-container *ngIf="importers">
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="externalMonitorings.externalMonitorings.length"></oitc-select-all>
+                                [itemsCount]="importers.importers.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -224,7 +216,7 @@
                     <c-col>
                         <oitc-paginate-or-scroll
                             (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="externalMonitorings"></oitc-paginate-or-scroll>
+                            [paginateOrScroll]="importers"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
