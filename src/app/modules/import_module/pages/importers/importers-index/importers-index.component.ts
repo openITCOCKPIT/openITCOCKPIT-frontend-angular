@@ -110,7 +110,7 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     public importers?: ImportersIndexRoot;
-    public hostdefaults?: Hostdefault[];
+    public hostdefaults: Hostdefault[] = [];
 
 
     private readonly modalService = inject(ModalService);

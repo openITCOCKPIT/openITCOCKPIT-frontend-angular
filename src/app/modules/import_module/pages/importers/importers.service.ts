@@ -29,9 +29,11 @@ export class ImportersService {
 
     public getHostdefaults(): Observable<Hostdefault[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<Hostdefault[]>(`${proxyPath}/import_module/host_defaults/index.json`, {}).pipe(
+        return this.http.get<{
+            hostdefaults: Hostdefault[]
+        }>(`${proxyPath}/import_module/host_defaults/index.json`, {}).pipe(
             map(data => {
-                return data;
+                return data.hostdefaults;
             })
         )
     }
