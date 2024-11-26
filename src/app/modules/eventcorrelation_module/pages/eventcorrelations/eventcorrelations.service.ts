@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
+    EvcHostUsedBy,
     EventcorrelationsIndexParams,
     EventcorrelationsIndexRoot,
     EventcorrelationsViewRoot
@@ -81,6 +82,25 @@ export class EventcorrelationsService {
                     });
                 })
             );
+    }
+
+    /**********************
+     *  Usedby action     *
+     **********************/
+    public usedBy(id: number): Observable<EvcHostUsedBy> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            usedBy:
+                EvcHostUsedBy
+        }>(`${proxyPath}/eventcorrelation_module/eventcorrelations/usedBy/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.usedBy;
+            })
+        )
     }
 
 }

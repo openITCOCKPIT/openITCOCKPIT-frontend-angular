@@ -1,6 +1,6 @@
 import { ServiceObject, ServicestatusObject } from '../../../../pages/services/services.interface';
 import { EventcorrelationOperators } from './eventcorrelations.enum';
-import { HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
+import { HostEntity, HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
 
@@ -154,3 +154,33 @@ export interface EvcSummaryService {
     modified_state?: number
 }
 
+export interface EvcHostUsedBy extends HostEntity {
+    usedBy: {
+        // Hashmap ob objects
+        [key: number]: EvcUsedByEntity
+    }
+}
+
+export interface EvcUsedByEntity {
+    id: number
+    name: string
+    description?: string,
+    Services: {
+        id: number
+        name: string
+        service_type: number
+        host_id: number
+    },
+    Eventcorrelations: {
+        service_id: number
+        host_id: number
+    },
+    EvcHosts: {
+        id: number
+        name: string
+        description?: string
+        container_id: number
+        hasViewPermission: boolean
+        hasWritePermission: boolean
+    }
+}
