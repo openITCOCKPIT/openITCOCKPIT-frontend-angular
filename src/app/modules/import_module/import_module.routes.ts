@@ -54,5 +54,8 @@ export const importModuleRoutes: Routes = [{
 }, {
     path: 'import_module/HostDefaults/edit/:id',
     loadComponent: () => import('./pages/hostdefaults/hostdefaults-edit/hostdefaults-edit.component').then(m => m.HostdefaultsEditComponent)
+}, {
+    path: 'import_module/importers/index',
+    loadComponent: () => import('./pages/importers/importers-index/importers-index.component').then(m => m.ImportersIndexComponent)
 }
 ];
