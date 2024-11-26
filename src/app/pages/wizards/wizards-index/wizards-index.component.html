@@ -55,15 +55,15 @@
                 <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                        *ngFor="let wizard of result.wizards | keyvalue" [hidden]="! filterByCategory(wizard.value.category)">
                     <c-card class="mb-3">
-                        <c-card-body>
+                        <c-card-body class="wizard-card-body">
                             <div class="d-flex align-items-center">
                                 <div class="wizard-logo-image">
                                     <img src="/img/wizards/{{wizard.value.image}}">
                                 </div>
-                                <div class="ml-3">
-                                    <strong>
+                                <div class="pl-10">
+                                    <h5>
                                         {{ wizard.value.title }}
-                                    </strong>
+                                    </h5>
                                     <br />
                                     {{ wizard.value.description }}
                                 </div>

@@ -13,6 +13,15 @@
     flex: 0 0 80px;
 }
 
+.wizard-card-body {
+    min-height:150px;
+}
+
+
+.pl-10 {
+    padding-left: 10px!important;
+}
+
 .wizard-logo-image-small {
     border-radius: 50%;
     background: rgba(243, 243, 243, 0.6);
