@@ -14,3 +14,38 @@ export interface Importer {
     container: string
     allowEdit: boolean
 }
+
+export interface ImportersIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Importers.id][]': [],
+    'filter[Importers.name]': string
+    'filter[Importers.description]': string
+}
+
+export function getDefaultImportersIndexParams(): ImportersIndexParams {
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'Importers.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Importers.id][]': [],
+        'filter[Importers.name]': '',
+        'filter[Importers.description]': ''
+    }
+}
+
+export interface ImportersIndexParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Importers.id][]': [],
+    'filter[Importers.name]': string
+    'filter[Importers.description]': string
+}
