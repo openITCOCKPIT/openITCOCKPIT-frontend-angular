@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
@@ -9,6 +9,8 @@ import {
     EventcorrelationsViewRoot
 } from './eventcorrelations.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { HostAddEditSuccessResponse, HostPost } from '../../../../pages/hosts/hosts.interface';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -51,4 +53,34 @@ export class EventcorrelationsService {
 
         return this.http.post(`${proxyPath}/eventcorrelation_module/eventcorrelations/delete/${item.id}.json`, {});
     }
+
+    /**********************
+     *    Add action      *
+     **********************/
+    public add(host: HostPost): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+
+        let body: any = {
+            Host: host
+        };
+
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/add.json?angular=true`, body)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as HostAddEditSuccessResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+    }
+
 }

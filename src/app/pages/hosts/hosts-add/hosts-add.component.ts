@@ -419,6 +419,7 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(this.post.name)
             .subscribe((result) => {
                 this.data.isHostnameInUse = result;
+                this.cdr.markForCheck();
             })
         );
     }
