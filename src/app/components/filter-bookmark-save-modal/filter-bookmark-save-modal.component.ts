@@ -58,6 +58,10 @@ import { HostsIndexFilter } from "../../pages/hosts/hosts.interface";
 import { BookmarkPost, BookmarkResponse, BookmarksObject } from '../filter-bookmark/bookmarks.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {
+    CustomAlertsIndexFilter,
+    CustomAlertsIndexParams
+} from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
 
 
 type NewBookmark = {
@@ -103,7 +107,7 @@ export class FilterBookmarkSaveModalComponent implements OnInit, OnDestroy {
     @Input({required: true}) public plugin: string = '';
     @Input({required: false}) public controller: string = '';
     @Input({required: false}) public action: string = '';
-    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter;
+    @Input({required: false}) public filter!: ServiceIndexFilter | HostsIndexFilter | CustomAlertsIndexFilter;
     @Output() saved = new EventEmitter<string>();
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
