@@ -16,6 +16,35 @@
             </li>
         </ol>
     </nav>
+    <div class="alert alert-warning border-faded"
+         *ngIf="hostdefaults.length === 0">
+        <div class="d-flex align-items-center">
+            <div class="alert-icon me-2">
+                <span class="icon-stack icon-stack-md">
+                    <i class="base-circle icon-stack-3x text-warning"></i>
+                    <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                </span>
+            </div>
+            <div class="flex-1">
+                <span class="h5">
+                    {{ t('No "Host defaults" defined') }}
+                </span>
+                <br>
+                <div>
+                    {{ t('Please create at least one "Host defaults"') }}
+                </div>
+            </div>
+            <div class="ms-2">
+                <a *oitcPermission="['ImportModule', 'HostDefaults', 'index']"
+                   [routerLink]="['/', 'import_module', 'HostDefaults', 'index']"
+                   class="btn btn-outline-warning ripple">
+                    <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                    {{ t('Go to "Host defaults"') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('Importers') }}
