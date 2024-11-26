@@ -136,24 +136,6 @@
                                 </c-form-check>
                             </fieldset>
                         </c-col>
-                        <c-col md="6" *ngIf="entityType === 'HOST'">
-                            <fieldset>
-                                <h5>
-                                    {{ t('Show services') }}
-                                </h5>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[ShowServices]']" cFormCheckInput
-                                           id="ShowServices"
-                                           name="ShowServices"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="ShowServices">
-                                        {{ t('Yes') }}
-                                    </label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
                     </c-row>
                     <c-row class="mt-2">
                         <c-col class="text-end">
