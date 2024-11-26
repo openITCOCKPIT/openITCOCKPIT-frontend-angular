@@ -108,7 +108,6 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
 
     public post!: HostDefaultsPost;
     public showRootAlert: boolean = false;
-    public createAnother: boolean = false;
 
     public errors: GenericValidationError | null = null;
     public errors_exists_matches_servicetemplates = false;
@@ -410,7 +409,5 @@ export class HostdefaultsEditComponent implements OnInit, OnDestroy {
             }
         }
     }
-
-    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
     protected readonly ServicetemplateTypesEnum = ServicetemplateTypesEnum;
 }
