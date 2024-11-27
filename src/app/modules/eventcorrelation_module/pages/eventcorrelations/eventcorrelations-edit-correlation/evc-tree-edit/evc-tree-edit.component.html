@@ -34,11 +34,25 @@
 
             </f-connection>
         }
+        @for (group of groups; track group.id) {
+            <div fGroup fGroupId="group.id" class="with-padding"
+                 [fGroupSize]="{ width: group.fGroupSize.width, height: group.fGroupSize.height }"
+                 [fGroupPosition]="{ x: group.fGroupPosition.x, y: group.fGroupPosition.y }">
+                <div class="title">
+                    <button cButton class="ripple w-100 text-center" color="success" type="button">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        New vService
+                    </button>
+                </div>
+            </div>
+        }
+
         @for (node of nodes; track node.id) {
             <!-- vService Node -->
             <div fNode class="evc-service-container"
                  [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator' }"
                  [fNodePosition]="node.position"
+                 fNodeParentId="node.groupId"
                  fNodeOutput [fOutputId]="node.connectorId"
                  [fOutputConnectableSide]="configuration.outputSide"
                  fNodeInput [fInputId]="node.connectorId"
@@ -166,4 +180,3 @@
 </f-flow>
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
-

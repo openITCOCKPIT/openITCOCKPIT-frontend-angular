@@ -42,6 +42,8 @@ import { EvcTreeDirection } from '../../eventcorrelations-view/evc-tree/evc-tree
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
+import { ISize } from '@foblex/2d/size/i-size';
+import _ from 'lodash';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -54,6 +56,13 @@ interface EvcGraphNode {
     service?: EvcService
     operator?: EventcorrelationOperators | null,
     type: 'service' | 'operator'
+    fNodeParentId?: string
+}
+
+interface EvcGraphGroup {
+    id: string
+    fGroupSize: ISize
+    fGroupPosition: IPoint
 }
 
 interface INodeViewModel {
@@ -139,6 +148,7 @@ export class EvcTreeEditComponent {
     private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
 
     public nodes: INodeViewModel[] = [];
+    public groups: EvcGraphGroup[] = [];
     public connections: ConnectionOperator[] = [];
     public direction: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
     public configuration = CONFIGURATION[EvcTreeDirection.RIGHT_TO_LEFT];
@@ -302,7 +312,7 @@ export class EvcTreeEditComponent {
                 connectorId: x,
                 position: {
                     x: xpos,//evcNode.x,
-                    y: evcNode.y
+                    y: evcNode.y + 30
                 },
                 evcNode: evcNode.evcNode
             }
@@ -313,21 +323,33 @@ export class EvcTreeEditComponent {
     private getEvcTreeNodes(evcTree: EvcTree[]): EvcGraphNode[] {
         const nodes: EvcGraphNode[] = [];
 
+
         // This method create an array for the EVC Tree (Flow Chart)
         // We reverse the array from the server, so we can connect the services to the operators more easily
         evcTree = evcTree.reverse();
+        this.groups = [];
+        let firstLayerCounter = 0;
+
 
         evcTree.forEach((layer: EvcTree, layerIndex: number) => {
             // EVC Layer in reverse order
+            this.groups.push({
+                id: 'layer' + layerIndex.toString(),
+                fGroupSize: {width: 180, height: 50},
+                fGroupPosition: {x: layerIndex * 350 + 60, y: 0}
+            });
+
             for (const vServiceKey in layer) {
                 const vServices = layer[vServiceKey];
+
                 vServices.forEach((vService, vServiceIndex: number) => {
                     nodes.push({
                         id: vService.id.toString(),
                         //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
                         parentId: vService.parent_id === null ? null : `${vService.parent_id}_operator`,
                         service: vService.service,
-                        type: 'service'
+                        type: 'service',
+                        fNodeParentId: 'layer' + layerIndex.toString(),
                     });
 
                     if (vService.operator !== null) {
@@ -338,9 +360,16 @@ export class EvcTreeEditComponent {
                             type: 'operator'
                         });
                     }
+                    if (layerIndex === 0 && vService.operator === null) {
+                        firstLayerCounter++;
+                    }
 
                 });
             }
+        });
+
+        _.forEach(this.groups, (group) => {
+            group.fGroupSize.height = (50 * firstLayerCounter) + 50;
         });
 
         return nodes;

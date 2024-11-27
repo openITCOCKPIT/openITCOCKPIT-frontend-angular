@@ -1,0 +1,30 @@
+.f-group {
+    background-color: red;
+    border: 2px solid magenta;
+    border-radius: 12px;
+}
+
+.f-node, .f-group {
+    position: relative;
+    padding: 0;
+    text-align: left;
+}
+
+.with-padding {
+    padding: 0;
+}
+
+.title {
+    padding: 4px 12px;
+}
+
+/***
+.missing-connection-icon::after {
+    font-family:FontAwesome;
+    padding-left: 140px;
+    content: "\f127";
+    color: red;
+
+}
+*/
+
