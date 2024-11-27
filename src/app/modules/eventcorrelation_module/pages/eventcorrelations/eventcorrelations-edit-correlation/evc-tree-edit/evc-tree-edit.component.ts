@@ -1,19 +1,10 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    inject,
-    input,
-    ViewChild
-} from '@angular/core';
-import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
-import * as dagre from "@dagrejs/dagre"
-import { IPoint, PointExtensions } from '@foblex/2d';
-import { generateGuid } from '@foblex/utils';
-import { EvcTreeDirection } from './evc-tree.enum';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, ViewChild } from '@angular/core';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
+import { ConnectionOperator } from '../../eventcorrelations-view/evc-tree/evc-tree.interface';
+import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
+import dagre from '@dagrejs/dagre';
+import { generateGuid } from '@foblex/utils';
+import { IPoint, PointExtensions } from '@foblex/2d';
 import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
 import {
     ButtonGroupComponent,
@@ -28,25 +19,29 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
-import { PermissionsService } from '../../../../../../permissions/permissions.service';
 import {
     AcknowledgementIconComponent
 } from '../../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { EvcOperatorComponent } from './evc-operator/evc-operator.component';
-import { ConnectionOperator } from './evc-tree.interface'
-import { EventcorrelationOperators } from '../../eventcorrelations.enum';
+import { EvcOperatorComponent } from '../../eventcorrelations-view/evc-tree/evc-operator/evc-operator.component';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     HostSummaryStatusmapComponent
 } from '../../../../../../pages/statusmaps/statusmaps-index/host-summary-statusmap/host-summary-statusmap.component';
-import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
-import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+import {
+    EvcServicestatusToasterComponent
+} from '../../eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+import { PermissionsService } from '../../../../../../permissions/permissions.service';
+import {
+    EvcServicestatusToasterService
+} from '../../eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
+import { EvcTreeDirection } from '../../eventcorrelations-view/evc-tree/evc-tree.enum';
+import { EventcorrelationOperators } from '../../eventcorrelations.enum';
+import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
+import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -92,10 +87,10 @@ const SERVICE_WIDTH = 150;
 const OPERATOR_WIDTH = 100;
 
 /******************************
- * ⚠️ If you make changes to this file, make sure to update the EvcTreeEditComponent in the eventcorrelations-edit-correlation folder as well
+ * ⚠️ If you make changes to this file, make sure to update the EvcTreeComponent in the eventcorrelations-view folder as well
  ******************************/
 @Component({
-    selector: 'oitc-evc-tree',
+    selector: 'oitc-evc-tree-edit',
     standalone: true,
     imports: [
         FFlowModule,
@@ -125,11 +120,11 @@ const OPERATOR_WIDTH = 100;
         ToasterComponent,
         EvcServicestatusToasterComponent
     ],
-    templateUrl: './evc-tree.component.html',
-    styleUrl: './evc-tree.component.css',
+    templateUrl: './evc-tree-edit.component.html',
+    styleUrl: './evc-tree-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvcTreeComponent implements AfterViewInit {
+export class EvcTreeEditComponent {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public downtimedServices = input<number>(0);
