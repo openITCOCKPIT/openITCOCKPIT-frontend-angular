@@ -28,7 +28,7 @@ https://stackoverflow.com/a/76688561
     (onPanelHide)="resetSearchString()"
     group="true"
     optionGroupLabel="label"
-    appendTo="body">
+    [appendTo]="appendTo">
     <ng-template let-item pTemplate="item">
         <div [innerHTML]="item | highlightSearch : this.searchText:this.optionLabel"></div>
     </ng-template>

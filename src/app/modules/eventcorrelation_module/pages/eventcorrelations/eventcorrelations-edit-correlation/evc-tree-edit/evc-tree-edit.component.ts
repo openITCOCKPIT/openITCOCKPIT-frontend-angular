@@ -1,49 +1,43 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, ViewChild } from '@angular/core';
-import { EvcService, EvcTree } from '../../eventcorrelations.interface';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+    output,
+    ViewChild
+} from '@angular/core';
+import {
+    EvcService,
+    EvcToggleModal,
+    EvcTree,
+    EvcTreeItem,
+    EvcVServiceModalMode
+} from '../../eventcorrelations.interface';
 import { ConnectionOperator } from '../../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import dagre from '@dagrejs/dagre';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
-import {
-    ButtonGroupComponent,
-    ColComponent,
-    ProgressBarComponent,
-    ProgressComponent,
-    RowComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToasterComponent,
-    ToastHeaderComponent,
-    TooltipDirective
-} from '@coreui/angular';
+import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
-import {
-    AcknowledgementIconComponent
-} from '../../../../../../pages/acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { EvcOperatorComponent } from '../../eventcorrelations-view/evc-tree/evc-operator/evc-operator.component';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    HostSummaryStatusmapComponent
-} from '../../../../../../pages/statusmaps/statusmaps-index/host-summary-statusmap/host-summary-statusmap.component';
-import {
-    EvcServicestatusToasterComponent
-} from '../../eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 import { PermissionsService } from '../../../../../../permissions/permissions.service';
-import {
-    EvcServicestatusToasterService
-} from '../../eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcTreeDirection } from '../../eventcorrelations-view/evc-tree/evc-tree.enum';
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
-import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 import { ISize } from '@foblex/2d/size/i-size';
 import _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { EventcorrelationsService } from '../../eventcorrelations.service';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -61,6 +55,7 @@ interface EvcGraphNode {
 
 interface EvcGraphGroup {
     id: string
+    layerIndex: number
     fGroupSize: ISize
     fGroupPosition: IPoint
 }
@@ -110,42 +105,31 @@ const OPERATOR_WIDTH = 100;
         NgIf,
         TooltipDirective,
         FaIconComponent,
-        DowntimeIconComponent,
         PermissionDirective,
         AsyncPipe,
-        AcknowledgementIconComponent,
         TranslocoDirective,
         EvcOperatorComponent,
         TranslocoPipe,
         RouterLink,
         XsButtonDirective,
         ButtonGroupComponent,
-        HostSummaryStatusmapComponent,
-        ProgressBarComponent,
-        ProgressComponent,
-        ToastBodyComponent,
-        ToastComponent,
-        ToastHeaderComponent,
-        ToasterComponent,
-        EvcServicestatusToasterComponent
     ],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvcTreeEditComponent {
+export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
-    public downtimedServices = input<number>(0);
-    public stateForDowntimedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
 
-    public downtimeStateTitle: string = '';
+    public toggleVServiceModal = output<EvcToggleModal>();
+
     public disabledStateTitle: string = '';
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
-    private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
+    private readonly EventcorrelationsService = inject(EventcorrelationsService);
 
     public nodes: INodeViewModel[] = [];
     public groups: EvcGraphGroup[] = [];
@@ -160,38 +144,19 @@ export class EvcTreeEditComponent {
 
     public isAutoLayout: boolean = false;
 
-
     private cdr = inject(ChangeDetectorRef);
 
     private isInitialized = false;
 
     private toasterTimeout: any = null;
+    private subscriptions: Subscription = new Subscription();
 
     constructor() {
-        this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
             if (this.isInitialized) {
                 this.updateGraph(new dagre.graphlib.Graph(), this.direction);
-            }
-
-            switch (this.stateForDowntimedService()) {
-                case 0:
-                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered ok');
-                    break;
-
-                case 1:
-                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered warning');
-                    break;
-
-                case 2:
-                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered critical');
-                    break;
-
-                case 3:
-                    this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
-                    break;
             }
 
             switch (this.stateForDisabledService()) {
@@ -215,9 +180,13 @@ export class EvcTreeEditComponent {
         });
     }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.isInitialized = true;
         this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public onLoaded(): void {
@@ -335,6 +304,7 @@ export class EvcTreeEditComponent {
             // EVC Layer in reverse order
             this.groups.push({
                 id: 'layer' + layerIndex.toString(),
+                layerIndex: layerIndex,
                 fGroupSize: {width: 180, height: 50},
                 fGroupPosition: {x: layerIndex * 350 + 60, y: 0}
             });
@@ -386,30 +356,6 @@ export class EvcTreeEditComponent {
         });
     }
 
-    public horizontalLR(): void {
-        this.direction = EvcTreeDirection.LEFT_TO_RIGHT;
-        this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.LEFT_TO_RIGHT);
-        this.fitToScreen();
-    }
-
-    public horizontalRL(): void {
-        this.direction = EvcTreeDirection.RIGHT_TO_LEFT;
-        this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.RIGHT_TO_LEFT);
-        this.fitToScreen();
-    }
-
-    public verticalTB(): void {
-        this.direction = EvcTreeDirection.TOP_TO_BOTTOM;
-        this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.TOP_TO_BOTTOM);
-        this.fitToScreen();
-    }
-
-    public verticalBT(): void {
-        this.direction = EvcTreeDirection.BOTTOM_TO_TOP;
-        this.updateGraph(new dagre.graphlib.Graph(), EvcTreeDirection.BOTTOM_TO_TOP);
-        this.fitToScreen();
-    }
-
     public fitToScreen(): void {
         // Disabled for now, as it adds a scale factor to the canvas and "zooms in" on init.
         //return;
@@ -423,25 +369,14 @@ export class EvcTreeEditComponent {
         }
     }
 
-    public toggleToaster(serviceId: number | undefined): void {
-        this.cancelToaster();
-        if (serviceId) {
-            this.toasterTimeout = setTimeout(() => {
-                this.EvcServicestatusToasterService.setServiceIdToaster(serviceId);
-            }, 500);
-        }
-    }
-
-    public cancelToaster() {
-        if (this.toasterTimeout) {
-            clearTimeout(this.toasterTimeout);
-        }
-
-        this.toasterTimeout = null;
+    public toggleVServiceModalFunc(layerIndex: number, mode: EvcVServiceModalMode, eventCorrelation?: EvcTreeItem) {
+        this.toggleVServiceModal.emit({
+            layerIndex: layerIndex,
+            mode: mode,
+            eventCorrelation: eventCorrelation
+        });
     }
 
     protected readonly ServiceTypesEnum = ServiceTypesEnum;
     protected readonly Number = Number;
-    protected readonly AcknowledgementTypes = AcknowledgementTypes;
-    protected readonly EvcTreeDirection = EvcTreeDirection;
 }

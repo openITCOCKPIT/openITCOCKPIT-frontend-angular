@@ -2,6 +2,7 @@ import { ServiceObject, ServicestatusObject } from '../../../../pages/services/s
 import { EventcorrelationOperators } from './eventcorrelations.enum';
 import { HostEntity, HostObject, HoststatusObject } from '../../../../pages/hosts/hosts.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 
 /**********************
@@ -84,14 +85,18 @@ export interface EventcorrelationsViewRoot {
 
 
 export interface EvcTree {
-    [key: string]: {
-        id: number
-        parent_id: number
-        host_id: number
-        service_id: number
-        operator: EventcorrelationOperators | null,
-        service: EvcService
-    }[]
+    // Hashmap of EvcTreeItem arrays
+    [key: string]: EvcTreeItem[]
+}
+
+export interface EvcTreeItem {
+    id: number
+    parent_id: number
+    host_id: number
+    service_id: number
+    operator: EventcorrelationOperators | null,
+    service: EvcService,
+    usedBy?: string[], //editCorrelation only
 }
 
 export interface EventcorrelationRootElement {
@@ -183,4 +188,78 @@ export interface EvcUsedByEntity {
         hasViewPermission: boolean
         hasWritePermission: boolean
     }
+}
+
+/*********************************
+ *    editCorrelation action     *
+ ********************************/
+export interface EventcorrelationsEditCorrelationRoot {
+    evcTree: EvcTree[] // Used to render the tree chart
+    rootElement: EventcorrelationRootElement,
+    servicetemplates: SelectKeyValue[],
+    stateForDisabledService: number,
+    stateForDowntimedService: number,
+    showInfoForDisabledService: number,
+    disabledServices: number,
+    downtimedServices: number,
+    _csrfToken: string | null
+}
+
+
+export interface EvcModalService {
+    servicename: string,
+    servicetemplate_id: number,
+    service_ids: (number | string)[], // 1 or 2_vService
+    operator: EventcorrelationOperators | null,
+    operator_modifier: number,
+    current_evc: {
+        id: number,
+        layerIndex: number,
+        mode: EvcVServiceModalMode,
+        evc_node_id?: number, // edit only
+        old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
+    }
+}
+
+export function getDefaultEvcModalService(evcId: number, layerIndex: number): EvcModalService {
+    return {
+        servicename: '',
+        servicetemplate_id: 0,
+        service_ids: [],
+        operator: null,
+        operator_modifier: 0,
+        current_evc: {
+            id: evcId,
+            layerIndex: layerIndex,
+            mode: 'add'
+        }
+    }
+}
+
+export interface EvcServiceSelect {
+    key: number | string,
+    value: {
+        Service: {
+            id: number | string
+            name?: string
+            servicename: string
+            disabled?: number
+        }
+        Host: {
+            id: number,
+            name: string
+        }
+        Servicetemplate?: {
+            name: string
+        }
+    },
+    vServiceInUse?: boolean
+}
+
+export type EvcVServiceModalMode = 'add' | 'edit';
+
+export interface EvcToggleModal {
+    layerIndex: number,
+    mode: EvcVServiceModalMode
+    eventCorrelation?: EvcTreeItem
 }

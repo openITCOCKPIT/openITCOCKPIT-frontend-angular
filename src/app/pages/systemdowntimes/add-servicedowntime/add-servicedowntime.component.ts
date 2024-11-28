@@ -15,7 +15,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -27,8 +26,8 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { SelectItemOptionGroup } from '../../../layouts/primeng/select.interface';
+import { GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
 import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -86,7 +85,7 @@ import { HistoryService } from '../../../history.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddServicedowntimeComponent implements OnInit, OnDestroy {
-    public services: SelectKeyValueWithDisabled[] = [];
+    public services: SelectItemOptionGroup[] = [];
     public errors: GenericValidationError | null = null;
     public post: SystemdowntimesPost = this.getClearForm();
     public get!: SystemdowntimesGet;

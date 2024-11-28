@@ -5,6 +5,8 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     EvcHostUsedBy,
+    EvcServiceSelect,
+    EventcorrelationsEditCorrelationRoot,
     EventcorrelationsIndexParams,
     EventcorrelationsIndexRoot,
     EventcorrelationsViewRoot
@@ -101,6 +103,49 @@ export class EventcorrelationsService {
                 return data.usedBy;
             })
         )
+    }
+
+    /*******************************
+     *  editCorrelation action     *
+     *******************************/
+    public getEventcorrelationEditCorrelation(id: number): Observable<EventcorrelationsEditCorrelationRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<EventcorrelationsEditCorrelationRoot>(`${proxyPath}/eventcorrelation_module/eventcorrelations/editCorrelation/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
+
+    public loadServices(searchString: string, evcId: number, selected: (number | string)[] = []): Observable<EvcServiceSelect[]> {
+        const proxyPath = this.proxyPath;
+
+        // ITC-2712 Change load function to use POST
+        const data = {
+            filter: {
+                servicename: searchString
+            },
+            selected: selected,
+            notServiceId: evcId
+        }
+
+        return this.http.post<{
+            services: EvcServiceSelect[]
+        }>(`${proxyPath}/eventcorrelation_module/eventcorrelations/loadServicesByString.json`, data, {
+            params: {
+                angular: true
+            }
+        })
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return data.services
+                })
+            );
     }
 
 }

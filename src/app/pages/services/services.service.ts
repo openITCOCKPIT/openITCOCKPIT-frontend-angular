@@ -28,7 +28,7 @@ import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
     ServiceBrowserMenu,
     ServiceBrowserResult,
@@ -356,12 +356,12 @@ export class ServicesService {
         });
     }
 
-    public loadServicesByString(params: ServicesLoadServicesByStringParams): Observable<SelectKeyValue[]> {
+    public loadServicesByString(params: ServicesLoadServicesByStringParams): Observable<SelectItemOptionGroup[]> {
         const proxyPath = this.proxyPath;
 
         let url = `${proxyPath}/services/loadServicesByStringForOptionGroup.json`;
 
-        return this.http.get<{ services: SelectKeyValue[] }>(url, {
+        return this.http.get<{ services: SelectItemOptionGroup[] }>(url, {
             params: params as {}
         }).pipe(
             map(data => {

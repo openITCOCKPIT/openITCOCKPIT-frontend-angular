@@ -18,8 +18,8 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                {{ t('View') }}
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit correlation') }}
             </li>
         </ol>
     </nav>
@@ -97,12 +97,11 @@
 
             <div class="d-flex" style="height: 100vh;">
                 <oitc-evc-tree-edit
-                    class="w-100 h-100"
+                    class="w-100 h-100 mt-3"
                     [evcId]="id"
                     [evcTree]="evcTree"
-                    [downtimedServices]="downtimedServices"
-                    [stateForDowntimedService]="stateForDowntimedService"
-                    [stateForDisabledService]="stateForDisabledService"></oitc-evc-tree-edit>
+                    [stateForDisabledService]="stateForDisabledService"
+                    (toggleVServiceModal)="toggleVServiceModal($event)"></oitc-evc-tree-edit>
             </div>
 
         </c-card-body>
@@ -110,4 +109,135 @@
             &nbsp;
         </c-card-footer>
     </c-card>
+
+    <!-- Service / vService modal -->
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="evcVServicesModal"
+        [size]="'xl'"
+    >
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                @if (modalVService?.current_evc?.mode === 'add') {
+                    {{ t('Create virtual service') }}
+                }
+
+                @if (modalVService?.current_evc?.mode === 'edit') {
+                    {{ t('Modify virtual service') }}
+                }
+            </h5>
+            <button cButtonClose (click)="hideModal()"></button>
+        </c-modal-header>
+        <c-modal-body *ngIf="modalVService">
+
+            <div class="mb-3">
+                <label cLabel for="servicename">
+                    {{ t('Name of vService') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl type="text"
+                       id="servicename"
+                       name="servicename"
+                       oitcFormError [errors]="errors" errorField="servicename"
+                       [(ngModel)]="modalVService.servicename">
+                <oitc-form-feedback [errors]="errors" errorField="servicename"></oitc-form-feedback>
+                <div class="help-block">
+                    {{ t('Name of the virtual service that holds the result of the correlation.') }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label cLabel for="servicetemplate">
+                    {{ t('Service template') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+
+                <oitc-select
+                    name="servicetemplate"
+                    id="servicetemplate"
+                    optionValue="key"
+                    optionLabel="value"
+                    [(ngModel)]="modalVService.servicetemplate_id"
+                    [options]="servicetemplates"
+                    [appendTo]="''"
+                    oitcFormError [errors]="errors" errorField="servicetemplate_id">
+                </oitc-select>
+                <oitc-form-feedback [errors]="errors"
+                                    errorField="servicetemplate_id"></oitc-form-feedback>
+                <div class="help-block">
+                    {{ t('Only service templates of the EVC type are available.') }}
+                </div>
+            </div>
+
+            @if (modalCurrentLayerIndex === 0) {
+                <!-- "Real" Services -->
+                <div class="mb-3">
+                    <label for="operator" cLabel>
+                        {{ t('Services') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <c-input-group>
+                        <oitc-multi-select-optgroup
+                            name="Services"
+                            id="Services"
+                            optionValue="value"
+                            optionLabel="label"
+                            [options]="modalServicesForSelect"
+                            [(ngModel)]="modalVService.service_ids"
+                            [searchCallback]="loadServicesForModal"
+                            class="flex-1"
+                            [appendTo]="''"
+                            oitcFormError [errors]="errors" errorField="object_id">
+                        </oitc-multi-select-optgroup>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="operator_modifier"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Services that should be correlated') }}
+                    </div>
+                </div>
+            }
+
+            <div class="mb-3">
+                <label for="operator" cLabel>
+                    {{ t('Operator') }}
+                    <oitc-required-icon/>
+                </label>
+                <oitc-select
+                    name="operator"
+                    id="operator"
+                    optionValue="key"
+                    optionLabel="value"
+                    [(ngModel)]="modalVService.operator"
+                    [options]="modalOperators"
+                    [appendTo]="''"
+                    oitcFormError [errors]="errors" errorField="operator">
+                </oitc-select>
+            </div>
+
+            <div class="mb-3" *ngIf="modalVService.operator === EventcorrelationOperators.MIN">
+                <label cLabel for="operator_modifier">
+                    {{ t('Operator modifier') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl type="number"
+                       id="operator_modifier"
+                       name="operator_modifier"
+                       oitcFormError [errors]="errors" errorField="operator_modifier"
+                       [(ngModel)]="modalVService.operator_modifier">
+                <oitc-form-feedback [errors]="errors" errorField="operator_modifier"></oitc-form-feedback>
+            </div>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton class="ripple" color="primary">
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
 </ng-container>
