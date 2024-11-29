@@ -90,10 +90,10 @@ export interface EvcTree {
 }
 
 export interface EvcTreeItem {
-    id: number
-    parent_id: number
+    id: number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657fa_1"
+    parent_id: null | number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657f"
     host_id: number
-    service_id: number
+    service_id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
     operator: EventcorrelationOperators | null,
     service: EvcService,
     usedBy?: string[], //editCorrelation only
@@ -116,19 +116,19 @@ export interface EventcorrelationRootElement {
 }
 
 export interface EvcService {
-    id: number
+    id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
     servicetemplate_id: number
     host_id: number
-    name?: string
+    name?: string | null
     description: any
     service_type: number
-    uuid: string
+    uuid: string | null // null for new created vServices
     disabled: number
     host: {
         id: number
         name: string
     }
-    servicetemplate: {
+    servicetemplate?: {
         id: number
         name: string
         description: string
@@ -216,7 +216,7 @@ export interface EvcModalService {
         id: number,
         layerIndex: number,
         mode: EvcVServiceModalMode,
-        evc_node_id?: number, // edit only
+        evc_node_id?: string | number, // edit only
         old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
     }
 }
@@ -241,7 +241,7 @@ export interface EvcServiceSelect {
     value: {
         Service: {
             id: number | string
-            name?: string
+            name?: string | null
             servicename: string
             disabled?: number
         }
@@ -262,4 +262,20 @@ export interface EvcToggleModal {
     layerIndex: number,
     mode: EvcVServiceModalMode
     eventCorrelation?: EvcTreeItem
+}
+
+export interface EvcAddVServiceValidationResult {
+    success: boolean,
+    // updates."0".uu-id."0" = EvcTreeItem
+    updates: {
+        // layerIndexToUpdate (0,1,2,etc)
+        [key: string]: {
+            // newParentIdvService (ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657fa)
+            [key: string]: {
+                // 0, 1 (just a number)
+                [key: string]: EvcTreeItem
+            }
+        }
+    }
+
 }

@@ -34,9 +34,9 @@
                  [fNodePosition]="node.position"
                  fNodeParentId="node.groupId"
                  fNodeOutput [fOutputId]="node.connectorId"
-                 [fOutputConnectableSide]="configuration.outputSide"
+                 [fOutputConnectableSide]="EFConnectableSide.LEFT"
                  fNodeInput [fInputId]="node.connectorId"
-                 [fInputConnectableSide]="configuration.inputSide">
+                 [fInputConnectableSide]="EFConnectableSide.RIGHT">
 
                 <!-- We can not have an if or ngIf here or on fNode  -->
 

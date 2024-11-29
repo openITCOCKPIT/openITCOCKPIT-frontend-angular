@@ -38,6 +38,7 @@ import { ISize } from '@foblex/2d/size/i-size';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../../eventcorrelations.service';
+import { getTestTreeForDevelopment } from './testtree';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
 interface EvcNode extends dagre.Node {
@@ -50,7 +51,8 @@ interface EvcGraphNode {
     service?: EvcService
     operator?: EventcorrelationOperators | null,
     type: 'service' | 'operator'
-    fNodeParentId?: string
+    fNodeParentId?: string,
+    forceX: number,
 }
 
 interface EvcGraphGroup {
@@ -66,26 +68,6 @@ interface INodeViewModel {
     position: IPoint,
     evcNode: EvcGraphNode
 }
-
-
-const CONFIGURATION = {
-    [EvcTreeDirection.LEFT_TO_RIGHT]: {
-        outputSide: EFConnectableSide.RIGHT,
-        inputSide: EFConnectableSide.LEFT
-    },
-    [EvcTreeDirection.TOP_TO_BOTTOM]: {
-        outputSide: EFConnectableSide.BOTTOM,
-        inputSide: EFConnectableSide.TOP
-    },
-    [EvcTreeDirection.RIGHT_TO_LEFT]: {
-        outputSide: EFConnectableSide.LEFT,
-        inputSide: EFConnectableSide.RIGHT
-    },
-    [EvcTreeDirection.BOTTOM_TO_TOP]: {
-        outputSide: EFConnectableSide.TOP,
-        inputSide: EFConnectableSide.BOTTOM
-    }
-};
 
 const SERVICE_WIDTH = 150;
 const OPERATOR_WIDTH = 100;
@@ -135,7 +117,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public groups: EvcGraphGroup[] = [];
     public connections: ConnectionOperator[] = [];
     public direction: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
-    public configuration = CONFIGURATION[EvcTreeDirection.RIGHT_TO_LEFT];
 
     @ViewChild(FFlowComponent, {static: true})
     public fFlowComponent!: FFlowComponent;
@@ -148,7 +129,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     private isInitialized = false;
 
-    private toasterTimeout: any = null;
     private subscriptions: Subscription = new Subscription();
 
     constructor() {
@@ -210,9 +190,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     }
 
     private setGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
-        this.configuration = CONFIGURATION[direction];
-
-        const evcTree = this.evcTree();
+        const evcTree = [...this.evcTree()]; // create a copy to not modify the original array
         const nodes = this.getEvcTreeNodes(evcTree);
 
         // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
@@ -270,10 +248,11 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             // Cast the dagre.Node to EvcNode
             const evcNode = node as EvcNode;
 
-            let xpos = evcNode.x;
+            //let xpos = evcNode.x;
+            let xpos = evcNode.evcNode.forceX;
             if (evcNode.evcNode.type === 'operator') {
                 // This centers the operator node between the service nodes
-                xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 2;
+                xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 4;
             }
 
             return {
@@ -291,11 +270,11 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     private getEvcTreeNodes(evcTree: EvcTree[]): EvcGraphNode[] {
         const nodes: EvcGraphNode[] = [];
-
+        evcTree = getTestTreeForDevelopment();
 
         // This method create an array for the EVC Tree (Flow Chart)
         // We reverse the array from the server, so we can connect the services to the operators more easily
-        evcTree = evcTree.reverse();
+        //evcTree = evcTree.reverse();
         this.groups = [];
         let firstLayerCounter = 0;
 
@@ -305,8 +284,14 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             this.groups.push({
                 id: 'layer' + layerIndex.toString(),
                 layerIndex: layerIndex,
-                fGroupSize: {width: 180, height: 50},
-                fGroupPosition: {x: layerIndex * 350 + 60, y: 0}
+                fGroupSize: {
+                    width: 180,
+                    height: 50
+                },
+                fGroupPosition: {
+                    x: layerIndex * 350 + 60,
+                    y: 0
+                }
             });
 
             for (const vServiceKey in layer) {
@@ -320,6 +305,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         service: vService.service,
                         type: 'service',
                         fNodeParentId: 'layer' + layerIndex.toString(),
+                        forceX: layerIndex * 350 + 60
                     });
 
                     if (vService.operator !== null) {
@@ -327,7 +313,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             id: `${vService.id}_operator`,
                             parentId: vService.id.toString(),
                             operator: vService.operator,
-                            type: 'operator'
+                            type: 'operator',
+                            forceX: layerIndex * 350 + 60
                         });
                     }
                     if (layerIndex === 0 && vService.operator === null) {
@@ -379,4 +366,5 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     protected readonly ServiceTypesEnum = ServiceTypesEnum;
     protected readonly Number = Number;
+    protected readonly EFConnectableSide = EFConnectableSide;
 }

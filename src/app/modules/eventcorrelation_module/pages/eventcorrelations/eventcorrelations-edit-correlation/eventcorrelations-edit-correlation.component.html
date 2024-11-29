@@ -27,7 +27,7 @@
     <oitc-block-loader [height]="'25rem'" *ngIf="!evcTree || !rootElement"></oitc-block-loader>
     <c-card class="mb-3" *ngIf="evcTree && rootElement">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Event Correlation:') }}
+            <h5 cCardTitle>{{ t('Edit Event Correlation:') }}
                 <small class="fw-300">
                     {{ rootElement.host.name }}
                 </small>
@@ -52,14 +52,14 @@
                 </c-nav-item>
 
                 <c-nav-item class="px-1" *ngIf="hasWritePermission">
-                    <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
-                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
+                    <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
+                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', rootElement.host.id]"
                        cButton
                        class="ripple"
-                       color="primary"
+                       color="default"
                        size="xs">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Edit Correlation') }}
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        {{ t('View') }}
                     </a>
                 </c-nav-item>
             </c-nav>
@@ -101,7 +101,7 @@
                     [evcId]="id"
                     [evcTree]="evcTree"
                     [stateForDisabledService]="stateForDisabledService"
-                    (toggleVServiceModal)="toggleVServiceModal($event)"></oitc-evc-tree-edit>
+                    (toggleVServiceModal)="onToggleVServiceModal($event)"></oitc-evc-tree-edit>
             </div>
 
         </c-card-body>
@@ -189,12 +189,40 @@
                             [searchCallback]="loadServicesForModal"
                             class="flex-1"
                             [appendTo]="''"
-                            oitcFormError [errors]="errors" errorField="object_id">
+                            oitcFormError [errors]="errors" errorField="service_ids">
                         </oitc-multi-select-optgroup>
                     </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="operator_modifier"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="service_ids"></oitc-form-feedback>
                     <div class="help-block">
                         {{ t('Services that should be correlated') }}
+                    </div>
+                </div>
+            }
+
+            @if (modalCurrentLayerIndex > 0) {
+                <!-- "virtual" Services -->
+                <div class="mb-3">
+                    <label for="operator" cLabel>
+                        {{ t('vServices') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <c-input-group>
+                        <oitc-multi-select-optgroup
+                            name="Services"
+                            id="Services"
+                            optionValue="value"
+                            optionLabel="label"
+                            [options]="modalServicesForSelect"
+                            [(ngModel)]="modalVService.service_ids"
+                            [searchCallback]="loadServicesForModal"
+                            class="flex-1"
+                            [appendTo]="''"
+                            oitcFormError [errors]="errors" errorField="service_ids">
+                        </oitc-multi-select-optgroup>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="service_ids"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Virtual services that should be correlated') }}
                     </div>
                 </div>
             }
@@ -214,6 +242,7 @@
                     [appendTo]="''"
                     oitcFormError [errors]="errors" errorField="operator">
                 </oitc-select>
+                <oitc-form-feedback [errors]="errors" errorField="operator"></oitc-form-feedback>
             </div>
 
             <div class="mb-3" *ngIf="modalVService.operator === EventcorrelationOperators.MIN">
@@ -231,7 +260,10 @@
 
         </c-modal-body>
         <c-modal-footer>
-            <button cButton class="ripple" color="primary">
+            <button cButton class="ripple" color="primary"
+                    (click)="validateModalForm()"
+                    [disabled]="showSpinner">
+                <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" *ngIf="showSpinner"></fa-icon>
                 {{ t('Save') }}
             </button>
             <button (click)="hideModal()" cButton class="ripple" color="default">

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
+    EvcAddVServiceValidationResult,
     EvcModalService,
     EvcServiceSelect,
     EvcToggleModal,
@@ -62,6 +63,7 @@ import {
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import _ from 'lodash';
 import { SelectItem } from 'primeng/api/selectitem';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -134,6 +136,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public modalCurrentLayerIndex: number = 0;
     public modalVService?: EvcModalService;
     public modalServicesForSelect: SelectItemOptionGroup[] = [];
+    public showSpinner: boolean = false;
 
     public modalOperators: SelectKeyValueString[] = [
         {key: EventcorrelationOperators.AND, value: this.TranslocoService.translate('AND')},
@@ -195,11 +198,12 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         if (layerIndex > 0) {
             //Load "virtual" services for current layer
             //All other layers use the evcId_vService as key in the select box => 5_vService
-            this.cdr.markForCheck();
             this.modalServicesForSelect = [];
 
             const services = this.getServicesByLayerIndexForSelect(layerIndex);
             this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
+
+            this.cdr.markForCheck();
         }
 
         this.modalService.toggle({
@@ -258,9 +262,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      * @param layerIndex
      * @private
      */
-    private getServicesIdsByLayerIndex(layerIndex: number): number[] {
+    private getServicesIdsByLayerIndex(layerIndex: number): (number | string)[] {
         const layerServices = this.getServicesByLayerIndex(layerIndex);
-        const layerServicesIds: number[] = [];
+        const layerServicesIds: (number | string)[] = [];
 
         layerServices.forEach((service) => {
             layerServicesIds.push(service.service_id);
@@ -301,7 +305,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      * @param currentEvcId
      * @private
      */
-    private getServicesByLayerIndexForSelect(layerIndex: number | string, currentEvcId?: number | undefined): EvcServiceSelect[] {
+    private getServicesByLayerIndexForSelect(layerIndex: number | string, currentEvcId?: string | number | undefined): EvcServiceSelect[] {
         const servicesInLayer = this.getServicesByLayerIndex(layerIndex);
         const services: EvcServiceSelect[] = [];
 
@@ -347,7 +351,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      * @param parentId
      * @private
      */
-    private getServicesIdsByLayerIndexAndParentId(layerIndex: number, parentId: number): (number | string)[] {
+    private getServicesIdsByLayerIndexAndParentId(layerIndex: number, parentId: string | number): (number | string)[] {
         const layerServices = this.getServicesByLayerIndex(layerIndex);
         const layerServicesIds: (number | string)[] = [];
 
@@ -402,7 +406,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         }
     }
 
-    public toggleVServiceModal(event: EvcToggleModal) {
+    public onToggleVServiceModal(event: EvcToggleModal) {
         if (event.mode === 'add') {
             this.showAddVServiceModal(event.layerIndex);
         }
@@ -458,7 +462,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 };
 
                 const items: SelectItem[] = [];
-                servicesOfHost.forEach((service, index) => {
+                servicesOfHost.forEach((service) => {
                     // Append all services to the host
                     let servicename = service.value.Service.servicename;
                     if (Number(service.value.Service.disabled) === 1) {
@@ -467,7 +471,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
                     items.push({
                         label: servicename,
-                        value: service.key
+                        value: service.key,
+                        disabled: service.vServiceInUse === true
                     });
                 });
                 host.items = items;
@@ -476,6 +481,129 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         }
 
         return result;
+    }
+
+    public validateModalForm() {
+        if (this.modalVService?.current_evc.mode === 'add') {
+            this.validateModalAddVServices();
+        } else {
+            console.log('IMPLEMENT EDIT VALIDATION')
+        }
+    }
+
+    /**
+     * add new services
+     * @private
+     */
+    private validateModalAddVServices(): void {
+        this.errors = null;
+        if (!this.modalVService) {
+            return;
+        }
+
+        this.showSpinner = true;
+        this.cdr.markForCheck();
+
+        const sub = this.EventcorrelationsService.validateModalAddVServices(this.modalVService).subscribe({
+            next: (value: any) => {
+                //console.log(value); // Serve result with the new copied host templates
+                // 200 ok
+                const result = value as EvcAddVServiceValidationResult;
+                const updates = result.updates;
+
+                for (const layerIndexToUpdate in updates) {
+                    const layerIndexToUpdateInt = Number(layerIndexToUpdate);
+
+                    if (typeof this.evcTree[layerIndexToUpdateInt] === "undefined") {
+                        //Create new layer in evcTree
+                        this.evcTree[layerIndexToUpdateInt] = {};
+                    }
+
+                    if (layerIndexToUpdate === "0") { //this is a json object {} so we get strings !!!
+                        //Add new 1st layer services
+                        for (const newParentId in updates[layerIndexToUpdate]) {
+
+                            //Add new 1st layer services to evcTree as array
+                            this.evcTree[layerIndexToUpdateInt][newParentId] = [];
+
+                            for (const jsonKey in updates[layerIndexToUpdate][newParentId]) {
+                                this.evcTree[layerIndexToUpdateInt][newParentId].push(updates[layerIndexToUpdate][newParentId][jsonKey]);
+                            }
+                        }
+                    }
+
+                    //Add new vServices (this can always be only one service !)
+                    if (layerIndexToUpdateInt > 0) {
+
+                        for (const newParentIdvService in updates[layerIndexToUpdate]) {
+
+                            //Add new vService to evcTree as array
+                            this.evcTree[layerIndexToUpdateInt][newParentIdvService] = [];
+
+                            //The new vService has always the key "0" !
+                            updates[layerIndexToUpdate][newParentIdvService]["0"].usedBy = []; //This needs to be an array but PHP's JSON_FORCE_OBJECT force this into an {} object
+                            this.evcTree[layerIndexToUpdateInt][newParentIdvService].push(updates[layerIndexToUpdate][newParentIdvService]["0"]);
+
+                            const newParentIdWithoutvServiceSuffix = updates[layerIndexToUpdate][newParentIdvService]["0"].id;
+
+                            //Update old vServices with the new parentId (NO _vService prefix!)
+                            //Only update if we do not add any 1st layer services.
+                            //If we have any 1st layer services, the service handles all that for us.
+                            if (updates.hasOwnProperty("0") === false) {
+                                if (this.modalVService?.current_evc.layerIndex) {
+
+                                    //Create new evc "container" with new parent id as key (no _vService suffix)
+                                    this.evcTree[this.modalVService.current_evc.layerIndex][newParentIdWithoutvServiceSuffix] = [];
+
+                                    for (const index in this.modalVService.service_ids) {
+
+                                        //Get old parentLess node
+                                        const oldKeyToUpdate = this.modalVService.service_ids[index];
+                                        const evcNodeToUpdateArray = this.evcTree[this.modalVService.current_evc.layerIndex][oldKeyToUpdate];
+
+                                        //Remove old and parent less evcNode
+                                        delete this.evcTree[this.modalVService.current_evc.layerIndex][oldKeyToUpdate];
+
+                                        for (const evcIndex in evcNodeToUpdateArray) {
+                                            const evcNodeToUpdate = evcNodeToUpdateArray[evcIndex];
+                                            evcNodeToUpdate.parent_id = newParentIdWithoutvServiceSuffix;
+
+                                            this.evcTree[this.modalVService.current_evc.layerIndex][newParentIdWithoutvServiceSuffix].push(evcNodeToUpdate);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Important for the Angular Change Detection
+                // Signals Need to be Immutable
+                // https://www.angulararchitects.io/blog/angular-signals/
+                // evcTree is now a new object, so the reference changes
+                // do not use _.cloneDeep() as it reverses the evcTree for some reason
+                this.evcTree = [...this.evcTree];
+
+                this.modalService.toggle({
+                    show: false,
+                    id: 'evcVServicesModal'
+                });
+                this.showSpinner = false;
+
+                // All done trigger change detection
+                this.cdr.markForCheck();
+            },
+            error: (error: HttpErrorResponse) => {
+                // We run into a validation error.
+                this.errors = error.error.error as GenericValidationError;
+                this.showSpinner = false;
+
+                this.cdr.markForCheck();
+            }
+        });
+
+        this.subscriptions.add(sub);
+
     }
 
     protected readonly EventcorrelationOperators = EventcorrelationOperators;

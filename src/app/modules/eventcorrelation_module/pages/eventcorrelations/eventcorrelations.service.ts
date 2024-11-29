@@ -5,6 +5,7 @@ import { DOCUMENT } from '@angular/common';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import {
     EvcHostUsedBy,
+    EvcModalService,
     EvcServiceSelect,
     EventcorrelationsEditCorrelationRoot,
     EventcorrelationsIndexParams,
@@ -146,6 +147,11 @@ export class EventcorrelationsService {
                     return data.services
                 })
             );
+    }
+
+    public validateModalAddVServices(vService: EvcModalService): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/eventcorrelation_module/eventcorrelations/validateModalAddVServices.json?angular=true`, vService);
     }
 
 }
