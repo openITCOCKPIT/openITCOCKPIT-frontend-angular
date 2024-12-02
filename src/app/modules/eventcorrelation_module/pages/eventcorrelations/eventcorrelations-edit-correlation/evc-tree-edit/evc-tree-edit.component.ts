@@ -74,7 +74,7 @@ interface INodeViewModel {
 }
 
 const SERVICE_WIDTH = 150;
-const SERVICE_HEIGHT = 38;
+const SERVICE_HEIGHT = 40; // actually 38, but 2px border
 
 // NODE_SEP is the vertical distance between the nodes
 // +--------------+
@@ -86,7 +86,7 @@ const SERVICE_HEIGHT = 38;
 // +--------------+
 // |    Node 2    |
 // +--------------+
-const NODE_SEP = 10; // vertical distance between nodes
+const NODE_SEP = 7; // vertical distance between nodes
 
 
 // RANK_SEP is the distance between the different layers of the graph
@@ -100,7 +100,7 @@ const NODE_SEP = 10; // vertical distance between nodes
 const RANK_SEP = 50;
 
 const OPERATOR_WIDTH = 100;
-const OPERATOR_HEIGHT = SERVICE_HEIGHT;
+const OPERATOR_HEIGHT = 38;
 
 /******************************
  * ⚠️ If you make changes to this file, make sure to update the EvcTreeComponent in the eventcorrelations-view folder as well
@@ -254,15 +254,11 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
             for (const vServiceId in evcLayer) {
 
-                // Calculate the total height of all services for the current part of the correlation
-                // We need this to calculate the position of the operator for this correlation
-                const totalHeight = evcLayer[vServiceId].length * (SERVICE_HEIGHT + NODE_SEP);
-
                 if (!totalLayersCount.hasOwnProperty(vServiceId)) {
                     totalLayersCount[vServiceId] = {
                         count: evcLayer[vServiceId].length,
-                        totalHeight: totalHeight,
-                        startY: null
+                        startY: null,
+                        endY: null
                     };
                 }
 
@@ -292,6 +288,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
                         // Calculate the Y position for the next first layer service
                         Y = Y + (SERVICE_HEIGHT + NODE_SEP);
+                        totalLayersCount[vServiceId].endY = Y;
                     }
 
                     if (layerIndex > 0) {
@@ -308,12 +305,24 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
                         const offsetY = totalLayersCount[evcTreeItem.id.toString()].startY;
                         // Total height if all previous services
-                        const totalHeight = totalLayersCount[evcTreeItem.id.toString()].totalHeight;
+                        const totalHeight = totalLayersCount[evcTreeItem.id.toString()].endY - totalLayersCount[evcTreeItem.id.toString()].startY;
 
                         const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
                         const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY;
 
                         // Add the operator
+                        /*
+                        let myX = layerIndex * (SERVICE_WIDTH + RANK_SEP);
+                        if (layerIndex > 1) {
+                            // 550 wollen wir
+                            myX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH);
+                        }
+                         */
+                        let myX = layerIndex * (RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
+                        if (layerIndex > 1) {
+                            myX = myX + (layerIndex * SERVICE_WIDTH)
+                        }
+                        console.log(myX);
                         if (evcTreeItem.operator !== null) {
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
@@ -322,7 +331,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                                 type: 'operator',
                                 totalHeight: totalHeight,
                                 position: {
-                                    x: layerIndex * (SERVICE_WIDTH + RANK_SEP),
+                                    x: myX,
                                     y: operatorY
                                 }
                             });
@@ -343,9 +352,13 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // Save the Y position for the next layer of operators / vServices
                         if (evcTreeItem.parent_id !== null) {
                             if (totalLayersCount[evcTreeItem.parent_id.toString()].startY === null) {
-                                console.log(`Layer: ${layerIndex} SAVE Y ${vServiceY}`);
+                                console.log(`Layer: ${layerIndex}, EVC ID: ${evcTreeItem.id}, SAVE Y ${vServiceY}`);
                                 totalLayersCount[evcTreeItem.parent_id.toString()].startY = vServiceY;
                             }
+                        }
+
+                        if (evcTreeItem.parent_id !== null) {
+                            totalLayersCount[evcTreeItem.parent_id.toString()].endY = vServiceY + SERVICE_HEIGHT + NODE_SEP;
                         }
 
                     }
