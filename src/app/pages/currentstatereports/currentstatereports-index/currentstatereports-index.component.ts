@@ -21,7 +21,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
@@ -43,7 +42,7 @@ import { ServicesService } from '../../services/services.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GenericValidationError } from '../../../generic-responses';
-import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import {
     CurrentStateReportHtmlResponse,
@@ -129,7 +128,7 @@ export class CurrentstatereportsIndexComponent implements OnInit, OnDestroy {
 
 
     public isGeneratingReport: boolean = false;
-    public services: SelectKeyValue[] = [];
+    public services: SelectItemOptionGroup[] = [];
     public selectedServices: number[] = [];
     public errors: GenericValidationError | null = null;
     public selectedFormat: ReportFormat = 'html';

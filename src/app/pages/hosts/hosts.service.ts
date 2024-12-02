@@ -198,12 +198,17 @@ export class HostsService {
         )
     }
 
-    public loadElements(containerId: number, hostId: number = 0): Observable<HostElements> {
+    public loadElements(containerId: number, hostId: number = 0, isEvcHost: number = 0): Observable<HostElements> {
         const proxyPath = this.proxyPath;
         let url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}.json`;
 
         if (hostId) {
             url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}/${hostId}.json`
+        }
+
+        if (isEvcHost) {
+            // Only used to create (add) new event correlations
+            url = `${proxyPath}/hosts/loadElementsByContainerId/${containerId}/${hostId}/${isEvcHost}.json`
         }
 
         return this.http.get<HostElements>(url, {

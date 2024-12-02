@@ -1,0 +1,249 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['MapModule', 'maps', 'index']"
+                   [routerLink]="['/', 'map_module', 'maps', 'index']">
+                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    {{ t('Maps') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Maps') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadMaps()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['MapModule', 'maps', 'add']"
+                            [routerLink]="['/', 'map_module', 'maps', 'add']" cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Maps.name]']"
+                                       [placeholder]="'Filter by Map name' | transloco"
+                                       aria-label="Map Name"
+                                       cFormControl
+                                       name="maps.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Maps.title]']"
+                                       [placeholder]="'Filter by Map title' | transloco"
+                                       aria-label="Map Title"
+                                       cFormControl
+                                       name="maps.title"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-table-loader *ngIf="!maps"></oitc-table-loader>
+            <table *ngIf="maps" bordered cTable class="mt-2 mb-0" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Maps.name">
+                        {{ t('Map name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Maps.title">
+                        {{ t('Map title') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let map of maps.all_maps">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['mapmodule','maps', 'delete']"
+                            [disabled]="!map.allowEdit"
+                            [item]="map"></oitc-item-select>
+
+                    </td>
+                    <td><a [routerLink]="['/', 'map_module', 'maps', 'index', map.id]">{{ map.name }}</a></td>
+                    <td>{{ map.title }}</td>
+
+                    <td class="width-50">
+                        <oitc-actions-button [allowEdit]="map.allowEdit"
+                                             [permission]="'mapmodule.maps.edit'"
+                                             [url]="'/map_module/mapeditors/edit/' + map.id">
+
+                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
+                                                         [allow]="map.allowEdit"
+                                                         [url]="'/map_module/mapeditors/edit/' + map.id">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Edit in Map editor') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'mapmodule.maps.edit'"
+                                                         [allow]="map.allowEdit"
+                                                         [url]="'/map_module/maps/edit/' + map.id">
+                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                {{ t('Edit settings') }}
+                            </oitc-actions-button-element>
+                            @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'copy']) | async) {
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element [permission]="'mapmodule.maps.copy'"
+                                                             [allow]="map.allowCopy"
+                                                             [url]="'/map_module/maps/copy/' + map.id">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </oitc-actions-button-element>
+                            }
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
+                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + false">
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'mapmodule.mapeditors.view'"
+                                                         [url]="'/map_module/mapeditors/view/' + map.id + '/' + true">
+                                <fa-icon [icon]="['fas', 'expand']"></fa-icon>
+                                {{ t('View in fullscreen') }}
+                            </oitc-actions-button-element>
+                            @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'delete']) | async) {
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(map)"
+                                                             [permission]="'mapmodule.maps.delete'">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            }
+
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records *ngIf="maps && maps.all_maps.length === 0"></oitc-no-records>
+            <ng-container *ngIf="maps && maps.all_maps">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="maps.all_maps.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="navigateCopy()">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </button>
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            *ngIf="maps"
+                            [paginateOrScroll]="maps"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

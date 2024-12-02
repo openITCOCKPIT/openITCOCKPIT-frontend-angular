@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -70,9 +69,11 @@ export class CommandsUsedByComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        this.commandId = Number(this.route.snapshot.paramMap.get('id'));
-        this.load();
-        this.cdr.markForCheck();
+        this.route.queryParams.subscribe(params => {
+            this.commandId = Number(this.route.snapshot.paramMap.get('id'));
+            this.load();
+            this.cdr.markForCheck();
+        });
     }
 
     public ngOnDestroy() {

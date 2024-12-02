@@ -1,0 +1,255 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'clipboard-list']"></fa-icon>
+                {{ t('Importers Overview') }}
+            </li>
+        </ol>
+    </nav>
+    <div class="alert alert-warning border-faded"
+         *ngIf="hostdefaults.length === 0">
+        <div class="d-flex align-items-center">
+            <div class="alert-icon me-2">
+                <span class="icon-stack icon-stack-md">
+                    <i class="base-circle icon-stack-3x text-warning"></i>
+                    <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                </span>
+            </div>
+            <div class="flex-1">
+                <span class="h5">
+                    {{ t('No "Host defaults" defined') }}
+                </span>
+                <br>
+                <div>
+                    {{ t('Please create at least one "Host defaults"') }}
+                </div>
+            </div>
+            <div class="ms-2">
+                <a *oitcPermission="['ImportModule', 'HostDefaults', 'index']"
+                   [routerLink]="['/', 'import_module', 'HostDefaults', 'index']"
+                   class="btn btn-outline-warning ripple">
+                    <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                    {{ t('Go to "Host defaults"') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Importers') }}
+                <small class="fw-300">
+                    {{ t('Overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['ImportModule', 'importers', 'add']"
+                            [routerLink]="['/', 'import_module', 'importers', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Importers.name]']"
+                                       [placeholder]="'Filter by importer name' | transloco"
+                                       aria-label="importersName"
+                                       cFormControl
+                                       name="importersName"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Importers.description]']"
+                                       [placeholder]="'Filter by importer description' | transloco"
+                                       aria-label="importersDescription"
+                                       cFormControl
+                                       name="importersDescription"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            <oitc-table-loader *ngIf="!importers"></oitc-table-loader>
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Importers.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Importers.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Container') }}
+                    </th>
+
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="importers">
+                <tr *ngFor="let importer of importers.importers">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['importmodule','importers', 'delete']"
+                            [disabled]="!importer.allowEdit"
+                            [item]="importer"></oitc-item-select>
+
+                    </td>
+                    <td>
+                        <span *oitcPermission="['importmodule','importers', 'edit']">
+                            @if (importer.allowEdit) {
+                                <a [routerLink]="['/', 'import_module', 'importers', 'edit',importer.id]">
+                                    {{ importer.name }}
+                                </a>
+                            } @else {
+                                {{ importer.name }}
+                            }
+                        </span>
+                        <span *oitcPermission="['importmodule','importers', 'edit']; negate: true">
+                            {{ importer.name }}
+                        </span>
+                    </td>
+                    <td>{{ importer.description }}</td>
+
+                    <td> {{ importer.container }}</td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'ImportModule.importers.edit'"
+                                             [icon]="['fas', 'cog']"
+                                             [url]="'/import_module/importers/edit/' + importer.id">
+                            <oitc-actions-button-element [permission]="'ImportModule.importers.edit'"
+                                                         *ngIf="importer.allowEdit"
+                                                         [url]="'/import_module/importers/edit/' + importer.id">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
+                                                         [url]="'/import_module/import_changelogs/entity/Importer/' + importer.id">
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog') }}
+                            </oitc-actions-button-element>
+                            <li cDropdownDivider></li>
+                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importer)"
+                                                         *ngIf="importer.allowEdit"
+                                                         [permission]="'ImportModule.importedhostgroups.delete'">
+                                <span class="text-danger">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete') }}
+                                </span>
+                            </oitc-actions-button-element>
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <oitc-no-records
+                *ngIf="importers && importers.importers.length === 0"></oitc-no-records>
+            <ng-container *ngIf="importers">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="importers.importers.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="importers"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

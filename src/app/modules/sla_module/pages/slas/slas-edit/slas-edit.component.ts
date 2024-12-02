@@ -19,7 +19,6 @@ import { HistoryService } from '../../../../../history.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SlasReportFormatEnum } from '../slas.enum';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {

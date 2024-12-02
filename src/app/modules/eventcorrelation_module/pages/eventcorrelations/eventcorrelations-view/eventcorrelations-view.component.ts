@@ -34,7 +34,6 @@ import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.inter
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
@@ -125,6 +124,4 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
         }));
     }
-
-    protected readonly AgentHttpClientErrors = AgentHttpClientErrors;
 }
