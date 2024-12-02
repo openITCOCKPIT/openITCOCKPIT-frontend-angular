@@ -14,15 +14,16 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
-import { WizardsIndex } from '../wizards.interface';
+import { WizardElement, WizardsIndex } from '../wizards.interface';
 import { KeyValuePipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-wizards-index',
@@ -77,9 +78,11 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected result?: WizardsIndex;
+    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private router = inject(Router);
 
-    protected filterCategory(category: string): void {
-
+    protected goToWizard(wizard: WizardElement): void {
+        this.router.navigate([`wizards/wizardHostConfiguration/${wizard.type_id}/${wizard.title}/42/${wizard.state}/${wizard.selected_os}`]);
     }
 
     public ngOnInit() {

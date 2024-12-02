@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { UsersIndexParams, UsersIndexRoot } from '../users/users.interface';
 import { map, Observable } from 'rxjs';
-import { WizardsIndex } from './wizards.interface';
+import { LoadHostsByStringRoot, WizardsIndex } from './wizards.interface';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -14,10 +14,17 @@ export class WizardsService {
     private readonly proxyPath: string = inject(PROXY_PATH);
 
     public getIndex(): Observable<WizardsIndex> {
-        const proxyPath: string = this.proxyPath;
-        return this.http.get<WizardsIndex>(`${proxyPath}/wizards/index.json?angular=true`).pipe(
+        return this.http.get<WizardsIndex>(`${this.proxyPath}/wizards/index.json?angular=true`).pipe(
             map((data: WizardsIndex): WizardsIndex => {
                 return data;
+            })
+        );
+    }
+
+    public loadHostsByString(search: string = ''): Observable<SelectKeyValue[]> {
+        return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`,).pipe(
+            map((data: LoadHostsByStringRoot): SelectKeyValue[] => {
+                return data.hosts;
             })
         );
     }

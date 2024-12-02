@@ -1,3 +1,5 @@
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+
 export interface WizardsIndex {
     wizards: { [key: string]: WizardElement }
     possibleWizards: any[]
@@ -15,4 +17,11 @@ export interface WizardElement {
     category: string[]
     necessity_of_assignment: boolean
     selected_os: undefined | string
+}
+
+//
+export interface LoadHostsByStringRoot {
+    hosts: SelectKeyValue[]
+    additionalInfo: any
+    _csrfToken: string
 }
