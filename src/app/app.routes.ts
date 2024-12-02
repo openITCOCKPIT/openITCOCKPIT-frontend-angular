@@ -615,9 +615,11 @@ const coreRoutes: Routes = [{
     path: 'wizards/index',
     loadComponent: () => import('./pages/wizards/wizards-index/wizards-index.component').then(m => m.WizardsIndexComponent)
 }, {
-    // state: wizard.state, selectedOs: wizard.selected_os, typeId: wizard.type_id, title: wizard.title
     path: 'wizards/wizardHostConfiguration/:typeId/:title/:hostId/:state/:selectedOs',
     loadComponent: () => import('./pages/wizards/wizards-wizard-host-configuration/wizards-wizard-host-configuration.component').then(m => m.WizardsWizardHostConfigurationComponent)
+}, {
+    path: 'wizards/mysqlserver/:hostId',
+    loadComponent: () => import('./pages/wizards/mysqlserver/mysqlserver.component').then(m => m.MysqlserverComponent)
 }, {
     path: 'ConfigurationFiles/index',
     loadComponent: () => import('./pages/configurationfiles/configuration-files-index/configuration-files-index.component').then(m => m.ConfigurationFilesIndexComponent)

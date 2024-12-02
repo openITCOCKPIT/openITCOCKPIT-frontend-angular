@@ -1,0 +1,186 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                {{ t('Wizards') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                {{ t('MySQL') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: MySQL Server') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            MYSQL INFO ALERT BOX DING
+            <br/>
+
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('MySQL Server') }}
+                    </h4>
+                </legend>
+
+                <c-card>
+                    <c-card-header>
+                        <h5 c-card-body>
+                            <i class="fas fa-life-ring width-2"></i>
+                            {{ t('MySQL configuration help') }}
+                        </h5>
+                    </c-card-header>
+                    <c-card-body>
+
+                        <ol>
+                            <li>
+                                <div>
+                                    {{ t('To enable external databases access you have to change the {0} of your MySQL server.') }}
+                                    <div class="alert border-danger bg-transparent text-danger">
+                                        {{ t('Changing the bind address can be a potential security issue!') }}
+                                    </div>
+                                    {{ t('The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}') }}
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    {{ t('Change the bind-address from 127.0.0.1 to the external address of the system or use 0.0.0.0 to bind to all interfaces.') }}
+                                    <pre>bind-address = 0.0.0.0</pre>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    {{ t('Restart the MySQL server to apply the changes.') }}
+                                    <pre>systemctl restart mysql.service</pre>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    {{ t('Create a new MySQL user for {0}', {"1": systemName}) }}
+                                    <pre>CREATE USER 'monitoring'&#64;'{{ serverAddr }}' IDENTIFIED BY 'secure_password';
+GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
+                                    {{
+                                        t('Please replace {0} with the address of the {1} server and set a secure password', {
+                                            "1": serverAddr,
+                                            "2": systemName
+                                        })
+                                    }}
+                                </div>
+                            </li>
+
+                        </ol>
+                    </c-card-body>
+                </c-card>
+
+                <div class="mb-3">
+                    <label cLabel for="post.username">
+                        {{ t('Username') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.username"
+                           type="text"
+                           name="post.username"
+                           oitcFormError [errors]="errors" errorField="username"
+                           [(ngModel)]="post.username">
+                    <oitc-form-feedback [errors]="errors" errorField="username"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.password">
+                        {{ t('Password') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.password"
+                           type="password"
+                           name="post.password"
+                           oitcFormError [errors]="errors" errorField="password"
+                           [(ngModel)]="post.password">
+                    <oitc-form-feedback [errors]="errors" errorField="password"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.database">
+                        {{ t('Database') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.database"
+                           type="text"
+                           name="post.database"
+                           oitcFormError [errors]="errors" errorField="database"
+                           [(ngModel)]="post.database">
+                    <oitc-form-feedback [errors]="errors" errorField="database"></oitc-form-feedback>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('MySQL services') }}
+                    </h4>
+
+                    <div ng-repeat="error in errors.services">
+                        <h5 class="text-danger"></h5>
+                    </div>
+
+                </legend>
+
+                WIZZARD FILDERS
+
+
+                <ul>
+                    <ol *ngFor="let service of post.services">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox"
+                                       id="{{service.name}}"
+                                       class="custom-control-input"
+                                       name="checkbox"
+                                       [ngModel]="service.createService">
+                                <label class="custom-control-label custom-control-label-ok"
+                                       for="{{service.name}}">
+                                    {{ service.name }}
+                                    <span class="help-block italic">
+                                        {{ service.description }}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div
+                                class="form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                *ngFor="let commandArgument of service.servicecommandargumentvalues">
+                            {{ commandArgument.commandargument.human_name }}
+                            <input class="form-control"
+                                   type="text"
+                                   [disabled]="!service.createService"
+                                   [ngModel]="commandArgument.value">
+                        </div>
+                    </ol>
+                </ul>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    <h5>{{ t('MySQL services') }}</h5>
+                </legend>
+            </fieldset>
+            <br/>
+        </c-card-body>
+    </c-card>
+</ng-container>

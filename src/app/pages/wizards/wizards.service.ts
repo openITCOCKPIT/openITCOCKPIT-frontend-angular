@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { LoadHostsByStringRoot, WizardsIndex } from './wizards.interface';
+import { LoadHostsByStringRoot, MysqlWizard, WizardRoot, WizardsIndex } from './wizards.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 @Injectable({
@@ -22,9 +22,17 @@ export class WizardsService {
     }
 
     public loadHostsByString(search: string = ''): Observable<SelectKeyValue[]> {
-        return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`,).pipe(
+        return this.http.get<LoadHostsByStringRoot>(`${this.proxyPath}/wizards/loadHostsByString.json?angular=true`).pipe(
             map((data: LoadHostsByStringRoot): SelectKeyValue[] => {
                 return data.hosts;
+            })
+        );
+    }
+
+    public getMysqlWizard(hostId: number): Observable<WizardRoot> {
+        return this.http.get<WizardRoot>(`${this.proxyPath}/wizards/mysqlserver/${hostId}.json?angular=true`).pipe(
+            map((data: WizardRoot): WizardRoot => {
+                return data;
             })
         );
     }
