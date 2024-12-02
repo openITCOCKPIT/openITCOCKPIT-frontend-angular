@@ -292,6 +292,7 @@ export class EvcTreeComponent implements AfterViewInit {
     private getNodes(graph: dagre.graphlib.Graph): INodeViewModel[] {
         return graph.nodes().map((x: any) => {
             let node = graph.node(x);
+            // x = node.id (15, 15_operator, 16, 16_operator etc)
 
             // Cast the dagre.Node to EvcNode
             const evcNode = node as EvcNode;

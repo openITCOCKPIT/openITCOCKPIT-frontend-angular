@@ -31,18 +31,21 @@ import { EvcOperatorComponent } from '../../eventcorrelations-view/evc-tree/evc-
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../../../permissions/permissions.service';
-import { EvcTreeDirection } from '../../eventcorrelations-view/evc-tree/evc-tree.enum';
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { ISize } from '@foblex/2d/size/i-size';
-import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../../eventcorrelations.service';
-import { getTestTreeForDevelopment } from './testtree';
 
-// Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
-interface EvcNode extends dagre.Node {
-    evcNode: EvcGraphNode
+interface OperatorPositionsPerLayer {
+    [key: number]: {
+        start: number,
+        end: number
+    }
+}
+
+interface LeftSideServiceGroupForOperatorPosition {
+    [key: (string | number)]: EvcTreeItem
 }
 
 interface EvcGraphNode {
@@ -50,9 +53,10 @@ interface EvcGraphNode {
     parentId: string | null
     service?: EvcService
     operator?: EventcorrelationOperators | null,
-    type: 'service' | 'operator'
+    type: 'service' | 'operator',
+    totalHeight?: number, // only for operators
     fNodeParentId?: string,
-    forceX: number,
+    position: IPoint,
 }
 
 interface EvcGraphGroup {
@@ -70,7 +74,33 @@ interface INodeViewModel {
 }
 
 const SERVICE_WIDTH = 150;
+const SERVICE_HEIGHT = 38;
+
+// NODE_SEP is the vertical distance between the nodes
+// +--------------+
+// |    Node 1    |
+// +--------------+
+// ↑
+// | <- nodesep
+// ↓
+// +--------------+
+// |    Node 2    |
+// +--------------+
+const NODE_SEP = 10; // vertical distance between nodes
+
+
+// RANK_SEP is the distance between the different layers of the graph
+// --------------------------
+// ↑                        |
+// +--------------+         ↓  <- RANK_SEP
+// |    Layer 1   |         +--------------+
+// +--------------+         |    Layer 2   |
+//                          +--------------+
+//
+const RANK_SEP = 50;
+
 const OPERATOR_WIDTH = 100;
+const OPERATOR_HEIGHT = SERVICE_HEIGHT;
 
 /******************************
  * ⚠️ If you make changes to this file, make sure to update the EvcTreeComponent in the eventcorrelations-view folder as well
@@ -116,7 +146,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public nodes: INodeViewModel[] = [];
     public groups: EvcGraphGroup[] = [];
     public connections: ConnectionOperator[] = [];
-    public direction: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
 
     @ViewChild(FFlowComponent, {static: true})
     public fFlowComponent!: FFlowComponent;
@@ -136,7 +165,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
         effect(() => {
             if (this.isInitialized) {
-                this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+                this.updateGraph();
             }
 
             switch (this.stateForDisabledService()) {
@@ -162,7 +191,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     public ngAfterViewInit(): void {
         this.isInitialized = true;
-        this.updateGraph(new dagre.graphlib.Graph(), this.direction);
+        this.updateGraph();
     }
 
     public ngOnDestroy(): void {
@@ -174,7 +203,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     }
 
 
-    private updateGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
+    private updateGraph(): void {
         if (this.isAutoLayout) {
             if (this.fFlowComponent) {
                 this.fFlowComponent.reset();
@@ -182,154 +211,214 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             }
         }
 
-        this.setGraph(graph, direction);
-        this.nodes = this.getNodes(graph);
-        this.connections = this.getConnections(graph);
+        this.nodes = [];
+        this.groups = [];
+        this.connections = [];
+
+        const nodes = this.getEvcTreeNodes(this.evcTree());
+        this.nodes = this.getNodes(nodes);
 
         this.cdr.markForCheck();
     }
 
-    private setGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
-        const evcTree = [...this.evcTree()]; // create a copy to not modify the original array
-        const nodes = this.getEvcTreeNodes(evcTree);
+    private getNodes(nodes: EvcGraphNode[]): INodeViewModel[] {
+        const result: INodeViewModel[] = [];
 
-        // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
-        graph.setGraph({
-            rankdir: direction,
-
-            // nodesep is the vertical distance between the nodes
-            // +--------------+
-            // |    Node 1    |
-            // +--------------+
-            // ↑
-            // | <- nodesep
-            // ↓
-            // +--------------+
-            // |    Node 2    |
-            // +--------------+
-            nodesep: 10, // vertical distance between nodes
-
-            // ranksep is the distance between the different layers of the graph
-            // --------------------------
-            // ↑                        |
-            // +--------------+         ↓  <- ranksep
-            // |    Layer 1   |         +--------------+
-            // +--------------+         |    Layer 2   |
-            //                          +--------------+
-            //
-            ranksep: 50,
-            edgesep: 10, // not entirely sure
-            marginx: 0,
-            marginy: 0,
-        });
-
-
-        nodes.forEach(node => {
-            // Add service meta data into dagre.Node (EvcNode)
-            graph.setNode(node.id, {
-                width: (node.type === 'service') ? SERVICE_WIDTH : OPERATOR_WIDTH,
-                height: 38,
-                evcNode: node,
-            });
-
-            if (node.parentId != null) {
-                graph.setEdge(node.parentId, node.id, {});
-            }
-        });
-
-
-        dagre.layout(graph);
-    }
-
-    private getNodes(graph: dagre.graphlib.Graph): INodeViewModel[] {
-        return graph.nodes().map((x: any) => {
-            let node = graph.node(x);
-
-            // Cast the dagre.Node to EvcNode
-            const evcNode = node as EvcNode;
-
-            //let xpos = evcNode.x;
-            let xpos = evcNode.evcNode.forceX;
-            if (evcNode.evcNode.type === 'operator') {
-                // This centers the operator node between the service nodes
-                xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 4;
-            }
-
-            return {
+        nodes.forEach((node: EvcGraphNode) => {
+            result.push({
                 id: generateGuid(),
-                connectorId: x,
-                position: {
-                    x: xpos,//evcNode.x,
-                    y: evcNode.y + 30
-                },
-                evcNode: evcNode.evcNode
-            }
+                connectorId: node.id,
+                position: node.position,
+                evcNode: node
+            });
         });
+
+        return result;
     }
 
-
-    private getEvcTreeNodes(evcTree: EvcTree[]): EvcGraphNode[] {
+    private getEvcTreeNodes(evcTree: EvcTree[]) {
         const nodes: EvcGraphNode[] = [];
-        evcTree = getTestTreeForDevelopment();
+        //evcTree = getTestTreeForDevelopment();
 
-        // This method create an array for the EVC Tree (Flow Chart)
-        // We reverse the array from the server, so we can connect the services to the operators more easily
-        //evcTree = evcTree.reverse();
+        this.nodes = [];
         this.groups = [];
-        let firstLayerCounter = 0;
+        this.connections = [];
+
+        let Y = 0; // Start at top of the canvas
 
 
-        evcTree.forEach((layer: EvcTree, layerIndex: number) => {
-            // EVC Layer in reverse order
-            this.groups.push({
-                id: 'layer' + layerIndex.toString(),
-                layerIndex: layerIndex,
-                fGroupSize: {
-                    width: 180,
-                    height: 50
-                },
-                fGroupPosition: {
-                    x: layerIndex * 350 + 60,
-                    y: 0
+        const totalLayersCount: any = {};
+
+        evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
+//            Y = 0; // Reset Y for each layer
+
+            for (const vServiceId in evcLayer) {
+
+                // Calculate the total height of all services for the current part of the correlation
+                // We need this to calculate the position of the operator for this correlation
+                const totalHeight = evcLayer[vServiceId].length * (SERVICE_HEIGHT + NODE_SEP);
+
+                if (!totalLayersCount.hasOwnProperty(vServiceId)) {
+                    totalLayersCount[vServiceId] = {
+                        count: evcLayer[vServiceId].length,
+                        totalHeight: totalHeight,
+                        startY: null
+                    };
                 }
-            });
 
-            for (const vServiceKey in layer) {
-                const vServices = layer[vServiceKey];
+                evcLayer[vServiceId].forEach((evcTreeItem: EvcTreeItem, serviceIndex: number) => {
+                    if (layerIndex === 0) {
+                        // First layer services can be placed top to bottom
+                        // Also the first layer only contain "real" services and no operators
 
-                vServices.forEach((vService, vServiceIndex: number) => {
-                    nodes.push({
-                        id: vService.id.toString(),
-                        //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
-                        parentId: vService.parent_id === null ? null : `${vService.parent_id}_operator`,
-                        service: vService.service,
-                        type: 'service',
-                        fNodeParentId: 'layer' + layerIndex.toString(),
-                        forceX: layerIndex * 350 + 60
-                    });
-
-                    if (vService.operator !== null) {
                         nodes.push({
-                            id: `${vService.id}_operator`,
-                            parentId: vService.id.toString(),
-                            operator: vService.operator,
-                            type: 'operator',
-                            forceX: layerIndex * 350 + 60
+                            id: evcTreeItem.id.toString(),
+                            //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
+                            parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
+                            service: evcTreeItem.service,
+                            type: 'service',
+                            position: {
+                                x: 0, // First layer services are always at the left side of the canvas
+                                y: Y
+                            }
                         });
-                    }
-                    if (layerIndex === 0 && vService.operator === null) {
-                        firstLayerCounter++;
+
+                        // If we are the first service in this "group of services", we save the Y position
+                        // so we can calculate the operator position later
+                        if (totalLayersCount[vServiceId].startY === null) {
+                            console.log(`Layer: ${layerIndex} SAVE Y ${Y}`);
+                            totalLayersCount[vServiceId].startY = Y;
+                        }
+
+                        // Calculate the Y position for the next first layer service
+                        Y = Y + (SERVICE_HEIGHT + NODE_SEP);
                     }
 
+                    if (layerIndex > 0) {
+                        // Our Y position is the middle of the total height of all services in the previous layer
+                        // ┌----- offsetY
+                        // ↓
+                        // +--------------+                       ←---------------------┐
+                        // |    Node 1    |----------+                                  |
+                        // +--------------+          |    +--------------+              |
+                        //                           +--- |      AND     |          totalHeight
+                        // +--------------+          |    +--------------+              |
+                        // |    Node 2    |----------+                                  |
+                        // +--------------+                       ←---------------------┘
+
+                        const offsetY = totalLayersCount[evcTreeItem.id.toString()].startY;
+                        // Total height if all previous services
+                        const totalHeight = totalLayersCount[evcTreeItem.id.toString()].totalHeight;
+
+                        const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
+                        const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY;
+
+                        // Add the operator
+                        if (evcTreeItem.operator !== null) {
+                            nodes.push({
+                                id: `${evcTreeItem.id}_operator`,
+                                parentId: evcTreeItem.id.toString(),
+                                operator: evcTreeItem.operator,
+                                type: 'operator',
+                                totalHeight: totalHeight,
+                                position: {
+                                    x: layerIndex * (SERVICE_WIDTH + RANK_SEP),
+                                    y: operatorY
+                                }
+                            });
+                        }
+
+                        // Add the vService
+                        nodes.push({
+                            id: evcTreeItem.id.toString(),
+                            parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
+                            service: evcTreeItem.service,
+                            type: 'service',
+                            position: {
+                                x: layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP),
+                                y: vServiceY
+                            }
+                        });
+
+                        // Save the Y position for the next layer of operators / vServices
+                        if (evcTreeItem.parent_id !== null) {
+                            if (totalLayersCount[evcTreeItem.parent_id.toString()].startY === null) {
+                                console.log(`Layer: ${layerIndex} SAVE Y ${vServiceY}`);
+                                totalLayersCount[evcTreeItem.parent_id.toString()].startY = vServiceY;
+                            }
+                        }
+
+                    }
                 });
-            }
-        });
 
-        _.forEach(this.groups, (group) => {
-            group.fGroupSize.height = (50 * firstLayerCounter) + 50;
+
+                // for (const evcTreeItem of evcLayer[vServiceId]) { //evcLayer[vServiceId].forEach((evcTreeItem: EvcTreeItem) => {
+                //     if (layerIndex > 0) {
+                //         //console.log(JSON.stringify(totalLayersCount[vServiceId]));
+                //         Y = totalLayersCount[vServiceId].startY + (totalLayersCount[vServiceId].totalHeight / 2) - (OPERATOR_HEIGHT / 2);
+                //     }
+                //     nodes.push({
+                //         id: evcTreeItem.id.toString(),
+                //         //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
+                //         parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
+                //         service: evcTreeItem.service,
+                //         type: 'service',
+                //         position: {
+                //             x: layerIndex * (SERVICE_WIDTH + RANK_SEP),
+                //             y: Y + (SERVICE_HEIGHT + NODE_SEP),
+                //         }
+                //     });
+
+                //     /*  console.log({
+                //           layerIndex,
+                //           vServiceId,
+                //           id: evcTreeItem.id.toString(),
+                //           Y
+                //       });*/
+                //     if (totalLayersCount[vServiceId].startY === null) {
+                //         totalLayersCount[vServiceId].vServiceId = vServiceId;
+                //         totalLayersCount[vServiceId].layerIndex = layerIndex;
+                //         totalLayersCount[vServiceId].id = evcTreeItem.id.toString();
+                //         totalLayersCount[vServiceId].startY = Y;
+                //         console.log(JSON.stringify(totalLayersCount[vServiceId]));
+                //     }
+
+
+                //     if (evcTreeItem.operator !== null) {
+                //         let vServiceCount = totalLayersCount[evcTreeItem.id];
+                //         nodes.push({
+                //             id: `${evcTreeItem.id}_operator`,
+                //             parentId: evcTreeItem.id.toString(),
+                //             operator: evcTreeItem.operator,
+                //             type: 'operator',
+                //             totalHeight: totalHeight,
+                //             position: {
+                //                 x: layerIndex * (OPERATOR_WIDTH + RANK_SEP) - 30,
+                //                 y: Y + (vServiceCount.totalHeight / 2 + (OPERATOR_HEIGHT + NODE_SEP) / 2),
+                //             }
+                //         });
+                //     }
+
+                //     if (evcTreeItem.parent_id !== null) {
+                //         this.connections.push({
+                //             id: generateGuid(),
+                //             from: evcTreeItem.parent_id.toString(),
+                //             to: evcTreeItem.id.toString()
+                //         });
+                //     }
+
+                //     if (layerIndex === 0) {
+                //         Y = Y + (SERVICE_HEIGHT + NODE_SEP);
+                //     }
+                //     //});  // <-- end .foreach
+                // } // <-- end for of
+
+            }
+
         });
 
         return nodes;
+
     }
 
 
