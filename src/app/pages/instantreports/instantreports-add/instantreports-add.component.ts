@@ -14,7 +14,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -31,7 +30,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { InstantreportPost } from '../instantreports.interface';
 import { InstantreportEvaluationTypes, InstantreportObjectTypes } from '../instantreports.enums';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { RouterLink } from '@angular/router';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
@@ -100,7 +99,7 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
     public containers: SelectKeyValue[] = [];
     public hosts: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
-    public services: SelectKeyValue[] = [];
+    public services: SelectItemOptionGroup[] = [];
     public servicegroups: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public users: SelectKeyValue[] = [];

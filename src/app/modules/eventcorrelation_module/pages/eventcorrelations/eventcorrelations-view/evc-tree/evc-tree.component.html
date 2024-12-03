@@ -55,7 +55,7 @@
 
                 @if (node.evcNode.type === 'service') {
                     <div class="service-node"
-                         (mouseenter)="toggleToaster(node.evcNode.service?.id)"
+                         (mouseenter)="toggleToaster(Number(node.evcNode.service?.id))"
                          (mouseleave)="cancelToaster()">
                         <!-- vService container -->
 
@@ -89,7 +89,7 @@
                                     <oitc-downtime-icon
                                         *oitcPermission="['services', 'browser']"
                                         type="services"
-                                        [objectId]="node.evcNode.service?.id">
+                                        [objectId]="Number(node.evcNode.service?.id)">
                                     </oitc-downtime-icon>
                                     <fa-icon [icon]="['fas', 'power-off']" size="lg"
                                              *oitcPermission="['services', 'browser'];negate:true"></fa-icon>
@@ -100,7 +100,7 @@
                                         <oitc-acknowledgement-icon
                                             *ngIf="node.evcNode.service?.servicestatus"
                                             type="services"
-                                            [objectId]="node.evcNode.service?.id"
+                                            [objectId]="Number(node.evcNode.service?.id)"
                                             [acknowledgement_type]="node.evcNode.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
                                     } @else {
                                         <fa-icon [icon]="['far', 'user']"

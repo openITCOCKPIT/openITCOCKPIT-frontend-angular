@@ -15,7 +15,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -36,7 +35,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { InstantreportPost } from '../instantreports.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
@@ -96,7 +95,7 @@ export class InstantreportsEditComponent {
     public containers: SelectKeyValue[] = [];
     public hosts: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
-    public services: SelectKeyValue[] = [];
+    public services: SelectItemOptionGroup[] = [];
     public servicegroups: SelectKeyValue[] = [];
     public timeperiods: SelectKeyValue[] = [];
     public users: SelectKeyValue[] = [];
