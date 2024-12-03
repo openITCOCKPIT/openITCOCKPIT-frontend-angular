@@ -308,7 +308,10 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         const totalHeight = totalLayersCount[evcTreeItem.id.toString()].endY - totalLayersCount[evcTreeItem.id.toString()].startY;
 
                         const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
-                        const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY;
+                        const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY - ((SERVICE_HEIGHT - OPERATOR_HEIGHT) / 2);
+                        //                        ↑ Center the operator vertically in the total height of all services in the previous layer
+                        //                                                                                       ↑ Center the operator vertically to the vService
+                        //                                                                                         because vService is 6px higher than the operator
 
                         // Calculate the position of the next vService, then go back one step to place the operator
                         const vServiceX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
@@ -354,24 +357,23 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         }
 
                     }
-
-                    // Push connection between nodes
-                    if (evcTreeItem.parent_id !== null) {
-                        this.connections.push({
-                            id: generateGuid(),
-                            from: evcTreeItem.parent_id.toString(),
-                            to: evcTreeItem.id.toString()
-                        });
-                    }
                 });
             }
 
         });
 
-        console.log(this.connections);
-        console.log(this.connections.length);
-        return nodes;
+        // Push connection between nodes
+        nodes.forEach((node: EvcGraphNode) => {
+            if (node.parentId !== null) {
+                this.connections.push({
+                    id: generateGuid(),
+                    from: node.parentId.toString(),
+                    to: node.id.toString()
+                });
+            }
+        });
 
+        return nodes;
     }
 
 
