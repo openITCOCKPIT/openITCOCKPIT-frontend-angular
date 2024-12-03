@@ -8,7 +8,7 @@ import {
     input,
     ViewChild
 } from '@angular/core';
-import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
+import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import * as dagre from "@dagrejs/dagre"
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
@@ -417,4 +417,5 @@ export class EvcTreeComponent implements AfterViewInit {
     protected readonly Number = Number;
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
     protected readonly EvcTreeDirection = EvcTreeDirection;
+    protected readonly EFMarkerType = EFMarkerType;
 }

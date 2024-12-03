@@ -28,9 +28,16 @@
             <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
                           [fSelectionDisabled]="true"
                           [fReassignDisabled]="true"
-                          fType="segment"
+                          fType="bezier"
                           fBehavior="fixed">
-
+                <svg viewBox="0 0 12 12" fMarker [type]="EFMarkerType.START" [height]="12" [width]="12" [refX]="5"
+                     [refY]="5">
+                    <circle cx="5" cy="5" r="4" stroke="#5856d6" fill="var(--connection-color)" stroke-width="2"></circle>
+                </svg>
+                <svg viewBox="0 0 12 12" fMarker [type]="EFMarkerType.END" [height]="12" [width]="12" [refX]="5"
+                     [refY]="5">
+                    <circle cx="5" cy="5" r="4" stroke="#5856d6" fill="var(--connection-color)" stroke-width="2"></circle>
+                </svg>
 
             </f-connection>
         }
@@ -166,4 +173,3 @@
 </f-flow>
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>
-
