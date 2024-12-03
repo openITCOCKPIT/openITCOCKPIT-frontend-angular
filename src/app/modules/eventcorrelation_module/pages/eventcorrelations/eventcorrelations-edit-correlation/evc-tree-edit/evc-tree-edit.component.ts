@@ -358,7 +358,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         }
 
                         if (evcTreeItem.parent_id !== null) {
-                            totalLayersCount[evcTreeItem.parent_id.toString()].endY = vServiceY + SERVICE_HEIGHT + NODE_SEP;
+                            // We do not need to add a NODE_SEP because vServices are always only one service (odd)
+                            // vService = multiple releas services from layer 0 get combined to one vService
+                            totalLayersCount[evcTreeItem.parent_id.toString()].endY = vServiceY + SERVICE_HEIGHT;
                         }
 
                     }
