@@ -310,19 +310,11 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
                         const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY;
 
+                        // Calculate the position of the next vService, then go back one step to place the operator
+                        const vServiceX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
+                        const operatorX = vServiceX - RANK_SEP - OPERATOR_WIDTH;
+
                         // Add the operator
-                        /*
-                        let myX = layerIndex * (SERVICE_WIDTH + RANK_SEP);
-                        if (layerIndex > 1) {
-                            // 550 wollen wir
-                            myX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH);
-                        }
-                         */
-                        let myX = layerIndex * (RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
-                        if (layerIndex > 1) {
-                            myX = myX + (layerIndex * SERVICE_WIDTH)
-                        }
-                        console.log(myX);
                         if (evcTreeItem.operator !== null) {
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
@@ -331,7 +323,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                                 type: 'operator',
                                 totalHeight: totalHeight,
                                 position: {
-                                    x: myX,
+                                    x: operatorX,
                                     y: operatorY
                                 }
                             });
@@ -344,7 +336,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             service: evcTreeItem.service,
                             type: 'service',
                             position: {
-                                x: layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP),
+                                x: vServiceX,
                                 y: vServiceY
                             }
                         });
@@ -362,74 +354,22 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         }
 
                     }
+
+                    // Push connection between nodes
+                    if (evcTreeItem.parent_id !== null) {
+                        this.connections.push({
+                            id: generateGuid(),
+                            from: evcTreeItem.parent_id.toString(),
+                            to: evcTreeItem.id.toString()
+                        });
+                    }
                 });
-
-
-                // for (const evcTreeItem of evcLayer[vServiceId]) { //evcLayer[vServiceId].forEach((evcTreeItem: EvcTreeItem) => {
-                //     if (layerIndex > 0) {
-                //         //console.log(JSON.stringify(totalLayersCount[vServiceId]));
-                //         Y = totalLayersCount[vServiceId].startY + (totalLayersCount[vServiceId].totalHeight / 2) - (OPERATOR_HEIGHT / 2);
-                //     }
-                //     nodes.push({
-                //         id: evcTreeItem.id.toString(),
-                //         //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
-                //         parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
-                //         service: evcTreeItem.service,
-                //         type: 'service',
-                //         position: {
-                //             x: layerIndex * (SERVICE_WIDTH + RANK_SEP),
-                //             y: Y + (SERVICE_HEIGHT + NODE_SEP),
-                //         }
-                //     });
-
-                //     /*  console.log({
-                //           layerIndex,
-                //           vServiceId,
-                //           id: evcTreeItem.id.toString(),
-                //           Y
-                //       });*/
-                //     if (totalLayersCount[vServiceId].startY === null) {
-                //         totalLayersCount[vServiceId].vServiceId = vServiceId;
-                //         totalLayersCount[vServiceId].layerIndex = layerIndex;
-                //         totalLayersCount[vServiceId].id = evcTreeItem.id.toString();
-                //         totalLayersCount[vServiceId].startY = Y;
-                //         console.log(JSON.stringify(totalLayersCount[vServiceId]));
-                //     }
-
-
-                //     if (evcTreeItem.operator !== null) {
-                //         let vServiceCount = totalLayersCount[evcTreeItem.id];
-                //         nodes.push({
-                //             id: `${evcTreeItem.id}_operator`,
-                //             parentId: evcTreeItem.id.toString(),
-                //             operator: evcTreeItem.operator,
-                //             type: 'operator',
-                //             totalHeight: totalHeight,
-                //             position: {
-                //                 x: layerIndex * (OPERATOR_WIDTH + RANK_SEP) - 30,
-                //                 y: Y + (vServiceCount.totalHeight / 2 + (OPERATOR_HEIGHT + NODE_SEP) / 2),
-                //             }
-                //         });
-                //     }
-
-                //     if (evcTreeItem.parent_id !== null) {
-                //         this.connections.push({
-                //             id: generateGuid(),
-                //             from: evcTreeItem.parent_id.toString(),
-                //             to: evcTreeItem.id.toString()
-                //         });
-                //     }
-
-                //     if (layerIndex === 0) {
-                //         Y = Y + (SERVICE_HEIGHT + NODE_SEP);
-                //     }
-                //     //});  // <-- end .foreach
-                // } // <-- end for of
-
             }
 
         });
 
+        console.log(this.connections);
+        console.log(this.connections.length);
         return nodes;
 
     }
