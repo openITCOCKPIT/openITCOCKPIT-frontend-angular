@@ -246,12 +246,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
         let Y = 0; // Start at top of the canvas
 
-
         const totalLayersCount: any = {};
 
         evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
-//            Y = 0; // Reset Y for each layer
-
             for (const vServiceId in evcLayer) {
 
                 if (!totalLayersCount.hasOwnProperty(vServiceId)) {
@@ -288,7 +285,14 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
                         // Calculate the Y position for the next first layer service
                         Y = Y + (SERVICE_HEIGHT + NODE_SEP);
+
                         totalLayersCount[vServiceId].endY = Y;
+                        if (totalLayersCount[vServiceId].count % 2 !== 0) {
+                            // If we have an odd number of services, we need to remove one NODE_SEP
+                            // Otherwise we would have a wrong value for centering the operator
+                            totalLayersCount[vServiceId].endY = totalLayersCount[vServiceId].endY - NODE_SEP;
+                        }
+
                     }
 
                     if (layerIndex > 0) {
@@ -310,8 +314,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
                         const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY - ((SERVICE_HEIGHT - OPERATOR_HEIGHT) / 2);
                         //                        ↑ Center the operator vertically in the total height of all services in the previous layer
-                        //                                                                                       ↑ Center the operator vertically to the vService
-                        //                                                                                         because vService is 6px higher than the operator
+                        //                                                                                    ↑ Center the operator vertically to the vService
+                        //                                                                                      because vService is 2px higher than the operator
+
 
                         // Calculate the position of the next vService, then go back one step to place the operator
                         const vServiceX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
