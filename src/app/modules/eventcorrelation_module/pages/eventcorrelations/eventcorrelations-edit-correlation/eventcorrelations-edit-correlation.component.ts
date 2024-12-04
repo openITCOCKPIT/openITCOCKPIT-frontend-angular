@@ -118,6 +118,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
+    public isLoading: boolean = true;
     public id: number = 0;
 
     public evcTree: EvcTree[] = [];
@@ -165,6 +166,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     }
 
     public loadEventcorrelation() {
+        this.isLoading = true;
+        this.cdr.markForCheck();
+
         this.subscriptions.add(this.EventcorrelationsService.getEventcorrelationEditCorrelation(this.id).subscribe((result) => {
             this.cdr.markForCheck();
 
@@ -178,6 +182,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.downtimedServices = result.downtimedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
 
+            this.isLoading = false;
         }));
     }
 

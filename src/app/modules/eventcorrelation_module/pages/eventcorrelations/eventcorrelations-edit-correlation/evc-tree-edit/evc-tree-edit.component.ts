@@ -44,6 +44,11 @@ interface LayerDetails {
     }
 }
 
+// Holds an array of all Y positions for each layer
+interface CollisionCheck {
+    [key: number]: number[]
+}
+
 interface EvcGraphNode {
     id: string
     parentId: string | null
@@ -237,7 +242,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     private getEvcTreeNodes(evcTree: EvcTree[]) {
         const nodes: EvcGraphNode[] = [];
-        //evcTree = getTestTreeForDevelopment();
+        //evcTree = getTestTreeForCollisionDevelopment();
 
         this.nodes = [];
         this.groups = [];
@@ -247,8 +252,31 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         let X = 15; // Start at left of the canvas (15 as padding)
 
         const totalLayersCount: LayerDetails = {};
+        const collisionCheck: CollisionCheck = {};
+
+        if (evcTree.length === 0) {
+            // Empty EVC - probably a new one
+            // Add the first layer group hardcoded so the user can add new services to the EVC
+            this.groups.push({
+                id: 'layer0',
+                layerIndex: 0,
+                fGroupSize: {
+                    width: GROUP_WIDTH,
+                    height: GROUP_HEIGHT,
+                },
+                fGroupPosition: {
+                    x: X,
+                    y: 0
+                }
+            });
+
+            // Return empty nodes
+            return [];
+        }
 
         evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
+            collisionCheck[layerIndex] = [];
+
             this.groups.push({
                 id: 'layer' + layerIndex.toString(),
                 layerIndex: layerIndex,
@@ -291,7 +319,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // If we are the first service in this "group of services", we save the Y position
                         // so we can calculate the operator position later
                         if (totalLayersCount[vServiceId].startY === null) {
-                            console.log(`Layer: ${layerIndex} SAVE Y ${Y}`);
                             totalLayersCount[vServiceId].startY = Y;
                         }
 
@@ -323,8 +350,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // Total height if all previous services
                         const totalHeight = Number(totalLayersCount[evcTreeItem.id.toString()].endY) - Number(totalLayersCount[evcTreeItem.id.toString()].startY);
 
-                        const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
-                        const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY - ((SERVICE_HEIGHT - OPERATOR_HEIGHT) / 2);
+                        let vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
+                        let operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY - ((SERVICE_HEIGHT - OPERATOR_HEIGHT) / 2);
                         //                        ↑ Center the operator vertically in the total height of all services in the previous layer
                         //                                                                                    ↑ Center the operator vertically to the vService
                         //                                                                                      because vService is 2px higher than the operator
@@ -333,6 +360,36 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // Calculate the position of the next vService, then go back one step to place the operator
                         const vServiceX = layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP);
                         const operatorX = vServiceX - RANK_SEP - OPERATOR_WIDTH;
+
+                        // Check for collision/overlapping of operators
+                        if (collisionCheck[layerIndex].length > 0) {
+                            // The current layer has already some operators / vServices
+                            // Check the Y position does not overlap with the previous Y positions
+
+                            let hasCollision = false;
+                            do {
+                                hasCollision = false;
+                                collisionCheck[layerIndex].forEach((usedYStart: number) => {
+                                    const usedYEnd = usedYStart + SERVICE_HEIGHT + NODE_SEP;
+                                    if ((
+                                        vServiceY >= usedYStart
+                                        && vServiceY <= usedYEnd
+                                    ) || (
+                                        (vServiceY + SERVICE_HEIGHT + 3) >= usedYStart &&
+                                        (vServiceY + SERVICE_HEIGHT + 3) <= usedYEnd
+                                    )
+                                    ) {
+                                        hasCollision = true;
+                                    }
+                                });
+
+                                vServiceY++;
+                                operatorY++;
+                            } while (hasCollision);
+                        }
+
+                        // Store Y position for collision check
+                        collisionCheck[layerIndex].push(vServiceY);
 
                         // Add the operator
                         if (evcTreeItem.operator !== null) {
@@ -364,7 +421,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // Save the Y position for the next layer of operators / vServices
                         if (evcTreeItem.parent_id !== null) {
                             if (totalLayersCount[evcTreeItem.parent_id.toString()].startY === null) {
-                                console.log(`Layer: ${layerIndex}, EVC ID: ${evcTreeItem.id}, SAVE Y ${vServiceY}`);
                                 totalLayersCount[evcTreeItem.parent_id.toString()].startY = vServiceY;
                             }
                         }
