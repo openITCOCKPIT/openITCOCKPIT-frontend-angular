@@ -19,7 +19,6 @@ import {
 } from '../../eventcorrelations.interface';
 import { ConnectionOperator } from '../../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
-import dagre from '@dagrejs/dagre';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { AsyncPipe, JsonPipe, NgClass, NgIf } from '@angular/common';
@@ -37,15 +36,12 @@ import { ISize } from '@foblex/2d/size/i-size';
 import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../../eventcorrelations.service';
 
-interface OperatorPositionsPerLayer {
-    [key: number]: {
-        start: number,
-        end: number
+interface LayerDetails {
+    [key: string]: {
+        count: number
+        startY: null | number
+        endY: null | number
     }
-}
-
-interface LeftSideServiceGroupForOperatorPosition {
-    [key: (string | number)]: EvcTreeItem
 }
 
 interface EvcGraphNode {
@@ -101,6 +97,9 @@ const RANK_SEP = 50;
 
 const OPERATOR_WIDTH = 100;
 const OPERATOR_HEIGHT = 38;
+
+const GROUP_WIDTH = SERVICE_WIDTH + 20; // 20 px padding
+const GROUP_HEIGHT = 50;
 
 /******************************
  * ⚠️ If you make changes to this file, make sure to update the EvcTreeComponent in the eventcorrelations-view folder as well
@@ -244,13 +243,26 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         this.groups = [];
         this.connections = [];
 
-        let Y = 0; // Start at top of the canvas
+        let Y = GROUP_HEIGHT + 15; // Start at top of the canvas
+        let X = 15; // Start at left of the canvas (15 as padding)
 
-        const totalLayersCount: any = {};
+        const totalLayersCount: LayerDetails = {};
 
         evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
-            for (const vServiceId in evcLayer) {
+            this.groups.push({
+                id: 'layer' + layerIndex.toString(),
+                layerIndex: layerIndex,
+                fGroupSize: {
+                    width: GROUP_WIDTH,
+                    height: GROUP_HEIGHT,
+                },
+                fGroupPosition: {
+                    x: X + layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP) - ((GROUP_WIDTH - SERVICE_WIDTH) / 2),
+                    y: 0
+                }
+            });
 
+            for (const vServiceId in evcLayer) {
                 if (!totalLayersCount.hasOwnProperty(vServiceId)) {
                     totalLayersCount[vServiceId] = {
                         count: evcLayer[vServiceId].length,
@@ -271,7 +283,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             service: evcTreeItem.service,
                             type: 'service',
                             position: {
-                                x: 0, // First layer services are always at the left side of the canvas
+                                x: X, // First layer services are always at the left side of the canvas
                                 y: Y
                             }
                         });
@@ -307,9 +319,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                         // |    Node 2    |----------+                                  |
                         // +--------------+                       ←---------------------┘
 
-                        const offsetY = totalLayersCount[evcTreeItem.id.toString()].startY;
+                        const offsetY = Number(totalLayersCount[evcTreeItem.id.toString()].startY);
                         // Total height if all previous services
-                        const totalHeight = totalLayersCount[evcTreeItem.id.toString()].endY - totalLayersCount[evcTreeItem.id.toString()].startY;
+                        const totalHeight = Number(totalLayersCount[evcTreeItem.id.toString()].endY) - Number(totalLayersCount[evcTreeItem.id.toString()].startY);
 
                         const vServiceY = (totalHeight / 2) - (SERVICE_HEIGHT / 2) + offsetY;
                         const operatorY = (totalHeight / 2) - (OPERATOR_HEIGHT / 2) + offsetY - ((SERVICE_HEIGHT - OPERATOR_HEIGHT) / 2);
@@ -331,7 +343,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                                 type: 'operator',
                                 totalHeight: totalHeight,
                                 position: {
-                                    x: operatorX,
+                                    x: X + operatorX,
                                     y: operatorY
                                 }
                             });
@@ -344,7 +356,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             service: evcTreeItem.service,
                             type: 'service',
                             position: {
-                                x: vServiceX,
+                                x: X + vServiceX,
                                 y: vServiceY
                             }
                         });
@@ -381,17 +393,6 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         });
 
         return nodes;
-    }
-
-
-    private getConnections(graph: dagre.graphlib.Graph): ConnectionOperator[] {
-        return graph.edges().map((x: dagre.Edge) => {
-            return {
-                id: generateGuid(),
-                from: x.v,
-                to: x.w
-            }
-        });
     }
 
     public fitToScreen(): void {
