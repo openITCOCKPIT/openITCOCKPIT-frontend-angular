@@ -1,0 +1,121 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['mapmodule', 'maps', 'index']"
+                   [routerLink]="['/', 'map_module', 'maps', 'index']">
+                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    {{ t('Maps') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Map editor') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Edit map:') }}
+
+                <small class="fw-300">
+                    <!--{{ map.Map.name }}-->
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+
+                <c-nav-item class="px-1">
+                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                        <c-form-check>
+                            <!--<input
+                                type="checkbox"
+                                id="notify_host_recovery"
+                                [(ngModel)]="Mapeditor.helplines.enabled"
+                                (ngModelChange)="post.notify_host_recovery = $event ? 1 : 0"
+                                cFormCheckInput
+                                name="notify_host_recovery"
+                            />-->
+                            <input
+                                type="checkbox"
+                                id="show_helplines"
+                                cFormCheckInput
+                                name="checkbox"
+                                checked="checked"
+                                (change)="onShowHelplines($event)"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="show_helplines">
+                                <i class="checkbox-primary"></i>
+                                {{ t('Show help lines') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown variant="btn-group">
+                        <button cButton cDropdownToggle color="default" class="dropdown-button ripple me-1" size="xs"
+                                [caret]="false">
+                            <span class="fa-stack helpline-stack-icon">
+                                <i class="fas fa-grip-lines fa-stack-1x"></i>
+                                <i class="fas fa-grip-lines-vertical"></i>
+                            </span>
+                            {{ t('Help lines distance') }} <!--- {{ Mapeditor.helplines.size }}-->
+                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let size of helplineSizes">
+                                <!-- ng-click="changeHelplinesSize(<?php echo $helplinesize; ?>)" -->
+                                <a cDropdownItem>{{ size }}x{{ size }}px</a>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+
+        </c-card-header>
+        <c-card-body>
+
+
+            <oitc-map-canvas>
+                <oitc-map-item [position]="{ x: 24, y: 24 }" [itemId]="0">
+                    <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
+                         draggable="false">
+                    <span>
+                        I'm a node Layer 0
+                    </span>
+                </oitc-map-item>
+                <oitc-map-item [position]="{ x: 900, y: 24 }" [itemId]="1">
+                    <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
+                         draggable="false">
+                    <span>
+                        I'm a node Layer 1
+                    </span>
+                </oitc-map-item>
+            </oitc-map-canvas>
+
+        </c-card-body>
+    </c-card>
+</ng-container>

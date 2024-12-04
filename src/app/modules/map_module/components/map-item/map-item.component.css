@@ -1,0 +1,16 @@
+.map-element-container {
+    border: none;
+    background: none;
+    cursor: move;
+    display: inline-block;
+    position: absolute;
+}
+
+.map-element-container:active {
+    opacity: 0.5;
+/ / Semi-transparent while being dragged border: 2 px dashed #4285F4;
+}
+
+.map-element-container.selected {
+    border: 2px dashed #4285F4 !important;
+}

@@ -1,0 +1,7 @@
+<div cdkDrag #container class="map-element-container p-1"
+     [draggable]="dragEnabled"
+     (cdkDragStarted)="onDragStart($event)"
+     [cdkDragConstrainPosition]="computeDragRenderPos"
+     cdkDragBoundary=".map-canvas">
+    <ng-content></ng-content>
+</div>
