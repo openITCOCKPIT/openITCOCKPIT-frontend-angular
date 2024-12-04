@@ -12,9 +12,10 @@
             </f-connection>
         }
         @for (group of groups; track group.id) {
-            <div fGroup fGroupId="group.id" class="with-padding"
-                 [fGroupSize]="{ width: group.fGroupSize.width, height: group.fGroupSize.height }"
-                 [fGroupPosition]="{ x: group.fGroupPosition.x, y: group.fGroupPosition.y }">
+            <div fGroup class="with-padding"
+                 [fGroupSize]="group.fGroupSize"
+                 [fGroupPosition]="group.fGroupPosition"
+                 [ngClass]="{'f-group-error': layerWithErrors[group.layerIndex]}">
                 <div class="title">
                     <button cButton class="ripple w-100 text-center" color="success" type="button"
                             (click)="toggleVServiceModalFunc(group.layerIndex, 'add')">
@@ -30,9 +31,8 @@
         @for (node of nodes; track node.id) {
             <!-- vService Node -->
             <div fNode class="evc-service-container"
-                 [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator' }"
+                 [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-error': evcNodeWithErrors[node.evcNode.id] }"
                  [fNodePosition]="node.position"
-                 fNodeParentId="node.groupId"
                  fNodeOutput [fOutputId]="node.connectorId"
                  [fOutputConnectableSide]="EFConnectableSide.LEFT"
                  fNodeInput [fInputId]="node.connectorId"
@@ -52,6 +52,16 @@
                                 <fa-icon [icon]="['fas', 'plug']" size="lg"
                                          [cTooltip]="disabledStateTitle"
                                          cTooltipPlacement="top"></fa-icon>
+                            </span>
+                        }
+
+                        <!-- Missing Parent vService / Error Badge -->
+                        @if (evcNodeWithErrors[node.evcNode.id]) {
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                [cTooltip]="'Missing parent service'|transloco"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'link-slash']" size="lg"></fa-icon>
                             </span>
                         }
 

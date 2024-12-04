@@ -64,6 +64,7 @@ import {
 import _ from 'lodash';
 import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -132,6 +133,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
+
+    public layerWithErrors: EvcTreeValidationErrors = {};
+    public evcNodeWithErrors: EvcTreeValidationErrors = {};
 
     /** EVC Service Modal variables */
     public modalCurrentLayerIndex: number = 0;
@@ -609,6 +613,60 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         this.subscriptions.add(sub);
 
+    }
+
+    private validateEvcTreeBeforeSave(): boolean {
+        const layerWithErrors: EvcTreeValidationErrors = {};
+        const evcNodeWithErrors: EvcTreeValidationErrors = {};
+        const lastLayerIndex = this.evcTree.length - 1;
+
+        let layerHasErrors: boolean = false;
+
+        this.evcTree.forEach((evcLayer, layerIndex) => {
+            layerHasErrors = false;
+
+            for (const vServiceId in evcLayer) {
+                for (const evcTreeItem of evcLayer[vServiceId]) {
+
+                    // Check all layers for a parent service - except the last layer
+                    if (evcTreeItem.parent_id === null && layerIndex !== lastLayerIndex) {
+                        layerHasErrors = true;
+                        evcNodeWithErrors[evcTreeItem.id] = true;
+                    }
+
+                    // Check the last layer - only allow one element with parent_id = null!
+                    if (layerIndex === lastLayerIndex) {
+                        if (Object.keys(this.evcTree[layerIndex]).length > 1) {
+                            layerHasErrors = true;
+                            evcNodeWithErrors[evcTreeItem.id] = true;
+                        }
+                    }
+
+                }
+            }
+
+            if (layerHasErrors) {
+                layerWithErrors[layerIndex] = true;
+            }
+        });
+
+        this.layerWithErrors = layerWithErrors;
+        this.evcNodeWithErrors = evcNodeWithErrors;
+
+        if (Object.keys(layerWithErrors).length > 0) {
+            return false;
+        }
+
+        if (Object.keys(evcNodeWithErrors).length > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public saveEventcorrelation() {
+        const result = this.validateEvcTreeBeforeSave();
+        this.cdr.markForCheck();
     }
 
     protected readonly EventcorrelationOperators = EventcorrelationOperators;

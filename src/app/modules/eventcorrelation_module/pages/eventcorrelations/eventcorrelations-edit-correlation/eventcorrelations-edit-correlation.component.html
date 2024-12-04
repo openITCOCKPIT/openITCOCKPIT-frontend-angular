@@ -36,9 +36,9 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button (click)="loadEventcorrelation()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+                    <button (click)="saveEventcorrelation()" cButton class="ripple" color="success" size="xs">
+                        <fa-icon [icon]="['fas', 'floppy-disk']"></fa-icon>
+                        {{ t('Save Event Correlation') }}
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
@@ -51,12 +51,12 @@
                     </button>
                 </c-nav-item>
 
-                <c-nav-item class="px-1" *ngIf="hasWritePermission && rootElement">
+                <c-nav-item class="px-1" *ngIf="id">
                     <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
-                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', rootElement.host.id]"
+                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', id]"
                        cButton
                        class="ripple"
-                       color="default"
+                       color="primary"
                        size="xs">
                         <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         {{ t('View') }}
@@ -101,6 +101,8 @@
                     [evcId]="id"
                     [evcTree]="evcTree"
                     [stateForDisabledService]="stateForDisabledService"
+                    [evcNodeWithErrorsInput]="evcNodeWithErrors"
+                    [layerWithErrorsInput]="layerWithErrors"
                     (toggleVServiceModal)="onToggleVServiceModal($event)"></oitc-evc-tree-edit>
             </div>
 

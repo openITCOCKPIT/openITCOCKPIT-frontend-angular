@@ -1,8 +1,14 @@
 .f-group {
-    background-color: lightcoral;
-    border: 2px solid magenta;
-    border-radius: 12px;
+    border-left: var(--cui-card-border-width) dashed var(--cui-card-border-color);
+    border-right: var(--cui-card-border-width) dashed var(--cui-card-border-color);
 }
+
+.f-group-error {
+    background-color: var(--cui-danger-bg-subtle);
+    border: 2px solid var(--cui-danger-border-subtle);
+    border-radius: var(--cui-border-radius);
+}
+
 
 .f-node, .f-group {
     position: relative;
@@ -18,13 +24,4 @@
     padding: 4px 12px;
 }
 
-/***
-.missing-connection-icon::after {
-    font-family:FontAwesome;
-    padding-left: 140px;
-    content: "\f127";
-    color: red;
-
-}
-*/
 
