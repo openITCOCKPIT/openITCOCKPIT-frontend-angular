@@ -25,8 +25,32 @@
             </h5>
         </c-card-header>
         <c-card-body>
-            MYSQL INFO ALERT BOX DING
-            <br/>
+
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('MySQL Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 
             <fieldset class="padding-bottom-20">
@@ -36,57 +60,60 @@
                     </h4>
                 </legend>
 
-                <c-card>
-                    <c-card-header>
-                        <h5 c-card-body>
-                            <i class="fas fa-life-ring width-2"></i>
-                            {{ t('MySQL configuration help') }}
-                        </h5>
-                    </c-card-header>
-                    <c-card-body>
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon"></i>
+                                {{ t('MySQL configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>
+                                        <div>
+                                            {{ t('To enable external databases access you have to change the {0} of your MySQL server.') }}
+                                            <div class="alert border-danger bg-transparent text-danger">
+                                                {{ t('Changing the bind address can be a potential security issue!') }}
+                                            </div>
+                                            {{ t('The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}') }}
+                                        </div>
+                                    </li>
 
-                        <ol>
-                            <li>
-                                <div>
-                                    {{ t('To enable external databases access you have to change the {0} of your MySQL server.') }}
-                                    <div class="alert border-danger bg-transparent text-danger">
-                                        {{ t('Changing the bind address can be a potential security issue!') }}
-                                    </div>
-                                    {{ t('The bind-address is configured in my.cnf. Most likely this file is located at {0} or {1}') }}
-                                </div>
-                            </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Change the bind-address from 127.0.0.1 to the external address of the system or use 0.0.0.0 to bind to all interfaces.') }}
+                                            <pre>bind-address = 0.0.0.0</pre>
+                                        </div>
+                                    </li>
 
-                            <li>
-                                <div>
-                                    {{ t('Change the bind-address from 127.0.0.1 to the external address of the system or use 0.0.0.0 to bind to all interfaces.') }}
-                                    <pre>bind-address = 0.0.0.0</pre>
-                                </div>
-                            </li>
+                                    <li>
+                                        <div>
+                                            {{ t('Restart the MySQL server to apply the changes.') }}
+                                            <pre>systemctl restart mysql.service</pre>
+                                        </div>
+                                    </li>
 
-                            <li>
-                                <div>
-                                    {{ t('Restart the MySQL server to apply the changes.') }}
-                                    <pre>systemctl restart mysql.service</pre>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div>
-                                    {{ t('Create a new MySQL user for {0}', {"1": systemName}) }}
-                                    <pre>CREATE USER 'monitoring'&#64;'{{ serverAddr }}' IDENTIFIED BY 'secure_password';
+                                    <li>
+                                        <div>
+                                            {{ t('Create a new MySQL user for {0}', {"1": systemName}) }}
+                                            <pre>CREATE USER 'monitoring'&#64;'{{ serverAddr }}' IDENTIFIED BY 'secure_password';
 GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
-                                    {{
-                                        t('Please replace {0} with the address of the {1} server and set a secure password', {
-                                            "1": serverAddr,
-                                            "2": systemName
-                                        })
-                                    }}
-                                </div>
-                            </li>
+                                            {{
+                                                t('Please replace {0} with the address of the {1} server and set a secure password', {
+                                                    "1": serverAddr,
+                                                    "2": systemName
+                                                })
+                                            }}
+                                        </div>
+                                    </li>
 
-                        </ol>
-                    </c-card-body>
-                </c-card>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
 
                 <div class="mb-3">
                     <label cLabel for="post.username">
@@ -141,46 +168,72 @@ GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
 
                 </legend>
 
-                WIZZARD FILDERS
+                <c-row class="mb-3">
+                    <c-col md="6">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <ng-select
+                                    id="tags"
+                                    name="tags"
+                                    [items]="[]"
+                                    [(ngModel)]="searchedTags"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [isOpen]="false"
+                                    [placeholder]="'Filter by service name'|transloco"
+                                    (change)="search()">
+                            </ng-select>
+                        </c-input-group>
+                    </c-col>
+                    <c-col md="6">
+                        <span class="cursor-pointer">
+                            <i class="fas fa-lg fa-check-square"></i> {{ t('Check all') }}
+                        </span>
+
+                        <span class="cursor-pointer">
+                            <i class="fas fa-lg fa-square"></i> {{ t('Undo selection') }}
+                        </span>
+                    </c-col>
+
+                </c-row>
 
 
-                <ul>
-                    <ol *ngFor="let service of post.services">
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox"
-                                       id="{{service.name}}"
-                                       class="custom-control-input"
-                                       name="checkbox"
-                                       [ngModel]="service.createService">
-                                <label class="custom-control-label custom-control-label-ok"
-                                       for="{{service.name}}">
-                                    {{ service.name }}
-                                    <span class="help-block italic">
-                                        {{ service.description }}
-                                    </span>
-                                </label>
+                <ul style="margin:0;padding:0">
+                    <ol style="margin:0;padding:0" *ngFor="let service of post.services">
+                        <ng-container *ngIf="hasName(service.name)">
+
+                            <div class="mb-3 form-group">
+                                <div>
+                                    <input cFormCheckInput
+                                           type="checkbox"
+                                           id="{{service.name}}"
+                                           class="alert-icon"
+                                           name="checkbox"
+                                           [ngModel]="service.createService"/>
+                                    <label class="custom-control-label custom-control-label-ok"
+                                           for="{{service.name}}">
+                                        {{ service.name }}
+                                        <span class="help-block italic">
+                                            {{ service.description }}
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div
-                                class="form-group {{detectColor(commandArgument.commandargument.human_name)}}"
-                                *ngFor="let commandArgument of service.servicecommandargumentvalues">
-                            {{ commandArgument.commandargument.human_name }}
-                            <input class="form-control"
-                                   type="text"
-                                   [disabled]="!service.createService"
-                                   [ngModel]="commandArgument.value">
-                        </div>
+                            <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                 *ngFor="let commandArgument of service.servicecommandargumentvalues">
+                                {{ commandArgument.commandargument.human_name }}
+                                <input class="form-control"
+                                       type="text"
+                                       [disabled]="!service.createService"
+                                       [ngModel]="commandArgument.value">
+                            </div>
+                        </ng-container>
                     </ol>
                 </ul>
             </fieldset>
-
-            <fieldset>
-                <legend>
-                    <h5>{{ t('MySQL services') }}</h5>
-                </legend>
-            </fieldset>
-            <br/>
         </c-card-body>
     </c-card>
 </ng-container>

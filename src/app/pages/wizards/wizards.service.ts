@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
-import { LoadHostsByStringRoot, MysqlWizard, WizardRoot, WizardsIndex } from './wizards.interface';
+import { catchError, map, Observable, of } from 'rxjs';
+import { LoadHostsByStringRoot, WizardPost, WizardRoot, WizardsIndex } from './wizards.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -35,5 +36,25 @@ export class WizardsService {
                 return data;
             })
         );
+    }
+
+    public postMysqlWizard(post: WizardPost): Observable<GenericResponseWrapper> {
+        return this.http.post<any>(`${this.proxyPath}/wizards/mysqlserver.json?angular=true`, post)
+            .pipe(
+                map(data => {
+                    return {
+                        success: true,
+                        data: 342
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
+
     }
 }

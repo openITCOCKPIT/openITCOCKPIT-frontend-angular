@@ -2,22 +2,36 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subscription } from 'rxjs';
 import { WizardsService } from '../wizards.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { WizardRoot } from '../wizards.interface';
+import { Service, WizardPost, WizardRoot } from '../wizards.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericValidationError } from '../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { HistoryService } from '../../../history.service';
 
 @Component({
     selector: 'oitc-mysqlserver',
@@ -35,33 +49,60 @@ import { NgForOf } from '@angular/common';
         FormFeedbackComponent,
         FormControlDirective,
         RequiredIconComponent,
-        NgForOf
+        NgForOf,
+        AccordionComponent,
+        AccordionItemComponent,
+        AccordionButtonDirective,
+        TemplateIdDirective,
+        RowComponent,
+        ColComponent,
+        DebounceDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        NgSelectComponent,
+        FormCheckInputDirective,
+        FormCheckComponent,
+        NgIf
     ],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MysqlserverComponent implements OnInit, OnDestroy {
-    private readonly Subscriptions = new Subscription();
+    private readonly subscriptions = new Subscription();
     private readonly WizardsService: WizardsService = inject(WizardsService);
     private readonly route = inject(ActivatedRoute);
-    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly notyService: NotyService = inject(NotyService);
+    private readonly HistoryService: HistoryService = inject(HistoryService);
 
+    protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected hostId: number = 0;
     protected wizard: WizardRoot = {} as WizardRoot;
     protected serverAddr: string = 'localhost';
     protected systemName: string = 'mysqlserver';
     protected errors: GenericValidationError = {} as GenericValidationError;
+    protected servicetemplates: any = null;
+    protected servicesNamesForExistCheck: string[] = [];
+    protected searchedTags: string[] = [];
+    protected post: WizardPost = {
+        database: '',
+        host_id: 0,
+        password: '',
+        services: [],
+        username: ''
+    } as WizardPost;
 
     public ngOnInit() {
-        this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
+        this.post.host_id = Number(this.route.snapshot.paramMap.get('hostId'));
 
         // Fetch wizard settings and service templates
         this.loadWizard();
     }
 
     public ngOnDestroy() {
-        this.Subscriptions.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     protected detectColor = function (label: string): string {
@@ -76,19 +117,47 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
         return '';
     };
 
+    protected submit(): void {
 
-    protected servicetemplates: any = null;
-    protected servicesNamesForExistCheck: string[] = [];
-    protected post: any = {
-        database: '',
-        host_id: this.hostId,
-        password: '',
-        services: [],
-        username: ''
-    };
+        this.subscriptions.add(this.WizardsService.postMysqlWizard(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const title: string = this.TranslocoService.translate('User');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
+                    const url: (string | number)[] = ['users', 'edit', result.data.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    this.HistoryService.navigateWithFallback(['/users/index']);
+                    return;
+                }
+                // Error
+                this.notyService.genericError();
+                const errorResponse: GenericValidationError = result.data as GenericValidationError;
+                if (result) {
+                    this.errors = errorResponse;
+
+                }
+            })
+        );
+    }
+
+    protected hasName = (name: string): boolean => {
+        if (this.searchedTags.length === 0) {
+            return true;
+        }
+        return this.searchedTags.some((tag) => {
+            return name.toLowerCase().includes(tag.toLowerCase());
+        });
+    }
+
+    protected search = (): void => {
+        console.warn(this.searchedTags);
+        this.cdr.markForCheck();
+    }
 
     private loadWizard() {
-        this.Subscriptions.add(this.WizardsService.getMysqlWizard(this.hostId)
+        this.subscriptions.add(this.WizardsService.getMysqlWizard(this.post.host_id)
             .subscribe((result: WizardRoot) => {
                 this.wizard = result;
 
@@ -101,13 +170,13 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
                 for (let key in this.servicetemplates) {
                     this.post.services.push(
                         {
-                            'host_id': this.hostId,
-                            'servicetemplate_id': this.servicetemplates[key].id,
-                            'name': this.servicetemplates[key].name,
-                            'description': this.servicetemplates[key].description,
-                            'servicecommandargumentvalues': this.servicetemplates[key].servicetemplatecommandargumentvalues,
-                            'createService': true
-                        });
+                            host_id: this.post.host_id,
+                            servicetemplate_id: this.servicetemplates[key].id,
+                            name: this.servicetemplates[key].name,
+                            description: this.servicetemplates[key].description,
+                            servicecommandargumentvalues: this.servicetemplates[key].servicetemplatecommandargumentvalues,
+                            createService: true
+                        } as Service);
                 }
 
                 this.cdr.markForCheck();

@@ -28,9 +28,9 @@ export interface LoadHostsByStringRoot {
 
 
 // WIZARD POST
-export interface MysqlWizard {
+export interface WizardPost {
     database: string
-    host_id: string
+    host_id: number
     password: string
     services: Service[]
     username: string
@@ -39,7 +39,7 @@ export interface MysqlWizard {
 export interface Service {
     createService: boolean
     description: string
-    host_id: string
+    host_id: number
     name: string
     servicecommandargumentvalues: Servicecommandargumentvalue[]
     servicetemplate_id: number
@@ -63,6 +63,7 @@ export interface Commandargument {
     modified: string
     name: string
 }
+
 // WIZARD GET
 export interface WizardRoot {
     servicetemplates: Servicetemplate[]
@@ -124,7 +125,7 @@ export interface Servicetemplate {
     created: string
     modified: string
     check_command: CheckCommand
-    servicetemplatecommandargumentvalues: Servicetemplatecommandargumentvalue[]
+    servicetemplatecommandargumentvalues: Servicecommandargumentvalue[]
 }
 
 export interface CheckCommand {
@@ -138,21 +139,4 @@ export interface CheckCommand {
     commandarguments: Commandargument[]
 }
 
-export interface Commandargument {
-    id: number
-    command_id: number
-    name: string
-    human_name: string
-    created: string
-    modified: string
-}
 
-export interface Servicetemplatecommandargumentvalue {
-    id: number
-    commandargument_id: number
-    servicetemplate_id: number
-    value: string
-    created: string
-    modified: string
-    commandargument: Commandargument
-}
