@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Service } from '../wizards.interface';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     AccordionButtonDirective,
     AccordionComponent,
@@ -30,12 +28,12 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { MysqlWizardGet, MysqlWizardPost } from './mysqlserver-wizard.interface';
 import { MysqlserverWizardService } from './mysqlserver-wizard.service';
+import { WizardsAbstractComponent } from '../wizards-abstract/wizards-abstract.component';
 
 @Component({
     selector: 'oitc-mysqlserver',
@@ -75,23 +73,13 @@ import { MysqlserverWizardService } from './mysqlserver-wizard.service';
     styleUrl: './mysqlserver.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MysqlserverComponent implements OnInit, OnDestroy {
-    private readonly subscriptions = new Subscription();
+export class MysqlserverComponent extends WizardsAbstractComponent {
     private readonly MysqlserverWizardService: MysqlserverWizardService = inject(MysqlserverWizardService);
-    private readonly route = inject(ActivatedRoute);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly notyService: NotyService = inject(NotyService);
-    private readonly router: Router = inject(Router);
 
-    protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
-    protected hostId: number = 0;
-    protected wizard: MysqlWizardGet = {} as MysqlWizardGet;
     protected serverAddr: string = 'localhost';
     protected systemName: string = 'mysqlserver';
-    protected errors: GenericValidationError = {} as GenericValidationError;
-    protected servicetemplates: any = null;
-    protected servicesNamesForExistCheck: string[] = [];
-    protected post: MysqlWizardPost = {
+
+    protected override post: MysqlWizardPost = {
         database: '',
         host_id: 0,
         password: '',
@@ -99,19 +87,7 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
         username: ''
     } as MysqlWizardPost;
 
-    public ngOnInit() {
-        this.post.host_id = Number(this.route.snapshot.paramMap.get('hostId'));
-
-        // Fetch wizard settings and service templates
-        this.loadWizard();
-    }
-
-    public ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
-
-
-    protected submit(): void {
+    public submit(): void {
         this.subscriptions.add(this.MysqlserverWizardService.submit(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -134,30 +110,14 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
         );
     }
 
-    private loadWizard() {
+    public loadWizard() {
         this.subscriptions.add(this.MysqlserverWizardService.fetch(this.post.host_id)
             .subscribe((result: MysqlWizardGet) => {
-                this.wizard = result;
-
-
-                this.servicetemplates = result.servicetemplates;
-                this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
                 this.post.username = result.username;
                 this.post.password = result.password;
 
-                for (let key in this.servicetemplates) {
-                    this.post.services.push(
-                        {
-                            host_id: this.post.host_id,
-                            servicetemplate_id: this.servicetemplates[key].id,
-                            name: this.servicetemplates[key].name,
-                            description: this.servicetemplates[key].description,
-                            servicecommandargumentvalues: this.servicetemplates[key].servicetemplatecommandargumentvalues,
-                            createService: true
-                        } as Service);
-                }
-
-                this.cdr.markForCheck();
+                // Call default stub that fills services and calls CDR.
+                this.afterWizardLoaded(result);
             }));
     }
 }

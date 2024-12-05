@@ -13,6 +13,8 @@ import { customalertModuleRoutes } from './modules/customalert_module/customaler
 import { checkmkModuleRoutes } from './modules/checkmk_module/checkmk_module.routes';
 import { mapModuleRoutes } from './modules/map_module/map_module.routes';
 import { eventcorrelationModuleRoutes } from './modules/eventcorrelation_module/eventcorrelation_module.routes';
+import { printerModuleRoutes } from './modules/printer_module/printer_module.routes';
+import { vmwaresnapshotModuleRoutes } from './modules/vmwaresnapshot_module/vmwaresnapshot_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -39,6 +41,8 @@ class LegacyUrlComponent {
 /***    Routes for modules   ***/
 const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
+    ...printerModuleRoutes,
+    ...vmwaresnapshotModuleRoutes,
     ...customalertModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,

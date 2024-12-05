@@ -8,9 +8,10 @@
                     {{ t('Home') }}
                 </a></li>
             <li aria-current="page" class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Wizards') }}
-            </li>
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
                 {{ t('MySQL') }}

@@ -4,6 +4,9 @@
         <legend class="fs-md fieldset-legend-border-bottom">
             <h4>
                 {{ title }}
+                <span class="help-block italic text-primary">
+                    {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+                </span>
             </h4>
 
             <div ng-repeat="error in errors.services">

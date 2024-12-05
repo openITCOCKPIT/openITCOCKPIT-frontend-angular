@@ -34,6 +34,5 @@ export class MysqlserverWizardService extends WizardsService {
                     });
                 })
             );
-
     }
 }
