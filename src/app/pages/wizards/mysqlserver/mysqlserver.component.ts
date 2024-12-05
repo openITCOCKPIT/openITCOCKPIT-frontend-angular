@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WizardsService } from '../wizards.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Service, WizardPost, WizardRoot } from '../wizards.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -32,7 +32,9 @@ import { NgForOf, NgIf } from '@angular/common';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { HistoryService } from '../../../history.service';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 
 @Component({
     selector: 'oitc-mysqlserver',
@@ -65,7 +67,8 @@ import { HistoryService } from '../../../history.service';
         FormCheckInputDirective,
         FormCheckComponent,
         NgIf,
-        FormLabelDirective
+        FormLabelDirective,
+        WizardsDynamicfieldsComponent
     ],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
@@ -77,7 +80,7 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
     private readonly route = inject(ActivatedRoute);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
-    private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly router: Router = inject(Router);
 
     protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected hostId: number = 0;
@@ -87,7 +90,6 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected servicetemplates: any = null;
     protected servicesNamesForExistCheck: string[] = [];
-    protected searchedTags: string[] = [];
     protected post: WizardPost = {
         database: '',
         host_id: 0,
@@ -107,30 +109,17 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected detectColor = function (label: string): string {
-        if (label.match(/warning/gi)) {
-            return 'warning';
-        }
-
-        if (label.match(/critical/gi)) {
-            return 'critical';
-        }
-
-        return '';
-    };
 
     protected submit(): void {
-
         this.subscriptions.add(this.WizardsService.postMysqlWizard(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    const title: string = this.TranslocoService.translate('User');
-                    const msg: string = this.TranslocoService.translate('updated successfully');
-                    const url: (string | number)[] = ['users', 'edit', result.data.id];
+                    const title: string = this.TranslocoService.translate('Success');
+                    const msg: string = this.TranslocoService.translate('Data saved successfully');
 
-                    this.notyService.genericSuccess(msg, title, url);
-                    this.HistoryService.navigateWithFallback(['/users/index']);
+                    this.notyService.genericSuccess(msg, title);
+                    this.router.navigate(['/wizards/index']);
                     return;
                 }
                 // Error
@@ -142,33 +131,6 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
                 }
             })
         );
-    }
-
-    protected hasName = (name: string): boolean => {
-        if (this.searchedTags.length === 0) {
-            return true;
-        }
-        return this.searchedTags.some((tag) => {
-            return name.toLowerCase().includes(tag.toLowerCase());
-        });
-    }
-    protected showParams = (service: Service): boolean => {
-        return service.createService;
-    }
-
-    protected check(state: boolean): void {
-        this.post.services.forEach((service: Service) => {
-            if (!this.hasName(service.name)) {
-                return;
-            }
-            service.createService = state
-        });
-        this.cdr.markForCheck();
-    }
-
-    protected search = (): void => {
-        console.warn(this.searchedTags);
-        this.cdr.markForCheck();
     }
 
     private loadWizard() {

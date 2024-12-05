@@ -162,84 +162,8 @@ GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
                 </div>
             </fieldset>
 
-            <fieldset>
-                <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4>
-                        {{ t('MySQL services') }}
-                    </h4>
-
-                    <div ng-repeat="error in errors.services">
-                        <h5 class="text-danger"></h5>
-                    </div>
-
-                </legend>
-
-                <c-row class="mb-3">
-                    <c-col md="6">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            </span>
-                            <ng-select
-                                    id="tags"
-                                    name="tags"
-                                    [items]="[]"
-                                    [(ngModel)]="searchedTags"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [isOpen]="false"
-                                    [placeholder]="'Filter by service name'|transloco"
-                                    (change)="search()">
-                            </ng-select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col md="6">
-                        <span class="cursor-pointer" (click)="check(true)">
-                            <i class="fas fa-lg fa-check-square"></i> {{ t('Check all') }}
-                        </span>
-
-                        <span class="cursor-pointer" (click)="check(false)">
-                            <i class="fas fa-lg fa-square"></i> {{ t('Undo selection') }}
-                        </span>
-                    </c-col>
-
-                </c-row>
-
-
-                <ul style="margin:0;padding:0">
-                    <ol style="margin:0;padding:0" *ngFor="let service of post.services">
-                        <ng-container *ngIf="hasName(service.name)">
-
-                            <div class="mb-3 form-group">
-                                <div>
-                                    <input cFormCheckInput
-                                           type="checkbox"
-                                           id="{{service.name}}"
-                                           class="alert-icon"
-                                           name="checkbox"
-                                           [ngModel]="service.createService"/>
-                                    <label class="custom-control-label custom-control-label-ok"
-                                           for="{{service.name}}">
-                                        {{ service.name }}
-                                        <span class="help-block italic">
-                                            {{ service.description }}
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
-                                 *ngFor="let commandArgument of service.servicecommandargumentvalues">
-                                {{ commandArgument.commandargument.human_name }}
-                                <input class="form-control"
-                                       type="text"
-                                       [disabled]="!service.createService"
-                                       [ngModel]="commandArgument.value">
-                            </div>
-                        </ng-container>
-                    </ol>
-                </ul>
-            </fieldset>
+            <!--- HERE IS ONLY CONFIGURED STUPH -->
+            <oitc-wizards-dynamicfields [post]="post" [title]="'MySQL services'|transloco"></oitc-wizards-dynamicfields>
         </c-card-body>
     </c-card>
 </ng-container>
