@@ -31,8 +31,11 @@
                 <small class="fw-300" *ngIf="rootElement">
                     {{ rootElement.host.name }}
                 </small>
-            </h5>
 
+                <c-badge color="danger" class="ms-3" *ngIf="hasUnsavedChanges">
+                    {{ t('Unsaved changes') }}
+                </c-badge>
+            </h5>
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">

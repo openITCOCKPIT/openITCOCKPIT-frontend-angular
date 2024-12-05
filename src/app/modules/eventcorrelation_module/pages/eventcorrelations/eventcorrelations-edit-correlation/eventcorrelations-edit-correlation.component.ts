@@ -17,6 +17,7 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
+    BadgeComponent,
     ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
@@ -112,7 +113,8 @@ import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-
         FormSelectDirective,
         LabelLinkComponent,
         SelectComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        BadgeComponent
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -155,6 +157,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public highlightHostId: number = 0;
     public highlightServiceId: number = 0;
 
+    public hasUnsavedChanges: boolean = false;
+
     private subscriptions: Subscription = new Subscription();
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
     private readonly modalService: ModalService = inject(ModalService);
@@ -193,6 +197,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.cdr.markForCheck();
 
             this.evcTree = result.evcTree;
+            this.hasUnsavedChanges = false;
             this.rootElement = result.rootElement;
             this.servicetemplates = result.servicetemplates;
             this.showInfoForDisabledService = result.showInfoForDisabledService;
@@ -615,6 +620,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 });
                 this.showSpinner = false;
 
+                // Mark the EVC as changed
+                this.hasUnsavedChanges = true;
+
                 // All done trigger change detection
                 this.cdr.markForCheck();
             },
@@ -688,6 +696,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public onDeleteEvcNode(event: EvcDeleteNode) {
         this.deleteEvcNode(event.layerIndex, event.evcNodeId);
         this.checkForMissingParents();
+
+        // Mark the EVC as changed
+        this.hasUnsavedChanges = true;
 
         // Create a new reference for Angular Signals
         this.evcTree = [...this.evcTree];
