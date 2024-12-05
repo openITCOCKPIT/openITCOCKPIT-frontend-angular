@@ -29,10 +29,30 @@
             </h5>
         </c-card-header>
         <c-card-body>
-            <div>
-                <button cButton (click)="submit()">
-                    {{ t('Next') }}
-                </button>
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <c-card>
                 <c-card-header>

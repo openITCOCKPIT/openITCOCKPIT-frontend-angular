@@ -17,6 +17,7 @@ import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormControlDirective,
+    FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent,
@@ -63,7 +64,8 @@ import { HistoryService } from '../../../history.service';
         NgSelectComponent,
         FormCheckInputDirective,
         FormCheckComponent,
-        NgIf
+        NgIf,
+        FormLabelDirective
     ],
     templateUrl: './mysqlserver.component.html',
     styleUrl: './mysqlserver.component.css',
@@ -149,6 +151,19 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
         return this.searchedTags.some((tag) => {
             return name.toLowerCase().includes(tag.toLowerCase());
         });
+    }
+    protected showParams = (service: Service): boolean => {
+        return service.createService;
+    }
+
+    protected check(state: boolean): void {
+        this.post.services.forEach((service: Service) => {
+            if (!this.hasName(service.name)) {
+                return;
+            }
+            service.createService = state
+        });
+        this.cdr.markForCheck();
     }
 
     protected search = (): void => {

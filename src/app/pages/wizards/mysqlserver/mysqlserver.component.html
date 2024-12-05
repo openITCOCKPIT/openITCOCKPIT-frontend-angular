@@ -27,7 +27,13 @@
         <c-card-body>
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('MySQL Information') }}
@@ -189,11 +195,11 @@ GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
                         </c-input-group>
                     </c-col>
                     <c-col md="6">
-                        <span class="cursor-pointer">
+                        <span class="cursor-pointer" (click)="check(true)">
                             <i class="fas fa-lg fa-check-square"></i> {{ t('Check all') }}
                         </span>
 
-                        <span class="cursor-pointer">
+                        <span class="cursor-pointer" (click)="check(false)">
                             <i class="fas fa-lg fa-square"></i> {{ t('Undo selection') }}
                         </span>
                     </c-col>
