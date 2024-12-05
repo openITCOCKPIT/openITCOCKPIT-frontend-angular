@@ -24,11 +24,11 @@
         </ol>
     </nav>
 
-    <oitc-block-loader [height]="'25rem'" *ngIf="!evcTree || !rootElement"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="evcTree && rootElement">
+    <oitc-block-loader [height]="'25rem'" *ngIf="isLoading"></oitc-block-loader>
+    <c-card class="mb-3" *ngIf="!isLoading">
         <c-card-header>
             <h5 cCardTitle>{{ t('Edit Event Correlation:') }}
-                <small class="fw-300">
+                <small class="fw-300" *ngIf="rootElement">
                     {{ rootElement.host.name }}
                 </small>
             </h5>
@@ -51,7 +51,7 @@
                     </button>
                 </c-nav-item>
 
-                <c-nav-item class="px-1" *ngIf="hasWritePermission">
+                <c-nav-item class="px-1" *ngIf="hasWritePermission && rootElement">
                     <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
                        [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', rootElement.host.id]"
                        cButton

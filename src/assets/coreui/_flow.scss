@@ -62,9 +62,18 @@
     }
 
     .f-connection-path {
-        fill: none;
+        stroke-width: 1px;
         stroke: var(--connection-color);
-        stroke-width: 2;
+        fill: none;
+        stroke-dashoffset: 0;
+        stroke-dasharray: 5, 5;
+        animation: dash 5s linear infinite;
+    }
+
+    @keyframes dash {
+        to {
+            stroke-dashoffset: 50;
+        }
     }
 
     .f-connection-text, .f-connection-center {
