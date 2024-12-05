@@ -65,15 +65,6 @@
         stroke-width: 1px;
         stroke: var(--connection-color);
         fill: none;
-        stroke-dashoffset: 0;
-        stroke-dasharray: 5, 5;
-        animation: dash 5s linear infinite;
-    }
-
-    @keyframes dash {
-        to {
-            stroke-dashoffset: 50;
-        }
     }
 
     .f-connection-text, .f-connection-center {
@@ -203,5 +194,23 @@
         border-radius: 2px;
         padding: 4px 8px;
         line-height: normal;
+    }
+}
+
+.animated :not(circle) {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 5, 5;
+    animation: dash 5s linear infinite;
+}
+
+circle{
+    stroke-dashoffset: 0;
+    stroke-dasharray: 0, 0;
+    fill: var(--connection-color);
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 50;
     }
 }
