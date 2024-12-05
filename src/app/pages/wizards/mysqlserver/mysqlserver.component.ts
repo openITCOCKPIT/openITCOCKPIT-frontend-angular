@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WizardsService } from '../wizards.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Service, WizardPost, WizardRoot } from '../wizards.interface';
+import { Service } from '../wizards.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -35,6 +34,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { MysqlWizardGet, MysqlWizardPost } from './mysqlserver-wizard.interface';
+import { MysqlserverWizardService } from './mysqlserver-wizard.service';
 
 @Component({
     selector: 'oitc-mysqlserver',
@@ -76,7 +77,7 @@ import {
 })
 export class MysqlserverComponent implements OnInit, OnDestroy {
     private readonly subscriptions = new Subscription();
-    private readonly WizardsService: WizardsService = inject(WizardsService);
+    private readonly MysqlserverWizardService: MysqlserverWizardService = inject(MysqlserverWizardService);
     private readonly route = inject(ActivatedRoute);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
@@ -84,19 +85,19 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
 
     protected readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected hostId: number = 0;
-    protected wizard: WizardRoot = {} as WizardRoot;
+    protected wizard: MysqlWizardGet = {} as MysqlWizardGet;
     protected serverAddr: string = 'localhost';
     protected systemName: string = 'mysqlserver';
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected servicetemplates: any = null;
     protected servicesNamesForExistCheck: string[] = [];
-    protected post: WizardPost = {
+    protected post: MysqlWizardPost = {
         database: '',
         host_id: 0,
         password: '',
         services: [],
         username: ''
-    } as WizardPost;
+    } as MysqlWizardPost;
 
     public ngOnInit() {
         this.post.host_id = Number(this.route.snapshot.paramMap.get('hostId'));
@@ -111,7 +112,7 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
 
 
     protected submit(): void {
-        this.subscriptions.add(this.WizardsService.postMysqlWizard(this.post)
+        this.subscriptions.add(this.MysqlserverWizardService.submit(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
@@ -134,8 +135,8 @@ export class MysqlserverComponent implements OnInit, OnDestroy {
     }
 
     private loadWizard() {
-        this.subscriptions.add(this.WizardsService.getMysqlWizard(this.post.host_id)
-            .subscribe((result: WizardRoot) => {
+        this.subscriptions.add(this.MysqlserverWizardService.fetch(this.post.host_id)
+            .subscribe((result: MysqlWizardGet) => {
                 this.wizard = result;
 
 

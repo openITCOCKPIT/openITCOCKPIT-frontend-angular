@@ -29,11 +29,8 @@ export interface LoadHostsByStringRoot {
 
 // WIZARD POST
 export interface WizardPost {
-    database: string
     host_id: number
-    password: string
     services: Service[]
-    username: string
 }
 
 export interface Service {
@@ -65,12 +62,9 @@ export interface Commandargument {
 }
 
 // WIZARD GET
-export interface WizardRoot {
+export interface WizardGet {
     servicetemplates: Servicetemplate[]
     servicesNamesForExistCheck: string[]
-    username: string
-    password: string
-    _csrfToken: string
 }
 
 export interface Servicetemplate {
