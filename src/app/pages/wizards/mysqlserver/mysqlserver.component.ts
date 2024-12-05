@@ -80,10 +80,12 @@ export class MysqlserverComponent extends WizardsAbstractComponent {
     protected systemName: string = 'mysqlserver';
 
     protected override post: MysqlWizardPost = {
-        database: '',
+// Default fields from the base wizard
         host_id: 0,
-        password: '',
         services: [],
+// Fields for the wizard
+        database: '',
+        password: '',
         username: ''
     } as MysqlWizardPost;
 

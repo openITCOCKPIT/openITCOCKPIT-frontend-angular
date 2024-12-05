@@ -1,68 +1,58 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
+import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import { NetworkbasicWizardService } from './networkbasic-wizard.service';
+import { NetworkbasicWizardGet, NetworkbasicWizardPost } from './networkbasic-wizard.interface';
 import { RouterLink } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
-    CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective,
-    TemplateIdDirective
+    FormLabelDirective
 } from '@coreui/angular';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { PrinterWizardService } from './printer-wizard.service';
-import { PrinterWizardGet, PrinterWizardPost } from './printer-wizard.interface';
-import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { NgIf } from '@angular/common';
 
 @Component({
-    selector: 'oitc-printer',
+    selector: 'oitc-networkbasic',
     standalone: true,
     imports: [
-        FaIconComponent,
-        TranslocoDirective,
         RouterLink,
-        CardBodyComponent,
+        FaIconComponent,
         CardComponent,
         CardHeaderComponent,
-        CardTitleDirective,
+        CardBodyComponent,
         TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        AccordionButtonDirective,
-        AccordionComponent,
-        AccordionItemComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
         RequiredIconComponent,
-        TemplateIdDirective,
         SelectComponent,
-        NgIf
+        FormFeedbackComponent,
+        FormErrorDirective,
+        FormLabelDirective,
+        FormControlDirective,
+        FormsModule,
+        NgIf,
+        WizardsDynamicfieldsComponent,
+        TranslocoDirective
     ],
-    templateUrl: './printer.component.html',
-    styleUrl: './printer.component.css',
+    templateUrl: './networkbasic.component.html',
+    styleUrl: './networkbasic.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrinterComponent extends WizardsAbstractComponent {
-    private readonly PrinterWizardService: PrinterWizardService = inject(PrinterWizardService);
+export class NetworkbasicComponent extends WizardsAbstractComponent {
+    private readonly NetworkbasicWizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
 
-    protected override post: PrinterWizardPost = {
+    protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -76,7 +66,7 @@ export class PrinterComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as PrinterWizardPost;
+    } as NetworkbasicWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
@@ -100,7 +90,7 @@ export class PrinterComponent extends WizardsAbstractComponent {
     ];
 
     public submit(): void {
-        this.subscriptions.add(this.PrinterWizardService.submit(this.post)
+        this.subscriptions.add(this.NetworkbasicWizardService.submit(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
@@ -123,8 +113,8 @@ export class PrinterComponent extends WizardsAbstractComponent {
     }
 
     public loadWizard() {
-        this.subscriptions.add(this.PrinterWizardService.fetch(this.post.host_id)
-            .subscribe((result: PrinterWizardGet) => {
+        this.subscriptions.add(this.NetworkbasicWizardService.fetch(this.post.host_id)
+            .subscribe((result: NetworkbasicWizardGet) => {
                 this.servicetemplates = result.servicetemplates;
                 this.servicesNamesForExistCheck = result.servicesNamesForExistCheck;
 

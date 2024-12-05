@@ -15,6 +15,10 @@ import { mapModuleRoutes } from './modules/map_module/map_module.routes';
 import { eventcorrelationModuleRoutes } from './modules/eventcorrelation_module/eventcorrelation_module.routes';
 import { printerModuleRoutes } from './modules/printer_module/printer_module.routes';
 import { vmwaresnapshotModuleRoutes } from './modules/vmwaresnapshot_module/vmwaresnapshot_module.routes';
+import { db2ModuleRoutes } from './modules/db2_module/db2_module.routes';
+import { vmwarehorizonModuleRoutes } from './modules/vmwarehorizon_module/vmwarehorizon_module.routes';
+import { mssqlModuleRoutes } from './modules/mssql_module/mssql_module.routes';
+import { nwcModuleRoutes } from './modules/nwc_module/nwc_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -43,6 +47,10 @@ const moduleRoutes: Routes = [
     ...snmpTrapModuleRoutes,
     ...printerModuleRoutes,
     ...vmwaresnapshotModuleRoutes,
+    ...db2ModuleRoutes,
+    ...vmwarehorizonModuleRoutes,
+    ...mssqlModuleRoutes,
+    ...nwcModuleRoutes,
     ...customalertModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
