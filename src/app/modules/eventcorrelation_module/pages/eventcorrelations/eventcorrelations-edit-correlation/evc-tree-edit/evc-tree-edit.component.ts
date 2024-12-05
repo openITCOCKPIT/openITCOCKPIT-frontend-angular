@@ -75,6 +75,7 @@ interface INodeViewModel {
     connectorId: string
     position: IPoint,
     evcNode: EvcGraphNode
+    highlight?: boolean
 }
 
 const SERVICE_WIDTH = 150;
@@ -144,6 +145,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
 
     public layerWithErrorsInput = input<EvcTreeValidationErrors>({});
     public evcNodeWithErrorsInput = input<EvcTreeValidationErrors>({});
+
+    public highlightHostId = input<number>(0);
+    public highlightServiceId = input<number>(0);
 
     // !! For template usage only
     public layerWithErrors: EvcTreeValidationErrors = {};
@@ -247,11 +251,21 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         const result: INodeViewModel[] = [];
 
         nodes.forEach((node: EvcGraphNode) => {
+            let highlight = false;
+
+            if (node.type === 'service') {
+                if (node.service?.host.id == this.highlightHostId() || node.service?.id == this.highlightServiceId()) {
+                    highlight = true;
+                }
+            }
+
+
             result.push({
                 id: generateGuid(),
                 connectorId: node.id,
                 position: node.position,
-                evcNode: node
+                evcNode: node,
+                highlight: highlight
             });
         });
 

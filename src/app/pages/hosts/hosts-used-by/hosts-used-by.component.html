@@ -112,8 +112,8 @@
                             <tr *ngFor="let evc of objects.Eventcorrelations">
                                 <td colspan="2">
                                     <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
-                                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.host_id, evc.FilterHost.id]">
-                                        <!-- id, highlightHostId -->
+                                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.host_id]"
+                                       [queryParams]="{'highlightHostId': evc.FilterHost.id}">
                                         {{ evc.Hosts.name }}
                                     </a>
                                     <span

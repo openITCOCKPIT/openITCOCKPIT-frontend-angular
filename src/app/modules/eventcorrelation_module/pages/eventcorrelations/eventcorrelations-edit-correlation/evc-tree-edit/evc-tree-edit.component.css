@@ -25,3 +25,26 @@
 }
 
 
+.gradient-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #0000;
+    background: linear-gradient(var(--node-background-color), var(--node-background-color)) padding-box, conic-gradient(
+        from var(--angle) at 50% 50%,
+        #f7ff0a, #ffac1d, #ff833a, #ff5b50, #cd1371, #a50479
+    ) border-box;
+    animation: 4s rotate linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}

@@ -31,7 +31,7 @@
         @for (node of nodes; track node.id) {
             <!-- vService Node -->
             <div fNode class="evc-service-container"
-                 [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-error': evcNodeWithErrors[node.evcNode.id] }"
+                 [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-error': evcNodeWithErrors[node.evcNode.id], 'gradient-box': node.highlight }"
                  [fNodePosition]="node.position"
                  fNodeOutput [fOutputId]="node.connectorId"
                  [fOutputConnectableSide]="EFConnectableSide.LEFT"

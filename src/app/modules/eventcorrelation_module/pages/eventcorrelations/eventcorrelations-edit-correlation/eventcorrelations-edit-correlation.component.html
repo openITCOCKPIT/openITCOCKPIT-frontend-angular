@@ -104,7 +104,9 @@
                     [evcNodeWithErrorsInput]="evcNodeWithErrors"
                     [layerWithErrorsInput]="layerWithErrors"
                     (toggleVServiceModal)="onToggleVServiceModal($event)"
-                    (toggleDeleteEvcNode)="onDeleteEvcNode($event)"></oitc-evc-tree-edit>
+                    (toggleDeleteEvcNode)="onDeleteEvcNode($event)"
+                    [highlightHostId]="highlightHostId"
+                    [highlightServiceId]="highlightServiceId"></oitc-evc-tree-edit>
             </div>
 
         </c-card-body>
