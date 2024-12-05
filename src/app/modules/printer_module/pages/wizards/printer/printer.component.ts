@@ -20,6 +20,9 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'oitc-printer',
@@ -43,7 +46,9 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
         FormLabelDirective,
         FormsModule,
         RequiredIconComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        SelectComponent,
+        NgIf
     ],
     templateUrl: './printer.component.html',
     styleUrl: './printer.component.css',
@@ -58,15 +63,36 @@ export class PrinterComponent extends WizardsAbstractComponent {
         services: [],
 // Fields for the wizard
         authPassword: '',
-        authProtocol: '',
+        authProtocol: 'md5',
         interfaces: [],
         privacyPassword: '',
-        privacyProtocol: '',
-        securityLevel: '',
+        privacyProtocol: 'des',
+        securityLevel: '1',
         securityName: '',
         snmpCommunity: '',
-        snmpVersion: ''
+        snmpVersion: '2'
     } as PrinterWizardPost;
+    protected snmpVersions: SelectKeyValueString[] = [
+        {value: '1', key: 'SNMP V 1'},
+        {value: '2', key: 'SNMP V 2c'},
+        {value: '3', key: 'SNMP V 3'},
+    ]
+    protected securityLevels : SelectKeyValueString[] = [
+        {key: 'authPriv', value: '1'},
+        {key: 'authNoPriv', value: '2'},
+        {key: 'noAuthNoPriv', value: '3'},
+    ];
+    protected authProtocols : SelectKeyValueString[] = [
+        {key: 'MD5', value: 'md5'},
+        {key: 'SHA', value: 'sha'},
+    ];
+    protected privacyProtocols : SelectKeyValueString[] = [
+        {key: 'DES', value: 'des'},
+        {key: 'AES', value: 'aes'},
+        {key: 'AES128', value: 'aes128'},
+        {key: '3DES', value: '3des'},
+        {key: '3DESDE', value: '3desde'},
+    ];
 
     public submit(): void {
         this.subscriptions.add(this.PrinterWizardService.submit(this.post)
