@@ -11,13 +11,14 @@ import {
     ViewChild
 } from '@angular/core';
 import {
+    EvcDeleteNode,
     EvcService,
     EvcToggleModal,
     EvcTree,
     EvcTreeItem,
     EvcVServiceModalMode
 } from '../../eventcorrelations.interface';
-import { ConnectionOperator } from '../../eventcorrelations-view/evc-tree/evc-tree.interface';
+import { ConnectionOperator, EvcTreeValidationErrors } from '../../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
@@ -58,6 +59,8 @@ interface EvcGraphNode {
     totalHeight?: number, // only for operators
     fNodeParentId?: string,
     position: IPoint,
+    layerIndex: number,
+    usedBy?: string[]
 }
 
 interface EvcGraphGroup {
@@ -72,6 +75,7 @@ interface INodeViewModel {
     connectorId: string
     position: IPoint,
     evcNode: EvcGraphNode
+    highlight?: boolean
 }
 
 const SERVICE_WIDTH = 150;
@@ -139,7 +143,18 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public evcTree = input<EvcTree[]>([]);
     public stateForDisabledService = input<number>(3);
 
+    public layerWithErrorsInput = input<EvcTreeValidationErrors>({});
+    public evcNodeWithErrorsInput = input<EvcTreeValidationErrors>({});
+
+    public highlightHostId = input<number>(0);
+    public highlightServiceId = input<number>(0);
+
+    // !! For template usage only
+    public layerWithErrors: EvcTreeValidationErrors = {};
+    public evcNodeWithErrors: EvcTreeValidationErrors = {};
+
     public toggleVServiceModal = output<EvcToggleModal>();
+    public toggleDeleteEvcNode = output<EvcDeleteNode>();
 
     public disabledStateTitle: string = '';
 
@@ -171,6 +186,11 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             if (this.isInitialized) {
                 this.updateGraph();
             }
+
+            // We move all errors into a class variable so we can use it in the template more easily
+            // using signals is a bit cumbersome
+            this.layerWithErrors = this.layerWithErrorsInput();
+            this.evcNodeWithErrors = this.evcNodeWithErrorsInput();
 
             switch (this.stateForDisabledService()) {
                 case 0:
@@ -219,6 +239,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         this.groups = [];
         this.connections = [];
 
+        this.cdr.markForCheck();
+
         const nodes = this.getEvcTreeNodes(this.evcTree());
         this.nodes = this.getNodes(nodes);
 
@@ -229,11 +251,21 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
         const result: INodeViewModel[] = [];
 
         nodes.forEach((node: EvcGraphNode) => {
+            let highlight = false;
+
+            if (node.type === 'service') {
+                if (node.service?.host.id == this.highlightHostId() || node.service?.id == this.highlightServiceId()) {
+                    highlight = true;
+                }
+            }
+
+
             result.push({
                 id: generateGuid(),
                 connectorId: node.id,
                 position: node.position,
-                evcNode: node
+                evcNode: node,
+                highlight: highlight
             });
         });
 
@@ -258,7 +290,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             // Empty EVC - probably a new one
             // Add the first layer group hardcoded so the user can add new services to the EVC
             this.groups.push({
-                id: 'layer0',
+                id: generateGuid(), // uuid to trigger the change detection of ngfor track by group.id
                 layerIndex: 0,
                 fGroupSize: {
                     width: GROUP_WIDTH,
@@ -274,21 +306,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             return [];
         }
 
+        let firstLayerServicesCount = 0;
         evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
             collisionCheck[layerIndex] = [];
-
-            this.groups.push({
-                id: 'layer' + layerIndex.toString(),
-                layerIndex: layerIndex,
-                fGroupSize: {
-                    width: GROUP_WIDTH,
-                    height: GROUP_HEIGHT,
-                },
-                fGroupPosition: {
-                    x: X + layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP) - ((GROUP_WIDTH - SERVICE_WIDTH) / 2),
-                    y: 0
-                }
-            });
 
             for (const vServiceId in evcLayer) {
                 if (!totalLayersCount.hasOwnProperty(vServiceId)) {
@@ -303,15 +323,15 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                     if (layerIndex === 0) {
                         // First layer services can be placed top to bottom
                         // Also the first layer only contain "real" services and no operators
-
                         nodes.push({
                             id: evcTreeItem.id.toString(),
                             //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
                             parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
                             service: evcTreeItem.service,
+                            layerIndex: layerIndex,
                             type: 'service',
                             position: {
-                                x: X, // First layer services are always at the left side of the canvas
+                                x: X, // First layer services are always on the left side of the canvas
                                 y: Y
                             }
                         });
@@ -332,6 +352,9 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             totalLayersCount[vServiceId].endY = totalLayersCount[vServiceId].endY - NODE_SEP;
                         }
 
+                        // Keep track of the total number of services in the first layer
+                        // to calculate the total height of the group for errors;
+                        firstLayerServicesCount++;
                     }
 
                     if (layerIndex > 0) {
@@ -398,6 +421,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                                 parentId: evcTreeItem.id.toString(),
                                 operator: evcTreeItem.operator,
                                 type: 'operator',
+                                layerIndex: layerIndex,
                                 totalHeight: totalHeight,
                                 position: {
                                     x: X + operatorX,
@@ -411,6 +435,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             id: evcTreeItem.id.toString(),
                             parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
                             service: evcTreeItem.service,
+                            usedBy: evcTreeItem.usedBy,
+                            layerIndex: layerIndex,
                             type: 'service',
                             position: {
                                 x: X + vServiceX,
@@ -448,6 +474,31 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             }
         });
 
+        // Add groups per layer
+        let heightOfAllGroups = GROUP_HEIGHT;
+        if (Object.keys(this.layerWithErrorsInput()).length > 0) {
+            // At least one layer has errors
+            heightOfAllGroups += (firstLayerServicesCount * (SERVICE_HEIGHT + NODE_SEP)) + RANK_SEP; // RANK_SEP is used as padding bottom
+        }
+
+        console.log(heightOfAllGroups);
+
+        evcTree.forEach((evcLayer: EvcTree, layerIndex: number) => {
+            this.groups.push({
+                id: generateGuid(), // uuid to trigger the change detection of ngfor track by group.id
+                layerIndex: layerIndex,
+                fGroupSize: {
+                    width: GROUP_WIDTH,
+                    height: heightOfAllGroups,
+                },
+                fGroupPosition: {
+                    x: X + layerIndex * (SERVICE_WIDTH + RANK_SEP + OPERATOR_WIDTH + RANK_SEP) - ((GROUP_WIDTH - SERVICE_WIDTH) / 2),
+                    y: 0
+                }
+            });
+        });
+        console.log(this.groups);
+
         return nodes;
     }
 
@@ -469,6 +520,13 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             layerIndex: layerIndex,
             mode: mode,
             eventCorrelation: eventCorrelation
+        });
+    }
+
+    public toggleDeleteEvcNodeFunc(layerIndex: number, node: EvcGraphNode) {
+        this.toggleDeleteEvcNode.emit({
+            layerIndex: layerIndex,
+            evcNodeId: node.id
         });
     }
 

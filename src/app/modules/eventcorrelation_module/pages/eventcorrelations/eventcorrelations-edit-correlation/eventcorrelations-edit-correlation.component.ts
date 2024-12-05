@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
     EvcAddVServiceValidationResult,
+    EvcDeleteNode,
+    EvcDeleteNodeDetails,
     EvcModalService,
     EvcServiceSelect,
     EvcToggleModal,
@@ -15,6 +17,7 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
+    BadgeComponent,
     ButtonCloseDirective,
     CardBodyComponent,
     CardComponent,
@@ -64,6 +67,7 @@ import {
 import _ from 'lodash';
 import { SelectItem } from 'primeng/api/selectitem';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -109,7 +113,8 @@ import { HttpErrorResponse } from '@angular/common/http';
         FormSelectDirective,
         LabelLinkComponent,
         SelectComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        BadgeComponent
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -124,7 +129,6 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public evcTree: EvcTree[] = [];
     public rootElement?: EventcorrelationRootElement;
     public servicetemplates: SelectKeyValue[] = [];
-    public hasWritePermission: boolean = false;
 
     public showInfoForDisabledService: number = 0;
     public disabledServices: number = 0; //number of disabled services in the EVC
@@ -132,6 +136,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
+
+    public layerWithErrors: EvcTreeValidationErrors = {};
+    public evcNodeWithErrors: EvcTreeValidationErrors = {};
 
     /** EVC Service Modal variables */
     public modalCurrentLayerIndex: number = 0;
@@ -147,6 +154,11 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     ];
     public errors: GenericValidationError | null = null;
 
+    public highlightHostId: number = 0;
+    public highlightServiceId: number = 0;
+
+    public hasUnsavedChanges: boolean = false;
+
     private subscriptions: Subscription = new Subscription();
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
     private readonly modalService: ModalService = inject(ModalService);
@@ -157,6 +169,18 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.id = Number(this.route.snapshot.paramMap.get('id'));
+
+            // Query String Parameters
+            const highlightHostId = Number(params['highlightHostId']) || 0;
+            if (highlightHostId > 0) {
+                this.highlightHostId = highlightHostId;
+            }
+
+            const highlightServiceId = Number(params['highlightServiceId']) || 0;
+            if (highlightServiceId > 0) {
+                this.highlightServiceId = highlightServiceId;
+            }
+
             this.loadEventcorrelation();
         });
     }
@@ -173,6 +197,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.cdr.markForCheck();
 
             this.evcTree = result.evcTree;
+            this.hasUnsavedChanges = false;
             this.rootElement = result.rootElement;
             this.servicetemplates = result.servicetemplates;
             this.showInfoForDisabledService = result.showInfoForDisabledService;
@@ -595,6 +620,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 });
                 this.showSpinner = false;
 
+                // Mark the EVC as changed
+                this.hasUnsavedChanges = true;
+
                 // All done trigger change detection
                 this.cdr.markForCheck();
             },
@@ -609,6 +637,208 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         this.subscriptions.add(sub);
 
+    }
+
+    private validateEvcTreeBeforeSave(): boolean {
+        const layerWithErrors: EvcTreeValidationErrors = {};
+        const evcNodeWithErrors: EvcTreeValidationErrors = {};
+        const lastLayerIndex = this.evcTree.length - 1;
+
+        let layerHasErrors: boolean = false;
+
+        this.evcTree.forEach((evcLayer, layerIndex) => {
+            layerHasErrors = false;
+
+            for (const vServiceId in evcLayer) {
+                for (const evcTreeItem of evcLayer[vServiceId]) {
+
+                    // Check all layers for a parent service - except the last layer
+                    if (evcTreeItem.parent_id === null && layerIndex !== lastLayerIndex) {
+                        layerHasErrors = true;
+                        evcNodeWithErrors[evcTreeItem.id] = true;
+                    }
+
+                    // Check the last layer - only allow one element with parent_id = null!
+                    if (layerIndex === lastLayerIndex) {
+                        if (Object.keys(this.evcTree[layerIndex]).length > 1) {
+                            layerHasErrors = true;
+                            evcNodeWithErrors[evcTreeItem.id] = true;
+                        }
+                    }
+
+                }
+            }
+
+            if (layerHasErrors) {
+                layerWithErrors[layerIndex] = true;
+            }
+        });
+
+        this.layerWithErrors = layerWithErrors;
+        this.evcNodeWithErrors = evcNodeWithErrors;
+
+        if (Object.keys(layerWithErrors).length > 0) {
+            return false;
+        }
+
+        if (Object.keys(evcNodeWithErrors).length > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public saveEventcorrelation() {
+        const result = this.validateEvcTreeBeforeSave();
+        this.cdr.markForCheck();
+    }
+
+    public onDeleteEvcNode(event: EvcDeleteNode) {
+        this.deleteEvcNode(event.layerIndex, event.evcNodeId);
+        this.checkForMissingParents();
+
+        // Mark the EVC as changed
+        this.hasUnsavedChanges = true;
+
+        // Create a new reference for Angular Signals
+        this.evcTree = [...this.evcTree];
+
+        this.cdr.markForCheck();
+    }
+
+    /**
+     * Find a node inside evcTree by its id
+     * If the node was found, the parent_id and the serviceIndex will be returned
+     *
+     * Otherwise, the parent_id and serviceIndex will be null - Basically this can never happen, as this method gets called
+     * in an onClick event, if the user can click on the node, the node must exist
+     *
+     * @param layerIndex
+     * @param evcNodeId
+     * @private
+     */
+    private findEvcNodeInTreeForDelete(layerIndex: number, evcNodeId: string | number): EvcDeleteNodeDetails {
+        evcNodeId = String(evcNodeId);
+
+        let nodeDetails: EvcDeleteNodeDetails = {
+            id: evcNodeId,        // id of the node we are looking for in evcTree
+            parent_id: null,      // parent if of our node - null if the last one (or unfinished EVC)
+            serviceIndex: null,   // our own position in the array
+            parentEvcId: null,    // ParentId from the evcTree. E.g. 60_vService if we have no parent (or unfinished EVC)
+        };
+
+        for (let parentEvcId in this.evcTree[layerIndex]) {
+            nodeDetails.parentEvcId = parentEvcId;
+
+            for (let k in this.evcTree[layerIndex][parentEvcId]) {
+                //Find the evcNode by the given id
+                if (this.evcTree[layerIndex][parentEvcId][k].id == evcNodeId) {
+                    // parent exists
+                    if (this.evcTree[layerIndex][parentEvcId][k].parent_id !== null) {
+                        nodeDetails.parent_id = String(this.evcTree[layerIndex][parentEvcId][k].parent_id); // our own parent
+                    }
+                    nodeDetails.serviceIndex = Number(k); // our own position in the array
+                    return nodeDetails;
+                }
+            }
+        }
+
+        // No parent found
+        // technically this should never happen
+        return nodeDetails;
+    }
+
+    /**
+     * Remove one vService from the evcTree and also remove the parent vService if no more vServices
+     * where attached to the parent vService
+     *
+     * @param layerIndex
+     * @param evcNodeId
+     * @private
+     */
+    private deleteEvcNode(layerIndex: number, evcNodeId: string | number) {
+
+        // find the parent id in evcTree
+        const nodeDetails = this.findEvcNodeInTreeForDelete(layerIndex, evcNodeId);
+
+        //delete real services from 1st layer in evcTree
+        if (layerIndex === 1) {
+            delete this.evcTree[0][evcNodeId];
+            if (_.isEmpty(this.evcTree[0])) {
+                // EVC is now empty
+                this.evcTree = [];
+                return;
+            }
+        }
+
+        if (nodeDetails.parentEvcId !== null) {
+            if (_.size(this.evcTree[layerIndex][nodeDetails.parentEvcId]) === 1) {
+                // delete layer with number if only single element exists(data type object {})
+                delete this.evcTree[layerIndex][nodeDetails.parentEvcId];
+
+                //Remove layer and all PARENT layers to the left, because this layer is empty now!
+                if (_.isEmpty(this.evcTree[layerIndex])) {
+
+                    const amountOfLayersToDelete = this.evcTree.length - layerIndex;
+                    this.evcTree.splice(layerIndex, amountOfLayersToDelete);
+
+                    //Cleanup done - no parents to delete anymore
+                    return;
+                }
+
+            } else {
+                //remove element with id if layer consists more items than one (data type array [])
+                if (nodeDetails.serviceIndex !== null) {
+                    this.evcTree[layerIndex][nodeDetails.parentEvcId].splice(nodeDetails.serviceIndex, 1);
+                }
+
+                //return, clean up done, all affected elements has been removed
+                return;
+            }
+        }
+
+        //Delete vServices to the right
+        if (nodeDetails.parent_id !== null) {
+            this.deleteEvcNode(layerIndex + 1, nodeDetails.parent_id);
+        }
+    }
+
+    private checkForMissingParents() {
+        for (let layerIndex in this.evcTree) {
+            for (let parentEvcId in this.evcTree[layerIndex]) {
+
+                //Check if this parent exists
+                let parentExists = false;
+                let evcLayerToCheck = parseInt(layerIndex, 10) + 1;
+                if (typeof this.evcTree[evcLayerToCheck] != 'undefined') {
+                    for (let parentEvcIdToCheck in this.evcTree[evcLayerToCheck]) {
+                        for (let k in this.evcTree[evcLayerToCheck][parentEvcIdToCheck]) {
+                            if (String(this.evcTree[evcLayerToCheck][parentEvcIdToCheck][k].id) === String(parentEvcId)) {
+                                parentExists = true;
+                                break;
+                            }
+                        }
+                        if (parentExists === true) {
+                            break;
+                        }
+                    }
+                }
+                if (parentExists === false) {
+                    let container = this.evcTree[layerIndex][parentEvcId];
+                    //resolve original event correlation for processing
+                    delete this.evcTree[layerIndex][parentEvcId];
+                    for (let evcService in container) {
+                        container[evcService].parent_id = null;
+                        // for example: Layer 1{1} with oldKey => 60 [2 Elements with parent_id = 60]
+                        // after delete node with id 60
+                        // Layer 1{2} with keys =>  61_vService[1] and 66_vService[1] and parent_id = null
+                        let key = container[evcService].id + '_vService';
+                        this.evcTree[layerIndex][key] = [];
+                        this.evcTree[layerIndex][key].push(container[evcService]);
+                    }
+                }
+            }
+        }
     }
 
     protected readonly EventcorrelationOperators = EventcorrelationOperators;
