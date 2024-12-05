@@ -264,6 +264,11 @@ export interface EvcToggleModal {
     eventCorrelation?: EvcTreeItem
 }
 
+export interface EvcDeleteNode {
+    layerIndex: number,
+    evcNodeId: number | string
+}
+
 export interface EvcAddVServiceValidationResult {
     success: boolean,
     // updates."0".uu-id."0" = EvcTreeItem
@@ -278,4 +283,12 @@ export interface EvcAddVServiceValidationResult {
         }
     }
 
+}
+
+
+export interface EvcDeleteNodeDetails {
+    id: string,
+    parent_id: null | string,
+    serviceIndex: null | number,
+    parentEvcId: null | string
 }

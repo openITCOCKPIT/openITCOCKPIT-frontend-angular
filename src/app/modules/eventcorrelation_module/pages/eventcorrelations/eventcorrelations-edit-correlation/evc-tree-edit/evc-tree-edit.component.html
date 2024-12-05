@@ -42,6 +42,24 @@
 
                 @if (node.evcNode.type === 'service') {
                     <div class="service-node">
+                        <div class="evc-service-edit-box" *ngIf="node.evcNode.layerIndex > 0">
+                            <c-button-group aria-label="Basic example" role="group">
+                                <button cButton color="primary" size="xs">
+                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                </button>
+                                <button cButton color="danger" size="xs"
+                                        *ngIf="!node.evcNode.usedBy || node.evcNode.usedBy.length === 0"
+                                        (click)="toggleDeleteEvcNodeFunc(node.evcNode.layerIndex, node.evcNode)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                </button>
+                                <button cButton color="warning" size="xs"
+                                        *ngIf="node.evcNode.usedBy && node.evcNode.usedBy.length > 0"
+                                        [cTooltip]="'Used by: ' + node.evcNode.usedBy.join(', ') | transloco"
+                                        cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                </button>
+                            </c-button-group>
+                        </div>
                         <!-- vService container -->
 
                         <!-- Disable Badge -->

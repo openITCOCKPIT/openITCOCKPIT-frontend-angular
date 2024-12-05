@@ -11,6 +11,7 @@ import {
     ViewChild
 } from '@angular/core';
 import {
+    EvcDeleteNode,
     EvcService,
     EvcToggleModal,
     EvcTree,
@@ -58,6 +59,8 @@ interface EvcGraphNode {
     totalHeight?: number, // only for operators
     fNodeParentId?: string,
     position: IPoint,
+    layerIndex: number,
+    usedBy?: string[]
 }
 
 interface EvcGraphGroup {
@@ -147,6 +150,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public evcNodeWithErrors: EvcTreeValidationErrors = {};
 
     public toggleVServiceModal = output<EvcToggleModal>();
+    public toggleDeleteEvcNode = output<EvcDeleteNode>();
 
     public disabledStateTitle: string = '';
 
@@ -305,15 +309,15 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                     if (layerIndex === 0) {
                         // First layer services can be placed top to bottom
                         // Also the first layer only contain "real" services and no operators
-
                         nodes.push({
                             id: evcTreeItem.id.toString(),
                             //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
                             parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
                             service: evcTreeItem.service,
+                            layerIndex: layerIndex,
                             type: 'service',
                             position: {
-                                x: X, // First layer services are always at the left side of the canvas
+                                x: X, // First layer services are always on the left side of the canvas
                                 y: Y
                             }
                         });
@@ -403,6 +407,7 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                                 parentId: evcTreeItem.id.toString(),
                                 operator: evcTreeItem.operator,
                                 type: 'operator',
+                                layerIndex: layerIndex,
                                 totalHeight: totalHeight,
                                 position: {
                                     x: X + operatorX,
@@ -416,6 +421,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
                             id: evcTreeItem.id.toString(),
                             parentId: evcTreeItem.parent_id === null ? null : `${evcTreeItem.parent_id}_operator`,
                             service: evcTreeItem.service,
+                            usedBy: evcTreeItem.usedBy,
+                            layerIndex: layerIndex,
                             type: 'service',
                             position: {
                                 x: X + vServiceX,
@@ -499,6 +506,13 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
             layerIndex: layerIndex,
             mode: mode,
             eventCorrelation: eventCorrelation
+        });
+    }
+
+    public toggleDeleteEvcNodeFunc(layerIndex: number, node: EvcGraphNode) {
+        this.toggleDeleteEvcNode.emit({
+            layerIndex: layerIndex,
+            evcNodeId: node.id
         });
     }
 
