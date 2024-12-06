@@ -33,11 +33,8 @@
                             [placeholder]="'Filter by service name'|transloco"
                             (change)="search()">
                     </ng-select>
-                    <span cInputGroupText (click)="check(true)" class="cursor-pointer">
-                        <i class="fas fa-lg fa-check-square"></i> {{ t('Check all') }}
-                    </span>
-                    <span cInputGroupText (click)="check(false)" class="cursor-pointer">
-                        <i class="fas fa-lg fa-square"></i> {{ t('Undo selection') }}
+                    <span cInputGroupText (click)="toggleCheck()" class="cursor-pointer">
+                        <i class="fas fa-lg fa-check-square"></i> {{ t('Toggle checkboxes') }}
                     </span>
                 </c-input-group>
             </c-col>

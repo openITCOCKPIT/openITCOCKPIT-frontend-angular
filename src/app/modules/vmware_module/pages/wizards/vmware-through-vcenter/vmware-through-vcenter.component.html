@@ -1,0 +1,121 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+                {{ t('VMWare') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: VMWare Horizon') }}
+                <small class="fw-300">
+                    {{ t('(through vCenter)') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('VMware') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('VMware Server') }}
+                    </h4>
+                </legend>
+
+                <div class="mb-3">
+                    <label cLabel for="post.vcenter">
+                        {{ t('vCenter Address') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.vcenter"
+                           type="text"
+                           name="post.vcenter"
+                           oitcFormError [errors]="errors" errorField="vcenter"
+                           [(ngModel)]="post.vcenter">
+                    <oitc-form-feedback [errors]="errors" errorField="vcenter"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.username">
+                        {{ t('Username') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.username"
+                           type="text"
+                           name="post.username"
+                           oitcFormError [errors]="errors" errorField="username"
+                           [(ngModel)]="post.username">
+                    <oitc-form-feedback [errors]="errors" errorField="username"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="post.password">
+                        {{ t('Password') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.password"
+                           type="password"
+                           name="post.password"
+                           oitcFormError [errors]="errors" errorField="password"
+                           [(ngModel)]="post.password">
+                    <oitc-form-feedback [errors]="errors" errorField="password"></oitc-form-feedback>
+                </div>
+            </fieldset>
+            <!--- HERE IS ONLY CONFIGURED STUPH -->
+            <oitc-wizards-dynamicfields [post]="post"
+                                        [title]="'VMware services'|transloco"></oitc-wizards-dynamicfields>
+        </c-card-body>
+    </c-card>
+
+</ng-container>

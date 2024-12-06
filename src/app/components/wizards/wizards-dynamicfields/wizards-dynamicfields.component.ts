@@ -51,12 +51,12 @@ export class WizardsDynamicfieldsComponent {
         });
     }
 
-    protected check(state: boolean): void {
+    protected toggleCheck(): void {
         this.post.services.forEach((service: Service) => {
             if (!this.hasName(service.name)) {
                 return;
             }
-            service.createService = state
+            service.createService = !service.createService
         });
         this.cdr.markForCheck();
     }

@@ -19,6 +19,8 @@ import { db2ModuleRoutes } from './modules/db2_module/db2_module.routes';
 import { vmwarehorizonModuleRoutes } from './modules/vmwarehorizon_module/vmwarehorizon_module.routes';
 import { mssqlModuleRoutes } from './modules/mssql_module/mssql_module.routes';
 import { nwcModuleRoutes } from './modules/nwc_module/nwc_module.routes';
+import { vmwareModuleRoutes } from './modules/vmware_module/vmware_module.routes';
+import { hanaModuleRoutes } from './modules/hana_module/hana_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -51,6 +53,8 @@ const moduleRoutes: Routes = [
     ...vmwarehorizonModuleRoutes,
     ...mssqlModuleRoutes,
     ...nwcModuleRoutes,
+    ...vmwareModuleRoutes,
+    ...hanaModuleRoutes,
     ...customalertModuleRoutes,
     ...distributeModuleRoutes,
     ...msteamsModuleRoutes,
