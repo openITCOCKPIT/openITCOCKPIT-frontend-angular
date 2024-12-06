@@ -49,7 +49,8 @@ import {
     ServicesIndexRoot,
     ServicesLoadServicesByStringParams,
     ServicesNotMonitoredParams,
-    ServicesNotMonitoredRoot
+    ServicesNotMonitoredRoot,
+    ServiceUsedByRoot
 } from './services.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 import { ServiceTypesEnum } from './services.enum';
@@ -509,6 +510,20 @@ export class ServicesService {
                     end: Math.floor(endTimetamp)
                 }
             })
+            .pipe(
+                map(data => {
+                    return data;
+                })
+            )
+    }
+
+    /**********************
+     *   Used By action   *
+     **********************/
+    public usedBy(id: number): Observable<ServiceUsedByRoot> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<ServiceUsedByRoot>(`${proxyPath}/services/usedBy/${id}.json?angular=true`)
             .pipe(
                 map(data => {
                     return data;
