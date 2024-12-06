@@ -148,7 +148,7 @@
                                                max="65536"
                                                placeholder="3333"
                                                oitcFormError [errors]="errors" errorField="bind_port"
-                                               [(ngModel)]="config.string.bind_address">
+                                               [(ngModel)]="config.int.bind_port">
                                         <oitc-form-feedback [errors]="errors"
                                                             errorField="bind_port"></oitc-form-feedback>
                                     </div>
@@ -169,7 +169,7 @@
                                                max="7200"
                                                placeholder="30"
                                                oitcFormError [errors]="errors" errorField="check_interval"
-                                               [(ngModel)]="config.string.bind_address">
+                                               [(ngModel)]="config.int.check_interval">
                                         <oitc-form-feedback [errors]="errors"
                                                             errorField="check_interval"></oitc-form-feedback>
                                     </div>
