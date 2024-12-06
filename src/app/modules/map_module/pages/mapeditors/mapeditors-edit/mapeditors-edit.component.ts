@@ -43,6 +43,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
+import { Mapitem } from '../../../components/map-item/map-item.interface';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -104,6 +105,9 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
+    public gridSize: { x: number, y: number } = {x: 25, y: 25};
+    public gridEnabled: boolean = true;
+
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
         /*this.subscriptions.add(this.MapeditorsService.getEdit(this.mapId)
@@ -116,7 +120,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public onShowHelplines($event: Event) {
+    public onShowHelplines(event: Event) {
         this.showHelplines = !this.showHelplines;
     }
+
+    public onDropItem(mapItem: Mapitem) {
+        console.error("Item dropped", mapItem);
+    }
+
 }

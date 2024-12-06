@@ -1,31 +1,37 @@
 import {
+    AfterContentInit,
     AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ContentChildren,
     ElementRef,
     inject,
+    Input,
+    OnChanges,
+    QueryList,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { MapItemPosition } from './map-canvas.interface';
-import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MapItemComponent } from '../map-item/map-item.component';
 
 @Component({
     selector: 'oitc-map-canvas',
     standalone: true,
-    imports: [
-        CdkDropList
-    ],
+    imports: [],
     templateUrl: './map-canvas.component.html',
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements AfterViewInit {
+export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnChanges {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
 
     private cdr = inject(ChangeDetectorRef);
-    private mapItems: MapItemPosition[] = [];
+
+    @Input({required: true}) gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
+    @Input({required: true}) gridEnabled: boolean = true;
+
+    @ContentChildren(MapItemComponent) mapItemChildrens!: QueryList<MapItemComponent>;
 
     constructor() {
     }
@@ -33,18 +39,23 @@ export class MapCanvasComponent implements AfterViewInit {
     public ngAfterViewInit(): void {
     }
 
-    public onDrop(event: CdkDragDrop<any>) {
-        console.error("drop");
-        if (event.item.element.nativeElement instanceof MapItemComponent) {
-            const mapItem = event.item.element.nativeElement as MapItemComponent;
-            this.mapItems[mapItem.itemId] = {
-                id: mapItem.itemId,
-                x: event.dropPoint.x,
-                y: event.dropPoint.y
-            }
+    public ngAfterContentInit(): void {
+        this.updateValuesForChildren()
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['gridSize'] || changes['gridEnabled']) {
+            this.updateValuesForChildren()
         }
-        console.error("drop", this.mapItems);
-        this.cdr.markForCheck();
+    }
+
+    private updateValuesForChildren(): void {
+        if (this.mapItemChildrens) {
+            this.mapItemChildrens.forEach(child => {
+                child.gridEnabled = this.gridEnabled;
+                child.gridSize = this.gridSize;
+            });
+        }
     }
 
 }
