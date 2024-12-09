@@ -1,0 +1,247 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Event Correlation Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['eventcorrelationmodule', 'eventcorrelationsettings', 'index']"
+                   [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelation_settings', 'index']">
+                    <fa-icon [icon]="['fas', 'gears']"></fa-icon>
+                    {{ t('Configuration') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <form cForm (ngSubmit)="submit()" *ngIf="post">
+        <c-alert color="warning" class="bg-warning-500 alert-dismissible" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="alert-icon me-2">
+                    <div class='icon-stack  icon-stack-sm'>
+                        <i class="base base-9 icon-stack-3x opacity-100 text-primary"></i>
+                        <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <span class="h5"> {{ t('Attention!') }}</span>
+                    {{ t('This changes affects all event correlations') }}
+                </div>
+            </div>
+        </c-alert>
+
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Event Correlation Settings') }}</h5>
+            </c-card-header>
+            <c-card-body>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="EVC_CONSIDER_STATETYPE"
+                                    id="EVC_CONSIDER_STATETYPE"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="EVC_CONSIDER_STATETYPE"
+                                    trueFalseValue
+                                    [trueValue]="true"
+                                    [(ngModel)]="post.EVC_CONSIDER_STATETYPE"/>
+                                <label cFormCheckLabel for="EVC_CONSIDER_STATETYPE">
+                                    {{ t('Consider state type') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="EVC_CONSIDER_STATETYPE"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If disabled every state type will be considered to calculate the event correlation result. If enabled only "hard state" events will be used.') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="EVC_CONSIDER_STATE_COUNT"
+                                    id="EVC_CONSIDER_STATE_COUNT"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="EVC_CONSIDER_STATE_COUNT"
+                                    [(ngModel)]="post.EVC_CONSIDER_STATE_COUNT"/>
+                                <label cFormCheckLabel for="EVC_CONSIDER_STATE_COUNT">
+                                    {{ t('Consider state count') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="EVC_CONSIDER_STATE_COUNT"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If enabled, services in unknown state are ignored if there are more other services in critical or warning state.') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="EVC_REFLECT_CRITICAL_STATE"
+                                    id="EVC_REFLECT_CRITICAL_STATE"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="EVC_REFLECT_CRITICAL_STATE"
+                                    [(ngModel)]="post.EVC_REFLECT_CRITICAL_STATE"/>
+                                <label cFormCheckLabel for="EVC_REFLECT_CRITICAL_STATE">
+                                    {{ t('Reflect status to host') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="EVC_REFLECT_CRITICAL_STATE"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If enabled, the event correlation host will go in "down" state if the last element (root) of the event correlation is in "critical" state.') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="MonitoringSystems">
+                                {{ t('Check result submit method') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="MonitoringSystems"
+                                id="MonitoringSystems"
+                                optionValue="key"
+                                optionLabel="value"
+                                oitcFormError [errors]="errors" errorField="monitoring_system"
+                                [options]="MonitoringSystems"
+                                [(ngModel)]="post.monitoring_system"
+                                [showClear]="false">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="monitoring_system"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If Statusengine Event Broker or Naemons Query Handler will be used to submit correlation results a detailed long output will be passed to the monitoring engine. The external command pipe does not support long output.') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="StatusForServiceInDowntime">
+                                {{ t('Status for service in downtime') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="StatusForServiceInDowntime"
+                                id="StatusForServiceInDowntime"
+                                optionValue="key"
+                                optionLabel="value"
+                                oitcFormError [errors]="errors" errorField="status_downtime_service"
+                                [options]="StatusForServiceInDowntime"
+                                [(ngModel)]="post.status_downtime_service"
+                                [showClear]="false">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="status_downtime_service"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('This status will be used for services in downtime.') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="StatusForDisabledService">
+                                {{ t('Status for disabled service') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="StatusForDisabledService"
+                                id="StatusForDisabledService"
+                                optionValue="key"
+                                optionLabel="value"
+                                oitcFormError [errors]="errors" errorField="status_disabled_service"
+                                [options]="StatusForDisabledService"
+                                [(ngModel)]="post.status_disabled_service"
+                                [showClear]="false">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="status_disabled_service"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('This status will be used for disabled services.') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="EVC_SHOW_INFO_FOR_DISABLED_SERVICES"
+                                    id="EVC_SHOW_INFO_FOR_DISABLED_SERVICES"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="EVC_SHOW_INFO_FOR_DISABLED_SERVICES"
+                                    [(ngModel)]="post.EVC_SHOW_INFO_FOR_DISABLED_SERVICES"/>
+                                <label cFormCheckLabel for="EVC_SHOW_INFO_FOR_DISABLED_SERVICES">
+                                    {{ t('Show note for disabled services') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="EVC_SHOW_INFO_FOR_DISABLED_SERVICES"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If enabled, shows note if event correlation contains disabled services.') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    name="EVC_ANIMATE_CONNECTIONS"
+                                    id="EVC_ANIMATE_CONNECTIONS"
+                                    type="checkbox"
+                                    oitcFormError [errors]="errors" errorField="EVC_ANIMATE_CONNECTIONS"
+                                    [(ngModel)]="post.EVC_ANIMATE_CONNECTIONS"/>
+                                <label cFormCheckLabel for="EVC_ANIMATE_CONNECTIONS">
+                                    {{ t('Animate connections') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="EVC_ANIMATE_CONNECTIONS"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If enabled, connection lines are animated.') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label cLabel for="ConnectionLineTypes">
+                                {{ t('Connection line type') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="ConnectionLineTypes"
+                                id="ConnectionLineTypes"
+                                optionValue="key"
+                                optionLabel="value"
+                                oitcFormError [errors]="errors" errorField="connection_line"
+                                [options]="ConnectionLineTypes"
+                                [(ngModel)]="post.connection_line"
+                                [showClear]="false">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="connection_line"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('If Statusengine Event Broker or Naemons Query Handler will be used to submit correlation results a detailed long output will be passed to the monitoring engine. The external command pipe does not support long output.') }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>
