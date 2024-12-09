@@ -78,12 +78,6 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
     }
 
     protected result?: WizardsIndex;
-    private readonly HistoryService: HistoryService = inject(HistoryService);
-    private router = inject(Router);
-
-    protected goToWizard(wizard: WizardElement): void {
-        this.router.navigate([`wizards/wizardHostConfiguration/${wizard.type_id}/${wizard.title}/42/${wizard.state}/${wizard.selected_os}`]);
-    }
 
     public ngOnInit() {
         this.loadWizards();

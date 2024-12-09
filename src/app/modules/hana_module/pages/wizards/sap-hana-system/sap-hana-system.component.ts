@@ -7,7 +7,8 @@ import {
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
-    FormControlDirective, FormLabelDirective
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';

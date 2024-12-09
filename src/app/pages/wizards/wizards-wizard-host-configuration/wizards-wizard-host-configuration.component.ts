@@ -107,9 +107,12 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     };
 
     public submit() {
+
         if (this.useExistingHost) {
             let sgmts: string[] = this.state.split(/(?=[A-Z])/).map(segment => segment.toLowerCase());
-            let url: string = `/#!/${this.typeId}_module/${sgmts[0]}/${sgmts[1]}/${this.hostId}`;
+            let url: string = `/${this.typeId.replaceAll('-', '')}_module/wizards/${this.state.toLowerCase().replaceAll('wizards', '')}/${this.hostId}`;
+            console.warn(sgmts);
+            console.warn(url);
             this.router.navigate([url]);
             return;
         }
