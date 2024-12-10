@@ -1,0 +1,161 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                {{ t('SAP') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: SAP') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure SAP Monitoring') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('SAP Server Settings') }}
+                    </h4>
+                </legend>
+
+                <div class="mb-3">
+                    <label cLabel for="post.sysnr">
+                        {{ t('SAP System Instance Numbers') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.sysnr"
+                           type="text"
+                           name="post.sysnr"
+                           oitcFormError [errors]="errors" errorField="sysnr"
+                           [(ngModel)]="post.sysnr">
+                    <oitc-form-feedback [errors]="errors" errorField="sysnr"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.client">
+                        {{ t('Client') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.client"
+                           type="text"
+                           name="post.client"
+                           oitcFormError [errors]="errors" errorField="client"
+                           [(ngModel)]="post.client">
+                    <oitc-form-feedback [errors]="errors" errorField="client"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.rfcuser">
+                        {{ t('RFC User') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.rfcuser"
+                           type="text"
+                           name="post.rfcuser"
+                           oitcFormError [errors]="errors" errorField="rfcuser"
+                           [(ngModel)]="post.rfcuser">
+                    <oitc-form-feedback [errors]="errors" errorField="rfcuser"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.rfcpassword">
+                        {{ t('RFC Password') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.rfcpassword"
+                           type="password"
+                           name="post.rfcpassword"
+                           oitcFormError [errors]="errors" errorField="rfcpassword"
+                           [(ngModel)]="post.rfcpassword">
+                    <oitc-form-feedback [errors]="errors" errorField="rfcpassword"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.sid">
+                        {{ t('RFC User') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.sid"
+                           type="text"
+                           name="post.sid"
+                           oitcFormError [errors]="errors" errorField="sid"
+                           [(ngModel)]="post.sid">
+                    <oitc-form-feedback [errors]="errors" errorField="sid"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.msgroup">
+                        {{ t('MSGROUP') }}
+                    </label>
+                    <input cFormControl
+                           id="post.msgroup"
+                           type="text"
+                           name="post.msgroup"
+                           oitcFormError [errors]="errors" errorField="msgroup"
+                           [(ngModel)]="post.msgroup">
+                    <oitc-form-feedback [errors]="errors" errorField="msgroup"></oitc-form-feedback>
+                </div>
+
+            </fieldset>
+            <!--- HERE IS ONLY CONFIGURED STUPH -->
+            <oitc-wizards-dynamicfields [post]="post"
+                                        [title]="'SAP services'|transloco"></oitc-wizards-dynamicfields>
+        </c-card-body>
+    </c-card>
+
+</ng-container>

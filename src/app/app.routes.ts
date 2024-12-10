@@ -21,6 +21,9 @@ import { mssqlModuleRoutes } from './modules/mssql_module/mssql_module.routes';
 import { nwcModuleRoutes } from './modules/nwc_module/nwc_module.routes';
 import { vmwareModuleRoutes } from './modules/vmware_module/vmware_module.routes';
 import { hanaModuleRoutes } from './modules/hana_module/hana_module.routes';
+import { hpserverhardwareModuleRoutes } from './modules/hpserverhardware_module/hpserverhardware_module.routes';
+import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes';
+import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -53,7 +56,9 @@ const moduleRoutes: Routes = [
     ...vmwarehorizonModuleRoutes,
     ...mssqlModuleRoutes,
     ...nwcModuleRoutes,
+    ...oracleModuleRoutes,
     ...vmwareModuleRoutes,
+    ...sapModuleRoutes,
     ...hanaModuleRoutes,
     ...customalertModuleRoutes,
     ...distributeModuleRoutes,
@@ -63,6 +68,7 @@ const moduleRoutes: Routes = [
     ...slaModuleRoutes,
     ...importModuleRoutes,
     ...checkmkModuleRoutes,
+    ...hpserverhardwareModuleRoutes,
     ...mapModuleRoutes,
     ...eventcorrelationModuleRoutes
 ];
