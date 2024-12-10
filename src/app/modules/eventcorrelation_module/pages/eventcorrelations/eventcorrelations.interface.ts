@@ -80,6 +80,8 @@ export interface EventcorrelationsViewRoot {
     disabledServices: number
     downtimedServices: number
     hasWritePermission: boolean
+    animated: number
+    connectionLine: string
     _csrfToken: string | null
 }
 
@@ -200,6 +202,8 @@ export interface EventcorrelationsEditCorrelationRoot {
     stateForDisabledService: number,
     stateForDowntimedService: number,
     showInfoForDisabledService: number,
+    animated: number,
+    connectionLine: string,
     disabledServices: number,
     downtimedServices: number,
     _csrfToken: string | null

@@ -28,8 +28,8 @@
             <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
                           [fSelectionDisabled]="true"
                           [fReassignDisabled]="true"
-                          [class]="'animated'"
-                          fType="bezier"
+                          [ngClass]="{'animated':animated() > 0}"
+                          [fType]="connectionLine()"
                           fBehavior="fixed">
                 <svg viewBox="0 0 12 12" fMarker [type]="EFMarkerType.START" [height]="12" [width]="12" [refX]="5"
                      [refY]="5">
