@@ -14,11 +14,14 @@ import {
     ViewChild
 } from '@angular/core';
 import { MapItemComponent } from '../map-item/map-item.component';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-map-canvas',
     standalone: true,
-    imports: [],
+    imports: [
+        NgClass
+    ],
     templateUrl: './map-canvas.component.html',
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,6 +33,8 @@ export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnCh
 
     @Input({required: true}) gridSize: { x: number, y: number } = {x: 25, y: 25}; // Grid size for snapping
     @Input({required: true}) gridEnabled: boolean = true;
+    @Input({required: true}) helplinesSize: number = 15;
+    @Input({required: true}) helplinesEnabled: boolean = true;
 
     @ContentChildren(MapItemComponent) mapItemChildrens!: QueryList<MapItemComponent>;
 
@@ -57,5 +62,12 @@ export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnCh
             });
         }
     }
+
+    public getHelplinesClass() {
+        if (this.helplinesEnabled) {
+            return 'helplines' + this.helplinesSize;
+        }
+        return '';
+    };
 
 }

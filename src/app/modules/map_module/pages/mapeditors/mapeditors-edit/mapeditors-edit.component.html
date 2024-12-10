@@ -53,7 +53,7 @@
                                 cFormCheckInput
                                 name="checkbox"
                                 checked="checked"
-                                (change)="onShowHelplines($event)"
+                                (change)="onHelplinesEnabled($event)"
                             />
                             <label
                                 cFormCheckLabel
@@ -66,18 +66,87 @@
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <c-dropdown variant="btn-group">
-                        <button cButton cDropdownToggle color="default" class="dropdown-button ripple me-1" size="xs"
-                                [caret]="false">
+                        <button cButton cDropdownToggle color="default" class="dropdown-button dropdown-btn ripple me-1"
+                                size="xs" [caret]="true">
                             <span class="fa-stack helpline-stack-icon">
                                 <i class="fas fa-grip-lines fa-stack-1x"></i>
                                 <i class="fas fa-grip-lines-vertical"></i>
                             </span>
-                            {{ t('Help lines distance') }} <!--- {{ Mapeditor.helplines.size }}-->
+                            {{ t('Help lines distance') }} - {{ Mapeditor.helplines.size }}
                             <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
                         </button>
                         <ul cDropdownMenu>
-                            <li *ngFor="let size of helplineSizes">
-                                <!-- ng-click="changeHelplinesSize(<?php echo $helplinesize; ?>)" -->
+                            <li *ngFor="let size of helplineSizes" (click)="changeHelplinesSize(size)">
+                                <a cDropdownItem>{{ size }}x{{ size }}px</a>
+                            </li>
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button cButton
+                            class="ripple me-1 shadow-0"
+                            color="danger"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
+                        <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
+                        {{ t('Change size automatically') }}
+                        <fa-icon [icon]="['fas', 'arrow-right']" class="ps-1"></fa-icon>
+                    </button>
+                    <!--<button class="btn btn-danger btn-xs mr-1 shadow-0"
+                            ng-hide="Mapeditor.synchronizeGridAndHelplinesSize"
+                            ng-click="Mapeditor.synchronizeGridAndHelplinesSize = true">
+                        <i class="fas fa-arrow-left padding-right-10"></i>
+                        <i class="fas fa-unlink"></i>
+                        <?= __('Change size automatically'); ?>
+                        <i class="fas fa-arrow-right padding-left-10"></i>
+                    </button>-->
+                    <!--<button class="btn btn-success btn-xs mr-1 shadow-0"
+                            ng-show="Mapeditor.synchronizeGridAndHelplinesSize"
+                            ng-click="Mapeditor.synchronizeGridAndHelplinesSize = false">
+                        <i class="fas fa-arrow-left padding-right-10"></i>
+                        <i class="fas fa-link"></i>
+                        <?= __('Change size automatically'); ?>
+                        <i class="fas fa-arrow-right padding-left-10"></i>
+                    </button>-->
+                </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                        <!--<label class="checkbox small-checkbox-label margin-right-10 margin-top-2">
+                            <input type="checkbox" name="checkbox" checked="checked"
+                                   ng-model="Mapeditor.grid.enabled">
+                            <i class="checkbox-primary"></i>
+                            <?php echo __('Enable grid'); ?>
+                        </label>-->
+                        <c-form-check>
+                            <input
+                                type="checkbox"
+                                id="grid_enabled"
+                                cFormCheckInput
+                                name="checkbox"
+                                checked="checked"
+                                (change)="onGridEnabled($event)"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="grid_enabled">
+                                <i class="checkbox-primary"></i>
+                                {{ t('Enable grid') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown variant="btn-group">
+                        <button cButton cDropdownToggle color="default" class="dropdown-button dropdown-btn ripple me-1"
+                                size="xs" [caret]="true">
+                            <fa-icon [icon]="['fas', 'th']"></fa-icon>
+                            {{ t('Grid size') }} - {{ Mapeditor.grid.size }}
+                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let size of gridSizes" (click)="changeGridSize(size)">
                                 <a cDropdownItem>{{ size }}x{{ size }}px</a>
                             </li>
                         </ul>
@@ -93,13 +162,31 @@
                         {{ t('Back') }}
                     </button>
                 </c-nav-item>
+
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view']" cButton class="ripple"
+                            color="default" size="xs" class="me-1">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        {{ t('View') }}
+                    </button>
+                    <!--<button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id]" cButton class="ripple"
+                            color="default" size="xs" class="me-1">
+                        <fa-icon [icon]="['fas', 'fa-eye']"></fa-icon>
+                        {{ t('View') }}
+                    </button>-->
+                </c-nav-item>
+
             </c-nav>
 
         </c-card-header>
         <c-card-body>
 
 
-            <oitc-map-canvas [gridSize]="gridSize" [gridEnabled]="gridEnabled">
+            <oitc-map-canvas [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                             [helplinesEnabled]="Mapeditor.helplines.enabled"
+                             [helplinesSize]="Mapeditor.helplines.size">
                 <oitc-map-item [position]="{ x: 24, y: 24 }" [itemId]="0" [mapId]="'1'"
                                (dropItemEvent)="onDropItem($event)">
                     <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"

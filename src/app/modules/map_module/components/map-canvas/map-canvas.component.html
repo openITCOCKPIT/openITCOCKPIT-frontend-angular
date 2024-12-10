@@ -1,3 +1,4 @@
-<div #mapCanvasContainer class="map-canvas">
+<div #mapCanvasContainer class="map-canvas"
+     [ngClass]="getHelplinesClass()">
     <ng-content></ng-content>
 </div>

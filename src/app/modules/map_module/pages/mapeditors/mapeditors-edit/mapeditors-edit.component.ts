@@ -97,16 +97,33 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     public map!: MapPost;
     protected helplineSizes: number[] = [5, 10, 15, 20, 25, 30, 50, 80];
+    protected gridSizes = [5, 10, 15, 20, 25, 30, 50, 80];
+
+    public Mapeditor = {
+        grid: {
+            enabled: true,
+            size: 15
+        },
+        helplines: {
+            enabled: true,
+            size: 15
+        },
+        synchronizeGridAndHelplinesSize: true
+
+    };
+
+    public helplines = {
+        enabled: true,
+        size: 15
+    };
 
     private route = inject(ActivatedRoute);
-    protected showHelplines: boolean = true;
 
     protected mapId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
     public gridSize: { x: number, y: number } = {x: 25, y: 25};
-    public gridEnabled: boolean = true;
 
     public ngOnInit(): void {
         this.mapId = Number(this.route.snapshot.paramMap.get('id'));
@@ -120,12 +137,38 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public onShowHelplines(event: Event) {
-        this.showHelplines = !this.showHelplines;
+    public onHelplinesEnabled(event: Event) {
+        this.Mapeditor.helplines.enabled = !this.Mapeditor.helplines.enabled;
+    }
+
+    public onGridEnabled(event: Event) {
+        this.Mapeditor.grid.enabled = !this.Mapeditor.grid.enabled;
     }
 
     public onDropItem(mapItem: Mapitem) {
         console.error("Item dropped", mapItem);
+    }
+
+    public changeGridSize(size: number) {
+        this.Mapeditor.grid.size = parseInt(size.toString(), 10);
+        if (this.Mapeditor.synchronizeGridAndHelplinesSize) {
+            if (this.Mapeditor.grid.size != this.Mapeditor.helplines.size) {
+                this.changeHelplinesSize(this.Mapeditor.grid.size);
+            }
+        }
+        if (this.Mapeditor.grid.enabled) {
+            this.gridSize = {x: size, y: size};
+            //makeDraggable();
+        }
+    }
+
+    public changeHelplinesSize(size: number) {
+        this.Mapeditor.helplines.size = parseInt(size.toString(), 10);
+        if (this.Mapeditor.synchronizeGridAndHelplinesSize) {
+            if (this.Mapeditor.grid.size != this.Mapeditor.helplines.size) {
+                this.changeGridSize(this.Mapeditor.helplines.size);
+            }
+        }
     }
 
 }
