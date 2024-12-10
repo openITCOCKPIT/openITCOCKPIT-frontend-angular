@@ -216,6 +216,9 @@ const coreRoutes: Routes = [{
     path: 'services/copy/:ids',
     loadComponent: () => import('./pages/services/services-copy/services-copy.component').then(m => m.ServicesCopyComponent)
 }, {
+    path: 'services/usedBy/:id',
+    loadComponent: () => import('./pages/services/services-used-by/services-used-by.component').then(m => m.ServicesUsedByComponent)
+}, {
     path: 'services/notMonitored',
     loadComponent: () => import('./pages/services/services-not-monitored/services-not-monitored.component').then(m => m.ServicesNotMonitoredComponent)
 }, {

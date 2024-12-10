@@ -135,6 +135,8 @@ export class EvcTreeComponent implements AfterViewInit {
     public downtimedServices = input<number>(0);
     public stateForDowntimedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
+    public connectionLine = input<string>('bezier');
+    public animated = input<number>(0);
 
     public downtimeStateTitle: string = '';
     public disabledStateTitle: string = '';

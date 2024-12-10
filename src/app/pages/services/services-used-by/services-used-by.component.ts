@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -11,31 +12,30 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { Subscription } from 'rxjs';
-import { HostEntity, HostUsedByObjects } from '../hosts.interface';
-import { HostsService } from '../hosts.service';
+import { ServicesService } from '../services.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { ServiceEntity, ServiceUsedByObjects } from '../services.interface';
 
 @Component({
-    selector: 'oitc-hosts-used-by',
+    selector: 'oitc-services-used-by',
     standalone: true,
     imports: [
+        AsyncPipe,
         BackButtonDirective,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
         ContainerComponent,
-
         FaIconComponent,
+        FormLoaderComponent,
         NavComponent,
         NavItemComponent,
         NgForOf,
@@ -45,24 +45,21 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         TableDirective,
         TranslocoDirective,
         XsButtonDirective,
-        RouterLink,
-        TableLoaderComponent,
-        FormLoaderComponent,
-        AsyncPipe
+        RouterLink
     ],
-    templateUrl: './hosts-used-by.component.html',
-    styleUrl: './hosts-used-by.component.css',
+    templateUrl: './services-used-by.component.html',
+    styleUrl: './services-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsUsedByComponent implements OnInit, OnDestroy {
+export class ServicesUsedByComponent implements OnInit, OnDestroy {
 
-    public host?: HostEntity;
+    public service?: ServiceEntity;
     public total: number = 0;
-    public objects?: HostUsedByObjects;
+    public objects?: ServiceUsedByObjects;
 
-    private hostId: number = 0;
+    private serviceId: number = 0;
 
-    private HostsService = inject(HostsService);
+    private ServicesService = inject(ServicesService);
     public PermissionsService = inject(PermissionsService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
@@ -70,8 +67,9 @@ export class HostsUsedByComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
+
     public ngOnInit(): void {
-        this.hostId = Number(this.route.snapshot.paramMap.get('id'));
+        this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
         this.cdr.markForCheck();
     }
@@ -81,10 +79,10 @@ export class HostsUsedByComponent implements OnInit, OnDestroy {
     }
 
     public load() {
-        this.subscriptions.add(this.HostsService.usedBy(this.hostId)
+        this.subscriptions.add(this.ServicesService.usedBy(this.serviceId)
             .subscribe((result) => {
                 this.cdr.markForCheck();
-                this.host = result.host;
+                this.service = result.service;
                 this.objects = result.objects;
                 this.total = result.total;
             }));

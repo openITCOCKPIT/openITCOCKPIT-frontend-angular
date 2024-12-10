@@ -8,7 +8,7 @@
                 </a></li>
             <li class="breadcrumb-item">
                 <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                     {{ t('Services') }}
                 </a>
             </li>
@@ -856,7 +856,7 @@
                                         </oitc-actions-button-element>
                                         <oitc-actions-button-element
                                             [permission]="'services.copy'"
-                                            [url]="'/service/copy/' + service.Service.id">
+                                            [url]="'/services/copy/' + service.Service.id">
                                             <fa-icon [icon]="['fas', 'file']"></fa-icon>
                                             {{ t('Copy') }}
                                         </oitc-actions-button-element>
