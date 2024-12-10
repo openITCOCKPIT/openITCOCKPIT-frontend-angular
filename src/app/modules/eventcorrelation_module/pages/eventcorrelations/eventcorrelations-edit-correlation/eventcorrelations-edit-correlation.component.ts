@@ -137,6 +137,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
 
+    public animated: number = 0; // not animated
+    public connectionLine: string = 'bezier'; // bezier, straight, segment
+
     public layerWithErrors: EvcTreeValidationErrors = {};
     public evcNodeWithErrors: EvcTreeValidationErrors = {};
 
@@ -202,6 +205,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.servicetemplates = result.servicetemplates;
             this.showInfoForDisabledService = result.showInfoForDisabledService;
             this.stateForDisabledService = result.stateForDisabledService;
+            this.animated = result.animated;
+            this.connectionLine = result.connectionLine;
             this.disabledServices = result.disabledServices;
 
             this.downtimedServices = result.downtimedServices;

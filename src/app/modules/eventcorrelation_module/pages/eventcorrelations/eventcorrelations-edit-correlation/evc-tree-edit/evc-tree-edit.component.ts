@@ -142,6 +142,8 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public stateForDisabledService = input<number>(3);
+    public animated = input<number>(0); // not animated
+    public connectionLine = input<string>('bezier'); // bezier, straight, segment
 
     public layerWithErrorsInput = input<EvcTreeValidationErrors>({});
     public evcNodeWithErrorsInput = input<EvcTreeValidationErrors>({});
@@ -533,4 +535,5 @@ export class EvcTreeEditComponent implements AfterViewInit, OnDestroy {
     protected readonly ServiceTypesEnum = ServiceTypesEnum;
     protected readonly Number = Number;
     protected readonly EFConnectableSide = EFConnectableSide;
+
 }
