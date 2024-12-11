@@ -24,6 +24,7 @@ import { hanaModuleRoutes } from './modules/hana_module/hana_module.routes';
 import { hpserverhardwareModuleRoutes } from './modules/hpserverhardware_module/hpserverhardware_module.routes';
 import { oracleModuleRoutes } from './modules/oracle_module/oracle_module.routes';
 import { sapModuleRoutes } from './modules/sap_module/sap_module.routes';
+import { upsModuleRoutes } from './modules/ups_module/ups_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -53,6 +54,7 @@ const moduleRoutes: Routes = [
     ...printerModuleRoutes,
     ...vmwaresnapshotModuleRoutes,
     ...db2ModuleRoutes,
+    ...upsModuleRoutes,
     ...vmwarehorizonModuleRoutes,
     ...mssqlModuleRoutes,
     ...nwcModuleRoutes,

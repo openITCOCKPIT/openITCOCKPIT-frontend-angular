@@ -1,0 +1,204 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'car-battery']"></fa-icon>
+                {{ t('UPS') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: UPS') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure SNMP for UPS Monitoring') }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('SNMP Server Settings') }}
+                    </h4>
+                </legend>
+
+                <div class="mb-3">
+                    <label cLabel for="post.snmpVersion">
+                        {{ t('SNMP Version') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                            name="post.snmpVersion"
+                            id="post.snmpVersion"
+                            [(ngModel)]="post.snmpVersion"
+                            [options]="snmpVersions"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="securityLevel">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="snmpVersion"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.securityLevel">
+                        {{ t('Security level') }}
+                    </label>
+                    <oitc-select
+                            name="post.securityLevel"
+                            id="post.securityLevel"
+                            [(ngModel)]="post.securityLevel"
+                            [options]="securityLevels"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="securityLevel">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
+                    <div class="help-block text-primary-light">
+                        <span *ngIf="post.securityLevel === '1'">{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
+                        <span *ngIf="post.securityLevel === '2'">{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
+                        <span *ngIf="post.securityLevel === '3'">{{ t('Communication without authentication and privacy.') }}</span>
+                    </div>
+                </div>
+
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.authProtocol">
+                        {{ t('Auth Protocol') }}
+                    </label>
+                    <oitc-select
+                            name="post.authProtocol"
+                            id="post.authProtocol"
+                            [(ngModel)]="post.authProtocol"
+                            [options]="authProtocols"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="authProtocol">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="authProtocol"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.securityName">
+                        {{ t('Security name') }}
+                    </label>
+                    <input cFormControl
+                           id="post.securityName"
+                           type="text"
+                           name="post.securityName"
+                           oitcFormError [errors]="errors" errorField="securityName"
+                           [(ngModel)]="post.securityName">
+                    <oitc-form-feedback [errors]="errors" errorField="securityName"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.authPassword">
+                        {{ t('Auth password') }}
+                    </label>
+                    <input cFormControl
+                           id="post.authPassword"
+                           type="password"
+                           name="post.authPassword"
+                           oitcFormError [errors]="errors" errorField="authPassword"
+                           [(ngModel)]="post.authPassword">
+                    <oitc-form-feedback [errors]="errors" errorField="authPassword"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.privacyProtocol">
+                        {{ t('Privacy Protocol') }}
+                    </label>
+                    <oitc-select
+                            name="post.privacyProtocol"
+                            id="post.privacyProtocol"
+                            [(ngModel)]="post.privacyProtocol"
+                            [options]="privacyProtocols"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="privacyProtocol">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="privacyProtocol"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
+                    <label cLabel for="post.privacyPassword">
+                        {{ t('Privacy password') }}
+                    </label>
+                    <input cFormControl
+                           id="post.privacyPassword"
+                           type="password"
+                           name="post.privacyPassword"
+                           oitcFormError [errors]="errors" errorField="privacyPassword"
+                           [(ngModel)]="post.privacyPassword">
+                    <oitc-form-feedback [errors]="errors" errorField="privacyPassword"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3" *ngIf="post.snmpVersion !== '3'">
+                    <label cLabel for="post.snmpCommunity">
+                        {{ t('Community') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.snmpCommunity"
+                           type="text"
+                           name="post.snmpCommunity"
+                           oitcFormError [errors]="errors" errorField="snmpCommunity"
+                           placeholder="public"
+                           [(ngModel)]="post.snmpCommunity">
+                    <oitc-form-feedback [errors]="errors" errorField="snmpCommunity"></oitc-form-feedback>
+                </div>
+            </fieldset>
+
+
+            <!--- HERE IS ONLY CONFIGURED STUPH -->
+            <oitc-wizards-dynamicfields [post]="post"
+                                        [title]="'UPS services'|transloco"></oitc-wizards-dynamicfields>
+
+        </c-card-body>
+    </c-card>
+
+</ng-container>
