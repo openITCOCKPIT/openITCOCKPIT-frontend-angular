@@ -41,6 +41,7 @@ export class WizardsDynamicfieldsComponent {
 
     @Input({required: true}) post: WizardPost = {} as WizardPost;
     @Input({required: true}) title: string = '';
+    @Input({required: true}) servicesNamesForExistCheck : string[] = [];
 
     protected hasName = (name: string): boolean => {
         if (this.searchedTags.length === 0) {

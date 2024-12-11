@@ -108,9 +108,12 @@
                     <oitc-form-feedback [errors]="errors" errorField="password"></oitc-form-feedback>
                 </div>
             </fieldset>
-            <!--- HERE IS ONLY CONFIGURED STUPH -->
-            <oitc-wizards-dynamicfields [post]="post"
-                                        [title]="'VMware Snapshot services'|transloco"></oitc-wizards-dynamicfields>
+
+            <oitc-wizards-dynamicfields
+                    [servicesNamesForExistCheck]="servicesNamesForExistCheck"
+                    [post]="post"
+                    [title]="'VMware Snapshot services'|transloco"
+            />
         </c-card-body>
     </c-card>
 

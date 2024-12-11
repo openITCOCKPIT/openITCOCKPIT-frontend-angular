@@ -163,8 +163,12 @@ GRANT SELECT, SHOW VIEW ON *.* TO 'monitoring'&#64;'{{ serverAddr }}';</pre>
                 </div>
             </fieldset>
 
-            <!--- HERE IS ONLY CONFIGURED STUPH -->
-            <oitc-wizards-dynamicfields [post]="post" [title]="'MySQL services'|transloco"></oitc-wizards-dynamicfields>
+            <oitc-wizards-dynamicfields
+                    [servicesNamesForExistCheck]="servicesNamesForExistCheck"
+                    [post]="post"
+                    [title]="'MySQL services'|transloco"
+            />
+
         </c-card-body>
     </c-card>
 </ng-container>

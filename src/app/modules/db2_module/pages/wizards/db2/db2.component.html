@@ -96,8 +96,12 @@
                 </div>
             </fieldset>
 
-            <!--- HERE IS ONLY CONFIGURED STUPH -->
-            <oitc-wizards-dynamicfields [post]="post" [title]="'DB2 Database services'|transloco"></oitc-wizards-dynamicfields>
+            <oitc-wizards-dynamicfields
+                    [servicesNamesForExistCheck]="servicesNamesForExistCheck"
+                    [post]="post"
+                    [title]="'DB2 Database services'|transloco"
+            />
+            
         </c-card-body>
     </c-card>
 </ng-container>
