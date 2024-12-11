@@ -1,8 +1,12 @@
-<div cdkDrag #container class="map-element-container p-1"
+<div cdkDrag #container class="map-element-container" [ngClass]="getLabelPositionClass()"
      [draggable]="dragEnabled"
      (cdkDragStarted)="onDragStart($event)"
      (cdkDragEnded)="onDragEnd($event)"
      [cdkDragConstrainPosition]="computeDragRenderPos"
      cdkDragBoundary=".map-canvas">
     <ng-content></ng-content>
+    @if (showLabel) {
+        <ng-content select="oitc-map-item-label"></ng-content>
+    }
 </div>
+<p-contextMenu [target]="container" [model]="contextMenuItems" appendTo="body"></p-contextMenu>

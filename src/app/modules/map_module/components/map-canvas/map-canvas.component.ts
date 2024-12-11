@@ -61,9 +61,10 @@ export class MapCanvasComponent implements AfterViewInit, AfterContentInit, OnCh
                 child.gridSize = this.gridSize;
             });
         }
+        this.cdr.markForCheck();
     }
 
-    public getHelplinesClass() {
+    public getHelplinesClass(): string {
         if (this.helplinesEnabled) {
             return 'helplines' + this.helplinesSize;
         }

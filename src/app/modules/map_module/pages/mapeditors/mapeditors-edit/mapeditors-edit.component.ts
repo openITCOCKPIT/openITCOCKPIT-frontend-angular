@@ -44,6 +44,8 @@ import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
 import { Mapitem } from '../../../components/map-item/map-item.interface';
+import { MapItemLabelComponent } from '../../../components/map-item-label/map-item-label.component';
+import { MapItemContentComponent } from '../../../components/map-item-content/map-item-content.component';
 
 @Component({
     selector: 'oitc-mapeditors-edit',
@@ -77,7 +79,9 @@ import { Mapitem } from '../../../components/map-item/map-item.interface';
         NgForOf,
         NgIf,
         MapItemComponent,
-        MapCanvasComponent
+        MapCanvasComponent,
+        MapItemLabelComponent,
+        MapItemContentComponent
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -121,7 +125,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
     protected mapId: number = 0;
     private readonly HistoryService: HistoryService = inject(HistoryService);
-    private cdr = inject(ChangeDetectorRef);
+    protected cdr = inject(ChangeDetectorRef);
 
     public gridSize: { x: number, y: number } = {x: 25, y: 25};
 

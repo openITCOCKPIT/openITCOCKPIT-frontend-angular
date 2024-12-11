@@ -2,15 +2,31 @@
     border: none;
     background: none;
     cursor: move;
-    display: inline-block;
+    display: flex;
     position: absolute;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
 
-.map-element-container:active {
+.map-element-label-left {
+    flex-direction: row-reverse;
+}
+
+.map-element-label-right {
+    flex-direction: row;
+}
+
+.map-element-label-top {
+    flex-direction: column-reverse;
+}
+
+.map-element-label-bottom {
+    flex-direction: column;
+}
+
+.cdk-drag-dragging {
     opacity: 0.5;
-/ / Semi-transparent while being dragged border: 2 px dashed #4285F4;
-}
-
-.map-element-container.selected {
     border: 2px dashed #4285F4 !important;
 }

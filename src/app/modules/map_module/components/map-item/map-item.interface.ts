@@ -9,3 +9,8 @@ export interface Mapitem {
     y: number
     map_id: string
 }
+
+export interface ContextAction {
+    type: string
+    data: any
+}

@@ -39,21 +39,13 @@
                 <c-nav-item class="px-1">
                     <div class="checkbox small-checkbox-label me-1 mt-2">
                         <c-form-check>
-                            <!--<input
-                                type="checkbox"
-                                id="notify_host_recovery"
-                                [(ngModel)]="Mapeditor.helplines.enabled"
-                                (ngModelChange)="post.notify_host_recovery = $event ? 1 : 0"
-                                cFormCheckInput
-                                name="notify_host_recovery"
-                            />-->
                             <input
                                 type="checkbox"
                                 id="show_helplines"
                                 cFormCheckInput
                                 name="checkbox"
                                 checked="checked"
-                                (change)="onHelplinesEnabled($event)"
+                                [(ngModel)]="Mapeditor.helplines.enabled"
                             />
                             <label
                                 cFormCheckLabel
@@ -87,38 +79,29 @@
                     <button cButton
                             class="ripple me-1 shadow-0"
                             color="danger"
-                            size="xs">
+                            size="xs"
+                            [hidden]="Mapeditor.synchronizeGridAndHelplinesSize"
+                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = true">
                         <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
                         <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
                         {{ t('Change size automatically') }}
                         <fa-icon [icon]="['fas', 'arrow-right']" class="ps-1"></fa-icon>
                     </button>
-                    <!--<button class="btn btn-danger btn-xs mr-1 shadow-0"
-                            ng-hide="Mapeditor.synchronizeGridAndHelplinesSize"
-                            ng-click="Mapeditor.synchronizeGridAndHelplinesSize = true">
-                        <i class="fas fa-arrow-left padding-right-10"></i>
-                        <i class="fas fa-unlink"></i>
-                        <?= __('Change size automatically'); ?>
-                        <i class="fas fa-arrow-right padding-left-10"></i>
-                    </button>-->
-                    <!--<button class="btn btn-success btn-xs mr-1 shadow-0"
-                            ng-show="Mapeditor.synchronizeGridAndHelplinesSize"
-                            ng-click="Mapeditor.synchronizeGridAndHelplinesSize = false">
-                        <i class="fas fa-arrow-left padding-right-10"></i>
-                        <i class="fas fa-link"></i>
-                        <?= __('Change size automatically'); ?>
-                        <i class="fas fa-arrow-right padding-left-10"></i>
-                    </button>-->
+                    <button cButton
+                            class="ripple me-1 shadow-0"
+                            color="success"
+                            size="xs"
+                            [hidden]="!Mapeditor.synchronizeGridAndHelplinesSize"
+                            (click)="Mapeditor.synchronizeGridAndHelplinesSize = false">
+                        <fa-icon [icon]="['fas', 'arrow-left']" class="pe-1"></fa-icon>
+                        <fa-icon [icon]="['fas', 'unlink']"></fa-icon>
+                        {{ t('Change size automatically') }}
+                        <fa-icon [icon]="['fas', 'arrow-right']" class="ps-1"></fa-icon>
+                    </button>
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
                     <div class="checkbox small-checkbox-label me-1 mt-2">
-                        <!--<label class="checkbox small-checkbox-label margin-right-10 margin-top-2">
-                            <input type="checkbox" name="checkbox" checked="checked"
-                                   ng-model="Mapeditor.grid.enabled">
-                            <i class="checkbox-primary"></i>
-                            <?php echo __('Enable grid'); ?>
-                        </label>-->
                         <c-form-check>
                             <input
                                 type="checkbox"
@@ -126,7 +109,7 @@
                                 cFormCheckInput
                                 name="checkbox"
                                 checked="checked"
-                                (change)="onGridEnabled($event)"
+                                [(ngModel)]="Mapeditor.grid.enabled"
                             />
                             <label
                                 cFormCheckLabel
@@ -189,19 +172,23 @@
                              [helplinesSize]="Mapeditor.helplines.size">
                 <oitc-map-item [position]="{ x: 24, y: 24 }" [itemId]="0" [mapId]="'1'"
                                (dropItemEvent)="onDropItem($event)">
-                    <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
-                         draggable="false">
-                    <span>
+                    <oitc-map-item-content>
+                        <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
+                             draggable="false">
+                    </oitc-map-item-content>
+                    <oitc-map-item-label>
                         I'm a node Layer 0
-                    </span>
+                    </oitc-map-item-label>
                 </oitc-map-item>
                 <oitc-map-item [position]="{ x: 900, y: 24 }" [itemId]="1" [mapId]="'1'"
                                (dropItemEvent)="onDropItem($event)">
-                    <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
-                         draggable="false">
-                    <span>
+                    <oitc-map-item-content>
+                        <img src="./assets/images/docs/browser_notification_bg.png" height="200px" width="200px"
+                             draggable="false">
+                    </oitc-map-item-content>
+                    <oitc-map-item-label>
                         I'm a node Layer 1
-                    </span>
+                    </oitc-map-item-label>
                 </oitc-map-item>
             </oitc-map-canvas>
 

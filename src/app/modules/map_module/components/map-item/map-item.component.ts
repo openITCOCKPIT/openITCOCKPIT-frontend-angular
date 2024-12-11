@@ -12,15 +12,19 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { Mapitem, MapItemPosition } from './map-item.interface';
+import { ContextAction, Mapitem, MapItemPosition } from './map-item.interface';
 import { LabelPosition } from './map-item.enum';
 import { CdkDrag, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
+import { NgClass } from '@angular/common';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { MenuItem } from 'primeng/api';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag],
+    imports: [CdkDrag, NgClass, ContextMenuModule],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -31,7 +35,7 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
     @Input() layer: number = 0;
     @Input() position: MapItemPosition = {x: 0, y: 0};
     @Input() labelPosition: LabelPosition = LabelPosition.RIGHT;
-    @Input() showLabel: boolean = false;
+    @Input() showLabel: boolean = true;
     @Input() dragEnabled: boolean = true;
     @Input({required: true}) itemId!: number;
     @Input({required: true}) mapId!: string;
@@ -39,10 +43,79 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
     @Input() gridEnabled: boolean = true;
 
     @Output() dropItemEvent = new EventEmitter<Mapitem>();
+    @Output() contextActionEvent = new EventEmitter<ContextAction>();
+
+    private readonly TranslocoService = inject(TranslocoService);
 
     private cdr = inject(ChangeDetectorRef);
     private initialOffset: { x: number, y: number } = {x: 0, y: 0}; // Initial offset when dragging (needed to prevent bouncing after start dragging)
     private mapCanvasComponent: MapCanvasComponent;
+
+    protected contextMenuItems: MenuItem[] = [
+        {
+            label: this.TranslocoService.translate('Edit'),
+            icon: 'fa fa-cog',
+            command: () => {
+                console.log('Edit');
+            }
+        },
+        {
+            separator: true
+        },
+        {
+            label: this.TranslocoService.translate('Label position'),
+            icon: 'fa fa-font',
+            items: [
+                {
+                    label: this.TranslocoService.translate('Top'),
+                    icon: 'fa fa-up-long',
+                    command: () => {
+                        this.labelPosition = LabelPosition.TOP;
+                        this.cdr.markForCheck();
+                        console.log('Top');
+                    }
+                },
+                {
+                    label: this.TranslocoService.translate('Right'),
+                    icon: 'fa fa-right-long',
+                    command: () => {
+                        this.labelPosition = LabelPosition.RIGHT;
+                        this.cdr.markForCheck();
+                        console.log('Right');
+                    }
+                },
+                {
+                    label: this.TranslocoService.translate('Bottom'),
+                    icon: 'fa fa-down-long',
+                    command: () => {
+                        this.labelPosition = LabelPosition.BOTTOM;
+                        this.cdr.markForCheck();
+                        console.log('Bottom');
+                    }
+                },
+                {
+                    label: this.TranslocoService.translate('Left'),
+                    icon: 'fa fa-left-long',
+                    command: () => {
+                        this.labelPosition = LabelPosition.LEFT;
+                        this.cdr.markForCheck();
+                        console.log('Left');
+                    }
+                }
+            ]
+        },
+        {
+            separator: true
+        },
+        {
+            label: this.TranslocoService.translate('Delete'),
+            styleClass: 'text-danger',
+            icon: 'fa fa-trash',
+            command: () => {
+                console.log('Delete');
+            }
+        }
+    ];
 
     constructor(private parent: MapCanvasComponent) {
         this.mapCanvasComponent = parent;
@@ -76,6 +149,7 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
 
     public onDragStart(cdkEvent: CdkDragStart<any>) {
         cdkEvent.event.preventDefault();
+
         let clientX: number = 0;
         let clientY: number = 0;
 
@@ -123,5 +197,8 @@ export class MapItemComponent implements AfterViewInit, OnChanges {
         return {x: posX, y: posY};
     }
 
+    public getLabelPositionClass(): string {
+        return 'map-element-label-' + this.labelPosition;
+    };
 
 }
