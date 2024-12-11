@@ -59,7 +59,7 @@ export abstract class WizardsAbstractComponent implements OnInit, OnDestroy {
                     name: this.servicetemplates[key].name,
                     description: this.servicetemplates[key].description,
                     servicecommandargumentvalues: this.servicetemplates[key].servicetemplatecommandargumentvalues,
-                    createService: true
+                    createService: ! this.servicesNamesForExistCheck.includes(this.servicetemplates[key].name)
                 } as Service);
         }
         this.cdr.markForCheck();
